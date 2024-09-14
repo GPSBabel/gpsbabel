@@ -71,6 +71,7 @@
 #ifndef TPO_H_INCLUDED_
 #define TPO_H_INCLUDED_
 
+#include <QList>     // for QList
 #include <QString>   // for QString
 #include <QVector>   // for QVector
 #include <cstdint>   // for uint8_t
@@ -107,11 +108,11 @@ protected:
   int tpo_find_block(unsigned int block_desired);
   static Waypoint* tpo_convert_ll(int lat, int lon);
   void tpo_process_tracks();
-  void tpo_process_waypoints();
+  void tpo_process_waypoints(QList<Waypoint>& tpo_wp_index);
   void tpo_process_map_notes();
   void tpo_process_symbols();
   void tpo_process_text_labels();
-  void tpo_process_routes();
+  void tpo_process_routes(const QList<Waypoint>& tpo_wp_index);
   void tpo_read_3_x();
   void tpo_rd_init(const QString& fname);
   void tpo_rd_deinit();
@@ -124,13 +125,6 @@ protected:
 
   // Define a global here that we can query from multiple places.
   float tpo_version = 0.0;
-
-  // Global index to waypoints, needed for routes, filled in by
-  // tpo_process_waypoints.
-  //
-  // For version 3.x files.
-  Waypoint** tpo_wp_index{};
-  unsigned int tpo_index_ptr{};
 };
 
 class Tpo2Format : public Format, private TpoFormatBase

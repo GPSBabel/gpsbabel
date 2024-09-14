@@ -314,15 +314,17 @@ public:
   void rd_init(const QString& fname) override
   {
     mtk_rd_init(fname);
-  };
+  }
+
   void read() override
   {
     mtk_read();
-  };
+  }
+
   void rd_deinit() override
   {
     mtk_rd_deinit();
-  };
+  }
 };
 
 class MtkM241Format : public Format, private MtkLoggerBase
@@ -346,15 +348,17 @@ public:
   void rd_init(const QString& fname) override
   {
     mtk_rd_init_m241(fname);
-  };
+  }
+
   void read() override
   {
     mtk_read();
-  };
+  }
+
   void rd_deinit() override
   {
     mtk_rd_deinit();
-  };
+  }
 };
 
 class MtkFileFormat : public Format, private MtkLoggerBase
@@ -378,15 +382,17 @@ public:
   void rd_init(const QString& fname) override
   {
     file_init(fname);
-  };
+  }
+
   void read() override
   {
     file_read();
-  };
+  }
+
   void rd_deinit() override
   {
     file_deinit();
-  };
+  }
 };
 
 class MtkM241FileFormat : public Format, private MtkLoggerBase
@@ -410,14 +416,16 @@ public:
   void rd_init(const QString& fname) override
   {
     file_init_m241(fname);
-  };
+  }
+
   void read() override
   {
     file_read();
-  };
+  }
+
   void rd_deinit() override
   {
     file_deinit();
-  };
+  }
 };
 #endif // MTK_LOGGER_H_INCLUDED_

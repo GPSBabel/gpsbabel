@@ -40,24 +40,17 @@
 #include "src/core/file.h"      // for File
 #include "src/core/logging.h"   // for Debug, FatalMsg, Warning
 
-#define MYNAME "Google Takeout"
-#define TIMELINE_OBJECTS "timelineObjects"
 
-static const QList<QString> takeout_month_names{
-  "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY",
-  "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
-};
-
-static void takeout_fatal(const QString& message) {
+void GoogleTakeoutFormat::takeout_fatal(const QString& message) {
   fatal(FatalMsg() << MYNAME << ": " << message);
 }
 
-static void takeout_warning(const QString& message) {
+void GoogleTakeoutFormat::takeout_warning(const QString& message) {
   Warning() << MYNAME << ": " << message;
 }
 
 /* create a waypoint from late7/lone7 and optional metadata */
-static Waypoint* takeout_waypoint(
+Waypoint* GoogleTakeoutFormat::takeout_waypoint(
   int lat_e7,
   int lon_e7,
   const QString* shortname,
@@ -65,7 +58,7 @@ static Waypoint* takeout_waypoint(
   const QString* start_str
 )
 {
-  Waypoint* waypoint = new Waypoint();
+  auto* waypoint = new Waypoint();
   waypoint->latitude = lat_e7 / 1e7;
   waypoint->longitude = lon_e7 / 1e7;
   if (shortname && shortname->length() > 0) {
@@ -81,7 +74,7 @@ static Waypoint* takeout_waypoint(
   return waypoint;
 }
 
-static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
+bool GoogleTakeoutFormat::track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
   if (waypoint->latitude == 0 && waypoint->longitude == 0) {
     if (global_opts.debug_level >= 2) {
       Debug(2) << "Track " << route->rte_name << "@" <<
@@ -95,7 +88,7 @@ static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint) {
   return true;
 }
 
-static QList<QJsonObject> readJson(
+QList<QJsonObject> GoogleTakeoutFormat::GoogleTakeoutInputStream::readJson(
     const QString& source)
 {
   if (global_opts.debug_level >= 2) {
@@ -142,7 +135,7 @@ static QList<QJsonObject> readJson(
   return timeline;
 }
 
-static QList<QString> readDir(
+QList<QString> GoogleTakeoutFormat::GoogleTakeoutInputStream::readDir(
     const QString& source)
 {
   if (global_opts.debug_level >= 2) {
@@ -158,6 +151,10 @@ static QList<QString> readDir(
    * folders
    */
   if (baseName.length() == 4 && baseName.toInt() > 0) {
+    static const QList<QString> takeout_month_names{
+      "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY",
+      "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+    };
     for (auto&& month : takeout_month_names) {
       const QString path = source + "/" + baseName + "_" + month + ".json";
       const QFileInfo info{path};
@@ -337,7 +334,6 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
    *   TODO: do something with simplifiedRawPath
    */
   int n_points = 0;
-  Waypoint* waypoint = nullptr;
   auto* route = new route_head;
   const QJsonObject startLoc = activitySegment[START_LOCATION].toObject();
   const QJsonObject endLoc = activitySegment[END_LOCATION].toObject();
@@ -347,7 +343,7 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
   track_add_head(route);
   QString timestamp;
   timestamp = activitySegment[DURATION][START_TIMESTAMP].toString();
-  waypoint = takeout_waypoint(
+  Waypoint* waypoint = takeout_waypoint(
     startLoc[LOCATION_LATE7].toInt(),
     startLoc[LOCATION_LONE7].toInt(),
     nullptr, nullptr,
@@ -404,7 +400,7 @@ GoogleTakeoutFormat::add_activity_segment(const QJsonObject& activitySegment)
   return n_points;
 }
 
-void GoogleTakeoutInputStream::loadSource(const QString& source) {
+void GoogleTakeoutFormat::GoogleTakeoutInputStream::loadSource(const QString& source) {
   const QFileInfo info{source};
   if (info.isDir()) {
     sources += readDir(source);
@@ -415,7 +411,7 @@ void GoogleTakeoutInputStream::loadSource(const QString& source) {
   }
 }
 
-QJsonValue GoogleTakeoutInputStream::next() {
+QJsonValue GoogleTakeoutFormat::GoogleTakeoutInputStream::next() {
   if (!timelineObjects.isEmpty()) {
     QJsonValue nextObject = timelineObjects.first();
     timelineObjects.removeFirst();

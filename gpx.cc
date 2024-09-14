@@ -505,7 +505,12 @@ xml_parse_time(const QString& dateTimeString)
     *pointstr = '\0';
   }
 
-  int year = 0, mon = 1, mday = 1, hour = 0, min = 0, sec = 0;
+  int year = 0;
+  int mon = 1;
+  int mday = 1;
+  int hour = 0;
+  int min = 0;
+  int sec = 0;
   gpsbabel::DateTime dt;
   int res = sscanf(timestr, "%d-%d-%dT%d:%d:%d", &year, &mon, &mday, &hour,
                    &min, &sec);
@@ -1184,7 +1189,7 @@ GpxFormat::write_attributes(const QXmlStreamAttributes& attributes) const
 }
 
 void
-GpxFormat::fprint_xml_chain(XmlTag* tag) const
+GpxFormat::fprint_xml_chain(const XmlTag* tag) const
 {
   while (tag) {
     writer->writeStartElement(tag->tagname);
@@ -1227,7 +1232,7 @@ GpxFormat::write_gpx_url(const UrlList& urls) const
       }
     }
   } else {
-    UrlLink l = urls.GetUrlLink();
+    const UrlLink& l = urls.GetUrlLink();
     if (!l.url_.isEmpty()) {
       writer->writeTextElement(QStringLiteral("url"), QString(urlbase) + l.url_);
       writer->writeOptionalTextElement(QStringLiteral("urlname"), l.url_link_text_);

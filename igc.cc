@@ -128,9 +128,14 @@ void IgcFormat::rd_deinit()
  */
 void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
 {
-  unsigned int lat_deg, lat_min, lat_frac;
-  unsigned int lon_deg, lon_min, lon_frac;
-  char lat_hemi[2], lon_hemi[2];
+  unsigned int lat_deg;
+  unsigned int lat_min;
+  unsigned int lat_frac;
+  unsigned int lon_deg;
+  unsigned int lon_min;
+  unsigned int lon_frac;
+  char lat_hemi[2];
+  char lon_hemi[2];
   char tmp_str[kMaxRecLen];
 
   // First task record identifies the task to follow
@@ -234,14 +239,22 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
 void IgcFormat::read()
 {
   char* ibuf;
-  int hours, mins, secs;
-  unsigned int lat_deg, lat_min, lat_frac;
-  unsigned int lon_deg, lon_min, lon_frac;
-  char lat_hemi[2], lon_hemi[2];
+  int hours;
+  int mins;
+  int secs;
+  unsigned int lat_deg;
+  unsigned int lat_min;
+  unsigned int lat_frac;
+  unsigned int lon_deg;
+  unsigned int lon_min;
+  unsigned int lon_frac;
+  char lat_hemi[2];
+  char lon_hemi[2];
   char validity;
   route_head* pres_head = nullptr;
   route_head* gnss_head = nullptr;
-  int pres_alt, gnss_alt;
+  int pres_alt;
+  int gnss_alt;
   char pres_valid = 0;
   char gnss_valid = 0;
   Waypoint* pres_wpt = nullptr;
@@ -633,7 +646,7 @@ QByteArray IgcFormat::latlon2str(const Waypoint* wpt)
 
 QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 {
-  QByteArray str = dt.toUTC().toString("ddMMyy").toUtf8();
+  QByteArray str = dt.toUTC().toString(u"ddMMyy").toUtf8();
   if (str.size() != 6) {
     fatal(MYNAME ": Bad date format '%s'\n", str.constData());
   }
@@ -642,7 +655,7 @@ QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 
 QByteArray IgcFormat::tod2str(const gpsbabel::DateTime& tod)
 {
-  QByteArray str = tod.toUTC().toString("hhmmss").toUtf8();
+  QByteArray str = tod.toUTC().toString(u"hhmmss").toUtf8();
   if (str.size() != 6) {
     fatal(MYNAME ": Bad time of day format '%s'\n", str.constData());
   }
@@ -856,8 +869,7 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
     // Get a crude indication of groundspeed from the change in lat/lon
     int deltat_msec = (*wpt_rit)->GetCreationTime().msecsTo(wpt->GetCreationTime());
     speed = (deltat_msec == 0) ? 0:
-            radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
-                               RAD((*wpt_rit)->latitude), RAD((*wpt_rit)->longitude))) /
+            radtometers(gcdist(wpt->position(), (*wpt_rit)->position())) /
             (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
       printf(MYNAME ": speed=%.2fm/s\n", speed);

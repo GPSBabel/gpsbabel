@@ -19,14 +19,15 @@
 
  */
 
-#include "defs.h"
 #include "grtcirc.h"
 
-#include <algorithm>
-#include <cerrno>
-#include <cmath>
-#include <cstdio>
-#include <tuple>
+#include <algorithm>  // for clamp
+#include <cerrno>     // for errno, EDOM
+#include <cmath>      // for cos, sin, fabs, atan2, sqrt, asin, atan, isnan
+#include <numbers>    // for pi
+#include <tuple>      // for tie, tuple, make_tuple, ignore
+
+#include "defs.h"     // for PositionRad, DEG, METERS_TO_MILES, PositionDeg
 
 static constexpr double EARTH_RAD = 6378137.0;
 
@@ -45,20 +46,9 @@ static double dotproduct(double x1, double y1, double z1,
   return (x1 * x2 + y1 * y2 + z1 * z2);
 }
 
-/*
- * Note: this conversion to miles uses the WGS84 value for the radius of
- * the earth at the equator.
- * (radius in meters)*(100cm/m) -> (radius in cm)
- * (radius in cm) / (2.54 cm/in) -> (radius in in)
- * (radius in in) / (12 in/ft) -> (radius in ft)
- * (radius in ft) / (5280 ft/mi) -> (radius in mi)
- * If the compiler is half-decent, it'll do all the math for us at compile
- * time, so why not leave the expression human-readable?
- */
-
 double radtomiles(double rads)
 {
-  const double radmiles = METERS_TO_MILES(EARTH_RAD);
+  constexpr double radmiles = METERS_TO_MILES(EARTH_RAD);
   return (rads * radmiles);
 }
 
@@ -67,20 +57,21 @@ double radtometers(double rads)
   return (rads * EARTH_RAD);
 }
 
-double gcdist(double lat1, double lon1, double lat2, double lon2)
+double gcdist(PositionRad pos1, PositionRad pos2)
 {
   errno = 0;
+
+  const double lat1 = pos1.latR;
+  const double lon1 = pos1.lonR;
+  const double lat2 = pos2.latR;
+  const double lon2 = pos2.lonR;
 
   double sdlat = sin((lat1 - lat2) / 2.0);
   double sdlon = sin((lon1 - lon2) / 2.0);
 
   double res = sqrt(sdlat * sdlat + cos(lat1) * cos(lat2) * sdlon * sdlon);
 
-  if (res > 1.0) {
-    res = 1.0;
-  } else if (res < -1.0) {
-    res = -1.0;
-  }
+  res = std::clamp(res, -1.0, 1.0);
 
   res = asin(res);
 
@@ -95,10 +86,15 @@ double gcdist(double lat1, double lon1, double lat2, double lon2)
 /* This value is the heading you'd leave point 1 at to arrive at point 2.
  * Inputs and outputs are in radians.
  */
-double heading(double lat1, double lon1, double lat2, double lon2)
+static double heading(PositionRad pos1, PositionRad pos2)
 {
-  double v1 = sin(lon1 - lon2) * cos(lat2);
-  double v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1 - lon2);
+  const double lat1 = pos1.latR;
+  const double lon1 = pos1.lonR;
+  const double lat2 = pos2.latR;
+  const double lon2 = pos2.lonR;
+
+  double v1 = sin(lon2 - lon1) * cos(lat2);
+  double v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon2 - lon1);
   /* rounding error protection */
   if (fabs(v1) < 1e-15) {
     v1 = 0.0;
@@ -109,10 +105,9 @@ double heading(double lat1, double lon1, double lat2, double lon2)
   return atan2(v1, v2);
 }
 
-/* As above, but outputs is in degrees from 0 - 359.  Inputs are still radians. */
-double heading_true_degrees(double lat1, double lon1, double lat2, double lon2)
+double heading_true_degrees(PositionRad pos1, PositionRad pos2)
 {
-  double h = 360.0 - DEG(heading(lat1, lon1, lat2, lon2));
+  double h = 360.0 + DEG(heading(pos1, pos2));
   if (h >= 360.0) {
     h -= 360.0;
   }
@@ -123,38 +118,48 @@ double heading_true_degrees(double lat1, double lon1, double lat2, double lon2)
 // Note: This is probably not going to vectorize as it uses statics internally,
 // so it's hard for the optimizer to prove it's a pure function with no side
 // effects, right?
-double linedistprj(double lat1, double lon1,
-                   double lat2, double lon2,
-                   double lat3, double lon3,
-                   double* prjlat, double* prjlon,
-                   double* frac)
+std::tuple<double, PositionDeg, double> linedistprj(PositionRad pos1,
+                                                    PositionRad pos2,
+                                                    PositionRad pos3)
 {
   static double _lat1 = -9999;
   static double _lat2 = -9999;
   static double _lon1 = -9999;
   static double _lon2 = -9999;
 
-  static double x1, y1, z1;
-  static double x2, y2, z2;
-  static double xa, ya, za, la;
+  static double x1;
+  static double y1;
+  static double z1;
+  static double x2;
+  static double y2;
+  static double z2;
+  static double xa;
+  static double ya;
+  static double za;
+  static double la;
 
   double dot;
 
-  *prjlat = lat1;
-  *prjlon = lon1;
-  *frac = 0;
+  /* prjpos must be of type PositionRad as we assign
+   * prjpos.lat, prjpos.lon below in radians.
+   */
+  PositionRad prjpos = pos1;
 
-  /* degrees to radians */
-  lat1 = RAD(lat1);
-  lon1 = RAD(lon1);
-  lat2 = RAD(lat2);
-  lon2 = RAD(lon2);
-  lat3 = RAD(lat3);
-  lon3 = RAD(lon3);
+  double frac = 0;
 
-  int newpoints = 1;
+  /* we use these values below assuming they are in radians,
+   * => posn must be of type PositionRad.
+   */
+  const double lat1 = pos1.latR;
+  const double lon1 = pos1.lonR;
+  const double lat2 = pos2.latR;
+  const double lon2 = pos2.lonR;
+  const double lat3 = pos3.latR;
+  const double lon3 = pos3.lonR;
+
+  bool newpoints = true;
   if (lat1 == _lat1 && lat2 == _lat2 && lon1 == _lon1 && lon2 == _lon2) {
-    newpoints = 0;
+    newpoints = false;
   } else {
     _lat1 = lat1;
     _lat2 = lat2;
@@ -179,10 +184,7 @@ double linedistprj(double lat1, double lon1,
     /* 'a' is the axis; the line that passes through the center of the earth
      * and is perpendicular to the great circle through point 1 and point 2
      * It is computed by taking the cross product of the '1' and '2' vectors.*/
-    auto [xt, yt, zt] = crossproduct(x1, y1, z1, x2, y2, z2);
-    xa = xt;
-    ya = yt;
-    za = zt;
+    std::tie(xa, ya, za) = crossproduct(x1, y1, z1, x2, y2, z2);
     la = sqrt(xa * xa + ya * ya + za * za);
 
     if (la) {
@@ -226,15 +228,15 @@ double linedistprj(double lat1, double lon1,
          * atan2 would be overkill because lp and fabs(dot) are both
          * known to be positive. */
 
-        *prjlat = DEG(asin(yp));
+        prjpos.latR = asin(yp);
         if (xp == 0 && zp == 0) {
-          *prjlon = 0;
+          prjpos.lonR = 0;
         } else {
-          *prjlon = DEG(atan2(zp, xp));
+          prjpos.lonR = atan2(zp, xp);
         }
-        *frac = d1 / (d1 + d2);
+        frac = d1 / (d1 + d2);
 
-        return atan(fabs(dot) / lp);
+        return {atan(fabs(dot) / lp), prjpos , frac};
       }
 
       /* otherwise, get the distance from the closest endpoint */
@@ -260,34 +262,32 @@ double linedistprj(double lat1, double lon1,
       }
 
       if (fabs(d1) < fabs(d2)) {
-        return gcdist(lat1, lon1, lat3, lon3);
+        return {gcdist(pos1, pos3), prjpos, frac};
       } else {
-        *prjlat = DEG(lat2);
-        *prjlon = DEG(lon2);
-        *frac = 1.0;
-        return gcdist(lat2, lon2, lat3, lon3);
+        prjpos = pos2;
+        frac = 1.0;
+        return {gcdist(pos2, pos3), prjpos, frac};
       }
     } else {
       /* lp is 0 when 3 is 90 degrees from the great circle */
-      return M_PI / 2;
+      return {std::numbers::pi / 2, prjpos, frac};
     }
   } else {
     /* la is 0 when 1 and 2 are either the same point or 180 degrees apart */
     dot = dotproduct(x1, y1, z1, x2, y2, z2);
     if (dot >= 0) {
-      return gcdist(lat1, lon1, lat3, lon3);
+      return {gcdist(pos1, pos3), prjpos, frac};
     } else {
-      return 0;
+      return {0, prjpos, frac};
     }
   }
 }
 
-double linedist(double lat1, double lon1,
-                double lat2, double lon2,
-                double lat3, double lon3)
+double linedist(PositionRad pos1, PositionRad pos2, PositionRad pos3)
 {
-  double dummy;
-  return linedistprj(lat1, lon1, lat2, lon2, lat3, lon3, &dummy, &dummy, &dummy);
+  double dist;
+  std::tie(dist, std::ignore, std::ignore) = linedistprj(pos1, pos2, pos3);
+  return dist;
 }
 
 /*
@@ -297,20 +297,20 @@ double linedist(double lat1, double lon1,
  * Ref: http://mathworld.wolfram.com/RotationFormula.html
  */
 
-void linepart(double lat1, double lon1,
-              double lat2, double lon2,
-              double frac,
-              double* reslat, double* reslon)
+PositionDeg linepart(PositionRad pos1, PositionRad pos2, double frac)
 {
-  /* result must be in degrees */
-  *reslat = lat1;
-  *reslon = lon1;
+  /* respos must be of type PositionRad as we assign
+   * respos.lat, respos.lon below in radians.
+   */
+  PositionRad respos = pos1;
 
-  /* degrees to radians */
-  lat1 = RAD(lat1);
-  lon1 = RAD(lon1);
-  lat2 = RAD(lat2);
-  lon2 = RAD(lon2);
+  /* we use these values below assuming they are in radians,
+   * => posn must be of type PositionRad.
+   */
+  const double lat1 = pos1.latR;
+  const double lon1 = pos1.lonR;
+  const double lat2 = pos2.latR;
+  const double lon2 = pos2.lonR;
 
   /* polar to ECEF rectangular */
   double x1 = cos(lon1) * cos(lat1);
@@ -353,11 +353,12 @@ void linepart(double lat1, double lon1,
     yr = std::clamp(yr, -1.0, 1.0);
     zr = std::clamp(zr, -1.0, 1.0);
 
-    *reslat = DEG(asin(yr));
+    respos.latR = asin(yr);
     if (xr == 0 && zr == 0) {
-      *reslon = 0;
+      respos.lonR = 0;
     } else {
-      *reslon = DEG(atan2(zr, xr));
+      respos.lonR = atan2(zr, xr);
     }
   }
+  return respos;
 }

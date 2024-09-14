@@ -60,10 +60,15 @@ public slots:
   {
     emit logTime(s);
   }
+  void loadedX()
+  {
+    emit loadFinished(true);
+  }
 
 signals:
   void markerClicked(int t, int i);
   void logTime(const QString& s);
+  void loadFinished(bool b);
 };
 
 

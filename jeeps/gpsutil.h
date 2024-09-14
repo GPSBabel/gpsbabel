@@ -4,8 +4,6 @@
 
 #include "jeeps/gps.h"
 
-int32_t GPS_Util_Little();
-
 US     GPS_Util_Get_Short(const UC* s);
 void   GPS_Util_Put_Short(UC* s, US v);
 int32_t GPS_Util_Get_Int(const UC* s);

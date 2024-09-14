@@ -41,13 +41,13 @@ case "${GENERATOR[1]}" in
 Xcode | "Ninja Multi-Config")
   cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} "${GENERATOR[@]}"
   cmake --build . --config Release
-  ctest -C Release
+  ctest -C Release --output-on-failure
   cmake --build . --config Release --target package_app
   ;;
 *)
   cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} -DCMAKE_BUILD_TYPE=Release "${GENERATOR[@]}"
   cmake --build .
-  ctest
+  ctest --output-on-failure
   cmake --build . --target package_app
   cmake --build . --target gpsbabel.html
   cmake --build . --target gpsbabel.pdf

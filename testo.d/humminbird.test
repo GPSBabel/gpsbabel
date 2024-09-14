@@ -7,6 +7,21 @@ gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -o humminbird -F ${TMPDIR}
 bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/humminbird.hwr
 gpsbabel -i humminbird -f ${REFERENCE}/route/humminbird.hwr -o gpx -F ${TMPDIR}/humminbird~hwr.gpx
 compare ${REFERENCE}/route/humminbird~hwr.gpx ${TMPDIR}/humminbird~hwr.gpx
+
+# The provenance of humminbird.hwr is unclear.
+# The routes have timestamps
+# 48 a8 59 72 (Sun Aug 17 2008 17:01:38 GMT+0000)
+# 48 a8 5a 77 (Sun Aug 17 2008 17:05:59 GMT+0000)
+# 48 a8 5a 80 (Sun Aug 17 2008 17:06:08 GMT+0000)
+# which suggests they may be real.
+# The unused entries in the points array of the route headers appear to be random.
+# To add regresssion for our writer we generated a corresponding hwr file with GPSBABEL_FREEZE_TIME=y
+# gpsbabel -i humminbird -f reference/route/humminbird.hwr -o humminbird -F reference/route/humminbird_gpsbabel.hwr
+# This has zeroed timestamps and zeroed unused entries in the points arrays.
+gpsbabel -i humminbird -f ${REFERENCE}/route/humminbird_gpsbabel.hwr -o humminbird -F ${TMPDIR}/humminbird_gpsbabel~hwr.hwr
+compare ${REFERENCE}/route/humminbird_gpsbabel.hwr ${TMPDIR}/humminbird_gpsbabel~hwr.hwr
+
+#
 #
 # Humminbird tracks
 #
@@ -27,3 +42,4 @@ compare ${REFERENCE}/humminbird-rte-v2~gpx.gpx ${TMPDIR}/humminbird-rte-v2~gpx.g
 
 gpsbabel -i humminbird -f ${REFERENCE}/humminbird-rte-v3.hwr  -o gpx,humminbirdextensions=1 -F ${TMPDIR}/humminbird-rte-v3~gpx.gpx
 compare ${REFERENCE}/humminbird-rte-v3~gpx.gpx ${TMPDIR}/humminbird-rte-v3~gpx.gpx 
+

@@ -109,9 +109,7 @@ private:
   void ozi_parse_track(int field, const QString& str, Waypoint* wpt_tmp, char* trk_name);
   static void ozi_parse_routepoint(int field, const QString& str, Waypoint* wpt_tmp);
   void ozi_parse_routeheader(int field, const QString& str);
-  void data_read();
   void ozi_waypt_pr(const Waypoint* wpt, int index);
-  void data_write();
 
   /* Data Members */
 

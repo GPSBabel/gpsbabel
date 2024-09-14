@@ -126,8 +126,10 @@ OziFormat::ozi_set_time_str(const QString& str, Waypoint* waypointp)
 void
 OziFormat::ozi_convert_datum(Waypoint* wpt) const
 {
-  if (datum != kDautmWGS84) {
-    double lat, lon, alt;
+  if (datum != kDatumWGS84) {
+    double lat;
+    double lon;
+    double alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
                                     &lat, &lon, &alt, datum);
     wpt->latitude = lat;

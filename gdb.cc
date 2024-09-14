@@ -258,9 +258,7 @@ GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_cla
     /* At this point we have found a waypoint with same name,
        but probably from another data stream. Check coordinates!
     */
-    double dist = radtometers(gcdist(
-                                RAD(ref->latitude), RAD(ref->longitude),
-                                RAD(tmp->latitude), RAD(tmp->longitude)));
+    double dist = radtometers(gcdist(ref->position(), tmp->position()));
 
     if (fabs(dist) > 100) {
       fatal(MYNAME ": Route point mismatch!\n" \
@@ -992,7 +990,8 @@ GdbFormat::read()
     char typ;
     gt_waypt_classes_e wpt_class;
     Waypoint* wpt;
-    route_head* trk, *rte;
+    route_head* trk;
+    route_head* rte;
 
     int len = FREAD_i32;
     if (FREAD(&typ, 1) < 1) {
@@ -1134,8 +1133,8 @@ GdbFormat::write_header()
     */
   static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
   gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
-  gdb_write_cstr(gdb_release_dt.toString("MMM dd yyyy"));
-  gdb_write_cstr(gdb_release_dt.toString("HH:mm:ss"));
+  gdb_write_cstr(gdb_release_dt.toString(u"MMM dd yyyy"));
+  gdb_write_cstr(gdb_release_dt.toString(u"HH:mm:ss"));
 
   finalize_item(fsave, 'A');
 
@@ -1153,26 +1152,7 @@ GdbFormat::write_header()
 void
 GdbFormat::gdb_check_waypt(Waypoint* wpt)
 {
-  double lat_orig = wpt->latitude;
-  double lon_orig = wpt->longitude;
-
-  if (wpt->latitude < -90) {
-    wpt->latitude += 180;
-  } else if (wpt->latitude > +90) {
-    wpt->latitude -= 180;
-  }
-  if (wpt->longitude < -180) {
-    wpt->longitude += 360;
-  } else if (wpt->longitude > +180) {
-    wpt->longitude -= 360;
-  }
-
-  if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    fatal("Invalid latitude %f in waypoint %s.\n",
-          lat_orig, !wpt->shortname.isEmpty() ? qPrintable(wpt->shortname) : "<no name>");
-  if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    fatal("Invalid longitude %f in waypoint %s.\n",
-          lon_orig, !wpt->shortname.isEmpty() ? qPrintable(wpt->shortname) : "<no name>");
+  wpt->NormalizePosition();
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -1182,7 +1162,8 @@ GdbFormat::write_waypoint(
   const Waypoint* wpt, const QString& shortname, const garmin_fs_t* gmsd,
   const int icon, const int display)
 {
-  char zbuf[32], ffbuf[32];
+  char zbuf[32];
+  char ffbuf[32];
 
   waypt_ct++;	/* increase informational number of written waypoints */
 
@@ -1235,7 +1216,7 @@ GdbFormat::write_waypoint(
     FWRITE(zbuf, 4);
     QString ld;
     if (wpt->HasUrlLink()) {
-      UrlLink l = wpt->GetUrlLink();
+      const UrlLink& l = wpt->GetUrlLink();
       ld = l.url_;
     }
     QString descr = (wpt_class < gt_waypt_class_map_point) ?
@@ -1335,7 +1316,8 @@ void
 GdbFormat::write_route(const route_head* rte, const QString& rte_name)
 {
   bounds bounds;
-  char zbuf[32], ffbuf[32];
+  char zbuf[32];
+  char ffbuf[32];
 
   memset(zbuf, 0, sizeof(zbuf));
   memset(ffbuf, 0xFF, sizeof(ffbuf));
@@ -1525,7 +1507,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
   Waypoint* test = gdb_find_wayptq(waypt_nameposn_out_hash, refpt);
 
   if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
-    UrlLink orig_link = refpt->GetUrlLink();
+    const UrlLink& orig_link = refpt->GetUrlLink();
     UrlLink test_link = test->GetUrlLink();
     if (orig_link.url_ != test_link.url_) {
       test = nullptr;

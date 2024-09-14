@@ -309,7 +309,8 @@ void TrackFilter::trackfilter_title()
 void TrackFilter::trackfilter_pack()
 {
   if (!track_list.isEmpty()) {
-    int i, j;
+    int i;
+    int j;
 
     for (i = 1, j = 0; i < track_list.size(); i++, j++) {
       auto prev_last_time = trackfilter_get_last_time(track_list.at(j));
@@ -359,8 +360,8 @@ void TrackFilter::trackfilter_merge()
 
     QList<Waypoint*> buff;
 
-    auto it = track_list.begin();
-    while (it != track_list.end()) { /* put all points into temp buffer */
+    auto it = track_list.cbegin();
+    while (it != track_list.cend()) { /* put all points into temp buffer */
       route_head* track = *it;
       // steal all the wpts
       WaypointList wpts;
@@ -377,9 +378,9 @@ void TrackFilter::trackfilter_merge()
           delete wpt;
         }
       }
-      if (it != track_list.begin()) {
+      if (it != track_list.cbegin()) {
         track_del_head(track);
-        it = track_list.erase(it);
+        it = static_cast<RouteList::const_iterator>(track_list.erase(it));
       } else {
         ++it;
       }
@@ -530,8 +531,7 @@ void TrackFilter::trackfilter_split()
 
         if (distance > 0) {
           double curdist = radtometers(
-                             gcdist(RAD(prev_wpt->latitude), RAD(prev_wpt->longitude),
-                                    RAD(wpt->latitude), RAD(wpt->longitude)));
+                             gcdist(prev_wpt->position(), wpt->position()));
           if (curdist <= distance) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
@@ -599,10 +599,8 @@ void TrackFilter::trackfilter_move()
 
 void TrackFilter::trackfilter_synth()
 {
-  double last_course_lat;
-  double last_course_lon;
-  double last_speed_lat = std::nan(""); /* Quiet gcc 7.3.0 -Wmaybe-uninitialized */
-  double last_speed_lon = std::nan(""); /* Quiet gcc 7.3.0 -Wmaybe-uninitialized */
+  PositionDeg last_course_pos;
+  PositionDeg last_speed_pos;
   gpsbabel::DateTime last_speed_time;
   int nsats = 0;
 
@@ -625,18 +623,14 @@ void TrackFilter::trackfilter_synth()
           wpt->reset_speed();
         }
         first = false;
-        last_course_lat = wpt->latitude;
-        last_course_lon = wpt->longitude;
-        last_speed_lat = wpt->latitude;
-        last_speed_lon = wpt->longitude;
+        last_course_pos = wpt->position();
+        last_speed_pos = wpt->position();
         last_speed_time = wpt->GetCreationTime();
       } else {
         if (opt_course) {
-          wpt->set_course(heading_true_degrees(RAD(last_course_lat),
-                                               RAD(last_course_lon),RAD(wpt->latitude),
-                                               RAD(wpt->longitude)));
-          last_course_lat = wpt->latitude;
-          last_course_lon = wpt->longitude;
+          wpt->set_course(heading_true_degrees(last_course_pos,
+                                               wpt->position()));
+          last_course_pos = wpt->position();
         }
         if (opt_speed) {
           if (last_speed_time.msecsTo(wpt->GetCreationTime()) != 0) {
@@ -648,14 +642,11 @@ void TrackFilter::trackfilter_synth()
             // Note that points with the same time can occur because the input
             // has truncated times, or because we are truncating times with
             // toTime_t().
-            wpt->set_speed(radtometers(gcdist(
-                                         RAD(last_speed_lat), RAD(last_speed_lon),
-                                         RAD(wpt->latitude),
-                                         RAD(wpt->longitude))) /
+            wpt->set_speed(radtometers(gcdist(last_speed_pos, wpt->position()))
+                                          /
                            (0.001 * std::abs(last_speed_time.msecsTo(wpt->GetCreationTime())))
                           );
-            last_speed_lat = wpt->latitude;
-            last_speed_lon = wpt->longitude;
+            last_speed_pos = wpt->position();
             last_speed_time = wpt->GetCreationTime();
           } else {
             wpt->reset_speed();
@@ -684,7 +675,7 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
   QRegularExpressionMatch match = re.match(fmtstart);
   if (match.hasMatch()) {
     // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
-    result = QDateTime::fromString(match.captured(0), "yyyyMMddHHmmss.zzz");
+    result = QDateTime::fromString(match.captured(0), u"yyyyMMddHHmmss.zzz");
     result.setTimeSpec(Qt::UTC);
     if (!result.isValid()) {
       fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", timestr);
@@ -702,7 +693,8 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
 
 void TrackFilter::trackfilter_range()
 {
-  QDateTime start, stop; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
+  QDateTime start; // constructed such that isValid() is false, unlike gpsbabel::DateTime!
+  QDateTime stop;  // constructed such that isValid() is false, unlike gpsbabel::DateTime!
 
   if (opt_start != nullptr) {
     start = trackfilter_range_check(opt_start);
@@ -714,8 +706,8 @@ void TrackFilter::trackfilter_range()
 
   int original_waypt_count = track_waypt_count();
 
-  auto it = track_list.begin();
-  while (it != track_list.end()) {
+  auto it = track_list.cbegin();
+  while (it != track_list.cend()) {
     route_head* track = *it;
 
     foreach (Waypoint* wpt, track->waypoint_list) {
@@ -739,7 +731,7 @@ void TrackFilter::trackfilter_range()
 
     if (track->rte_waypt_empty()) {
       track_del_head(track);
-      it = track_list.erase(it);
+      it = static_cast<RouteList::const_iterator>(track_list.erase(it));
     } else {
       ++it;
     }
@@ -841,7 +833,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
     QString start = match.captured(2);
     QString fmtstart("00000101000000");
     fmtstart.replace(0, start.size(), start);
-    result.start = QDateTime::fromString(fmtstart, "yyyyMMddHHmmss");
+    result.start = QDateTime::fromString(fmtstart, u"yyyyMMddHHmmss");
     result.start.setTimeSpec(Qt::UTC);
     if (!result.start.isValid()) {
       fatal(MYNAME "-faketime-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
@@ -886,10 +878,7 @@ void TrackFilter::trackfilter_faketime()
 bool TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb)
 {
   return
-    radtometers(gcdist(RAD(wpta->latitude),
-                       RAD(wpta->longitude),
-                       RAD(wptb->latitude),
-                       RAD(wptb->longitude))) < kDistanceLimit &&
+    radtometers(gcdist(wpta->position(), wptb->position())) < kDistanceLimit &&
     std::abs(wpta->altitude - wptb->altitude) < 20 &&
     wpta->courses_equal(*wptb) &&
     wpta->speeds_equal(*wptb) &&
@@ -907,10 +896,8 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
   for (auto it = wptlist.cbegin(); it != wptlist.cend(); ++it) {
     auto* wpt = *it;
     if (it != wptlist.cbegin()) {
-      double cur_dist = radtometers(gcdist(RAD(prev_wpt->latitude),
-                                           RAD(prev_wpt->longitude),
-                                           RAD(wpt->latitude),
-                                           RAD(wpt->longitude)));
+      double cur_dist = radtometers(gcdist(prev_wpt->position(),
+                                           wpt->position()));
 
       // Denoise points that are on top of each other,
       // keeping the first and last of the group.

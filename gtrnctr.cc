@@ -38,7 +38,7 @@
 #include <type_traits>           // for add_const<>::type
 
 #include "defs.h"                // for Waypoint, route_head, computed_trkdata, waypt_add, route_disp, track_disp_all, case_ignore_strncmp, track_add_head, track_add_wpt, track_recompute, xml_parse_time, CSTR, wp_flags, WAYPT_SET, unknown_alt
-#include "xmlgeneric.h"          // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
+#include "xmlgeneric.h"          // for xml_deinit, xml_init, xml_read
 
 
 #define MYNAME "gtc"
@@ -46,19 +46,21 @@
 void
 GtrnctrFormat::rd_init(const QString& fname)
 {
-  xml_init(fname, build_xg_tag_map(this, gtc_map), nullptr, gtc_tags_to_ignore, nullptr, true);
+  xml_reader = new XmlGenericReader;
+  xml_reader->xml_init(fname, this, gtc_map, nullptr, gtc_tags_to_ignore, nullptr);
 }
 
 void
 GtrnctrFormat::read()
 {
-  xml_read();
+  xml_reader->xml_read();
 }
 
 void
 GtrnctrFormat::rd_deinit()
 {
-  xml_deinit();
+  delete xml_reader;
+  xml_reader = nullptr;
 }
 
 void
@@ -359,39 +361,39 @@ GtrnctrFormat::write()
 }
 
 void
-GtrnctrFormat::gtc_trk_s(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_s(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   trk_head = new route_head;
   track_add_head(trk_head);
 }
 
 void
-GtrnctrFormat::gtc_trk_ident(xg_string args, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_ident(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   trk_head->rte_name = args;
 }
 
 void
-GtrnctrFormat::gtc_trk_lap_s(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_lap_s(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   lap_ct++;
   lap_s = 1;
 }
 
 void
-GtrnctrFormat::gtc_trk_lap_e(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_lap_e(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   lap_s = 0;
 }
 
 void
-GtrnctrFormat::gtc_trk_pnt_s(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_pnt_s(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp = new Waypoint;
 }
 
 void
-GtrnctrFormat::gtc_trk_pnt_e(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_pnt_e(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     if (lap_s) {
@@ -414,25 +416,25 @@ GtrnctrFormat::gtc_trk_pnt_e(xg_string /*unused*/, const QXmlStreamAttributes* /
 }
 
 void
-GtrnctrFormat::gtc_trk_utc(xg_string args, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_utc(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->creation_time = xml_parse_time(args);
 }
 
 void
-GtrnctrFormat::gtc_trk_lat(xg_string args, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_lat(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->latitude = args.toDouble();
 }
 
 void
-GtrnctrFormat::gtc_trk_long(xg_string args, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_long(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->longitude = args.toDouble();
 }
 
 void
-GtrnctrFormat::gtc_trk_alt(xg_string args, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_alt(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->altitude = args.toDouble();
 }
@@ -451,13 +453,13 @@ void GtrnctrFormat::gtc_trk_cad(const QString& args, const QXmlStreamAttributes*
 }
 
 void
-GtrnctrFormat::gtc_trk_pwr(xg_string args, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_pwr(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->power = args.toDouble();
 }
 
 void
-GtrnctrFormat::gtc_trk_spd(xg_string args, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_trk_spd(const QString& args, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp->set_speed(args.toDouble());
 }
@@ -469,7 +471,7 @@ GtrnctrFormat::gtc_wpt_crs_s(const QString& /*unused*/, const QXmlStreamAttribut
 }
 
 void
-GtrnctrFormat::gtc_wpt_crs_e(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_wpt_crs_e(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     waypt_add(wpt_tmp);
@@ -481,14 +483,14 @@ GtrnctrFormat::gtc_wpt_crs_e(xg_string /*unused*/, const QXmlStreamAttributes* /
 }
 
 void
-GtrnctrFormat::gtc_wpt_pnt_s(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_wpt_pnt_s(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   wpt_tmp = new Waypoint;
   lap_ct++;
 }
 
 void
-GtrnctrFormat::gtc_wpt_pnt_e(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+GtrnctrFormat::gtc_wpt_pnt_e(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     /* Add the begin position of a CourseLap as

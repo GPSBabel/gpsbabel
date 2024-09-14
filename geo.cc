@@ -154,7 +154,7 @@ void GeoFormat::geo_waypt_pr(const Waypoint* waypointp, QXmlStreamWriter& writer
   if (waypointp->HasUrlLink()) {
     writer.writeStartElement(QStringLiteral("link"));
     writer.writeAttribute(QStringLiteral("text "), QStringLiteral("Cache Details"));
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     writer.writeCharacters(link.url_);
     writer.writeEndElement();
   }
