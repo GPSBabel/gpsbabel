@@ -20,6 +20,7 @@
  */
 
 #include <algorithm>                    // for sort
+#include <cassert>                      // for assert
 #include <cctype>                       // for isspace, tolower
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
@@ -35,6 +36,7 @@
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
+#include <QRegularExpression>           // for QRegularExpressio
 #include <QString>                      // for QString
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
@@ -734,92 +736,29 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
 /*
  * Get rid of potentially nasty HTML that would influence another record
  * that includes;
- * <body> - to stop backgrounds/background colours from being loaded
+ * <body> - to stop backgrounds/background colors from being loaded
  * </body> and </html>- stop processing altogether
  * <style> </style> - stop overriding styles for everything
  */
 QString
 strip_nastyhtml(const QString& in)
 {
-  char* returnstr = xstrdup(in);
-  char* lcstr = xstrdup(in.toLower());
+  static const QRegularExpression htmlre("<html.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(htmlre.isValid());
+  static const QRegularExpression bodyre("<body.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(bodyre.isValid());
+  static const QRegularExpression stylere("<style.*?>.*?</style>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(stylere.isValid());
+  QString out(in);
+  
+  out.replace(bodyre, "");
+  out.replace("</body>", "", Qt::CaseInsensitive);
+  out.replace(htmlre, "");
+  out.replace("</html>", "", Qt::CaseInsensitive);
+  out.replace(stylere, "");
+  out.replace("<image", "<img", Qt::CaseInsensitive);
 
-  while (char* lcp = strstr(lcstr, "<body>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
-    sp++;
-    *sp++ = '!';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<body")) {   /* becomes <!--        --> */
-    char* sp = returnstr + (lcp - lcstr) ;
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    while ((*sp) && (*sp != '>')) {
-      sp++;
-    }
-    *--sp = '-';
-    *--sp = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</body>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</html>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<style")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp = ' ';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</style>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<image")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <img */
-    sp+=3;
-    *sp++ = 'g';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *lcp = '*';
-  }
-  xfree(lcstr);
-  QString rv(returnstr);
-  xfree(returnstr);
-  return rv;
+  return out;
 }
 
 /*
