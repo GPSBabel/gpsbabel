@@ -390,7 +390,7 @@ UnicsvFormat::unicsv_fondle_header(QString header)
    */
   header = header.toLower();
 
-  int column_count= 0;
+  int column_count = 0;
 
   /* Find the separator and split the line into fields.
    * If we see an unenclosd tab that is the separator.
