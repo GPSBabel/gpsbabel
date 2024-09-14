@@ -75,7 +75,7 @@ private:
   char* tpg_datum_opt{};
   int tpg_datum_idx{};
 
-  unsigned int waypt_out_count{};
+  int waypt_out_count{};
 
   QVector<arglist_t> tpg_args = {
     {"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},

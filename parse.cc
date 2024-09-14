@@ -20,11 +20,15 @@
 
  */
 
-#include "defs.h"
-#include "jeeps/gpsmath.h"
-#include <cmath>
-#include <cstdio>
-#include <cstdlib> //strtod
+#include <cctype>           // for isspace
+#include <cmath>            // for fabs
+#include <cstdio>           // for sscanf
+#include <cstdlib>          // for strtod
+
+#include <QString>          // for QString
+
+#include "defs.h"           // for case_ignore_strcmp, fatal, KPH_TO_MPS, MPH_TO_MPS, warning, FEET_TO_METERS, KNOTS_TO_MPS, CSTR, FATHOMS_TO_METERS, MILES_TO_METERS, NMILES_TO_METERS, kDatumWGS84, grid_type, parse_coordinates, parse_distance, parse_speed, grid_bng, grid_lat_lon_ddd, grid_lat_lo...
+#include "jeeps/gpsmath.h"  // for GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UKOSMap_To_WGS84_H, GPS_Math_UTM_EN_To_Known_Datum
 
 /*
  * parse_distance:
@@ -83,7 +87,8 @@ parse_distance(const char* str, double* val, double scale, const char* module)
 }
 
 int
-parse_distance(const QString& str, double* val, double scale, const char* module) {
+parse_distance(const QString& str, double* val, double scale, const char* module)
+{
   return parse_distance(CSTR(str), val, scale, module);
 }
 
@@ -214,14 +219,14 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     break;
 
   case grid_bng:
-    datum = kDautmWGS84;	/* fix */
+    datum = kDatumWGS84;	/* fix */
     format = "%2s %lf %lf%n";
     ct = sscanf(str, format,
                 map, &lx, &ly,
                 &result);
     valid = (ct == 3);
     if (valid) {
-      if (! GPS_Math_UKOSMap_To_WGS84_M(map, lx, ly, &lat, &lon))
+      if (! GPS_Math_UKOSMap_To_WGS84_H(map, lx, ly, &lat, &lon))
         fatal("%s: Unable to convert BNG coordinates (%s)!\n",
               module, str);
     }
@@ -246,7 +251,7 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     double east;
     double north;
 
-    datum = kDautmWGS84;	/* fix */
+    datum = kDatumWGS84;	/* fix */
     format = "%lf %lf%n";
     ct = sscanf(str, format,
                 &east, &north, &result);
@@ -273,7 +278,7 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     lon = -lon;
   }
 
-  if (datum != kDautmWGS84) {
+  if (datum != kDatumWGS84) {
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(lat, lon, 0.0,
                                     &lat, &lon, &alt, datum);

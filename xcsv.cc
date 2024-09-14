@@ -56,7 +56,7 @@
 #include "garmin_fs.h"             // for garmin_fs_t
 #include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
 #include "grtcirc.h"               // for RAD, gcdist, radtometers
-#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_M
+#include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_H
 #include "jeeps/gpsport.h"         // for int32
 #include "session.h"               // for session_t
 #include "src/core/datetime.h"     // for DateTime
@@ -167,7 +167,7 @@ const QHash<QString, QString> XcsvStyle::xcsv_char_table {
   { "COLON",		":"	},
   { "SEMICOLON",		";"	},
   { "NEWLINE",		"\n"	},
-  { "CR",			"\n"	},
+  { "CR",			"\r"	},
   { "CRNEWLINE",  	"\r\n"	},
   { "TAB",  		"\t"	},
   { "SPACE",  		" "	},
@@ -249,7 +249,7 @@ XcsvStyle::xcsv_ofield_add(XcsvStyle* style, const QString& qkey, const QString&
 QDate
 XcsvFormat::yyyymmdd_to_time(const QString& s)
 {
-  return QDate::fromString(s, "yyyyMMdd");
+  return QDate::fromString(s, u"yyyyMMdd");
 }
 
 QDateTime
@@ -907,7 +907,7 @@ XcsvFormat::read()
         wpt_tmp->longitude = -wpt_tmp->longitude;
       }
 
-      if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDautmWGS84)) {
+      if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDatumWGS84)) {
         double alt;
         GPS_Math_Known_Datum_To_WGS84_M(wpt_tmp->latitude, wpt_tmp->longitude, 0.0,
                                         &wpt_tmp->latitude, &wpt_tmp->longitude, &alt, xcsv_file->gps_datum_idx);
@@ -918,7 +918,7 @@ XcsvFormat::read()
                                        &wpt_tmp->longitude,
                                        parse_data.utm_easting, parse_data.utm_northing,
                                        parse_data.utm_zone, parse_data.utm_zonec,
-                                       kDautmWGS84);
+                                       kDatumWGS84);
       }
 
       if (parse_data.link_) {
@@ -963,8 +963,7 @@ void
 XcsvFormat::xcsv_resetpathlen(const route_head* head)
 {
   pathdist = 0;
-  oldlat = 999;
-  oldlon = 999;
+  old_position.reset();
   csv_route = csv_track = nullptr;
   switch (xcsv_style->datatype) {
   case trkdata:
@@ -993,12 +992,13 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
   double utmn;
   char utmzc;
 
-  if (oldlon < 900) {
-    pathdist += radtometers(gcdist(RAD(oldlat),RAD(oldlon),
-                                   RAD(wpt->latitude),RAD(wpt->longitude)));
+  if (old_position) {
+    pathdist += radtometers(gcdist(old_position.value(),
+                                   wpt->position()));
   }
-  longitude = oldlon = wpt->longitude;
-  latitude = oldlat = wpt->latitude;
+  old_position = wpt->position();
+  latitude = wpt->latitude;
+  longitude = wpt->longitude;
 
   QString write_delimiter;
   if (xcsv_style->field_delimiter == u"\\w") {
@@ -1036,7 +1036,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     description = shortname;
   }
 
-  if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDautmWGS84)) {
+  if ((xcsv_file->gps_datum_idx > -1) && (xcsv_file->gps_datum_idx != kDatumWGS84)) {
     double alt;
     GPS_Math_WGS84_To_Known_Datum_M(latitude, longitude, 0.0,
                                     &latitude, &longitude, &alt, xcsv_file->gps_datum_idx);
@@ -1118,7 +1118,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
         buff = xcsv_urlbase;
       }
       if (wpt->HasUrlLink()) {
-        UrlLink l = wpt->GetUrlLink();
+        const UrlLink& l = wpt->GetUrlLink();
         buff += QString::asprintf(fmp.printfc.constData(), CSTR(l.url_));
       } else {
         buff += QString::asprintf(fmp.printfc.constData(), fmp.val.constData() && *fmp.val.constData() ? fmp.val.constData() : "\"\"");
@@ -1127,7 +1127,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
     break;
     case XcsvStyle::XT_URL_LINK_TEXT:
       if (wpt->HasUrlLink()) {
-        UrlLink l = wpt->GetUrlLink();
+        const UrlLink& l = wpt->GetUrlLink();
         buff = QString::asprintf(fmp.printfc.constData(),
                                  !l.url_link_text_.isEmpty() ? CSTR(l.url_link_text_) : fmp.val.constData());
       }
@@ -1227,7 +1227,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       char map[3];
       double north;
       double east;
-      if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map))
+      if (! GPS_Math_WGS84_To_UKOSMap_H(wpt->latitude, wpt->longitude, &east, &north, map))
         fatal(MYNAME ": Position (%.5f/%.5f) outside of BNG.\n",
               wpt->latitude, wpt->longitude);
       buff = QString::asprintf(fmp.printfc.constData(), map, qRound(east), qRound(north));

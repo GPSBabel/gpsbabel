@@ -132,7 +132,7 @@ private:
 
   /* Member Functions */
 
-  void kml_init_color_sequencer(unsigned int steps_per_rev);
+  void kml_init_color_sequencer(int steps_per_rev);
   static constexpr int kml_bgr_to_color(int blue, int green, int red)
   {
     return (blue)<<16 | (green)<<8 | (red);

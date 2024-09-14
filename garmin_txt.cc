@@ -56,7 +56,7 @@
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t
 #include "garmin_tables.h"         // for gt_display_modes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_get_mps_grid_longname, gt_lookup_datum_index, gt_lookup_grid_type, GDB, gt_get_icao_cc, gt_get_icao_country, gt_get_mps_datum_name, gt_waypt_class_names, GT_DISPLAY_MODE...
-#include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_M
+#include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS84_To_UKOSMap_H
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for FatalMsg
 #include "src/core/textstream.h"   // for TextStream
@@ -119,7 +119,7 @@ GarminTxtFormat::convert_datum(const Waypoint* wpt, double* dest_lat, double* de
 {
   double alt;
 
-  if (datum_index == kDautmWGS84) {
+  if (datum_index == kDatumWGS84) {
     *dest_lat = wpt->latitude;
     *dest_lon = wpt->longitude;
   } else GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
@@ -243,7 +243,7 @@ GarminTxtFormat::print_position(const Waypoint* wpt)
 
   case grid_bng:
 
-    valid = GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map);
+    valid = GPS_Math_WGS84_To_UKOSMap_H(wpt->latitude, wpt->longitude, &east, &north, map);
     if (valid) {
       *fout << QString::asprintf("%s %5.0f %5.0f\t", map, east, north);
     }
@@ -494,7 +494,7 @@ GarminTxtFormat::write_waypt(const Waypoint* wpt)
   print_string("%s\t", (country != nullptr) ? country : "");
   print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
   if (wpt->HasUrlLink()) {
-    UrlLink l = wpt->GetUrlLink();
+    const UrlLink& l = wpt->GetUrlLink();
     print_string("%s\t", l.url_);
   } else {
     print_string("%s\t", "");
@@ -697,7 +697,7 @@ GarminTxtFormat::wr_init(const QString& fname)
     datum_index = kDatumOSGB36;
     break;
   case grid_swiss: /* force datum to WGS84 */
-    datum_index = kDautmWGS84;
+    datum_index = kDatumWGS84;
     break;
   default:
     datum_index = gt_lookup_datum_index(datum_str, MYNAME);
@@ -751,7 +751,7 @@ GarminTxtFormat::write()
   };
 
   QString grid_str = gt_get_mps_grid_longname(grid_index, MYNAME);
-  grid_str = grid_str.replace('*', "°");
+  grid_str = grid_str.replace('*', u'°');
   *fout << "Grid\t" << grid_str << "\r\n";
 
   datum_str = gt_get_mps_datum_name(datum_index);

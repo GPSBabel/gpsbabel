@@ -125,28 +125,31 @@ char	gps_save_string[GPS_ARB_LEN];
  * we uppercase the string because some models (III's and 12's) react
  * violently to lower case data.
  */
-typedef enum { UpperNo = 0, UpperYes = 1 } copycase;
+enum copycase { UpperNo, UpperYes };
 
 static
-void copy_char_array(UC** dst, char* src, int count, copycase mustupper)
+void copy_char_array(UC** dst, const char* src, int count, copycase mustupper)
 {
   UC* d = *dst;
-  int ocount =  count;
-  do {
+  int copied = 0;
+  // Copy up to count characters from the source to the desitnation.
+  for (int i = 0; i < count; ++i) {
     UC sc = *src++;
     if (sc == 0) {
-      while (count--) {
-        *d++ = ' ';
-      }
       break;
     }
     if (!isalnum(sc)) {
       continue;
-    } else {
-      *d++ = mustupper == UpperYes ? toupper(sc) : sc;
     }
-  } while (--count) ;
-  *dst += ocount;
+    *d++ = mustupper == UpperYes ? toupper(sc) : sc;
+    copied++;
+  }
+  // If necessary pad with space characters so that the total count
+  // of characters written to the destination is count.
+  for (int i = copied; i < count; ++i) {
+    *d++ = ' ';
+  }
+  *dst += count;
 }
 
 
@@ -164,8 +167,6 @@ void copy_char_array(UC** dst, char* src, int count, copycase mustupper)
 int32_t GPS_Init(const char* port)
 {
 	int32_t ret;
-
-  (void) GPS_Util_Little();
 
   ret = GPS_A000(port);
   if (ret<0) {
@@ -361,7 +362,7 @@ static int32_t GPS_A000(const char* port)
 carry_on:
   /* Make sure PVT is off as some GPS' have it on by default */
   if (gps_pvt_transfer != -1) {
-    GPS_A800_Off(port,&fd);
+    GPS_A800_Off(fd);
   }
 
   if (!GPS_Device_Off(fd)) {
@@ -3152,9 +3153,6 @@ int32_t GPS_A200_Send(const char* port, GPS_PWay* way, int32_t n)
   gpsdevh* fd;
   GPS_Packet tra;
   GPS_Packet rec;
-  int32_t i;
-  int32_t len;
-  US  method;
 
   if (!GPS_Device_On(port,&fd)) {
     return gps_errno;
@@ -3172,7 +3170,10 @@ int32_t GPS_A200_Send(const char* port, GPS_PWay* way, int32_t n)
   }
 
 
-  for (i=0; i<n; ++i) {
+  for (int32_t i=0; i<n; ++i) {
+    US  method;
+    int32_t len;
+
     if (way[i]->isrte) {
       method = LINK_ID[gps_link_type].Pid_Rte_Hdr;
 
@@ -3190,6 +3191,8 @@ int32_t GPS_A200_Send(const char* port, GPS_PWay* way, int32_t n)
         GPS_Error("A200_Send: Unknown route protocol");
         return PROTOCOL_ERROR;
       }
+    } else if (way[i]->islink) {
+      continue; // links not supported.  can cause "Route Waypoint was Deleted" and "Received an Invalid WPT" on device.
     } else {
       method = LINK_ID[gps_link_type].Pid_Rte_Wpt_Data;
 
@@ -6126,12 +6129,11 @@ int32_t GPS_A800_On(const char* port, gpsdevh** fd)
 **
 ** Turn off GPS PVT
 **
-** @param [r] port [const char *] port
-** @param [w] fd [int32 *] file descriptor
+** @param [r] fd [int32] file descriptor
 **
 ** @return [int32] success
 ************************************************************************/
-int32_t GPS_A800_Off(const char* /*unused*/, gpsdevh** fd)
+int32_t GPS_A800_Off(gpsdevh* fd)
 {
   static UC data[2];
   GPS_Packet tra;
@@ -6142,10 +6144,10 @@ int32_t GPS_A800_Off(const char* /*unused*/, gpsdevh** fd)
                      COMMAND_ID[gps_device_command].Cmnd_Stop_Pvt_Data);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
                   data,2);
-  if (!GPS_Write_Packet(*fd,tra)) {
+  if (!GPS_Write_Packet(fd,tra)) {
     return gps_errno;
   }
-  if (!GPS_Get_Ack(*fd, &tra, &rec)) {
+  if (!GPS_Get_Ack(fd, &tra, &rec)) {
     GPS_Error("A800_Off: Not acknowledged");
     return FRAMING_ERROR;
   }
@@ -6162,22 +6164,22 @@ int32_t GPS_A800_Off(const char* /*unused*/, gpsdevh** fd)
 **
 ** make a position packet for sending to the GPS
 **
-** @param [r] fd [int32 *] file descriptor
+** @param [r] fd [int32] file descriptor
 ** @param [w] packet [GPS_PPvt_Data *] packet
 **
 ** @return [int32] success
 ************************************************************************/
-int32_t GPS_A800_Get(gpsdevh** fd, GPS_PPvt_Data* packet)
+int32_t GPS_A800_Get(gpsdevh* fd, GPS_PPvt_Data* packet)
 {
   GPS_Packet tra;
   GPS_Packet rec;
 
 
-  if (!GPS_Packet_Read(*fd, &rec)) {
+  if (!GPS_Packet_Read(fd, &rec)) {
     return gps_errno;
   }
 
-  if (!GPS_Send_Ack(*fd, &tra, &rec)) {
+  if (!GPS_Send_Ack(fd, &tra, &rec)) {
     return gps_errno;
   }
 

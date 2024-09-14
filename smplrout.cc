@@ -57,7 +57,7 @@
 */
 
 #include <cassert>
-#include <cstdlib>              // for strtol
+#include <cstdlib>              // for strtod, strtol
 #include <iterator>             // for prev
 
 #include <QDateTime>            // for QDateTime
@@ -97,18 +97,15 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
   switch (metric) {
   case metric_t::crosstrack:
     track_error = radtomiles(linedist(
-                               wpt1->latitude, wpt1->longitude,
-                               wpt2->latitude, wpt2->longitude,
-                               wpt3->latitude, wpt3->longitude));
+                               wpt1->position(),
+                               wpt2->position(),
+                               wpt3->position()));
     break;
   case metric_t::length:
     track_error = radtomiles(
-                    gcdist(wpt1->latitude, wpt1->longitude,
-                           wpt3->latitude, wpt3->longitude) +
-                    gcdist(wpt3->latitude, wpt3->longitude,
-                           wpt2->latitude, wpt2->longitude) -
-                    gcdist(wpt1->latitude, wpt1->longitude,
-                           wpt2->latitude, wpt2->longitude));
+                    gcdist(wpt1->position(), wpt3->position()) +
+                    gcdist(wpt3->position(), wpt2->position()) -
+                    gcdist(wpt1->position(), wpt2->position()));
     break;
   case metric_t::relative:
   default: // eliminate false positive warning with g++ 11.3.0: ‘error’ may be used uninitialized in this function [-Wmaybe-uninitialized]
@@ -119,19 +116,15 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
         (wpt1->GetCreationTime() != wpt2->GetCreationTime())) {
       double frac = static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt3->GetCreationTime())) /
                     static_cast<double>(wpt1->GetCreationTime().msecsTo(wpt2->GetCreationTime()));
-      double reslat;
-      double reslon;
-      linepart(wpt1->latitude, wpt1->longitude,
-               wpt2->latitude, wpt2->longitude,
-               frac, &reslat, &reslon);
-      track_error = radtometers(gcdist(
-                                  wpt3->latitude, wpt3->longitude,
-                                  reslat, reslon));
+      auto respos = linepart(wpt1->position(),
+                             wpt2->position(),
+                             frac);
+      track_error = radtometers(gcdist(wpt3->position(), respos));
     } else { // else distance to connecting line
       track_error = radtometers(linedist(
-                                  wpt1->latitude, wpt1->longitude,
-                                  wpt2->latitude, wpt2->longitude,
-                                  wpt3->latitude, wpt3->longitude));
+                                  wpt1->position(),
+                                  wpt2->position(),
+                                  wpt3->position()));
     }
     // error relative to horizontal precision
     track_error /= (6 * wpt3->hdop);
@@ -297,11 +290,15 @@ void SimplifyRouteFilter::init()
     count = strtol(countopt, nullptr, 10);
     break;
   case limit_basis_t::error: {
-    int res = parse_distance(erroropt, &error, 1.0, MYNAME);
-    if (res == 0) {
-      error = 0;
-    } else if (res == 2) { /* parameter with unit */
-      error = METERS_TO_MILES(error);
+    if (metric == metric_t::relative) {
+      error = strtod(erroropt, nullptr);
+    } else {
+      int res = parse_distance(erroropt, &error, 1.0, MYNAME);
+      if (res == 0) {
+        error = 0;
+      } else if (res == 2) { /* parameter with unit */
+        error = METERS_TO_MILES(error);
+      }
     }
   }
   break;

@@ -22,47 +22,20 @@
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
 #include "jeeps/gps.h"
+#include <bit>
 #include <cstdarg>
 #include <cstdlib>
-#include <fcntl.h>
 
-static int32_t gps_endian_called = 0;
-static int32_t GPS_Little = 0;
+static_assert((std::endian::native == std::endian::little) !=
+              (std::endian::native == std::endian::big),
+              "Only big or little endian platforms are supported.");
+static constexpr bool GPS_Little = std::endian::native == std::endian::little;
 
 int32_t gps_warning = 0;
 int32_t gps_error = 0;
 int32_t gps_user = 0;
 int32_t gps_show_bytes = 0;
 int32_t gps_errno = 0;
-
-/* @func GPS_Util_Little ***********************************************
-**
-** Determine endian nature of host
-**
-** @return [int32] true if little-endian
-************************************************************************/
-
-int32_t GPS_Util_Little()
-{
-  static union lb {
-    char chars[sizeof(int32_t)];
-    int32_t i;
-  }
-  data;
-
-  if (!gps_endian_called) {
-    gps_endian_called = 1;
-    data.i = 0;
-    *data.chars = '\1';
-    if (data.i == 1) {
-      GPS_Little = 1;
-    } else {
-      GPS_Little = 0;
-    }
-  }
-
-  return GPS_Little;
-}
 
 
 /* @func GPS_Util_Get_Short ********************************************
@@ -79,7 +52,7 @@ US GPS_Util_Get_Short(const UC* s)
 
   p = (UC*)&ret;
 
-  if (!GPS_Little) {
+  if constexpr(!GPS_Little) {
     *p++ = *(s+1);
     *p = *s;
   } else {
@@ -106,7 +79,7 @@ void GPS_Util_Put_Short(UC* s, const US v)
 {
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little) {
+  if constexpr(!GPS_Little) {
     *s++ = *(p+1);
     *s = *p;
   } else {
@@ -135,7 +108,7 @@ double GPS_Util_Get_Double(const UC* s)
   p = (UC*)&ret;
 
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(double)-1; i>-1; --i) {
       *p++ = s[i];
     }
@@ -165,7 +138,7 @@ void GPS_Util_Put_Double(UC* s, const double v)
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(double)-1; i>-1; --i) {
       s[i] = *p++;
     }
@@ -196,7 +169,7 @@ int32_t GPS_Util_Get_Int(const UC* s)
   p = (UC*)&ret;
 
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(int32_t)-1; i>-1; --i) {
       *p++ = s[i];
     }
@@ -226,7 +199,7 @@ void GPS_Util_Put_Int(UC* s, const int32_t v)
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(int32_t)-1; i>-1; --i) {
       s[i] = *p++;
     }
@@ -256,7 +229,7 @@ uint32_t GPS_Util_Get_Uint(const UC* s)
   p = (UC*)&ret;
 
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(uint32_t)-1; i>-1; --i) {
       *p++ = s[i];
     }
@@ -286,7 +259,7 @@ void GPS_Util_Put_Uint(UC* s, const uint32_t v)
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(uint32_t)-1; i>-1; --i) {
       s[i] = *p++;
     }
@@ -316,7 +289,7 @@ float GPS_Util_Get_Float(const UC* s)
   p = (UC*)&ret;
 
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(float)-1; i>-1; --i) {
       *p++ = s[i];
     }
@@ -346,7 +319,7 @@ void GPS_Util_Put_Float(UC* s, const float v)
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(float)-1; i>-1; --i) {
       s[i] = *p++;
     }
@@ -357,88 +330,6 @@ void GPS_Util_Put_Float(UC* s, const float v)
 
   return;
 }
-
-#if 0
-/* @func GPS_Util_Canon  ****************************************************
-**
-** Sets or unsets canonical mode
-** NB: Must have called this with True before calling with False
-** NB: Remember to trun it off (false) eventually
-**
-** @param [r] state [int32] state=true->raw state=false->normal
-** @return [void]
-** @@
-****************************************************************************/
-
-void GPS_Util_Canon(int32 state)
-{
-  static struct termios tty;
-  static struct termios sv;
-
-
-  if (state) {
-    tcgetattr(1,&sv);
-    tcgetattr(1, &tty);
-    tty.c_cc[VMIN]='\1';
-    tty.c_cc[VTIME]='\0';
-    tcsetattr(1,TCSANOW,&tty);
-    tty.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(1, TCSANOW, &tty);
-  } else {
-    tcsetattr(1, TCSANOW, &sv);
-  }
-
-  return;
-}
-#endif
-
-#if 0
-/* @func GPS_Util_Block  ****************************************************
-**
-** Sets or unsets blocking
-** @modified 13-01-2000 to return an int
-**
-** @param [r] fd [int32] file descriptor
-** @param [r] state [int32] state=true->block state=false->non-block
-**
-** @return [int32] success
-** @@
-****************************************************************************/
-
-int32 GPS_Util_Block(int32 fd, int32 state)
-{
-  static int32 notcalled=1;
-  static int32 block;
-  static int32 noblock;
-  int32    f;
-
-  gps_errno = HARDWARE_ERROR;
-
-  if (notcalled) {
-    notcalled = 0;
-    if ((f=fcntl(fd,F_GETFL,0))==-1) {
-      GPS_Error("Util_Block: FCNTL error");
-      return 0;
-    }
-    block = f & ~O_NDELAY;
-    noblock = f |  O_NDELAY;
-  }
-
-  if (state) {
-    if (fcntl(fd,F_SETFL,block)==-1) {
-      GPS_Error("Util_Block: Error blocking");
-      return 0;
-    }
-  } else {
-    if (fcntl(fd,F_SETFL,noblock)==-1) {
-      GPS_Error("Util_Block: Error unblocking");
-      return 0;
-    }
-  }
-
-  return 1;
-}
-#endif
 
 
 /* @func GPS_Warning ********************************************************

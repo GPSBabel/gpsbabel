@@ -1232,7 +1232,7 @@ GpxFormat::write_gpx_url(const UrlList& urls) const
       }
     }
   } else {
-    UrlLink l = urls.GetUrlLink();
+    const UrlLink& l = urls.GetUrlLink();
     if (!l.url_.isEmpty()) {
       writer->writeTextElement(QStringLiteral("url"), QString(urlbase) + l.url_);
       writer->writeOptionalTextElement(QStringLiteral("urlname"), l.url_link_text_);

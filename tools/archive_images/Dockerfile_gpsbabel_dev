@@ -1,0 +1,81 @@
+# this file is used to build the image gpsbabel_build_environment used by travis.
+
+FROM ubuntu:noble
+
+LABEL maintainer="https://github.com/tsteven4"
+
+WORKDIR /app
+
+# update environment.
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+ && apt-get upgrade -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# install packages needed for gpsbabel build
+# split into multiple commands to limit layer size
+
+# basic build and test tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    g++ \
+    git \
+    expat \
+    libxml2-utils \
+    cmake \
+    ninja-build \
+    curl \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+# pkgs with libraries needed by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libusb-1.0-0-dev \
+    pkg-config \
+    libudev-dev \
+    libshp-dev \
+    zlib1g-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+# pkgs with qt used by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    qt6-base-dev \
+    qt6-5compat-dev \
+    qt6-serialport-dev \
+    libx11-xcb-dev \
+    libxkbcommon-dev \
+    qt6-tools-dev \
+    qt6-translations-l10n \
+    qt6-webengine-dev \
+    qt6-wayland \
+ && rm -rf /var/lib/apt/lists/*
+
+# install environment for locale test
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    locales \
+    tzdata \
+ && rm -rf /var/lib/apt/lists/* \
+ && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
+ && locale-gen \
+ && locale -a
+
+WORKDIR /home/gpsbabel
+
+COPY gpsbabel_dev.patch /home/gpsbabel
+
+RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
+ && cd gpsbabel-build \
+ && git apply /home/gpsbabel/gpsbabel_dev.patch \
+ && rm -fr zlib \
+ && rm -fr shapelib \
+ && rm -f testo.d/serialization.test \
+ && sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake \
+ && mkdir bld \
+ && cd bld \
+ && cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6 -DGPSBABEL_WITH_ZLIB=pkgconfig -DGPSBABEL_WITH_SHAPELIB=pkgconfig -DGB.PACKAGE_RELEASE="+$(git log -1 --format=%h)" .. \
+ && cmake --build . --target package_app \
+ && cmake --build . --target check \
+ && ln -s $(pwd)/gui/GPSBabelFE/gpsbabel /usr/local/bin \
+ && ln -s $(pwd)/gui/GPSBabelFE/gpsbabelfe /usr/local/bin 
+
+COPY setup_user.sh /usr/local/bin

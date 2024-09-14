@@ -90,7 +90,7 @@ const QVector<KmlFormat::mt_field_t> KmlFormat::mt_fields_def = {
   { wp_field::sat, "satellites", "Satellites", "int" },
 };
 
-void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
+void KmlFormat::kml_init_color_sequencer(int steps_per_rev)
 {
   if (rotate_colors) {
     float color_step = strtod(opt_rotate_colors, nullptr);
@@ -1319,7 +1319,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
 
   writer->writeStartElement(QStringLiteral("name"));
   if (waypointp->HasUrlLink()) {
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     writer->writeCDATA(link.url_link_text_);
   }
   writer->writeEndElement(); // Close name tag
@@ -1347,7 +1347,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
   }
 
   if (waypointp->HasUrlLink()) {
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     kml_write_data_element("gc_name", link.url_link_text_);
   }
 
@@ -1422,7 +1422,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
   // Description
   if (waypointp->HasUrlLink()) {
     writer->writeEmptyElement(QStringLiteral("snippet"));
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     if (!link.url_link_text_.isEmpty()) {
       QString odesc = link.url_;
       QString olink = link.url_link_text_;
@@ -2070,8 +2070,7 @@ void KmlFormat::wr_position(Waypoint* wpt)
   } else {
     Waypoint* newest_posn= posn_trk_head->waypoint_list.back();
 
-    if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
-                           RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
+    if (radtometers(gcdist(wpt->position(), newest_posn->position())) > 50) {
       track_add_wpt(posn_trk_head, new Waypoint(*wpt));
     } else {
       /* If we haven't move more than our threshold, pretend

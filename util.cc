@@ -20,7 +20,7 @@
  */
 
 #include <algorithm>                    // for sort
-#include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
+#include <cctype>                       // for isspace, tolower
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
@@ -102,27 +102,6 @@ xstrdup(const char* s)
 char* xstrdup(const QString& s)
 {
   return xstrdup(CSTR(s));
-}
-
-/*
- * Duplicate at most sz bytes in str.
- */
-char*
-xstrndup(const char* str, size_t sz)
-{
-  size_t newlen = 0;
-  const char* cin = str;
-
-  while ((newlen < sz) && (*cin != '\0')) {
-    newlen++;
-    cin++;
-  }
-
-  char* newstr = (char*) xmalloc(newlen + 1);
-  memcpy(newstr, str, newlen);
-  newstr[newlen] = 0;
-
-  return newstr;
 }
 
 void*
@@ -570,66 +549,60 @@ rot13(const QString& s)
  */
 
 QString
-convert_human_date_format(const char* human_datef)
+convert_human_date_format(const QString& human_datef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  QString result;
+  QChar prev = '\0';
   int ylen = 0;
 
-  for (const char* cin = human_datef; *cin; cin++) {
-    char okay = 1;
+  for (const QChar cin : human_datef) {
+    bool okay = true;
 
-    if (toupper(*cin) != 'Y') {
+    if (cin.toUpper() != 'Y') {
       ylen = 0;
     }
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'y':
       case 'Y':
         if (prev != 'Y') {
-          strcat(cout, "%y");
-          cout += 2;
+          result.append("%y");
           prev = 'Y';
         }
         ylen++;
         if (ylen > 2) {
-          *(cout-1) = 'Y';
+          result.back() = 'Y';
         }
         break;
       case 'm':
       case 'M':
         if (prev != 'M') {
-          strcat(cout, "%m");
-          cout += 2;
+          result.append("%m");
           prev = 'M';
         }
         break;
       case 'd':
       case 'D':
         if (prev != 'D') {
-          strcat(cout, "%d");
-          cout += 2;
+          result.append("%d");
           prev = 'D';
         }
         break;
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin)) {
-      *cout++ = *cin;
+    } else if (cin.isPunct()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Invalid character " << cin << " in date format " << human_datef << "!");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return result;
 }
 
 /*
@@ -638,22 +611,20 @@ convert_human_date_format(const char* human_datef)
  */
 
 QString
-convert_human_time_format(const char* human_timef)
+convert_human_time_format(const QString& human_timef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  QString result;
+  QChar prev = '\0';
 
-  for (const char* cin = human_timef; *cin; cin++) {
-    int okay = 1;
+  for (const QChar cin : human_timef) {
+    bool okay = true;
 
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'S':
       case 's':
         if (prev != 'S') {
-          strcat(cout, "%S");
-          cout += 2;
+          result.append("%S");
           prev = 'S';
         }
         break;
@@ -661,69 +632,62 @@ convert_human_time_format(const char* human_timef)
       case 'M':
       case 'm':
         if (prev != 'M') {
-          strcat(cout, "%M");
-          cout += 2;
+          result.append("%M");
           prev = 'M';
         }
         break;
 
       case 'h':				/* 12-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%l");	/* 1 .. 12 */
-          cout += 2;
+          result.append("%l");	/* 1 .. 12 */
           prev = 'H';
         } else {
-          *(cout-1) = 'I';  /* 01 .. 12 */
+          result.back() = 'I';  /* 01 .. 12 */
         }
         break;
 
       case 'H':				/* 24-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%k");
-          cout += 2;
+          result.append("%k");
           prev = 'H';
         } else {
-          *(cout-1) = 'H';
+          result.back() = 'H';
         }
         break;
 
       case 'x':
         if (prev != 'X') {
-          strcat(cout, "%P");
-          cout += 2;
+          result.append("%P");
           prev = 'X';
         } else {
-          *(cout-1) = 'P';
+          result.back() = 'P';
         }
         break;
 
       case 'X':
         if (prev != 'X') {
-          strcat(cout, "%p");
-          cout += 2;
+          result.append("%p");
           prev = 'X';
         } else {
-          *(cout-1) = 'p';
+          result.back() = 'p';
         }
         break;
 
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin) || isspace(*cin)) {
-      *cout++ = *cin;
+    } else if (cin.isPunct() || cin.isSpace()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Invalid character " << cin << " in time format " << human_timef << "!");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return result;
 }
 
 
@@ -956,33 +920,6 @@ QString strip_html(const QString& utfstring)
 QString get_filename(const QString& fname)
 {
   return QFileInfo(fname).fileName();
-}
-
-/*
- * gb_int2ptr: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
- */
-void* gb_int2ptr(const int i)
-{
-  union {
-    void* p;
-    int i;
-  } x = { nullptr };
-
-  x.i = i;
-  return x.p;
-}
-
-/*
- * gb_ptr2int: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
- */
-int gb_ptr2int(const void* p)
-{
-  union {
-    const void* p;
-    int i;
-  } x = { p };
-
-  return x.i;
 }
 
 QTextCodec* get_codec(const QByteArray& cs_name)

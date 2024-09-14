@@ -112,9 +112,9 @@ void GMapDialog::appendTrackInfo(QStandardItem* it, const GpxTrack& trk)
   }
   if (startTime.isValid()) {
     it->appendRow(new StandardItem(tr("Start: %1")
-                                   .arg(startTime.toString("yyyy-MMM-dd HH:mm:ss"))));
+                                   .arg(startTime.toString(u"yyyy-MMM-dd HH:mm:ss"))));
     it->appendRow(new StandardItem(tr("Stop: %1")
-                                   .arg(stopTime.toString("yyyy-MMM-dd HH:mm:ss"))));
+                                   .arg(stopTime.toString(u"yyyy-MMM-dd HH:mm:ss"))));
   }
   it->appendRow(new StandardItem(tr("Points: %1").arg(count)));
 

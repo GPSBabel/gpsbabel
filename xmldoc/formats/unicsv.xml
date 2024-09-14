@@ -4,9 +4,13 @@
    figure out what data it has and writes headers and all the data it can.
 </para>
 <para>
-   If the first line contains any tabs, the data lines are assumed
-   to be tab separated.   Otherwise the fields are assumed to be
-   separated by commas.
+   Fields may be enclosed in double quotes.  To include a double quote inside quotes escape it with another double quote.
+</para>
+<para>
+   If the first line contains any unenclosed tabs then the data lines are assumed to be tab separated.
+   Otherwise if the first line contains any unenclosed semicolons then fields are assumed to be separated by semicolons.
+   Otherwise if the first line contains any unenclosed vertical bars then fields are assumed to be separated by vertical bars.
+   Otherwise the fields are assumed to be separated by commas.
 </para>
 <para>
    The list of keywords include:

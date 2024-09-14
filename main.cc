@@ -742,12 +742,12 @@ main(int argc, char* argv[])
 #error This version of Qt is not supported.
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 1920) /* MSVC 2017 or earlier */
-#error MSVC 2017 and earlier are not supported. Please use MSVC 2019 or MSVC 2022.
+#if defined(_MSC_VER) && (_MSC_VER < 1920) /* Visual Studio 2017 or earlier */
+#error Visual Studio 2017 and earlier are not supported. Please use Visual Studio 2019 or 2022.
 #endif
 
   if constexpr (DEBUG_LOCALE) {
-    printf("Initial locale: %s\n",setlocale(LC_ALL, NULL));
+    printf("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
   }
 
   // Create a QCoreApplication object to handle application initialization.
@@ -764,7 +764,7 @@ main(int argc, char* argv[])
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
   if constexpr (DEBUG_LOCALE) {
-    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, NULL));
+    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, nullptr));
   }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
@@ -776,7 +776,7 @@ main(int argc, char* argv[])
     }
     setlocale(LC_NUMERIC,"C");
     if constexpr (DEBUG_LOCALE) {
-      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
   /* reset LC_TIME for strftime */
@@ -786,7 +786,7 @@ main(int argc, char* argv[])
     }
     setlocale(LC_TIME,"C");
     if constexpr (DEBUG_LOCALE) {
-      printf("LC_ALL: %s\n",setlocale(LC_ALL, NULL));
+      printf("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
   qInstallMessageHandler(MessageHandler);
@@ -804,7 +804,7 @@ main(int argc, char* argv[])
   }
 
   assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);
-  assert(GPS_Lookup_Datum_Index("WGS 84") == kDautmWGS84);
+  assert(GPS_Lookup_Datum_Index("WGS 84") == kDatumWGS84);
 
   Vecs::Instance().init_vecs();
   FilterVecs::Instance().init_filter_vecs();

@@ -21,32 +21,31 @@
 
 #include "garmin.h"
 
-#include <cassert>               // for assert
 #include <climits>               // for INT_MAX
-#include <cmath>                 // for atan2, floor, sqrt
+#include <cmath>                 // for atan2, modf, sqrt
 #include <cstdio>                // for fprintf, fflush, snprintf, snprintf
+#include <cstdint>               // for int32_t
 #include <cstdlib>               // for strtol
 #include <cstring>               // for memcpy, strlen, strncpy, strchr
 #include <ctime>                 // for time_t
 #include <utility>               // for as_const
 
 #include <QByteArray>            // for QByteArray
-#include <QRegularExpression>    // for QRegularExpression
+#include <QChar>                 // for QChar
+#include <QList>                 // for QList<>::const_iterator
 #include <QString>               // for QString
 #include <QTextCodec>            // for QTextCodec
 #include <Qt>                    // for CaseInsensitive
-#include <QtGlobal>              // for qPrintable, foreach
+#include <QtGlobal>              // for qPrintable, qRound64, Q_INT64_C, qint64
 
 #include "defs.h"
 #include "formspec.h"            // for FormatSpecificDataList
 #include "garmin_fs.h"           // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
 #include "garmin_tables.h"       // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
 #include "geocache.h"            // for Geocache, Geocache::type_t, Geocache...
-#include "grtcirc.h"             // for DEG
 #include "jeeps/gpsapp.h"        // for GPS_Set_Baud_Rate, GPS_Init, GPS_Pre...
 #include "jeeps/gpscom.h"        // for GPS_Command_Get_Lap, GPS_Command_Get...
 #include "jeeps/gpsmem.h"        // for GPS_Track_Del, GPS_Way_Del, GPS_Pvt_Del
-#include "jeeps/gpsport.h"       // for int32
 #include "jeeps/gpsprot.h"       // for gps_waypt_type, gps_category_type
 #include "jeeps/gpssend.h"       // for GPS_SWay, GPS_PWay, GPS_STrack, GPS_...
 #include "jeeps/gpsserial.h"     // for DEFAULT_BAUD
@@ -297,17 +296,7 @@ GarminFormat::rw_init(const QString& fname)
     fprintf(stdout, "receiver charset detected as %s.\r\n", receiver_charset);
   }
 
-  /*
-   * Beware, valid_waypt_chars shouldn't contain any character class metacharacters,
-   * i.e. '\', '^', '-', '[', or ']'
-   */
-  assert(!QString(valid_waypt_chars).contains('\\'));
-  assert(!QString(valid_waypt_chars).contains('^'));
-  assert(!QString(valid_waypt_chars).contains('-'));
-  assert(!QString(valid_waypt_chars).contains('['));
-  assert(!QString(valid_waypt_chars).contains(']'));
-  invalid_char_re = QRegularExpression(QStringLiteral("[^%1]").arg(valid_waypt_chars));
-  assert(invalid_char_re.isValid());
+  valid_chars = valid_waypt_chars;
 }
 
 void
@@ -330,6 +319,8 @@ GarminFormat::rw_deinit()
 
   xfree(portname);
   portname = nullptr;
+
+  valid_chars = QString();
 }
 
 int
@@ -587,7 +578,13 @@ GarminFormat::route_read()
 void
 GarminFormat::pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
 {
-  wpt->altitude = pvt->alt;
+  // pvt->alt is height (in meters) above the WGS84 elipsoid.
+  // pvt->msl_hght is height (in meters) of WGS84 elipsoid above MSL.
+  // wpt->altitude is height (in meters) above geoid (mean sea level).
+  // wpt->geoidheight is "Height (in meters) of geoid (mean sea level) above WGS84 earth ellipsoid."
+  wpt->set_geoidheight(-pvt->msl_hght);
+  wpt->altitude = pvt->alt + pvt->msl_hght;
+
   wpt->latitude = pvt->lat;
   wpt->longitude = pvt->lon;
 
@@ -604,11 +601,13 @@ GarminFormat::pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
    * 3) The number of leap seconds that offset the current UTC and GPS
    *    reference clocks.
    */
-  double wptime = 631065600.0 + pvt->wn_days * 86400.0  +
-                  pvt->tow
-                  - pvt->leap_scnds;
-  double wptimes = floor(wptime);
-  wpt->SetCreationTime(wptimes, 1000000.0 * (wptime - wptimes));
+  double tow_integral_part;
+  double tow_fractional_part = modf(pvt->tow, &tow_integral_part);
+  qint64 seconds = Q_INT64_C(631065600) + pvt->wn_days * Q_INT64_C(86400)  +
+                   qRound64(tow_integral_part)
+                   - pvt->leap_scnds;
+  qint64 milliseconds = qRound64(1000.0 * tow_fractional_part);
+  wpt->SetCreationTime(seconds, milliseconds);
 
   /*
    * The Garmin spec fifteen different models that use a different
@@ -657,7 +656,7 @@ GarminFormat::rd_position(posn_status* posn_status)
   auto* wpt = new Waypoint;
   GPS_PPvt_Data pvt = GPS_Pvt_New();
 
-  if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
+  if (GPS_Command_Pvt_Get(pvt_fd, &pvt)) {
     pvt2wpt(pvt, wpt);
     GPS_Pvt_Del(&pvt);
 
@@ -915,6 +914,11 @@ GarminFormat::route_hdr_pr(const route_head* rte)
   (*cur_tx_routelist_entry)->rte_num = rte->rte_num;
   (*cur_tx_routelist_entry)->isrte = 1;
   if (!rte->rte_name.isEmpty()) {
+    /* for devices that use D201_Rte_Hdr_Type */
+    write_char_string((*cur_tx_routelist_entry)->rte_cmnt,
+                      str_from_unicode(rte->rte_name).constData(),
+                      sizeof((*cur_tx_routelist_entry)->rte_cmnt));
+    /* for devices that use D202_Rte_Hdr_Type */
     write_char_string((*cur_tx_routelist_entry)->rte_ident,
                       str_from_unicode(rte->rte_name).constData(),
                       sizeof((*cur_tx_routelist_entry)->rte_ident));
@@ -940,7 +944,11 @@ GarminFormat::route_waypt_pr(const Waypoint* wpt)
 
   rte->lon = wpt->longitude;
   rte->lat = wpt->latitude;
-  rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+  if (gps_rte_type == 103) {
+    rte->smbl = d103_icon_number_from_symbol(wpt->icon_descr);
+  } else {
+    rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+  }
 
   // map class so unit doesn't duplicate routepoints as a waypoint.
   rte->wpt_class = 0x80;
@@ -958,7 +966,10 @@ GarminFormat::route_waypt_pr(const Waypoint* wpt)
    * for the new models, we just release this safety check manually.
    */
   if (receiver_must_upper) {
-    cleanname = cleanname.toUpper().remove(invalid_char_re);
+    auto isInvalidChar = [this](const QChar &ch)->bool {
+      return !valid_chars.contains(ch);
+    };
+    cleanname = cleanname.toUpper().removeIf(isInvalidChar);
   }
   write_char_string(rte->ident,
                     str_from_unicode(cleanname).constData(),
@@ -977,7 +988,7 @@ GarminFormat::route_waypt_pr(const Waypoint* wpt)
 void
 GarminFormat::route_write()
 {
-  int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
+  const int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
 
   tx_routelist = (GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
   cur_tx_routelist_entry = tx_routelist;
@@ -994,6 +1005,12 @@ GarminFormat::route_write()
   };
   route_disp_all(route_hdr_pr_lambda, nullptr, route_waypt_pr_lambda);
   GPS_Command_Send_Route(portname, tx_routelist, n);
+
+  for (int i = 0; i < n; i++) {
+    GPS_Way_Del(&tx_routelist[i]);
+  }
+
+  xfree(tx_routelist);
 }
 
 void

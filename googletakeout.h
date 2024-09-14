@@ -120,7 +120,7 @@ private:
   };
 
   /* Member Functions */
- 
+
   static void takeout_fatal(const QString& message);
   static void takeout_warning(const QString& message);
   static Waypoint* takeout_waypoint(int lat_e7, int lon_e7, const QString* shortname, const QString* description, const QString* start_str);
