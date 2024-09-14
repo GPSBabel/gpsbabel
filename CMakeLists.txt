@@ -339,8 +339,6 @@ target_sources(gpsbabel PRIVATE ${SOURCES} ${HEADERS})
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 target_compile_definitions(gpsbabel PRIVATE FILTERS_ENABLED)
-target_compile_definitions(gpsbabel PRIVATE SHAPELIB_ENABLED)
-target_compile_definitions(gpsbabel PRIVATE CSVFMTS_ENABLED)
 
 target_link_libraries(gpsbabel PRIVATE ${QT_LIBRARIES} ${LIBS})
 
