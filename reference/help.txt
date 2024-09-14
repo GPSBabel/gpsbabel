@@ -323,6 +323,15 @@ File Types (-i and -o options):
 	  proxunit              Unit used in proximity values
 	  codec                 codec to use for reading and writing strings (defa
 	qstarz_bl-1000        Qstarz BL-1000
+	cup                   See You flight analysis data
+	  snlen                 Max synthesized shortname length
+	  snwhite               (0/1) Allow whitespace synth. shortnames
+	  snupper               (0/1) UPPERCASE synth. shortnames
+	  snunique              (0/1) Make synth. shortnames unique
+	  urlbase               Basename prepended to URL on output
+	  prefer_shortnames     (0/1) Use shortname instead of description
+	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	skytraq               SkyTraq Venus based loggers (download)
 	  erase                 (0/1) Erase device data after download
 	  targetlocation        Set location finder target location as lat,lng

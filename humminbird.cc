@@ -1,7 +1,7 @@
 /*
     Copyright (C) 2008  Björn Augustsson, oggust@gmail.com
     Copyright (C) 2008  Olaf Klein, o.b.klein@gpsbabel.org
-    Copyright (C) 2005-2013 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2005-2024 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -61,8 +61,6 @@ Still, they're useful in the code as a plain signature.
 #define WPT_MAGIC		0x02020024L
 #define WPT_MAGIC2		0x02030024L // New for 2013.  No visible diff?!
 #define RTE_MAGIC		0x03030088L
-
-#define BAD_CHARS		"\r\n\t"
 
 /* The hwr data format is records-based, and the records are 36 bytes long. */
 
@@ -223,7 +221,8 @@ HumminbirdBase::humminbird_rd_deinit() const
 void
 HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 {
-  humminbird_waypt_t w{};
+  humminbird_waypt_t w{0};
+  static_assert(sizeof(w) == 32);
 
   if (! gbfread(&w, 1, sizeof(w), fin)) {
     fatal(MYNAME ": Unexpected end of file!\n");
@@ -248,7 +247,7 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
   wpt->latitude = geocentric_to_geodetic_hwr(guder);
   wpt->longitude = static_cast<double>(w.east) / EAST_SCALE * 180.0;
 
-  wpt->altitude  = 0.0; /* It's from a fishfinder... */
+  wpt->altitude = 0.0; /* It's from a fishfinder... */
 
   if (w.depth != 0) {
     wpt->set_depth(static_cast<double>(w.depth) / 100.0);
@@ -284,8 +283,8 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
 void
 HumminbirdBase::humminbird_read_route(gbfile* fin) const
 {
-
-  humminbird_rte_t hrte{};
+  humminbird_rte_t hrte{0};
+  static_assert(sizeof(hrte) == 132);
 
   if (! gbfread(&hrte, 1, sizeof(hrte), fin)) {
     fatal(MYNAME ": Unexpected end of file!\n");
@@ -302,7 +301,7 @@ HumminbirdBase::humminbird_read_route(gbfile* fin) const
 
       /* locate the point over his internal Humminbird "Number" */
       if (const Waypoint* wpt = wpt_num_to_wpt_hash.value(hrte.points[i], nullptr); wpt != nullptr) {
-        if (rte == nullptr) {
+      	if (rte == nullptr) {
           rte = new route_head;
           route_add_head(rte);
           rte->rte_name = QByteArray(hrte.name, static_cast<int>(qstrnlen(hrte.name, sizeof(hrte.name))));
@@ -316,8 +315,8 @@ HumminbirdBase::humminbird_read_route(gbfile* fin) const
 void
 HumminbirdBase::humminbird_read_track(gbfile* fin)
 {
-
-  humminbird_trk_header_t th{};
+  humminbird_trk_header_t th{0};
+  static_assert(sizeof(th) == 64);
 
   if (! gbfread(&th, 1, sizeof(th), fin)) {
     fatal(MYNAME ": Unexpected end of file reading header!\n");
@@ -424,11 +423,9 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
 void
 HumminbirdBase::humminbird_read_track_old(gbfile* fin)
 {
-
-  humminbird_trk_header_old_t th{};
+  humminbird_trk_header_old_t th{0};
   constexpr int file_len = 8048;
   char namebuf[TRK_NAME_LEN];
-
 
   if (! gbfread(&th, 1, sizeof(th), fin)) {
     fatal(MYNAME ": Unexpected end of file reading header!\n");
@@ -483,7 +480,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
   first_wpt->altitude  = 0.0;
   track_add_wpt(trk, first_wpt);
 
-  for (int i = 0 ; i<th.num_points-1 ; i++) {
+  for (int i = 0 ; i < th.num_points-1 ; i++) {
     auto* wpt = new Waypoint;
 
     points[i].deltaeast  = be_read16(&points[i].deltaeast);
@@ -563,7 +560,7 @@ HumminbirdBase::humminbird_wr_init(const QString& fname)
   wptname_sh = new MakeShort;
 
   wptname_sh->set_length(WPT_NAME_LEN - 1);
-  wptname_sh->set_badchars(BAD_CHARS);
+  wptname_sh->set_badchars(kBadChars);
   wptname_sh->set_mustupper(false);
   wptname_sh->set_mustuniq(false);
   wptname_sh->set_whitespace_ok(true);
@@ -572,7 +569,7 @@ HumminbirdBase::humminbird_wr_init(const QString& fname)
 
   rtename_sh = new MakeShort;
   rtename_sh->set_length(RTE_NAME_LEN - 1);
-  rtename_sh->set_badchars(BAD_CHARS);
+  rtename_sh->set_badchars(kBadChars);
   rtename_sh->set_mustupper(false);
   rtename_sh->set_mustuniq(false);
   rtename_sh->set_whitespace_ok(true);
@@ -581,7 +578,7 @@ HumminbirdBase::humminbird_wr_init(const QString& fname)
 
   trkname_sh = new MakeShort;
   trkname_sh->set_length(RTE_NAME_LEN - 1);
-  trkname_sh->set_badchars(BAD_CHARS);
+  trkname_sh->set_badchars(kBadChars);
   trkname_sh->set_mustupper(false);
   trkname_sh->set_mustuniq(false);
   trkname_sh->set_whitespace_ok(true);
@@ -609,8 +606,7 @@ HumminbirdBase::humminbird_wr_deinit()
 void
 HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
 {
-  humminbird_waypt_t hum{};
-  int num_icons = std::size(humminbird_icons);
+  humminbird_waypt_t hum{0};
 
   be_write16(&hum.num, waypoint_num++);
   hum.zero   = 0;
@@ -618,20 +614,26 @@ HumminbirdFormat::humminbird_write_waypoint(const Waypoint* wpt)
   hum.icon   = 255;
 
   // Icon....
-  if (!wpt->icon_descr.isNull()) {
-    for (int i = 0; i < num_icons; i++) {
-      if (!wpt->icon_descr.compare(humminbird_icons[i], Qt::CaseInsensitive)) {
+  QString icon = wpt->icon_descr;
+  if (!icon.isEmpty()) {
+    int i = 0;
+    for (const auto& hi : humminbird_icons) {
+      if (!icon.compare(hi, Qt::CaseInsensitive)) {
         hum.icon = i;
         break;
       }
+      i++;
     }
-    if (hum.icon == 255) {	/* no success, no try to find the item in a more comlex name */
+
+    if (hum.icon == 255) { /* no success, now try to find the item in a more complex name */
       hum.icon = 0;	/* i.e. "Diamond" as part of "Diamond, Green" or "Green Diamond" */
-      for (int i = 0; i < num_icons; i++) {
-        if (wpt->icon_descr.contains(humminbird_icons[i], Qt::CaseInsensitive)) {
+      i = 0;
+      for (const auto& hi : humminbird_icons) {
+        if (icon.contains(hi, Qt::CaseInsensitive)) {
           hum.icon = i;
           break;
         }
+        i++;
       }
     }
   }
