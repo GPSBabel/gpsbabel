@@ -21,8 +21,9 @@
 #ifndef HUMMINBIRD_H_INCLUDED_
 #define HUMMINBIRD_H_INCLUDED_
 
-#include <QMap>      // for QMap
+#include <QHash>     // for QHash
 #include <QString>   // for QString
+#include <QStringList>   // for QString
 #include <QVector>   // for QVector
 
 #include <cstdint>   // for int32_t, uint32_t
@@ -30,6 +31,7 @@
 #include "defs.h"    // for ff_cap, arglist_t, ff_cap_read, Waypoint, route_head, ff_cap_write, short_handle, ff_type, ff_type_file
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
+#include "mkshort.h" // for MakeShort
 
 
 class HumminbirdBase
@@ -48,7 +50,19 @@ protected:
 
   /* Constants */
 
-  static constexpr const char* humminbird_icons[] = {
+  // constants related to position conversions.
+  static constexpr double i1924_equ_axis = 6378388.0;
+  static constexpr double EAST_SCALE = 20038297.0; /* this is i1924_equ_axis*pi */
+
+  // static constexpr double i1924_polar_axis = 6356911.946;
+  // We use a modified international 1924 ellipse with a different flattening,
+  // defined by cos_ae = cos(angular eccentricity).
+  static constexpr double cos_ae = 0.9966349016452;
+  static constexpr double cos2_ae = cos_ae * cos_ae;
+
+  static constexpr auto kBadChars = "\r\n\t";
+
+  const QStringList humminbird_icons = {
     "Normal",       /*  0 */
     "House",        /*  1 */
     "Red cross",    /*  2 */
@@ -102,10 +116,13 @@ protected:
   gbfile* fin_{};
   gbfile* fout_{};
   int waypoint_num{};
-  short_handle wptname_sh{}, rtename_sh{}, trkname_sh{};
+  MakeShort* wptname_sh{};
+  MakeShort* rtename_sh{};
+  MakeShort* trkname_sh{};
   humminbird_rte_t* humrte{};
   int rte_num_{};
-  QMap<QString, Waypoint*> map;
+  QHash<unsigned int, const Waypoint*> wpt_num_to_wpt_hash;
+  QHash<QString, unsigned int> wpt_id_to_wpt_num_hash;
 
   humminbird_trk_header_t* trk_head{};
   humminbird_trk_point_t* trk_points{};
@@ -148,6 +165,7 @@ private:
 
   void humminbird_rte_head(const route_head* rte);
   void humminbird_rte_tail(const route_head* rte);
+  static QString wpt_to_id(const Waypoint*);
   void humminbird_write_rtept(const Waypoint* wpt) const;
   void humminbird_write_waypoint(const Waypoint* wpt);
   void humminbird_write_waypoint_wrapper(const Waypoint* wpt);

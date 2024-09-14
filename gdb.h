@@ -30,13 +30,13 @@
 #include <QString>          // for QString
 #include <QStringView>      // for QStringView
 #include <QVector>          // for QVector
-#include <QtGlobal>         // for QT_VERSION, QT_VERSION_CHECK
 
-#include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file, short_handle
+#include "defs.h"           // for arglist_t, Waypoint, route_head, ARGTYPE_BOOL, ARGTYPE_INT, ARG_NOMINMAX, bounds, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"         // for Format
 #include "garmin_fs.h"      // for garmin_fs_t
 #include "garmin_tables.h"  // for gt_waypt_classes_e
 #include "gbfile.h"         // for gbfile
+#include "mkshort.h"        // for MakeShort
 
 
 class GdbFormat : public Format
@@ -73,23 +73,9 @@ public:
   public:
     WptNamePosnKey(const QString& name, double lt, double ln) : shortname(name), lat(lt), lon(ln) {}
 
-    friend qhash_result_t qHash(const WptNamePosnKey &c, qhash_result_t seed = 0) noexcept
+    friend size_t qHash(const WptNamePosnKey &c, size_t seed = 0) noexcept
     {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
       return qHashMulti(seed, c.shortname.toUpper(), c.lat, c.lon);
-#else
-      /*
-       * As noted in above refeference
-       * QtPrivate::QHashCombine is private API, but does not require any special buildsystem magic;
-       * it’s in <qhashfunctions.h>, a public header.
-       */
-      QtPrivate::QHashCombine hash;
-      
-      seed = hash(seed, c.shortname.toUpper());
-      seed = hash(seed, c.lat);
-      seed = hash(seed, c.lon);
-      return seed;
-#endif
     }
 
     QString shortname;
@@ -103,7 +89,7 @@ public:
   public:
     WptNameKey(const QString& name) : shortname(name) {} /* converting constructor */
 
-    friend qhash_result_t qHash(const WptNameKey &c, qhash_result_t seed = 0) noexcept
+    friend size_t qHash(const WptNameKey &c, size_t seed = 0) noexcept
     {
       return qHash(c.shortname.toUpper(), seed);
     }
@@ -149,7 +135,7 @@ private:
   void reset_short_handle(const char* defname);
   void write_header();
   static void gdb_check_waypt(Waypoint* wpt);
-  void write_waypoint(const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd, int icon, int display);
+  void write_waypoint(const Waypoint* wpt, const QString& shortname, const garmin_fs_t* gmsd, int icon, int display);
   static void route_compute_bounds(const route_head* rte, bounds* bounds);
   void route_write_bounds(bounds* bounds) const;
   void write_route(const route_head* rte, const QString& rte_name);
@@ -172,7 +158,7 @@ private:
   WptNamePosnHash waypt_nameposn_in_hidden_hash;
   WptNameHash waypt_name_in_hidden_hash;
   WptNamePosnHash waypt_nameposn_out_hash;
-  short_handle short_h{};
+  MakeShort* short_h{};
 
   char* gdb_opt_category{};
   char* gdb_opt_ver{};

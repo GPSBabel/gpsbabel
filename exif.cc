@@ -50,7 +50,7 @@
 #include <QVariant>             // for QVariant
 #include <QVector>              // for QVector
 #include <Qt>                   // for UTC, ISODate
-#include <QtGlobal>             // for qAsConst, qPrintable, qint64
+#include <QtGlobal>             // for qPrintable, qint64
 
 #include <algorithm>            // for sort, min
 #include <cassert>              // for assert
@@ -61,9 +61,9 @@
 #include <cstdio>               // for printf, SEEK_SET, snprintf, SEEK_CUR
 #include <cstdlib>              // for abs
 #include <cstring>              // for memcmp, strlen
-#include <type_traits>          // for add_const<>::type
+#include <utility>              // for as_const
 
-#include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, waypt_add, xstrdup, xstrndup, fix_2d
+#include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, waypt_add, xstrdup, fix_2d
 #include "garmin_tables.h"      // for gt_lookup_datum_index
 #include "gbfile.h"             // for gbfputuint32, gbfputuint16, gbfgetuint16, gbfgetuint32, gbfseek, gbftell, gbfile, gbfclose, gbfcopyfrom, gbfwrite, gbfopen_be, gbfread, gbfrewind, gbfgetflt, gbfgetint16, gbfopen, gbfputc, gbfputflt, gbsize_t, gbfeof, gbfgetdbl, gbfputdbl, gbfile::(anonymous)
 #include "jeeps/gpsmath.h"      // for GPS_Math_WGS84_To_Known_Datum_M
@@ -209,7 +209,7 @@ ExifFormat::exif_read_str(ExifTag* tag)
   // Panasonic DMC-TZ10 stores datum with trailing spaces.
   // Kodak stores zero count ASCII tags.
   QByteArray buf = (tag->count == 0) ? QByteArray("") : tag->data.at(0).toByteArray();
-  // If the bytearray contains internal NULL(s), get rid of the first and 
+  // If the bytearray contains internal NULL(s), get rid of the first and
   // anything after it.
   if (auto idx = buf.indexOf('\0'); idx >= 0) {
     buf = buf.left(idx);
@@ -267,13 +267,13 @@ ExifFormat::exif_read_timestamp(const ExifTag* tag)
 QDate
 ExifFormat::exif_read_datestamp(const ExifTag* tag)
 {
-  return QDate::fromString(tag->data.at(0).toByteArray().constData(), "yyyy:MM:dd");
+  return QDate::fromString(tag->data.at(0).toByteArray().constData(), u"yyyy:MM:dd");
 }
 
 void
 ExifFormat::exif_release_apps()
 {
-  for (auto* app : qAsConst(*exif_apps)) {
+  for (auto* app : std::as_const(*exif_apps)) {
     if (app->fcache) {
       gbfclose(app->fcache);
     }
@@ -579,7 +579,9 @@ void
 ExifFormat::exif_read_app(ExifApp* app)
 {
   gbsize_t offs;
-  uint32_t exif_ifd_ofs, gps_ifd_ofs, inter_ifd_ofs;
+  uint32_t exif_ifd_ofs;
+  uint32_t gps_ifd_ofs;
+  uint32_t inter_ifd_ofs;
   ExifIfd* ifd;
   gbfile* fin = app->fexif;
 
@@ -695,7 +697,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
     // Note the assumption of local time can be problematic if the data
     // is processed in a different time zone than was used in recording
     // the time in the image.
-    res = QDateTime::fromString(str, "yyyy:MM:dd hh:mm:ss");
+    res = QDateTime::fromString(str, u"yyyy:MM:dd hh:mm:ss");
 
     // Exif 2.31 added offset tags to record the offset to UTC.
     // If these are present use them, otherwise assume local time.
@@ -849,7 +851,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     if (idatum < 0) {
       fatal(MYNAME ": Unknown GPSMapDatum \"%s\"!\n", datum.constData());
     }
-    if (idatum != kDautmWGS84) {
+    if (idatum != kDatumWGS84) {
       GPS_Math_WGS84_To_Known_Datum_M(wpt->latitude, wpt->longitude, 0.0,
                                       &wpt->latitude, &wpt->longitude, &alt, idatum);
     }
@@ -1304,7 +1306,7 @@ ExifFormat::exif_write_apps() const
 {
   gbfputuint16(0xFFD8, fout_);
 
-  for (auto* app : qAsConst(*exif_apps)) {
+  for (auto* app : std::as_const(*exif_apps)) {
 
     gbfputuint16(app->marker, fout_);
 
@@ -1574,7 +1576,7 @@ ExifFormat::write()
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 0, dt.time().hour());
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 1, dt.time().minute());
       exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 2,
-                      static_cast<double>(dt.time().second()) + 
+                      static_cast<double>(dt.time().second()) +
                       static_cast<double>(dt.time().msec())/1000.0);
 
       exif_put_str(GPS_IFD, GPS_IFD_TAG_DATESTAMP, CSTR(dt.toString(u"yyyy:MM:dd")));

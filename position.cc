@@ -22,10 +22,10 @@
 #include "position.h"
 
 #include <cmath>                // for abs
-#include <cstdlib>              // for strtod
+#include <cstdlib>              // for strtod, abs
 
 #include <QList>                // for QList
-#include <QtGlobal>             // for qAsConst, qRound64, qint64
+#include <QtGlobal>             // for qRound64, qint64
 
 #include "defs.h"
 #include "src/core/datetime.h"  // for DateTime
@@ -37,23 +37,21 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
 {
   if (!waypt_list.empty()) {
     QList<WptRecord> qlist;
-  
+
     for (auto* const waypointp : waypt_list) {
       qlist.append(WptRecord(waypointp));
     }
     int nelems = qlist.size();
-  
+
     for (int i = 0 ; i < nelems ; ++i) {
       if (!qlist.at(i).deleted) {
         bool something_deleted = false;
-  
+
         for (int j = i + 1 ; j < nelems ; ++j) {
           if (!qlist.at(j).deleted) {
-            double dist = gc_distance(qlist.at(j).wpt->latitude,
-                                      qlist.at(j).wpt->longitude,
-                                      qlist.at(i).wpt->latitude,
-                                      qlist.at(i).wpt->longitude);
-  
+            double dist = radtometers(gcdist(qlist.at(j).wpt->position(),
+                                             qlist.at(i).wpt->position()));
+
             if (dist <= pos_dist) {
               if (check_time) {
                 qint64 diff_time = std::abs(qlist.at(j).wpt->creation_time.msecsTo(qlist.at(i).wpt->creation_time));
@@ -61,7 +59,7 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
                   continue;
                 }
               }
-  
+
               qlist[j].deleted = true;
               qlist.at(j).wpt->wpt_flags.marked_for_deletion = 1;
               something_deleted = true;
@@ -75,7 +73,7 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
             }
           }
         }
-  
+
         if (something_deleted && (purge_duplicates != nullptr)) {
           qlist.at(i).wpt->wpt_flags.marked_for_deletion = 1;
         }

@@ -24,6 +24,7 @@
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
 #include <ctime>                   // for tm
+#include <utility>                 // for as_const
 
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar
@@ -42,10 +43,10 @@
 #include "defs.h"
 #include "csv_util.h"              // for csv_linesplit, human_to_dec
 #include "formspec.h"              // for FormatSpecificDataList
-#include "garmin_fs.h"             // for garmin_fs_flags_t, garmin_fs_t, GMSD_GET, GMSD_HAS, GMSD_SETQSTR, GMSD_FIND, garmin_fs_alloc
+#include "garmin_fs.h"             // for garmin_fs_t
 #include "garmin_tables.h"         // for gt_lookup_datum_index, gt_get_mps_grid_longname, gt_lookup_grid_type
 #include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
-#include "jeeps/gpsmath.h"         // for GPS_Math_UKOSMap_To_WGS84_M, GPS_Math_EN_To_UKOSNG_Map, GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS...
+#include "jeeps/gpsmath.h"         // for GPS_Math_UKOSMap_To_WGS84_H, GPS_Math_EN_To_UKOSNG_Map, GPS_Math_Known_Datum_To_UTM_EN, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_Swiss_EN, GPS_Math_WGS...
 #include "session.h"               // for session_t
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Warning, Fatal
@@ -156,7 +157,6 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   { "diff",	fld_gc_diff, kStrAny },
   { "arch",	fld_gc_is_archived, kStrAny },
   { "avail",	fld_gc_is_available, kStrAny },
-  { "exported",	fld_gc_exported, kStrAny },
   { "found",	fld_gc_last_found, kStrAny },
   { "placer_id",	fld_gc_placer_id, kStrAny },
   { "placer",	fld_gc_placer, kStrAny },
@@ -208,7 +208,7 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   }
 
   long long res = 0;
-  for (auto c : qAsConst(s)) {
+  for (auto c : std::as_const(s)) {
     int val = kBase31.indexOf(c);
     if (val < 0 || (base == 16 && val > 15)) {
       return 0;
@@ -227,7 +227,9 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
 QDate
 UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
 {
-  int p1, p2, p3;
+  int p1;
+  int p2;
+  int p3;
   char sep[2];
   std::tm tm{};
   int lconsumed = 0;
@@ -383,19 +385,27 @@ void
 UnicsvFormat::unicsv_fondle_header(QString header)
 {
   /* Convert the entire header to lower case for convenience.
-   * If we see a tab in that header, we decree it to be tabsep.
    */
-  unicsv_fieldsep = ",";
-  if (header.contains('\t')) {
-    unicsv_fieldsep = "\t";
-  } else if (header.contains(';')) {
-    unicsv_fieldsep = ";";
-  } else if (header.contains('|')) {
-    unicsv_fieldsep = "|";
-  }
   header = header.toLower();
 
-  const QStringList values = csv_linesplit(header, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
+  /* Find the separator and split the line into fields.
+   * If we see an unenclosd tab that is the separator.
+   * Otherwise, if we see an unenclosed semicolon that is the separator.
+   * Otherwise, if we see an unenclosed vertical bar that is the separator.
+   * Otherwise the separator is a comma.
+   */
+  const QList<const char*> delimiters = {"\t", ";", "|", ","};
+  unicsv_fieldsep = delimiters.last();
+  QStringList values;
+  bool delimiter_detected;
+  for (const auto* delimiter : delimiters) {
+    values = csv_linesplit(header, delimiter, kUnicsvQuoteChar, unicsv_lineno, CsvQuoteMethod::rfc4180, &delimiter_detected);
+    if (delimiter_detected) {
+      unicsv_fieldsep = delimiter;
+      break;
+    }
+  }
+
   for (auto value : values) {
     value = value.trimmed();
 
@@ -409,8 +419,12 @@ UnicsvFormat::unicsv_fondle_header(QString header)
       }
       f++;
     }
-    if ((f->name.isEmpty()) && global_opts.debug_level) {
-      warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+    if (global_opts.debug_level) {
+      if ((f->name.isEmpty()) && global_opts.debug_level) {
+        warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
+      } else {
+        warning(MYNAME ": Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f->name), f->type);
+      }
     }
 
     /* handle some special items */
@@ -454,10 +468,12 @@ UnicsvFormat::rd_init(const QString& fname)
 
   fin = new gpsbabel::TextStream;
   fin->open(fname, QIODevice::ReadOnly, MYNAME, opt_codec);
+  unicsv_lineno = 0;
   if (opt_fields) {
-    QString fields = QString(opt_fields).replace("+", ",");
+    QString fields = QString(opt_fields).replace('+', ',');
     unicsv_fondle_header(fields);
-  } else if (buff = fin->readLine(), !buff.isNull()) {
+  } else if (buff = fin->readLine(); !buff.isNull()) {
+    ++unicsv_lineno;
     unicsv_fondle_header(buff);
   } else {
     unicsv_fieldsep = nullptr;
@@ -506,7 +522,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
   wpt->longitude = kUnicsvUnknown;
 
   int column = -1;
-  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, "\"", 0, CsvQuoteMethod::rfc4180);
+  const QStringList values = csv_linesplit(ibuf, unicsv_fieldsep, kUnicsvQuoteChar, unicsv_lineno, CsvQuoteMethod::rfc4180);
   for (auto value : values) {
     if (++column >= unicsv_fields_tab.size()) {
       break;  /* ignore extra fields on line */
@@ -590,7 +606,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = kDautmWGS84;
+      src_datum = kDatumWGS84;
       break;
 
     case fld_bng:
@@ -598,7 +614,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = kDautmWGS84;
+      src_datum = kDatumWGS84;
       break;
 
     case fld_bng_zone:
@@ -614,11 +630,11 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_swiss:
-      parse_coordinates(value, kDautmWGS84, grid_swiss,
+      parse_coordinates(value, kDatumWGS84, grid_swiss,
                         &wpt->latitude, &wpt->longitude, MYNAME);
       /* coordinates from parse_coordinates are in WGS84
          don't convert a second time */
-      src_datum = kDautmWGS84;
+      src_datum = kDatumWGS84;
       break;
 
     case fld_swiss_easting:
@@ -824,7 +840,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_garmin_facility:
       gmsd = garmin_fs_t::find(wpt);
       if (! gmsd) {
-        gmsd = garmin_fs_alloc(-1);
+        gmsd = new garmin_fs_t(-1);
         wpt->fs.FsChainAdd(gmsd);
       }
       switch (unicsv_fields_tab[column]) {
@@ -869,7 +885,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
     case fld_gc_diff:
     case fld_gc_is_archived:
     case fld_gc_is_available:
-    case fld_gc_exported:
     case fld_gc_last_found:
     case fld_gc_placer:
     case fld_gc_placer_id:
@@ -907,14 +922,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       case fld_gc_is_available:
         gc_data->is_available = unicsv_parse_status(value);
         break;
-      case fld_gc_exported: {
-        QTime etime;
-        QDate edate;
-        etime = unicsv_parse_time(value, edate);
-        if (edate.isValid() || etime.isValid()) {
-          gc_data->exported = unicsv_adjust_time(edate, etime, true);
-        }
-      }
       break;
       case fld_gc_last_found: {
         QTime ftime;
@@ -1010,27 +1017,27 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
           fatal(MYNAME ": Unable to convert BNG coordinates (%.f %.f)!\n",
                 bng_easting, bng_northing);
         }
-        if (! GPS_Math_UKOSMap_To_WGS84_M(
+        if (! GPS_Math_UKOSMap_To_WGS84_H(
               bngz, bnge, bngn,
               &wpt->latitude, &wpt->longitude))
           fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
                 bngz, bnge, bngn);
       } else { // traditional zone easting northing
-        if (! GPS_Math_UKOSMap_To_WGS84_M(
+        if (! GPS_Math_UKOSMap_To_WGS84_H(
               CSTR(bng_zone), bng_easting, bng_northing,
               &wpt->latitude, &wpt->longitude))
           fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
                 CSTR(bng_zone), bng_easting, bng_northing);
       }
-      src_datum = kDautmWGS84;	/* don't convert afterwards */
+      src_datum = kDatumWGS84;	/* don't convert afterwards */
     } else if ((swiss_easting != kUnicsvUnknown) && (swiss_northing != kUnicsvUnknown)) {
       GPS_Math_Swiss_EN_To_WGS84(swiss_easting, swiss_northing,
                                  &wpt->latitude, &wpt->longitude);
-      src_datum = kDautmWGS84;	/* don't convert afterwards */
+      src_datum = kDatumWGS84;	/* don't convert afterwards */
     }
   }
 
-  if ((src_datum != kDautmWGS84) &&
+  if ((src_datum != kDatumWGS84) &&
       (wpt->latitude != kUnicsvUnknown) && (wpt->longitude != kUnicsvUnknown)) {
     double alt;
     GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
@@ -1067,6 +1074,7 @@ UnicsvFormat::read()
   }
 
   while ((buff = fin->readLine(), !buff.isNull())) {
+    ++unicsv_lineno;
     buff = buff.trimmed();
     if (buff.isEmpty() || buff.startsWith('#')) {
       continue;
@@ -1077,8 +1085,7 @@ UnicsvFormat::read()
 
 /* =========================================================================== */
 
-void
-UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
+[[noreturn]] void UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
 {
   *fout << "#####\n";
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
@@ -1098,8 +1105,8 @@ UnicsvFormat::unicsv_print_str(const QString& s) const
     // slavish re-implementation of (what I think) the original C code
     // was doing.
     t.replace("\r\n", ",");
-    t.replace("\r", ",");
-    t.replace("\n", ",");
+    t.replace('\r', ',');
+    t.replace('\n', ',');
   }
   *fout << t.trimmed();
 }
@@ -1124,7 +1131,7 @@ void
 UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   const QString& shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   if (!shortname.isEmpty()) {
     unicsv_outp_flags[fld_shortname] = true;
@@ -1252,9 +1259,6 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
     if (gc_data->is_available != Geocache::status_t::gs_unknown) {
       unicsv_outp_flags[fld_gc_is_available] = true;
     }
-    if (gc_data->exported.isValid()) {
-      unicsv_outp_flags[fld_gc_exported] = true;
-    }
     if (gc_data->last_found.isValid()) {
       unicsv_outp_flags[fld_gc_last_found] = true;
     }
@@ -1273,14 +1277,16 @@ UnicsvFormat::unicsv_waypt_enum_cb(const Waypoint* wpt)
 void
 UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
-  double lat, lon, alt;
+  double lat;
+  double lon;
+  double alt;
   const Geocache* gc_data = nullptr;
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
-  if (unicsv_datum_idx == kDautmWGS84) {
+  if (unicsv_datum_idx == kDatumWGS84) {
     lat = wpt->latitude;
     lon = wpt->longitude;
     alt = wpt->altitude;
@@ -1313,9 +1319,10 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
 
   case grid_bng: {
     char map[3];
-    double north, east;
+    double north;
+    double east;
 
-    if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map)) {
+    if (! GPS_Math_WGS84_To_UKOSMap_H(wpt->latitude, wpt->longitude, &east, &north, map)) {
       unicsv_fatal_outside(wpt);
     }
     auto fieldWidth = fout->fieldWidth();
@@ -1328,7 +1335,8 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   case grid_utm: {
     int zone;
     char zonec;
-    double north, east;
+    double north;
+    double east;
 
     if (! GPS_Math_Known_Datum_To_UTM_EN(lat, lon,
                                          &east, &north, &zone, &zonec, unicsv_datum_idx)) {
@@ -1341,7 +1349,8 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     break;
   }
   case grid_swiss: {
-    double north, east;
+    double north;
+    double east;
 
     if (! GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &east, &north)) {
       unicsv_fatal_outside(wpt);
@@ -1534,7 +1543,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     if (!wpt->HasUrlLink()) {
       unicsv_print_str("");
     } else {
-      UrlLink l = wpt->GetUrlLink();
+      const UrlLink& l = wpt->GetUrlLink();
       unicsv_print_str(l.url_);
     }
   }
@@ -1622,13 +1631,6 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
       *fout << unicsv_fieldsep;
     }
   }
-  if (unicsv_outp_flags[fld_gc_exported]) {
-    if (gc_data) {
-      unicsv_print_date_time(gc_data->exported);
-    } else {
-      *fout << unicsv_fieldsep;
-    }
-  }
   if (unicsv_outp_flags[fld_gc_last_found]) {
     if (gc_data) {
       unicsv_print_date_time(gc_data->last_found);
@@ -1682,7 +1684,7 @@ UnicsvFormat::wr_init(const QString& fname)
 
   unicsv_outp_flags.reset();
   unicsv_grid_idx = grid_unknown;
-  unicsv_datum_idx = kDautmWGS84;
+  unicsv_datum_idx = kDatumWGS84;
   unicsv_fieldsep = kUnicsvFieldSep;
   unicsv_waypt_ct = 0;
 
@@ -1707,7 +1709,7 @@ UnicsvFormat::wr_init(const QString& fname)
   } else if (unicsv_grid_idx == grid_swiss)
     /* ! ignore parameter "Datum" ! */
   {
-    unicsv_datum_idx = kDautmWGS84;  /* internal, becomes CH1903 */
+    unicsv_datum_idx = kDatumWGS84;  /* internal, becomes CH1903 */
   } else {
     unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
   }
@@ -1900,9 +1902,6 @@ UnicsvFormat::write()
   }
   if (unicsv_outp_flags[fld_gc_is_available]) {
     *fout << unicsv_fieldsep << "Available";
-  }
-  if (unicsv_outp_flags[fld_gc_exported]) {
-    *fout << unicsv_fieldsep << "Exported";
   }
   if (unicsv_outp_flags[fld_gc_last_found]) {
     *fout << unicsv_fieldsep << "Last Found";

@@ -17,7 +17,7 @@ Passing is good. We like passing.
 
 The latest official release is available at http://www.gpsbabel.org/download.html.
 
-We are proud of our rating on Codacy: [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b87af2d47325425cbaeea5805eff2c6b)](https://www.codacy.com/gh/GPSBabel/gpsbabel/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GPSBabel/gpsbabel&amp;utm_campaign=Badge_Grade)
+We are proud of our rating on Codacy: [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b87af2d47325425cbaeea5805eff2c6b)](https://app.codacy.com/gh/GPSBabel/gpsbabel/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 If you aren't a programmer or a writer, we need help with gear, hosting costs, tool license prices, answering questions on the mailing lists, etc. Please [support GPSBabel](https://www.gpsbabel.org/contribute.html) any way you can.
 

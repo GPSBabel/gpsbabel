@@ -19,147 +19,73 @@
 
  */
 
-#include <cassert>               // for assert
+#include "garmin.h"
+
 #include <climits>               // for INT_MAX
-#include <cmath>                 // for atan2, floor, sqrt
+#include <cmath>                 // for atan2, modf, sqrt
 #include <cstdio>                // for fprintf, fflush, snprintf, snprintf
+#include <cstdint>               // for int32_t
 #include <cstdlib>               // for strtol
 #include <cstring>               // for memcpy, strlen, strncpy, strchr
 #include <ctime>                 // for time_t
+#include <utility>               // for as_const
 
 #include <QByteArray>            // for QByteArray
-#include <QRegularExpression>    // for QRegularExpression
+#include <QChar>                 // for QChar
+#include <QList>                 // for QList<>::const_iterator
 #include <QString>               // for QString
 #include <QTextCodec>            // for QTextCodec
-#include <QVector>               // for QVector
 #include <Qt>                    // for CaseInsensitive
-#include <QtGlobal>              // for qPrintable, foreach
+#include <QtGlobal>              // for qPrintable, qRound64, Q_INT64_C, qint64
 
 #include "defs.h"
 #include "formspec.h"            // for FormatSpecificDataList
 #include "garmin_fs.h"           // for garmin_fs_garmin_after_read, garmin_fs_garmin_before_write
 #include "garmin_tables.h"       // for gt_find_icon_number_from_desc, PCX, gt_find_desc_from_icon_number
 #include "geocache.h"            // for Geocache, Geocache::type_t, Geocache...
-#include "grtcirc.h"             // for DEG
 #include "jeeps/gpsapp.h"        // for GPS_Set_Baud_Rate, GPS_Init, GPS_Pre...
 #include "jeeps/gpscom.h"        // for GPS_Command_Get_Lap, GPS_Command_Get...
-#include "jeeps/gpsdevice.h"     // for gpsdevh
 #include "jeeps/gpsmem.h"        // for GPS_Track_Del, GPS_Way_Del, GPS_Pvt_Del
-#include "jeeps/gpsport.h"       // for int32
 #include "jeeps/gpsprot.h"       // for gps_waypt_type, gps_category_type
 #include "jeeps/gpssend.h"       // for GPS_SWay, GPS_PWay, GPS_STrack, GPS_...
 #include "jeeps/gpsserial.h"     // for DEFAULT_BAUD
 #include "jeeps/gpsutil.h"       // for GPS_User, GPS_Enable_Diagnose, GPS_E...
 #include "src/core/datetime.h"   // for DateTime
+#include "mkshort.h"             // for MakeShort
 
 
 #define MYNAME "GARMIN"
-static const char* portname;
-static short_handle mkshort_handle;
-static GPS_PWay* tx_waylist;
-static GPS_PWay* tx_routelist;
-static GPS_PWay* cur_tx_routelist_entry;
-static GPS_PTrack* tx_tracklist;
-static GPS_PTrack* cur_tx_tracklist_entry;
-static int my_track_count = 0;
-static char* getposn = nullptr;
-static char* poweroff = nullptr;
-static char* eraset = nullptr;
-static char* resettime = nullptr;
-static char* snlen = nullptr;
-static char* snwhiteopt = nullptr;
-static char* deficon = nullptr;
-static char* category = nullptr;
-static char* categorybitsopt = nullptr;
-static char* baudopt = nullptr;
-static char* opt_codec = nullptr;
-static int baud = 0;
-static int categorybits;
-static int receiver_must_upper = 1;
-static QTextCodec* codec{nullptr};
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-/* Technically, even this is a little loose as spaces aren't allowed */
-static const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
-static QRegularExpression invalid_char_re;
 
-static
-QVector<arglist_t> garmin_args = {
-  {
-    "snlen", &snlen, "Length of generated shortnames", nullptr,
-    ARGTYPE_INT, "1", nullptr, nullptr
-  },
-  {
-    "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  { "deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {
-    "get_posn", &getposn, "Return current position as a waypoint",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "power_off", &poweroff, "Command unit to power itself down",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "erase_t", &eraset, "Erase existing courses when writing new ones",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "resettime", &resettime, "Sync GPS time to computer time",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "category", &category, "Category number to use for written waypoints",
-    nullptr, ARGTYPE_INT, "1", "16", nullptr
-  },
-  {
-    "bitscategory", &categorybitsopt, "Bitmap of categories",
-    nullptr, ARGTYPE_INT, "1", "65535", nullptr
-  },
-  {
-    "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",
-    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-    {
-      "codec", &opt_codec, "override codec to use for device",
-      nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-    },
-
-};
-
-static const char* d103_symbol_from_icon_number(unsigned int n);
-static int d103_icon_number_from_symbol(const QString& s);
-static void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
-static void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
-
-static QByteArray str_from_unicode(const QString& qstr)
+QByteArray GarminFormat::str_from_unicode(const QString& qstr)
 {
   return codec->fromUnicode(qstr);
 }
-static QString str_to_unicode(const QByteArray& cstr)
+QString GarminFormat::str_to_unicode(const QByteArray& cstr)
 {
   return codec->toUnicode(cstr);
 }
 
-static void
-write_char_string(char* dest, const char* source, size_t destsize)
+void
+GarminFormat::write_char_string(char* dest, const char* source, size_t destsize)
 {
   // we zero fill and always terminate within the dest buffer.
   strncpy(dest, source, destsize - 1);
   dest[destsize-1] = 0;
 }
 
-static void
-rw_init(const QString& fname)
+void
+GarminFormat::rw_init(const QString& fname)
 {
-  receiver_must_upper = 1;
+  receiver_must_upper = true;
   const char* receiver_charset = "US-ASCII";
+  /* Technically, even this is a little loose as spaces aren't allowed */
+  const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
 
   if (!mkshort_handle) {
-    mkshort_handle = mkshort_new_handle();
+    mkshort_handle = new MakeShort;
   }
 
   if (global_opts.debug_level > 0)  {
@@ -218,7 +144,7 @@ rw_init(const QString& fname)
   }
 
   /*
-   * Grope the unit we're talking to to set setshort_length to
+   * Grope the unit we're talking to to set set_length to
    * 	20 for  the V,
    * 	10 for Street Pilot, (old) Rhino, 76
    * 	6 for the III, 12, emap, and etrex
@@ -260,7 +186,7 @@ rw_init(const QString& fname)
     case 574: 	/* Geko 201 */
       receiver_short_length = 6;
       valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
-      setshort_badchars(mkshort_handle, "\"$.,'!");
+      mkshort_handle->set_badchars("\"$.,'!");
       break;
 
     case 155:	/* Garmin V */
@@ -270,7 +196,7 @@ rw_init(const QString& fname)
       break;
     case 382: 	/* C320 */
       receiver_short_length = 30;
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       break;
     case 292: /* (60|76)C[S]x series */
     case 421: /* Vista|Legend Cx */
@@ -280,7 +206,7 @@ rw_init(const QString& fname)
     case 957: /* Legend HC */
       receiver_short_length = 14;
       snwhiteopt = xstrdup("1");
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       /* This might be 8859-1 */
       receiver_charset = "windows-1252";
       break;
@@ -288,20 +214,20 @@ rw_init(const QString& fname)
     case 1095: /* GPS 72H */
       receiver_short_length = 10;
       valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " +-";
-      setshort_badchars(mkshort_handle, "\"$.,'!");
+      mkshort_handle->set_badchars("\"$.,'!");
       break;
     case 231: /* Quest */
     case 463: /* Quest 2 */
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       receiver_short_length = 30;
       receiver_charset = "windows-1252";
       break;
     case 577: // Rino 530HCx Version 2.50
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       receiver_short_length = 14;
       break;
     case 429: // Streetpilot i3
-      receiver_must_upper = 0;
+      receiver_must_upper = false;
       receiver_charset = "windows-1252";
       receiver_short_length = 30;
       break;
@@ -332,13 +258,13 @@ rw_init(const QString& fname)
    * If the user provided a short_length, override the calculated value.
    */
   if (snlen) {
-    setshort_length(mkshort_handle, xstrtoi(snlen, nullptr, 10));
+    mkshort_handle->set_length(xstrtoi(snlen, nullptr, 10));
   } else {
-    setshort_length(mkshort_handle, receiver_short_length);
+    mkshort_handle->set_length(receiver_short_length);
   }
 
   if (snwhiteopt) {
-    setshort_whitespace_ok(mkshort_handle, xstrtoi(snwhiteopt, nullptr, 10));
+    mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
   }
 
   /*
@@ -346,12 +272,12 @@ rw_init(const QString& fname)
    * for the new models, we just release this safety check manually.
    */
   if (receiver_must_upper) {
-    setshort_goodchars(mkshort_handle, valid_waypt_chars);
+    mkshort_handle->set_goodchars(valid_waypt_chars);
   } else {
-    setshort_badchars(mkshort_handle, "");
+    mkshort_handle->set_badchars("");
   }
 
-  setshort_mustupper(mkshort_handle, receiver_must_upper);
+  mkshort_handle->set_mustupper(receiver_must_upper);
 
   /*
    * This used to mean something when we used cet, but these days this
@@ -370,27 +296,17 @@ rw_init(const QString& fname)
     fprintf(stdout, "receiver charset detected as %s.\r\n", receiver_charset);
   }
 
-  /*
-   * Beware, valid_waypt_chars shouldn't contain any character class metacharacters,
-   * i.e. '\', '^', '-', '[', or ']'
-   */
-  assert(!QString(valid_waypt_chars).contains('\\'));
-  assert(!QString(valid_waypt_chars).contains('^'));
-  assert(!QString(valid_waypt_chars).contains('-'));
-  assert(!QString(valid_waypt_chars).contains('['));
-  assert(!QString(valid_waypt_chars).contains(']'));
-  invalid_char_re = QRegularExpression(QStringLiteral("[^%1]").arg(valid_waypt_chars));
-  assert(invalid_char_re.isValid());
+  valid_chars = valid_waypt_chars;
 }
 
-static void
-rd_init(const QString& fname)
+void
+GarminFormat::rd_init(const QString& fname)
 {
   rw_init(fname);
 }
 
-static void
-rw_deinit()
+void
+GarminFormat::rw_deinit()
 {
   if (gps_baud_rate != DEFAULT_BAUD) {
     if (0 == GPS_Set_Baud_Rate(portname, DEFAULT_BAUD)) {
@@ -398,16 +314,17 @@ rw_deinit()
     }
   }
 
-  if (mkshort_handle) {
-    mkshort_del_handle(&mkshort_handle);
-  }
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
 
   xfree(portname);
   portname = nullptr;
+
+  valid_chars = QString();
 }
 
-static int
-waypt_read_cb(int total_ct, GPS_PWay*)
+int
+GarminFormat::waypt_read_cb(int total_ct, GPS_PWay* /*unused*/)
 {
   if (global_opts.verbose_status) {
     static int i;
@@ -417,8 +334,8 @@ waypt_read_cb(int total_ct, GPS_PWay*)
   return 0;
 }
 
-static void
-waypt_read()
+void
+GarminFormat::waypt_read()
 {
   int n;
   GPS_PWay* way = nullptr;
@@ -484,14 +401,14 @@ waypt_read()
   }
 }
 
-static int lap_read_nop_cb(int, struct GPS_SWay**)
+int GarminFormat::lap_read_nop_cb(int /*unused*/, GPS_SWay** /*unused*/)
 {
   return 0;
 }
 
 // returns 1 if the waypoint's start_time can be found
 // in the laps array, 0 otherwise
-static unsigned int checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nlaps)
+unsigned int GarminFormat::checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nlaps)
 {
   int result = 0;
 
@@ -517,9 +434,8 @@ static unsigned int checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nl
   return result;
 }
 
-static
 void
-track_read()
+GarminFormat::track_read()
 {
   GPS_PTrack* array;
   route_head* trk_head = nullptr;
@@ -534,7 +450,7 @@ track_read()
   }
 
 
-  int32 ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
+  int32_t ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
 
   if (ntracks <= 0) {
     return;
@@ -601,9 +517,8 @@ track_read()
   xfree(array);
 }
 
-static
 void
-route_read()
+GarminFormat::route_read()
 {
   GPS_PWay* array;
   /* TODO: Fixes warning but is it right?
@@ -612,7 +527,7 @@ route_read()
    */
   route_head* rte_head = nullptr;
 
-  int32 nroutepts = GPS_Command_Get_Route(portname, &array);
+  int32_t nroutepts = GPS_Command_Get_Route(portname, &array);
 
 //	fprintf(stderr, "Routes %d\n", (int) nroutepts);
 #if 1
@@ -660,10 +575,16 @@ route_read()
  * code, we convert the PVT (position/velocity/time) data from the receiver
  * to the data type we use throughout.   Yes, we do lose some data that way.
  */
-static void
-pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
+void
+GarminFormat::pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
 {
-  wpt->altitude = pvt->alt;
+  // pvt->alt is height (in meters) above the WGS84 elipsoid.
+  // pvt->msl_hght is height (in meters) of WGS84 elipsoid above MSL.
+  // wpt->altitude is height (in meters) above geoid (mean sea level).
+  // wpt->geoidheight is "Height (in meters) of geoid (mean sea level) above WGS84 earth ellipsoid."
+  wpt->set_geoidheight(-pvt->msl_hght);
+  wpt->altitude = pvt->alt + pvt->msl_hght;
+
   wpt->latitude = pvt->lat;
   wpt->longitude = pvt->lon;
 
@@ -680,11 +601,13 @@ pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
    * 3) The number of leap seconds that offset the current UTC and GPS
    *    reference clocks.
    */
-  double wptime = 631065600.0 + pvt->wn_days * 86400.0  +
-                  pvt->tow
-                  - pvt->leap_scnds;
-  double wptimes = floor(wptime);
-  wpt->SetCreationTime(wptimes, 1000000.0 * (wptime - wptimes));
+  double tow_integral_part;
+  double tow_fractional_part = modf(pvt->tow, &tow_integral_part);
+  qint64 seconds = Q_INT64_C(631065600) + pvt->wn_days * Q_INT64_C(86400)  +
+                   qRound64(tow_integral_part)
+                   - pvt->leap_scnds;
+  qint64 milliseconds = qRound64(1000.0 * tow_fractional_part);
+  wpt->SetCreationTime(seconds, milliseconds);
 
   /*
    * The Garmin spec fifteen different models that use a different
@@ -720,22 +643,20 @@ pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
   }
 }
 
-static gpsdevh* pvt_fd;
-
-static void
-pvt_init(const QString& fname)
+void
+GarminFormat::rd_position_init(const QString& fname)
 {
   rw_init(fname);
   GPS_Command_Pvt_On(qPrintable(fname), &pvt_fd);
 }
 
-static Waypoint*
-pvt_read(posn_status* posn_status)
+Waypoint*
+GarminFormat::rd_position(posn_status* posn_status)
 {
   auto* wpt = new Waypoint;
   GPS_PPvt_Data pvt = GPS_Pvt_New();
 
-  if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
+  if (GPS_Command_Pvt_Get(pvt_fd, &pvt)) {
     pvt2wpt(pvt, wpt);
     GPS_Pvt_Del(&pvt);
 
@@ -762,8 +683,8 @@ pvt_read(posn_status* posn_status)
   return nullptr;
 }
 
-static void
-data_read()
+void
+GarminFormat::read()
 {
   if (poweroff) {
     return;
@@ -784,8 +705,8 @@ data_read()
   }
 }
 
-static GPS_PWay
-sane_GPS_Way_New()
+GPS_PWay
+GarminFormat::sane_GPS_Way_New()
 {
   GPS_PWay way = GPS_Way_New();
   if (!way) {
@@ -810,8 +731,8 @@ sane_GPS_Way_New()
   return way;
 }
 
-static int
-waypt_write_cb(GPS_PWay*)
+int
+GarminFormat::waypt_write_cb(GPS_PWay* /*unused*/)
 {
   int n = waypt_count();
 
@@ -827,8 +748,8 @@ waypt_write_cb(GPS_PWay*)
  * If we're using smart names, try to put the cache info in the
  * description.
  */
-static const char*
-get_gc_info(const Waypoint* wpt)
+const char*
+GarminFormat::get_gc_info(const Waypoint* wpt)
 {
   if (global_opts.smart_names) {
     if (wpt->gc_data->type == Geocache::type_t::gt_virtual) {
@@ -856,15 +777,15 @@ get_gc_info(const Waypoint* wpt)
   return "";
 }
 
-static int
-waypoint_prepare()
+int
+GarminFormat::waypoint_prepare()
 {
   int i;
   int n = waypt_count();
   extern WaypointList* global_waypoint_list;
   int icon;
 
-  tx_waylist = (struct GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
+  tx_waylist = (GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
 
   for (i = 0; i < n; i++) {
     tx_waylist[i] = sane_GPS_Way_New();
@@ -873,7 +794,7 @@ waypoint_prepare()
   i = 0;
 
   // Iterate with waypt_disp_all?
-  for (const Waypoint* wpt : qAsConst(*global_waypoint_list)) {
+  for (const Waypoint* wpt : std::as_const(*global_waypoint_list)) {
     char obuf[256];
 
     QString src;
@@ -888,11 +809,11 @@ waypoint_prepare()
      * mkshort will do collision detection and namespace
      * cleaning
      */
-    QByteArray ident = mkshort(mkshort_handle,
-                               global_opts.synthesize_shortnames ?
-                               str_from_unicode(src) :
-                               str_from_unicode(wpt->shortname),
-                               false);
+    QByteArray ident = mkshort_handle->mkshort(
+                         global_opts.synthesize_shortnames ?
+                         str_from_unicode(src) :
+                         str_from_unicode(wpt->shortname),
+                         false);
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
      * to the end with spaces.  So this is NOT (strlen+1).
@@ -968,12 +889,12 @@ waypoint_prepare()
   return n;
 }
 
-static void
-waypoint_write()
+void
+GarminFormat::waypoint_write()
 {
   int n = waypoint_prepare();
 
-  if (int32 ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
+  if (int32_t ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
     fatal(MYNAME ":communication error sending waypoints..\n");
   }
 
@@ -987,20 +908,25 @@ waypoint_write()
   xfree(tx_waylist);
 }
 
-static void
-route_hdr_pr(const route_head* rte)
+void
+GarminFormat::route_hdr_pr(const route_head* rte)
 {
   (*cur_tx_routelist_entry)->rte_num = rte->rte_num;
   (*cur_tx_routelist_entry)->isrte = 1;
   if (!rte->rte_name.isEmpty()) {
+    /* for devices that use D201_Rte_Hdr_Type */
+    write_char_string((*cur_tx_routelist_entry)->rte_cmnt,
+                      str_from_unicode(rte->rte_name).constData(),
+                      sizeof((*cur_tx_routelist_entry)->rte_cmnt));
+    /* for devices that use D202_Rte_Hdr_Type */
     write_char_string((*cur_tx_routelist_entry)->rte_ident,
                       str_from_unicode(rte->rte_name).constData(),
                       sizeof((*cur_tx_routelist_entry)->rte_ident));
   }
 }
 
-static void
-route_waypt_pr(const Waypoint* wpt)
+void
+GarminFormat::route_waypt_pr(const Waypoint* wpt)
 {
   GPS_PWay rte = *cur_tx_routelist_entry;
 
@@ -1018,7 +944,11 @@ route_waypt_pr(const Waypoint* wpt)
 
   rte->lon = wpt->longitude;
   rte->lat = wpt->latitude;
-  rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+  if (gps_rte_type == 103) {
+    rte->smbl = d103_icon_number_from_symbol(wpt->icon_descr);
+  } else {
+    rte->smbl = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+  }
 
   // map class so unit doesn't duplicate routepoints as a waypoint.
   rte->wpt_class = 0x80;
@@ -1036,7 +966,10 @@ route_waypt_pr(const Waypoint* wpt)
    * for the new models, we just release this safety check manually.
    */
   if (receiver_must_upper) {
-    cleanname = cleanname.toUpper().remove(invalid_char_re);
+    auto isInvalidChar = [this](const QChar &ch)->bool {
+      return !valid_chars.contains(ch);
+    };
+    cleanname = cleanname.toUpper().removeIf(isInvalidChar);
   }
   write_char_string(rte->ident,
                     str_from_unicode(cleanname).constData(),
@@ -1052,24 +985,36 @@ route_waypt_pr(const Waypoint* wpt)
   cur_tx_routelist_entry++;
 }
 
-static void
-route_write()
+void
+GarminFormat::route_write()
 {
-  int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
+  const int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
 
-  tx_routelist = (struct GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
+  tx_routelist = (GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
   cur_tx_routelist_entry = tx_routelist;
 
   for (int i = 0; i < n; i++) {
     tx_routelist[i] = sane_GPS_Way_New();
   }
 
-  route_disp_all(route_hdr_pr, nullptr, route_waypt_pr);
+  auto route_hdr_pr_lambda = [this](const route_head* rte)->void {
+    route_hdr_pr(rte);
+  };
+  auto route_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
+    route_waypt_pr(waypointp);
+  };
+  route_disp_all(route_hdr_pr_lambda, nullptr, route_waypt_pr_lambda);
   GPS_Command_Send_Route(portname, tx_routelist, n);
+
+  for (int i = 0; i < n; i++) {
+    GPS_Way_Del(&tx_routelist[i]);
+  }
+
+  xfree(tx_routelist);
 }
 
-static void
-track_hdr_pr(const route_head* trk_head)
+void
+GarminFormat::track_hdr_pr(const route_head* trk_head)
 {
   (*cur_tx_tracklist_entry)->ishdr = true;
   if (!trk_head->rte_name.isEmpty()) {
@@ -1083,8 +1028,8 @@ track_hdr_pr(const route_head* trk_head)
   my_track_count++;
 }
 
-static void
-track_waypt_pr(const Waypoint* wpt)
+void
+GarminFormat::track_waypt_pr(const Waypoint* wpt)
 {
   (*cur_tx_tracklist_entry)->lat = wpt->latitude;
   (*cur_tx_tracklist_entry)->lon = wpt->longitude;
@@ -1099,26 +1044,32 @@ track_waypt_pr(const Waypoint* wpt)
   cur_tx_tracklist_entry++;
 }
 
-static int
-track_prepare()
+int
+GarminFormat::track_prepare()
 {
-  int32 n = track_waypt_count() + track_count();
+  int32_t n = track_waypt_count() + track_count();
 
-  tx_tracklist = (struct GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
+  tx_tracklist = (GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
   cur_tx_tracklist_entry = tx_tracklist;
   for (int i = 0; i < n; i++) {
     tx_tracklist[i] = GPS_Track_New();
   }
   my_track_count = 0;
-  track_disp_all(track_hdr_pr, nullptr, track_waypt_pr);
+  auto track_hdr_pr_lambda = [this](const route_head* rte)->void {
+    track_hdr_pr(rte);
+  };
+  auto track_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
+    track_waypt_pr(waypointp);
+  };
+  track_disp_all(track_hdr_pr_lambda, nullptr, track_waypt_pr_lambda);
 
   GPS_Prepare_Track_For_Device(&tx_tracklist, &n);
 
   return n;
 }
 
-static void
-track_write()
+void
+GarminFormat::track_write()
 {
   int n = track_prepare();
   GPS_Command_Send_Track(portname, tx_tracklist, n, (eraset)? 1 : 0);
@@ -1129,8 +1080,8 @@ track_write()
   xfree(tx_tracklist);
 }
 
-static void
-course_write()
+void
+GarminFormat::course_write()
 {
   int i;
 
@@ -1151,8 +1102,8 @@ course_write()
   xfree(tx_tracklist);
 }
 
-static void
-data_write()
+void
+GarminFormat::write()
 {
   if (poweroff) {
     return;
@@ -1179,42 +1130,8 @@ data_write()
   }
 }
 
-
-ff_vecs_t garmin_vecs = {
-  ff_type_serial,
-  FF_CAP_RW_ALL,
-  rd_init,
-  rw_init,
-  rw_deinit,
-  rw_deinit,
-  data_read,
-  data_write,
-  nullptr,
-  &garmin_args,
-  { pvt_init, pvt_read, rw_deinit, nullptr, nullptr, nullptr }
-};
-
-static const char* d103_icons[16] = {
-  "dot",
-  "house",
-  "gas",
-  "car",
-  "fish",
-  "boat",
-  "anchor",
-  "wreck",
-  "exit",
-  "skull",
-  "flag",
-  "camp",
-  "circle_x",
-  "deer",
-  "1st_aid",
-  "back-track"
-};
-
-static const char*
-d103_symbol_from_icon_number(unsigned int n)
+const char*
+GarminFormat::d103_symbol_from_icon_number(unsigned int n)
 {
   if (n  <= 15) {
     return d103_icons[n];
@@ -1223,8 +1140,8 @@ d103_symbol_from_icon_number(unsigned int n)
   }
 }
 
-static int
-d103_icon_number_from_symbol(const QString& s)
+int
+GarminFormat::d103_icon_number_from_symbol(const QString& s)
 {
   if (s.isNull()) {
     return 0;
@@ -1238,10 +1155,10 @@ d103_icon_number_from_symbol(const QString& s)
   return 0;
 }
 
-static void
-garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
+void
+GarminFormat::garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
-  garmin_fs_t* gmsd = garmin_fs_alloc(protoid);
+  auto* gmsd = new garmin_fs_t(protoid);
   wpt->fs.FsChainAdd(gmsd);
 
   /* nothing happens until gmsd is allocated some lines above */
@@ -1272,10 +1189,10 @@ garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid
   garmin_fs_t::set_addr(gmsd, str_to_unicode(QByteArray(way->addr, qstrnlen(way->addr, sizeof(way->addr)))));
 }
 
-static void
-garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid)
+void
+GarminFormat::garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid)
 {
-  garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
+  const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   (void)protoid; // unused for now.
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.16)
 
 include(CMakeDependentOption)
 include(CheckIncludeFile)
@@ -6,7 +6,7 @@ include(CheckIncludeFile)
 include(gbversion.cmake)
 project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Do this after we set up common variables but before creating other
@@ -26,17 +26,12 @@ set(CMAKE_AUTORCC ON)
 add_executable(gpsbabel)
 
 # Find the QtCore library
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
-list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core)
-if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
-  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
+find_package(Qt6 REQUIRED COMPONENTS Core Core5Compat)
+list(APPEND QT_LIBRARIES Qt6::Core Qt6::Core5Compat)
+if(${Qt6Core_VERSION} VERSION_LESS 6.2)
+  message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.2 or newer is required.")
 else()
-  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
-endif()
-if(${QT_VERSION_MAJOR} EQUAL "6")
-  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core5Compat REQUIRED)
-  list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core5Compat)
+  message(STATUS "Using Qt6 version ${Qt6Core_VERSION}")
 endif()
 
 option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
@@ -153,7 +148,7 @@ set(JEEPS
   jeeps/gpsusbcommon.cc
   jeeps/gpsusbread.cc
   jeeps/gpsusbsend.cc
-  jeeps/jgpsutil.cc
+  jeeps/gpsutil.cc
 )
 
 # SUPPORT
@@ -174,6 +169,7 @@ set(SUPPORT
   rgbcolors.cc
   route.cc
   session.cc
+  src/core/codecdevice.cc
   src/core/logging.cc
   src/core/nvector.cc
   src/core/textstream.cc
@@ -187,9 +183,6 @@ set(SUPPORT
   waypt.cc
   xmlgeneric.cc
 )
-if(${QT_VERSION_MAJOR} EQUAL "6")
-  set(SUPPORT ${SUPPORT} src/core/codecdevice.cc)
-endif()
 
 # HEADERS
 set(HEADERS
@@ -201,6 +194,7 @@ set(HEADERS
   filter_vecs.h
   format.h
   formspec.h
+  garmin.h
   garmin_fit.h
   garmin_fs.h
   garmin_gpi.h
@@ -209,6 +203,8 @@ set(HEADERS
   gbfile.h
   gbser.h
   gbser_private.h
+  garmin_txt.h
+  garmin_xt.h
   gdb.h
   geocache.h
   geojson.h
@@ -217,17 +213,20 @@ set(HEADERS
   googletakeout.h
   gpx.h
   grtcirc.h
+  gtm.h
   gtrnctr.h
   heightgrid.h
   humminbird.h
   html.h
   inifile.h
   kml.h
-  legacyformat.h
   igc.h
   lowranceusr.h
+  mkshort.h
+  mtk_logger.h
   nmea.h
   osm.h
+  ozi.h
   qstarz_bl_1000.h
   random.h
   session.h
@@ -235,8 +234,12 @@ set(HEADERS
   skytraq.h
   subrip.h
   text.h
+  tpg.h
+  tpo.h
   unicsv.h
   units.h
+  v900.h
+  vcf.h
   vecs.h
   xcsv.h
   xmlgeneric.h
@@ -246,7 +249,6 @@ set(HEADERS
   jeeps/gpscom.h
   jeeps/gpsdatum.h
   jeeps/gpsdevice.h
-  jeeps/gpsfmt.h
   jeeps/gpsmath.h
   jeeps/gpsmem.h
   jeeps/gpsport.h
@@ -258,6 +260,7 @@ set(HEADERS
   jeeps/gpsusbcommon.h
   jeeps/gpsusbint.h
   jeeps/gpsutil.h
+  src/core/codecdevice.h
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
@@ -268,9 +271,6 @@ set(HEADERS
   src/core/xmlstreamwriter.h
   src/core/xmltag.h
 )
-if(${QT_VERSION_MAJOR} EQUAL "6")
-  set(HEADERS ${HEADERS} src/core/codecdevice.h)
-endif()
 
 string(REPLACE .cc .h FILTER_HEADERS "${FILTERS}")
 set(HEADERS ${HEADERS} ${FILTER_HEADERS})
@@ -283,9 +283,7 @@ endif()
 
 if(WIN32)
   target_compile_definitions(gpsbabel PRIVATE __WIN32__)
-  if(${QT_VERSION_MAJOR} EQUAL "6")
-    qt_disable_unicode_defines(gpsbabel)
-  endif()
+  qt_disable_unicode_defines(gpsbabel)
   if(CMAKE_BUILD_TYPE STREQUAL Debug)
     target_compile_definitions(gpsbabel PRIVATE _DEBUG)
   endif()
@@ -342,7 +340,6 @@ target_sources(gpsbabel PRIVATE ${SOURCES} ${HEADERS})
 # We don't care about stripping things out of the build.  Full monty, baby.
 target_compile_definitions(gpsbabel PRIVATE MAXIMAL_ENABLED)
 target_compile_definitions(gpsbabel PRIVATE FILTERS_ENABLED)
-target_compile_definitions(gpsbabel PRIVATE SHAPELIB_ENABLED)
 target_compile_definitions(gpsbabel PRIVATE CSVFMTS_ENABLED)
 
 target_link_libraries(gpsbabel PRIVATE ${QT_LIBRARIES} ${LIBS})
@@ -396,6 +393,7 @@ set(TESTS
   kml-read
   kml
   lowranceusr
+  mkshort
   mtk
   multiurlgpx
   nmea
@@ -475,9 +473,9 @@ endif()
 
 get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if((CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR) AND NOT _isMultiConfig)
-  set(WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
+  set(GPSBABEL_WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
   add_custom_target(gpsbabel.org
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${WEB} ${DOCVERSION}
+                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${GPSBABEL_WEB} ${GPSBABEL_DOCVERSION}
                     DEPENDS gpsbabel gpsbabel.pdf
                     VERBATIM
                     USES_TERMINAL)

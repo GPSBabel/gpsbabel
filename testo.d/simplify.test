@@ -19,7 +19,12 @@ gpsbabel -i gpx -f ${REFERENCE}/track/garmin-edge-800-output.gpx \
 compare ${REFERENCE}/simplify_error_crosstrack.gpx ${TMPDIR}/simplify_error.gpx
 
 gpsbabel -i gpx -f ${REFERENCE}/track/garmin-edge-800-output.gpx \
-         -x simplify,error=1000m,length \
+         -x simplify,error=20.34m,length \
          -o gpx -F ${TMPDIR}/simplify_error_length.gpx
 compare ${REFERENCE}/simplify_error_length.gpx ${TMPDIR}/simplify_error_length.gpx
 
+# check default error units are miles
+gpsbabel -i gpx -f ${REFERENCE}/track/garmin-edge-800-output.gpx \
+         -x simplify,error=0.01263869,length \
+         -o gpx -F ${TMPDIR}/simplify_error_length_miles.gpx
+compare ${REFERENCE}/simplify_error_length.gpx ${TMPDIR}/simplify_error_length_miles.gpx

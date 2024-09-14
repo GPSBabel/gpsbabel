@@ -45,6 +45,7 @@
 #include "gbfile.h"                // for gbfprintf, gbfflush, gbfclose, gbfopen, gbfgetstr, gbfile
 #include "gbser.h"                 // for gbser_set_speed, gbser_flush, gbser_read_line, gbser_deinit, gbser_init, gbser_write
 #include "jeeps/gpsmath.h"         // for GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M
+#include "mkshort.h"               // for MakeShort
 #include "src/core/datetime.h"     // for DateTime
 #include "src/core/logging.h"      // for Warning
 
@@ -190,8 +191,10 @@ NmeaFormat::nmea_add_wpt(Waypoint* wpt, route_head* trk) const
   // This also indicates to nmea_release_wpt that ownership has been
   // transferred to either the global_waypoint_list or global_track_list.
   wpt->extra_data = nullptr;
-  if (datum != kDautmWGS84) {
-    double lat, lon, alt;
+  if (datum != kDatumWGS84) {
+    double lat;
+    double lon;
+    double alt;
     GPS_Math_Known_Datum_To_WGS84_M(
       wpt->latitude, wpt->longitude, 0,
       &lat, &lon, &alt, datum);
@@ -220,7 +223,7 @@ NmeaFormat::rd_init(const QString& fname)
 {
   curr_waypt = nullptr;
   last_waypt = nullptr;
-  datum = kDautmWGS84;
+  datum = kDatumWGS84;
   had_checksum = false;
 
   CHECK_BOOL(opt_gprmc);
@@ -299,8 +302,8 @@ NmeaFormat::wr_init(const QString& fname)
     }
   }
 
-  mkshort_handle = mkshort_new_handle();
-  setshort_length(mkshort_handle, xstrtoi(snlenopt, nullptr, 10));
+  mkshort_handle = new MakeShort;
+  mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
 
   if (opt_gisteq) {
     opt_gpgga = nullptr;
@@ -313,7 +316,8 @@ void
 NmeaFormat::wr_deinit()
 {
   gbfclose(file_out);
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
 }
 
 void
@@ -354,7 +358,7 @@ QTime NmeaFormat::nmea_parse_hms(const QString& str)
   QTime retval; /* invalid time */
   const QStringList parts = str.trimmed().split('.');
   if ((parts.size() == 1) || (parts.size() == 2)) {
-    retval = QTime::fromString(parts.at(0), "hhmmss");
+    retval = QTime::fromString(parts.at(0), u"hhmmss");
     if (retval.isValid() && parts.size() == 2) {
       bool ok;
       // prepend "0.".  prepending "." won't work if there are no trailing digits.
@@ -382,11 +386,11 @@ NmeaFormat::gpgll_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
   QChar latdir = 'N';
-  if (fields.size() > 2) latdir = fields[2][0];
+  if ((fields.size() > 2) && (fields[2].size() > 0)) latdir = fields[2][0];
   double lngdeg = 0;
   if (fields.size() > 3) lngdeg = fields[3].toDouble();
   QChar lngdir = 'E';
-  if (fields.size() > 4) lngdir = fields[4][0];
+  if ((fields.size() > 4) && (fields[4].size() > 0)) lngdir = fields[4][0];
   QTime hms;
   if (fields.size() > 5) hms = nmea_parse_hms(fields[5]);
   bool valid = false;
@@ -430,11 +434,11 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 2) latdeg = fields[2].toDouble();
   QChar latdir = 'N';
-  if (fields.size() > 3) latdir = fields[3][0];
+  if ((fields.size() > 3) && (fields[3].size() > 0)) latdir = fields[3][0];
   double lngdeg = 0;
   if (fields.size() > 4) lngdeg = fields[4].toDouble();
-  QChar lngdir = 'W';
-  if (fields.size() > 5) lngdir = fields[5][0];
+  QChar lngdir = 'E';
+  if ((fields.size() > 5) && (fields[5].size() > 0)) lngdir = fields[5][0];
   int fix = fix_unknown;
   if (fields.size() > 6) fix = fields[6].toInt();
   int nsats = 0;
@@ -444,11 +448,11 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
   double alt = unknown_alt;
   if (fields.size() > 9) alt = fields[9].toDouble();
   QChar altunits ='M';
-  if (fields.size() > 10) altunits = fields[10][0];
+  if ((fields.size() > 10) && (fields[10].size() > 0)) altunits = fields[10][0];
   double geoidheight = unknown_alt;
   if (fields.size() > 11) geoidheight = fields[11].toDouble();
   QChar geoidheightunits = 'M';
-  if (fields.size() > 12) geoidheightunits = fields[12][0];
+  if ((fields.size() > 12) && (fields[12].size() > 0)) geoidheightunits = fields[12][0];
 
   /*
    * In serial mode, allow the fix with an invalid position through
@@ -518,15 +522,15 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   QTime hms;
   if (fields.size() > 1) hms = nmea_parse_hms(fields[1]);
   QChar fix = 'V'; // V == "Invalid"
-  if (fields.size() > 2) fix = fields[2][0];
+  if ((fields.size() > 2) && (fields[2].size() > 0)) fix = fields[2][0];
   double latdeg = 0;
   if (fields.size() > 3) latdeg = fields[3].toDouble();
   QChar latdir = 'N';
-  if (fields.size() > 4) latdir = fields[4][0];
+  if ((fields.size() > 4) && (fields[4].size() > 0)) latdir = fields[4][0];
   double lngdeg = 0;
   if (fields.size() > 5) lngdeg = fields[5].toDouble();
-  QChar lngdir = 'W';
-  if (fields.size() > 6) lngdir = fields[6][0];
+  QChar lngdir = 'E';
+  if ((fields.size() > 6) && (fields[6].size() > 0)) lngdir = fields[6][0];
   double speed = 0;
   if (fields.size() > 7) speed = fields[7].toDouble();
   double course = 0;
@@ -535,7 +539,7 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   if (fields.size() > 9) {
     QString datestr(fields[9]);
     datestr.insert(4, "20");
-    dmy = QDate::fromString(datestr, "ddMMyyyy");
+    dmy = QDate::fromString(datestr, u"ddMMyyyy");
   }
   if (fix != 'A') {
     /* ignore this fix - it is invalid */
@@ -600,11 +604,11 @@ NmeaFormat::gpwpl_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
   QChar latdir = 'N';
-  if (fields.size() > 2) latdir = fields[2][0];
+  if ((fields.size() > 2) && (fields[2].size() > 0)) latdir = fields[2][0];
   double lngdeg = 0;
   if (fields.size() > 3) lngdeg = fields[3].toDouble();
   QChar lngdir = 'E';
-  if (fields.size() > 4) lngdir = fields[4][0];
+  if ((fields.size() > 4) && (fields[4].size() > 0)) lngdir = fields[4][0];
   QString sname;
   if (fields.size() > 5) sname = fields[5];
 
@@ -631,7 +635,7 @@ NmeaFormat::gpzda_parse(const QString& ibuf)
   if (fields.size() > 4) {
     QTime time = nmea_parse_hms(fields[1]);
     QString datestr = QStringLiteral("%1%2%3").arg(fields[2], fields[3], fields[4]);
-    QDate date = QDate::fromString(datestr, "ddMMyyyy");
+    QDate date = QDate::fromString(datestr, u"ddMMyyyy");
 
     // The prev_datetime data member might be used by
     // nmea_fix_timestamps and nmea_set_waypoint_time.
@@ -658,7 +662,7 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
   // 0 = "GPGSA"
   // 1 = Mode. Ignored
   QChar fix;
-  if (nfields > 2) {
+  if ((nfields > 2) && (fields[2].size() > 0)) {
     fix = fields[2][0];
   }
 
@@ -667,7 +671,9 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
     if (nfields > cnt + 3) prn[cnt] = fields[cnt + 3].toInt();
   }
 
-  float pdop = 0, hdop = 0, vdop = 0;
+  float pdop = 0;
+  float hdop = 0;
+  float vdop = 0;
   if (nfields > 15) pdop = fields[15].toFloat();
   if (nfields > 16) hdop = fields[16].toFloat();
   if (nfields > 17) vdop = fields[17].toFloat();
@@ -730,12 +736,24 @@ double NmeaFormat::pcmpt_deg(int d)
 void
 NmeaFormat::pcmpt_parse(const char* ibuf)
 {
-  int i, j1, j2, j3, j4, j5, j6;
-  int lat, lon;
-  char altflag, u1, u2;
-  float alt, f1, f2;
+  int i;
+  int j1;
+  int j2;
+  int j3;
+  int j4;
+  int j5;
+  int j6;
+  int lat;
+  int lon;
+  char altflag;
+  char u1;
+  char u2;
+  float alt;
+  float f1;
+  float f2;
   char coords[20] = {0};
-  int dmy, hms;
+  int dmy;
+  int hms;
 
   dmy = hms = 0;
 
@@ -925,7 +943,9 @@ NmeaFormat::nmea_parse_one_line(const QByteArray& ibuf)
      for that field.  Rather than change all the parse routines, we first
      substitute a default value of zero for any missing field.
   */
-  tbuf.replace(",,", ",0,");
+  while (tbuf.contains(",,")) {
+    tbuf.replace(",,", ",0,");
+  }
 
   if (notalkerid_strmatch(tbuf, "WPL")) {
     gpwpl_parse(tbuf);
@@ -977,7 +997,7 @@ NmeaFormat::read()
   }
 
   if (optdate) {
-    opt_tm = QDate::fromString(optdate, "yyyyMMdd");
+    opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
     if (!opt_tm.isValid()) {
       fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
     }
@@ -1164,9 +1184,9 @@ NmeaFormat::nmea_wayptpr(const Waypoint* wpt) const
   double lat = degrees2ddmm(wpt->latitude);
   double lon = degrees2ddmm(wpt->longitude);
   if (global_opts.synthesize_shortnames) {
-    s = mkshort_from_wpt(mkshort_handle, wpt);
+    s = mkshort_handle->mkshort_from_wpt(wpt);
   } else {
-    s = mkshort(mkshort_handle, wpt->shortname);
+    s = mkshort_handle->mkshort(wpt->shortname);
   }
 
   snprintf(obuf, sizeof(obuf),  "GPWPL,%08.3f,%c,%09.3f,%c,%s",

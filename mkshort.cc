@@ -1,7 +1,7 @@
 /*
     Generate unique short names.
 
-    Copyright (C) 2003, 2004, 2005, 2006 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2003-2006, 2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,288 +19,154 @@
 
  */
 
+#include "mkshort.h"
+
 #include <cassert>     // for assert
-#include <cctype>      // for isspace, toupper, isdigit
-#include <climits>     // for INT_MAX
-#include <cstring>     // for strlen, memmove, strchr, strcpy, strncmp, strcat, strncpy
+#include <cctype>      // for isspace, isdigit
+#include <utility>     // for as_const
 
 #include <QByteArray>  // for QByteArray
 #include <QChar>       // for QChar, QChar::ReplacementCharacter
-#include <QHash>       // for QHash, QHash<>::iterator, qHash, QHash<>::size_type
 #include <QString>     // for QString
+#include <QVector>     // for QVector
 #include <Qt>          // for CaseInsensitive
-#include <QtGlobal>    // for foreach
 
 #include "defs.h"
 #include "geocache.h"  // for Geocache
 
 
-#define MYNAME	"mkshort"
+const QByteArray MakeShort::vowels = "aeiouAEIOU";
 
-static const char vowels[] = "aeiouAEIOU";
-
-static constexpr unsigned int default_target_len = 8U;
-static const char* DEFAULT_BADCHARS = "\"$.,'!-";
-
-struct uniq_shortname {
-  int conflictctr{0};
+const QVector<MakeShort::replacement_t> MakeShort::replacements = {
+  {"zero", "0"},
+  {"one", "1"},
+  {"two", "2"},
+  {"three", "3"},
+  {"four", "4"},
+  {"five", "5"},
+  {"six", "6"},
+  {"seven", "7"},
+  {"eight", "8"},
+  {"nine", "9"}
 };
 
-class ShortNameKey;
-using ShortNameHash = QHash<ShortNameKey, uniq_shortname*>;
-class ShortNameKey {
-public:
-  ShortNameKey(const QByteArray& name) : shortname(name) {} /* converting constructor */
-
-  friend qhash_result_t qHash(const ShortNameKey &key, qhash_result_t seed = 0) noexcept
-  {
-    // We hash all strings as upper case.
-    return qHash(key.shortname.toUpper(), seed);
-  }
-
-  QByteArray shortname;
-};
-
-inline bool operator==(const ShortNameKey& lhs, const ShortNameKey &rhs) noexcept
+void MakeShort::mkshort_add_to_list(QByteArray& name, bool is_utf8)
 {
-  return lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0;
-}
-
-struct  mkshort_handle_imp {
-  unsigned int target_len{default_target_len};
-  char* badchars{nullptr};
-  char* goodchars{nullptr};
-  char* defname{nullptr};
-  ShortNameHash namelist;
-
-  /* Various internal flags */
-  bool mustupper{false};
-  bool whitespaceok{true};
-  bool repeating_whitespaceok{false};
-  bool must_uniq{true};
-};
-
-static struct replacements {
-  const char* orig;
-  const char* replacement;
-} replacements[] = {
-  {"zero", 	"0"},
-  {"one", 	"1"},
-  {"two", 	"2"},
-  {"three", 	"3"},
-  {"four", 	"4"},
-  {"five", 	"5"},
-  {"six", 	"6"},
-  {"seven", 	"7"},
-  {"eight", 	"8"},
-  {"nine", 	"9"},
-  {nullptr, 		nullptr}
-};
-
-short_handle
-mkshort_new_handle()
-{
-  auto* h = new mkshort_handle_imp;
-
-  h->badchars = xstrdup(DEFAULT_BADCHARS);
-  h->defname = xstrdup("WPT");
-
-  return h;
-}
-
-static
-uniq_shortname*
-is_unique(mkshort_handle_imp* h, const QByteArray& name)
-{
-  if (h->namelist.contains(name)) {
-    return h->namelist.value(name);
-  }
-  return (uniq_shortname*) nullptr;
-}
-
-static
-void
-add_to_hashlist(mkshort_handle_imp* h, const QByteArray& name)
-{
-  h->namelist.insert(name, new uniq_shortname);
-}
-
-static
-void
-mkshort_add_to_list(mkshort_handle_imp* h, QByteArray& name)
-{
-  static_assert(!std::is_signed<decltype(h->target_len)>::value,
-                "simplify the following logic if target length is signed.");
-  assert(h->target_len <= INT_MAX);
-  int target_len = h->target_len;
-
-  uniq_shortname* s;
-  while ((s = is_unique(h, name))) {
+  while (namelist_.contains(name)) {
+    auto& conflictctr = namelist_[name];
 
     QByteArray suffix(".");
-    suffix.append(QByteArray::number(++s->conflictctr));
+    suffix.append(QByteArray::number(++conflictctr));
+    int suffixcnt = suffix.size();
 
-    if (name.size() + suffix.size() <= target_len) {
+    if (name.size() + suffixcnt <= target_len_) {
       name.append(suffix);
-    } else if (suffix.size() <= target_len) {
-      // FIXME: utf8 => grapheme truncate
-      name.truncate(target_len - suffix.size());
-      name.append(suffix);
+    } else if (int keepcnt = target_len_ - suffixcnt; keepcnt >= 0) {
+      if (is_utf8) {
+        QString result = grapheme_truncate(QString::fromUtf8(name), keepcnt);
+        name = result.toUtf8().append(suffix);
+      } else {
+        name.truncate(keepcnt);
+        name.append(suffix);
+      }
     } else {
       fatal("mkshort failure, the specified short length is insufficient.\n");
     }
   }
 
-  add_to_hashlist(h, name);
-}
-
-void
-mkshort_del_handle(short_handle* h)
-{
-  if (!h) {
-    return;
-  }
-
-  auto* hdr = (mkshort_handle_imp*) *h;
-
-  if (!hdr) {
-    return;
-  }
-
-  for (auto it = hdr->namelist.cbegin(), end = hdr->namelist.cend(); it != end; ++it) {
-#if 0
-    if (global_opts.verbose_status >= 2 && it.value()->conflictctr) {
-      fprintf(stderr, "%d Output name conflicts: '%s'\n",
-              it.value()->conflictctr, it.key().shortname.constData());
-    }
-#endif
-    delete it.value();
-  }
-  hdr->namelist.clear();
-  hdr->namelist.squeeze();
-  /* setshort_badchars(*h, NULL); ! currently setshort_badchars() always allocates something ! */
-  if (hdr->badchars != nullptr) {
-    xfree(hdr->badchars);
-  }
-  setshort_goodchars(*h, nullptr);
-  if (hdr->defname) {
-    xfree(hdr->defname);
-  }
-
-  delete hdr;
-  *h = nullptr;
+  namelist_.insert(name, 0);
 }
 
 /*
  * This is the stuff that makes me ashamed to be a C programmer...
  */
 
-static
-char*
-delete_last_vowel(int start, char* istring, int* replaced)
+bool MakeShort::delete_last_vowel(int start, QByteArray& iostring)
 {
   /*
    * Basically implement strrchr.
    */
-  *replaced = 0;
-  for (int l = strlen(istring); l > start; l--) {
-    if (strchr(vowels, istring[l-1])) {
+  assert(start >= 1);
+  bool replaced = false;
+  for (int l = iostring.size(); l > start; --l) {
+    if (vowels.contains(iostring.at(l - 1))) {
       /* If vowel is the first letter of a word, keep it.*/
-      if (istring[l-2] == ' ') {
+      if (iostring.at(l - 2) == ' ') {
         continue;
       }
-      char* ostring = xstrdup(istring);
-      strncpy(&ostring[l-1], &istring[l], 1+strlen(istring)-l);
-      ostring[strlen(istring)-1] = 0;
-      *replaced = 1;
-      strcpy(istring, ostring);
-      xfree(ostring);
+      iostring.remove(l - 1, 1);
+      replaced = true;
       break;
     }
   }
-  return istring;
+  return replaced;
 }
 
 /*
  * Open the slippery slope of literal replacement.   Right now, replacements
  * are made only at the end of the string.
  */
-void
-replace_constants(char* s)
+void MakeShort::replace_constants(QByteArray& s)
 {
-  int origslen = strlen(s);
-
-  for (struct replacements* r = replacements; r->orig; r++) {
-    int rl = strlen(r->orig);
+  for (const auto& r : replacements) {
     /*
      * If word is in replacement list and preceded by a
      * space, replace it.
      */
-    if ((origslen - rl > 1) &&
-        (0 == case_ignore_strcmp(r->orig, &s[origslen - rl])) &&
-        (s[origslen - rl - 1] == ' ')) {
-      strcpy(&s[origslen - rl], r->replacement);
-      return ;
+    if ((s.size() > r.orig.size()) &&
+        (0 == r.orig.compare(s.mid(s.size() - r.orig.size()), Qt::CaseInsensitive)) &&
+        (s.at(s.size() - r.orig.size() - 1) == ' ')) {
+      s.truncate(s.size() - r.orig.size());
+      s.append(r.replacement);
+      return;
     }
   }
 }
-
 
 /*
  * Externally callable function to set the max length of the
  * strings returned by mkshort().  0 resets to default.
  */
-void
-setshort_length(short_handle h, int l)
+void MakeShort::set_length(int l)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
   if (l < 0) {
     fatal("mkshort: short length must be non-negative.\n");
   } else if (l == 0) {
-    hdl->target_len = default_target_len;
+    target_len_ = default_target_len;
   } else {
-    hdl->target_len = l;
+    target_len_ = l;
   }
 }
 
 /*
- * Call with L nonzero if whitespace in the generated shortname is wanted.
+ * Call with ok = true if whitespace in the generated shortname is wanted.
  */
 
-void
-setshort_whitespace_ok(short_handle h, int l)
+void MakeShort::set_whitespace_ok(bool ok)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-  hdl->whitespaceok = l;
+  whitespaceok_ = ok;
 }
 
 /*
- * Call with L nonzero if multiple consecutive whitespace in the
+ * Call with ok = true if multiple consecutive whitespace in the
  * generated shortname is wanted.
  */
 
-void
-setshort_repeating_whitespace_ok(short_handle h, int l)
+void MakeShort::set_repeating_whitespace_ok(bool ok)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-  hdl->repeating_whitespaceok = l;
+  repeating_whitespaceok_ = ok;
 }
 
 /*
  * Set default name given to a waypoint if no valid is possible
  * because it was filtered by charsets or null or whatever.
  */
-void
-setshort_defname(short_handle h, const char* s)
+void MakeShort::set_defname(const char* s)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
   if (s == nullptr) {
-    fatal("setshort_defname called without a valid name.");
+    fatal("set_defname called without a valid name.");
   }
-  if (hdl->defname != nullptr) {
-    xfree(hdl->defname);
-  }
-  hdl->defname = xstrdup(s);
+  defname_ = s;
 }
 
 /*
@@ -308,66 +174,45 @@ setshort_defname(short_handle h, const char* s)
  * that must never appear in a string returned by mkshort.  NULL
  * resets to default.
  */
-void
-setshort_badchars(short_handle h, const char* s)
+void MakeShort::set_badchars(const char* s)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-
-  if ((hdl->badchars != nullptr)) {
-    xfree(hdl->badchars);
-  }
-  hdl->badchars = xstrdup(s ? s : DEFAULT_BADCHARS);
+  badchars_ = (s  == nullptr)? default_badchars : s;
 }
 
 /*
  * Only characters that appear in *s are "whitelisted" to appear
  * in generated names.
  */
-void
-setshort_goodchars(short_handle h, const char* s)
+void MakeShort::set_goodchars(const char* s)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-
-  if (hdl->goodchars != nullptr) {
-    xfree(hdl->goodchars);
-  }
-  if (s != nullptr) {
-    hdl->goodchars = xstrdup(s);
+  if (s == nullptr) {
+    goodchars_.clear();
   } else {
-    hdl->goodchars = nullptr;
+    goodchars_ = s;
   }
 }
 
 /*
- *  Call with i non-zero if generated names must be uppercase only.
+ *  Call with must = true if generated names must be uppercase only.
  */
-void
-setshort_mustupper(short_handle h, int i)
+void MakeShort::set_mustupper(bool must)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-  hdl->mustupper = i;
+  mustupper_ = must;
 }
 
 
 /*
- *  Call with i zero if the generated names don't have to be unique.
+ *  Call with must = false if the generated names don't have to be unique.
  *  (By default, they are.)
  */
-void
-setshort_mustuniq(short_handle h, int i)
+void MakeShort::set_mustuniq(bool must)
 {
-  auto* hdl = (mkshort_handle_imp*) h;
-  hdl->must_uniq = i;
+  must_uniq_ = must;
 }
 
-QByteArray
-mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
+QByteArray MakeShort::mkshort(const QByteArray& istring, bool is_utf8)
 {
-  char* ostring;
-  char* tstring;
-  char* cp;
-  int i, l, replaced;
-  auto* hdl = (mkshort_handle_imp*) h;
+  QByteArray ostring;
 
   if (is_utf8) {
     /* clean UTF-8 string */
@@ -375,9 +220,9 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
     // QString::fromUtf8() doesn't quite promise to use QChar::ReplacementCharacter,
     // but if it did toss them.
     result.remove(QChar::ReplacementCharacter);
-    ostring = xstrdup(result.toUtf8().constData());
+    ostring = result.toUtf8();
   } else {
-    ostring = xstrdup(istring.constData());
+    ostring = istring;
   }
 
   /*
@@ -387,51 +232,37 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * the new seven digit geocache numbers and special case whacking
    * the 'G' off the front.
    */
-  if ((hdl->target_len == 6) && (strlen(ostring) == 7) &&
-      (ostring[0] == 'G') && (ostring[1] == 'C')) {
-    memmove(&ostring[0], &ostring[1], strlen(ostring));
+  if ((target_len_ == 6) && (ostring.size() == 7) &&
+      ostring.startsWith("GC")) {
+    ostring.remove(0, 1);
   }
 
   /*
-   * Whack leading "[Tt]he",
+   * Whack leading "[Tt]he "
    */
-  if ((strlen(ostring) > hdl->target_len + 4) &&
-      (strncmp(ostring, "The ", 4) == 0 ||
-       strncmp(ostring, "the ", 4) == 0)) {
-    char* nstring = xstrdup(ostring + 4);
-    xfree(ostring);
-    ostring = nstring;
+  if ((ostring.size() > (target_len_ + 4)) &&
+      (ostring.startsWith("The ") || ostring.startsWith("the "))) {
+    ostring.remove(0, 4);
   }
 
-  /* Eliminate leading whitespace in all cases */
-  while (ostring[0] && isspace(ostring[0])) {
-    /* If orig string has N bytes, we want to copy N-1 bytes
-     * of the string itself plus the string terminator (which
-     * matters if the string consists of nothing but spaces)
-     */
-    memmove(&ostring[0], &ostring[1], strlen(ostring));
-  }
+  /* In all cases eliminate leading and trailing whitespace */
+  ostring = ostring.trimmed();
 
-  if (!hdl->whitespaceok) {
+  if (!whitespaceok_) {
     /*
      * Eliminate Whitespace
      */
-    tstring = xstrdup(ostring);
-    l = strlen(tstring);
-    cp = ostring;
-    for (i=0; i<l; i++) {
-      if (!isspace(tstring[i])) {
-        *cp++ = tstring[i];
+    QByteArray tstring;
+    ostring.swap(tstring);
+    for (const auto ch : std::as_const(tstring)) {
+      if (!isspace(ch)) {
+        ostring.append(ch);
       }
     }
-    xfree(tstring);
-    *cp = 0;
   }
 
-  if (hdl->mustupper) {
-    for (tstring = ostring; *tstring; tstring++) {
-      *tstring = toupper(*tstring);
-    }
+  if (mustupper_) {
+    ostring = ostring.toUpper();
   }
 
   /* Before we do any of the vowel or character removal, look for
@@ -443,54 +274,34 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
   /*
    * Eliminate chars on the blacklist.
    */
-  tstring = xstrdup(ostring);
-  l = strlen(tstring);
-  cp = ostring;
-  for (i=0; i<l; i++) {
-    if (strchr(hdl->badchars, tstring[i])) {
-      continue;
+  {
+    QByteArray tstring;
+    ostring.swap(tstring);
+    for (const auto ch : std::as_const(tstring)) {
+      if (badchars_.contains(ch)) {
+        continue;
+      }
+      if (!goodchars_.isEmpty() && (!goodchars_.contains(ch))) {
+        continue;
+      }
+      ostring.append(ch);
     }
-    if (hdl->goodchars && (!strchr(hdl->goodchars, tstring[i]))) {
-      continue;
-    }
-// FIXME(robertl): we need a way to not return partial UTF-8, but this isn't it.
-//		if (!isascii(tstring[i]))
-//			continue;
-    *cp++ = tstring[i];
   }
-  *cp = 0;
-  xfree(tstring);
 
   /*
-   * Eliminate repeated whitespace.  This can only shorten the string
-   * so we do it in place.
+   * Eliminate whitespace.
+   * In all cases remove leading and trailing whitespace.
+   * Leading and/or trailing whitespace may have been created by earlier
+   * operations that removed character(s) before and/or after whitespace.
+   * Conditionally simplify embedded whitespace.
    */
-  if (!hdl->repeating_whitespaceok) {
-    for (i = 0; i < l-1; i++) {
-      if (ostring[i] == ' ' && ostring[i+1] == ' ') {
-        memmove(&ostring[i], &ostring[i+1], l-i);
-      }
-    }
-  }
-
-  /* Eliminate trailing whitespace in all cases. This is done late because
-     earlier operations may have vacated characters after the space. */
-
-  char *end = ostring + strlen(ostring) - 1;
-  while (end > ostring && isspace(*end)) {
-    *end-- = 0;
-  }
-
+  ostring = repeating_whitespaceok_? ostring.trimmed() : ostring.simplified();
 
   /*
    * Toss vowels to approach target length, but don't toss them
    * if we don't have to.  We always keep the leading two letters
    * to preserve leading vowels and some semblance of pronouncability.
    *
-   * FIXME: There's a boundary case here where we're too aggressive.
-   * If the target length is "6" we will shorten "Trolley" to "Trlly",
-   * when we really don't have to.  We should throw away one vowel, not
-   * both.
    */
 
   /*
@@ -503,14 +314,10 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    *
    * It also helps units with speech synthesis.
    */
-  if (hdl->target_len < 15) {
-    replaced = 1;
-  } else {
-    replaced = 0;
-  }
+  bool replaced = target_len_ < 15;
 
-  while (replaced && strlen(ostring) > hdl->target_len) {
-    ostring = delete_last_vowel(2, ostring, &replaced);
+  while (replaced && (ostring.size() > target_len_)) {
+    replaced = delete_last_vowel(2, ostring);
   }
 
   /*
@@ -520,36 +327,34 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * Walk in the Woods 2.
    */
 
-  char* np = ostring + strlen(ostring);
-  while ((np != ostring) && *(np-1) && isdigit(*(np-1))) {
-    np--;
-  }
-  size_t nlen = strlen(np);
-
   /*
    * Now brutally truncate the resulting string, preserve trailing
    * numeric data.
    * If the numeric component alone is longer than our target string
-   * length, use only what'll fit.
+   * length, use the trailing part of the the numeric component.
    */
-  if (is_utf8) {
-    /* ToDo: Keep trailing numeric data as described above! */
-    QString result = grapheme_truncate(QString::fromUtf8(ostring), hdl->target_len);
-    xfree(ostring);
-    ostring = xstrdup(result.toUtf8().constData());
-  } else if ((/*i = */strlen(ostring)) > hdl->target_len) {
-    char* dp = &ostring[hdl->target_len] - nlen;
-    if (dp < ostring) {
-      dp = ostring;
-    }
-    memmove(dp, np, nlen);
-    dp[nlen] = 0;
-    // Essentially ostring.rtrim() from here down.
-    if (ostring && ostring[0] != 0) { // Empty output string? Bail.
-      char *end = ostring + strlen(ostring) - 1;
-      while (end > ostring && isspace(*end)) {
-        *end-- = 0;
+  if (int delcnt = ostring.size() - target_len_; delcnt > 0) {
+    int suffixcnt = 0;
+    for (auto it = ostring.crbegin(); it != ostring.crend(); ++it) {
+      if (isdigit(*it)) {
+        ++suffixcnt;
       }
+      if (suffixcnt == target_len_) {
+        break;
+      }
+    }
+
+    int keepcnt = target_len_ - suffixcnt;
+    assert(keepcnt >= 0);
+
+    if (is_utf8) {
+      QString result = grapheme_truncate(QString::fromUtf8(ostring), keepcnt);
+      ostring = result.toUtf8().append(ostring.right(suffixcnt));
+    } else {
+      ostring.remove(keepcnt, delcnt);
+    }
+    while (isspace(ostring.back())) {
+      ostring.chop(1);
     }
   }
 
@@ -557,31 +362,26 @@ mkshort(short_handle h, const QByteArray& istring, bool is_utf8)
    * If, after all that, we have an empty string, punt and
    * let the must_uniq code handle it.
    */
-  if (ostring && ostring[0] == '\0') {
-    xfree(ostring);
-    ostring = xstrdup(hdl->defname);
+  if (ostring.isEmpty()) {
+    ostring = defname_;
   }
 
-  QByteArray rval(ostring);
-  xfree(ostring);
-  if (hdl->must_uniq) {
-    mkshort_add_to_list(hdl, rval);
+  if (must_uniq_) {
+    mkshort_add_to_list(ostring, is_utf8);
   }
-  return rval;
+  return ostring;
 }
 
-QString
-mkshort(short_handle h, const QString& istring)
+QString MakeShort::mkshort(const QString& istring)
 {
-  return mkshort(h, istring.toUtf8(), true);
+  return mkshort(istring.toUtf8(), true);
 }
 
 /*
  * As above, but arg list is a waypoint so we can centralize
  * the code that considers the alternate sources.
  */
-QString
-mkshort_from_wpt(short_handle h, const Waypoint* wpt)
+QString MakeShort::mkshort_from_wpt(const Waypoint* wpt)
 {
   /* This probably came from a Groundspeak Pocket Query
    * so use the 'cache name' instead of the description field
@@ -590,209 +390,20 @@ mkshort_from_wpt(short_handle h, const Waypoint* wpt)
    */
   if (wpt->gc_data->diff && wpt->gc_data->terr &&
       !wpt->notes.isEmpty()) {
-    return mkshort(h, wpt->notes);
+    return mkshort(wpt->notes);
   }
 
   if (!wpt->description.isEmpty()) {
-    return mkshort(h, wpt->description);
+    return mkshort(wpt->description);
   }
 
   if (!wpt->notes.isEmpty()) {
-    return mkshort(h, wpt->notes);
+    return mkshort(wpt->notes);
   }
 
   /* Should probably never actually happen... */
   /* O.K.: But this can happen (waypoints transformed from trackpoints )! */
   /*       Now we return every time a valid entity." */
 
-  return mkshort(h, wpt->shortname);
+  return mkshort(wpt->shortname);
 }
-
-
-#if TEST_MKSHORT
-const char* foo[] =  {
-  "VwthPst# 3700.706N 08627.588W 0000000m View the Past #2              ",
-  "PilotRoc 3655.270N 08717.173W 0000000m Pilot Rock by CacheAdvance    ",
-  "MrCycsNg 3652.407N 08728.890W 0000000m Mr. Cayces Neighborhood by Ca",
-  "SOLDIER  3640.691N 08726.660W 0000000m SOLDIER&#8217;S TRIBUTE       ",
-  "ZOOMZOOM 3636.659N 08721.793W 0000000m ZOOM ZOOM ZOOM by Feros Family",
-  "SOCLOSEB 3636.494N 08722.086W 0000000m SO CLOSE BUT YET by Kyle of Fe",
-  "InSrchfS 3636.363N 08636.363W 0000000m In Search of Steam by BigHank ",
-  "RdBlngSp 3632.119N 08550.956W 0000000m Red Boiling Springs by Firedog",
-  "HelngWtr 3631.729N 08550.481W 0000000m Healing Waters by FiredogPotte",
-  "AHHtheVi 3629.020N 08533.891W 0000000m ogPotter                      ",
-  "LstCrkCc 3628.167N 08801.656W 0000000m Lost Creek Cache by Paul Kathy",
-  "DlvrncTr 3626.412N 08729.249W 0000000m Deliverance Train by Team Skay",
-  "FrQrtrRn 3438.502N 08646.926W 0000000m Four Quarter Rendezvous by Zay",
-  "Jstlttlc 3620.647N 08814.298W 0000000m Just a little cache by Paul Ka",
-  "BrryPtch 3618.786N 08616.344W 0000000m Berry Patch Cache by White Dog",
-  "AStrllDw 3342.752N 08630.829W 0000000m A Stroll Down Memory Lane by t",
-  "QunfTnns 3606.413N 08651.962W 0000000m Queen of Tennessee by A182pilo",
-  "GoneFish 3618.199N 08655.171W 0000000m Gone Fishin' by White Dog Pack",
-  "GrnwysFn 3610.942N 08642.061W 0000000m Greenways Fence by Ukulele And",
-  "AStnsThr 3611.240N 08638.324W 0000000m A Stone's Throw by Murrcat & S",
-  "Nashvlls 3617.112N 08642.359W 0000000m Nashville's Zoo by White Dog P",
-  "BltzMcr4 3517.127N 08622.211W 0000000m Blitz Micro Number 4 by IHTFP ",
-  "NkdnthWn 3437.145N 08651.693W 0000000m Naked in the Wind by Zaybex   ",
-  "ANcPlctR 3603.389N 08654.418W 0000000m A Nice Place to Rest by JoGPS ",
-  "welcomtT 3638.155N 08720.130W 0000000m welcome to TN by Raf of the se",
-  "welcomtK 3638.956N 08721.011W 0000000m welcome to KY by raf of the se",
-  "BltzMcr5 3506.191N 08634.277W 0000000m Blitz Micro Number 5 by IHTFP ",
-  "JmsFmlyG 3615.887N 08649.846W 0000000m James Family Grocery by White ",
-  "seekngrf 3629.262N 08742.333W 0000000m seekeing refuge by raf of the ",
-  "SecrtFll 3614.927N 08534.180W 0000000m Secret Falls                  ",
-  "ApstlcTh 3613.870N 08645.108W 0000000m Apostolic Thistle Walk by Jame",
-  "WllIllBD 3609.258N 08637.268W 0000000m Well....I'll Be \"Dammed\" byi",
-  "BettysBt 3608.857N 08550.564W 0000000m Betty's Booty by White Dog Pac",
-  "SmthngSm 3439.748N 08643.522W 0000000m Something Smells Fishy by Zayb",
-  "RckyRd(C 3605.315N 08549.326W 0000000m Rocky Road (Center Hill Lake) ",
-  "Brdwtchr 3436.605N 08651.243W 0000000m Birdwatcher's Dream by Zaybex ",
-  "JcksnsHl 3605.185N 08619.439W 0000000m Jackson's Halls by White Dog P",
-  "FrgttnP2 3509.599N 08633.282W 0000000m Forgotten Park 2 by mdawg & mu",
-  "SOLDIERS 3640.691N 08726.660W 0000000m SOLDIERS TRIBUTE by Feros Fami",
-  "EndofRop 3433.820N 08650.460W 0000000m End of Rope by Big Rock       ",
-  "VwthPst1 3659.263N 08627.114W 0000000m View the Past #1 by wkgraham  ",
-  "VwthPst2 3700.706N 08627.588W 0000000m View the Past #2 by wkgraham  ",
-  "Trash#8  3603.102N 08655.144W 0000000m Cache In Trash Out # 8        ",
-  "SlwwwwCc 3602.543N 08535.953W 0000000m Sloowwww Cache by Tntcacher   ",
-  "Leavttbv 3602.514N 08638.686W 0000000m Leave it to beaver by A182pilo",
-  "WhrrthHr 3436.594N 08654.759W 0000000m Where are the Horses? by Zaybe",
-  "ButtonCc 3433.401N 08645.294W 0000000m Button Cache by Zaybex        ",
-  "MrcsLbrr 3436.842N 08655.972W 0000000m Marco's Library by Marco      ",
-  "Octopus  3526.743N 08534.757W 0000000m Octopus by White Dog Pack     ",
-  "WtrFllsV 3544.140N 08527.861W 0000000m Water Falls Valley by Cave Rat",
-  "DeddrpPn 3448.126N 08719.696W 0000000m Dead-drop Pink by Marco       ",
-  "JWhlrRvr 3448.157N 08719.914W 0000000m Joe Wheeler River Walk by Marc",
-  "CvSprngs 3432.797N 08651.084W 0000000m Cave Springs Cache by Marco.. ",
-  "CnyFrkOv 3550.876N 08518.446W 0000000m Fork Overlook                 ",
-  "SheepsCa 3550.527N 08519.480W 0000000m Sheep's Cave                  ",
-  "VrgnFlls 3550.308N 08519.904W 0000000m Virgin Falls Cache            ",
-  "ShrtctVr 3550.170N 08519.590W 0000000m Shortcut Virtual              ",
-  "KlylFlls 3549.105N 08539.814W 0000000m Klaylee Falls Cache by pattytr",
-  "FshngfrB 3548.923N 08538.558W 0000000m BADGER  by M&Mk               ",
-  "TpfthHll 3548.808N 08601.722W 0000000m Top of the Hill Pet Cache by M",
-  "TwnFllsC 3548.560N 08537.996W 0000000m  Twin Falls  Cache by SLCREW a",
-  "WtchsCst 3548.197N 08537.673W 0000000m Witch's Castle Keys by SLCREW ",
-  "ThatCave 3544.901N 08522.854W 0000000m That Cave by JaDan150 and AprJ",
-  "BssltwnW 3541.174N 08801.489W 0000000m Busseltown Wildlife Refuge by ",
-  "Riverfrn 3540.968N 08546.995W 0000000m  Riverfront  by SLCREW and M&M",
-  "Basement 3540.086N 08521.304W 0000000m The Basement                  ",
-  "EfflTwrC 3617.132N 08818.371W 0000000m Eiffel Tower Cache by Dick Wan",
-  "KeyholeC 3544.562N 08524.098W 0000000m Keyhole Cave by Cave Rat      ",
-  "(MC^2)Mn 3444.990N 08630.218W 0000000m (MC^2) Monte Sano Cuts Cache b",
-  "WildctCc 3636.823N 08808.087W 0000000m Wildcat Cache by The Storm    ",
-  "NAlbm/Tn 3444.365N 08632.688W 0000000m N. Alabama / Tennessee Valley ",
-  "CalebsCa 3444.215N 08633.103W 0000000m Caleb's Cave by Papaw and Cale",
-  "MntSnPrs 3444.201N 08632.591W 0000000m Monte Sano Preserve by Evan & ",
-  "FltRckFl 3444.475N 08629.958W 0000000m Flat Rock Falls Cache by Jason",
-  "PanormCc 3443.961N 08631.638W 0000000m The Panorama Cache by IHTFP an",
-  "TnnssScv 3602.861N 08652.751W 0000000m Tennessee Scavenger Hunt Cache",
-  "Geocache 3435.209N 08655.968W 0000000m Geocache by Papaw & Caleb     ",
-  "Skellig  3444.100N 08656.566W 0000000m Skellig by Zaybex             ",
-  "Deceptio 3433.450N 08655.711W 0000000m Deception by Papaw and Caleb  ",
-  "AwlknthD 3433.310N 08655.635W 0000000m A   walk in the Desert by Papa",
-  "MiniMsQs 3558.934N 08650.674W 0000000m Mini Me's Quest by CrotalusRex",
-  "BakrsBlf 3541.891N 08717.300W 0000000m Bakers Bluff by Flower Child &",
-  "GoFlyAKi 3435.664N 08659.267W 0000000m Go Fly A Kite by Marco..      ",
-  "FlntCrkA 3432.028N 08656.806W 0000000m Flint Creek Adventure by Marco",
-  "HonordMn 3534.680N 08612.557W 0000000m Honored Mount by Southpaw     ",
-  "SafariZo 3440.697N 08700.774W 0000000m Safari Zone by Zaybex         ",
-  "JckDnlsC 3517.077N 08622.260W 0000000m Jack Daniels Cache by Rmearse ",
-  "FrgttnPr 3509.599N 08633.282W 0000000m Forgotten Park by mdawg & muff",
-  "DntOvrlk 3513.326N 08616.031W 0000000m Dont Overlook Me Cache        ",
-  "ArYStmpd 3513.039N 08615.110W 0000000m Are You Stumped Yet? cache    ",
-  "CchtthBn 3512.532N 08614.691W 0000000m Cache at the Bend             ",
-  "Thtsnkng 3609.009N 08530.314W 0000000m That sinking feeling by Tntcac",
-  "GamersCc 3449.136N 08635.836W 0000000m mer's Cache by avoral         ",
-  "CchMIfYC 3452.455N 08620.648W 0000000m Cache Me If You Can! by Glen H",
-  "SavageVs 3526.915N 08535.136W 0000000m Savage Vista by White Dog Pack",
-  "PrtrnG15 3555.479N 08653.274W 0000000m Praetorian Guards Hail Caesar #15!",
-  "WtrlnAmp 3443.722N 08632.535W 0000000m Waterline Amphitheater by Fath",
-  "BysLttlC 3447.569N 08638.448W 0000000m Boys' Little Cache by Zaybex  ",
-  "DrgnsBrt 3443.779N 08635.188W 0000000m Dragon's Breath by Zaybex     ",
-  "CryBbyHl 3430.733N 08657.362W 0000000m Cry Baby Hollow Cache by La Pa",
-  "Parmer   3606.218N 08651.590W 0000000m Parmer by A182pilot & Family  ",
-  "JnnfrndJ 3438.141N 08632.991W 0000000m Jennifer and Jonathans Cliff C",
-  "ALDRIDGE 3435.305N 08632.868W 0000000m ALDRIDGE CREEK LOTTA LOOT!! by",
-  "RcktCtyS 3440.032N 08631.352W 0000000m Rocket City Stash by David Upt",
-  "TrgcAccd 3608.561N 08648.381W 0000000m Tragic Accident by Campaholics",
-  "FALLENTR 3439.210N 08631.104W 0000000m FALLEN TREE 4 MILE POST by zac",
-  "TrshOt15 3558.964N 08646.064W 0000000m Cache In Trash Out  # 15 by Jo",
-  "TrshOt13 3602.214N 08650.428W 0000000m Cache In Trash Out #13 by JoGP",
-  "PrcysDrp 3604.312N 08653.465W 0000000m Percys Dripping Springs by KLi",
-  "TrshOt14 3605.292N 08648.560W 0000000m Cache In Trash Out # 14 by JoG",
-  "PrtrnGr5 3557.621N 08640.278W 0000000m Praetorian Guards Hail Caesar #5!",
-  "PrtrnGr4 3557.370N 08640.201W 0000000m Praetorian Guards Hail Caesar #4!",
-  "PrtrnGr3 3557.250N 08640.047W 0000000m Praetorian Guards Hail Caesar #3!",
-  "GrnMntnC 3439.120N 08631.100W 0000000m Green Mountain Cache by Steve ",
-  "TrshOt12 3605.330N 08635.817W 0000000m Cache In Trash Out #12 by JoGP",
-  "BlncngAc 3608.579N 08648.120W 0000000m Balancing Act by Campaholics  ",
-  "DittoCac 3434.652N 08633.310W 0000000m Ditto Cache by mookey         ",
-  "EraserCc 3431.888N 08633.024W 0000000m Eraser Cache by Zaybex        ",
-  "FrMlPstE 3439.440N 08630.180W 0000000m Four Mile Post Extension Cache",
-  "MllrdFxC 3439.578N 08706.552W 0000000m Mallard-Fox Creek Cache by bam",
-  "FireCach 3443.908N 08630.318W 0000000m he by Glen Pam Chase M        ",
-  "FlntRvrC 3443.170N 08625.990W 0000000m Flint River Canoe Cache by Ran",
-  "ArabinCc 3419.104N 08628.765W 0000000m The Arabian Cache by WesNSpace",
-  "CvrdBrdg 3412.406N 08659.392W 0000000m Covered Bridge Cache by pmarkh",
-  "MilesTCc 3424.470N 08611.720W 0000000m Miles Too Cache by Rmearse    ",
-  "MbryOvrl 3423.803N 08611.922W 0000000m Mabrey Overlook Me by DDVaughn",
-  "LwEnfrcm 3423.218N 08612.258W 0000000m Law Enforcement Cache by DDVau",
-  "GrndDddy 3423.128N 08612.025W 0000000m Grand Daddys Home by Rmearse  ",
-  "BamaCach 3421.459N 08611.686W 0000000m The Bama Cache by DDVaughn & T",
-  "Canyons  3440.085N 08600.910W 0000000m The Canyons by Aubrey and Josh",
-  "ADamGodV 3511.677N 08616.587W 0000000m A Dam Good View by mdawg & muf",
-  "UNDERTHE 3446.918N 08739.790W 0000000m UNDER THE ROCK by RUNNINGWILD ",
-  "SQUIRREL 3448.712N 08741.681W 0000000m SQUIRREL'S NEST by RUNNINGWILD",
-  "WlknthPr 3448.273N 08741.844W 0000000m Walk in the Park by Runningwil",
-  "NetsClue 3448.494N 08741.977W 0000000m Net's Clues by Runningwild Adv",
-  "NatrlBrd 3405.583N 08736.909W 0000000m Natural Bridge by Southeast Xt",
-  "TrnglPrk 3341.448N 08640.980W 0000000m Triangle Park Cache by Charles",
-  "LttlRvrI 3421.855N 08539.597W 0000000m Little River Initiative by spa",
-  "GimmShlt 3430.087N 08536.834W 0000000m Gimme Shelter by Big Rock & Po",
-  "GnomeTrs 3433.081N 08535.849W 0000000m Gnome Treasure by Big Rock    ",
-  "FlyingTr 3608.594N 08648.179W 0000000m  Flying Torso  by Campaholics ",
-  "CultivtC 3608.582N 08648.064W 0000000m  Cultivate a Cure  by Campahol",
-  __nullptr
-}
-;
-
-int main()
-{
-  int r;
-
-  auto h = mkshort_new_handle();
-//  setshort_whitespace_ok(h, false);
-
-  printf("%s\n", mkshort(h, "The Troll", false));
-  printf("%s\n", mkshort(h, "EFI", false));
-  printf("%s\n", mkshort(h, "the Troll", false));
-  printf("%s\n", mkshort(h, "the Trolley", false));
-  printf("%s\n", mkshort(h, "The Troll Lives Under The Bridge", false));
-  printf("%s\n", mkshort(h, "The \"Troll\" Lives Under $$ The Bridge!", false));
-  printf("%s\n", mkshort(h, "The Trolley Goes Round", false));
-  printf("%s\n", mkshort(h, "Cache In / Trash Out #1", false));
-  printf("%s\n", mkshort(h, "Cache In / Trash Out #2", false));
-  printf("%s\n", mkshort(h, "Cache In / Trash Out #137", false));
-  printf("|%s|\n", mkshort(h, "Cache .", false));
-  printf("|%s|\n", mkshort(h, "Cache    .", false));
-  printf("|%s|\n", mkshort(h, "Cache         .", false));
-  printf("|%s|\n", mkshort(h, "   Cache   .", false));
-
-#if 0
-  const char** foop = foo;
-  while (*foop) {
-    printf("%s | %s\n", mkshort(h, *foop+39, false), *foop+39);
-    foop++;
-  }
-#endif
-
-  printf("%s\n", delete_last_vowel(0, xstrdup("the quick brown foo"), &r));
-  printf("%s\n", delete_last_vowel(0, xstrdup("the quick brown fox"), &r));
-  printf("%s\n", delete_last_vowel(0, xstrdup("xxx"), &r));
-  printf("%s\n", delete_last_vowel(0, xstrdup("ixxx"), &r));
-  printf("%s\n", delete_last_vowel(0, xstrdup("aexxx"), &r));
-
-  return 0;
-}
-#endif

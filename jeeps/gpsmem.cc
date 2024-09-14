@@ -167,7 +167,7 @@ void GPS_Track_Del(GPS_PTrack* thys)
 GPS_PWay GPS_Way_New()
 {
   GPS_PWay ret;
-  int32 i;
+  int32_t i;
 
   if (!(ret=(GPS_PWay)xcalloc(sizeof(GPS_OWay),1))) {
     perror("malloc");

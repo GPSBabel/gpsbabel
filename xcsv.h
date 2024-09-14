@@ -37,8 +37,9 @@
 #include <QtGlobal>               // for qRound64
 
 #include "defs.h"
-#include "format.h"
-#include "garmin_fs.h"
+#include "format.h"               // for Format
+#include "garmin_fs.h"            // for garmin_fs_t
+#include "mkshort.h"              // for MakeShort
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
 
@@ -239,7 +240,7 @@ public:
   std::optional<int> shortlen;
 
   /* SHORTWHITE from style file */
-  std::optional<int> whitespace_ok;
+  std::optional<bool> whitespace_ok;
 
 private:
   /* Types */
@@ -298,28 +299,13 @@ private:
   class XcsvFile
   {
   public:
-    /* Special Member Functions */
-
-    XcsvFile() : mkshort_handle(mkshort_new_handle()) {}
-    // delete copy and move constructors and assignment operators.
-    // The defaults are not appropriate, and we haven't implemented proper ones.
-    XcsvFile(const XcsvFile&) = delete;
-    XcsvFile& operator=(const XcsvFile&) = delete;
-    XcsvFile(XcsvFile&&) = delete;
-    XcsvFile& operator=(XcsvFile&&) = delete;
-    ~XcsvFile()
-    {
-      if (mkshort_handle != nullptr) {
-        mkshort_del_handle(&mkshort_handle);
-      }
-    }
 
     /* Data Members */
 
     gpsbabel::TextStream stream;
     QString fname;
     int gps_datum_idx{-1};		/* result of GPS_Lookup_Datum_Index */
-    short_handle mkshort_handle{nullptr};
+    MakeShort mkshort_handle;
   };
 
   struct xcsv_parse_data {
@@ -364,13 +350,10 @@ private:
   /* Member Functions */
 
   static QDate yyyymmdd_to_time(const QString& s);
-  QDateTime xcsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
+  QDateTime xcsv_adjust_time(QDate date, QTime time, bool is_localtime) const;
   static void sscanftime(const char* s, const char* format, QDate& date, QTime& time);
-  static QTime addhms(const char* s, const char* format);
   static QString writetime(const char* format, time_t t, bool gmt);
   static QString writetime(const char* format, const gpsbabel::DateTime& t, bool gmt);
-  static QString writehms(const char* format, time_t t, bool gmt);
-  static QString writehms(const char* format, const gpsbabel::DateTime& t, bool gmt);
   static long int time_to_yyyymmdd(const QDateTime& t);
   static garmin_fs_t* gmsd_init(Waypoint* wpt);
   static void xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle::field_map& fmp, xcsv_parse_data* parse_data, int line_no);
@@ -383,8 +366,7 @@ private:
   XcsvFile* xcsv_file{nullptr};
   const XcsvStyle* xcsv_style{nullptr};
   double pathdist = 0;
-  double oldlon = 999;
-  double oldlat = 999;
+  std::optional<PositionDeg> old_position;
 
   int waypt_out_count = 0;
   const route_head* csv_track = nullptr;
