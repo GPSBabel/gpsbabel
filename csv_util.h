@@ -43,7 +43,8 @@ enum class CsvQuoteMethod {historic, rfc4180};
 
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, int line_no, CsvQuoteMethod method = CsvQuoteMethod::historic);
+              const QString& enclosed_in, int line_no, CsvQuoteMethod method = CsvQuoteMethod::historic,
+              bool* delimiter_detected = nullptr);
 
 int
 dec_to_intdeg(double d);

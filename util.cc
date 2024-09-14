@@ -20,16 +20,14 @@
  */
 
 #include <algorithm>                    // for sort
-#include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
+#include <cctype>                       // for isspace, tolower
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
-#include <cstdarg>                      // for va_list, va_end, va_start, va_copy
 #include <cstdio>                       // for size_t, vsnprintf, FILE, fopen, printf, sprintf, stderr, stdin, stdout
-#include <cstdint>                      // for uint32_t
 #include <cstdlib>                      // for abs, calloc, free, malloc, realloc
 #include <cstring>                      // for strlen, strcat, strstr, memcpy, strcmp, strcpy, strdup, strchr, strerror
-#include <ctime>                        // for mktime, localtime
+#include <utility>                      // for as_const
 
 #include <QByteArray>                   // for QByteArray
 #include <QChar>                        // for QChar, operator<=, operator>=
@@ -37,7 +35,6 @@
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
-#include <QScopedPointer>               // for QScopedPointer
 #include <QString>                      // for QString
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
@@ -45,7 +42,7 @@
 #include <Qt>                           // for CaseInsensitive
 #include <QTime>                        // for QTime
 #include <QTimeZone>                    // for QTimeZone
-#include <QtGlobal>                     // for qAsConst, qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
+#include <QtGlobal>                     // for qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
 #include "defs.h"
 #include "src/core/datetime.h"          // for DateTime
@@ -107,27 +104,6 @@ char* xstrdup(const QString& s)
   return xstrdup(CSTR(s));
 }
 
-/*
- * Duplicate at most sz bytes in str.
- */
-char*
-xstrndup(const char* str, size_t sz)
-{
-  size_t newlen = 0;
-  const char* cin = str;
-
-  while ((newlen < sz) && (*cin != '\0')) {
-    newlen++;
-    cin++;
-  }
-
-  char* newstr = (char*) xmalloc(newlen + 1);
-  memcpy(newstr, str, newlen);
-  newstr[newlen] = 0;
-
-  return newstr;
-}
-
 void*
 xrealloc(void* p, size_t s)
 {
@@ -146,7 +122,7 @@ xrealloc(void* p, size_t s)
 FILE*
 xfopen(const char* fname, const char* type, const char* errtxt)
 {
-  int am_writing = strchr(type, 'w') != nullptr;
+  bool am_writing = strchr(type, 'w') != nullptr;
 
   if (fname == nullptr) {
     fatal("%s must have a filename specified for %s.\n",
@@ -185,245 +161,6 @@ ufopen(const QString& fname, const char* mode)
   // On other platforms, convert to native locale (UTF-8 or other 8-bit).
   return fopen(qPrintable(fname), mode);
 #endif
-}
-
-/*
- * Allocate a string using a format list with optional arguments
- * Returns -1 on error.
- * If return value is anything else, *strp will be populated with an
- * allocated string containing the formatted buffer.
- *
- * Freeing that is the responsibility of the caller.
- */
-
-int
-xasprintf(char** strp, const char* fmt, ...)
-{
-  va_list args;
-
-  va_start(args, fmt);
-  int res = xvasprintf(strp, fmt, args);
-  va_end(args);
-
-  return res;
-}
-
-int
-xasprintf(QString* strp, const char* fmt, ...)
-{
-  va_list args;
-  va_start(args, fmt);
-  char* cstrp;
-  int res = xvasprintf(&cstrp, fmt, args);
-  *strp = cstrp;
-  xfree(cstrp);
-  va_end(args);
-
-  return res;
-}
-
-int
-xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...)
-{
-  va_list args;
-
-  va_start(args, fmt);
-  char* cstrp;
-  int res = xvasprintf(&cstrp, fmt, args);
-  strp.reset(cstrp);
-  va_end(args);
-
-  return res;
-}
-
-int
-xvasprintf(char** strp, const char* fmt, va_list ap)
-{
-  /* From http://perfec.to/vsnprintf/pasprintf.c */
-  /* size of first buffer malloc; start small to exercise grow routines */
-# define	FIRSTSIZE	1
-  char* buf = nullptr;
-  char* newbuf;
-  size_t nextsize = 0;
-  int outsize;
-  va_list args;
-
-  int bufsize = 0;
-  for (;;) {
-    if (bufsize == 0) {
-      if ((buf = (char*) xmalloc(FIRSTSIZE)) == nullptr) {
-        *strp = nullptr;
-        return -1;
-      }
-      bufsize = FIRSTSIZE;
-    } else if ((newbuf = (char*) xrealloc(buf, nextsize)) != nullptr) {
-      buf = newbuf;
-      bufsize = nextsize;
-    } else {
-      xfree(buf);
-      *strp = nullptr;
-      return -1;
-    }
-
-    va_copy(args, ap);
-    outsize = vsnprintf(buf, bufsize, fmt, args);
-    va_end(args);
-
-    if (outsize == -1) {
-      /* Clear indication that output was truncated, but no
-       * clear indication of how big buffer needs to be, so
-       * simply double existing buffer size for next time.
-       */
-      nextsize = bufsize * 2;
-
-    } else if (outsize == bufsize) {
-      /* Output was truncated (since at least the \0 could
-       * not fit), but no indication of how big the buffer
-       * needs to be, so just double existing buffer size
-       * for next time.
-       */
-      nextsize = bufsize * 2;
-
-    } else if (outsize > bufsize) {
-      /* Output was truncated, but we were told exactly how
-       * big the buffer needs to be next time. Add two chars
-       * to the returned size. One for the \0, and one to
-       * prevent ambiguity in the next case below.
-       */
-      nextsize = outsize + 2;
-
-    } else if (outsize == bufsize - 1) {
-      /* This is ambiguous. May mean that the output string
-       * exactly fits, but on some systems the output string
-       * may have been truncated. We can't tell.
-       * Just double the buffer size for next time.
-       */
-      nextsize = bufsize * 2;
-
-    } else {
-      /* Output was not truncated */
-      break;
-    }
-  }
-  /* Prevent us from allocating millions of unused bytes. */
-  /* O.K.: I think this is not the final solution. */
-  if (bufsize > outsize + 1) {
-    const unsigned ptrsz = sizeof(buf);
-    if (((bufsize + ptrsz + 1) / ptrsz) > ((outsize + ptrsz + 1) / ptrsz)) {
-      buf = (char*) xrealloc(buf, outsize + 1);
-    }
-
-  }
-  *strp = buf;
-  return outsize;
-}
-
-/*
- * compare str with match
- * match may contain wildcards "*" and "?"
- *
- * examples:
- *		str_match("ABCDE", "*BC*") ->	1
- *		str_match("ABCDE", "A*C*E") ->	1
- *		str_match("?ABCDE", "\\?A*") ->	1
- *		str_match("", "*A") -> 		0
- */
-
-int
-str_match(const char* str, const char* match)
-{
-  const char* s = str;
-  const char* m = match;
-
-  while (*m || *s) {
-    switch (*m) {
-
-    case '\0':
-      /* there is something left in s, FAIL */
-      return 0;
-
-    case '*':
-      /* skip all wildcards */
-      while ((*m == '*') || (*m == '?')) {
-        m++;
-      }
-      if (*m == '\0') {
-        return 1;
-      }
-
-      if (*m == '\\') {			/* ? escaped ? */
-        m++;
-        if (*m == '\0') {
-          return 0;
-        }
-      }
-
-      do {
-        while (*s && (*s != *m)) {
-          s++;
-        }
-        if (*s == '\0') {
-          return 0;
-        }
-
-        const char* sx = s + 1;
-        const char* mx = m + 1;
-
-        while (*sx) {
-          if (*mx == '\\') {	/* ? escaped ? */
-            mx++;
-            if (*mx == '\0') {
-              return 0;
-            }
-
-          }
-          if (*sx == *mx) {
-            sx++;
-            mx++;
-          } else {
-            break;
-          }
-        }
-        if (*mx == '\0') {	/* end of match */
-          if (*sx == '\0') {
-            return 1;
-          }
-          s++;
-        } else if ((*mx == '?') || (*mx == '*')) {
-          s = sx;
-          m = mx;
-          break;
-        } else {
-          s++;
-        }
-      } while (*s);
-      break;
-
-    case '?':
-      if (*s == '\0') {
-        return 0;  /* no character left */
-      }
-      m++;
-      s++;
-      break;
-
-    case '\\':
-      m++;
-      if (*m == '\0') {
-        return 0;  /* incomplete escape sequence */
-      }
-      /* pass-through next character */
-      [[fallthrough]];
-
-    default:
-      if (*m != *s) {
-        return 0;
-      }
-      m++;
-      s++;
-    }
-  }
-  return ((*s == '\0') && (*m == '\0'));
 }
 
 void
@@ -555,67 +292,42 @@ le_write32(void* ptr, const unsigned value)
   p[3] = value >> 24;
 }
 
-/*
-	mkgmtime -- convert tm struct in UTC to time_t
-
-	works just like mktime but without all the mucking
-	around with timezones and daylight savings
-
-	Borrowed from lynx GPL source code
-	http://lynx.isc.org/release/lynx2-8-5/src/mktime.c
-
-	Written by Philippe De Muyter <phdm@macqel.be>.
-*/
-
-time_t
-mkgmtime(struct tm* t)
+QDateTime
+make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset)
 {
-  static int      m_to_d[12] =
-  {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+  QDateTime result;
+  Qt::TimeSpec timespec;
+  int offset = 0;
 
-  short month = t->tm_mon;
-  short year = t->tm_year + month / 12 + 1900;
-  month %= 12;
-  if (month < 0) {
-    year -= 1;
-    month += 12;
+  if (is_localtime) {
+    if (force_utc) { // override with passed option value
+      if (utc_offset == 0) {
+        // Qt 6.5.0 QDate::startOfDay(Qt::OffsetFromUTC, 0) returns an invalid QDateTime.
+        timespec = Qt::UTC;
+      } else {
+        timespec = Qt::OffsetFromUTC;
+        // Avoid Qt 6.5.0 warnings with non-zero offsets when not using Qt::OffsetFromUTC.
+        offset = utc_offset;
+      }
+    } else {
+      timespec = Qt::LocalTime;
+    }
+  } else {
+    timespec = Qt::UTC;
   }
-  time_t result = (year - 1970) * 365 + m_to_d[month];
-  if (month <= 1) {
-    year -= 1;
-  }
-  result += (year - 1968) / 4;
-  result -= (year - 1900) / 100;
-  result += (year - 1600) / 400;
-  result += t->tm_mday;
-  result -= 1;
-  result *= 24;
-  result += t->tm_hour;
-  result *= 60;
-  result += t->tm_min;
-  result *= 60;
-  result += t->tm_sec;
-  return (result);
-}
 
-/*
- * mklocaltime: same as mktime, but try to recover the "Summer time flag",
- *              which is evaluated by mktime
- */
-time_t
-mklocaltime(struct tm* t)
-{
-  time_t result;
-  struct tm check = *t;
-
-  check.tm_isdst = 0;
-  result = mktime(&check);
-  check = *localtime(&result);
-  if (check.tm_isdst == 1) {	/* DST is in effect */
-    check = *t;
-    check.tm_isdst = 1;
-    result = mktime(&check);
+  if (date.isValid() && time.isValid()) {
+    result = QDateTime(date, time, timespec, offset);
+  } else if (time.isValid()) {
+    // TODO: Wouldn't it be better to return an invalid QDateTime
+    // that contained an invalid QDate, a valid QTime and a valid
+    // Qt::TimeSpec?
+    result = QDateTime(QDate(1970, 1, 1), time, timespec, offset);
+  } else if (date.isValid()) {
+    //  no time, use start of day in the given Qt::TimeSpec.
+    result = date.startOfDay(timespec, offset);
   }
+
   return result;
 }
 
@@ -654,6 +366,13 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet)
   QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
   qint64 millisecs = (dotnet + 5000)/ 10000;
   return epoch.addMSecs(millisecs);
+}
+
+long long qdatetime_to_dotnet_time(const QDateTime& dt)
+{
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+  qint64 millisecs = epoch.msecsTo(dt);
+  return millisecs * 10000;
 }
 
 double
@@ -804,30 +523,6 @@ double degrees2ddmm(double deg_val)
   return (deg * 100.0) + ((deg_val - deg) * 60.0);
 }
 
-/*
- *
- */
-char*
-strupper(char* src)
-{
-  for (char* c = src; *c; c++) {
-    *c = toupper(*c);
-  }
-  return src;
-}
-
-/*
- *
- */
-char*
-strlower(char* src)
-{
-  for (char* c = src; *c; c++) {
-    *c = tolower(*c);
-  }
-  return src;
-}
-
 QString
 rot13(const QString& s)
 {
@@ -854,66 +549,60 @@ rot13(const QString& s)
  */
 
 QString
-convert_human_date_format(const char* human_datef)
+convert_human_date_format(const QString& human_datef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  QString result;
+  QChar prev = '\0';
   int ylen = 0;
 
-  for (const char* cin = human_datef; *cin; cin++) {
-    char okay = 1;
+  for (const QChar cin : human_datef) {
+    bool okay = true;
 
-    if (toupper(*cin) != 'Y') {
+    if (cin.toUpper() != 'Y') {
       ylen = 0;
     }
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'y':
       case 'Y':
         if (prev != 'Y') {
-          strcat(cout, "%y");
-          cout += 2;
+          result.append("%y");
           prev = 'Y';
         }
         ylen++;
         if (ylen > 2) {
-          *(cout-1) = 'Y';
+          result.back() = 'Y';
         }
         break;
       case 'm':
       case 'M':
         if (prev != 'M') {
-          strcat(cout, "%m");
-          cout += 2;
+          result.append("%m");
           prev = 'M';
         }
         break;
       case 'd':
       case 'D':
         if (prev != 'D') {
-          strcat(cout, "%d");
-          cout += 2;
+          result.append("%d");
           prev = 'D';
         }
         break;
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin)) {
-      *cout++ = *cin;
+    } else if (cin.isPunct()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in date format!", *cin);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Invalid character " << cin << " in date format " << human_datef << "!");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return result;
 }
 
 /*
@@ -922,22 +611,20 @@ convert_human_date_format(const char* human_datef)
  */
 
 QString
-convert_human_time_format(const char* human_timef)
+convert_human_time_format(const QString& human_timef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  QString result;
+  QChar prev = '\0';
 
-  for (const char* cin = human_timef; *cin; cin++) {
-    int okay = 1;
+  for (const QChar cin : human_timef) {
+    bool okay = true;
 
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'S':
       case 's':
         if (prev != 'S') {
-          strcat(cout, "%S");
-          cout += 2;
+          result.append("%S");
           prev = 'S';
         }
         break;
@@ -945,69 +632,62 @@ convert_human_time_format(const char* human_timef)
       case 'M':
       case 'm':
         if (prev != 'M') {
-          strcat(cout, "%M");
-          cout += 2;
+          result.append("%M");
           prev = 'M';
         }
         break;
 
       case 'h':				/* 12-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%l");	/* 1 .. 12 */
-          cout += 2;
+          result.append("%l");	/* 1 .. 12 */
           prev = 'H';
         } else {
-          *(cout-1) = 'I';  /* 01 .. 12 */
+          result.back() = 'I';  /* 01 .. 12 */
         }
         break;
 
       case 'H':				/* 24-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%k");
-          cout += 2;
+          result.append("%k");
           prev = 'H';
         } else {
-          *(cout-1) = 'H';
+          result.back() = 'H';
         }
         break;
 
       case 'x':
         if (prev != 'X') {
-          strcat(cout, "%P");
-          cout += 2;
+          result.append("%P");
           prev = 'X';
         } else {
-          *(cout-1) = 'P';
+          result.back() = 'P';
         }
         break;
 
       case 'X':
         if (prev != 'X') {
-          strcat(cout, "%p");
-          cout += 2;
+          result.append("%p");
           prev = 'X';
         } else {
-          *(cout-1) = 'p';
+          result.back() = 'p';
         }
         break;
 
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin) || isspace(*cin)) {
-      *cout++ = *cin;
+    } else if (cin.isPunct() || cin.isSpace()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in time format!", *cin);
+    if (!okay) {
+      fatal(FatalMsg().nospace() << "Invalid character " << cin << " in time format " << human_timef << "!");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return result;
 }
 
 
@@ -1061,14 +741,11 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
 QString
 strip_nastyhtml(const QString& in)
 {
-  char* returnstr;
-  char* lcstr;
+  char* returnstr = xstrdup(in);
+  char* lcstr = xstrdup(in.toLower());
 
-  char* sp = returnstr = xstrdup(in);
-  char* lcp = lcstr = strlower(xstrdup(in));
-
-  while (lcp = strstr(lcstr, "<body>"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
+  while (char* lcp = strstr(lcstr, "<body>")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
     sp++;
     *sp++ = '!';
     *sp++ = ' ';
@@ -1076,8 +753,8 @@ strip_nastyhtml(const QString& in)
     *sp++ = ' ';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<body"), lcp != nullptr) {   /* becomes <!--        --> */
-    sp = returnstr + (lcp - lcstr) ;
+  while (char* lcp = strstr(lcstr, "<body")) {   /* becomes <!--        --> */
+    char* sp = returnstr + (lcp - lcstr) ;
     sp++;
     *sp++ = '!';
     *sp++ = '-';
@@ -1089,8 +766,8 @@ strip_nastyhtml(const QString& in)
     *--sp = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</body>"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
+  while (char* lcp = strstr(lcstr, "</body>")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
     sp++;
     *sp++ = '!';
     *sp++ = '-';
@@ -1099,8 +776,8 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</html>"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
+  while (char* lcp = strstr(lcstr, "</html>")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
     sp++;
     *sp++ = '!';
     *sp++ = '-';
@@ -1109,8 +786,8 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<style"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
+  while (char* lcp = strstr(lcstr, "<style")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
     sp++;
     *sp++ = '!';
     *sp++ = '-';
@@ -1120,8 +797,8 @@ strip_nastyhtml(const QString& in)
     *sp = ' ';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</style>"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
+  while (char* lcp = strstr(lcstr, "</style>")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
     *sp++ = ' ';
     *sp++ = ' ';
     *sp++ = ' ';
@@ -1131,8 +808,8 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<image"), nullptr != lcp) {
-    sp = returnstr + (lcp - lcstr) ; /* becomes <img */
+  while (char* lcp = strstr(lcstr, "<image")) {
+    char* sp = returnstr + (lcp - lcstr) ; /* becomes <img */
     sp+=3;
     *sp++ = 'g';
     *sp++ = ' ';
@@ -1245,54 +922,6 @@ QString get_filename(const QString& fname)
   return QFileInfo(fname).fileName();
 }
 
-/* bit manipulation functions */
-
-/*
- * setbit: Set bit number [nr] of buffer [buf]
- */
-void gb_setbit(void* buf, const uint32_t nr)
-{
-  auto* bytes = (unsigned char*) buf;
-  bytes[nr / 8] |= (1 << (nr % 8));
-}
-
-/*
- * setbit: Get state of bit number [nr] of buffer [buf]
- */
-char gb_getbit(const void* buf, const uint32_t nr)
-{
-  const auto* bytes = (const unsigned char*) buf;
-  return (bytes[nr / 8] & (1 << (nr % 8)));
-
-}
-
-/*
- * gb_int2ptr: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
- */
-void* gb_int2ptr(const int i)
-{
-  union {
-    void* p;
-    int i;
-  } x = { nullptr };
-
-  x.i = i;
-  return x.p;
-}
-
-/*
- * gb_ptr2int: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
- */
-int gb_ptr2int(const void* p)
-{
-  union {
-    const void* p;
-    int i;
-  } x = { p };
-
-  return x.i;
-}
-
 QTextCodec* get_codec(const QByteArray& cs_name)
 {
   QTextCodec* codec = QTextCodec::codecForName(cs_name);
@@ -1342,7 +971,7 @@ void list_timezones()
   };
   std::sort(zoneids.begin(), zoneids.end(), alpha);
   Warning() << "Available timezones are:";
-  for (const auto& id : qAsConst(zoneids)) {
+  for (const auto& id : std::as_const(zoneids)) {
     Warning() << id;
   }
 }
@@ -1371,7 +1000,7 @@ QString grapheme_truncate(const QString& input, unsigned int count)
 
 int xstrtoi(const char* str, char** str_end, int base)
 {
-  
+
   long value = strtol(str, str_end, base);
   if (value > INT_MAX) {
     errno = ERANGE;

@@ -19,40 +19,34 @@
 
  */
 
+#include "radius.h"
+
 #include <cstdlib>          // for strtod
+#include <utility>          // for as_const
 
 #include <QString>          // for QString
-#include <QtGlobal>         // for qAsConst, QAddConst<>::Type, foreach
+#include <QtGlobal>         // QAddConst<>::Type, foreach
 
-#include "defs.h"           // for Waypoint, waypt_del, route_add_head, route_add_wpt, route_head, waypt_add, waypt_count, xcalloc, xfree, kMilesPerKilometer
-#include "radius.h"
-#include "grtcirc.h"        // for RAD, gcdist, radtomiles
+#include "defs.h"           // for Waypoint, del_marked_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, xstrtoi, route_head, WaypointList, kMilesPerKilometer
 
 
 #if FILTERS_ENABLED
 
-double RadiusFilter::gc_distance(double lat1, double lon1, double lat2, double lon2)
-{
-  return radtomiles(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
-}
-
 void RadiusFilter::process()
 {
-  // waypt_del may modify container.
   foreach (Waypoint* waypointp, *global_waypoint_list) {
-    double dist = gc_distance(waypointp->latitude, waypointp->longitude,
-                              home_pos->latitude, home_pos->longitude);
+    double dist = radtomiles(gcdist(waypointp->position(),
+                                    home_pos->position()));
 
     if ((dist >= pos_dist) == (exclopt == nullptr)) {
-      waypt_del(waypointp);
-      delete waypointp;
-      continue;
+      waypointp->wpt_flags.marked_for_deletion = 1;
+    } else {
+      auto* ed = new extra_data;
+      ed->distance = dist;
+      waypointp->extra_data = ed;
     }
-
-    auto* ed = new extra_data;
-    ed->distance = dist;
-    waypointp->extra_data = ed;
   }
+  del_marked_wpts();
 
   if (nosort == nullptr) {
     auto dist_comp_lambda = [](const Waypoint* a, const Waypoint* b)->bool {
@@ -80,7 +74,7 @@ void RadiusFilter::process()
   waypt_swap(comp);
 
   int i = 0;
-  for (Waypoint* wp : qAsConst(comp)) {
+  for (Waypoint* wp : std::as_const(comp)) {
     delete static_cast<extra_data*>(wp->extra_data);
     wp->extra_data = nullptr;
 

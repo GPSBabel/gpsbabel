@@ -1,7 +1,5 @@
 internal	xcsv		? Character Separated Values
 internal	tabsep		All database fields on one tab-separated line
-serial	baroiq		Brauniger IQ Series Barograph Download
-file	cambridge	dat	Cambridge/Winpilot glider software
 file	v900		Columbus/Visiontac V900 files (.csv)
 file	csv		Comma separated values
 internal	custom		Custom "Everything" Style
@@ -27,13 +25,13 @@ internal	dg-200-bin		GlobalSat DG-200 Binary File
 serial	dg-200		GlobalSat DG-200 Download
 serial	globalsat		GlobalSat GH625XT GPS training watch
 file	kml	kml	Google Earth (Keyhole) Markup Language
+file	googletakeout	json	Google Takeout Location History
 file	land_air_sea	txt	GPS Tracking Key Pro text
 file	gtm	gtm	GPS TrackMaker
 file	arc	txt	GPSBabel arc filter file
 file	gpsdrive		GpsDrive Format
 file	gpsdrivetrack		GpsDrive Format for Tracks
 file	gpx	gpx	GPX XML
-file	holux	wpo	Holux (gm-100) .wpo Format
 file	m241-bin	bin	Holux M-241 (MTK based) Binary File Format
 serial	m241		Holux M-241 (MTK based) download
 file	html	html	HTML Output
@@ -48,13 +46,11 @@ serial	mtk		MTK Logger (iBlue 747,Qstarz BT-1000,...) download
 file	tpg	tpg	National Geographic Topo .tpg (waypoints)
 file	tpo2	tpo	National Geographic Topo 2.x .tpo
 file	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo
-serial	navilink		NaviGPS GT-11/BGT-11 Download
-file	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)
-file	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
 file	nmea		NMEA 0183 sentences
 file	osm	osm	OpenStreetMap data files
 file	ozi		OziExplorer
 file	qstarz_bl-1000		Qstarz BL-1000
+file	cup	cup	See You flight analysis data
 serial	skytraq		SkyTraq Venus based loggers (download)
 file	skytraq-bin	bin	SkyTraq Venus based loggers Binary File Format
 file	subrip	srt	SubRip subtitles for video mapping (.srt)
@@ -62,6 +58,3 @@ file	openoffice		Tab delimited fields useful for OpenOffice
 file	text	txt	Textual Output
 file	unicsv		Universal csv with field structure in first line
 file	vcard	vcf	Vcard Output (for iPod)
-file	wbt-bin	bin	Wintec WBT-100/200 Binary File Format
-serial	wbt		Wintec WBT-100/200 GPS Download
-file	wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format

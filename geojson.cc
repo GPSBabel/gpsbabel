@@ -73,7 +73,7 @@ GeoJsonFormat::geojson_waypt_pr(const Waypoint* waypoint) const
     properties[DESCRIPTION] = waypoint->description;
   }
   if (waypoint->HasUrlLink()) {
-    UrlLink link = waypoint->GetUrlLink();
+    const UrlLink& link = waypoint->GetUrlLink();
     if (!link.url_.isEmpty()) {
       properties[URL] = link.url_;
     }
@@ -249,7 +249,7 @@ void GeoJsonFormat::geojson_track_disp(const Waypoint* trackpoint) const
   if (trackpoint->altitude != unknown_alt && trackpoint->altitude != 0) {
     coords.append(trackpoint->altitude);
   }
-  (*track_coords).append(coords);
+  track_coords->append(coords);
 }
 
 void GeoJsonFormat::geojson_track_tlr(const route_head* /*unused*/)

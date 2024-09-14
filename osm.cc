@@ -34,7 +34,7 @@
 #include "osm.h"
 #include "src/core/datetime.h"         // for DateTime
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
-#include "xmlgeneric.h"                // for xg_string, build_xg_tag_map, xml_deinit, xml_init, xml_read
+#include "xmlgeneric.h"                // for xml_deinit, xml_init, xml_read
 
 
 #define MYNAME "osm"
@@ -413,7 +413,7 @@ OsmFormat::osm_strip_html(const QString& str)
 }
 
 void
-OsmFormat::osm_node_end(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+OsmFormat::osm_node_end(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (wpt) {
     if (wpt->wpt_flags.fmt_use) {
@@ -426,7 +426,7 @@ OsmFormat::osm_node_end(xg_string /*unused*/, const QXmlStreamAttributes* /*unus
 }
 
 void
-OsmFormat::osm_node(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
+OsmFormat::osm_node(const QString& /*unused*/, const QXmlStreamAttributes* attrv)
 {
   wpt = new Waypoint;
 
@@ -457,9 +457,10 @@ OsmFormat::osm_node(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 }
 
 void
-OsmFormat::osm_node_tag(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
+OsmFormat::osm_node_tag(const QString& /*unused*/, const QXmlStreamAttributes* attrv)
 {
-  QString key, value;
+  QString key;
+  QString value;
   signed char ikey;
 
   if (attrv->hasAttribute("k")) {
@@ -510,7 +511,7 @@ OsmFormat::osm_node_tag(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 }
 
 void
-OsmFormat::osm_way(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
+OsmFormat::osm_way(const QString& /*unused*/, const QXmlStreamAttributes* attrv)
 {
   rte = new route_head;
   // create a wpt to represent the route center if it has a center tag
@@ -521,7 +522,7 @@ OsmFormat::osm_way(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 }
 
 void
-OsmFormat::osm_way_nd(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
+OsmFormat::osm_way_nd(const QString& /*unused*/, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ref")) {
     QString atstr = attrv->value("ref").toString();
@@ -537,9 +538,10 @@ OsmFormat::osm_way_nd(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 }
 
 void
-OsmFormat::osm_way_tag(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
+OsmFormat::osm_way_tag(const QString& /*unused*/, const QXmlStreamAttributes* attrv)
 {
-  QString key, value;
+  QString key;
+  QString value;
   signed char ikey;
 
   if (attrv->hasAttribute("k")) {
@@ -574,7 +576,7 @@ OsmFormat::osm_way_tag(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
 }
 
 void
-OsmFormat::osm_way_center(xg_string /*unused*/, const QXmlStreamAttributes* attrv)
+OsmFormat::osm_way_center(const QString& /*unused*/, const QXmlStreamAttributes* attrv)
 {
   wpt->wpt_flags.fmt_use = 1;
 
@@ -587,7 +589,7 @@ OsmFormat::osm_way_center(xg_string /*unused*/, const QXmlStreamAttributes* attr
 }
 
 void
-OsmFormat::osm_way_end(xg_string /*unused*/, const QXmlStreamAttributes* /*unused*/)
+OsmFormat::osm_way_end(const QString& /*unused*/, const QXmlStreamAttributes* /*unused*/)
 {
   if (rte) {
     route_add_head(rte);
@@ -615,19 +617,22 @@ OsmFormat::rd_init(const QString& fname)
     osm_features_init();
   }
 
-  xml_init(fname, build_xg_tag_map(this, osm_map), nullptr, nullptr, nullptr, true);
+  xml_reader = new XmlGenericReader;
+  xml_reader->xml_init(fname, this, osm_map);
 }
 
 void
 OsmFormat::read()
 {
-  xml_read();
+  xml_reader->xml_read();
 }
 
 void
 OsmFormat::rd_deinit()
 {
-  xml_deinit();
+  delete xml_reader;
+  xml_reader = nullptr;
+
   waypoints.clear();
 }
 
@@ -718,7 +723,8 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
   fout->writeAttribute(QStringLiteral("lat"), QString::number(waypoint->latitude, 'f', 7));
   fout->writeAttribute(QStringLiteral("lon"), QString::number(waypoint->longitude, 'f', 7));
   if (waypoint->creation_time.isValid()) {
-    fout->writeAttribute(QStringLiteral("timestamp"), waypoint->CreationTimeXML());
+    // osm readers don't uniformally support fractional seconds, and may only accept time zone designation Z.
+    fout->writeAttribute(QStringLiteral("timestamp"), waypoint->creation_time.toUTC().toString(Qt::ISODate));
   }
 
   if (waypoint->hdop) {
@@ -780,7 +786,7 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
 void
 OsmFormat::osm_rte_disp_head(const route_head* route)
 {
-  skip_rte = route->rte_waypt_ct() <= 0;
+  skip_rte = route->rte_waypt_empty();
 
   if (skip_rte) {
     return;
@@ -829,9 +835,7 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
   osm_write_tag("name", route->rte_name);
   osm_write_tag("note", route->rte_desc);
 
-  if (opt_tag && (case_ignore_strncmp(opt_tag, "tagnd", 5) != 0)) {
-    osm_write_opt_tag(opt_tag);
-  }
+  osm_write_opt_tag(opt_tag);
 
   fout->writeEndElement(); // way
 }

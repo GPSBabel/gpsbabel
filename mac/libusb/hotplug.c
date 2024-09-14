@@ -33,7 +33,7 @@
  *
  * \section hotplug_intro Introduction
  *
- * Version 1.0.16, \ref LIBUSB_API_VERSION >= 0x01000102, has added support
+ * Version 1.0.16, \ref LIBUSBX_API_VERSION >= 0x01000102, has added support
  * for hotplug events on <b>some</b> platforms (you should test if your platform
  * supports hotplug notification by calling \ref libusb_has_capability() with
  * parameter \ref LIBUSB_CAP_HAS_HOTPLUG).
@@ -117,7 +117,7 @@ int main (void) {
   libusb_hotplug_callback_handle callback_handle;
   int rc;
 
-  libusb_init(NULL);
+  libusb_init_context(NULL, NULL, 0);
 
   rc = libusb_hotplug_register_callback(NULL, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED |
                                         LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT, 0, 0x045a, 0x5005,
@@ -311,7 +311,7 @@ void usbi_hotplug_process(struct libusb_context *ctx, struct list_head *hotplug_
 	for_each_hotplug_cb_safe(ctx, hotplug_cb, next_cb) {
 		if (hotplug_cb->flags & USBI_HOTPLUG_NEEDS_FREE) {
 			usbi_dbg(ctx, "freeing hotplug cb %p with handle %d",
-				hotplug_cb, hotplug_cb->handle);
+				 (void *) hotplug_cb, hotplug_cb->handle);
 			list_del(&hotplug_cb->list);
 			free(hotplug_cb);
 		}
@@ -377,7 +377,8 @@ int API_EXPORTED libusb_hotplug_register_callback(libusb_context *ctx,
 
 	usbi_mutex_unlock(&ctx->hotplug_cbs_lock);
 
-	usbi_dbg(ctx, "new hotplug cb %p with handle %d", hotplug_cb, hotplug_cb->handle);
+	usbi_dbg(ctx, "new hotplug cb %p with handle %d",
+		 (void *) hotplug_cb, hotplug_cb->handle);
 
 	if ((flags & LIBUSB_HOTPLUG_ENUMERATE) && (events & LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED)) {
 		ssize_t i, len;

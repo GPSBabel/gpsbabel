@@ -48,7 +48,7 @@ TextFormat::wr_init(const QString& fname)
     file_out = new gpsbabel::TextStream;
     file_out->open(fname, QIODevice::WriteOnly, MYNAME);
   }
-  mkshort_handle = mkshort_new_handle();
+  mkshort_handle = new MakeShort;
 }
 
 void
@@ -59,7 +59,8 @@ TextFormat::wr_deinit()
     delete file_out;
     file_out = nullptr;
   }
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
   output_name.clear();
 }
 
@@ -67,7 +68,8 @@ void
 TextFormat::text_disp(const Waypoint* wpt)
 {
   int32_t utmz;
-  double utme, utmn;
+  double utme;
+  double utmn;
   char utmzc;
 
   waypoint_count++;
@@ -90,7 +92,7 @@ TextFormat::text_disp(const Waypoint* wpt)
   if (wpt->altitude != unknown_alt) {
     position += QStringLiteral(" alt:%1").arg((int)((altunits[0]=='f') ? METERS_TO_FEET(wpt->altitude) : wpt->altitude));
   }
-  QString sn = global_opts.synthesize_shortnames ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname;
+  QString sn = global_opts.synthesize_shortnames ? mkshort_handle->mkshort_from_wpt(wpt) : wpt->shortname;
   *file_out << sn.leftJustified(16) << "  " <<  position.rightJustified(59) << "\n";
 
   if (wpt->description != wpt->shortname) {
@@ -146,7 +148,7 @@ TextFormat::text_disp(const Waypoint* wpt)
 
         logpart = curlog->xml_findfirst(u"groundspeak:date");
         if (logpart) {
-          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toLocalTime();
+          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toUTC();
           *file_out << logtime.toString(u"yyyy-MM-dd") << "\n";
         }
 
@@ -196,7 +198,7 @@ TextFormat::write()
   if (!suppresssep && !split_output) {
     *file_out << "-----------------------------------------------------------------------------\n";
   }
-  setshort_length(mkshort_handle, 6);
+  mkshort_handle->set_length(6);
   auto text_disp_lambda = [this](const Waypoint* waypointp)->void {
     text_disp(waypointp);
   };

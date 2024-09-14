@@ -22,32 +22,24 @@
 #ifndef GRTCIRC_H
 #define GRTCIRC_H
 
-double gcdist(double lat1, double lon1, double lat2, double lon2);
-double heading(double lat1, double lon1, double lat2, double lon2);
-double heading_true_degrees(double lat1, double lon1, double lat2, double lon2);
+#include <tuple>   // for tuple
+#include "defs.h"  // for PositionRad, PositionDeg
 
-double linedistprj(double lat1, double lon1,
-                   double lat2, double lon2,
-                   double lat3, double lon3,
-                   double* prjlat, double* prjlon,
-                   double* frac);
+/* Note PositionDeg and PositionRad can be implicity converted to
+ * each other, so you may use either to interface to these functions.
+ */
 
-double linedist(double lat1, double lon1,
-                double lat2, double lon2,
-                double lat3, double lon3);
+double gcdist(PositionRad pos1, PositionRad pos2);
+double heading_true_degrees(PositionRad pos1, PositionRad pos2);
+
+std::tuple<double, PositionDeg, double> linedistprj(PositionRad pos1,
+                                                    PositionRad pos2,
+                                                    PositionRad pos3);
+
+double linedist(PositionRad pos1, PositionRad pos2, PositionRad pos3);
 
 double radtometers(double rads);
 double radtomiles(double rads);
 
-void linepart(double lat1, double lon1,
-              double lat2, double lon2,
-              double frac,
-              double* reslat, double* reslon);
-
-/* Degrees to radians */
-constexpr double DEG(double x) { return (x) * 180.0 / M_PI; }
-
-/* Radians to degrees */
-constexpr double RAD(double x) { return (x) * M_PI / 180.0; }
-
+PositionDeg linepart(PositionRad pos1, PositionRad pos2, double frac);
 #endif

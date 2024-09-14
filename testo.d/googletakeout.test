@@ -1,0 +1,8 @@
+rm -f ${TMPDIR}/googletakeout.gpx
+gpsbabel \
+  -i googletakeout \
+  -f ${REFERENCE}/googletakeout \
+  -o gpx \
+  -F ${TMPDIR}/googletakeout.gpx
+
+compare "${TMPDIR}/googletakeout.gpx" "${REFERENCE}/googletakeout/googletakeout.gpx"
