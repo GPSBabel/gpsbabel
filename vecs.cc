@@ -140,7 +140,6 @@ struct Vecs::Impl {
   GarminFitFormat format_fit_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
-  QstarzBL1000Format qstarz_bl_1000_fmt;
 
   const QVector<vecs_t> vec_list {
     /* XCSV must be the first entry in this table. */
