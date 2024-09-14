@@ -1133,8 +1133,8 @@ GdbFormat::write_header()
     */
   static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
   gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
-  gdb_write_cstr(gdb_release_dt.toString("MMM dd yyyy"));
-  gdb_write_cstr(gdb_release_dt.toString("HH:mm:ss"));
+  gdb_write_cstr(gdb_release_dt.toString(u"MMM dd yyyy"));
+  gdb_write_cstr(gdb_release_dt.toString(u"HH:mm:ss"));
 
   finalize_item(fsave, 'A');
 
@@ -1152,26 +1152,7 @@ GdbFormat::write_header()
 void
 GdbFormat::gdb_check_waypt(Waypoint* wpt)
 {
-  double lat_orig = wpt->latitude;
-  double lon_orig = wpt->longitude;
-
-  if (wpt->latitude < -90) {
-    wpt->latitude += 180;
-  } else if (wpt->latitude > +90) {
-    wpt->latitude -= 180;
-  }
-  if (wpt->longitude < -180) {
-    wpt->longitude += 360;
-  } else if (wpt->longitude > +180) {
-    wpt->longitude -= 360;
-  }
-
-  if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    fatal("Invalid latitude %f in waypoint %s.\n",
-          lat_orig, !wpt->shortname.isEmpty() ? qPrintable(wpt->shortname) : "<no name>");
-  if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    fatal("Invalid longitude %f in waypoint %s.\n",
-          lon_orig, !wpt->shortname.isEmpty() ? qPrintable(wpt->shortname) : "<no name>");
+  wpt->NormalizePosition();
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -1235,7 +1216,7 @@ GdbFormat::write_waypoint(
     FWRITE(zbuf, 4);
     QString ld;
     if (wpt->HasUrlLink()) {
-      UrlLink l = wpt->GetUrlLink();
+      const UrlLink& l = wpt->GetUrlLink();
       ld = l.url_;
     }
     QString descr = (wpt_class < gt_waypt_class_map_point) ?
@@ -1526,7 +1507,7 @@ GdbFormat::write_waypoint_cb(const Waypoint* refpt)
   Waypoint* test = gdb_find_wayptq(waypt_nameposn_out_hash, refpt);
 
   if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
-    UrlLink orig_link = refpt->GetUrlLink();
+    const UrlLink& orig_link = refpt->GetUrlLink();
     UrlLink test_link = test->GetUrlLink();
     if (orig_link.url_ != test_link.url_) {
       test = nullptr;

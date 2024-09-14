@@ -470,7 +470,7 @@ UnicsvFormat::rd_init(const QString& fname)
   fin->open(fname, QIODevice::ReadOnly, MYNAME, opt_codec);
   unicsv_lineno = 0;
   if (opt_fields) {
-    QString fields = QString(opt_fields).replace("+", ",");
+    QString fields = QString(opt_fields).replace('+', ',');
     unicsv_fondle_header(fields);
   } else if (buff = fin->readLine(); !buff.isNull()) {
     ++unicsv_lineno;
@@ -1105,8 +1105,8 @@ UnicsvFormat::unicsv_print_str(const QString& s) const
     // slavish re-implementation of (what I think) the original C code
     // was doing.
     t.replace("\r\n", ",");
-    t.replace("\r", ",");
-    t.replace("\n", ",");
+    t.replace('\r', ',');
+    t.replace('\n', ',');
   }
   *fout << t.trimmed();
 }
@@ -1543,7 +1543,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
     if (!wpt->HasUrlLink()) {
       unicsv_print_str("");
     } else {
-      UrlLink l = wpt->GetUrlLink();
+      const UrlLink& l = wpt->GetUrlLink();
       unicsv_print_str(l.url_);
     }
   }

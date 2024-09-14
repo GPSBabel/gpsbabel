@@ -357,6 +357,7 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+  void NormalizePosition();
   PositionDeg position() const {return PositionDeg(latitude, longitude);}
   void SetPosition(const PositionDeg& pos)
   {
@@ -921,7 +922,6 @@ void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
 char* xstrdup(const QString& s);
-char* xstrndup(const char* str, size_t sz);
 char* xstrdup(const char* s);
 
 FILE* xfopen(const char* fname, const char* type, const char* errtxt);
@@ -950,8 +950,8 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet);
 long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
-QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
-QString convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
+QString convert_human_date_format(const QString& human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
+QString convert_human_time_format(const QString& human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 QString get_filename(const QString& fname);			/* extract the filename portion */
@@ -1012,9 +1012,6 @@ enum grid_type {
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
-
-void* gb_int2ptr(int i);
-int gb_ptr2int(const void* p);
 
 QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();

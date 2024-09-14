@@ -1319,7 +1319,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
 
   writer->writeStartElement(QStringLiteral("name"));
   if (waypointp->HasUrlLink()) {
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     writer->writeCDATA(link.url_link_text_);
   }
   writer->writeEndElement(); // Close name tag
@@ -1347,7 +1347,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
   }
 
   if (waypointp->HasUrlLink()) {
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     kml_write_data_element("gc_name", link.url_link_text_);
   }
 
@@ -1422,7 +1422,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
   // Description
   if (waypointp->HasUrlLink()) {
     writer->writeEmptyElement(QStringLiteral("snippet"));
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     if (!link.url_link_text_.isEmpty()) {
       QString odesc = link.url_;
       QString olink = link.url_link_text_;

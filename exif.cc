@@ -63,7 +63,7 @@
 #include <cstring>              // for memcmp, strlen
 #include <utility>              // for as_const
 
-#include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, waypt_add, xstrdup, xstrndup, fix_2d
+#include "defs.h"               // for Waypoint, fatal, warning, global_options, global_opts, unknown_alt, xfree, route_disp_all, track_disp_all, waypt_disp_all, wp_flags, KNOTS_TO_MPS, KPH_TO_MPS, MPH_TO_MPS, MPS_TO_KPH, WAYPT_HAS, case_ignore_strcmp, waypt_add, xstrdup, fix_2d
 #include "garmin_tables.h"      // for gt_lookup_datum_index
 #include "gbfile.h"             // for gbfputuint32, gbfputuint16, gbfgetuint16, gbfgetuint32, gbfseek, gbftell, gbfile, gbfclose, gbfcopyfrom, gbfwrite, gbfopen_be, gbfread, gbfrewind, gbfgetflt, gbfgetint16, gbfopen, gbfputc, gbfputflt, gbsize_t, gbfeof, gbfgetdbl, gbfputdbl, gbfile::(anonymous)
 #include "jeeps/gpsmath.h"      // for GPS_Math_WGS84_To_Known_Datum_M
@@ -267,7 +267,7 @@ ExifFormat::exif_read_timestamp(const ExifTag* tag)
 QDate
 ExifFormat::exif_read_datestamp(const ExifTag* tag)
 {
-  return QDate::fromString(tag->data.at(0).toByteArray().constData(), "yyyy:MM:dd");
+  return QDate::fromString(tag->data.at(0).toByteArray().constData(), u"yyyy:MM:dd");
 }
 
 void
@@ -697,7 +697,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
     // Note the assumption of local time can be problematic if the data
     // is processed in a different time zone than was used in recording
     // the time in the image.
-    res = QDateTime::fromString(str, "yyyy:MM:dd hh:mm:ss");
+    res = QDateTime::fromString(str, u"yyyy:MM:dd hh:mm:ss");
 
     // Exif 2.31 added offset tags to record the offset to UTC.
     // If these are present use them, otherwise assume local time.

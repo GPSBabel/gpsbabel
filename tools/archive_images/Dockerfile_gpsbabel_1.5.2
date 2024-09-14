@@ -1,6 +1,6 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM ubuntu:noble
+FROM ubuntu:focal
 
 LABEL maintainer="https://github.com/tsteven4"
 
@@ -20,60 +20,32 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     make \
+    autoconf \
     git \
-    valgrind \
     expat \
     libxml2-utils \
-    bear \
     cmake \
     ninja-build \
-    clazy \
-    clang-tidy \
-    jq \
     curl \
     ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
-# alternative compiler
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    clang \
- && rm -rf /var/lib/apt/lists/*
-
-# pkgs needed to build document
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    fop \
-    xsltproc \
-    docbook-xml \
-    docbook5-xml \
-    docbook-xsl \
-    docbook-xsl-ns \
-    libavalon-framework-java \
-    jing \
- && rm -rf /var/lib/apt/lists/*
-
 # pkgs with libraries needed by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libusb-1.0-0-dev \
+    libusb-dev \
     pkg-config \
     libudev-dev \
+    zlib1g-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    qt6-base-dev \
-    qt6-5compat-dev \
-    qt6-serialport-dev \
-    libx11-xcb-dev \
-    libxkbcommon-dev \
-    qt6-tools-dev \
-    qt6-translations-l10n \
-    qt6-webengine-dev \
-    qt6-wayland \
- && rm -rf /var/lib/apt/lists/*
-
-# pkgs needed to generate coverage report:
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcovr \
+    qt5-default \
+    qttools5-dev \
+    qttools5-dev-tools \
+    qttranslations5-l10n \
+    libqt5webkit5-dev \
+    libqt5serialport5-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # install environment for locale test
@@ -83,3 +55,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
  && locale-gen \
  && locale -a
+
+WORKDIR /home/gpsbabel
+
+COPY gpsbabel_1_5_2.patch /home/gpsbabel
+
+RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
+ && cd gpsbabel-build \
+ && git checkout gpsbabel_1_5_2 \
+ && cd gpsbabel \
+ && git apply /home/gpsbabel/gpsbabel_1_5_2.patch \
+ && rm -fr zlib \
+ && autoconf -f && ./configure --with-zlib=system && make -j 10 linux-gui \
+ && ln -s $(pwd)/gui/GPSBabel1.5.2/gpsbabel /usr/local/bin \
+ && ln -s $(pwd)/gui/GPSBabel1.5.2/gpsbabelfe /usr/local/bin 
+
+#ENTRYPOINT ["/usr/local/bin/gpsbabel"]
+
+COPY setup_user.sh /usr/local/bin

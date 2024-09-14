@@ -228,12 +228,12 @@ HtmlFormat::write()
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
   if (!gpsbabel_testmode()) {
-    *file_out << "  <meta name=\"Generator\" content=\"GPSBabel "
+    *file_out << R"(  <meta name="Generator" content="GPSBabel )"
               << gpsbabel_version << "\">\n";
   }
   *file_out << "  <title>GPSBabel HTML Output</title>\n";
   if (stylesheet) {
-    *file_out << "  <link rel=\"stylesheet\" type=\"text/css\" href=\""
+    *file_out << R"(  <link rel="stylesheet" type="text/css" href=")"
               << stylesheet << "\">\n";
   } else {
     *file_out << "  <style>\n";

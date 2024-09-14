@@ -494,7 +494,7 @@ GarminTxtFormat::write_waypt(const Waypoint* wpt)
   print_string("%s\t", (country != nullptr) ? country : "");
   print_date_and_time(wpt->GetCreationTime().toTime_t(), false);
   if (wpt->HasUrlLink()) {
-    UrlLink l = wpt->GetUrlLink();
+    const UrlLink& l = wpt->GetUrlLink();
     print_string("%s\t", l.url_);
   } else {
     print_string("%s\t", "");
@@ -751,7 +751,7 @@ GarminTxtFormat::write()
   };
 
   QString grid_str = gt_get_mps_grid_longname(grid_index, MYNAME);
-  grid_str = grid_str.replace('*', "°");
+  grid_str = grid_str.replace('*', u'°');
   *fout << "Grid\t" << grid_str << "\r\n";
 
   datum_str = gt_get_mps_datum_name(datum_index);
