@@ -21,7 +21,6 @@
 
 #include <algorithm>                    // for sort
 #include <cassert>                      // for assert
-#include <cctype>                       // for isspace, tolower
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
