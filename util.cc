@@ -778,7 +778,7 @@ QString strip_html(const QString& utfstring)
   doc.setHtml(utfstring);
   return doc.toPlainText().simplified();
 #else
-  static const QRegularExpression re("(?:<(?<tag>.*?)>)|(?:&(?<entity>.*?);)|(?<other>[^<&]+)|(?<fragment>.+)",
+  static const QRegularExpression re("(?:<(?<tag>[^ >]*).*?>)|(?:&(?<entity>.*?);)|(?<other>[^<&]+)|(?<fragment>.+)",
                                      QRegularExpression::DotMatchesEverythingOption);
   assert(re.isValid());
   static const QRegularExpression newlinespace_re("\\n\\s*");
@@ -793,13 +793,13 @@ QString strip_html(const QString& utfstring)
     if (!match.captured(u"tag").isNull()) {
       QString tag = match.captured(u"tag");
       //qDebug() << "tag match:" << tag;
-      if (tag.startsWith("p", Qt::CaseInsensitive)) {
+      if (tag.compare("p", Qt::CaseInsensitive) == 0) {
         out.append('\n');
-      } else if (tag.startsWith("br", Qt::CaseInsensitive)) {
+      } else if (tag.compare("br", Qt::CaseInsensitive) == 0) {
         out.append('\n');
-      } else if (tag.startsWith("/tr", Qt::CaseInsensitive)) {
+      } else if (tag.compare("/tr", Qt::CaseInsensitive) == 0) {
         out.append('\n');
-      } else if (tag.startsWith("/td", Qt::CaseInsensitive)) {
+      } else if (tag.compare("/td", Qt::CaseInsensitive) == 0) {
         out.append(' ');
       } else if (tag.startsWith("img", Qt::CaseInsensitive)) {
         out.append("[IMG]");
@@ -807,17 +807,17 @@ QString strip_html(const QString& utfstring)
     } else if (!match.captured(u"entity").isNull()) {
       QString entity = match.captured(u"entity");
       //qDebug() << "entity match:" << entity;
-      if (match.captured() == "amp") {
+      if (entity == "amp") {
         out.append('&');
-      } else if (match.captured() == "lt") {
+      } else if (entity == "lt") {
         out.append('<');
-      } else if (match.captured() == "gt") {
+      } else if (entity == "gt") {
         out.append('>');
-      } else if (match.captured() == "quot") {
+      } else if (entity == "quot") {
         out.append('"');
-      } else if (match.captured() == "nbsp") {
+      } else if (entity == "nbsp") {
         out.append(' ');
-      } else if (match.captured() == "deg") {
+      } else if (entity == "deg") {
         out.append("deg");
       } // else eat the entity
     } else if (!match.captured(u"other").isNull()) {
