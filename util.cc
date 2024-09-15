@@ -36,7 +36,9 @@
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
-#include <QRegularExpression>           // for QRegularExpressio
+#include <QRegularExpression>               // for QRegularExpression
+#include <QRegularExpressionMatch>          // for QRegularExpressionMatch
+#include <QRegularExpressionMatchIterator>  // for QRegularExpressionMatchIterator
 #include <QString>                      // for QString
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
@@ -777,62 +779,56 @@ QString strip_html(const QString& utfstring)
   doc.setHtml(utfstring);
   return doc.toPlainText().simplified();
 #else
-  QString tag;
-  bool processing_tag = false;
+  static const QRegularExpression re("(?:<(?<tag>.*?)>)|(?:&(?<entity>.*?);)|(?<other>[^<&]+)|(?<fragment>.+)",
+                                     QRegularExpression::DotMatchesEverythingOption);
+  assert(re.isValid());
+  static const QRegularExpression newlinespace_re("\\n\\s*");
+  assert(newlinespace_re.isValid());
   QString out;
 
-  for (auto instr = utfstring.cbegin(), end = utfstring.cend(); instr != end;) {
-    if ((*instr == '<') || (*instr == '&')) {
-      processing_tag = true;
-    }
-
-    if (!processing_tag) {
-      if (*instr == '\n') {
-        out.append(' ');
-        do {
-          instr++;
-        } while ((instr != end) && instr->isSpace());
-        continue;
-      } else {
-        out.append(*instr);
-      }
-    } else {
-      if (tag.size() < 7) {
-        tag.append(instr->toLower());
-      }
-    }
-
-    if ((tag.startsWith('<') && (*instr == '>')) ||
-        (tag.startsWith('&') && (*instr == ';'))) {
-      if (tag == "&amp;") {
-        out.append('&');
-      } else if (tag == "&lt;") {
-        out.append('<');
-      } else if (tag == "&gt;") {
-        out.append('>');
-      } else if (tag == "&quot;") {
-        out.append('"');
-      } else if (tag == "&nbsp;") {
-        out.append(' ');
-      } else if (tag == "&deg;") {
-        out.append("deg");
-      } else if (tag.startsWith("<p")) {
+  QRegularExpressionMatchIterator it = re.globalMatch(utfstring);
+  while (it.hasNext()) {
+    auto match = it.next();
+    //qDebug() << match.capturedTexts();
+    // TODO: Qt >= 6.3 use match.hasCaptured(...) instead of !match.captured(...).isNull()
+    if (!match.captured(u"tag").isNull()) {
+      QString tag = match.captured(u"tag");
+      //qDebug() << "tag match:" << tag;
+      if (tag.startsWith("p", Qt::CaseInsensitive)) {
         out.append('\n');
-      } else if (tag.startsWith("<br")) {
+      } else if (tag.startsWith("br", Qt::CaseInsensitive)) {
         out.append('\n');
-      } else if (tag.startsWith("</tr")) {
+      } else if (tag.startsWith("/tr", Qt::CaseInsensitive)) {
         out.append('\n');
-      } else if (tag.startsWith("</td")) {
+      } else if (tag.startsWith("/td", Qt::CaseInsensitive)) {
         out.append(' ');
-      } else if (tag.startsWith("<img")) {
+      } else if (tag.startsWith("img", Qt::CaseInsensitive)) {
         out.append("[IMG]");
-      }
-
-      tag.clear();
-      processing_tag = false;
+      } // else eat the tag
+    } else if (!match.captured(u"entity").isNull()) {
+      QString entity = match.captured(u"entity");
+      //qDebug() << "entity match:" << entity;
+      if (match.captured() == "amp") {
+        out.append('&');
+      } else if (match.captured() == "lt") {
+        out.append('<');
+      } else if (match.captured() == "gt") {
+        out.append('>');
+      } else if (match.captured() == "quot") {
+        out.append('"');
+      } else if (match.captured() == "nbsp") {
+        out.append(' ');
+      } else if (match.captured() == "deg") {
+        out.append("deg");
+      } // else eat the entity
+    } else if (!match.captured(u"other").isNull()) {
+      //qDebug() << "other match:" << match.capturedTexts();
+      out.append(match.captured(u"other").replace(newlinespace_re, " "));
+    } else {
+      //qDebug() << "unexpected fragment:" << match.capturedTexts();
     }
-    instr++;
   }
+
   return out;
 #endif
 }
