@@ -752,7 +752,7 @@ strip_nastyhtml(const QString& in)
   static const QRegularExpression stylere("<style.*?>.*?</style>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
   assert(stylere.isValid());
   QString out(in);
-  
+
   out.replace(bodyre, "");
   out.replace("</body>", "", Qt::CaseInsensitive);
   out.replace(htmlre, "");
@@ -824,8 +824,8 @@ QString strip_html(const QString& utfstring)
     } else if (!match.captured(u"other").isNull()) {
       //qDebug() << "other match:" << match.capturedTexts();
       out.append(match.captured(u"other").replace(newlinespace_re, " "));
-    } else {
-      //qDebug() << "unexpected fragment:" << match.capturedTexts();
+    //} else {
+    //  qDebug() << "unexpected fragment:" << match.capturedTexts();
     }
   }
 
