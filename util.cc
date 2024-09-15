@@ -777,32 +777,62 @@ QString strip_html(const QString& utfstring)
   doc.setHtml(utfstring);
   return doc.toPlainText().simplified();
 #else
-  static const QRegularExpression pre("<p.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
-  assert(pre.isValid());
-  static const QRegularExpression brre("<br.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
-  assert(brre.isValid());
-  static const QRegularExpression trre("<tr.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
-  assert(trre.isValid());
-  static const QRegularExpression tdre("<td.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
-  assert(tdre.isValid());
+  QString tag;
+  bool processing_tag = false;
+  QString out;
 
-  QString out(utfstring);
+  for (auto instr = utfstring.cbegin(), end = utfstring.cend(); instr != end;) {
+    if ((*instr == '<') || (*instr == '&')) {
+      processing_tag = true;
+    }
 
-  // Tag replacement first
-  out.replace(pre, "\n");
-  out.replace(brre, "\n");
-  out.replace(trre, "\n");
-  out.replace(tdre, " ");
-  out.replace("<img", "[IMG]", Qt::CaseInsensitive);
+    if (!processing_tag) {
+      if (*instr == '\n') {
+        out.append(' ');
+        do {
+          instr++;
+        } while ((instr != end) && instr->isSpace());
+        continue;
+      } else {
+        out.append(*instr);
+      }
+    } else {
+      if (tag.size() < 7) {
+        tag.append(instr->toLower());
+      }
+    }
 
-  // Then entity replacement (entities are case sensitive)
-  out.replace("&amp;","&");
-  out.replace("&lt;", "<");
-  out.replace("&gt;", ">");
-  out.replace("&quot;", "\"");
-  out.replace("&nbsp", " ");
-  out.replace("&deg;", "deg");
+    if ((tag.startsWith('<') && (*instr == '>')) ||
+        (tag.startsWith('&') && (*instr == ';'))) {
+      if (tag == "&amp;") {
+        out.append('&');
+      } else if (tag == "&lt;") {
+        out.append('<');
+      } else if (tag == "&gt;") {
+        out.append('>');
+      } else if (tag == "&quot;") {
+        out.append('"');
+      } else if (tag == "&nbsp;") {
+        out.append(' ');
+      } else if (tag == "&deg;") {
+        out.append("deg");
+      } else if (tag.startsWith("<p")) {
+        out.append('\n');
+      } else if (tag.startsWith("<br")) {
+        out.append('\n');
+      } else if (tag.startsWith("</tr")) {
+        out.append('\n');
+      } else if (tag.startsWith("</td")) {
+        out.append(' ');
+      } else if (tag.startsWith("<img")) {
+        out.append("[IMG]");
+      }
 
+      tag.clear();
+      processing_tag = false;
+    }
+    instr++;
+  }
   return out;
 #endif
 }
