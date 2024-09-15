@@ -785,8 +785,6 @@ QString strip_html(const QString& utfstring)
   assert(trre.isValid());
   static const QRegularExpression tdre("<td.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
   assert(tdre.isValid());
-  static const QRegularExpression imgre("<img.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
-  assert(imgre.isValid());
   static const QRegularExpression otherre("<.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
   assert(otherre.isValid());
 
@@ -798,7 +796,7 @@ QString strip_html(const QString& utfstring)
   out.replace(brre, "\n");
   out.replace(trre, "\n");
   out.replace(tdre, " ");
-  out.replace(imgre, "[IMG]");
+  out.replace("<img", "[IMG]", Qt::CaseInsensitive);
   out.replace(otherre, "");
 
   // Then entity replacement (entities are case sensitive)
