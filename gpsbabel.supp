@@ -6,6 +6,12 @@
    fun:calculateHash<QStringView>
 }
 {
+   <Ubuntu noble vtesto text, libqt6core6t64/noble,now 6.4.2+dfsg-21.1build5 amd64>
+   Memcheck:Addr16
+   fun:UnknownInlinedFun
+   fun:_ZL15aeshash128_lt16Dv2_xPKhm
+}
+{
    <Ubuntu Jammy vtesto text, qtio qhash.cpp 6.2.4>
    Memcheck:Addr16
    fun:_mm_loadu_si128
