@@ -781,7 +781,7 @@ QString strip_html(const QString& utfstring)
   static const QRegularExpression re("(?:<(?<tag>[^ >]*).*?>)|(?:&(?<entity>.*?);)|(?<other>[^<&]+)|(?<fragment>.+)",
                                      QRegularExpression::DotMatchesEverythingOption);
   assert(re.isValid());
-  static const QRegularExpression newlinespace_re("\\n\\s*");
+  static const QRegularExpression newlinespace_re("\\s*\\n\\s*");
   assert(newlinespace_re.isValid());
   QString out;
 
@@ -793,11 +793,9 @@ QString strip_html(const QString& utfstring)
     if (!match.captured(u"tag").isNull()) {
       QString tag = match.captured(u"tag");
       //qDebug() << "tag match:" << tag;
-      if (tag.compare("p", Qt::CaseInsensitive) == 0) {
-        out.append('\n');
-      } else if (tag.compare("br", Qt::CaseInsensitive) == 0) {
-        out.append('\n');
-      } else if (tag.compare("/tr", Qt::CaseInsensitive) == 0) {
+      if ((tag.compare("p", Qt::CaseInsensitive) == 0) ||
+          (tag.compare("br", Qt::CaseInsensitive) == 0) ||
+          (tag.compare("/tr", Qt::CaseInsensitive) == 0)) {
         out.append('\n');
       } else if (tag.compare("/td", Qt::CaseInsensitive) == 0) {
         out.append(' ');
