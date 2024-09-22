@@ -1,4 +1,19 @@
 {
+   <Ubuntu Jammy vtesto text, qhash.cpp 6.2.4>
+   Memcheck:Addr16
+   fun:_mm_loadu_si128
+   fun:_ZL7aeshashPKhmm
+   fun:calculateHash<QStringView>
+}
+{
+   <Ubuntu Jammy vtesto text, qhash.cpp 6.7.2 intermittant>
+   Memcheck:Addr16
+   fun:_mm_loadu_si128
+   fun:aeshash128_lt16
+   fun:_ZL10aeshash128PKhmmm
+   fun:calculateHash<QStringView>
+}
+{
    <Fedora18: Qt's use of libuuc leaks.>
    Memcheck:Leak
    ...
