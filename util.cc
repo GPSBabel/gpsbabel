@@ -781,7 +781,7 @@ QString strip_html(const QString& utfstring)
   static const QRegularExpression re("(?:<(?<tag>[^ >]*).*?>)|(?:&(?<entity>.*?);)|(?<other>[^<&]+)|(?<fragment>.+)",
                                      QRegularExpression::DotMatchesEverythingOption);
   assert(re.isValid());
-  static const QRegularExpression newlinespace_re("\\s*\\n\\s*");
+  static const QRegularExpression newlinespace_re(R"(\s*\n\s*)");
   assert(newlinespace_re.isValid());
   QString out;
 
