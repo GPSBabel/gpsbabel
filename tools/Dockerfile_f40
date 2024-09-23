@@ -19,6 +19,6 @@ RUN dnf install --assumeyes qt6-qtbase-devel qt6-qtserialport-devel qt6-qtwebeng
 RUN dnf install --assumeyes expat desktop-file-utils libxslt docbook-style-xsl fop docbook5-style-xsl docbook5-schemas && \
     dnf clean all
 # debuginfo for valgrind suppressions (or use DEBUGINFOD server)
-#RUN dnf install --assumeyes 'dnf-command(debuginfo-install)' && \
-#    dnf debuginfo-install --assumeyes qt6-qtbase && \
-#    dnf clean all
+RUN dnf install --assumeyes 'dnf-command(debuginfo-install)' && \
+    dnf debuginfo-install --assumeyes qt6-qtbase && \
+    dnf clean all
