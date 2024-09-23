@@ -685,7 +685,7 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
       rval.startsWith('0') && (arg->defaultvalue == nullptr)) {
     return;
   }
-  *arg->argval = arg->argvalptr = xstrdup(rval);
+  *arg->argval = arg->argvalptr = xstrdup(CSTR(rval));
 }
 
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)

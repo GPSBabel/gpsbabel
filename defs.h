@@ -921,10 +921,9 @@ void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
-char* xstrdup(const QString& s);
 char* xstrdup(const char* s);
 
-FILE* xfopen(const char* fname, const char* type, const char* errtxt);
+FILE* xfopen(const QString& fname, const char* type, const QString& errtxt);
 
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);

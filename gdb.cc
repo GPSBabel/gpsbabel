@@ -383,14 +383,14 @@ GdbFormat::read_file_header()
   	misinterpreted.
   */
   if (strcmp(buf, "MsRcf") != 0) {
-    fatal(MYNAME ": Invalid file \"%s\"!", fin->name);
+    fatal(MYNAME ": Invalid file \"%s\"!", qPrintable(fin->name));
   }
 
   int reclen = FREAD_i32;
   Q_UNUSED(reclen);
   QByteArray drec = FREAD_STR();
   if (drec.at(0) != 'D') {
-    fatal(MYNAME ": Invalid file \"%s\"!", fin->name);
+    fatal(MYNAME ": Invalid file \"%s\"!", qPrintable(fin->name));
   }
 
   gdb_ver = drec.at(1) - 'k' + 1;
@@ -1081,7 +1081,7 @@ GdbFormat::read()
 
   if (incomplete) {
     warning(MYNAME ":------------------------------------------\n");
-    warning(MYNAME ": \"%s\"\n", fin->name);
+    warning(MYNAME ": \"%s\"\n", qPrintable(fin->name));
     warning(MYNAME ":------------------------------------------\n");
     warning(MYNAME ":       Please mail this information\n");
     warning(MYNAME "     and, if you can, the used GDB file\n");
