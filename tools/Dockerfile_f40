@@ -13,10 +13,12 @@ RUN dnf install --assumeyes git make valgrind diffutils findutils langpacks-en n
 RUN dnf install --assumeyes libusb1-devel zlib-devel shapelib-devel && \
     dnf clean all
 # Qt used by gpsbabel, gpsbabelfe
-RUN dnf install --assumeyes qt5-qtbase-devel qt5-qtserialport-devel qt5-qtwebengine-devel qt5-linguist qt5-qttranslations && \
-    dnf clean all
 RUN dnf install --assumeyes qt6-qtbase-devel qt6-qtserialport-devel qt6-qtwebengine-devel qt6-linguist qt6-qttranslations qt6-qt5compat-devel qt6-qttools-devel libxkbcommon-devel && \
     dnf clean all
 # tools to build the docs
 RUN dnf install --assumeyes expat desktop-file-utils libxslt docbook-style-xsl fop docbook5-style-xsl docbook5-schemas && \
     dnf clean all
+# debuginfo for valgrind suppressions (or use DEBUGINFOD server)
+#RUN dnf install --assumeyes 'dnf-command(debuginfo-install)' && \
+#    dnf debuginfo-install --assumeyes qt6-qtbase && \
+#    dnf clean all
