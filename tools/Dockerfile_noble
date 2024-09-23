@@ -71,6 +71,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qt6-wayland \
  && rm -rf /var/lib/apt/lists/*
 
+# dbgsyms for "libqt6core6t64/noble,now 6.4.2+dfsg-21.1build5 amd64" needed for gpsbabel.supp
+RUN apt-get update && apt-get install -y --no-install-recommends ubuntu-dbgsym-keyring \
+ && echo "deb http://ddebs.ubuntu.com noble main restricted universe multiverse" >> /etc/apt/sources.list.d/ddebs.list \
+ && echo "deb http://ddebs.ubuntu.com noble-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/ddebs.list \
+ && echo "deb http://ddebs.ubuntu.com noble-proposed main restricted universe multiverse" >> /etc/apt/sources.list.d/ddebs.list \
+ && apt-get update && apt-get install -y --no-install-recommends libqt6core6t64-dbgsym \
+ && rm -rf /var/lib/apt/lists/*
+
 # pkgs needed to generate coverage report:
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcovr \

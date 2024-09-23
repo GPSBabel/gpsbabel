@@ -20,7 +20,7 @@
  */
 
 #include <algorithm>                    // for sort
-#include <cctype>                       // for isspace, tolower
+#include <cassert>                      // for assert
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
@@ -35,6 +35,9 @@
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
+#include <QRegularExpression>               // for QRegularExpression
+#include <QRegularExpressionMatch>          // for QRegularExpressionMatch
+#include <QRegularExpressionMatchIterator>  // for QRegularExpressionMatchIterator
 #include <QString>                      // for QString
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
@@ -734,92 +737,29 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
 /*
  * Get rid of potentially nasty HTML that would influence another record
  * that includes;
- * <body> - to stop backgrounds/background colours from being loaded
+ * <body> - to stop backgrounds/background colors from being loaded
  * </body> and </html>- stop processing altogether
  * <style> </style> - stop overriding styles for everything
  */
 QString
 strip_nastyhtml(const QString& in)
 {
-  char* returnstr = xstrdup(in);
-  char* lcstr = xstrdup(in.toLower());
+  static const QRegularExpression htmlre("<html.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(htmlre.isValid());
+  static const QRegularExpression bodyre("<body.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(bodyre.isValid());
+  static const QRegularExpression stylere("<style.*?>.*?</style>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(stylere.isValid());
+  QString out(in);
 
-  while (char* lcp = strstr(lcstr, "<body>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
-    sp++;
-    *sp++ = '!';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<body")) {   /* becomes <!--        --> */
-    char* sp = returnstr + (lcp - lcstr) ;
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    while ((*sp) && (*sp != '>')) {
-      sp++;
-    }
-    *--sp = '-';
-    *--sp = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</body>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</html>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<style")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp = ' ';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</style>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<image")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <img */
-    sp+=3;
-    *sp++ = 'g';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *lcp = '*';
-  }
-  xfree(lcstr);
-  QString rv(returnstr);
-  xfree(returnstr);
-  return rv;
+  out.replace(bodyre, "");
+  out.replace("</body>", "", Qt::CaseInsensitive);
+  out.replace(htmlre, "");
+  out.replace("</html>", "", Qt::CaseInsensitive);
+  out.replace(stylere, "");
+  out.replace("<image", "<img", Qt::CaseInsensitive);
+
+  return out;
 }
 
 /*
@@ -838,82 +778,55 @@ QString strip_html(const QString& utfstring)
   doc.setHtml(utfstring);
   return doc.toPlainText().simplified();
 #else
-  char* out;
-  char* instr;
-  char tag[8];
-  unsigned short int taglen = 0;
+  static const QRegularExpression re("(?:<(?<tag>[^ >]*).*?>)|(?:&(?<entity>.*?);)|(?<other>[^<&]+)|(?<fragment>.+)",
+                                     QRegularExpression::DotMatchesEverythingOption);
+  assert(re.isValid());
+  static const QRegularExpression newlinespace_re(R"(\s*\n\s*)");
+  assert(newlinespace_re.isValid());
+  QString out;
 
-  char* incopy = instr = xstrdup(utfstring);
-  /*
-   * We only shorten, so just dupe the input buf for space.
-   */
-  char* outstring = out = xstrdup(utfstring);
-
-  tag[0] = 0;
-  while (*instr) {
-    if ((*instr == '<') || (*instr == '&')) {
-      tag[0] = *instr;
-      taglen = 0;
+  QRegularExpressionMatchIterator it = re.globalMatch(utfstring);
+  while (it.hasNext()) {
+    auto match = it.next();
+    //qDebug() << match.capturedTexts();
+    // TODO: Qt >= 6.3 use match.hasCaptured(...) instead of !match.captured(...).isNull()
+    if (!match.captured(u"tag").isNull()) {
+      QString tag = match.captured(u"tag");
+      //qDebug() << "tag match:" << tag;
+      if ((tag.compare("p", Qt::CaseInsensitive) == 0) ||
+          (tag.compare("br", Qt::CaseInsensitive) == 0) ||
+          (tag.compare("/tr", Qt::CaseInsensitive) == 0)) {
+        out.append('\n');
+      } else if (tag.compare("/td", Qt::CaseInsensitive) == 0) {
+        out.append(' ');
+      } else if (tag.startsWith("img", Qt::CaseInsensitive)) {
+        out.append("[IMG]");
+      } // else eat the tag
+    } else if (!match.captured(u"entity").isNull()) {
+      QString entity = match.captured(u"entity");
+      //qDebug() << "entity match:" << entity;
+      if (entity == "amp") {
+        out.append('&');
+      } else if (entity == "lt") {
+        out.append('<');
+      } else if (entity == "gt") {
+        out.append('>');
+      } else if (entity == "quot") {
+        out.append('"');
+      } else if (entity == "nbsp") {
+        out.append(' ');
+      } else if (entity == "deg") {
+        out.append("deg");
+      } // else eat the entity
+    } else if (!match.captured(u"other").isNull()) {
+      //qDebug() << "other match:" << match.capturedTexts();
+      out.append(match.captured(u"other").replace(newlinespace_re, " "));
+    //} else {
+    //  qDebug() << "unexpected fragment:" << match.capturedTexts();
     }
-
-    if (! tag[0]) {
-      if (*instr == '\n') {
-        *out++ = ' ';
-        do {
-          instr++;
-        } while (isspace(*instr));
-        continue;
-      } else {
-        *out++ = *instr;
-      }
-    } else {
-      if (taglen < (sizeof(tag)-1)) {
-        tag[taglen++] = tolower(*instr);
-        tag[taglen] = 0;
-      }
-    }
-
-    if (((tag[0] == '<') && (*instr == '>')) ||
-        ((tag[0] == '&') && (*instr == ';'))) {
-      if (! strcmp(tag, "&amp;")) {
-        *out++ = '&';
-      } else if (! strcmp(tag, "&lt;")) {
-        *out++ = '<';
-      } else if (! strcmp(tag, "&gt;")) {
-        *out++ = '>';
-      } else if (! strcmp(tag, "&quot;")) {
-        *out++ = '"';
-      } else if (! strcmp(tag, "&nbsp;")) {
-        *out++ = ' ';
-      } else if (! strcmp(tag, "&deg;")) {
-        *out++ = 'd';
-        *out++ = 'e';
-        *out++ = 'g';
-      } else if ((tag[0]=='<') && (tag[1]=='p')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='b') && (tag[2]=='r')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='/') && (tag[2]=='t') && (tag[3]=='r')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='/') && (tag[2]=='t') && (tag[3]=='d')) {
-        *out++ = ' ';
-      } else if ((tag[0]=='<') && (tag[1]=='i') && (tag[2]=='m') && (tag[3]=='g')) {
-        *out++ = '[';
-        *out++ = 'I';
-        *out++ = 'M';
-        *out++ = 'G';
-        *out++ = ']';
-      }
-
-      tag[0] = 0;
-    }
-    instr++;
   }
-  *out++ = 0;
-  xfree(incopy);
-  QString rv(outstring);
-  xfree(outstring);
-  return rv;
+
+  return out;
 #endif
 }
 
