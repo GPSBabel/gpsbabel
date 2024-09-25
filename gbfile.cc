@@ -24,6 +24,7 @@
 #include <QChar>               // for QChar, operator==, operator!=
 #include <QDebug>              // for QDebug
 #include <QString>             // for QString
+#include <Qt>                  // for CaseInsensitive
 #include <QtGlobal>            // for qPrintable
 
 #include <cassert>             // for assert
@@ -93,20 +94,19 @@ gzapi_open(gbfile* self, const char* mode)
     self->handle.gz = gzdopen(fileno(fd), openmode);
   } else {
 #if __WIN32__
-    // On Windows, convert UTF-8 to wchar_t[] and use gzopen_w().
-    QString name(self->name);
-    self->handle.gz = gzopen_w((const wchar_t*) name.utf16(), openmode);
+    // On Windows, convert to wchar_t[] and use gzopen_w().
+    self->handle.gz = gzopen_w((const wchar_t*) self->name.utf16(), openmode);
 #else
     // On other platforms, convert to native locale (UTF-8 or other 8-bit).
-    self->handle.gz = gzopen(qPrintable(QString(self->name)), openmode);
+    self->handle.gz = gzopen(qPrintable(self->name), openmode);
 #endif
   }
 
   if (self->handle.gz == nullptr) {
     fatal("%s: Cannot %s file '%s'!\n",
-          self->module,
+          qPrintable(self->module),
           (self->mode == 'r') ? "open" : "create",
-          self->name);
+          qPrintable(self->name));
   }
 
   return self;
@@ -131,9 +131,9 @@ gzapi_seek(gbfile* self, int32_t offset, int whence)
 
   if (result < 0) {
     if (self->is_pipe) {
-      fatal("%s: This format cannot be used in piped commands!\n", self->module);
+      fatal("%s: This format cannot be used in piped commands!\n", qPrintable(self->module));
     }
-    fatal("%s: online compression not yet supported for this format!", self->module);
+    fatal("%s: online compression not yet supported for this format!", qPrintable(self->module));
   }
   return 0;
 }
@@ -155,7 +155,7 @@ gzapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 
   /* Check for an incomplete READ */
   if ((members == 1) && (size > 1) && (result > 0) && (result < (int)size)) {
-    fatal("%s: Unexpected end of file (EOF)!\n", self->module);
+    fatal("%s: Unexpected end of file (EOF)!\n", qPrintable(self->module));
   }
 
   result /= size;
@@ -171,7 +171,7 @@ gzapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
     }
     if ((errnum != Z_STREAM_END) && (errnum != 0))
       fatal("%s: zlib returned error %d ('%s')!\n",
-            self->module, errnum, errtxt);
+            qPrintable(self->module), errnum, errtxt);
   }
   return (gbsize_t) result;
 }
@@ -296,10 +296,10 @@ stdapi_seek(gbfile* self, int32_t offset, int whence)
       break;
     default:
       fatal("%s: Unknown seek operation (%d) for file %s!\n",
-            self->module, whence, self->name);
+            qPrintable(self->module), whence, qPrintable(self->name));
     }
     fatal("%s: Unable to set file (%s) to position (%llu)!\n",
-          self->module, self->name, (long long unsigned) pos);
+          qPrintable(self->module), qPrintable(self->name), (long long unsigned) pos);
   }
   return 0;
 }
@@ -312,7 +312,7 @@ stdapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self
 
   if ((result < members) && (error_number = ferror(self->handle.std))) {
     fatal("%s: Error %d occurred during read of file '%s'!\n",
-          self->module, error_number, self->name);
+          qPrintable(self->module), error_number, qPrintable(self->name));
   }
   return result;
 }
@@ -501,15 +501,15 @@ memapi_error(gbfile* self)
  */
 
 gbfile*
-gbfopen(const QString& filename, const char* mode, const char* module)
+gbfopen(const QString& filename, const char* mode, const QString& module)
 {
-  auto* file = (gbfile*) xcalloc(1, sizeof(gbfile));
+  auto* file = new gbfile;
 
-  file->module = xstrdup(module);
+  file->module = module;
   file->mode = 'r'; // default
   file->binary = (strchr(mode, 'b') != nullptr);
   file->back = -1;
-  file->memapi = (filename == nullptr);
+  file->memapi = filename.isNull();
 
   for (const char* m = mode; *m; m++) {
     switch (tolower(*m)) {
@@ -527,7 +527,7 @@ gbfopen(const QString& filename, const char* mode, const char* module)
 
   if (file->memapi) {
     file->gzapi = 0;
-    file->name = xstrdup("(Memory stream)");
+    file->name = "(Memory stream)";
 
     file->fileclearerr = memapi_clearerr;
     file->fileclose = memapi_close;
@@ -541,12 +541,11 @@ gbfopen(const QString& filename, const char* mode, const char* module)
     file->fileungetc = memapi_ungetc;
     file->filewrite = memapi_write;
   } else {
-    file->name = xstrdup(filename);
+    file->name = filename;
     file->is_pipe = (filename == '-');
 
     /* Do we have a '.gz' extension in the filename ? */
-    int len = strlen(file->name);
-    if ((len > 3) && (case_ignore_strcmp(&file->name[len-3], ".gz") == 0)) {
+    if ((file->name.size() > 3) && (file->name.endsWith(".gz", Qt::CaseInsensitive))) {
 #if !ZLIB_INHIBITED
       /* force gzipped files on output */
       file->gzapi = 1;
@@ -571,7 +570,7 @@ gbfopen(const QString& filename, const char* mode, const char* module)
       file->filewrite = gzapi_write;
 #else
       /* This is the only runtime test we make */
-      fatal("%s: Zlib was not included in this build.\n", file->module);
+      fatal("%s: Zlib was not included in this build.\n", qPrintable(file->module));
 #endif
     } else {
       file->fileclearerr = stdapi_clearerr;
@@ -601,7 +600,7 @@ gbfopen(const QString& filename, const char* mode, const char* module)
  */
 
 gbfile*
-gbfopen_be(const QString& filename, const char* mode, const char* module)
+gbfopen_be(const QString& filename, const char* mode, const QString& module)
 {
   gbfile* result = gbfopen(filename, mode, module);
   result->big_endian = 1;
@@ -622,10 +621,8 @@ gbfclose(gbfile* file)
 
   file->fileclose(file);
 
-  xfree(file->name);
-  xfree(file->module);
   xfree(file->buff);
-  xfree(file);
+  delete file;
 }
 
 /*
@@ -815,9 +812,9 @@ gbfwrite(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* f
   unsigned int result = file->filewrite(buf, size, members, file);
   if (result != members) {
     fatal("%s: Could not write %lld bytes to %s (result %d)!\n",
-          file->module,
+          qPrintable(file->module),
           (long long int)(members - result) * size,
-          file->name,
+          qPrintable(file->name),
           result);
   }
 
@@ -885,7 +882,7 @@ gbftell(gbfile* file)
   gbsize_t result = file->filetell(file);
   if ((signed) result == -1)
     fatal("%s: Could not determine position of file '%s'!\n",
-          file->module, file->name);
+          qPrintable(file->module), qPrintable(file->name));
   return result;
 }
 
@@ -921,7 +918,7 @@ gbfgetint32(gbfile* file)
   char buf[4];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    fatal("%s: Unexpected end of file (%s)!\n", qPrintable(file->module), qPrintable(file->name));
   }
 
   if (file->big_endian) {
@@ -941,7 +938,7 @@ gbfgetint16(gbfile* file)
   char buf[2];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    fatal("%s: Unexpected end of file (%s)!\n", qPrintable(file->module), qPrintable(file->name));
   }
 
   if (file->big_endian) {
@@ -961,7 +958,7 @@ gbfgetdbl(gbfile* file)
   char buf[8];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    fatal("%s: Unexpected end of file (%s)!\n", qPrintable(file->module), qPrintable(file->name));
   }
 
   return endian_read_double(buf, ! file->big_endian);
@@ -977,7 +974,7 @@ gbfgetflt(gbfile* file)
   char buf[4];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    fatal("%s: Unexpected end of file (%s)!\n", qPrintable(file->module), qPrintable(file->name));
   }
 
   return endian_read_float(buf, ! file->big_endian);
@@ -1002,7 +999,7 @@ gbfgetcstr_old(gbfile* file)
     }
 
     if (c == EOF) {
-      fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+      fatal("%s: Unexpected end of file (%s)!\n", qPrintable(file->module), qPrintable(file->name));
     }
 
     if (len == file->buffsz) {
@@ -1049,12 +1046,12 @@ gbfgetpstr(gbfile* file)
 {
   int len = gbfgetc(file);
   if (len == EOF) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    fatal("%s: Unexpected end of file (%s)!\n", qPrintable(file->module), qPrintable(file->name));
   }
   QByteArray ba;
   ba.resize(len);
   if (gbfread(ba.data(), 1, len, file) != (gbsize_t) len) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    fatal("%s: Unexpected end of file (%s)!\n", qPrintable(file->module), qPrintable(file->name));
   }
 
   return QString(ba);
@@ -1072,7 +1069,7 @@ gbfgetutf16char(gbfile* file)
 
     if (c1 == EOF) {
         fatal("%s: Incomplete unicode (UTF-16%cE) character at EOF!\n",
-              file->module,
+              qPrintable(file->module),
               file->big_endian ? 'B' : 'L');
     }
 
@@ -1121,7 +1118,7 @@ gbfgetutf16str(gbfile* file)
       if (qch2 != u'\n') {  // including qch2.isNull()
         // Putting back two chars may not be supported, e.g. with gzapi_ungetc.
         fatal("%s: Invalid unicode (UTF-16%cE) line break!\n",
-              file->module,
+              qPrintable(file->module),
               file->big_endian ? 'B' : 'L');
       }
       break;
@@ -1131,7 +1128,7 @@ gbfgetutf16str(gbfile* file)
 
     if (qch.isLowSurrogate()) {
       fatal("%s: Leading unicode (UTF-16%cE) low surrogate!\n",
-            file->module,
+            qPrintable(file->module),
             file->big_endian ? 'B' : 'L');
     }
 
@@ -1140,7 +1137,7 @@ gbfgetutf16str(gbfile* file)
       QChar qch2 = gbfgetutf16char(file);
       if (!qch2.isLowSurrogate()) { // including qch2.isNull()
         fatal("%s: Missing unicode (UTF-16%cE) low surrogate!\n",
-              file->module,
+              qPrintable(file->module),
               file->big_endian ? 'B' : 'L');
       }
       str.append(qch2);
