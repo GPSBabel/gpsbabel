@@ -56,27 +56,27 @@
 #define GDB_DEF_CLASS		gt_waypt_class_user_waypoint
 #define GDB_DEF_HIDDEN_CLASS	gt_waypt_class_map_point
 
-#define GDB_DBG_WPT		1
-#define GDB_DBG_RTE		2
-#define GDB_DBG_TRK		4
+constexpr unsigned int GDB_DBG_WPT = 1;
+constexpr unsigned int GDB_DBG_RTE = 2;
+constexpr unsigned int GDB_DBG_TRK = 4;
 
-#define GDB_DBG_WPTe		8
-#define GDB_DBG_RTEe		16
-#define GDB_DBG_TRKe		32
+constexpr unsigned int GDB_DBG_WPTe = 8;
+constexpr unsigned int GDB_DBG_RTEe = 16;
+constexpr unsigned int GDB_DBG_TRKe = 32;
 
-#define GDB_DEBUG		(GDB_DBG_WPTe) /* | GDB_DBG_RTE) */
-#undef GDB_DEBUG
-// #define GDB_DEBUG 0xff
+//constexpr unsigned int GDB_DEBUG = (GDB_DBG_WPTe) /* | GDB_DBG_RTE) */;
+//constexpr unsigned int GDB_DEBUG = 0xff;
+constexpr unsigned int GDB_DEBUG = 0x00;
 
 #define DBG(a, b)		if ((GDB_DEBUG & (a)) && (b))
 
 
-inline bool operator==(const GdbFormat::WptNameKey& lhs, const GdbFormat::WptNameKey &rhs) noexcept
+inline bool operator==(const GdbFormat::WptNameKey& lhs, const GdbFormat::WptNameKey& rhs) noexcept
 {
   return lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0;
 }
 
-inline bool operator==(const GdbFormat::WptNamePosnKey& lhs, const GdbFormat::WptNamePosnKey &rhs) noexcept
+inline bool operator==(const GdbFormat::WptNamePosnKey& lhs, const GdbFormat::WptNamePosnKey& rhs) noexcept
 {
   return
     (lhs.shortname.compare(rhs.shortname, Qt::CaseInsensitive) == 0) &&
@@ -100,43 +100,38 @@ GdbFormat::gdb_flush_waypt_queue(WptNamePosnHash& Q)
   Q = WptNamePosnHash();
 }
 
-#if GDB_DEBUG
 void
 GdbFormat::disp_summary(const gbfile* f) const
 {
-  int i, len;
+  if constexpr(GDB_DEBUG) {
+    int len = strlen(qPrintable(f->name));
 
-  len = strlen(f->name);
+    warning(MYNAME ": =====================");
+    for (int i = 0; i < len; i++) {
+      warning("=");
+    }
+    warning("\n" MYNAME ": %s summary for \"%s\"\n",
+            (f->mode == 'r') ? "Reader" : "Writer", qPrintable(f->name));
 
-  warning(MYNAME ": =====================");
-  for (i = 0; i < len; i++) {
-    warning("=");
+    warning(MYNAME ": ---------------------");
+    for (int i = 0; i < len; i++) {
+      warning("-");
+    }
+
+    warning("\n" MYNAME ": %d waypoint(s)\n", waypt_ct - waypth_ct);
+    warning(MYNAME ": %d hidden waypoint(s)\n", waypth_ct);
+    warning(MYNAME ": %d route(s) with total %d point(s)\n", rte_ct, rtept_ct);
+    warning(MYNAME ": %d track(s) with total %d point(s)\n", trk_ct, trkpt_ct);
+    warning(MYNAME ": ---------------------");
+
+    for (int i = 0; i < len; i++) {
+      warning("-");
+    }
+    warning("\n");
+  } else  {
+    Q_UNUSED(f);
   }
-  warning("\n" MYNAME ": %s summary for \"%s\"\n",
-          (f->mode == 'r') ? "Reader" : "Writer", f->name);
-
-  warning(MYNAME ": ---------------------");
-  for (i = 0; i < len; i++) {
-    warning("-");
-  }
-
-  warning("\n" MYNAME ": %d waypoint(s)\n", waypt_ct - waypth_ct);
-  warning(MYNAME ": %d hidden waypoint(s)\n", waypth_ct);
-  warning(MYNAME ": %d route(s) with total %d point(s)\n", rte_ct, rtept_ct);
-  warning(MYNAME ": %d track(s) with total %d point(s)\n", trk_ct, trkpt_ct);
-  warning(MYNAME ": ---------------------");
-
-  for (i = 0; i < len; i++) {
-    warning("-");
-  }
-  warning("\n");
 }
-#else
-void
-GdbFormat::disp_summary(const gbfile* /* f */) const
-{
-}
-#endif
 
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE READER */
@@ -465,41 +460,41 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     double alt = FREAD_DBL;
     if (alt < 1.0e24) {
       res->altitude = alt;
-#if GDB_DEBUG
-      DBG(GDB_DBG_WPTe, true)
-      printf(MYNAME "-wpt \"%s\" (%d): Altitude = %.1f\n",
-             qPrintable(res->shortname), wpt_class, alt);
-#endif
+      if constexpr(GDB_DEBUG) {
+        DBG(GDB_DBG_WPTe, true)
+        printf(MYNAME "-wpt \"%s\" (%d): Altitude = %.1f\n",
+               qPrintable(res->shortname), wpt_class, alt);
+      }
     }
   }
-#if GDB_DEBUG
-  DBG(GDB_DBG_WPT, true)
-  printf(MYNAME "-wpt \"%s\": coordinates = %c%0.6f %c%0.6f\n",
-         qPrintable(res->shortname),
-         res->latitude < 0 ? 'S' : 'N', res->latitude,
-         res->longitude < 0 ? 'W' : 'E', res->longitude);
-#endif
+  if constexpr(GDB_DEBUG) {
+    DBG(GDB_DBG_WPT, true)
+    printf(MYNAME "-wpt \"%s\": coordinates = %c%0.6f %c%0.6f\n",
+           qPrintable(res->shortname),
+           res->latitude < 0 ? 'S' : 'N', res->latitude,
+           res->longitude < 0 ? 'W' : 'E', res->longitude);
+  }
   res->notes = fread_cstr();
-#if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, !res->notes.isNull())
-  printf(MYNAME "-wpt \"%s\" (%d): notes = %s\n",
-         qPrintable(res->shortname), wpt_class,
-         qPrintable(QString(res->notes).replace("\r\n", ", ")));
-#endif
+  if constexpr(GDB_DEBUG) {
+    DBG(GDB_DBG_WPTe, !res->notes.isNull())
+    printf(MYNAME "-wpt \"%s\" (%d): notes = %s\n",
+           qPrintable(res->shortname), wpt_class,
+           qPrintable(QString(res->notes).replace("\r\n", ", ")));
+  }
   if (FREAD_C == 1) {
     res->set_proximity(FREAD_DBL);
-#if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, res->proximity_has_value())
-    printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->proximity_value() / 1000);
-#endif
+    if constexpr(GDB_DEBUG) {
+      DBG(GDB_DBG_WPTe, res->proximity_has_value())
+      printf(MYNAME "-wpt \"%s\" (%d): Proximity = %.1f\n",
+             qPrintable(res->shortname), wpt_class, res->proximity_value() / 1000);
+    }
   }
   int display = FREAD_i32;
-#if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, true)
-  printf(MYNAME "-wpt \"%s\" (%d): display = %d\n",
-         qPrintable(res->shortname), wpt_class, display);
-#endif
+  if constexpr(GDB_DEBUG) {
+    DBG(GDB_DBG_WPTe, true)
+    printf(MYNAME "-wpt \"%s\" (%d): display = %d\n",
+           qPrintable(res->shortname), wpt_class, display);
+  }
   switch (display) {			/* display value */
   case gt_gdb_display_mode_symbol:
     display = gt_display_mode_symbol;
@@ -524,11 +519,11 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
   if (FREAD_C == 1) {
     res->set_depth(FREAD_DBL);
-#if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, res->depth_has_value())
-    printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->depth_value());
-#endif
+    if constexpr(GDB_DEBUG) {
+      DBG(GDB_DBG_WPTe, res->depth_has_value())
+      printf(MYNAME "-wpt \"%s\" (%d): Depth = %.1f\n",
+             qPrintable(res->shortname), wpt_class, res->depth_value());
+    }
   }
 
   /* VERSION DEPENDENT CODE */
@@ -543,14 +538,14 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       FREAD(buf, 2);
     }
 
-#if GDB_DEBUG
-    QString temp = FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
-    DBG(GDB_DBG_WPTe, !temp.isEmpty())
-    printf(MYNAME "-wpt \"%s\" (%d): Unknown string = %s\n",
-           qPrintable(res->shortname), wpt_class, qPrintable(temp));
-#else
-    (void) FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
-#endif
+    if constexpr(GDB_DEBUG) {
+      QString temp = FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
+      DBG(GDB_DBG_WPTe, !temp.isEmpty())
+      printf(MYNAME "-wpt \"%s\" (%d): Unknown string = %s\n",
+             qPrintable(res->shortname), wpt_class, qPrintable(temp));
+    } else {
+      (void) FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
+    }
 
     QString linky = FREAD_CSTR_AS_QSTR;
     UrlLink l(linky);
@@ -573,51 +568,51 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     if (wpt_class == gt_waypt_class_map_intersection || wpt_class == gt_waypt_class_map_line) {
       garmin_fs_t::set_duration(gmsd, duration);
       res->notes = QStringLiteral("[%1]").arg(gdb_to_ISO8601_duration(duration));
-#if GDB_DEBUG
-      DBG(GDB_DBG_WPTe, true)
-      printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
-             qPrintable(res->shortname), wpt_class, duration);
-#endif
+      if constexpr(GDB_DEBUG) {
+        DBG(GDB_DBG_WPTe, true)
+        printf(MYNAME "-wpt \"%s\" (%d): duration = %u\n",
+               qPrintable(res->shortname), wpt_class, duration);
+      }
     }
     int url_ct = FREAD_i32;
     for (int i = url_ct; (i); i--) {
       QString str = FREAD_CSTR_AS_QSTR;
       if (!str.isEmpty()) {
         waypt_add_url(res, str, nullptr);
-#if GDB_DEBUG
-        DBG(GDB_DBG_WPTe, true)
-        printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
-               qPrintable(res->shortname), wpt_class, url_ct - i, qPrintable(str));
-#endif
+        if constexpr(GDB_DEBUG) {
+          DBG(GDB_DBG_WPTe, true)
+          printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
+                 qPrintable(res->shortname), wpt_class, url_ct - i, qPrintable(str));
+        }
       }
     }
   }
 
-#if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, !res->description.isNull())
-  printf(MYNAME "-wpt \"%s\" (%d): description = %s\n",
-         qPrintable(res->shortname), wpt_class, qPrintable(res->description));
-  DBG(GDB_DBG_WPTe, res->urls.HasUrlLink())
-  printf(MYNAME "-wpt \"%s\" (%d): url = %s\n",
-         qPrintable(res->shortname), wpt_class, qPrintable(res->urls.GetUrlLink().url_));
-#endif
+  if constexpr(GDB_DEBUG) {
+    DBG(GDB_DBG_WPTe, !res->description.isNull())
+    printf(MYNAME "-wpt \"%s\" (%d): description = %s\n",
+           qPrintable(res->shortname), wpt_class, qPrintable(res->description));
+    DBG(GDB_DBG_WPTe, res->urls.HasUrlLink())
+    printf(MYNAME "-wpt \"%s\" (%d): url = %s\n",
+           qPrintable(res->shortname), wpt_class, qPrintable(res->urls.GetUrlLink().url_));
+  }
   int category = FREAD_i16;
   if (category != 0) {
     garmin_fs_t::set_category(gmsd, category);
   }
-#if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, category)
-  printf(MYNAME "-wpt \"%s\" (%d): category = %d\n",
-         qPrintable(res->shortname), wpt_class, category);
-#endif
+  if constexpr(GDB_DEBUG) {
+    DBG(GDB_DBG_WPTe, category)
+    printf(MYNAME "-wpt \"%s\" (%d): category = %d\n",
+           qPrintable(res->shortname), wpt_class, category);
+  }
 
   if (FREAD_C == 1) {
     res->set_temperature(FREAD_DBL);
-#if GDB_DEBUG
-    DBG(GDB_DBG_WPTe, res->temperature_has_value())
-    printf(MYNAME "-wpt \"%s\" (%d): temperature = %.1f\n",
-           qPrintable(res->shortname), wpt_class, res->temperature_value());
-#endif
+    if constexpr(GDB_DEBUG) {
+      DBG(GDB_DBG_WPTe, res->temperature_has_value())
+      printf(MYNAME "-wpt \"%s\" (%d): temperature = %.1f\n",
+             qPrintable(res->shortname), wpt_class, res->temperature_value());
+    }
   }
 
   /* VERSION DEPENDENT CODE */
@@ -642,11 +637,11 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
   res->icon_descr = gt_find_desc_from_icon_number(icon, GDB);
 
-#if GDB_DEBUG
-  DBG(GDB_DBG_WPTe, icon != kGDBDefIcon)
-  printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n",
-         qPrintable(res->shortname), wpt_class, qPrintable(res->icon_descr), icon);
-#endif
+  if constexpr(GDB_DEBUG) {
+    DBG(GDB_DBG_WPTe, icon != kGDBDefIcon)
+    printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n",
+           qPrintable(res->shortname), wpt_class, qPrintable(res->icon_descr), icon);
+  }
   QString str;
   if (!(str = garmin_fs_t::get_cc(gmsd, nullptr)).isEmpty()) {
     if (!(garmin_fs_t::has_country(gmsd))) {
@@ -695,11 +690,11 @@ GdbFormat::read_route()
 
   int points = FREAD_i32;
 
-#if GDB_DEBUG
-  DBG(GDB_DBG_RTE, true)
-  printf(MYNAME "-rte \"%s\": loading route with %d point(s)...\n",
-         qPrintable(rte->rte_name), points);
-#endif
+  if constexpr(GDB_DEBUG) {
+    DBG(GDB_DBG_RTE, true)
+    printf(MYNAME "-rte \"%s\": loading route with %d point(s)...\n",
+           qPrintable(rte->rte_name), points);
+  }
 
   for (int i = 0; i < points; i++) {
     char buf[128];
@@ -737,11 +732,11 @@ GdbFormat::read_route()
 
     int links = FREAD_i32;
     QList<garmin_ilink_t> il_list;
-#if GDB_DEBUG
-    DBG(GDB_DBG_RTE, links)
-    printf(MYNAME "-rte_pt \"%s\" (%d): %d interlink step(s)\n",
-           qPrintable(wpt->shortname), wpt_class, links);
-#endif
+    if constexpr(GDB_DEBUG) {
+      DBG(GDB_DBG_RTE, links)
+      printf(MYNAME "-rte_pt \"%s\" (%d): %d interlink step(s)\n",
+             qPrintable(wpt->shortname), wpt_class, links);
+    }
     for (int j = 0; j < links; j++) {
       garmin_ilink_t il_step;
 
@@ -761,14 +756,14 @@ GdbFormat::read_route()
 
       il_list.append(il_step);
 
-#if GDB_DEBUG
-      DBG(GDB_DBG_RTEe, true) {
-        printf(MYNAME "-rte_il \"%s\" (%d of %d): %c%0.6f %c%0.6f\n",
-               qPrintable(wpt->shortname), j + 1, links,
-               il_step.lat < 0 ? 'S' : 'N', il_step.lat,
-               il_step.lon < 0 ? 'W' : 'E', il_step.lon);
+      if constexpr(GDB_DEBUG) {
+        DBG(GDB_DBG_RTEe, true) {
+          printf(MYNAME "-rte_il \"%s\" (%d of %d): %c%0.6f %c%0.6f\n",
+                 qPrintable(wpt->shortname), j + 1, links,
+                 il_step.lat < 0 ? 'S' : 'N', il_step.lat,
+                 il_step.lon < 0 ? 'W' : 'E', il_step.lon);
+        }
       }
-#endif
     }
 
     bounds bounds;
@@ -810,13 +805,13 @@ GdbFormat::read_route()
         FREAD(buf, 2);
       }
     }
-#if GDB_DEBUG
-    DBG(GDB_DBG_RTE, true)
-    printf(MYNAME "-rte_pt \"%s\": coordinates = %c%0.6f, %c%0.6f\n",
-           qPrintable(wpt->shortname),
-           wpt->latitude < 0 ? 'S' : 'N', wpt->latitude,
-           wpt->longitude < 0 ? 'W' : 'E', wpt->longitude);
-#endif
+    if constexpr(GDB_DEBUG) {
+      DBG(GDB_DBG_RTE, true)
+      printf(MYNAME "-rte_pt \"%s\": coordinates = %c%0.6f, %c%0.6f\n",
+             qPrintable(wpt->shortname),
+             wpt->latitude < 0 ? 'S' : 'N', wpt->latitude,
+             wpt->longitude < 0 ? 'W' : 'E', wpt->longitude);
+    }
     wpt = gdb_add_route_waypt(rte, wpt, wpt_class);
     if (wpt != nullptr) {
       garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
@@ -852,19 +847,19 @@ GdbFormat::read_route()
       driving_speed[3] = FREAD_DBL;
       driving_speed[4] = FREAD_DBL;
       FREAD(tbuf, 8); /* unknown bytes */
-#if GDB_DEBUG
-      DBG(GDB_DBG_RTE, true)
-      printf(MYNAME "-rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"
-             "                            driving speeds (kph) %.0f, %.0f, %.0f, %.0f, %.0f\n",
-             route_style, calc_type, vehicle_type, road_selection,
-             driving_speed[0], driving_speed[1], driving_speed[2], driving_speed[3], driving_speed[4]);
-#else
-      Q_UNUSED(route_style);
-      Q_UNUSED(calc_type);
-      Q_UNUSED(vehicle_type);
-      Q_UNUSED(road_selection);
-      Q_UNUSED(driving_speed);
-#endif
+      if constexpr(GDB_DEBUG) {
+        DBG(GDB_DBG_RTE, true)
+        printf(MYNAME "-rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"
+               "                            driving speeds (kph) %.0f, %.0f, %.0f, %.0f, %.0f\n",
+               route_style, calc_type, vehicle_type, road_selection,
+               driving_speed[0], driving_speed[1], driving_speed[2], driving_speed[3], driving_speed[4]);
+      } else {
+        Q_UNUSED(route_style);
+        Q_UNUSED(calc_type);
+        Q_UNUSED(vehicle_type);
+        Q_UNUSED(road_selection);
+        Q_UNUSED(driving_speed);
+      }
     }
 
     rte->rte_desc = fread_cstr();
@@ -933,11 +928,11 @@ GdbFormat::read_track()
   } else { /* if (gdb_ver <= kGDBVer2) */
     res->rte_urls.AddUrlLink(UrlLink(FREAD_CSTR_AS_QSTR));
   }
-#if GDB_DEBUG
-  DBG(GDB_DBG_TRK, res->rte_urls.HasUrlLink())
-  printf(MYNAME "-trk \"%s\": url = %s\n",
-         qPrintable(res->rte_name), qPrintable(res->rte_urls.GetUrlLink().url_));
-#endif
+  if constexpr(GDB_DEBUG) {
+    DBG(GDB_DBG_TRK, res->rte_urls.HasUrlLink())
+    printf(MYNAME "-trk \"%s\": url = %s\n",
+           qPrintable(res->rte_name), qPrintable(res->rte_urls.GetUrlLink().url_));
+  }
   return res;
 }
 
@@ -1127,10 +1122,10 @@ GdbFormat::write_header()
   fout = ftmp;
   FWRITE_i16(605); // program version 6.5 -> 6*100 + 5
 
-   /*
-    * This is our "Watermark" to show this file was created by GPSbabel.
-    * The date/time used to be from CVS, and may be from git in the future.
-    */
+  /*
+   * This is our "Watermark" to show this file was created by GPSbabel.
+   * The date/time used to be from CVS, and may be from git in the future.
+   */
   static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
   gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
   gdb_write_cstr(gdb_release_dt.toString(u"MMM dd yyyy"));
