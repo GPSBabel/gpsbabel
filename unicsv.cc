@@ -21,6 +21,7 @@
 
 #include "unicsv.h"
 
+#include <algorithm>               // for find_if
 #include <cmath>                   // for fabs, lround
 #include <cstdio>                  // for NULL, sscanf
 #include <ctime>                   // for tm
@@ -59,7 +60,7 @@
  * ! Please use always underscores in field names !
  * we check a second time after replacing underscores with spaces
  */
-const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
+const QVector<UnicsvFormat::field_t> UnicsvFormat::fields_def = {
   /* unhandled columns */
   { "index",	fld_terminator, kStrAny },
   { "no",		fld_terminator, kStrEqual },
@@ -160,8 +161,7 @@ const UnicsvFormat::field_t UnicsvFormat::fields_def[] = {
   { "found",	fld_gc_last_found, kStrAny },
   { "placer_id",	fld_gc_placer_id, kStrAny },
   { "placer",	fld_gc_placer, kStrAny },
-  { "hint",	fld_gc_hint, kStrAny },
-  { nullptr,		fld_terminator, 0 }
+  { "hint",	fld_gc_hint, kStrAny }
 };
 /* helpers */
 
@@ -348,24 +348,24 @@ UnicsvFormat::unicsv_adjust_time(const QDate date, const QTime time, bool is_loc
 }
 
 bool
-UnicsvFormat::unicsv_compare_fields(const QString& s, const field_t* f)
+UnicsvFormat::unicsv_compare_fields(const QString& s, const field_t& f)
 {
-  QString name = f->name;
+  QString name = f.name;
   QString test = s;
   bool result = false;
 
-  if (!(f->options & kStrCase)) {
+  if (!(f.options & kStrCase)) {
     test = test.toUpper();
     name = name.toUpper();
   }
 
-  if (f->options & kStrEqual) {
+  if (f.options & kStrEqual) {
     result = test == name;
-  } else if (f->options & kStrAny) {
+  } else if (f.options & kStrAny) {
     result = test.contains(name);
-  } else if (f->options & kStrLeft) {
+  } else if (f.options & kStrLeft) {
     result = test.startsWith(name);
-  } else if (f->options & kStrRight) {
+  } else if (f.options & kStrRight) {
     result = test.endsWith(name);
   }
 
@@ -409,43 +409,44 @@ UnicsvFormat::unicsv_fondle_header(QString header)
   for (auto value : values) {
     value = value.trimmed();
 
-    const field_t* f = &fields_def[0];
+    unicsv_fields_tab.append(fld_terminator); // default
 
-    unicsv_fields_tab.append(fld_terminator);
-    while (!f->name.isEmpty()) {
-      if (unicsv_compare_fields(value, f)) {
-        unicsv_fields_tab.last() = f->type;
-        break;
-      }
-      f++;
-    }
-    if (global_opts.debug_level) {
-      if ((f->name.isEmpty()) && global_opts.debug_level) {
+    const auto it = std::find_if(fields_def.cbegin(), fields_def.cend(), [&value](const field_t& f)->bool {
+      return unicsv_compare_fields(value, f);
+    });
+
+    if (it == fields_def.cend()) { // not found
+      if (global_opts.debug_level) {
         warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(value));
-      } else {
-        warning(MYNAME ": Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f->name), f->type);
       }
-    }
+    } else { // found
+      const field_t f = *it;
+      unicsv_fields_tab.last() = f.type;
 
-    /* handle some special items */
-    if (f->type == fld_altitude) {
-      if (value.contains("ft") || value.contains("feet")) {
-        unicsv_altscale = FEET_TO_METERS(1);
+      if (global_opts.debug_level) {
+        warning(MYNAME ": Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f.name), f.type);
       }
-    }
-    if (f->type == fld_depth) {
-      if (value.contains("ft") || value.contains("feet")) {
-        unicsv_depthscale = FEET_TO_METERS(1);
+
+      /* handle some special items */
+      if (f.type == fld_altitude) {
+        if (value.contains("ft") || value.contains("feet")) {
+          unicsv_altscale = FEET_TO_METERS(1);
+        }
       }
-    }
-    if (f->type == fld_proximity) {
-      if (value.contains("ft") || value.contains("feet")) {
-        unicsv_proximityscale = FEET_TO_METERS(1);
+      if (f.type == fld_depth) {
+        if (value.contains("ft") || value.contains("feet")) {
+          unicsv_depthscale = FEET_TO_METERS(1);
+        }
       }
-    }
-    if ((f->type == fld_time) || (f->type == fld_date)) {
-      if (value.contains("iso")) {
-        unicsv_fields_tab.last() = fld_iso_time;
+      if (f.type == fld_proximity) {
+        if (value.contains("ft") || value.contains("feet")) {
+          unicsv_proximityscale = FEET_TO_METERS(1);
+        }
+      }
+      if ((f.type == fld_time) || (f.type == fld_date)) {
+        if (value.contains("iso")) {
+          unicsv_fields_tab.last() = fld_iso_time;
+        }
       }
     }
   }
@@ -922,7 +923,6 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       case fld_gc_is_available:
         gc_data->is_available = unicsv_parse_status(value);
         break;
-      break;
       case fld_gc_last_found: {
         QTime ftime;
         QDate fdate;
@@ -987,14 +987,14 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       }
 
       wpt->SetCreationTime(unicsv_adjust_time(
-                           QDate(ymd.tm_year, ymd.tm_mon, ymd.tm_mday),
-                           QTime(ymd.tm_hour, ymd.tm_min, ymd.tm_sec),
-                           true));
+                             QDate(ymd.tm_year, ymd.tm_mon, ymd.tm_mday),
+                             QTime(ymd.tm_hour, ymd.tm_min, ymd.tm_sec),
+                             true));
     } else if (ymd.tm_hour || ymd.tm_min || ymd.tm_sec) {
       wpt->SetCreationTime(unicsv_adjust_time(
-                           QDate(),
-                           QTime(ymd.tm_hour, ymd.tm_min, ymd.tm_sec),
-                           true));
+                             QDate(),
+                             QTime(ymd.tm_hour, ymd.tm_min, ymd.tm_sec),
+                             true));
     }
 
   }
@@ -1736,7 +1736,7 @@ UnicsvFormat::unicsv_check_modes(bool test)
 {
   if (test) {
     fatal(FatalMsg() << MYNAME <<
-            " : Invalid combination of -w, -t, -r selected. Use only one.");
+          " : Invalid combination of -w, -t, -r selected. Use only one.");
   }
 }
 
