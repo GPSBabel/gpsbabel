@@ -104,19 +104,17 @@ GdbFormat::gdb_flush_waypt_queue(WptNamePosnHash& Q)
 void
 GdbFormat::disp_summary(const gbfile* f) const
 {
-  int i, len;
-
-  len = strlen(f->name);
+  int len = strlen(qPrintable(f->name));
 
   warning(MYNAME ": =====================");
-  for (i = 0; i < len; i++) {
+  for (int i = 0; i < len; i++) {
     warning("=");
   }
   warning("\n" MYNAME ": %s summary for \"%s\"\n",
-          (f->mode == 'r') ? "Reader" : "Writer", f->name);
+          (f->mode == 'r') ? "Reader" : "Writer", qPrintable(f->name));
 
   warning(MYNAME ": ---------------------");
-  for (i = 0; i < len; i++) {
+  for (int i = 0; i < len; i++) {
     warning("-");
   }
 
@@ -126,7 +124,7 @@ GdbFormat::disp_summary(const gbfile* f) const
   warning(MYNAME ": %d track(s) with total %d point(s)\n", trk_ct, trkpt_ct);
   warning(MYNAME ": ---------------------");
 
-  for (i = 0; i < len; i++) {
+  for (int i = 0; i < len; i++) {
     warning("-");
   }
   warning("\n");
