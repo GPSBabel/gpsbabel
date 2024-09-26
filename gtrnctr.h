@@ -28,6 +28,7 @@
 
 #include <QList>                 // for QList
 #include <QString>               // for QString
+#include <QStringList>           // for QStringList
 #include <QVector>               // for QVector
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 
@@ -73,16 +74,6 @@ private:
   static constexpr int kGtcMaxNameLen = 15;
   static constexpr const char* gtc_sportlist[] = { "Biking", "Running", "MultiSport", "Other" };
 
-  static constexpr const char* gtc_tags_to_ignore[] = {
-    "TrainingCenterDatabase",
-    "CourseFolder",
-    "Running",
-    "Biking",
-    "Other",
-    "Multisport",
-    nullptr,
-  };
-
   /* Member Functions */
 
   [[gnu::format(printf, 3, 4)]] void gtc_write_xml(int indent, const char* fmt, ...);
@@ -124,6 +115,7 @@ private:
 
   /* Data Members */
 
+  static const QStringList gtc_tags_to_ignore;
   gbfile* ofd{};
   int lap_ct = 0;
   int lap_s = 0;

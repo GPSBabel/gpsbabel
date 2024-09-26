@@ -71,6 +71,19 @@
 
 #define MYNAME "kml"
 
+const QStringList KmlFormat::kml_tags_to_ignore = {
+  "kml",
+  "Document",
+  "Folder"
+};
+
+const QStringList KmlFormat::kml_tags_to_skip = {
+  "Camera",
+  "LookAt",
+  "styleUrl",
+  "snippet"
+};
+
 const QVector<KmlFormat::mt_field_t> KmlFormat::mt_fields_def = {
   { wp_field::igc_enl, "igc_enl", "Engine Noise", "double" },
   { wp_field::igc_tas, "igc_tas", "True Airspd", "double" },

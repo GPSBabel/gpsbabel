@@ -43,11 +43,20 @@
 
 #define MYNAME "gtc"
 
+const QStringList GtrnctrFormat::gtc_tags_to_ignore = {
+  "TrainingCenterDatabase",
+  "CourseFolder",
+  "Running",
+  "Biking",
+  "Other",
+  "Multisport"
+};
+
 void
 GtrnctrFormat::rd_init(const QString& fname)
 {
   xml_reader = new XmlGenericReader;
-  xml_reader->xml_init(fname, this, gtc_map, nullptr, gtc_tags_to_ignore, nullptr);
+  xml_reader->xml_init(fname, this, gtc_map, nullptr, gtc_tags_to_ignore);
 }
 
 void

@@ -21,6 +21,7 @@
 
 #include "xmlgeneric.h"
 
+#include <algorithm>             // for for_each
 #include <utility>               // for as_const
 
 #include <QByteArray>            // for QByteArray
@@ -66,7 +67,7 @@ XmlGenericReader::xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 
 void
 XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
-         const char* const* ignorelist, const char* const* skiplist)
+         const QStringList ignorelist, const QStringList skiplist)
 {
   rd_fname = fname;
 
@@ -80,16 +81,13 @@ XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
   }
 
   xg_shortcut_taglist.clear();
-  if (ignorelist != nullptr) {
-    for (; ignorelist && *ignorelist; ++ignorelist) {
-      xg_shortcut_taglist.insert(QString::fromUtf8(*ignorelist), xg_shortcut::sc_ignore);
-    }
-  }
-  if (skiplist != nullptr) {
-    for (; skiplist && *skiplist; ++skiplist) {
-      xg_shortcut_taglist.insert(QString::fromUtf8(*skiplist), xg_shortcut::sc_skip);
-    }
-  }
+  std::for_each(ignorelist.cbegin(), ignorelist.cend(), [this](const QString& tag)->void {
+    xg_shortcut_taglist.insert(tag, xg_shortcut::sc_ignore);
+  });
+    
+  std::for_each(skiplist.cbegin(), skiplist.cend(), [this](const QString& tag)->void {
+    xg_shortcut_taglist.insert(tag, xg_shortcut::sc_skip);
+  });
 }
 
 XmlGenericReader::xg_shortcut
