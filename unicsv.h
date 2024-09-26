@@ -170,7 +170,7 @@ private:
   static QTime unicsv_parse_time(const QString& str, QDate& date);
   static Geocache::status_t unicsv_parse_status(const QString& str);
   QDateTime unicsv_adjust_time(QDate date, QTime time, bool is_localtime) const;
-  static bool unicsv_compare_fields(const QString& s, const field_t* f);
+  static bool unicsv_compare_fields(const QString& s, const field_t& f);
   void unicsv_fondle_header(QString header);
   void unicsv_parse_one_line(const QString& ibuf);
   [[noreturn]] void unicsv_fatal_outside(const Waypoint* wpt) const;
@@ -182,7 +182,7 @@ private:
 
   /* Data Members */
 
-  static const field_t fields_def[];
+  static const QVector<field_t> fields_def;
 
   QVector<field_e> unicsv_fields_tab;
   double unicsv_altscale{};
