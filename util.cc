@@ -44,9 +44,6 @@
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
 #include <Qt>                           // for CaseInsensitive
 #include <QTime>                        // for QTime
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-#include <QTimeZone>                   // for QTimeZone
-#endif
 #include <QTimeZone>                    // for QTimeZone
 #include <QtGlobal>                     // for qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 

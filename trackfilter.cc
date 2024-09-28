@@ -41,11 +41,11 @@ static constexpr bool TRACKF_DBG = false;
 #include <QRegularExpression>              // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpression::PatternOptions
 #include <QRegularExpressionMatch>         // for QRegularExpressionMatch
 #include <QString>                         // for QString
-#include <Qt>                              // for UTC, CaseInsensitive
-#include <QtGlobal>                        // for foreach, qPrintable, QAddConst<>::Type, qint64
 #ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>                       // for QTimeZone
 #endif
+#include <Qt>                              // for UTC, CaseInsensitive
+#include <QtGlobal>                        // for foreach, qPrintable, QAddConst<>::Type, qint64
 
 #include "defs.h"
 #include "trackfilter.h"

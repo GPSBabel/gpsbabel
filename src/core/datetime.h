@@ -28,10 +28,10 @@
 
 #include <QtGlobal>
 #include <QDateTime>
+#include <QString>
 #ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>
 #endif
-#include <QString>
 
 // As this code began in C, we have several hundred places that set and
 // read creation_time as a time_t.  Provide some operator overloads to make
