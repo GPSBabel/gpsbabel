@@ -777,7 +777,6 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
 #else
         res.setOffsetFromUtc(((offset_hours * 60) + offset_mins) * 60);
 #endif
-qDebug() << "using offset" << offset_hours << offset_mins << (offset_tag == nullptr);
       } else if (opt_offsettime) {
         // Only warn for user supplied offsets.
         // Offset tags may indicate the offset was unknown, e.g. "   :  ".
