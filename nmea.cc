@@ -37,6 +37,9 @@
 #include <QTextStream>             // for hex
 #include <QThread>                 // for QThread
 #include <QTime>                   // for QTime
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#include <QTimeZone>               // for QTimeZone
+#endif
 #include <Qt>                      // for UTC
 #include <QtGlobal>                // for qPrintable, foreach
 
@@ -324,14 +327,22 @@ void
 NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& date, const QTime& time)
 {
   if (date.isValid()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    wpt->SetCreationTime(QDateTime(date, time, QTimeZone::UTC));
+#else
     wpt->SetCreationTime(QDateTime(date, time, Qt::UTC));
+#endif
     if (wpt->wpt_flags.fmt_use != 0) {
       wpt->wpt_flags.fmt_use = 0;
       without_date--;
     }
     *prev = wpt->GetCreationTime();
   } else if (prev->date().isValid()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    wpt->SetCreationTime(QDateTime(prev->date(), time, QTimeZone::UTC));
+#else
     wpt->SetCreationTime(QDateTime(prev->date(), time, Qt::UTC));
+#endif
     if (*prev > wpt->creation_time) {
       /* go over midnight ? */
       wpt->creation_time = wpt->creation_time.addDays(1);
@@ -342,7 +353,11 @@ NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& 
     }
     *prev = wpt->GetCreationTime();
   } else {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    wpt->SetCreationTime(QDateTime(QDate(), time, QTimeZone::UTC));
+#else
     wpt->SetCreationTime(QDateTime(QDate(), time, Qt::UTC));
+#endif
     if (wpt->wpt_flags.fmt_use == 0) {
       wpt->wpt_flags.fmt_use = 1;
       without_date++;
@@ -639,7 +654,11 @@ NmeaFormat::gpzda_parse(const QString& ibuf)
 
     // The prev_datetime data member might be used by
     // nmea_fix_timestamps and nmea_set_waypoint_time.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    prev_datetime = QDateTime(date, time, QTimeZone::UTC);
+#else
     prev_datetime = QDateTime(date, time, Qt::UTC);
+#endif
   }
 }
 
@@ -839,7 +858,11 @@ NmeaFormat::nmea_fix_timestamps(route_head* track)
       return;
     }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    QDateTime prev = QDateTime(opt_tm, QTime(0, 0), QTimeZone::UTC);
+#else
     QDateTime prev = QDateTime(opt_tm, QTime(0, 0), Qt::UTC);
+#endif
 
     foreach (Waypoint* wpt, track->waypoint_list) {
 

@@ -44,6 +44,9 @@
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
 #include <Qt>                           // for CaseInsensitive
 #include <QTime>                        // for QTime
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#include <QTimeZone>                   // for QTimeZone
+#endif
 #include <QTimeZone>                    // for QTimeZone
 #include <QtGlobal>                     // for qEnvironmentVariableIsSet, QAddConst<>::Type, qPrintable
 
@@ -294,6 +297,31 @@ QDateTime
 make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset)
 {
   QDateTime result;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+  QTimeZone timezone;
+
+  if (is_localtime) {
+    if (force_utc) { // override with passed option value
+      timezone = QTimeZone::fromSecondsAheadOfUtc(utc_offset);
+    } else {
+      timezone = QTimeZone::LocalTime;
+    }
+  } else {
+    timezone = QTimeZone::UTC;
+  }
+
+  if (date.isValid() && time.isValid()) {
+    result = QDateTime(date, time, timezone);
+  } else if (time.isValid()) {
+    // TODO: Wouldn't it be better to return an invalid QDateTime
+    // that contained an invalid QDate, a valid QTime and a valid
+    // Qt::TimeSpec?
+    result = QDateTime(QDate(1970, 1, 1), time, timezone);
+  } else if (date.isValid()) {
+    //  no time, use start of day in the given Qt::TimeSpec.
+    result = date.startOfDay(timezone);
+  }
+#else
   Qt::TimeSpec timespec;
   int offset = 0;
 
@@ -326,6 +354,7 @@ make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc
     result = date.startOfDay(timespec, offset);
   }
 
+#endif
   return result;
 }
 
@@ -347,7 +376,11 @@ gpsbabel::DateTime
 current_time()
 {
   if (gpsbabel_testmode()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    return QDateTime::fromMSecsSinceEpoch(0, QTimeZone::UTC);
+#else
     return QDateTime::fromMSecsSinceEpoch(0, Qt::UTC);
+#endif
   }
 
   return QDateTime::currentDateTimeUtc();
@@ -361,14 +394,22 @@ current_time()
  */
 QDateTime dotnet_time_to_qdatetime(long long dotnet)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QTimeZone::UTC);
+#else
   QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+#endif
   qint64 millisecs = (dotnet + 5000)/ 10000;
   return epoch.addMSecs(millisecs);
 }
 
 long long qdatetime_to_dotnet_time(const QDateTime& dt)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QTimeZone::UTC);
+#else
   QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+#endif
   qint64 millisecs = epoch.msecsTo(dt);
   return millisecs * 10000;
 }

@@ -47,6 +47,9 @@
 #include <QString>              // for QString
 #include <QTextCodec>           // for QTextCodec
 #include <QTime>                // for QTime
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#include <QTimeZone>            // for QTimeZone
+#endif
 #include <QVariant>             // for QVariant
 #include <QVector>              // for QVector
 #include <Qt>                   // for UTC, ISODate
@@ -664,6 +667,20 @@ ExifFormat::exif_find_ifd(ExifApp* app, const uint16_t ifd_nr)
 }
 
 ExifFormat::ExifTag*
+ExifFormat::exif_find_tag(ExifIfd* ifd, const uint16_t tag_id)
+{
+  if (ifd != nullptr) {
+    for (auto& tag_instance : ifd->tags) {
+      ExifTag* tag = &tag_instance;
+      if (tag->id == tag_id) {
+        return tag;
+      }
+    }
+  }
+  return nullptr;
+}
+
+ExifFormat::ExifTag*
 ExifFormat::exif_find_tag(ExifApp* app, const uint16_t ifd_nr, const uint16_t tag_id)
 {
   ExifIfd* ifd = exif_find_ifd(app, ifd_nr);
@@ -676,6 +693,33 @@ ExifFormat::exif_find_tag(ExifApp* app, const uint16_t ifd_nr, const uint16_t ta
     }
   }
   return nullptr;
+}
+
+QDateTime
+ExifFormat::exif_get_gps_time(ExifApp* app) const
+{
+  QDateTime res;
+
+  ExifIfd* gpsifd = exif_find_ifd(app, GPS_IFD);
+  if (gpsifd != nullptr) {
+    ExifTag* gpsdstag = exif_find_tag(gpsifd, GPS_IFD_TAG_DATESTAMP);
+    if (gpsdstag != nullptr) {
+      ExifTag* gpststag = exif_find_tag(gpsifd, GPS_IFD_TAG_TIMESTAMP);
+      if (gpststag != nullptr) {
+        QDate datestamp = exif_read_datestamp(gpsdstag);
+        QTime timestamp = exif_read_timestamp(gpststag);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+        QDateTime gpstime = QDateTime(datestamp, timestamp, QTimeZone::UTC);
+#else
+        QDateTime gpstime = QDateTime(datestamp, timestamp, Qt::UTC);
+#endif
+        if (gpstime.isValid()) {
+          res = gpstime;
+        }
+      }
+    }
+  }
+  return res.toUTC();
 }
 
 QDateTime
@@ -728,7 +772,12 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
         // Correct the date time by supplying the offset from UTC.
         int offset_hours = match.captured(1).append(match.captured(2)).toInt();
         int offset_mins = match.captured(1).append(match.captured(3)).toInt();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+        res.setTimeZone(QTimeZone::fromSecondsAheadOfUtc(((offset_hours * 60) + offset_mins) * 60));
+#else
         res.setOffsetFromUtc(((offset_hours * 60) + offset_mins) * 60);
+#endif
+qDebug() << "using offset" << offset_hours << offset_mins << (offset_tag == nullptr);
       } else if (opt_offsettime) {
         // Only warn for user supplied offsets.
         // Offset tags may indicate the offset was unknown, e.g. "   :  ".
@@ -912,7 +961,11 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     }
   }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+  gps_datetime = QDateTime(datestamp, timestamp, QTimeZone::UTC);
+#else
   gps_datetime = QDateTime(datestamp, timestamp, Qt::UTC);
+#endif
   if (gps_datetime.isValid()) {
     if (global_opts.debug_level >= 3) {
       printf(MYNAME "-GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODateWithMs)));
@@ -1476,7 +1529,10 @@ ExifFormat::wr_init(const QString& fname)
   exif_examine_app(exif_app_);
   gbfclose(fin_);
 
-  exif_time_ref = exif_get_exif_time(exif_app_);
+  exif_time_ref = exif_get_gps_time(exif_app_);
+  if (!exif_time_ref.isValid()) {
+    exif_time_ref = exif_get_exif_time(exif_app_);
+  }
   if (!exif_time_ref.isValid()) {
     fatal(MYNAME ": No valid timestamp found in picture!\n");
   }

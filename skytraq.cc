@@ -35,6 +35,9 @@
 #include <QChar>           // for QChar
 #include <QLatin1Char>     // for QLatin1Char
 #include <QThread>         // for QThread
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#include <QTimeZone>       // for QTimeZone
+#endif
 #include <QtGlobal>        // for qPrintable
 
 #include "defs.h"
@@ -534,7 +537,11 @@ SkytraqBase::gpstime_to_qdatetime(int week, int sec) const
   int override = xstrtoi(opt_gps_utc_offset, nullptr, 10);
   if (override) {
     gps_timet -= override;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    return QDateTime::fromSecsSinceEpoch(gps_timet, QTimeZone::UTC);
+#else
     return QDateTime::fromSecsSinceEpoch(gps_timet, Qt::UTC);
+#endif
   }
 
   /* leap second compensation: */
@@ -557,7 +564,11 @@ SkytraqBase::gpstime_to_qdatetime(int week, int sec) const
   // Future: Consult http://maia.usno.navy.mil/ser7/tai-utc.dat
   // use http://www.stevegs.com/utils/jd_calc/ for Julian to UNIX sec
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+  return QDateTime::fromSecsSinceEpoch(gps_timet, QTimeZone::UTC);
+#else
   return QDateTime::fromSecsSinceEpoch(gps_timet, Qt::UTC);
+#endif
 }
 
 void

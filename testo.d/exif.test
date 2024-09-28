@@ -26,3 +26,10 @@ cp ${REFERENCE}/ricoh-rdc5300.jpg ${TMPDIR}/ricoh-rdc5300.jpg
 gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/ricoh-rdc5300.jpg
 bincompare ${REFERENCE}/ricoh-rdc5300.jpg.jpg ${TMPDIR}/ricoh-rdc5300.jpg.jpg
 
+# test offset option. photo has no gps info and no exif offset tags.
+# the offset is only required if the current system timezone is differnt from utc.
+cp ${REFERENCE}/ricoh-rdc5300.jpg ${TMPDIR}/ricoh-rdc5300_offset.jpg
+gpsbabel -i unicsv -f reference/ricoh-rdc5300_offset.csv -o exif,offset="+00:00" -F ${TMPDIR}/ricoh-rdc5300_offset.jpg
+bincompare ${REFERENCE}/ricoh-rdc5300_offset.jpg.jpg ${TMPDIR}/ricoh-rdc5300_offset.jpg.jpg
+
+

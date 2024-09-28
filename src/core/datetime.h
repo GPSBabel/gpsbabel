@@ -28,6 +28,9 @@
 
 #include <QtGlobal>
 #include <QDateTime>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#include <QTimeZone>
+#endif
 #include <QString>
 
 // As this code began in C, we have several hundred places that set and
@@ -54,7 +57,11 @@ public:
   // Qt::LocalTime compared to Qt::UTC on ubuntu bionic.
   // Note that these conversions can be required if the Qt::TimeSpec is
   // set to Qt:LocalTime after construction.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+  DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, QTimeZone::UTC))
+#else
   DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, Qt::UTC))
+#endif
   {
   }
 

@@ -43,6 +43,9 @@
 #include <QScopedArrayPointer>         // for QScopedArrayPointer
 #include <QString>                     // for QString
 #include <QTime>                       // for QTime
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#include <QTimeZone>                   // for QTimeZone
+#endif
 #include <Qt>                          // for TextDate, UTC
 #include <QtGlobal>                    // for qPrintable
 
@@ -109,7 +112,11 @@ Dg100Format::bintime2utc(int date, int time)
   date /= 100;
   int day  = date;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+  return QDateTime(QDate(year, mon, day), QTime(hour, min, sec), QTimeZone::UTC);
+#else
   return QDateTime(QDate(year, mon, day), QTime(hour, min, sec), Qt::UTC);
+#endif
 }
 
 void

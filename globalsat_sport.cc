@@ -529,7 +529,11 @@ GlobalsatSportFormat::track_read()
           if (timezn != nullptr) {
             gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, *timezn).toUTC());
           } else {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+            gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, QTimeZone::LocalTime).toUTC());
+#else
             gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, Qt::LocalTime).toUTC());
+#endif
           }
 
           int laps_in_package = header.gh_laprec.LapIndex - header.gh_ptrec.Index + 1;

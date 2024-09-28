@@ -40,6 +40,9 @@
 #include <QStringList>                      // for QStringList
 #include <QStringView>                      // for QStringView
 #include <QTime>                            // for QTime
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#include <QTimeZone>                       // for QTimeZone
+#endif
 #include <QVersionNumber>                   // for QVersionNumber
 #include <QXmlStreamAttribute>              // for QXmlStreamAttribute
 #include <QXmlStreamAttributes>             // for QXmlStreamAttributes
@@ -517,7 +520,11 @@ xml_parse_time(const QString& dateTimeString)
   if (res > 0) {
     QDate date(year, mon, mday);
     QTime time(hour, min, sec);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    dt = QDateTime(date, time, QTimeZone::UTC);
+#else
     dt = QDateTime(date, time, Qt::UTC);
+#endif
 
     // Fractional part of time.
     if (fsec) {
