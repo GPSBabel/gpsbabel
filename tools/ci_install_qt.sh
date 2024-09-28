@@ -40,6 +40,9 @@ do
       skip=true
     fi
   done
+  if [[ "$a" == *".debug_information" ]]; then
+    skip=true
+  fi
   if [ $skip == false ]; then
     mods+=( "$a" )
   fi
