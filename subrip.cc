@@ -24,7 +24,7 @@
 #include <QDebug>               // for QDebug
 #include <QString>              // for QString
 #include <QTime>                // for QTime
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>                       // for QTimeZone
 #endif
 #include <Qt>                   // for UTC
@@ -224,7 +224,7 @@ SubripFormat::wr_init(const QString& fname)
         fatal(FatalMsg().nospace() << MYNAME ": option gps_time value (" << opt_gpstime << ") is invalid.  Expected hhmmss[.sss]");
       }
     }
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     gps_datetime = QDateTime(gps_date, gps_time, QTimeZone::UTC);
 #else
     gps_datetime = QDateTime(gps_date, gps_time, Qt::UTC);

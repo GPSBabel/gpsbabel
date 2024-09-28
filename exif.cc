@@ -47,7 +47,7 @@
 #include <QString>              // for QString
 #include <QTextCodec>           // for QTextCodec
 #include <QTime>                // for QTime
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>            // for QTimeZone
 #endif
 #include <QVariant>             // for QVariant
@@ -708,7 +708,7 @@ ExifFormat::exif_get_gps_time(ExifApp* app) const
       if (gpststag != nullptr) {
         QDate datestamp = exif_read_datestamp(gpsdstag);
         QTime timestamp = exif_read_timestamp(gpststag);
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
         QDateTime gpstime = QDateTime(datestamp, timestamp, QTimeZone::UTC);
 #else
         QDateTime gpstime = QDateTime(datestamp, timestamp, Qt::UTC);
@@ -772,7 +772,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
         // Correct the date time by supplying the offset from UTC.
         int offset_hours = match.captured(1).append(match.captured(2)).toInt();
         int offset_mins = match.captured(1).append(match.captured(3)).toInt();
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
         res.setTimeZone(QTimeZone::fromSecondsAheadOfUtc(((offset_hours * 60) + offset_mins) * 60));
 #else
         res.setOffsetFromUtc(((offset_hours * 60) + offset_mins) * 60);
@@ -961,7 +961,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     }
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
   gps_datetime = QDateTime(datestamp, timestamp, QTimeZone::UTC);
 #else
   gps_datetime = QDateTime(datestamp, timestamp, Qt::UTC);

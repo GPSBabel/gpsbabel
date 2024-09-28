@@ -44,7 +44,7 @@
 #include <QTextStream>                  // for operator<<, QTextStream, qSetFieldWidth, endl, QTextStream::AlignLeft
 #include <Qt>                           // for CaseInsensitive
 #include <QTime>                        // for QTime
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>                   // for QTimeZone
 #endif
 #include <QTimeZone>                    // for QTimeZone
@@ -297,7 +297,7 @@ QDateTime
 make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset)
 {
   QDateTime result;
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
   QTimeZone timezone;
 
   if (is_localtime) {
@@ -376,7 +376,7 @@ gpsbabel::DateTime
 current_time()
 {
   if (gpsbabel_testmode()) {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     return QDateTime::fromMSecsSinceEpoch(0, QTimeZone::UTC);
 #else
     return QDateTime::fromMSecsSinceEpoch(0, Qt::UTC);
@@ -394,7 +394,7 @@ current_time()
  */
 QDateTime dotnet_time_to_qdatetime(long long dotnet)
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
   QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QTimeZone::UTC);
 #else
   QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
@@ -405,7 +405,7 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet)
 
 long long qdatetime_to_dotnet_time(const QDateTime& dt)
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
   QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QTimeZone::UTC);
 #else
   QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);

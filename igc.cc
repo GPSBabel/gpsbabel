@@ -43,7 +43,7 @@
 #include <QString>              // for QString, operator+, QStringLiteral
 #include <QStringList>          // for QStringList
 #include <QTime>                // for operator<, operator==, QTime
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>            // for QTimeZone
 #endif
 #include <Qt>                   // for UTC, SkipEmptyParts
@@ -165,7 +165,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
     } else {
       year += 1900;
     }
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), QTimeZone::UTC);
 #else
     creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), Qt::UTC);
@@ -405,7 +405,7 @@ void IgcFormat::read()
         pres_wpt->fs.FsChainAdd(fsdata);
       }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
       pres_wpt->SetCreationTime(QDateTime(date, tod, QTimeZone::UTC));
 #else
       pres_wpt->SetCreationTime(QDateTime(date, tod, Qt::UTC));

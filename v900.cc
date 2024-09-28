@@ -82,7 +82,7 @@ for a little more info, see structures:
 #include <QByteArray>  // for QByteArray
 #include <QDate>       // for QDate
 #include <QTime>       // for QTime
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>   // for QTimeZone
 #endif
 #include <QtCore>      // for qPrintable, UTC
@@ -146,7 +146,7 @@ V900Format::bintime2utc(int date, int time) {
   // What's left in 'date' is year.
   QDate dt(date + 2000, month, day);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
   return QDateTime(dt, tm, QTimeZone::UTC);
 #else
   return QDateTime(dt, tm, Qt::UTC);

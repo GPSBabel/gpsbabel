@@ -40,7 +40,7 @@
 #include <QStringList>                      // for QStringList
 #include <QStringView>                      // for QStringView
 #include <QTime>                            // for QTime
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>                       // for QTimeZone
 #endif
 #include <QVersionNumber>                   // for QVersionNumber
@@ -520,7 +520,7 @@ xml_parse_time(const QString& dateTimeString)
   if (res > 0) {
     QDate date(year, mon, mday);
     QTime time(hour, min, sec);
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     dt = QDateTime(date, time, QTimeZone::UTC);
 #else
     dt = QDateTime(date, time, Qt::UTC);

@@ -37,7 +37,7 @@
 #include <QTextStream>             // for hex
 #include <QThread>                 // for QThread
 #include <QTime>                   // for QTime
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>               // for QTimeZone
 #endif
 #include <Qt>                      // for UTC
@@ -327,7 +327,7 @@ void
 NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& date, const QTime& time)
 {
   if (date.isValid()) {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     wpt->SetCreationTime(QDateTime(date, time, QTimeZone::UTC));
 #else
     wpt->SetCreationTime(QDateTime(date, time, Qt::UTC));
@@ -338,7 +338,7 @@ NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& 
     }
     *prev = wpt->GetCreationTime();
   } else if (prev->date().isValid()) {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     wpt->SetCreationTime(QDateTime(prev->date(), time, QTimeZone::UTC));
 #else
     wpt->SetCreationTime(QDateTime(prev->date(), time, Qt::UTC));
@@ -353,7 +353,7 @@ NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& 
     }
     *prev = wpt->GetCreationTime();
   } else {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     wpt->SetCreationTime(QDateTime(QDate(), time, QTimeZone::UTC));
 #else
     wpt->SetCreationTime(QDateTime(QDate(), time, Qt::UTC));
@@ -654,7 +654,7 @@ NmeaFormat::gpzda_parse(const QString& ibuf)
 
     // The prev_datetime data member might be used by
     // nmea_fix_timestamps and nmea_set_waypoint_time.
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     prev_datetime = QDateTime(date, time, QTimeZone::UTC);
 #else
     prev_datetime = QDateTime(date, time, Qt::UTC);
@@ -858,7 +858,7 @@ NmeaFormat::nmea_fix_timestamps(route_head* track)
       return;
     }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     QDateTime prev = QDateTime(opt_tm, QTime(0, 0), QTimeZone::UTC);
 #else
     QDateTime prev = QDateTime(opt_tm, QTime(0, 0), Qt::UTC);

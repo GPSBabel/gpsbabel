@@ -28,7 +28,7 @@
 #include <QList>                   // for QList
 #include <QString>                 // for QString, operator+, operator<
 #include <QThread>                 // for QThread
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>               // for QTimeZone
 #endif
 #include <Qt>                      // for CaseInsensitive
@@ -181,7 +181,7 @@ GarminGPIFormat::read_header()
   if (GPI_DBG) {
     time_t crdate = GPS_Math_Gtime_To_Utime(rdata->crdate);
     warning("crdate = %lld (%s)\n", (long long) rdata->crdate,
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
             CSTR(QDateTime::fromSecsSinceEpoch(crdate, QTimeZone::UTC).toString(Qt::ISODate)));
 #else
             CSTR(QDateTime::fromSecsSinceEpoch(crdate, Qt::UTC).toString(Qt::ISODate)));

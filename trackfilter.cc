@@ -43,7 +43,7 @@ static constexpr bool TRACKF_DBG = false;
 #include <QString>                         // for QString
 #include <Qt>                              // for UTC, CaseInsensitive
 #include <QtGlobal>                        // for foreach, qPrintable, QAddConst<>::Type, qint64
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>                       // for QTimeZone
 #endif
 
@@ -301,7 +301,7 @@ void TrackFilter::trackfilter_title()
     fatal(MYNAME "-title: Missing your title!\n");
   }
   for (auto* track : std::as_const(track_list)) {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, QTimeZone::UTC));
 #else
     trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, Qt::UTC));
@@ -683,7 +683,7 @@ QDateTime TrackFilter::trackfilter_range_check(const char* timestr)
   if (match.hasMatch()) {
     // QTime::fromString zzz expects exactly 3 digits representing milliseconds.
     result = QDateTime::fromString(match.captured(0), u"yyyyMMddHHmmss.zzz");
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     result.setTimeZone(QTimeZone::UTC);
 #else
     result.setTimeSpec(Qt::UTC);
@@ -845,7 +845,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
     QString fmtstart("00000101000000");
     fmtstart.replace(0, start.size(), start);
     result.start = QDateTime::fromString(fmtstart, u"yyyyMMddHHmmss");
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     result.start.setTimeZone(QTimeZone::UTC);
 #else
     result.start.setTimeSpec(Qt::UTC);

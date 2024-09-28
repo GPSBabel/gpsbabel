@@ -529,7 +529,7 @@ GlobalsatSportFormat::track_read()
           if (timezn != nullptr) {
             gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, *timezn).toUTC());
           } else {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
             gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, QTimeZone::LocalTime).toUTC());
 #else
             gpsDateTime = gpsbabel::DateTime(QDateTime(gpsDate, gpsTime, Qt::LocalTime).toUTC());

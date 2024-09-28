@@ -105,7 +105,7 @@
 #include <QTextCodec>           // for QTextCodec, QTextCodec::IgnoreHeader
 #include <QTextEncoder>         // for QTextEncoder
 #include <QTime>                // for QTime
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>            // for QTimeZone
 #endif
 #include <Qt>                   // for CaseInsensitive, UTC
@@ -249,7 +249,7 @@ LowranceusrFormat::lowranceusr4_writestr(const QString& buf, gbfile* file, int b
 gpsbabel::DateTime
 LowranceusrFormat::lowranceusr4_get_timestamp(unsigned int jd_number, unsigned int msecs)
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
   QDateTime qdt = QDateTime(QDate::fromJulianDay(jd_number), QTime(0, 0, 0), QTimeZone::UTC).addMSecs(msecs);
 #else
   QDateTime qdt = QDateTime(QDate::fromJulianDay(jd_number), QTime(0, 0, 0), Qt::UTC).addMSecs(msecs);

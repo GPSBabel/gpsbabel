@@ -71,7 +71,7 @@
 #include <QLatin1Char>          // for QLatin1Char
 #include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
 #include <QThread>              // for QThread
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
 #include <QTimeZone>            // for QTimeZone
 #endif
 #include <QtCore>               // for qPrintable, UTC
@@ -842,7 +842,7 @@ int MtkLoggerBase::csv_line(gbfile* csvFile, int idx, unsigned long bmask, data_
               , (itm->rcr&0x0004)?"D":"", (itm->rcr&0x0008)?"B":"");
 
   if (bmask & (1U<<UTC)) {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
     QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, QTimeZone::UTC);
 #else
     QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, Qt::UTC);
