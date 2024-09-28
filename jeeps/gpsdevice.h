@@ -26,8 +26,6 @@ typedef struct gpsdevh gpsdevh;
 
 #include "jeeps/gps.h"
 
-#define usecDELAY 180000	/* Microseconds before GPS sends A001 */
-
 
 int32_t GPS_Device_Chars_Ready(gpsdevh* fd);
 int32_t GPS_Device_On(const char* port, gpsdevh** fd);
