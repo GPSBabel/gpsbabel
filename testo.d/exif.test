@@ -37,7 +37,7 @@ bincompare ${REFERENCE}/ricoh-rdc5300.jpg.jpg ${TMPDIR}/ricoh-rdc5300.jpg.jpg
 # [File]              - File Inode Change Date/Time     : 2024:09:27 07:18:42-06:00
 # [EXIF]          36867 Date/Time Original              : 2000:05:31 21:50:40
 # [EXIF]          36868 Create Date                     : 2000:05:31 21:50:40
-# $ exiftool -D -G -time:all -composite:GPSPosition -c "%+.6f" reference//ricoh-rdc5300.jpg.jpg
+# $ exiftool -D -G -time:all -composite:GPSPosition -c "%+.6f" reference/ricoh-rdc5300.jpg.jpg
 # [File]              - File Modification Date/Time     : 2024:09:29 07:04:04-06:00
 # [File]              - File Access Date/Time           : 2024:09:29 07:04:06-06:00
 # [File]              - File Inode Change Date/Time     : 2024:09:29 07:04:04-06:00
