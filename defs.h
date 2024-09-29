@@ -1046,13 +1046,8 @@ constexpr double unknown_alt = -99999999.0;
 constexpr int unknown_color = -1;
 
 #ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-// error: the type ‘const QTimeZone’ of ‘constexpr’ variable ‘QtLocalTime’ is not literal
-// note: ‘QTimeZone’ is not literal because:
-// note: ‘QTimeZone’ does not have ‘constexpr’ destructor
-//constexpr QTimeZone QtLocalTime = QTimeZone::LocalTime;
-//constexpr QTimeZone QtUTC = QTimeZone::UTC;
-#define QtLocalTime QTimeZone::LocalTime
-#define QtUTC QTimeZone::UTC
+constexpr QTimeZone::Initialization QtLocalTime = QTimeZone::LocalTime;
+constexpr QTimeZone::Initialization QtUTC = QTimeZone::UTC;
 #else
 constexpr Qt::TimeSpec QtLocalTime = Qt::LocalTime;
 constexpr Qt::TimeSpec QtUTC = Qt::UTC;
