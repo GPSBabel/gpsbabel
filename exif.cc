@@ -667,20 +667,6 @@ ExifFormat::exif_find_ifd(ExifApp* app, const uint16_t ifd_nr)
 }
 
 ExifFormat::ExifTag*
-ExifFormat::exif_find_tag(ExifIfd* ifd, const uint16_t tag_id)
-{
-  if (ifd != nullptr) {
-    for (auto& tag_instance : ifd->tags) {
-      ExifTag* tag = &tag_instance;
-      if (tag->id == tag_id) {
-        return tag;
-      }
-    }
-  }
-  return nullptr;
-}
-
-ExifFormat::ExifTag*
 ExifFormat::exif_find_tag(ExifApp* app, const uint16_t ifd_nr, const uint16_t tag_id)
 {
   ExifIfd* ifd = exif_find_ifd(app, ifd_nr);
@@ -693,29 +679,6 @@ ExifFormat::exif_find_tag(ExifApp* app, const uint16_t ifd_nr, const uint16_t ta
     }
   }
   return nullptr;
-}
-
-QDateTime
-ExifFormat::exif_get_gps_time(ExifApp* app) const
-{
-  QDateTime res;
-
-  ExifIfd* gpsifd = exif_find_ifd(app, GPS_IFD);
-  if (gpsifd != nullptr) {
-    ExifTag* gpsdstag = exif_find_tag(gpsifd, GPS_IFD_TAG_DATESTAMP);
-    if (gpsdstag != nullptr) {
-      ExifTag* gpststag = exif_find_tag(gpsifd, GPS_IFD_TAG_TIMESTAMP);
-      if (gpststag != nullptr) {
-        QDate datestamp = exif_read_datestamp(gpsdstag);
-        QTime timestamp = exif_read_timestamp(gpststag);
-        QDateTime gpstime = QDateTime(datestamp, timestamp, QtUTC);
-        if (gpstime.isValid()) {
-          res = gpstime;
-        }
-      }
-    }
-  }
-  return res.toUTC();
 }
 
 QDateTime
@@ -1520,10 +1483,7 @@ ExifFormat::wr_init(const QString& fname)
   exif_examine_app(exif_app_);
   gbfclose(fin_);
 
-  exif_time_ref = exif_get_gps_time(exif_app_);
-  if (!exif_time_ref.isValid()) {
-    exif_time_ref = exif_get_exif_time(exif_app_);
-  }
+  exif_time_ref = exif_get_exif_time(exif_app_);
   if (!exif_time_ref.isValid()) {
     fatal(MYNAME ": No valid timestamp found in picture!\n");
   }

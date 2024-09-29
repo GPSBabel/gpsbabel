@@ -171,9 +171,7 @@ private:
   static void exif_read_app(ExifApp* app);
   static void exif_examine_app(ExifApp* app);
   static ExifIfd* exif_find_ifd(ExifApp* app, uint16_t ifd_nr);
-  static ExifTag* exif_find_tag(ExifIfd* ifd, uint16_t tag_id);
   static ExifTag* exif_find_tag(ExifApp* app, uint16_t ifd_nr, uint16_t tag_id);
-  QDateTime exif_get_gps_time(ExifApp* app) const;
   QDateTime exif_get_exif_time(ExifApp* app) const;
   Waypoint* exif_waypt_from_exif_app(ExifApp* app) const;
   static Rational<int> exif_dec2frac(double val, double tolerance);
