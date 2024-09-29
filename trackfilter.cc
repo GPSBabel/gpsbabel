@@ -301,11 +301,7 @@ void TrackFilter::trackfilter_title()
     fatal(MYNAME "-title: Missing your title!\n");
   }
   for (auto* track : std::as_const(track_list)) {
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-    trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, QTimeZone::UTC));
-#else
-    trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, Qt::UTC));
-#endif
+    trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, QtUTC));
   }
 }
 

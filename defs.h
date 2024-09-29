@@ -37,6 +37,9 @@
 #include <QString>                   // for QString
 #include <QStringView>               // for QStringView
 #include <QTextCodec>                // for QTextCodec
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+#include <QTimeZone>                 // for QTimeZone
+#endif
 #include <Qt>                        // for CaseInsensitive
 #include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
@@ -1041,5 +1044,13 @@ int color_to_bbggrr(const char* cname);
  */
 constexpr double unknown_alt = -99999999.0;
 constexpr int unknown_color = -1;
+
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+constexpr QTimeZone QtLocalTime = QTimeZone::LocalTime;
+constexpr QTimeZone QtUTC = QTimeZone::UTC;
+#else
+constexpr Qt::TimeSpec QtLocalTime = Qt::LocalTime;
+constexpr Qt::TimeSpec QtUTC = Qt::UTC;
+#endif
 
 #endif // DEFS_H_INCLUDED_

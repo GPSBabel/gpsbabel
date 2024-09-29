@@ -373,11 +373,7 @@ gpsbabel::DateTime
 current_time()
 {
   if (gpsbabel_testmode()) {
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-    return QDateTime::fromMSecsSinceEpoch(0, QTimeZone::UTC);
-#else
-    return QDateTime::fromMSecsSinceEpoch(0, Qt::UTC);
-#endif
+    return QDateTime::fromMSecsSinceEpoch(0, QtUTC);
   }
 
   return QDateTime::currentDateTimeUtc();
@@ -391,22 +387,14 @@ current_time()
  */
 QDateTime dotnet_time_to_qdatetime(long long dotnet)
 {
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QTimeZone::UTC);
-#else
-  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
-#endif
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QtUTC);
   qint64 millisecs = (dotnet + 5000)/ 10000;
   return epoch.addMSecs(millisecs);
 }
 
 long long qdatetime_to_dotnet_time(const QDateTime& dt)
 {
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QTimeZone::UTC);
-#else
-  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
-#endif
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QtUTC);
   qint64 millisecs = epoch.msecsTo(dt);
   return millisecs * 10000;
 }

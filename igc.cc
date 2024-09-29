@@ -43,9 +43,6 @@
 #include <QString>              // for QString, operator+, QStringLiteral
 #include <QStringList>          // for QStringList
 #include <QTime>                // for operator<, operator==, QTime
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-#include <QTimeZone>            // for QTimeZone
-#endif
 #include <Qt>                   // for UTC, SkipEmptyParts
 #include <QtGlobal>             // for foreach, qPrintable
 
@@ -165,11 +162,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
     } else {
       year += 1900;
     }
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-    creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), QTimeZone::UTC);
-#else
-    creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), Qt::UTC);
-#endif
+    creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), QtUTC);
     if (!creation.isValid()) {
       fatal(MYNAME ": bad date time\n%s\n", rec);
     }
@@ -405,11 +398,7 @@ void IgcFormat::read()
         pres_wpt->fs.FsChainAdd(fsdata);
       }
 
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-      pres_wpt->SetCreationTime(QDateTime(date, tod, QTimeZone::UTC));
-#else
-      pres_wpt->SetCreationTime(QDateTime(date, tod, Qt::UTC));
-#endif
+      pres_wpt->SetCreationTime(QDateTime(date, tod, QtUTC));
 
       // Add the waypoint to the pressure altitude track
       if (pres_alt) {

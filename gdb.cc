@@ -31,9 +31,6 @@
 #include <QDateTime>                // for QDateTime
 #include <QString>                  // for QString, operator!=, operator==
 #include <QTime>                    // for QTime
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-#include <QTimeZone>                // for QTimeZone
-#endif
 #include <Qt>                       // for CaseInsensitive
 #include <QtGlobal>                 // for Q_UNUSED, qPrintable, foreach
 
@@ -1129,11 +1126,7 @@ GdbFormat::write_header()
    * This is our "Watermark" to show this file was created by GPSbabel.
    * The date/time used to be from CVS, and may be from git in the future.
    */
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-  static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), QTimeZone::UTC);
-#else
-  static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
-#endif
+  static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), QtUTC);
   gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
   gdb_write_cstr(gdb_release_dt.toString(u"MMM dd yyyy"));
   gdb_write_cstr(gdb_release_dt.toString(u"HH:mm:ss"));

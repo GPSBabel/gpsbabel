@@ -708,11 +708,7 @@ ExifFormat::exif_get_gps_time(ExifApp* app) const
       if (gpststag != nullptr) {
         QDate datestamp = exif_read_datestamp(gpsdstag);
         QTime timestamp = exif_read_timestamp(gpststag);
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-        QDateTime gpstime = QDateTime(datestamp, timestamp, QTimeZone::UTC);
-#else
-        QDateTime gpstime = QDateTime(datestamp, timestamp, Qt::UTC);
-#endif
+        QDateTime gpstime = QDateTime(datestamp, timestamp, QtUTC);
         if (gpstime.isValid()) {
           res = gpstime;
         }
@@ -960,11 +956,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     }
   }
 
-#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
-  gps_datetime = QDateTime(datestamp, timestamp, QTimeZone::UTC);
-#else
-  gps_datetime = QDateTime(datestamp, timestamp, Qt::UTC);
-#endif
+  gps_datetime = QDateTime(datestamp, timestamp, QtUTC);
   if (gps_datetime.isValid()) {
     if (global_opts.debug_level >= 3) {
       printf(MYNAME "-GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODateWithMs)));
