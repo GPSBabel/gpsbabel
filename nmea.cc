@@ -324,14 +324,14 @@ void
 NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& date, const QTime& time)
 {
   if (date.isValid()) {
-    wpt->SetCreationTime(QDateTime(date, time, Qt::UTC));
+    wpt->SetCreationTime(QDateTime(date, time, QtUTC));
     if (wpt->wpt_flags.fmt_use != 0) {
       wpt->wpt_flags.fmt_use = 0;
       without_date--;
     }
     *prev = wpt->GetCreationTime();
   } else if (prev->date().isValid()) {
-    wpt->SetCreationTime(QDateTime(prev->date(), time, Qt::UTC));
+    wpt->SetCreationTime(QDateTime(prev->date(), time, QtUTC));
     if (*prev > wpt->creation_time) {
       /* go over midnight ? */
       wpt->creation_time = wpt->creation_time.addDays(1);
@@ -342,7 +342,7 @@ NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& 
     }
     *prev = wpt->GetCreationTime();
   } else {
-    wpt->SetCreationTime(QDateTime(QDate(), time, Qt::UTC));
+    wpt->SetCreationTime(QDateTime(QDate(), time, QtUTC));
     if (wpt->wpt_flags.fmt_use == 0) {
       wpt->wpt_flags.fmt_use = 1;
       without_date++;
@@ -639,7 +639,7 @@ NmeaFormat::gpzda_parse(const QString& ibuf)
 
     // The prev_datetime data member might be used by
     // nmea_fix_timestamps and nmea_set_waypoint_time.
-    prev_datetime = QDateTime(date, time, Qt::UTC);
+    prev_datetime = QDateTime(date, time, QtUTC);
   }
 }
 
@@ -839,7 +839,7 @@ NmeaFormat::nmea_fix_timestamps(route_head* track)
       return;
     }
 
-    QDateTime prev = QDateTime(opt_tm, QTime(0, 0), Qt::UTC);
+    QDateTime prev = QDateTime(opt_tm, QTime(0, 0), QtUTC);
 
     foreach (Waypoint* wpt, track->waypoint_list) {
 

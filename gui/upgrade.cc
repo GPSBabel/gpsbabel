@@ -262,14 +262,20 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   QString oresponse(reply->readAll());
 
   QDomDocument document;
-  int line = -1;
-  QString error_text;
   // This shouldn't ever be seen by a user.
-  if (!document.setContent(oresponse, &error_text, &line)) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+  if (auto result = document.setContent(oresponse); !result) {
+#else
+  struct {
+    int errorLine{-1};
+    QString errorMessage;
+  } result;
+  if (!document.setContent(oresponse, &result.errorMessage, &result.errorLine)) {
+#endif
     QMessageBox::critical(nullptr, tr("Error"),
                           tr("Invalid return data at line %1: %2.")
-                          .arg(line)
-                          .arg(error_text));
+                          .arg(result.errorLine)
+                          .arg(result.errorMessage));
     babelData_.upgradeErrors_++;
     replyId_ = nullptr;
     reply->deleteLater();

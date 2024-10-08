@@ -839,7 +839,7 @@ int MtkLoggerBase::csv_line(gbfile* csvFile, int idx, unsigned long bmask, data_
               , (itm->rcr&0x0004)?"D":"", (itm->rcr&0x0008)?"B":"");
 
   if (bmask & (1U<<UTC)) {
-    QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, Qt::UTC);
+    QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, QtUTC);
     dt = dt.addMSecs(itm->timestamp_ms);
 
     QString timestamp = dt.toUTC().toString(u"yyyy/MM/dd,hh:mm:ss.zzz");

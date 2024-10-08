@@ -29,6 +29,9 @@
 #include <QtGlobal>
 #include <QDateTime>
 #include <QString>
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+#include <QTimeZone>
+#endif
 
 // As this code began in C, we have several hundred places that set and
 // read creation_time as a time_t.  Provide some operator overloads to make
@@ -54,7 +57,11 @@ public:
   // Qt::LocalTime compared to Qt::UTC on ubuntu bionic.
   // Note that these conversions can be required if the Qt::TimeSpec is
   // set to Qt:LocalTime after construction.
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+  DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, QTimeZone::UTC))
+#else
   DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, Qt::UTC))
+#endif
   {
   }
 

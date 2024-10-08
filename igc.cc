@@ -162,7 +162,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
     } else {
       year += 1900;
     }
-    creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), Qt::UTC);
+    creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), QtUTC);
     if (!creation.isValid()) {
       fatal(MYNAME ": bad date time\n%s\n", rec);
     }
@@ -398,7 +398,7 @@ void IgcFormat::read()
         pres_wpt->fs.FsChainAdd(fsdata);
       }
 
-      pres_wpt->SetCreationTime(QDateTime(date, tod, Qt::UTC));
+      pres_wpt->SetCreationTime(QDateTime(date, tod, QtUTC));
 
       // Add the waypoint to the pressure altitude track
       if (pres_alt) {

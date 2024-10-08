@@ -517,7 +517,7 @@ xml_parse_time(const QString& dateTimeString)
   if (res > 0) {
     QDate date(year, mon, mday);
     QTime time(hour, min, sec);
-    dt = QDateTime(date, time, Qt::UTC);
+    dt = QDateTime(date, time, QtUTC);
 
     // Fractional part of time.
     if (fsec) {

@@ -109,7 +109,7 @@ Dg100Format::bintime2utc(int date, int time)
   date /= 100;
   int day  = date;
 
-  return QDateTime(QDate(year, mon, day), QTime(hour, min, sec), Qt::UTC);
+  return QDateTime(QDate(year, mon, day), QTime(hour, min, sec), QtUTC);
 }
 
 void

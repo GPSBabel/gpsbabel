@@ -143,7 +143,7 @@ V900Format::bintime2utc(int date, int time) {
   // What's left in 'date' is year.
   QDate dt(date + 2000, month, day);
 
-  return QDateTime(dt, tm, Qt::UTC);
+  return QDateTime(dt, tm, QtUTC);
 }
 
 void

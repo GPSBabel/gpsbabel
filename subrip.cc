@@ -221,7 +221,7 @@ SubripFormat::wr_init(const QString& fname)
         fatal(FatalMsg().nospace() << MYNAME ": option gps_time value (" << opt_gpstime << ") is invalid.  Expected hhmmss[.sss]");
       }
     }
-    gps_datetime = QDateTime(gps_date, gps_time, Qt::UTC);
+    gps_datetime = QDateTime(gps_date, gps_time, QtUTC);
   }
 
   video_offset_ms = 0;

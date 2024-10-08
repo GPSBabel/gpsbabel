@@ -246,7 +246,7 @@ LowranceusrFormat::lowranceusr4_writestr(const QString& buf, gbfile* file, int b
 gpsbabel::DateTime
 LowranceusrFormat::lowranceusr4_get_timestamp(unsigned int jd_number, unsigned int msecs)
 {
-  QDateTime qdt = QDateTime(QDate::fromJulianDay(jd_number), QTime(0, 0, 0), Qt::UTC).addMSecs(msecs);
+  QDateTime qdt = QDateTime(QDate::fromJulianDay(jd_number), QTime(0, 0, 0), QtUTC).addMSecs(msecs);
   return qdt;
 }
 

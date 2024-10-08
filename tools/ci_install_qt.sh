@@ -19,6 +19,9 @@ remove=( \
 debug_info \
 qtcharts \
 qtdatavis3d \
+qtgraphs \
+qtgrpc \
+qthttpserver \
 qtlottie \
 qtnetworkauth \
 qtquick3d \
@@ -40,6 +43,9 @@ do
       skip=true
     fi
   done
+  if [[ "$a" == *".debug_information" ]]; then
+    skip=true
+  fi
   if [ $skip == false ]; then
     mods+=( "$a" )
   fi

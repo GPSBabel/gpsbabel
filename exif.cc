@@ -47,6 +47,9 @@
 #include <QString>              // for QString
 #include <QTextCodec>           // for QTextCodec
 #include <QTime>                // for QTime
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+#include <QTimeZone>            // for QTimeZone
+#endif
 #include <QVariant>             // for QVariant
 #include <QVector>              // for QVector
 #include <Qt>                   // for UTC, ISODate
@@ -728,7 +731,11 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
         // Correct the date time by supplying the offset from UTC.
         int offset_hours = match.captured(1).append(match.captured(2)).toInt();
         int offset_mins = match.captured(1).append(match.captured(3)).toInt();
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+        res.setTimeZone(QTimeZone::fromSecondsAheadOfUtc(((offset_hours * 60) + offset_mins) * 60));
+#else
         res.setOffsetFromUtc(((offset_hours * 60) + offset_mins) * 60);
+#endif
       } else if (opt_offsettime) {
         // Only warn for user supplied offsets.
         // Offset tags may indicate the offset was unknown, e.g. "   :  ".
@@ -912,7 +919,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     }
   }
 
-  gps_datetime = QDateTime(datestamp, timestamp, Qt::UTC);
+  gps_datetime = QDateTime(datestamp, timestamp, QtUTC);
   if (gps_datetime.isValid()) {
     if (global_opts.debug_level >= 3) {
       printf(MYNAME "-GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODateWithMs)));

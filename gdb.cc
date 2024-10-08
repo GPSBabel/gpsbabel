@@ -62,7 +62,7 @@ constexpr unsigned int GDB_DBG_TRK = 4;
 
 constexpr unsigned int GDB_DBG_WPTe = 8;
 constexpr unsigned int GDB_DBG_RTEe = 16;
-constexpr unsigned int GDB_DBG_TRKe = 32;
+//constexpr unsigned int GDB_DBG_TRKe = 32;
 
 //constexpr unsigned int GDB_DEBUG = (GDB_DBG_WPTe) /* | GDB_DBG_RTE) */;
 //constexpr unsigned int GDB_DEBUG = 0xff;
@@ -1126,7 +1126,7 @@ GdbFormat::write_header()
    * This is our "Watermark" to show this file was created by GPSbabel.
    * The date/time used to be from CVS, and may be from git in the future.
    */
-  static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), Qt::UTC);
+  static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), QtUTC);
   gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
   gdb_write_cstr(gdb_release_dt.toString(u"MMM dd yyyy"));
   gdb_write_cstr(gdb_release_dt.toString(u"HH:mm:ss"));
