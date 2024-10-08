@@ -62,7 +62,7 @@ constexpr unsigned int GDB_DBG_TRK = 4;
 
 constexpr unsigned int GDB_DBG_WPTe = 8;
 constexpr unsigned int GDB_DBG_RTEe = 16;
-constexpr unsigned int GDB_DBG_TRKe = 32;
+//constexpr unsigned int GDB_DBG_TRKe = 32;
 
 //constexpr unsigned int GDB_DEBUG = (GDB_DBG_WPTe) /* | GDB_DBG_RTE) */;
 //constexpr unsigned int GDB_DEBUG = 0xff;
