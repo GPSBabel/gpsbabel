@@ -44,6 +44,14 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-latest
+          - QT_VERSION: '6.8.0'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2022_64'
+            METHOD: 'aqt'
+            RELEASE: false
+            GENERATOR: 'Ninja'
+            os: windows-latest
 
     steps:
     - name: Checkout repository
