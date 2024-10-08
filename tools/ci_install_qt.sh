@@ -19,6 +19,9 @@ remove=( \
 debug_info \
 qtcharts \
 qtdatavis3d \
+qtgraphs \
+qtgrpc \
+qthttpserver \
 qtlottie \
 qtnetworkauth \
 qtquick3d \
