@@ -20,8 +20,6 @@
 
 */
 
-#include <cstring>                     // for strcmp, strlen
-
 #include <QByteArray>                  // for QByteArray
 #include <QIODevice>                   // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
 #include <QLatin1String>               // for QLatin1String
@@ -474,8 +472,7 @@ OsmFormat::osm_node_tag(const QString& /*unused*/, const QXmlStreamAttributes* a
     }
   } else if (key == QLatin1String("name:en")) {
     wpt->shortname = str;
-  }
-  else if (int ikey = osm_feature_ikey(key); ikey >= 0) {
+  } else if (int ikey = osm_feature_ikey(key); ikey >= 0) {
     wpt->icon_descr = osm_feature_symbol(ikey, value);
   } else if (key == QLatin1String("note")) {
     if (wpt->notes.isEmpty()) {
@@ -757,10 +754,10 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
     break;
   }
 
-  if (strlen(created_by) !=0) {
+  if ((created_by != nullptr) && (*created_by != '\0')) {
     QString value(created_by);
     if (!gpsbabel_testmode()) {
-      if (strcmp("GPSBabel",created_by)==0) {
+      if (value == "GPSBabel") {
         value += '-';
         value += gpsbabel_version;
       }
@@ -817,10 +814,10 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
     return;
   }
 
-  if (strlen(created_by) !=0) {
+  if ((created_by != nullptr) && (*created_by != '\0')) {
     QString value(created_by);
     if (!gpsbabel_testmode()) {
-      if (strcmp("GPSBabel",created_by)==0) {
+      if (value == "GPSBabel") {
         value += '-';
         value += gpsbabel_version;
       }
