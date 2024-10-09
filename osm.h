@@ -26,6 +26,7 @@
 #include <QList>                       // for QList
 #include <QPair>                       // for QPair
 #include <QString>                     // for QString
+#include <QStringList>                 // for QStringList
 #include <QVector>                     // for QVector
 #include <QXmlStreamAttributes>        // for QXmlStreamAttributes
 
