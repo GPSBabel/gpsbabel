@@ -87,7 +87,7 @@ private:
 
   void osm_features_init();
   int osm_feature_ikey(const QString& key) const;
-  QString osm_feature_symbol(int ikey, const char* value) const;
+  QString osm_feature_symbol(int ikey, const QString& value) const;
   static QString osm_strip_html(const QString& str);
   void osm_node_end(const QString& /* unused */, const QXmlStreamAttributes* /* unused */);
   void osm_node(const QString& /* unused */, const QXmlStreamAttributes* attrv);

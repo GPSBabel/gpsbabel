@@ -20,7 +20,7 @@
 
 */
 
-#include <cstring>                     // for strlen, strchr, st
+#include <cstring>                     // for strcmp, strlen
 
 #include <QByteArray>                  // for QByteArray
 #include <QIODevice>                   // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
@@ -390,7 +390,7 @@ OsmFormat::osm_feature_ikey(const QString& key) const
 }
 
 QString
-OsmFormat::osm_feature_symbol(const int ikey, const char* value) const
+OsmFormat::osm_feature_symbol(const int ikey, const QString& value) const
 {
   QPair<int, QString> key(ikey, value);
 
@@ -476,7 +476,7 @@ OsmFormat::osm_node_tag(const QString& /*unused*/, const QXmlStreamAttributes* a
     wpt->shortname = str;
   }
   else if (int ikey = osm_feature_ikey(key); ikey >= 0) {
-    wpt->icon_descr = osm_feature_symbol(ikey, CSTR(value));
+    wpt->icon_descr = osm_feature_symbol(ikey, value);
   } else if (key == QLatin1String("note")) {
     if (wpt->notes.isEmpty()) {
       wpt->notes = str;
@@ -560,7 +560,7 @@ OsmFormat::osm_way_tag(const QString& /*unused*/, const QXmlStreamAttributes* at
     wpt->shortname = str;
     // The remaining cases only apply to the center node
   } else if (int ikey = osm_feature_ikey(key); ikey >= 0) {
-    wpt->icon_descr = osm_feature_symbol(ikey, CSTR(value));
+    wpt->icon_descr = osm_feature_symbol(ikey, value);
   } else if (key == "note") {
     if (wpt->notes.isEmpty()) {
       wpt->notes = str;
