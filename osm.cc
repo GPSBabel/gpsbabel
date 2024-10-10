@@ -754,15 +754,14 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
     break;
   }
 
-  if ((created_by != nullptr) && (*created_by != '\0')) {
-    QString value(created_by);
+  if (QString creator = created_by; !creator.isEmpty()) {
     if (!gpsbabel_testmode()) {
-      if (value == "GPSBabel") {
-        value += '-';
-        value += gpsbabel_version;
+      if (creator == "GPSBabel") {
+        creator += '-';
+        creator += gpsbabel_version;
       }
     }
-    osm_write_tag(QStringLiteral("created_by"), value);
+    osm_write_tag(QStringLiteral("created_by"), creator);
   }
 
   osm_write_tag("name", waypoint->shortname);
@@ -814,15 +813,14 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
     return;
   }
 
-  if ((created_by != nullptr) && (*created_by != '\0')) {
-    QString value(created_by);
+  if (QString creator = created_by; !creator.isEmpty()) {
     if (!gpsbabel_testmode()) {
-      if (value == "GPSBabel") {
-        value += '-';
-        value += gpsbabel_version;
+      if (creator == "GPSBabel") {
+        creator += '-';
+        creator += gpsbabel_version;
       }
     }
-    osm_write_tag(QStringLiteral("created_by"), value);
+    osm_write_tag(QStringLiteral("created_by"), creator);
   }
 
   osm_write_tag("name", route->rte_name);
