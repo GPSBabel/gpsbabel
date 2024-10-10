@@ -26,6 +26,7 @@
 #include <QList>                       // for QList
 #include <QPair>                       // for QPair
 #include <QString>                     // for QString
+#include <QStringList>                 // for QStringList
 #include <QVector>                     // for QVector
 #include <QXmlStreamAttributes>        // for QXmlStreamAttributes
 
@@ -73,20 +74,20 @@ private:
 
   struct osm_icon_mapping_t {
     int key;
-    const char* value;
-    const char* icon;
+    QString value;
+    QString icon;
   };
 
   /* Constants */
 
-  static const char* const osm_features[];
-  static const osm_icon_mapping_t osm_icon_mappings[];
+  static const QStringList osm_features;
+  static const QVector<osm_icon_mapping_t> osm_icon_mappings;
 
   /* Member Functions */
 
   void osm_features_init();
-  char osm_feature_ikey(const QString& key) const;
-  QString osm_feature_symbol(int ikey, const char* value) const;
+  int osm_feature_ikey(const QString& key) const;
+  QString osm_feature_symbol(int ikey, const QString& value) const;
   static QString osm_strip_html(const QString& str);
   void osm_node_end(const QString& /* unused */, const QXmlStreamAttributes* /* unused */);
   void osm_node(const QString& /* unused */, const QXmlStreamAttributes* attrv);
