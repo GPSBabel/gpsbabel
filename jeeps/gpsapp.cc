@@ -88,7 +88,7 @@ static void   GPS_D152_Send(UC* data, GPS_PWay way, int32_t* len);
 static void   GPS_D154_Send(UC* data, GPS_PWay way, int32_t* len);
 static void   GPS_D155_Send(UC* data, GPS_PWay way, int32_t* len);
 
-static void   GPS_D120_Get(int cat_num, char*s);
+static void   GPS_D120_Get(US cat_num, char*s);
 
 static void   GPS_D200_Get(GPS_PWay* way, const UC* s);
 static void   GPS_D201_Get(GPS_PWay* way, UC* s);
@@ -1137,8 +1137,8 @@ int32_t GPS_A101_Get(const char* port)
   gpsdevh* fd;
   GPS_Packet tra;
   GPS_Packet rec;
-  int32_t n;
-  int32_t i;
+  US n;
+  US i;
 
 
   if (!GPS_Device_On(port,&fd)) {
@@ -2021,7 +2021,7 @@ char gps_categories[16][17];
  * Read descriptor s into category number N;
  */
 static
-void GPS_D120_Get(int cat_num, char* s)
+void GPS_D120_Get(US cat_num, char* s)
 {
   /* we're guaranteed to have no more than 16 chars plus a
    * null terminator.
@@ -2030,11 +2030,15 @@ void GPS_D120_Get(int cat_num, char* s)
    * so mimic the behaviour of the 276/296.
    */
 
-  if (*s) {
-    strncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
+  if (cat_num < 16) {
+    if (*s) {
+      strncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
+    } else {
+      snprintf(gps_categories[cat_num], sizeof(gps_categories[0]),
+               "Category %d", cat_num+1);
+    }
   } else {
-    snprintf(gps_categories[cat_num], sizeof(gps_categories[0]),
-             "Category %d", cat_num+1);
+    GPS_Warning("GPS_D120_Get: assumption (1 <= category number <= 16) violated");
   }
 }
 
