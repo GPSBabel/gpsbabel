@@ -25,7 +25,6 @@
 ********************************************************************/
 #include "jeeps/gps.h"
 #include <cctype>
-#include <cinttypes>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -1188,7 +1187,7 @@ int32_t GPS_A101_Get(const char* port)
   }
 
   if (rec.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
-    GPS_Error("A101_Get: Error transferring waypoints.  Expected %d completion code.  Got %d.  %" PRIu16 " of %" PRIu16 " received", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec.type, i, n);
+    GPS_Error("A101_Get: Error transferring waypoints.  Expected %d completion code.  Got %d.  %d of %d received", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec.type, i, n);
     return FRAMING_ERROR;
   }
 
@@ -2031,11 +2030,15 @@ void GPS_D120_Get(US cat_num, char* s)
    * so mimic the behaviour of the 276/296.
    */
 
-  if (*s) {
-    strncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
+  if (cat_num < 16) {
+    if (*s) {
+      strncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
+    } else {
+      snprintf(gps_categories[cat_num], sizeof(gps_categories[0]),
+               "Category %d", cat_num+1);
+    }
   } else {
-    snprintf(gps_categories[cat_num], sizeof(gps_categories[0]),
-             "Category %" PRIu16, cat_num+1);
+    GPS_Warning("GPS_D120_Get: assumption (1 <= category number <= 16) violated");
   }
 }
 
