@@ -55,21 +55,82 @@
 
 
 #define MYNAME "GARMIN"
+static const char* portname;
+static short_handle mkshort_handle;
+static GPS_PWay* tx_waylist;
+static GPS_PWay* tx_routelist;
+static GPS_PWay* cur_tx_routelist_entry;
+static GPS_PTrack* tx_tracklist;
+static GPS_PTrack* cur_tx_tracklist_entry;
+static int my_track_count = 0;
+static char* getposn = nullptr;
+static char* poweroff = nullptr;
+static char* eraset = nullptr;
+static char* resettime = nullptr;
+static char* snlen = nullptr;
+static char* deficon = nullptr;
+static char* category = nullptr;
+static char* categorybitsopt = nullptr;
+static char* baudopt = nullptr;
+static int baud = 0;
+static int categorybits;
+static int receiver_must_upper = 1;
+static QTextCodec* codec{nullptr};
+
+static Vecs::fmtinfo_t gpx_vec;
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
+/* Technically, even this is a little loose as spaces arent allowed */
+static const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
 
-QByteArray GarminFormat::str_from_unicode(const QString& qstr)
-{
-  return codec->fromUnicode(qstr);
-}
-QString GarminFormat::str_to_unicode(const QByteArray& cstr)
-{
-  return codec->toUnicode(cstr);
-}
+static
+QVector<arglist_t> garmin_args = {
+  {
+    "snlen", &snlen, "Length of generated shortnames", nullptr,
+    ARGTYPE_INT, "1", nullptr, nullptr
+  },
+  { "deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  {
+    "get_posn", &getposn, "Return current position as a waypoint",
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+  },
+  {
+    "power_off", &poweroff, "Command unit to power itself down",
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+  },
+  {
+    "erase_t", &eraset, "Erase existing courses when writing new ones",
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+  },
+  {
+    "resettime", &resettime, "Sync GPS time to computer time",
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+  },
+  {
+    "category", &category, "Category number to use for written waypoints",
+    nullptr, ARGTYPE_INT, "1", "16", nullptr
+  },
+  {
+    "bitscategory", &categorybitsopt, "Bitmap of categories",
+    nullptr, ARGTYPE_INT, "1", "65535", nullptr
+  },
+  {
+    "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",
+    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
 
-void
-GarminFormat::write_char_string(char* dest, const char* source, size_t destsize)
+};
+
+static const char* d103_symbol_from_icon_number(unsigned int n);
+static int d103_icon_number_from_symbol(const QString& s);
+static void garmin_fs_garmin_after_read(GPS_PWay way, Waypoint* wpt, int protoid);
+static void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, int protoid);
+
+static QByteArray str_from_unicode(const QString& qstr) {return codec->fromUnicode(qstr);}
+static QString str_to_unicode(const QByteArray& cstr) {return codec->toUnicode(cstr);}
+
+static void
+rw_init(const QString& fname)
 {
   // we zero fill and always terminate within the dest buffer.
   strncpy(dest, source, destsize - 1);
@@ -205,7 +266,6 @@ GarminFormat::rw_init(const QString& fname)
     case 786: /* HC model */
     case 957: /* Legend HC */
       receiver_short_length = 14;
-      snwhiteopt = xstrdup("1");
       receiver_must_upper = false;
       /* This might be 8859-1 */
       receiver_charset = "windows-1252";
@@ -261,10 +321,6 @@ GarminFormat::rw_init(const QString& fname)
     mkshort_handle->set_length(xstrtoi(snlen, nullptr, 10));
   } else {
     mkshort_handle->set_length(receiver_short_length);
-  }
-
-  if (snwhiteopt) {
-    mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
   }
 
   /*

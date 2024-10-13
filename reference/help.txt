@@ -32,30 +32,27 @@ Options:
     -V               Print GPSBabel version and exit
 
 File Types (-i and -o options):
+	baroiq                Brauniger IQ Series Barograph Download
+	cambridge             Cambridge/Winpilot glider software
+	  snlen                 Max synthesized shortname length
+	  urlbase               Basename prepended to URL on output
+	  prefer_shortnames     (0/1) Use shortname instead of description
+	  datum                 GPS datum (def. WGS 84)
 	v900                  Columbus/Visiontac V900 files (.csv)
 	csv                   Comma separated values
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
 	  utc                   Write timestamps with offset x to UTC time
 	iblue747              Data Logger iBlue747 csv
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
 	  utc                   Write timestamps with offset x to UTC time
 	iblue757              Data Logger iBlue757 csv
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
@@ -86,18 +83,12 @@ File Types (-i and -o options):
 	  recoverymode          (0/1) Attempt to recovery data from corrupt file
 	garmin301             Garmin 301 Custom position and heartrate
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
 	  utc                   Write timestamps with offset x to UTC time
 	garmin_g1000          Garmin G1000 datalog input filter file
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
@@ -120,9 +111,6 @@ File Types (-i and -o options):
 	  utc                   Write timestamps with offset x to UTC time
 	garmin_poi            Garmin POI database
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
@@ -144,9 +132,8 @@ File Types (-i and -o options):
 	  languagecode          language code to use for reading dual language fil
 	garmin                Garmin serial/USB protocol
 	  snlen                 Length of generated shortnames
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  deficon               Default icon name
-	  get_posn              (0/1) Return current position as a waypoint
+          deficon               Default icon name
+          get_posn              (0/1) Return current position as a waypoint
 	  power_off             (0/1) Command unit to power itself down
 	  erase_t               (0/1) Erase existing courses when writing new ones
 	  resettime             (0/1) Sync GPS time to computer time
@@ -193,9 +180,6 @@ File Types (-i and -o options):
 	googletakeout         Google Takeout Location History
 	land_air_sea          GPS Tracking Key Pro text
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
@@ -203,27 +187,18 @@ File Types (-i and -o options):
 	gtm                   GPS TrackMaker
 	arc                   GPSBabel arc filter file
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
 	  utc                   Write timestamps with offset x to UTC time
 	gpsdrive              GpsDrive Format
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
 	  utc                   Write timestamps with offset x to UTC time
 	gpsdrivetrack         GpsDrive Format for Tracks
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
@@ -313,9 +288,6 @@ File Types (-i and -o options):
 	ozi                   OziExplorer
 	  pack                  (0/1) Write all tracks into one file
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  wptfgcolor            Waypoint foreground color
 	  wptbgcolor            Waypoint background color
 	  proximity             Proximity distance
@@ -357,9 +329,6 @@ File Types (-i and -o options):
 	  format                Format for subtitles
 	openoffice            Tab delimited fields useful for OpenOffice
 	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)

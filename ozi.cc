@@ -68,8 +68,86 @@
 #define BADCHARS	",\r\n"
 #define DAYS_SINCE_1990	25569
 
-void
-OziFormat::ozi_open_io(const QString& fname, QIODevice::OpenModeFlag mode)
+struct ozi_fsdata : FormatSpecificData {
+  ozi_fsdata() : FormatSpecificData(kFsOzi) {}
+
+  ozi_fsdata* clone() const override
+  {
+    return new ozi_fsdata(*this);
+  }
+
+  int fgcolor{0};
+  int bgcolor{65535};
+};
+
+static gpsbabel::TextStream* stream = nullptr;
+
+static short_handle mkshort_handle;
+static route_head* trk_head;
+static route_head* rte_head;
+
+static int track_out_count;
+static int route_out_count;
+static int route_wpt_count;
+static int new_track;
+
+static char* snlenopt = nullptr;
+static char* wptfgcolor = nullptr;
+static char* wptbgcolor = nullptr;
+static char* pack_opt = nullptr;
+static int datum;
+static char* proximityarg = nullptr;
+static double proximity;
+static char* altunit_opt;
+static char* proxunit_opt;
+static char altunit;
+static char proxunit;
+static double alt_scale;
+static double prox_scale;
+static char* opt_codec;
+
+static
+QVector<arglist_t> ozi_args = {
+  {
+    "pack", &pack_opt, "Write all tracks into one file",
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+  },
+  {
+    "snlen", &snlenopt, "Max synthesized shortname length",
+    "32", ARGTYPE_INT, "1", nullptr, nullptr
+  },
+  {
+    "wptfgcolor", &wptfgcolor, "Waypoint foreground color",
+    "black", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+  {
+    "wptbgcolor", &wptbgcolor, "Waypoint background color",
+    "yellow", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+  {
+    "proximity", &proximityarg, "Proximity distance",
+    "0", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+  {
+    "altunit", &altunit_opt, "Unit used in altitude values",
+    "feet", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+  {
+    "proxunit", &proxunit_opt, "Unit used in proximity values",
+    "miles", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+  {
+    "codec", &opt_codec, "codec to use for reading and writing strings (default windows-1252)",
+    "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+};
+
+static gpsdata_type ozi_objective;
+
+static QString ozi_ofname;
+
+static void
+ozi_open_io(const QString& fname, QIODevice::OpenModeFlag mode)
 {
   stream = new gpsbabel::TextStream;
   stream->open(fname, mode, MYNAME, opt_codec);
@@ -386,22 +464,8 @@ OziFormat::wr_init(const QString& fname)
 
   /* set mkshort options from the command line if applicable */
   if (global_opts.synthesize_shortnames) {
-
     mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
-
-    if (snwhiteopt) {
-      mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
-    }
-
-    if (snupperopt) {
-      mkshort_handle->set_mustupper(xstrtoi(snupperopt, nullptr, 10));
-    }
-
-    if (snuniqueopt) {
-      mkshort_handle->set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
-    }
-
-    mkshort_handle->set_badchars("\",");
+    setshort_badchars(mkshort_handle, "\",");
   }
 
   ozi_init_units(1);
