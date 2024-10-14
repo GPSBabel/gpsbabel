@@ -1074,7 +1074,7 @@ void TrackFilter::process()
     }
   }
 
-  if (opt_seg2trk != nullptr) {
+  if (opt_seg2trk) {
     trackfilter_seg2trk();
     // track_list may? now be invalid!
     if (--opts == 0) {
@@ -1086,7 +1086,7 @@ void TrackFilter::process()
     init();
   }
 
-  if (opt_trk2seg != nullptr) {
+  if (opt_trk2seg) {
     trackfilter_trk2seg();
     if (--opts == 0) {
       return;
@@ -1102,7 +1102,7 @@ void TrackFilter::process()
 
   bool something_done = false;
 
-  if ((opt_pack != nullptr) || (opts == -1)) {	/* call our default option */
+  if (opt_pack || (opts == -1)) {	/* call our default option */
     trackfilter_pack();
     something_done = true;
   } else if (opt_merge != nullptr) {

@@ -108,7 +108,7 @@ private:
   /* Data Members */
 
   OptionCString opt_merge;
-  OptionCString opt_pack;
+  OptionBool opt_pack;
   OptionCString opt_split;
   OptionCString opt_sdistance;
   OptionCString opt_move;
@@ -116,14 +116,14 @@ private:
   OptionCString opt_start;
   OptionCString opt_stop;
   OptionCString opt_fix;
-  OptionCString opt_course;
-  OptionCString opt_speed;
+  OptionBool opt_course;
+  OptionBool opt_speed;
   OptionCString opt_name;
-  OptionCString opt_seg2trk;
-  OptionCString opt_trk2seg;
-  OptionCString opt_segment;
+  OptionBool opt_seg2trk;
+  OptionBool opt_trk2seg;
+  OptionBool opt_segment;
   OptionCString opt_faketime;
-  OptionCString opt_discard;
+  OptionBool opt_discard;
   OptionCString opt_minpoints;
   int minimum_points{0};
 
