@@ -42,15 +42,15 @@ public:
   void exit() override;
 
 private:
-  char* opt_push = nullptr;
-  char* opt_copy = nullptr;
-  char* opt_pop = nullptr;
-  char* opt_append = nullptr;
-  char* opt_discard = nullptr;
-  char* opt_replace = nullptr;
-  char* opt_swap = nullptr;
-  char* opt_depth = nullptr;
-  char* nowarn = nullptr;
+  OptionCString opt_push;
+  OptionCString opt_copy;
+  OptionCString opt_pop;
+  OptionCString opt_append;
+  OptionCString opt_discard;
+  OptionCString opt_replace;
+  OptionCString opt_swap;
+  OptionCString opt_depth;
+  OptionCString nowarn;
   int  warnings_enabled = 1;
   int  swapdepth = 0;
 

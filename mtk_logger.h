@@ -216,11 +216,11 @@ protected:
   void* fd{};  /* serial fd */
   FILE* fl{};  /* bin.file fd */
   char* port{}; /* serial port name */
-  char* OPT_erase{};  /* erase ? command option */
-  char* OPT_erase_only{};  /* erase_only ? command option */
-  char* OPT_log_enable{};  /* enable ? command option */
-  char* csv_file{}; /* csv ? command option */
-  char* OPT_block_size_kb{}; /* block_size_kb ? command option */
+  OptionCString OPT_erase;  /* erase ? command option */
+  OptionCString OPT_erase_only;  /* erase_only ? command option */
+  OptionCString OPT_log_enable;  /* enable ? command option */
+  OptionCString csv_file; /* csv ? command option */
+  OptionCString OPT_block_size_kb; /* block_size_kb ? command option */
   MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
   mtk_loginfo mtk_info{};
@@ -279,7 +279,7 @@ protected:
   int mtk_erase();
   void mtk_read();
   int add_trackpoint(int idx, long unsigned int bmask, data_item* itm);
-  void mtk_csv_init(char* csv_fname, long unsigned int bitmask);
+  void mtk_csv_init(const char* csv_fname, long unsigned int bitmask);
   void mtk_csv_deinit();
   static int csv_line(gbfile* csvFile, int idx, long unsigned int bmask, data_item* itm);
   int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask);

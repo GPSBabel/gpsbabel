@@ -849,7 +849,7 @@ GarminFormat::waypoint_prepare()
     tx_waylist[i]->lat = wpt->latitude;
 
     if (deficon) {
-      icon = gt_find_icon_number_from_desc(deficon, PCX);
+      icon = gt_find_icon_number_from_desc(static_cast<const char*>(deficon), PCX);
     } else {
       if (!wpt->gc_data->get_icon().isEmpty()) {
         icon = gt_find_icon_number_from_desc(wpt->gc_data->get_icon(), PCX);

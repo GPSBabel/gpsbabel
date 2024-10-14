@@ -348,7 +348,7 @@ LowranceusrFormat::wr_init(const QString& fname)
   waypt_out_count = 0;
   writing_version = xstrtoi(opt_wversion, nullptr, 10);
   if ((writing_version < 2) || (writing_version > 4)) {
-    fatal(MYNAME " wversion value %s is not supported !!\n", opt_wversion);
+    fatal(MYNAME " wversion value %s is not supported !!\n", static_cast<const char*>(opt_wversion));
   }
   utf16le_codec = QTextCodec::codecForName("UTF-16LE");
   waypt_table = new QList<const Waypoint*>;
@@ -1886,7 +1886,8 @@ LowranceusrFormat::write()
       buf = QString("GPSBabel generated USR data file");
     } else {
       if (len > MAXUSRSTRINGSIZE) {
-        opt_title[MAXUSRSTRINGSIZE] = '\000';  // truncate it before copy
+#warning "fix me"
+        //opt_title[MAXUSRSTRINGSIZE] = '\000';  // truncate it before copy
       }
       buf = opt_title;
     }
@@ -1916,7 +1917,8 @@ LowranceusrFormat::write()
       buf = QString("Waypoints, routes, and trails");
     } else {
       if (len > MAXUSRSTRINGSIZE) {
-        opt_content_descr[MAXUSRSTRINGSIZE] = '\000';  // truncate it before copy
+#warning "fix me"
+        //opt_content_descr[MAXUSRSTRINGSIZE] = '\000';  // truncate it before copy
       }
       buf = opt_content_descr;
     }

@@ -997,9 +997,9 @@ NmeaFormat::read()
   }
 
   if (optdate) {
-    opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
+    opt_tm = QDate::fromString(static_cast<const char*>(optdate), u"yyyyMMdd");
     if (!opt_tm.isValid()) {
-      fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
+      fatal(MYNAME ": Invalid date \"%s\"!\n", static_cast<const char*>(optdate));
     }
   }
 
@@ -1062,7 +1062,7 @@ NmeaFormat::rd_position_init(const QString& fname)
 
   if (opt_baud) {
     if (!gbser_set_speed(gbser_handle, xstrtoi(opt_baud, nullptr, 10))) {
-      fatal(MYNAME ": Unable to set baud rate %s\n", opt_baud);
+      fatal(MYNAME ": Unable to set baud rate %s\n", static_cast<const char*>(opt_baud));
     }
   }
   posn_fname = fname;

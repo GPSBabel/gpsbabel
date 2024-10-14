@@ -160,12 +160,12 @@ private:
   WptNamePosnHash waypt_nameposn_out_hash;
   MakeShort* short_h{};
 
-  char* gdb_opt_category{};
-  char* gdb_opt_ver{};
-  char* gdb_opt_via{};
-  char* gdb_opt_roadbook{};
-  char* gdb_opt_bitcategory{};
-  char* gdb_opt_drop_hidden_wpt{};
+  OptionCString gdb_opt_category;
+  OptionCString gdb_opt_ver;
+  OptionCString gdb_opt_via;
+  OptionCString gdb_opt_roadbook;
+  OptionCString gdb_opt_bitcategory;
+  OptionCString gdb_opt_drop_hidden_wpt;
 
   int waypt_flag{};
   int route_flag{};

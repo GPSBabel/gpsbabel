@@ -40,9 +40,9 @@ public:
   void process() override;
 
 private:
-  char* opt_debug{};
+  OptionCString opt_debug;
   bool debug{};
-  char* opt_checkempty{};
+  OptionCString opt_checkempty;
   bool checkempty{};
   int point_ct{};
   int total_point_ct{};

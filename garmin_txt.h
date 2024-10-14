@@ -172,14 +172,14 @@ private:
   std::array<QList<std::pair<QString, int>>, unknown_header> header_mapping_info;
   QStringList header_column_names;
 
-  char* opt_datum = nullptr;
-  char* opt_dist = nullptr;
-  char* opt_temp = nullptr;
-  char* opt_date_format = nullptr;
-  char* opt_time_format = nullptr;
-  char* opt_precision = nullptr;
-  char* opt_utc = nullptr;
-  char* opt_grid = nullptr;
+  OptionCString opt_datum;
+  OptionCString opt_dist;
+  OptionCString opt_temp;
+  OptionCString opt_date_format;
+  OptionCString opt_time_format;
+  OptionCString opt_precision;
+  OptionCString opt_utc;
+  OptionCString opt_grid;
 
   QVector<arglist_t> garmin_txt_args = {
     {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},

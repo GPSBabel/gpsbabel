@@ -733,7 +733,7 @@ int MtkLoggerBase::add_trackpoint(int idx, unsigned long bmask, data_item* itm)
 
 
 /********************** MTK Logger -- CSV output *************************/
-void MtkLoggerBase::mtk_csv_init(char* csv_fname, unsigned long bitmask)
+void MtkLoggerBase::mtk_csv_init(const char* csv_fname, unsigned long bitmask)
 {
   FILE* cf;
 
@@ -1397,7 +1397,7 @@ void MtkLoggerBase::file_read()
   mtk_info.logLen = mtk_log_len(mtk_info.bitmask);
   dbg(3, "Log item size %d bytes\n", mtk_info.logLen);
   if (csv_file && *csv_file) {
-    mtk_csv_init(csv_file, mtk_info.bitmask);
+    mtk_csv_init(static_cast<const char*>(csv_file), mtk_info.bitmask);
   }
 
   while (pos < fsize && (bLen = fread(&buf[j], 1, sizeof(buf)-j, fl)) > 0) {

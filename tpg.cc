@@ -61,7 +61,7 @@ TpgFormat::tpg_common_init()
 {
   tpg_datum_idx = GPS_Lookup_Datum_Index(tpg_datum_opt);
   if (tpg_datum_idx < 0) {
-    fatal(MYNAME ": Datum '%s' is not recognized.\n", tpg_datum_opt);
+    fatal(MYNAME ": Datum '%s' is not recognized.\n", static_cast<const char*>(tpg_datum_opt));
   }
 }
 

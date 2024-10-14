@@ -47,11 +47,11 @@ private:
 
   /* Data Members */
 
-  char* opt_time{nullptr};
+  OptionCString opt_time;
   double max_time_step{0};
-  char* opt_dist{nullptr};
+  OptionCString opt_dist;
   double max_dist_step{0};
-  char* opt_route{nullptr};
+  OptionCString opt_route;
 
   QVector<arglist_t> args = {
     {

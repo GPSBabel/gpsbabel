@@ -67,9 +67,9 @@ private:
   int decimate_count{0};
   int interpolate_count{0};
 
-  char* decimateopt{nullptr};
-  char* interpolateopt{nullptr};
-  char* averageopt{nullptr};
+  OptionCString decimateopt;
+  OptionCString interpolateopt;
+  OptionCString averageopt;
 
   QVector<arglist_t> args = {
     {

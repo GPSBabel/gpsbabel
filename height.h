@@ -44,8 +44,8 @@ public:
   void process() override;
 
 private:
-  char* addopt        = nullptr;
-  char* wgs84tomslopt = nullptr;
+  OptionCString addopt;
+  OptionCString wgs84tomslopt;
   double addf{};
   // include static constexpr data member definitions with intializers for grid as private members.
   #include "heightgrid.h"

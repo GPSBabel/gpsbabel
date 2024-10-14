@@ -157,25 +157,25 @@ void DiscardFilter::init()
   }
 
   if (nameopt) {
-    name_regex = generateRegExp(nameopt);
+    name_regex = generateRegExp(static_cast<const char*>(nameopt));
     if (!name_regex.isValid()) {
       fatal(FatalMsg() << "discard: matchname option is an invalid expression.");
     }
   }
   if (descopt) {
-    desc_regex = generateRegExp(descopt);
+    desc_regex = generateRegExp(static_cast<const char*>(descopt));
     if (!desc_regex.isValid()) {
       fatal(FatalMsg() << "discard: matchdesc option is an invalid expression.");
     }
   }
   if (cmtopt) {
-    cmt_regex = generateRegExp(cmtopt);
+    cmt_regex = generateRegExp(static_cast<const char*>(cmtopt));
     if (!cmt_regex.isValid()) {
       fatal(FatalMsg() << "discard: matchcmt option is an invalid expression.");
     }
   }
   if (iconopt) {
-    icon_regex = generateRegExp(iconopt);
+    icon_regex = generateRegExp(static_cast<const char*>(iconopt));
     if (!icon_regex.isValid()) {
       fatal(FatalMsg() << "discard: matchicon option is an invalid expression.");
     }

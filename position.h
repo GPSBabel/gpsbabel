@@ -63,9 +63,9 @@ private:
 
   double pos_dist{};
   qint64 max_diff_time{};
-  char* distopt = nullptr;
-  char* timeopt = nullptr;
-  char* purge_duplicates = nullptr;
+  OptionCString distopt;
+  OptionCString timeopt;
+  OptionCString purge_duplicates;
   bool check_time{};
 
   QVector<arglist_t> args = {

@@ -201,11 +201,11 @@ private:
   char exif_success{};
   QString exif_fout_name;
 
-  char* opt_filename{};
-  char* opt_overwrite{};
-  char* opt_frame{};
-  char* opt_name{};
-  char* opt_offsettime{};
+  OptionCString opt_filename;
+  OptionCString opt_overwrite;
+  OptionCString opt_frame;
+  OptionCString opt_name;
+  OptionCString opt_offsettime;
 
   QVector<arglist_t> exif_args = {
     { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },

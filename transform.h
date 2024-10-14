@@ -45,8 +45,13 @@ private:
   route_head* current_trk{};
   route_head* current_rte{};
 
-  char* opt_routes{}, *opt_tracks{}, *opt_waypts{}, *opt_delete{}, *rpt_name_digits{}, *opt_rpt_name{};
-  char* opt_timeless{};
+  OptionCString opt_routes;
+  OptionCString opt_tracks;
+  OptionCString opt_waypts;
+  OptionCString opt_delete;
+  OptionCString rpt_name_digits;
+  OptionCString opt_rpt_name;
+  OptionCString opt_timeless;
   bool timeless{};
   bool use_src_name{};
   QString current_namepart;

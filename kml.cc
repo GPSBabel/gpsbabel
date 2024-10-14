@@ -413,7 +413,7 @@ void KmlFormat::wr_init(const QString& fname)
     unitsformatter->setunits(UnitsFormatter::units_t::aviation);
     break;
   default:
-    fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", opt_units);
+    fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", static_cast<const char*>(opt_units));
     break;
   }
   /*
@@ -472,11 +472,11 @@ void KmlFormat::wr_position_deinit()
 }
 
 
-void KmlFormat::kml_output_linestyle(char* /*color*/, int width) const
+void KmlFormat::kml_output_linestyle(const char* color, int width) const
 {
   // Style settings for line strings
   writer->writeStartElement(QStringLiteral("LineStyle"));
-  writer->writeTextElement(QStringLiteral("color"), opt_line_color);
+  writer->writeTextElement(QStringLiteral("color"), color);
   writer->writeTextElement(QStringLiteral("width"), QString::number(width));
   writer->writeEndElement(); // Close LineStyle tag
 }
@@ -885,7 +885,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
       writer->writeStartElement(QStringLiteral("Style"));
       writer->writeStartElement(QStringLiteral("IconStyle"));
       writer->writeStartElement(QStringLiteral("Icon"));
-      writer->writeTextElement(QStringLiteral("href"), opt_deficon);
+      writer->writeTextElement(QStringLiteral("href"), static_cast<const char*>(opt_deficon));
       writer->writeEndElement(); // Close Icon tag
       writer->writeEndElement(); // Close IconStyle tag
       writer->writeEndElement(); // Close Style tag
@@ -944,7 +944,7 @@ void KmlFormat::kml_output_tailer(const route_head* header)
         kml_step_color();
         writer->writeTextElement(QStringLiteral("color"), QStringLiteral("%1%2")
                                  .arg(kml_color_sequencer.color.opacity, 2, 16, QChar('0')).arg(kml_color_sequencer.color.bbggrr, 6, 16, QChar('0')));
-        writer->writeTextElement(QStringLiteral("width"), opt_line_width);
+        writer->writeTextElement(QStringLiteral("width"), static_cast<const char*>(opt_line_width));
       } else {
         if (header->line_color.bbggrr >= 0) {
           writer->writeTextElement(QStringLiteral("color"), QStringLiteral("%1%2")
@@ -1455,7 +1455,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
   kml_output_timestamp(waypointp);
 
   // Icon - but only if it looks like a URL.
-  icon = opt_deficon ? opt_deficon : waypointp->icon_descr;
+  icon = opt_deficon ? static_cast<const char*>(opt_deficon) : waypointp->icon_descr;
   if (icon.contains("://")) {
     writer->writeStartElement(QStringLiteral("Style"));
     writer->writeStartElement(QStringLiteral("IconStyle"));

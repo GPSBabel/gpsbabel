@@ -992,7 +992,7 @@ SkytraqBase::skytraq_read_tracks() const
   // m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
   if (opt_dump_file) {
-    dumpfile = gbfopen(opt_dump_file, "w", MYNAME);
+    dumpfile = gbfopen(static_cast<const char*>(opt_dump_file), "w", MYNAME);
   }
 
   db(1, MYNAME ": Reading log data from device...\n");
@@ -1164,7 +1164,7 @@ SkytraqBase::skytraq_set_location() const
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   uint8_t MSG_GET_LOCATION = 0x35;
 
-  db(3, MYNAME ": set_location='%s'\n", opt_set_location);
+  db(3, MYNAME ": set_location='%s'\n", static_cast<const char*>(opt_set_location));
 
   sscanf(opt_set_location, "%lf:%lf", &lat, &lng);
   le_write_double(&MSG_SET_LOCATION[1], lat);

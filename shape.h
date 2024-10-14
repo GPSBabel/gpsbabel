@@ -86,8 +86,8 @@ private:
   QString ofname;
   int nameFieldIdx{};	// the field index of the field with fieldName "name" in the output DBF.
 
-  char* opt_name = nullptr;
-  char* opt_url = nullptr;
+  OptionCString opt_name;
+  OptionCString opt_url;
 
   QVector<arglist_t> shp_args = {
     {

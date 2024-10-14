@@ -48,21 +48,21 @@ private:
 
   /* Data Members */
 
-  char* hdopopt = nullptr;
-  char* vdopopt = nullptr;
-  char* andopt = nullptr;
-  char* satopt = nullptr;
-  char* fixnoneopt = nullptr;
-  char* fixunknownopt = nullptr;
-  char* eleminopt = nullptr;
-  char* elemaxopt = nullptr;
-  char* nameopt = nullptr;
+  OptionCString hdopopt;
+  OptionCString vdopopt;
+  OptionCString andopt;
+  OptionCString satopt;
+  OptionCString fixnoneopt;
+  OptionCString fixunknownopt;
+  OptionCString eleminopt;
+  OptionCString elemaxopt;
+  OptionCString nameopt;
   QRegularExpression name_regex;
-  char* descopt = nullptr;
+  OptionCString descopt;
   QRegularExpression desc_regex;
-  char* cmtopt = nullptr;
+  OptionCString cmtopt;
   QRegularExpression cmt_regex;
-  char* iconopt = nullptr;
+  OptionCString iconopt;
   QRegularExpression icon_regex;
 
   double hdopf{};

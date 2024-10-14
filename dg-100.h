@@ -141,8 +141,8 @@ protected:
 
   /* GPSBabel integration */
 
-  char* erase{nullptr};
-  char* erase_only{nullptr};
+  OptionCString erase;
+  OptionCString erase_only;
 
   QVector<arglist_t> dg100_args = {
     {

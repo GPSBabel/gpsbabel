@@ -67,11 +67,11 @@ private:
 
   int waypoint_number{};
 
-  char* stylesheet = nullptr;
-  char* html_encrypt = nullptr;
-  char* includelogs = nullptr;
-  char* degformat = nullptr;
-  char* altunits = nullptr;
+  OptionCString stylesheet;
+  OptionCString html_encrypt;
+  OptionCString includelogs;
+  OptionCString degformat;
+  OptionCString altunits;
 
   QVector<arglist_t> html_args = {
     {

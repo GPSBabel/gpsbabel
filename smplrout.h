@@ -118,11 +118,11 @@ private:
   limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
 
-  char* countopt = nullptr;
-  char* erroropt = nullptr;
-  char* xteopt = nullptr;
-  char* lenopt = nullptr;
-  char* relopt = nullptr;
+  OptionCString countopt;
+  OptionCString erroropt;
+  OptionCString xteopt;
+  OptionCString lenopt;
+  OptionCString relopt;
 
   QVector<arglist_t> args = {
     {

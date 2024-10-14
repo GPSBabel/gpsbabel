@@ -54,13 +54,13 @@ private:
   /* Data Members */
 
   double pos_dist{};
-  char* distopt = nullptr;
-  char* latopt = nullptr;
-  char* lonopt = nullptr;
-  char* exclopt = nullptr;
-  char* nosort = nullptr;
-  char* maxctarg = nullptr;
-  char* routename = nullptr;
+  OptionCString distopt;
+  OptionCString latopt;
+  OptionCString lonopt;
+  OptionCString exclopt;
+  OptionCString nosort;
+  OptionCString maxctarg;
+  OptionCString routename;
   int maxct{};
 
   Waypoint* home_pos{};

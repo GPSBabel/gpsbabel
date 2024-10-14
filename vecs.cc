@@ -509,7 +509,7 @@ void Vecs::init_vec(Format* fmt)
     for (auto& arg : *args) {
       arg.argvalptr = nullptr;
       if (arg.argval) {
-        *arg.argval = nullptr;
+        arg.argval->reset();
       }
     }
   }
@@ -592,7 +592,8 @@ void Vecs::free_options(QVector<arglist_t>* args)
     for (auto& arg : *args) {
       if (arg.argvalptr) {
         xfree(arg.argvalptr);
-        *arg.argval = arg.argvalptr = nullptr;
+        arg.argvalptr = nullptr;
+        arg.argval->reset();
       }
     }
   }
@@ -626,7 +627,7 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
     arg->argvalptr = nullptr;
   }
   if (arg->argval) {
-    *arg->argval = nullptr;
+    arg->argval->reset();
   }
 
   if (val.isNull()) {
@@ -685,17 +686,18 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
       rval.startsWith('0') && (arg->defaultvalue == nullptr)) {
     return;
   }
-  *arg->argval = arg->argvalptr = xstrdup(CSTR(rval));
+  arg->argvalptr = xstrdup(CSTR(rval));
+  arg->argval->set(arg->argvalptr);
 }
 
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
 {
   if (args) {
     for (const auto& arg : *args) {
-      if (arg.argval && *arg.argval) {
+      if (!arg.argval->isEmpty()) {
         printf("options: module/option=value: %s/%s=\"%s\"",
-               qPrintable(vecname), qPrintable(arg.argstring), *arg.argval);
-        if (case_ignore_strcmp(arg.defaultvalue, *arg.argval) == 0) {
+               qPrintable(vecname), qPrintable(arg.argstring), arg.argval->printable());
+        if (case_ignore_strcmp(arg.defaultvalue, arg.argval->printable()) == 0) {
           printf(" (=default)");
         }
         printf("\n");

@@ -149,7 +149,7 @@ void GeoFormat::geo_waypt_pr(const Waypoint* waypointp, QXmlStreamWriter& writer
   writer.writeAttribute(QStringLiteral("lon"), QString::number(waypointp->longitude, 'f'));
   writer.writeEndElement();
 
-  writer.writeTextElement(QStringLiteral("type"), deficon ? deficon : waypointp->icon_descr);
+  writer.writeTextElement(QStringLiteral("type"), deficon ? static_cast<const char*>(deficon) : waypointp->icon_descr);
 
   if (waypointp->HasUrlLink()) {
     writer.writeStartElement(QStringLiteral("link"));

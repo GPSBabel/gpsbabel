@@ -27,6 +27,7 @@
 
 #include "defs.h"    // for route_head (ptr only), ARGTYPE_FLOAT, ARG_NOMINMAX
 #include "filter.h"  // for Filter
+#include "option.h"
 
 #if FILTERS_ENABLED
 
@@ -42,8 +43,8 @@ public:
   void deinit() override;
 
 private:
-  char* distopt = nullptr;
-  char* minangleopt = nullptr;
+  OptionCString distopt;
+  OptionCString minangleopt;
 
   double maxDist{};
   double minAngle{};

@@ -55,8 +55,8 @@ private:
 
   /* Data Members */
 
-  char* polyfileopt = nullptr;
-  char* exclopt = nullptr;
+  OptionCString polyfileopt;
+  OptionCString exclopt;
 
   QVector<arglist_t> args = {
     {

@@ -158,7 +158,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_waypts);
+      fatal(MYNAME ": Invalid option value (%s)!\n", static_cast<const char*>(opt_waypts));
     }
   }
   if (opt_routes != nullptr) {
@@ -177,7 +177,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_routes);
+      fatal(MYNAME ": Invalid option value (%s)!\n", static_cast<const char*>(opt_routes));
     }
   }
   if (opt_tracks != nullptr) {
@@ -196,7 +196,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_tracks);
+      fatal(MYNAME ": Invalid option value (%s)!\n", static_cast<const char*>(opt_tracks));
     }
   }
 }

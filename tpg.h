@@ -72,7 +72,7 @@ private:
   gbfile* tpg_file_in{};
   gbfile* tpg_file_out{};
   MakeShort* mkshort_handle{};
-  char* tpg_datum_opt{};
+  OptionCString tpg_datum_opt;
   int tpg_datum_idx{};
 
   int waypt_out_count{};

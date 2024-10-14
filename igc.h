@@ -138,18 +138,18 @@ private:
     rec_bad = 1,		// Bad record
   };
 
-  char* opt_enl{nullptr};
-  char* opt_tas{nullptr};
-  char* opt_vat{nullptr};
-  char* opt_oat{nullptr};
-  char* opt_trt{nullptr};
-  char* opt_gsp{nullptr};
-  char* opt_fxa{nullptr};
-  char* opt_siu{nullptr};
-  char* opt_acz{nullptr};
-  char* opt_gfo{nullptr};
+  OptionCString opt_enl;
+  OptionCString opt_tas;
+  OptionCString opt_vat;
+  OptionCString opt_oat;
+  OptionCString opt_trt;
+  OptionCString opt_gsp;
+  OptionCString opt_fxa;
+  OptionCString opt_siu;
+  OptionCString opt_acz;
+  OptionCString opt_gfo;
 
-  const QHash<igc_ext_type_t, char**> ext_option_map = {
+  const QHash<igc_ext_type_t, OptionCString*> ext_option_map = {
     {igc_ext_type_t::ext_rec_enl, &opt_enl},
     {igc_ext_type_t::ext_rec_tas, &opt_tas},
     {igc_ext_type_t::ext_rec_vat, &opt_vat},
@@ -292,7 +292,7 @@ private:
   gbfile* file_out{};
   char manufacturer[4] {};
   const route_head* head{};
-  char* timeadj = nullptr;
+  OptionCString timeadj;
 
   QVector<arglist_t> igc_args = {
     {

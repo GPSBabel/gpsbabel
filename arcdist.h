@@ -58,13 +58,13 @@ private:
   /* Data Members */
 
   double pos_dist{};
-  char* distopt = nullptr;
-  char* arcfileopt = nullptr;
-  char* rteopt = nullptr;
-  char* trkopt = nullptr;
-  char* exclopt = nullptr;
-  char* ptsopt = nullptr;
-  char* projectopt = nullptr;
+  OptionCString distopt;
+  OptionCString arcfileopt;
+  OptionCString rteopt;
+  OptionCString trkopt;
+  OptionCString exclopt;
+  OptionCString ptsopt;
+  OptionCString projectopt;
 
   QVector<arglist_t> args = {
     {
