@@ -193,29 +193,22 @@ private:
   QHash<const route_head*, track_trait_t> kml_track_traits_hash;
 
   // options
-  OptionCString opt_deficon{nullptr};
-  OptionCString opt_export_lines{nullptr};
-  OptionCString opt_export_points{nullptr};
-  OptionCString opt_export_track{nullptr};
-  OptionCString opt_line_width{nullptr};
-  OptionCString opt_line_color{nullptr};
-  OptionCString opt_floating{nullptr};
-  OptionCString opt_extrude{nullptr};
-  OptionCString opt_trackdata{nullptr};
-  OptionCString opt_trackdirection{nullptr};
-  OptionCString opt_units{nullptr};
-  OptionCString opt_labels{nullptr};
-  OptionCString opt_max_position_points{nullptr};
-  OptionCString opt_rotate_colors{nullptr};
-  OptionCString opt_precision{nullptr};
+  OptionCString opt_deficon;
+  OptionBool opt_export_lines;
+  OptionBool opt_export_points;
+  OptionBool opt_export_track;
+  OptionCString opt_line_width;
+  OptionCString opt_line_color;
+  OptionBool opt_floating;
+  OptionBool opt_extrude;
+  OptionBool opt_trackdata;
+  OptionBool opt_trackdirection;
+  OptionCString opt_units;
+  OptionBool opt_labels;
+  OptionCString opt_max_position_points;
+  OptionCString opt_rotate_colors;
+  OptionCString opt_precision;
 
-  bool export_lines{};
-  bool export_points{};
-  bool export_track{};
-  bool floating{};
-  bool extrude{};
-  bool trackdata{};
-  bool trackdirection{};
   int max_position_points{};
   bool rotate_colors{};
   int line_width{};

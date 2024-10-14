@@ -254,9 +254,9 @@ private:
   QXmlStreamReader* reader{};
   XmlTag* cur_tag{};
   QString cdatastr;
-  OptionCString opt_logpoint;
-  OptionCString opt_humminbirdext;
-  OptionCString opt_garminext;
+  OptionBool opt_logpoint;
+  OptionBool opt_humminbirdext;
+  OptionBool opt_garminext;
   OptionCString opt_elevation_precision;
   int logpoint_ct = 0;
   int elevation_precision{};
@@ -285,7 +285,7 @@ private:
 
 
   OptionCString snlen;
-  OptionCString suppresswhite;
+  OptionBool suppresswhite;
   OptionCString urlbase;
   route_head* trk_head{};
   route_head* rte_head{};
