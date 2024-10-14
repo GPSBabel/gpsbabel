@@ -98,7 +98,7 @@ public:
   option_t type() const override { return type_cstring; }
   bool has_value() const override { return data != nullptr; }
   void reset() override { data = nullptr; }
-  bool isEmpty() const override { return ((data != nullptr) && (*data != '\0')); }
+  bool isEmpty() const override { return ((data == nullptr) || (*data == '\0')); }
   const char* printable() const override { return data; }
   void set(const char* c) override { data = c;}
 
@@ -119,7 +119,7 @@ public:
   option_t type() const override { return type_cstring; }
   bool has_value() const override { return data != nullptr; }
   void reset() override { data = nullptr; }
-  bool isEmpty() const override { return ((data != nullptr) && (*data != '\0')); }
+  bool isEmpty() const override { return ((data == nullptr) || (*data == '\0')); }
   const char* printable() const override { return data; }
   void set(const char* c) override { data = c;}
 
