@@ -205,7 +205,8 @@ GarminFormat::rw_init(const QString& fname)
     case 786: /* HC model */
     case 957: /* Legend HC */
       receiver_short_length = 14;
-      snwhiteopt = xstrdup("1");
+#warning "check me"
+      snwhiteopt.set(xstrdup("1"));
       receiver_must_upper = false;
       /* This might be 8859-1 */
       receiver_charset = "windows-1252";

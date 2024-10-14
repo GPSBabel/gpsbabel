@@ -106,4 +106,24 @@ private:
   const char* data{nullptr};
 };
 
+class OptionBool : public Option
+{
+public:
+  /* Special Member Functions */
+  OptionBool() = default;
+
+  explicit(false) OptionBool(const char* c) : data(c) {}
+  
+  explicit(false) operator const bool() const { return ((data != nullptr) && (*data != '0')); }
+
+  option_t type() const override { return type_cstring; }
+  bool has_value() const override { return data != nullptr; }
+  void reset() override { data = nullptr; }
+  bool isEmpty() const override { return ((data != nullptr) && (*data != '\0')); }
+  const char* printable() const override { return data; }
+  void set(const char* c) override { data = c;}
+
+private:
+  const char* data{nullptr};
+};
 #endif // OPTION_H_INCLUDED_

@@ -157,7 +157,8 @@ sentence is truncated - and missing part of the line, including the checksum.
 */
 
 #define MYNAME "nmea"
-#define CHECK_BOOL(a) if ((a) && (*(a) == '0')) (a) = NULL
+#warning "fix me"
+#define CHECK_BOOL(a)
 
 /*
  * Slightly different than the Magellan checksum fn.
@@ -306,9 +307,10 @@ NmeaFormat::wr_init(const QString& fname)
   mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
 
   if (opt_gisteq) {
-    opt_gpgga = nullptr;
-    opt_gpvtg = nullptr;
-    opt_gpgsa = nullptr;
+#warning "fix me"
+    opt_gpgga.reset();
+    opt_gpvtg.reset();
+    opt_gpgsa.reset();
   }
 }
 

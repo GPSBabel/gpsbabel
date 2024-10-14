@@ -1431,7 +1431,8 @@ int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const char* opt_poi) con
 void
 MinihomerFormat::rd_init(const QString& fname)
 {
-  opt_set_location=nullptr;	// otherwise it will lead to bus error
+#warning "check me"
+  opt_set_location.reset();	// otherwise it will lead to bus error
   skytraq_rd_init(fname);	// sets global var serial_handle
   mhport=fname;
 }

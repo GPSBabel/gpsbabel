@@ -135,17 +135,17 @@ private:
   int without_date{};	/* number of created trackpoints without a valid date */
   QDate opt_tm;	/* converted "date" parameter */
 
-  OptionCString opt_gprmc;
-  OptionCString opt_gpgga;
-  OptionCString opt_gpvtg;
-  OptionCString opt_gpgsa;
+  OptionBool opt_gprmc;
+  OptionBool opt_gpgga;
+  OptionBool opt_gpvtg;
+  OptionBool opt_gpgsa;
   OptionCString snlenopt;
   OptionCString optdate;
   OptionCString getposnarg;
   OptionCString opt_sleep;
   OptionCString opt_baud;
   OptionCString opt_append;
-  OptionCString opt_gisteq;
+  OptionBool opt_gisteq;
   OptionCString opt_ignorefix;
 
   long sleepms{};
