@@ -85,7 +85,7 @@ public:
 
   explicit(false) OptionBool(const QString& s) : value_(s) {}
   
-  explicit(false) operator const bool() const { return (!value_.isNull() && (value_ != '0')); }
+  explicit(false) operator bool() const { return (!value_.isNull() && (value_ != '0')); }
 
   option_t type() const override { return type_cstring; }
   bool has_value() const override { return !value_.isNull(); }
