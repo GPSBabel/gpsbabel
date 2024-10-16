@@ -65,8 +65,6 @@ public:
   /* Special Member Functions */
   OptionCString() = default;
 
-  explicit(false) OptionCString(const QString& s) : value_(s), valueb_(s.toUtf8()) {}
-  
   explicit(false) operator const char*() const { return value_.isNull()? nullptr : valueb_.constData(); }
 
   option_t type() const override { return type_cstring; }
@@ -88,8 +86,6 @@ public:
   /* Special Member Functions */
   OptionBool() = default;
 
-  explicit(false) OptionBool(const QString& s) : value_(s) {}
-  
   /* traditionally bool options without default are considered to be false. */
   explicit(false) operator bool() const { return (!value_.isNull() && (value_ != '0')); }
 
