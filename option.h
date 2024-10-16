@@ -51,7 +51,7 @@ public:
   virtual bool has_value() const = 0;
   virtual void reset() = 0;
   virtual bool isEmpty() const = 0;
-  virtual const QString& value() const = 0;
+  virtual const QString& get() const = 0;
   virtual void set(const QString& s) = 0;
 };
 
@@ -69,7 +69,7 @@ public:
   bool has_value() const override { return !value_.isNull(); }
   void reset() override { value_ = QString(); valueb_ = QByteArray(); }
   bool isEmpty() const override { return value_.isEmpty(); }
-  const QString& value() const override { return value_; }
+  const QString& get() const override { return value_; }
   void set(const QString& s) override { value_ = s; valueb_ = s.toUtf8(); }
 
 private:
@@ -91,7 +91,7 @@ public:
   bool has_value() const override { return !value_.isNull(); }
   void reset() override { value_ = QString(); }
   bool isEmpty() const override { return value_.isEmpty(); }
-  const QString& value() const override { return value_; }
+  const QString& get() const override { return value_; }
   void set(const QString& s) override { value_ = s;}
 
 private:
