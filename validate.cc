@@ -60,8 +60,8 @@ void ValidateFilter::process()
   RteHdFunctor<ValidateFilter> validate_head_f(this, &ValidateFilter::validate_head);
   RteHdFunctor<ValidateFilter> validate_head_trl_f(this, &ValidateFilter::validate_head_trl);
 
-  debug = *opt_debug == '1';
-  checkempty = *opt_checkempty == '1';
+  debug = opt_debug;
+  checkempty = opt_checkempty;
 
   point_ct = 0;
   if (debug) {

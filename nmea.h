@@ -141,7 +141,7 @@ private:
   OptionBool opt_gpgsa;
   OptionCString snlenopt;
   OptionCString optdate;
-  OptionCString getposnarg;
+  OptionBool getposnarg;
   OptionCString opt_sleep;
   OptionCString opt_baud;
   OptionBool opt_append;

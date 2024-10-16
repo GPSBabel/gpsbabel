@@ -68,8 +68,8 @@ private:
   int waypoint_number{};
 
   OptionCString stylesheet;
-  OptionCString html_encrypt;
-  OptionCString includelogs;
+  OptionBool html_encrypt;
+  OptionBool includelogs;
   OptionCString degformat;
   OptionCString altunits;
 

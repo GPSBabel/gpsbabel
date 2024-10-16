@@ -1041,7 +1041,7 @@ SkytraqBase::skytraq_read_tracks() const
       gbfwrite(buffer, SECTOR_SIZE, got_sectors, dumpfile);
     }
 
-    if (*opt_no_output == '1') {
+    if (opt_no_output) {
       continue;		// skip decoding
     }
 
@@ -1223,12 +1223,12 @@ SkytraqBase::skytraq_read() const
     skytraq_set_baud(dlbaud);
   }
 
-  // read device unless no-output=1 and dump-file=0 (i.e. no data needed at all)
-  if (*opt_no_output == '0'  ||  opt_dump_file != nullptr) {
+  // read device unless no-output=true and dump-file=0 (i.e. no data needed at all)
+  if (!opt_no_output ||  opt_dump_file != nullptr) {
     skytraq_read_tracks();
   }
 
-  if (*opt_erase == '1') {
+  if (opt_erase) {
     skytraq_erase();
   }
 

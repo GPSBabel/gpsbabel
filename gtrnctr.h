@@ -133,7 +133,7 @@ private:
   double gtc_end_long{};
 
   OptionCString opt_sport;
-  OptionCString opt_course;
+  OptionBool opt_course;
 
   QVector<arglist_t> gtc_args = {
     {

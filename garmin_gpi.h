@@ -308,13 +308,13 @@ private:
   /* Data Members */
 
   OptionCString opt_cat;
-  OptionCString opt_pos;
-  OptionCString opt_notes;
-  OptionCString opt_hide_bitmap;
-  OptionCString opt_descr;
+  OptionBool opt_pos;
+  OptionBool opt_notes;
+  OptionBool opt_hide_bitmap;
+  OptionBool opt_descr;
   OptionCString opt_bitmap;
-  OptionCString opt_unique;
-  OptionCString opt_alerts;
+  OptionBool opt_unique;
+  OptionBool opt_alerts;
   OptionCString opt_units;
   OptionCString opt_speed;
   OptionCString opt_proximity;

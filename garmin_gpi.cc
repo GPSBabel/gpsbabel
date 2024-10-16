@@ -1044,7 +1044,7 @@ GarminGPIFormat::enum_waypt_cb(const Waypoint* ref) const
 
   auto* wpt = new Waypoint(*ref);
 
-  if (*opt_unique == '1') {
+  if (opt_unique) {
     wpt->shortname = short_h->mkshort(wpt->shortname);
   }
 

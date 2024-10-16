@@ -917,7 +917,7 @@ LowranceusrFormat::lowranceusr_parse_icons() const
     double longitude   = lon_mm_to_deg(gbfgetint32(file_in));
     int    icon_number = gbfgetint32(file_in);
 
-    if (opt_ignoreicons == nullptr) {          /* Option not specified if NULL */
+    if (!opt_ignoreicons) {
       auto* wpt_tmp = new Waypoint;
 
       /* position coord lat & long */

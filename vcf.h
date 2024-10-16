@@ -66,7 +66,7 @@ private:
 
   gbfile* file_out{};
 
-  OptionCString vcf_encrypt;
+  OptionBool vcf_encrypt;
 
   QVector<arglist_t> vcf_args = {
     {

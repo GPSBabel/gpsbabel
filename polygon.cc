@@ -305,7 +305,7 @@ void PolygonFilter::process()
       if (ed->override) {
         ed->state = INSIDE;
       }
-      if (((ed->state & INSIDE) == OUTSIDE) == (exclopt == nullptr)) {
+      if (((ed->state & INSIDE) == OUTSIDE) == !exclopt) {
         wp->wpt_flags.marked_for_deletion = 1;
       }
       delete ed;

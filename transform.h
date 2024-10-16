@@ -48,10 +48,10 @@ private:
   OptionCString opt_routes;
   OptionCString opt_tracks;
   OptionCString opt_waypts;
-  OptionCString opt_delete;
+  OptionBool opt_delete;
   OptionCString rpt_name_digits;
-  OptionCString opt_rpt_name;
-  OptionCString opt_timeless;
+  OptionBool opt_rpt_name;
+  OptionBool opt_timeless;
   bool timeless{};
   bool use_src_name{};
   QString current_namepart;

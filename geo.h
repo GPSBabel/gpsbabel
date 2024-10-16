@@ -68,8 +68,7 @@ private:
   /* Data Members */
 
   OptionCString deficon;
-  OptionCString nuke_placer;
-  OptionCString test{"this"};
+  OptionBool nuke_placer;
 
   QVector<arglist_t> geo_args = {
     {"deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },

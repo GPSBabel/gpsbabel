@@ -118,12 +118,12 @@ private:
   GPS_PTrack* tx_tracklist{};
   GPS_PTrack* cur_tx_tracklist_entry{};
   int my_track_count = 0;
-  OptionCString getposn;
-  OptionCString poweroff;
-  OptionCString eraset;
-  OptionCString resettime;
+  OptionBool getposn;
+  OptionBool poweroff;
+  OptionBool eraset;
+  OptionBool resettime;
   OptionCString snlen;
-  OptionCString snwhiteopt;
+  OptionBool snwhiteopt;
   OptionCString deficon;
   OptionCString category;
   OptionCString categorybitsopt;

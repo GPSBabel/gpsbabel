@@ -263,8 +263,8 @@ GarminFormat::rw_init(const QString& fname)
     mkshort_handle->set_length(receiver_short_length);
   }
 
-  if (snwhiteopt) {
-    mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+  if (snwhiteopt.has_value()) {
+    mkshort_handle->set_whitespace_ok(snwhiteopt);
   }
 
   /*

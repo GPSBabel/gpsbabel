@@ -79,16 +79,16 @@ private:
   SortModeRteHd rte_sort_mode{SortModeRteHd::none};	/* How are we sorting these? */
   SortModeRteHd trk_sort_mode{SortModeRteHd::none};	/* How are we sorting these? */
 
-  OptionCString opt_sm_gcid;
-  OptionCString opt_sm_shortname;
-  OptionCString opt_sm_description;
-  OptionCString opt_sm_time;
-  OptionCString opt_sm_rtenum;
-  OptionCString opt_sm_rtename;
-  OptionCString opt_sm_rtedesc;
-  OptionCString opt_sm_trknum;
-  OptionCString opt_sm_trkname;
-  OptionCString opt_sm_trkdesc;
+  OptionBool opt_sm_gcid;
+  OptionBool opt_sm_shortname;
+  OptionBool opt_sm_description;
+  OptionBool opt_sm_time;
+  OptionBool opt_sm_rtenum;
+  OptionBool opt_sm_rtename;
+  OptionBool opt_sm_rtedesc;
+  OptionBool opt_sm_trknum;
+  OptionBool opt_sm_trkname;
+  OptionBool opt_sm_trkdesc;
 
   QVector<arglist_t> args = {
     {

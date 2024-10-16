@@ -444,9 +444,9 @@ private:
   int            route_uid{};
   int            trail_uid{};
 
-  OptionCString  opt_ignoreicons;
-  OptionCString  opt_writeasicons;
-  OptionCString  opt_seg_break;
+  OptionBool  opt_ignoreicons;
+  OptionBool  opt_writeasicons;
+  OptionBool  opt_seg_break;
   OptionCString  opt_wversion;
   OptionCString  opt_title;
   OptionCString  opt_content_descr;
@@ -460,7 +460,7 @@ private:
   int            trail_point_count{};
   bool           merge_new_track{false};
   short          num_section_points{};
-  OptionCString  merge;
+  OptionBool  merge;
   int            reading_version{};
   int            rstream_version{};
   int            writing_version{};

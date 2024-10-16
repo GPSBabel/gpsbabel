@@ -162,10 +162,10 @@ private:
 
   OptionCString gdb_opt_category;
   OptionCString gdb_opt_ver;
-  OptionCString gdb_opt_via;
-  OptionCString gdb_opt_roadbook;
+  OptionBool gdb_opt_via;
+  OptionBool gdb_opt_roadbook;
   OptionCString gdb_opt_bitcategory;
-  OptionCString gdb_opt_drop_hidden_wpt;
+  OptionBool gdb_opt_drop_hidden_wpt;
 
   int waypt_flag{};
   int route_flag{};

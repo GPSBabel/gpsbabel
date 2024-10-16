@@ -1502,7 +1502,7 @@ ExifFormat::wr_deinit()
   gbfclose(fout_);
 
   if (exif_success) {
-    if (*opt_overwrite == '1') {
+    if (opt_overwrite) {
       QFile::remove(exif_fout_name);
       QFile::rename(tmpname, exif_fout_name);
     }

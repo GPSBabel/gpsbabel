@@ -138,18 +138,18 @@ private:
     rec_bad = 1,		// Bad record
   };
 
-  OptionCString opt_enl;
-  OptionCString opt_tas;
-  OptionCString opt_vat;
-  OptionCString opt_oat;
-  OptionCString opt_trt;
-  OptionCString opt_gsp;
-  OptionCString opt_fxa;
-  OptionCString opt_siu;
-  OptionCString opt_acz;
-  OptionCString opt_gfo;
+  OptionBool opt_enl;
+  OptionBool opt_tas;
+  OptionBool opt_vat;
+  OptionBool opt_oat;
+  OptionBool opt_trt;
+  OptionBool opt_gsp;
+  OptionBool opt_fxa;
+  OptionBool opt_siu;
+  OptionBool opt_acz;
+  OptionBool opt_gfo;
 
-  const QHash<igc_ext_type_t, OptionCString*> ext_option_map = {
+  const QHash<igc_ext_type_t, OptionBool*> ext_option_map = {
     {igc_ext_type_t::ext_rec_enl, &opt_enl},
     {igc_ext_type_t::ext_rec_tas, &opt_tas},
     {igc_ext_type_t::ext_rec_vat, &opt_vat},

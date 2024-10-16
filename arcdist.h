@@ -60,11 +60,11 @@ private:
   double pos_dist{};
   OptionCString distopt;
   OptionCString arcfileopt;
-  OptionCString rteopt;
-  OptionCString trkopt;
-  OptionCString exclopt;
-  OptionCString ptsopt;
-  OptionCString projectopt;
+  OptionBool rteopt;
+  OptionBool trkopt;
+  OptionBool exclopt;
+  OptionBool ptsopt;
+  OptionBool projectopt;
 
   QVector<arglist_t> args = {
     {

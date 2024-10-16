@@ -209,6 +209,13 @@ private:
   OptionCString opt_rotate_colors;
   OptionCString opt_precision;
 
+  bool export_lines{};
+  bool export_points{};
+  bool export_track{};
+  bool floating{};
+  bool extrude{};
+  bool trackdata{};
+  bool trackdirection{};
   int max_position_points{};
   bool rotate_colors{};
   int line_width{};

@@ -607,7 +607,7 @@ void KmlFormat::kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& data)
  */
 void KmlFormat::kml_output_trkdescription(const route_head* header, const computed_trkdata* td) const
 {
-  if (!td || !opt_trackdata) {
+  if (!td || !trackdata) {
     return;
   }
 
@@ -699,7 +699,7 @@ void KmlFormat::kml_output_header(const route_head* header, const computed_trkda
   writer->writeOptionalTextElement(QStringLiteral("name"), header->rte_name);
   kml_output_trkdescription(header, td);
 
-  if (opt_export_points && !header->rte_waypt_empty()) {
+  if (export_points && !header->rte_waypt_empty()) {
     // Put the points in a subfolder
     writer->writeStartElement(QStringLiteral("Folder"));
     writer->writeTextElement(QStringLiteral("name"), QStringLiteral("Points"));
@@ -750,7 +750,7 @@ void KmlFormat::kml_output_lookat(const Waypoint* waypointp) const
 void KmlFormat::kml_output_positioning(bool tessellate) const
 {
   // These elements must be output as a sequence, i.e. in order.
-  if (opt_extrude) {
+  if (extrude) {
     writer->writeTextElement(QStringLiteral("extrude"), QStringLiteral("1"));
   }
 
@@ -758,7 +758,7 @@ void KmlFormat::kml_output_positioning(bool tessellate) const
     writer->writeTextElement(QStringLiteral("tessellate"), QStringLiteral("1"));
   }
 
-  if (opt_floating) {
+  if (floating) {
     writer->writeTextElement(QStringLiteral("altitudeMode"), QStringLiteral("absolute"));
   }
 
@@ -767,7 +767,7 @@ void KmlFormat::kml_output_positioning(bool tessellate) const
 /* Output something interesting when we can for route and trackpoints */
 void KmlFormat::kml_output_description(const Waypoint* pt) const
 {
-  if (!opt_trackdata) {
+  if (!trackdata) {
     return;
   }
 
@@ -870,7 +870,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
     break;
   }
 
-  if (opt_export_points) {
+  if (export_points) {
     writer->writeStartElement(QStringLiteral("Placemark"));
     if (opt_labels) {
       writer->writeOptionalTextElement(QStringLiteral("name"), waypointp->shortname);
@@ -890,7 +890,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
       writer->writeEndElement(); // Close IconStyle tag
       writer->writeEndElement(); // Close Style tag
     } else {
-      if (opt_trackdirection && (pt_type == kmlpt_track)) {
+      if (trackdirection && (pt_type == kmlpt_track)) {
         QString value;
         if (!waypointp->speed_has_value() || !waypointp->course_has_value() ||
             (waypointp->speed_value() < 1.0f)) {
@@ -917,12 +917,12 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
 void KmlFormat::kml_output_tailer(const route_head* header)
 {
 
-  if (opt_export_points && !header->rte_waypt_empty()) {
+  if (export_points && !header->rte_waypt_empty()) {
     writer->writeEndElement(); // Close Folder tag
   }
 
   // Add a linestring for this track?
-  if (opt_export_lines && !header->rte_waypt_empty()) {
+  if (export_lines && !header->rte_waypt_empty()) {
     bool needs_multigeometry = false;
 
     foreach (const Waypoint* tpt, header->waypoint_list) {
@@ -1484,7 +1484,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
 void KmlFormat::kml_track_hdr(const route_head* header) const
 {
   computed_trkdata td = track_recompute(header);
-  if (!header->rte_waypt_empty() && (opt_export_lines || opt_export_points)) {
+  if (!header->rte_waypt_empty() && (export_lines || export_points)) {
     kml_output_header(header, &td);
   }
 }
@@ -1496,7 +1496,7 @@ void KmlFormat::kml_track_disp(const Waypoint* waypointp) const
 
 void KmlFormat::kml_track_tlr(const route_head* header)
 {
-  if (!header->rte_waypt_empty() && (opt_export_lines || opt_export_points)) {
+  if (!header->rte_waypt_empty() && (export_lines || export_points)) {
     kml_output_tailer(header);
   }
 }
@@ -1844,7 +1844,14 @@ void KmlFormat::kml_mt_array_schema(const QString& field_name, const QString& di
 void KmlFormat::write()
 {
   // Parse options
+  export_lines = opt_export_lines;
+  export_points = opt_export_points;
+  export_track = opt_export_track;
+  floating = opt_floating;
+  extrude = opt_extrude;
   rotate_colors = (!! opt_rotate_colors);
+  trackdata = opt_trackdata;
+  trackdirection = opt_trackdirection;
   line_width = xstrtoi(opt_line_width, nullptr, 10);
   precision = xstrtoi(opt_precision, nullptr, 10);
 
@@ -1877,7 +1884,7 @@ void KmlFormat::write()
   }
 
   if (track_waypt_count()) {
-    if (opt_trackdirection) {
+    if (trackdirection) {
       kml_write_bitmap_style(kmlpt_other, ICON_TRK, "track-none");
       for (int i = 0; i < 16; ++i) {
         kml_write_bitmap_style(kmlpt_other, QStringLiteral(ICON_DIR).arg(i), QStringLiteral("track-%1").arg(i));
@@ -1885,7 +1892,7 @@ void KmlFormat::write()
     } else {
       kml_write_bitmap_style(kmlpt_track, ICON_TRK, nullptr);
     }
-    if (opt_export_track)
+    if (export_track)
       kml_write_bitmap_style(kmlpt_multitrack, ICON_MULTI_TRK,
                              "track-none");
   }
@@ -1909,7 +1916,7 @@ void KmlFormat::write()
     kml_gc_make_balloonstyle();
   }
 
-  if (opt_export_track) {
+  if (export_track) {
     kml_track_traits.reset();
     kml_track_traits_hash.clear();
     auto kml_accumulate_track_traits_lambda = [this](const route_head* rte)->void {
@@ -1954,7 +1961,7 @@ void KmlFormat::write()
     }
 
     kml_init_color_sequencer(track_count());
-    if (opt_export_track) {
+    if (export_track) {
       auto kml_mt_hdr_lambda = [this](const route_head* rte)->void {
         kml_mt_hdr(rte);
       };

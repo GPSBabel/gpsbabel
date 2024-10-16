@@ -201,8 +201,8 @@ private:
   OptionCString opt_datum;
   OptionCString opt_grid;
   OptionCString opt_utc;
-  OptionCString opt_filename;
-  OptionCString opt_format;
+  OptionBool opt_filename;
+  OptionBool opt_format;
   OptionCString opt_prec;
   OptionCString opt_fields;
   OptionCString opt_codec;

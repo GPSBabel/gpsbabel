@@ -50,10 +50,10 @@ private:
 
   OptionCString hdopopt;
   OptionCString vdopopt;
-  OptionCString andopt;
+  OptionBool andopt;
   OptionCString satopt;
-  OptionCString fixnoneopt;
-  OptionCString fixunknownopt;
+  OptionBool fixnoneopt;
+  OptionBool fixunknownopt;
   OptionCString eleminopt;
   OptionCString elemaxopt;
   OptionCString nameopt;

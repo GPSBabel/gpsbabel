@@ -56,7 +56,7 @@ private:
   /* Data Members */
 
   OptionCString polyfileopt;
-  OptionCString exclopt;
+  OptionBool exclopt;
 
   QVector<arglist_t> args = {
     {

@@ -157,7 +157,7 @@ void ArcDistanceFilter::process()
     if (wp->extra_data) {
       auto* ed = (extra_data*) wp->extra_data;
       wp->extra_data = nullptr;
-      if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
+      if ((ed->distance >= pos_dist) == !exclopt) {
         wp->wpt_flags.marked_for_deletion = 1;
         removed++;
       } else if (projectopt) {

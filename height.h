@@ -45,7 +45,7 @@ public:
 
 private:
   OptionCString addopt;
-  OptionCString wgs84tomslopt;
+  OptionBool wgs84tomslopt;
   double addf{};
   // include static constexpr data member definitions with intializers for grid as private members.
   #include "heightgrid.h"

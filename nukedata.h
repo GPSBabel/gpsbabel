@@ -40,9 +40,9 @@ public:
   void process() override;
 
 private:
-  OptionCString nukewpts;
-  OptionCString nuketrks;
-  OptionCString nukertes;
+  OptionBool nukewpts;
+  OptionBool nuketrks;
+  OptionBool nukertes;
 
   QVector<arglist_t> args = {
     {

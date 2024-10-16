@@ -41,10 +41,10 @@ public:
   void process() override;
 
 private:
-  OptionCString snopt;
-  OptionCString lcopt;
-  OptionCString purge_duplicates;
-  OptionCString correct_coords;
+  OptionBool snopt;
+  OptionBool lcopt;
+  OptionBool purge_duplicates;
+  OptionBool correct_coords;
 
   QVector<arglist_t> args = {
     {

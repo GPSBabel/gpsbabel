@@ -38,7 +38,7 @@ void RadiusFilter::process()
     double dist = radtomiles(gcdist(waypointp->position(),
                                     home_pos->position()));
 
-    if ((dist >= pos_dist) == (exclopt == nullptr)) {
+    if ((dist >= pos_dist) == !exclopt) {
       waypointp->wpt_flags.marked_for_deletion = 1;
     } else {
       auto* ed = new extra_data;
@@ -48,7 +48,7 @@ void RadiusFilter::process()
   }
   del_marked_wpts();
 
-  if (nosort == nullptr) {
+  if (!nosort) {
     auto dist_comp_lambda = [](const Waypoint* a, const Waypoint* b)->bool {
       const auto* aed = static_cast<const extra_data*>(a->extra_data);
       const auto* bed = static_cast<const extra_data*>(b->extra_data);

@@ -354,7 +354,7 @@ void MtkLoggerBase::mtk_read()
   char* fusage = nullptr;
 
 
-  if (*OPT_erase_only != '0') {
+  if (OPT_erase_only) {
     mtk_erase();
     return;
   }
@@ -587,7 +587,7 @@ mtk_retry:
   }
 
   // Fixme - Order or. Enable - parse - erase ??
-  if (log_enabled || *OPT_log_enable=='1') {
+  if (log_enabled || OPT_log_enable) {
     i = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", nullptr, 2);
     dbg(3, " ---- LOG ENABLE ----%s\n", i==0?"Success":"Fail");
   } else {
@@ -605,7 +605,7 @@ mtk_retry:
   file_deinit();
 
   /* fixme -- we're assuming all went well - erase flash.... */
-  if (*OPT_erase != '0') {
+  if (OPT_erase) {
     mtk_erase();
   }
 

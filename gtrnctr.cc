@@ -85,7 +85,7 @@ GtrnctrFormat::wr_init(const QString& fname)
       }
     }
   }
-  gtc_course_flag = xstrtoi(opt_course, nullptr, 10);
+  gtc_course_flag = opt_course;
 }
 
 void

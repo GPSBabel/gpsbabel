@@ -201,8 +201,8 @@ private:
   char exif_success{};
   QString exif_fout_name;
 
-  OptionCString opt_filename;
-  OptionCString opt_overwrite;
+  OptionBool opt_filename;
+  OptionBool opt_overwrite;
   OptionCString opt_frame;
   OptionCString opt_name;
   OptionCString opt_offsettime;

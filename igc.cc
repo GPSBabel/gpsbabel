@@ -478,7 +478,7 @@ void IgcFormat::read()
         igc_ext_type_t ext = get_ext_type(ext_type);
         if (ext != igc_ext_type_t::ext_rec_unknown) {
           supported_extensions.append(name);
-          bool enabled = **ext_option_map.value(ext) == '1';
+          bool enabled = *ext_option_map.value(ext);
           if (enabled) {
             int factor = get_ext_factor(ext);
             ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));

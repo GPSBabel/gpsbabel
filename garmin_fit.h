@@ -258,8 +258,8 @@ private:
 
   /* Data Members */
 
-  OptionCString opt_allpoints;
-  OptionCString opt_recoverymode;
+  OptionBool opt_allpoints;
+  OptionBool opt_recoverymode;
   int lap_ct = 0;
   bool new_trkseg = false;
   bool write_header_msgs = false;

@@ -149,14 +149,14 @@ protected:
   void* serial_handle = nullptr;		/* IO file descriptor */
   int skytraq_baud = 0;		/* detected baud rate */
 
-  OptionCString opt_erase;		/* erase after read? (0/1) */
+  OptionBool    opt_erase;		/* erase after read? (0/1) */
   OptionCString opt_initbaud;		/* baud rate used to init device */
   OptionCString opt_dlbaud;		/* baud rate used for downloading tracks */
   OptionCString opt_read_at_once;	/* number of sectors to read at once (Venus6 only) */
   OptionCString opt_first_sector;	/* first sector to be read from the device (default: 0) */
   OptionCString opt_last_sector;	/* last sector to be read from the device (default: smart read everything) */
   OptionCString opt_dump_file;		/* dump raw data to this file (optional) */
-  OptionCString opt_no_output;		/* disable output? (0/1) */
+  OptionBool    opt_no_output;		/* disable output? (0/1) */
   OptionCString opt_set_location;	/* set if the "targetlocation" options was used */
   OptionCString opt_configure_logging;
   OptionCString opt_gps_utc_offset;

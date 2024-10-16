@@ -63,12 +63,12 @@ private:
   gpsbabel::TextStream* file_out{nullptr};
   MakeShort* mkshort_handle{};
 
-  OptionCString suppresssep;
-  OptionCString txt_encrypt;
-  OptionCString includelogs;
+  OptionBool suppresssep;
+  OptionBool txt_encrypt;
+  OptionBool includelogs;
   OptionCString degformat;
   OptionCString altunits;
-  OptionCString split_output;
+  OptionBool split_output;
   int waypoint_count{};
   QString output_name;
 

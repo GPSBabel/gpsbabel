@@ -74,7 +74,7 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
           }
         }
 
-        if (something_deleted && (purge_duplicates != nullptr)) {
+        if (something_deleted && purge_duplicates) {
           qlist.at(i).wpt->wpt_flags.marked_for_deletion = 1;
         }
       }

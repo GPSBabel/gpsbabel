@@ -84,7 +84,7 @@ private:
 
   OptionCString opt_points;
   OptionCString opt_seed;
-  OptionCString opt_nodelay;
+  OptionBool opt_nodelay;
 
   QVector<arglist_t> random_args = {
     {

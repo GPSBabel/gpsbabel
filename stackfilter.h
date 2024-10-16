@@ -42,15 +42,15 @@ public:
   void exit() override;
 
 private:
-  OptionCString opt_push;
-  OptionCString opt_copy;
-  OptionCString opt_pop;
-  OptionCString opt_append;
-  OptionCString opt_discard;
-  OptionCString opt_replace;
-  OptionCString opt_swap;
+  OptionBool opt_push;
+  OptionBool opt_copy;
+  OptionBool opt_pop;
+  OptionBool opt_append;
+  OptionBool opt_discard;
+  OptionBool opt_replace;
+  OptionBool opt_swap;
   OptionCString opt_depth;
-  OptionCString nowarn;
+  OptionBool nowarn;
   int  warnings_enabled = 1;
   int  swapdepth = 0;
 

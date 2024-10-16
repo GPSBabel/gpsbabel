@@ -120,9 +120,9 @@ private:
 
   OptionCString countopt;
   OptionCString erroropt;
-  OptionCString xteopt;
-  OptionCString lenopt;
-  OptionCString relopt;
+  OptionBool xteopt;
+  OptionBool lenopt;
+  OptionBool relopt;
 
   QVector<arglist_t> args = {
     {

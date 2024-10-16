@@ -51,7 +51,7 @@ private:
   double max_time_step{0};
   OptionCString opt_dist;
   double max_dist_step{0};
-  OptionCString opt_route;
+  OptionBool opt_route;
 
   QVector<arglist_t> args = {
     {

@@ -216,9 +216,9 @@ protected:
   void* fd{};  /* serial fd */
   FILE* fl{};  /* bin.file fd */
   char* port{}; /* serial port name */
-  OptionCString OPT_erase;  /* erase ? command option */
-  OptionCString OPT_erase_only;  /* erase_only ? command option */
-  OptionCString OPT_log_enable;  /* enable ? command option */
+  OptionBool OPT_erase;  /* erase ? command option */
+  OptionBool OPT_erase_only;  /* erase_only ? command option */
+  OptionBool OPT_log_enable;  /* enable ? command option */
   OptionCString csv_file; /* csv ? command option */
   OptionCString OPT_block_size_kb; /* block_size_kb ? command option */
   MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;

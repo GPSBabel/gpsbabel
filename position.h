@@ -65,7 +65,7 @@ private:
   qint64 max_diff_time{};
   OptionCString distopt;
   OptionCString timeopt;
-  OptionCString purge_duplicates;
+  OptionBool purge_duplicates;
   bool check_time{};
 
   QVector<arglist_t> args = {

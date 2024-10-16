@@ -57,8 +57,8 @@ private:
   OptionCString distopt;
   OptionCString latopt;
   OptionCString lonopt;
-  OptionCString exclopt;
-  OptionCString nosort;
+  OptionBool exclopt;
+  OptionBool nosort;
   OptionCString maxctarg;
   OptionCString routename;
   int maxct{};
