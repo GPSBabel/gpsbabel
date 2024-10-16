@@ -1165,6 +1165,16 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an bool.";
           ok = false;
         }
+        if (const auto* opt = dynamic_cast<const OptionBool*>(arg.argval); opt == nullptr) {
+          Warning() << name << "Bool option" << arg.argstring << "argval is not of class OptionBool";
+          ok = false;
+        }
+      }
+      if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_BOOL) {
+        if (const auto* opt = dynamic_cast<const OptionBool*>(arg.argval); opt != nullptr) {
+          Warning() << name << "non Bool option" << arg.argstring << "argval is of class OptionBool";
+          ok = false;
+        }
       }
     }
   }
