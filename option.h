@@ -93,7 +93,7 @@ public:
   /* traditionally bool options without default are considered to be false. */
   explicit(false) operator bool() const { return (!value_.isNull() && (value_ != '0')); }
 
-  option_t type() const override { return type_cstring; }
+  option_t type() const override { return type_boolean; }
   bool has_value() const override { return !value_.isNull(); }
   void reset() override { value_ = QString(); }
   bool isEmpty() const override { return value_.isEmpty(); }
