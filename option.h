@@ -90,6 +90,7 @@ public:
 
   explicit(false) OptionBool(const QString& s) : value_(s) {}
   
+  /* traditionally bool options without default are considered to be false. */
   explicit(false) operator bool() const { return (!value_.isNull() && (value_ != '0')); }
 
   option_t type() const override { return type_cstring; }

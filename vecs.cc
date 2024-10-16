@@ -39,7 +39,7 @@
 #include <type_traits>         // for is_base_of
 #include <utility>             // for as_const
 
-#include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
+#include "defs.h"              // for arglist_t, CSTR, fatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, case_ignore_strcmp, gpsdata_type, warning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
 #include "exif.h"              // for ExifFormat
 #include "format.h"            // for Format
@@ -674,12 +674,6 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
     break;
   }
 
-  /* for bool options without default: don't set argval if "FALSE" */
-
-  if (((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) &&
-      rval.startsWith('0') && (arg.defaultvalue == nullptr)) {
-    return;
-  }
   arg.argval->set(rval);
 }
 
