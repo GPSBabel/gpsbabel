@@ -144,9 +144,9 @@ private:
   OptionCString getposnarg;
   OptionCString opt_sleep;
   OptionCString opt_baud;
-  OptionCString opt_append;
+  OptionBool opt_append;
   OptionBool opt_gisteq;
-  OptionCString opt_ignorefix;
+  OptionBool opt_ignorefix;
 
   long sleepms{};
   int getposn{};
