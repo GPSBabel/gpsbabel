@@ -64,6 +64,7 @@
 #include "lowranceusr.h"       // for LowranceusrFormat
 #include "mtk_logger.h"        // for MtkFormat, MtkM241Format, MtkFileFormat, MtkM241FileFormat
 #include "nmea.h"              // for NmeaFormat
+#include "option.h"            // for Option
 #include "osm.h"               // for OsmFormat
 #include "ozi.h"               // for OziFormat
 #include "qstarz_bl_1000.h"    // for QstarzBL1000Format
@@ -507,7 +508,6 @@ void Vecs::init_vec(Format* fmt)
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
-      arg.argvalptr = nullptr;
       if (arg.argval) {
         arg.argval->reset();
       }
@@ -590,9 +590,7 @@ void Vecs::free_options(QVector<arglist_t>* args)
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
-      if (arg.argvalptr) {
-        xfree(arg.argvalptr);
-        arg.argvalptr = nullptr;
+      if (arg.argval) {
         arg.argval->reset();
       }
     }
@@ -616,18 +614,14 @@ void Vecs::exit_vecs()
   style_list.squeeze();
 }
 
-void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& val)
+void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& val)
 {
-  if (arg->argval == nullptr) {
-    fatal("%s: No local variable defined for option \"%s\"!\n", qPrintable(module), qPrintable(arg->argstring));
+  if (arg.argval == nullptr) {
+    fatal("%s: No local variable defined for option \"%s\"!\n", qPrintable(module), qPrintable(arg.argstring));
   }
 
-  if (arg->argvalptr != nullptr) {
-    xfree(arg->argvalptr);
-    arg->argvalptr = nullptr;
-  }
-  if (arg->argval) {
-    arg->argval->reset();
+  if (arg.argval) {
+    arg.argval->reset();
   }
 
   if (val.isNull()) {
@@ -636,13 +630,13 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
 
   QString rval(val);
 
-  switch (arg->argtype & ARGTYPE_TYPEMASK) {
+  switch (arg.argtype & ARGTYPE_TYPEMASK) {
   case ARGTYPE_INT:
     if (val.isEmpty()) {
       rval = '0';
     } else {
       if (!is_integer(val)) {
-        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
+        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg.argstring));
       }
     }
     break;
@@ -651,7 +645,7 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
       rval = '0';
     } else {
       if (!is_float(val)) {
-        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
+        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg.argstring));
       }
     }
     break;
@@ -672,7 +666,7 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
             rval = '1';
           }
         } else {
-          warning("%s :Invalid logical value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
+          warning("%s :Invalid logical value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg.argstring));
           rval = '0';
         }
       }
@@ -682,12 +676,11 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
 
   /* for bool options without default: don't set argval if "FALSE" */
 
-  if (((arg->argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) &&
-      rval.startsWith('0') && (arg->defaultvalue == nullptr)) {
+  if (((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) &&
+      rval.startsWith('0') && (arg.defaultvalue == nullptr)) {
     return;
   }
-  arg->argvalptr = xstrdup(CSTR(rval));
-  arg->argval->set(arg->argvalptr);
+  arg.argval->set(rval);
 }
 
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
@@ -737,7 +730,7 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
       if (!fmtdata.options.isEmpty()) {
         const QString opt = get_option(fmtdata.options, arg.argstring);
         if (!opt.isNull()) {
-          assign_option(fmtdata.fmtname, &arg, opt);
+          assign_option(fmtdata.fmtname, arg, opt);
           continue;
         }
       }
@@ -746,9 +739,9 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
         qopt = inifile_readstr(global_opts.inifile, "Common format settings", arg.argstring);
       }
       if (qopt.isNull()) {
-        assign_option(fmtdata.fmtname, &arg, arg.defaultvalue);
+        assign_option(fmtdata.fmtname, arg, arg.defaultvalue);
       } else {
-        assign_option(fmtdata.fmtname, &arg, qopt);
+        assign_option(fmtdata.fmtname, arg, qopt);
       }
     }
   }

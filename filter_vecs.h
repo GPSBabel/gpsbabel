@@ -21,10 +21,12 @@
 #ifndef FILTER_VECS_H_INCLUDED_
 #define FILTER_VECS_H_INCLUDED_
 
-#include <QString>          // for QString
+#include <QList>        // for QList
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
 
-#include "defs.h"           // for arglist_t
-#include "filter.h"         // for Filter
+#include "defs.h"       // for arglist_t
+#include "filter.h"     // for Filter
 
 
 class FilterVecs
