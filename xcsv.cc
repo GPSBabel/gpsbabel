@@ -1882,7 +1882,7 @@ XcsvFormat::rd_init(const QString& fname)
       fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
     }
 
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(static_cast<const char*>(styleopt)));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt.get()));
   }
 
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == wptdata)) {
@@ -1940,7 +1940,7 @@ XcsvFormat::wr_init(const QString& fname)
       fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
     }
 
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(static_cast<const char*>(styleopt)));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt.get()));
   }
 
   xcsv_file = new XcsvFile;

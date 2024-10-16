@@ -992,7 +992,7 @@ SkytraqBase::skytraq_read_tracks() const
   // m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
   if (opt_dump_file) {
-    dumpfile = gbfopen(static_cast<const char*>(opt_dump_file), "w", MYNAME);
+    dumpfile = gbfopen(opt_dump_file.get(), "w", MYNAME);
   }
 
   db(1, MYNAME ": Reading log data from device...\n");
@@ -1164,7 +1164,7 @@ SkytraqBase::skytraq_set_location() const
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   uint8_t MSG_GET_LOCATION = 0x35;
 
-  db(3, MYNAME ": set_location='%s'\n", static_cast<const char*>(opt_set_location));
+  db(3, MYNAME ": set_location='%s'\n", qPrintable(opt_set_location.get()));
 
   sscanf(opt_set_location, "%lf:%lf", &lat, &lng);
   le_write_double(&MSG_SET_LOCATION[1], lat);
@@ -1431,7 +1431,6 @@ int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const char* opt_poi) con
 void
 MinihomerFormat::rd_init(const QString& fname)
 {
-#warning "check me"
   opt_set_location.reset();	// otherwise it will lead to bus error
   skytraq_rd_init(fname);	// sets global var serial_handle
   mhport=fname;

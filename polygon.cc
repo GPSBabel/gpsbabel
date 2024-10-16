@@ -229,7 +229,7 @@ void PolygonFilter::process()
   QString line;
 
   gpsbabel::TextStream stream;
-  stream.open(static_cast<const char*>(polyfileopt), QIODevice::ReadOnly, MYNAME);
+  stream.open(polyfileopt.get(), QIODevice::ReadOnly, MYNAME);
 
   double olat = BADVAL;
   double olon = BADVAL;

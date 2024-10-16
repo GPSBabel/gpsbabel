@@ -158,7 +158,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", static_cast<const char*>(opt_waypts));
+      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_waypts.get()));
     }
   }
   if (opt_routes != nullptr) {
@@ -177,7 +177,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", static_cast<const char*>(opt_routes));
+      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_routes.get()));
     }
   }
   if (opt_tracks != nullptr) {
@@ -196,7 +196,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", static_cast<const char*>(opt_tracks));
+      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_tracks.get()));
     }
   }
 }

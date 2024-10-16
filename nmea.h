@@ -150,7 +150,6 @@ private:
 
   long sleepms{};
   int getposn{};
-  int append_output{};
   bool amod_waypoint{};
 
   QDateTime last_write_time;

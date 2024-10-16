@@ -332,7 +332,7 @@ OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
     alt_scale = FEET_TO_METERS(1.0);
     break;
   default:
-    fatal(MYNAME ": Unknown value (%s) for option 'altunit'!\n", static_cast<const char*>(altunit_opt));
+    fatal(MYNAME ": Unknown value (%s) for option 'altunit'!\n", qPrintable(altunit_opt.get()));
   }
   if (direction != 0) {
     alt_scale = 1 / alt_scale;
@@ -350,7 +350,7 @@ OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
     prox_scale = 1000.0;
     break;
   default:
-    fatal(MYNAME ": Unknown value (%s) for option 'proxunit'!\n", static_cast<const char*>(proxunit_opt));
+    fatal(MYNAME ": Unknown value (%s) for option 'proxunit'!\n", qPrintable(proxunit_opt.get()));
   }
   if (direction != 0) {
     prox_scale = 1 / prox_scale;

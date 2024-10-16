@@ -637,7 +637,7 @@ void
 GarminTxtFormat::garmin_txt_utc_option()
 {
   if (opt_utc != nullptr) {
-    if (case_ignore_strcmp(static_cast<const char*>(opt_utc), "utc") == 0) {
+    if (case_ignore_strcmp(opt_utc.get(), "utc") == 0) {
       utc_offs = 0;
     } else {
       utc_offs = xstrtoi(opt_utc, nullptr, 10);
@@ -669,7 +669,7 @@ GarminTxtFormat::wr_init(const QString& fname)
   if (opt_precision) {
     precision = xstrtoi(opt_precision, nullptr, 10);
     if (precision < 0) {
-      fatal(MYNAME ": Invalid precision (%s)!", static_cast<const char*>(opt_precision));
+      fatal(MYNAME ": Invalid precision (%s)!", qPrintable(opt_precision.get()));
     }
   }
 

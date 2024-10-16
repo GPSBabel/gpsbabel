@@ -138,7 +138,7 @@ private:
   void gx_trk_e(const QString& args, const QXmlStreamAttributes* attrs);
   void gx_trk_when(const QString& args, const QXmlStreamAttributes* attrs);
   void gx_trk_coord(const QString& args, const QXmlStreamAttributes* attrs);
-  void kml_output_linestyle(const char* color, int width) const;
+  void kml_output_linestyle(const QString& color, int width) const;
   void kml_write_bitmap_style_(const QString& style, const QString& bitmap, bool highlighted, bool force_heading) const;
   void kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap, const QString& customstyle) const;
   void kml_output_timestamp(const Waypoint* waypointp) const;

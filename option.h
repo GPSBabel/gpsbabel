@@ -70,6 +70,7 @@ public:
   void reset() override { value_ = QString(); valueb_ = QByteArray(); }
   bool isEmpty() const override { return value_.isEmpty(); }
   const QString& get() const override { return value_; }
+  const QByteArray& getba() const { return valueb_; }
   void set(const QString& s) override { value_ = s; valueb_ = s.toUtf8(); }
 
 private:
