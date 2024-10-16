@@ -880,7 +880,7 @@ struct arglist_t {
   const uint32_t argtype{ARGTYPE_UNKNOWN};
   const QString minvalue;    /* minimum value for numeric options */
   const QString maxvalue;    /* maximum value for numeric options */
-  char* argvalptr{nullptr};         /* !!! internal helper. Not used in definitions !!! */
+  char* unused{nullptr};     /* TODO: delete from initialization lists */
 };
 
 enum ff_type {

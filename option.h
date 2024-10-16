@@ -19,10 +19,10 @@
 #ifndef OPTION_H_INCLUDED_
 #define OPTION_H_INCLUDED_
 
-#include "defs.h"
+#include <QByteArray>  // for QByteArray
+#include <QString>     // for QString, operator!=
 
-
-class Option
+class Option /* Abstract Class */
 {
 public:
   /* Types */
@@ -53,6 +53,10 @@ public:
   virtual bool isEmpty() const = 0;
   virtual const QString& get() const = 0;
   virtual void set(const QString& s) = 0;
+
+  /* Data Members */
+  // I.25: Prefer empty abstract classes as interfaces to class hierarchies
+  // https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i25-prefer-empty-abstract-classes-as-interfaces-to-class-hierarchies
 };
 
 class OptionCString : public Option
