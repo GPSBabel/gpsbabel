@@ -1965,16 +1965,16 @@ XcsvFormat::wr_init(const QString& fname)
       xcsv_file->mkshort_handle.set_length(xstrtoi(snlenopt, nullptr, 10));
     }
 
-    if (snwhiteopt) {
-      xcsv_file->mkshort_handle.set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+    if (snwhiteopt.has_value()) {
+      xcsv_file->mkshort_handle.set_whitespace_ok(snwhiteopt);
     }
 
-    if (snupperopt) {
-      xcsv_file->mkshort_handle.set_mustupper(xstrtoi(snupperopt, nullptr, 10));
+    if (snupperopt.has_value()) {
+      xcsv_file->mkshort_handle.set_mustupper(snupperopt);
     }
 
-    if (snuniqueopt) {
-      xcsv_file->mkshort_handle.set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
+    if (snuniqueopt.has_value()) {
+      xcsv_file->mkshort_handle.set_mustuniq(snuniqueopt);
     }
 
     xcsv_file->mkshort_handle.set_badchars(CSTR(xcsv_style->badchars));

@@ -125,12 +125,12 @@ private:
   int new_track{};
 
   OptionCString snlenopt;
-  OptionCString snwhiteopt;
-  OptionCString snupperopt;
-  OptionCString snuniqueopt;
+  OptionBool snwhiteopt;
+  OptionBool snupperopt;
+  OptionBool snuniqueopt;
   OptionCString wptfgcolor;
   OptionCString wptbgcolor;
-  OptionCString pack_opt;
+  OptionBool pack_opt;
   int datum{};
   OptionCString proximityarg;
   double proximity{};

@@ -389,16 +389,16 @@ OziFormat::wr_init(const QString& fname)
 
     mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
 
-    if (snwhiteopt) {
-      mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+    if (snwhiteopt.has_value()) {
+      mkshort_handle->set_whitespace_ok(snwhiteopt);
     }
 
-    if (snupperopt) {
-      mkshort_handle->set_mustupper(xstrtoi(snupperopt, nullptr, 10));
+    if (snupperopt.has_value()) {
+      mkshort_handle->set_mustupper(snupperopt);
     }
 
-    if (snuniqueopt) {
-      mkshort_handle->set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
+    if (snuniqueopt.has_value()) {
+      mkshort_handle->set_mustuniq(snuniqueopt);
     }
 
     mkshort_handle->set_badchars("\",");

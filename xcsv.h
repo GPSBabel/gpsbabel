@@ -372,10 +372,10 @@ private:
 
   OptionCString styleopt;
   OptionCString snlenopt;
-  OptionCString snwhiteopt;
-  OptionCString snupperopt;
-  OptionCString snuniqueopt;
-  OptionCString prefer_shortnames;
+  OptionBool snwhiteopt;
+  OptionBool snupperopt;
+  OptionBool snuniqueopt;
+  OptionBool prefer_shortnames;
   OptionCString xcsv_urlbase;
   OptionCString opt_datum;
   OptionCString opt_utc;
