@@ -65,15 +65,53 @@ public:
   /* Special Member Functions */
   OptionCString() = default;
 
-  explicit(false) operator const char*() const { return value_.isNull()? nullptr : valueb_.constData(); }
+  /* Traditionally a nullptr value indicated the option was not supplied.
+   * This was convenient because a char* can be implicitly converted to bool,
+   * although now we also have the equivalent member function has_value().
+   * Because QByteArray::constData() != nullptr for a null QByteArray we
+   * have to handle that case manually.
+   */
+  explicit(false) operator const char* () const
+  {
+    return value_.isNull()? nullptr : valueb_.constData();
+  }
 
-  option_t type() const override { return type_cstring; }
-  bool has_value() const override { return !value_.isNull(); }
-  void reset() override { value_ = QString(); valueb_ = QByteArray(); }
-  bool isEmpty() const override { return value_.isEmpty(); }
-  const QString& get() const override { return value_; }
-  const QByteArray& getba() const { return valueb_; }
-  void set(const QString& s) override { value_ = s; valueb_ = s.toUtf8(); }
+  option_t type() const override
+  {
+    return type_cstring;
+  }
+
+  bool has_value() const override
+  {
+    return !value_.isNull();
+  }
+
+  void reset() override
+  {
+    value_ = QString();
+    valueb_ = QByteArray();
+  }
+
+  bool isEmpty() const override
+  {
+    return value_.isEmpty();
+  }
+
+  const QString& get() const override
+  {
+    return value_;
+  }
+
+  const QByteArray& getba() const
+  {
+    return valueb_;
+  }
+
+  void set(const QString& s) override
+  {
+    value_ = s;
+    valueb_ = s.toUtf8();
+  }
 
 private:
   QString value_;
@@ -86,15 +124,44 @@ public:
   /* Special Member Functions */
   OptionBool() = default;
 
-  /* traditionally bool options without default are considered to be false. */
-  explicit(false) operator bool() const { return (!value_.isNull() && (value_ != '0')); }
+  /* Traditionally bool options without default are considered to be false. */
+  explicit(false) operator bool() const
+  {
+    return (!value_.isNull() && (value_ != '0'));
+  }
 
-  option_t type() const override { return type_boolean; }
-  bool has_value() const override { return !value_.isNull(); }
-  void reset() override { value_ = QString(); }
-  bool isEmpty() const override { return value_.isEmpty(); }
-  const QString& get() const override { return value_; }
-  void set(const QString& s) override { value_ = s;}
+  option_t type() const override
+  {
+    return type_boolean;
+  }
+
+  /* Note that has_value can be used to distinguish an option that wasn't supplied
+   * from one that was supplied and is considered false by Vecs::assign_option.
+   */
+  bool has_value() const override
+  {
+    return !value_.isNull();
+  }
+
+  void reset() override
+  {
+    value_ = QString();
+  }
+
+  bool isEmpty() const override
+  {
+    return value_.isEmpty();
+  }
+
+  const QString& get() const override
+  {
+    return value_;
+  }
+
+  void set(const QString& s) override
+  {
+    value_ = s;
+  }
 
 private:
   QString value_;
