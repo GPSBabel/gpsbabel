@@ -1124,6 +1124,10 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
     }
 #endif
     for (const auto& arg : *args) {
+      if (arg.argval == nullptr) {
+        Warning() << name << "option" << arg.argstring << "does not point to an Option instance.";
+        ok = false;
+      }
       if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_INT) {
         if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
