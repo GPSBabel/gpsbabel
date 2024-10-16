@@ -620,9 +620,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
     fatal("%s: No local variable defined for option \"%s\"!\n", qPrintable(module), qPrintable(arg.argstring));
   }
 
-  if (arg.argval) {
-    arg.argval->reset();
-  }
+  arg.argval->reset();
 
   if (val.isNull()) {
     return;
@@ -681,7 +679,7 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
 {
   if (args) {
     for (const auto& arg : *args) {
-      if (!arg.argval->isEmpty()) {
+      if ((arg.argval != nullptr) & !arg.argval->isEmpty()) {
         printf("options: module/option=value: %s/%s=\"%s\"",
                qPrintable(vecname), qPrintable(arg.argstring), qPrintable(arg.argval->get()));
         if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
