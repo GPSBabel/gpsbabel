@@ -47,11 +47,11 @@ public:
   Option& operator=(Option&&) = delete;
 
   /* Member Functions */
-  virtual option_t type() const = 0;
-  virtual bool has_value() const = 0;
+  [[nodiscard]] virtual option_t type() const = 0;
+  [[nodiscard]] virtual bool has_value() const = 0;
   virtual void reset() = 0;
-  virtual bool isEmpty() const = 0;
-  virtual const QString& get() const = 0;
+  [[nodiscard]] virtual bool isEmpty() const = 0;
+  [[nodiscard]] virtual const QString& get() const = 0;
   virtual void set(const QString& s) = 0;
 
   /* Data Members */
@@ -76,12 +76,12 @@ public:
     return value_.isNull()? nullptr : valueb_.constData();
   }
 
-  option_t type() const override
+  [[nodiscard]] option_t type() const override
   {
     return type_cstring;
   }
 
-  bool has_value() const override
+  [[nodiscard]] bool has_value() const override
   {
     return !value_.isNull();
   }
@@ -92,17 +92,17 @@ public:
     valueb_ = QByteArray();
   }
 
-  bool isEmpty() const override
+  [[nodiscard]] bool isEmpty() const override
   {
     return value_.isEmpty();
   }
 
-  const QString& get() const override
+  [[nodiscard]] const QString& get() const override
   {
     return value_;
   }
 
-  const QByteArray& getba() const
+  [[nodiscard]] const QByteArray& getba() const
   {
     return valueb_;
   }
@@ -130,7 +130,7 @@ public:
     return (!value_.isNull() && (value_ != '0'));
   }
 
-  option_t type() const override
+  [[nodiscard]] option_t type() const override
   {
     return type_boolean;
   }
@@ -138,7 +138,7 @@ public:
   /* Note that has_value can be used to distinguish an option that wasn't supplied
    * from one that was supplied and is considered false by Vecs::assign_option.
    */
-  bool has_value() const override
+  [[nodiscard]] bool has_value() const override
   {
     return !value_.isNull();
   }
@@ -148,12 +148,12 @@ public:
     value_ = QString();
   }
 
-  bool isEmpty() const override
+  [[nodiscard]] bool isEmpty() const override
   {
     return value_.isEmpty();
   }
 
-  const QString& get() const override
+  [[nodiscard]] const QString& get() const override
   {
     return value_;
   }
