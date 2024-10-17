@@ -60,6 +60,7 @@
 #include "garmin_fs.h"  // for garmin_fs_t
 #include "gbfile.h"     // for gbfile
 #include "mkshort.h"    // for MakeShort
+#include "option.h"     // for OptionCString, OptionBool
 
 
 class GarminGPIFormat : public Format

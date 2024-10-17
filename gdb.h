@@ -26,6 +26,7 @@
 #ifndef GDB_H_INCLUDED_
 #define GDB_H_INCLUDED_
 
+#include <QList>            // for QList
 #include <QHash>            // for QHash<>::const_iterator, QHash<>::key_iterator, qHash, qHashMulti, QHash
 #include <QString>          // for QString
 #include <QStringView>      // for QStringView
@@ -37,6 +38,7 @@
 #include "garmin_tables.h"  // for gt_waypt_classes_e
 #include "gbfile.h"         // for gbfile
 #include "mkshort.h"        // for MakeShort
+#include "option.h"         // for OptionBool, OptionCString
 
 
 class GdbFormat : public Format

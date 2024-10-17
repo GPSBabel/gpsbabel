@@ -34,6 +34,7 @@
 
 #include "defs.h"
 #include "format.h"
+#include "option.h"                    // for OptionBool, OptionCString
 #include "src/core/datetime.h"         // for DateTime
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter

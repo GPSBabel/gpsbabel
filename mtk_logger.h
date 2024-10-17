@@ -63,6 +63,7 @@
 #include "defs.h"
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
+#include "option.h"  // for OptionBool, OptionCString
 
 
 class MtkLoggerBase

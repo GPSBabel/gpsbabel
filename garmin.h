@@ -21,18 +21,20 @@
 #ifndef GARMIN_H_INCLUDED_
 #define GARMIN_H_INCLUDED_
 
-#include <cstdio>              // for size_t
+#include <cstdio>             // for size_t
 
-#include <QByteArray>          // for QByteArray
-#include <QString>             // for QString
-#include <QTextCodec>          // for QTextCodec
-#include <QVector>             // for QVector
+#include <QList>              // for QList
+#include <QByteArray>         // for QByteArray
+#include <QString>            // for QString
+#include <QTextCodec>         // for QTextCodec
+#include <QVector>            // for QVector
 
 #include "defs.h"
-#include "format.h"            // for Format
-#include "jeeps/gpsdevice.h"   // for gpsdevh
-#include "jeeps/gpssend.h"     // for GPS_PWay, GPS_SWay, GPS_PTrack, GPS_PPvt_Data, GPS_SLap
-#include "mkshort.h"           // for MakeShort
+#include "format.h"           // for Format
+#include "jeeps/gpsdevice.h"  // for gpsdevh
+#include "jeeps/gpssend.h"    // for GPS_PWay, GPS_SWay, GPS_PTrack, GPS_PPvt_Data, GPS_SLap
+#include "mkshort.h"          // for MakeShort
+#include "option.h"           // for OptionCString, OptionBool
 
 
 class GarminFormat : public Format

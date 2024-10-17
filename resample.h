@@ -24,11 +24,13 @@
 
 #include <tuple>               // for tuple
 
+#include <QList>               // for QList
 #include <QString>             // for QString
 #include <QVector>             // for QVector
 
 #include "defs.h"              // for arglist_t, ARGTYPE_INT, Waypoint, route_head
 #include "filter.h"            // for Filter
+#include "option.h"            // for OptionCString
 #include "src/core/nvector.h"  // for NVector
 
 

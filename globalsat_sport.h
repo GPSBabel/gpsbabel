@@ -37,15 +37,17 @@
 #ifndef GLOBALSATSPORT_H_INCLUDED_
 #define GLOBALSATSPORT_H_INCLUDED_
 
-#include <cstdint>           // for uint32_t, uint8_t, uint16_t, int16_t
+#include <cstdint>    // for uint32_t, uint8_t, uint16_t, int16_t
 
-#include <QString>           // for QString
-#include <QTimeZone>         // for QTimeZone
-#include <QVector>           // for QVector
+#include <QList>      // for QList
+#include <QString>    // for QString
+#include <QTimeZone>  // for QTimeZone
+#include <QVector>    // for QVector
 
 #include "defs.h"
-#include "format.h"          // for Format
-#include "gbfile.h"          // for gbfclose, gbfopen, gbfread, gbfwrite, gbfile
+#include "format.h"   // for Format
+#include "gbfile.h"   // for gbfclose, gbfopen, gbfread, gbfwrite, gbfile
+#include "option.h"   // for OptionCString, OptionBool
 
 
 class GlobalsatSportFormat : public Format

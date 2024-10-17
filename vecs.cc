@@ -64,7 +64,7 @@
 #include "lowranceusr.h"       // for LowranceusrFormat
 #include "mtk_logger.h"        // for MtkFormat, MtkM241Format, MtkFileFormat, MtkM241FileFormat
 #include "nmea.h"              // for NmeaFormat
-#include "option.h"            // for Option
+#include "option.h"            // for Option, OptionBool
 #include "osm.h"               // for OsmFormat
 #include "ozi.h"               // for OziFormat
 #include "qstarz_bl_1000.h"    // for QstarzBL1000Format

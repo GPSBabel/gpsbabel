@@ -59,12 +59,13 @@
 #ifndef SMPLROUT_H_INCLUDED_
 #define SMPLROUT_H_INCLUDED_
 
+#include <QList>     // for QList
 #include <QString>               // for QString
-#include <QStringView>           // for QStringView
 #include <QVector>               // for QVector
 
 #include "defs.h"
-#include "filter.h"              // for Filter
+#include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool, OptionCString
 
 
 #if FILTERS_ENABLED

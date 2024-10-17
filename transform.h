@@ -23,11 +23,13 @@
 #ifndef TRANSFORM_H_INCLUDED_
 #define TRANSFORM_H_INCLUDED_
 
-#include <QString>         // for QString
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
-#include "defs.h"          // for route_head (ptr only), ARG_NOMINMAX, ARGTY...
-#include "filter.h"        // for Filter
+#include "defs.h"    // for route_head (ptr only), ARG_NOMINMAX, ARGTY...
+#include "filter.h"  // for Filter
+#include "option.h"  // for OptionCString, OptionBool
 
 #if FILTERS_ENABLED
 

@@ -27,7 +27,7 @@
 #include "defs.h"
 #include "format.h"          // for Format
 #include "geocache.h"        // for Geocache, Geocache::container_t
-#include "option.h"
+#include "option.h"          // for OptionBool, OptionCString
 
 
 class GeoFormat : public Format

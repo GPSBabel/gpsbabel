@@ -28,6 +28,7 @@
 #include <QtGlobal>             // for qRound64, qint64
 
 #include "defs.h"
+#include "grtcirc.h"            // for gcdist, radtometers
 #include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED

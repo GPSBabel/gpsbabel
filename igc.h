@@ -28,20 +28,22 @@
 #ifndef IGC_H_INCLUDED_
 #define IGC_H_INCLUDED_
 
-#include <optional>              // for optional
-#include <QByteArray>            // for QByteArray
-#include <QDateTime>             // for QDateTime
-#include <QList>                 // for QList<>::const_iterator
-#include <QString>               // for QString, operator+, QStringLiteral
-#include <QVector>               // for QVector
-#include <QHash>                 // for QHash
+#include <optional>             // for optional
+
+#include <QByteArray>           // for QByteArray
+#include <QDateTime>            // for QDateTime
+#include <QList>                // for QList<>::const_iterator
+#include <QString>              // for QString, operator+, QStringLiteral
+#include <QVector>              // for QVector
+#include <QHash>                // for QHash
 
 #include "defs.h"
-#include "format.h"              // for Format
-#include "formspec.h"            // for FormatSpecificData, kFsIGC
-#include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
-#include "src/core/datetime.h"   // for DateTime
-#include "kml.h"                 // for wp_field
+#include "format.h"             // for Format
+#include "formspec.h"           // for FormatSpecificData, kFsIGC
+#include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
+#include "kml.h"                // for wp_field
+#include "option.h"             // for OptionBool, OptionCString
+#include "src/core/datetime.h"  // for DateTime
 
 /*
  * Notes on IGC extensions:

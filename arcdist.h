@@ -22,10 +22,13 @@
 #ifndef ARCDIST_H_INCLUDED_
 #define ARCDIST_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
 #include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_BOOL, Waypoint (ptr only)
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool, OptionCString
 
 #if FILTERS_ENABLED
 

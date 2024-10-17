@@ -25,6 +25,7 @@
 #ifndef SKYTRAQ_H_INCLUDED_
 #define SKYTRAQ_H_INCLUDED_
 
+#include <QList>      // for QList
 #include <QDateTime>  // for QDateTime
 #include <QString>    // for QString
 #include <QVector>    // for QVector
@@ -34,6 +35,7 @@
 #include "defs.h"
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
+#include "option.h"   // for OptionCString, OptionBool
 
 
 class SkytraqBase

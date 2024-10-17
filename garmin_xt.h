@@ -27,12 +27,14 @@
 
 #include <cstdint>   // for uint8_t, uint16_t, uint32_t
 
+#include <QList>     // for QList
 #include <QString>   // for QString
 #include <QVector>   // for QVector
 
 #include "defs.h"
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
+#include "option.h"  // for OptionCString
 
 
 class GarminXTFormat : public Format

@@ -22,14 +22,16 @@
 #ifndef SUBRIP_H_INCLUDED_
 #define SUBRIP_H_INCLUDED_
 
-#include <QDateTime>         // for QDateTime, operator<<
-#include <QString>           // for QString
-#include <QTime>             // for QTime
-#include <QVector>           // for QVector
+#include <QList>      // for QList
+#include <QDateTime>  // for QDateTime, operator<<
+#include <QString>    // for QString
+#include <QTime>      // for QTime
+#include <QVector>    // for QVector
 
 #include "defs.h"
-#include "format.h"          // for Format
-#include "gbfile.h"          // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
+#include "format.h"   // for Format
+#include "gbfile.h"   // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
+#include "option.h"   // for OptionCString
 
 
 class SubripFormat : public Format

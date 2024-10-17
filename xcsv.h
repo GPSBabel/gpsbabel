@@ -40,6 +40,7 @@
 #include "format.h"               // for Format
 #include "garmin_fs.h"            // for garmin_fs_t
 #include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionCString, OptionBool
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
 

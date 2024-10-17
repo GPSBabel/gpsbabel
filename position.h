@@ -22,13 +22,14 @@
 #ifndef POSITION_H_INCLUDED_
 #define POSITION_H_INCLUDED_
 
+#include <QList>     // for QList
 #include <QString>    // for QString
 #include <QVector>    // for QVector
 #include <QtGlobal>   // for qint64
 
 #include "defs.h"     // for arglist_t, route_head (ptr only), ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED, ARGTYPE_BOOL, Waypoint, WaypointList (ptr only)
 #include "filter.h"   // for Filter
-#include "grtcirc.h"  // for RAD, gcdist, radtometers
+#include "option.h"  // for OptionCString, OptionBool
 
 
 #if FILTERS_ENABLED

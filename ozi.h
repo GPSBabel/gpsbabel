@@ -38,6 +38,7 @@
 #ifndef OZI_H_INCLUDED_
 #define OZI_H_INCLUDED_
 
+#include <QList>                  // for QList
 #include <QIODevice>              // for QIODeviceBase, QIODeviceBase::OpenModeFlag
 #include <QString>                // for QString
 #include <QVector>                // for QVector
@@ -46,6 +47,7 @@
 #include "format.h"               // for Format
 #include "formspec.h"             // for FormatSpecificData, kFsOzi
 #include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionCString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 

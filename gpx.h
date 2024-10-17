@@ -35,6 +35,7 @@
 #include "format.h"                    // for Format
 #include "formspec.h"                  // for FormatSpecificData
 #include "mkshort.h"                   // for MakeShort
+#include "option.h"                    // for OptionBool, OptionCString
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
 #include "src/core/xmltag.h"           // for xml_tag

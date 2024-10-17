@@ -22,18 +22,19 @@
 #ifndef NMEA_H_INCLUDED_
 #define NMEA_H_INCLUDED_
 
-#include <QByteArray>         // for QByteArray
-#include <QDate>              // for QDate
-#include <QDateTime>          // for QDateTime
-#include <QList>              // for QList
-#include <QString>            // for QString
-#include <QTime>              // for QTime
-#include <QVector>            // for QVector
+#include <QByteArray>  // for QByteArray
+#include <QDate>       // for QDate
+#include <QDateTime>   // for QDateTime
+#include <QList>       // for QList
+#include <QString>     // for QString
+#include <QTime>       // for QTime
+#include <QVector>     // for QVector
 
 #include "defs.h"
-#include "format.h"           // for Format
-#include "gbfile.h"           // for gbfile
-#include "mkshort.h"          // for MakeShort
+#include "format.h"    // for Format
+#include "gbfile.h"    // for gbfile
+#include "mkshort.h"   // for MakeShort
+#include "option.h"    // for OptionBool, OptionCString
 
 
 class NmeaFormat : public Format

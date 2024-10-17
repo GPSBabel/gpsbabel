@@ -32,6 +32,7 @@
 
 #include "defs.h"
 #include "format.h"                    // for Format
+#include "option.h"                    // for OptionCString
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
 #include "xmlgeneric.h"                // for xg_functor_map_entry, cb_start, cb_end

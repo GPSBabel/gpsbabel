@@ -26,6 +26,7 @@
 
 #include <QDate>                  // for QDate
 #include <QDateTime>              // for QDateTime
+#include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QTime>                  // for QTime
 #include <QVector>                // for QVector
@@ -33,6 +34,7 @@
 #include "defs.h"
 #include "format.h"               // for Format
 #include "geocache.h"             // for Geocache, Geocache::status_t
+#include "option.h"               // for OptionCString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 

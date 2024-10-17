@@ -21,12 +21,14 @@
 #ifndef HTML_H_INCLUDED_
 #define HTML_H_INCLUDED_
 
+#include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"               // for Format
 #include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionCString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 

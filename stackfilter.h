@@ -22,10 +22,13 @@
 #ifndef STACKFILTER_H_INCLUDED_
 #define STACKFILTER_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, ARGTYPE_BEGIN_EXCL
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool, OptionCString
 
 #if FILTERS_ENABLED
 

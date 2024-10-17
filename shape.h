@@ -22,11 +22,13 @@
 #ifndef SHAPE_H_INCLUDED_
 #define SHAPE_H_INCLUDED_
 
+#include <QList>               // for QList
 #include <QString>              // for QString
 #include <QVector>              // for QVector
 
 #include "defs.h"               // for arglist_t, ARGTYPE_STRING, Waypoint, route_head, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"             // for Format
+#include "option.h"            // for OptionCString
 #if SHAPELIB_ENABLED
 #if HAVE_LIBSHAPE
 #  include <shapefil.h>

@@ -22,11 +22,13 @@
 #ifndef SORT_H_INCLUDED_
 #define SORT_H_INCLUDED_
 
+#include <QList>     // for QList
 #include <QString>   // for QString
 #include <QVector>   // for QVector
 
 #include "defs.h"    // for arglist_t, ARGTYPE_BOOL, ARG_NOMINMAX, Waypoint
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool
 
 
 #if FILTERS_ENABLED

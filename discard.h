@@ -22,12 +22,14 @@
 #ifndef DISCARD_H_INCLUDED_
 #define DISCARD_H_INCLUDED_
 
+#include <QList>               // for QList
 #include <QRegularExpression>  // for QRegularExpression
 #include <QString>             // for QString
 #include <QVector>             // for QVector
 
 #include "defs.h"              // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_STRING, ARGTYPE_BOOL, ARGTYPE_INT, ARGTYPE_FLOAT, route_head, ARGTYPE_END_REQ, Waypoint, gpsdata_type
 #include "filter.h"            // for Filter
+#include "option.h"            // for OptionCString, OptionBool
 
 #if FILTERS_ENABLED
 class DiscardFilter:public Filter

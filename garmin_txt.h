@@ -36,6 +36,7 @@
 
 #include "defs.h"
 #include "format.h"               // for Format
+#include "option.h"               // for OptionCString
 #include "src/core/textstream.h"  // for TextStream
 
 

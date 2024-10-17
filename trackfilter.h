@@ -30,6 +30,7 @@
 
 #include "defs.h"               // for ARG_NOMINMAX, route_head (ptr only), ARG...
 #include "filter.h"             // for Filter
+#include "option.h"             // for OptionCString, OptionBool
 #include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS

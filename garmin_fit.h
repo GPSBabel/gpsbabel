@@ -39,6 +39,7 @@
 #include "defs.h"
 #include "format.h"             // for Format
 #include "gbfile.h"             // for gbfile
+#include "option.h"             // for OptionBool
 #include "src/core/datetime.h"  // for DateTime
 
 
