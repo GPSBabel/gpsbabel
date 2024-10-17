@@ -124,7 +124,7 @@ public:
   /* Special Member Functions */
   OptionBool() = default;
 
-  /* Traditionally bool options without default are considered to be false. */
+  /* Traditionally unsupplied bool options without default are considered to be false. */
   explicit(false) operator bool() const
   {
     return (!value_.isNull() && (value_ != '0'));
