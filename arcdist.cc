@@ -24,6 +24,7 @@
 #include <cmath>                  // for round
 #include <cstdio>                 // for printf, sscanf
 #include <cstdlib>                // for strtod
+#include <tuple>                  // for tie, tuple
 
 #include <QByteArray>             // for QByteArray
 #include <QString>                // for QString
@@ -112,7 +113,7 @@ void ArcDistanceFilter::process()
     QString line;
 
     gpsbabel::TextStream stream;
-    stream.open(arcfileopt, QIODevice::ReadOnly, MYNAME);
+    stream.open(arcfileopt.get(), QIODevice::ReadOnly, MYNAME);
 
     auto* arcpt1 = new Waypoint;
     auto* arcpt2 = new Waypoint;
@@ -157,7 +158,7 @@ void ArcDistanceFilter::process()
     if (wp->extra_data) {
       auto* ed = (extra_data*) wp->extra_data;
       wp->extra_data = nullptr;
-      if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
+      if ((ed->distance >= pos_dist) == !exclopt) {
         wp->wpt_flags.marked_for_deletion = 1;
         removed++;
       } else if (projectopt) {

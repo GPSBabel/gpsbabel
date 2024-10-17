@@ -31,6 +31,7 @@
 #include <algorithm>        // for sort
 #include <cassert>          // for assert
 #include <cstdio>           // for printf
+#include <type_traits>      // for is_base_of
 
 #include "arcdist.h"        // for ArcDistanceFilter
 #include "bend.h"           // for BendFilter
@@ -216,9 +217,9 @@ void FilterVecs::prepare_filter(const fltinfo_t& fltdata)
         qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", arg.argstring);
       }
       if (qtemp.isNull()) {
-        Vecs::assign_option(fltdata.fltname, &arg, arg.defaultvalue);
+        Vecs::assign_option(fltdata.fltname, arg, arg.defaultvalue);
       } else {
-        Vecs::assign_option(fltdata.fltname, &arg, qtemp);
+        Vecs::assign_option(fltdata.fltname, arg, qtemp);
       }
     }
   }
@@ -230,7 +231,7 @@ void FilterVecs::prepare_filter(const fltinfo_t& fltdata)
       for (auto& arg : *args) {
         const QString opt = Vecs::get_option(fltdata.options, arg.argstring);
         if (!opt.isNull()) {
-          Vecs::assign_option(fltdata.fltname, &arg, opt);
+          Vecs::assign_option(fltdata.fltname, arg, opt);
         }
       }
     }
@@ -274,9 +275,6 @@ void FilterVecs::init_filter_vec(Filter* flt)
   QVector<arglist_t>* args = flt->get_args();
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
-    for (auto& arg : *args) {
-      arg.argvalptr = nullptr;
-    }
   }
 }
 

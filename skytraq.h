@@ -25,6 +25,7 @@
 #ifndef SKYTRAQ_H_INCLUDED_
 #define SKYTRAQ_H_INCLUDED_
 
+#include <QList>      // for QList
 #include <QDateTime>  // for QDateTime
 #include <QString>    // for QString
 #include <QVector>    // for QVector
@@ -34,6 +35,7 @@
 #include "defs.h"
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
+#include "option.h"   // for OptionCString, OptionBool
 
 
 class SkytraqBase
@@ -149,18 +151,18 @@ protected:
   void* serial_handle = nullptr;		/* IO file descriptor */
   int skytraq_baud = 0;		/* detected baud rate */
 
-  char* opt_erase = nullptr;		/* erase after read? (0/1) */
-  char* opt_initbaud = nullptr;		/* baud rate used to init device */
-  char* opt_dlbaud = nullptr;		/* baud rate used for downloading tracks */
-  char* opt_read_at_once = nullptr;	/* number of sectors to read at once (Venus6 only) */
-  char* opt_first_sector = nullptr;	/* first sector to be read from the device (default: 0) */
-  char* opt_last_sector = nullptr;	/* last sector to be read from the device (default: smart read everything) */
-  char* opt_dump_file = nullptr;		/* dump raw data to this file (optional) */
-  char* opt_no_output = nullptr;		/* disable output? (0/1) */
-  char* opt_set_location = nullptr;	/* set if the "targetlocation" options was used */
-  char* opt_configure_logging = nullptr;
-  char* opt_gps_utc_offset = nullptr;
-  char* opt_gps_week_rollover = nullptr;
+  OptionBool    opt_erase;		/* erase after read? (0/1) */
+  OptionCString opt_initbaud;		/* baud rate used to init device */
+  OptionCString opt_dlbaud;		/* baud rate used for downloading tracks */
+  OptionCString opt_read_at_once;	/* number of sectors to read at once (Venus6 only) */
+  OptionCString opt_first_sector;	/* first sector to be read from the device (default: 0) */
+  OptionCString opt_last_sector;	/* last sector to be read from the device (default: smart read everything) */
+  OptionCString opt_dump_file;		/* dump raw data to this file (optional) */
+  OptionBool    opt_no_output;		/* disable output? (0/1) */
+  OptionCString opt_set_location;	/* set if the "targetlocation" options was used */
+  OptionCString opt_configure_logging;
+  OptionCString opt_gps_utc_offset;
+  OptionCString opt_gps_week_rollover;
 };
 
 class SkytraqFormat : public Format, private SkytraqBase
@@ -339,11 +341,11 @@ private:
 
   /* Data Members */
 
-  char* opt_set_poi_home = nullptr;	/* set if a "poi" option was used */
-  char* opt_set_poi_car = nullptr;	/* set if a "poi" option was used */
-  char* opt_set_poi_boat = nullptr;	/* set if a "poi" option was used */
-  char* opt_set_poi_heart = nullptr;	/* set if a "poi" option was used */
-  char* opt_set_poi_bar = nullptr;	/* set if a "poi" option was used */
+  OptionCString opt_set_poi_home;	/* set if a "poi" option was used */
+  OptionCString opt_set_poi_car;	/* set if a "poi" option was used */
+  OptionCString opt_set_poi_boat;	/* set if a "poi" option was used */
+  OptionCString opt_set_poi_heart;	/* set if a "poi" option was used */
+  OptionCString opt_set_poi_bar;	/* set if a "poi" option was used */
 
   QVector<arglist_t> miniHomer_args = {
     { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200", nullptr },

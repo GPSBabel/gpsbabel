@@ -67,7 +67,7 @@ int TrackFilter::trackfilter_opt_count()
   int res = 0;
 
   for (const auto& arg : std::as_const(args)) {
-    if (*arg.argval != nullptr) {
+    if (arg.argval->has_value()) {
       res++;
     }
   }
@@ -141,23 +141,23 @@ fix_type TrackFilter::trackfilter_parse_fix(int* nsats)
   if (!opt_fix) {
     return fix_unknown;
   }
-  if (!case_ignore_strcmp(opt_fix, "pps")) {
+  if (!case_ignore_strcmp(opt_fix.get(), "pps")) {
     *nsats = 4;
     return fix_pps;
   }
-  if (!case_ignore_strcmp(opt_fix, "dgps")) {
+  if (!case_ignore_strcmp(opt_fix.get(), "dgps")) {
     *nsats = 4;
     return fix_dgps;
   }
-  if (!case_ignore_strcmp(opt_fix, "3d")) {
+  if (!case_ignore_strcmp(opt_fix.get(), "3d")) {
     *nsats = 4;
     return fix_3d;
   }
-  if (!case_ignore_strcmp(opt_fix, "2d")) {
+  if (!case_ignore_strcmp(opt_fix.get(), "2d")) {
     *nsats = 3;
     return fix_2d;
   }
-  if (!case_ignore_strcmp(opt_fix, "none")) {
+  if (!case_ignore_strcmp(opt_fix.get(), "none")) {
     *nsats = 0;
     return fix_none;
   }
@@ -192,7 +192,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
   }
 
   if (opt_name != nullptr) {
-    QRegularExpression regex(QRegularExpression::wildcardToRegularExpression(opt_name),
+    QRegularExpression regex(QRegularExpression::wildcardToRegularExpression(opt_name.get()),
                              QRegularExpression::CaseInsensitiveOption);
     if (!regex.isValid()) {
       fatal(FatalMsg() << "track: name option is an invalid expression.");
@@ -256,7 +256,7 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
       strftime(buff, sizeof(buff), opt_title, &tm);
       track->rte_name = buff;
     } else {
-      track->rte_name = QStringLiteral("%1-%2").arg(opt_title, datetimestring);
+      track->rte_name = QStringLiteral("%1-%2").arg(opt_title.get(), datetimestring);
     }
   } else if (!track->rte_name.isEmpty()) {
     track->rte_name = QStringLiteral("%1-%2").arg(track->rte_name, datetimestring);
@@ -439,7 +439,7 @@ void TrackFilter::trackfilter_split()
     if (opt_interval != 0) {
       static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
-      QRegularExpressionMatch match = re.match(opt_split);
+      QRegularExpressionMatch match = re.match(opt_split.get());
       if (match.hasMatch()) {
         bool ok;
         interval = match.captured(1).toDouble(&ok);
@@ -467,7 +467,7 @@ void TrackFilter::trackfilter_split()
           printf(MYNAME ": interval %f seconds\n", interval);
         }
       } else {
-        fatal(MYNAME ": invalid timer interval specified \"%s\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", opt_split);
+        fatal(MYNAME ": invalid timer interval specified \"%s\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", qPrintable(opt_split.get()));
       }
     }
 
@@ -475,7 +475,7 @@ void TrackFilter::trackfilter_split()
     if (opt_distance != 0) {
       static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
-      QRegularExpressionMatch match = re.match(opt_sdistance);
+      QRegularExpressionMatch match = re.match(opt_sdistance.get());
       if (match.hasMatch()) {
         bool ok;
         distance = match.captured(1).toDouble(&ok);
@@ -498,7 +498,7 @@ void TrackFilter::trackfilter_split()
           printf(MYNAME ": distance %f meters\n", distance);
         }
       } else {
-        fatal(MYNAME ": invalid distance specified \"%s\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", opt_sdistance);
+        fatal(MYNAME ": invalid distance specified \"%s\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", qPrintable(opt_sdistance.get()));
       }
     }
 
@@ -1074,7 +1074,7 @@ void TrackFilter::process()
     }
   }
 
-  if (opt_seg2trk != nullptr) {
+  if (opt_seg2trk) {
     trackfilter_seg2trk();
     // track_list may? now be invalid!
     if (--opts == 0) {
@@ -1086,7 +1086,7 @@ void TrackFilter::process()
     init();
   }
 
-  if (opt_trk2seg != nullptr) {
+  if (opt_trk2seg) {
     trackfilter_trk2seg();
     if (--opts == 0) {
       return;
@@ -1102,7 +1102,7 @@ void TrackFilter::process()
 
   bool something_done = false;
 
-  if ((opt_pack != nullptr) || (opts == -1)) {	/* call our default option */
+  if (opt_pack || (opts == -1)) {	/* call our default option */
     trackfilter_pack();
     something_done = true;
   } else if (opt_merge != nullptr) {

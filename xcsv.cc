@@ -1882,7 +1882,7 @@ XcsvFormat::rd_init(const QString& fname)
       fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
     }
 
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt.get()));
   }
 
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == wptdata)) {
@@ -1940,7 +1940,7 @@ XcsvFormat::wr_init(const QString& fname)
       fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
     }
 
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt.get()));
   }
 
   xcsv_file = new XcsvFile;
@@ -1965,16 +1965,16 @@ XcsvFormat::wr_init(const QString& fname)
       xcsv_file->mkshort_handle.set_length(xstrtoi(snlenopt, nullptr, 10));
     }
 
-    if (snwhiteopt) {
-      xcsv_file->mkshort_handle.set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+    if (snwhiteopt.has_value()) {
+      xcsv_file->mkshort_handle.set_whitespace_ok(snwhiteopt);
     }
 
-    if (snupperopt) {
-      xcsv_file->mkshort_handle.set_mustupper(xstrtoi(snupperopt, nullptr, 10));
+    if (snupperopt.has_value()) {
+      xcsv_file->mkshort_handle.set_mustupper(snupperopt);
     }
 
-    if (snuniqueopt) {
-      xcsv_file->mkshort_handle.set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
+    if (snuniqueopt.has_value()) {
+      xcsv_file->mkshort_handle.set_mustuniq(snuniqueopt);
     }
 
     xcsv_file->mkshort_handle.set_badchars(CSTR(xcsv_style->badchars));

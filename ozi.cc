@@ -332,7 +332,7 @@ OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
     alt_scale = FEET_TO_METERS(1.0);
     break;
   default:
-    fatal(MYNAME ": Unknown value (%s) for option 'altunit'!\n", altunit_opt);
+    fatal(MYNAME ": Unknown value (%s) for option 'altunit'!\n", qPrintable(altunit_opt.get()));
   }
   if (direction != 0) {
     alt_scale = 1 / alt_scale;
@@ -350,7 +350,7 @@ OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
     prox_scale = 1000.0;
     break;
   default:
-    fatal(MYNAME ": Unknown value (%s) for option 'proxunit'!\n", proxunit_opt);
+    fatal(MYNAME ": Unknown value (%s) for option 'proxunit'!\n", qPrintable(proxunit_opt.get()));
   }
   if (direction != 0) {
     prox_scale = 1 / prox_scale;
@@ -389,16 +389,16 @@ OziFormat::wr_init(const QString& fname)
 
     mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
 
-    if (snwhiteopt) {
-      mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+    if (snwhiteopt.has_value()) {
+      mkshort_handle->set_whitespace_ok(snwhiteopt);
     }
 
-    if (snupperopt) {
-      mkshort_handle->set_mustupper(xstrtoi(snupperopt, nullptr, 10));
+    if (snupperopt.has_value()) {
+      mkshort_handle->set_mustupper(snupperopt);
     }
 
-    if (snuniqueopt) {
-      mkshort_handle->set_mustuniq(xstrtoi(snuniqueopt, nullptr, 10));
+    if (snuniqueopt.has_value()) {
+      mkshort_handle->set_mustuniq(snuniqueopt);
     }
 
     mkshort_handle->set_badchars("\",");

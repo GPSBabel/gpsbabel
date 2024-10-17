@@ -19,14 +19,16 @@
 #ifndef GEOJSON_H_INCLUDED_
 #define GEOJSON_H_INCLUDED_
 
-#include <QJsonArray>                // for QJsonArray
-#include <QJsonObject>               // for QJsonObject
-#include <QString>                   // for QString, QStringLiteral
-#include <QVector>                   // for QVector
+#include <QList>            // for QList
+#include <QJsonArray>       // for QJsonArray
+#include <QJsonObject>      // for QJsonObject
+#include <QString>          // for QString, QStringLiteral
+#include <QVector>          // for QVector
 
 #include "defs.h"
-#include "format.h"                  // for Format
-#include "src/core/file.h"
+#include "format.h"         // for Format
+#include "option.h"         // for OptionBool
+#include "src/core/file.h"  // for File
 
 class GeoJsonFormat : public Format
 {
@@ -70,7 +72,7 @@ private:
   gpsbabel::File* ifd{nullptr};
   gpsbabel::File* ofd{nullptr};
   const char* MYNAME = "geojson";
-  char* compact_opt = nullptr;
+  OptionBool compact_opt;
   QJsonObject* track_object = nullptr;
   QJsonArray* track_coords = nullptr;
 

@@ -38,6 +38,7 @@
 #ifndef OZI_H_INCLUDED_
 #define OZI_H_INCLUDED_
 
+#include <QList>                  // for QList
 #include <QIODevice>              // for QIODeviceBase, QIODeviceBase::OpenModeFlag
 #include <QString>                // for QString
 #include <QVector>                // for QVector
@@ -46,6 +47,7 @@
 #include "format.h"               // for Format
 #include "formspec.h"             // for FormatSpecificData, kFsOzi
 #include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionCString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -124,23 +126,23 @@ private:
   int route_wpt_count{};
   int new_track{};
 
-  char* snlenopt = nullptr;
-  char* snwhiteopt = nullptr;
-  char* snupperopt = nullptr;
-  char* snuniqueopt = nullptr;
-  char* wptfgcolor = nullptr;
-  char* wptbgcolor = nullptr;
-  char* pack_opt = nullptr;
+  OptionCString snlenopt;
+  OptionBool snwhiteopt;
+  OptionBool snupperopt;
+  OptionBool snuniqueopt;
+  OptionCString wptfgcolor;
+  OptionCString wptbgcolor;
+  OptionBool pack_opt;
   int datum{};
-  char* proximityarg = nullptr;
+  OptionCString proximityarg;
   double proximity{};
-  char* altunit_opt{};
-  char* proxunit_opt{};
+  OptionCString altunit_opt;
+  OptionCString proxunit_opt;
   char altunit{};
   char proxunit{};
   double alt_scale{};
   double prox_scale{};
-  char* opt_codec{};
+  OptionCString opt_codec;
 
   QVector<arglist_t> ozi_args = {
     {

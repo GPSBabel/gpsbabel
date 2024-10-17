@@ -22,10 +22,13 @@
 #ifndef POLYGON_H_INCLUDED_
 #define POLYGON_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
 #include "defs.h"    // for ARG_NOMINMAX, arglist_t, ARGTYPE_BOOL, ARGTYPE_FILE
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool, OptionCString
 
 #if FILTERS_ENABLED
 
@@ -55,8 +58,8 @@ private:
 
   /* Data Members */
 
-  char* polyfileopt = nullptr;
-  char* exclopt = nullptr;
+  OptionCString polyfileopt;
+  OptionBool exclopt;
 
   QVector<arglist_t> args = {
     {

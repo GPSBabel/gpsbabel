@@ -25,7 +25,6 @@
 #include <cstdint>             // for uint8_t, uint16_t, uint32_t, int32_t, int8_t, uint64_t
 #include <cstdio>              // for EOF, SEEK_SET, snprintf
 #include <deque>               // for deque, _Deque_iterator, operator!=
-#include <memory>              // for allocator_traits<>::value_type
 #include <string>              // for operator+, to_string, char_traits
 #include <utility>             // for pair
 #include <vector>              // for vector

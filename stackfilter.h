@@ -22,10 +22,13 @@
 #ifndef STACKFILTER_H_INCLUDED_
 #define STACKFILTER_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, ARGTYPE_BEGIN_EXCL
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool, OptionCString
 
 #if FILTERS_ENABLED
 
@@ -42,15 +45,15 @@ public:
   void exit() override;
 
 private:
-  char* opt_push = nullptr;
-  char* opt_copy = nullptr;
-  char* opt_pop = nullptr;
-  char* opt_append = nullptr;
-  char* opt_discard = nullptr;
-  char* opt_replace = nullptr;
-  char* opt_swap = nullptr;
-  char* opt_depth = nullptr;
-  char* nowarn = nullptr;
+  OptionBool opt_push;
+  OptionBool opt_copy;
+  OptionBool opt_pop;
+  OptionBool opt_append;
+  OptionBool opt_discard;
+  OptionBool opt_replace;
+  OptionBool opt_swap;
+  OptionCString opt_depth;
+  OptionBool nowarn;
   int  warnings_enabled = 1;
   int  swapdepth = 0;
 

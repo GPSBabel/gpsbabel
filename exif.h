@@ -36,19 +36,21 @@
 #ifndef EXIF_H_INCLUDED_
 #define EXIF_H_INCLUDED_
 
-#include <QDate>      // for QDate
-#include <QDateTime>  // for QDateTime
-#include <QList>      // for QList
-#include <QString>    // for QString
-#include <QTime>      // for QTime
-#include <QVariant>   // for QVariant
-#include <QVector>    // for QVector
+#include <QByteArray>  // for QByteArray
+#include <QDate>       // for QDate
+#include <QDateTime>   // for QDateTime
+#include <QList>       // for QList
+#include <QString>     // for QString
+#include <QTime>       // for QTime
+#include <QVariant>    // for QVariant
+#include <QVector>     // for QVector
 
-#include <cstdint>    // for uint32_t, uint16_t, uint8_t, int16_t, int32_t
+#include <cstdint>     // for uint32_t, uint16_t, uint8_t, int16_t, int32_t
 
-#include "defs.h"     // for arglist_t, ff_cap, Waypoint, ARG_NOMINMAX, ARGTYPE_BOOL, ff_cap_none, ARGTYPE_INT, ARGTYPE_STRING, ff_cap_read, ff_cap_write, ff_type, ff_type_file
-#include "format.h"   // for Format
-#include "gbfile.h"   // for gbfile, gbsize_t
+#include "defs.h"      // for arglist_t, ff_cap, Waypoint, ARG_NOMINMAX, ARGTYPE_BOOL, ff_cap_none, ARGTYPE_INT, ARGTYPE_STRING, ff_cap_read, ff_cap_write, ff_type, ff_type_file
+#include "format.h"    // for Format
+#include "gbfile.h"    // for gbfile, gbsize_t
+#include "option.h"    // for OptionCString, OptionBool
 
 
 class ExifFormat : public Format
@@ -201,11 +203,11 @@ private:
   char exif_success{};
   QString exif_fout_name;
 
-  char* opt_filename{};
-  char* opt_overwrite{};
-  char* opt_frame{};
-  char* opt_name{};
-  char* opt_offsettime{};
+  OptionBool opt_filename;
+  OptionBool opt_overwrite;
+  OptionCString opt_frame;
+  OptionCString opt_name;
+  OptionCString opt_offsettime;
 
   QVector<arglist_t> exif_args = {
     { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },

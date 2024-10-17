@@ -88,7 +88,7 @@ void HeightFilter::correct_height(const Waypoint* wpt)
       waypointp->altitude += addf;
     }
 
-    if (wgs84tomslopt != nullptr) {
+    if (wgs84tomslopt) {
       waypointp->altitude -= wgs84_separation(waypointp->latitude, waypointp->longitude);
     }
   }

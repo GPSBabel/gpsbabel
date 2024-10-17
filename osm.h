@@ -32,6 +32,7 @@
 
 #include "defs.h"
 #include "format.h"                    // for Format
+#include "option.h"                    // for OptionCString
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
 #include "xmlgeneric.h"                // for xg_functor_map_entry, cb_start, cb_end
@@ -110,9 +111,9 @@ private:
 
   /* Data Members */
 
-  char* opt_tag{};
-  char* opt_tagnd{};
-  char* created_by{};
+  OptionCString opt_tag;
+  OptionCString opt_tagnd;
+  OptionCString created_by;
 
   QVector<arglist_t> osm_args = {
     { "tag", &opt_tag, 	"Write additional way tag key/value pairs", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},

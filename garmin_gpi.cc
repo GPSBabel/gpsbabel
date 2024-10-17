@@ -980,7 +980,7 @@ GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* ima
 {
   int sz = wdata_compute_size(wdata);
   sz += 8;  /* string header */
-  sz += str_from_unicode(QString::fromUtf8(opt_cat)).size();
+  sz += str_from_unicode(opt_cat.get()).size();
 
   gbfputint32(0x80009, fout);
   if ((! opt_hide_bitmap) && image_sz) {
@@ -989,7 +989,7 @@ GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* ima
     gbfputint32(sz, fout);
   }
   gbfputint32(sz, fout);
-  write_string(str_from_unicode(QString::fromUtf8(opt_cat)), 1);
+  write_string(str_from_unicode(opt_cat.get()), 1);
 
   wdata_write(wdata);
 
@@ -1044,7 +1044,7 @@ GarminGPIFormat::enum_waypt_cb(const Waypoint* ref) const
 
   auto* wpt = new Waypoint(*ref);
 
-  if (*opt_unique == '1') {
+  if (opt_unique) {
     wpt->shortname = short_h->mkshort(wpt->shortname);
   }
 
@@ -1275,11 +1275,11 @@ GarminGPIFormat::wr_init(const QString& fname)
   }
 
   if (! codepage) {
-    warning(MYNAME ": Unsupported character set (%s)!\n", opt_writecodec);
+    warning(MYNAME ": Unsupported character set (%s)!\n", qPrintable(opt_writecodec.get()));
     fatal(MYNAME ": Valid values are windows-1250 to windows-1257 and utf8.\n");
   }
 
-  codec = get_codec(opt_writecodec);
+  codec = get_codec(opt_writecodec.getba());
 
   units = tolower(opt_units[0]);
   if ((units != 'm') && (units != 's')) {

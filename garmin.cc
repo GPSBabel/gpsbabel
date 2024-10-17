@@ -205,7 +205,7 @@ GarminFormat::rw_init(const QString& fname)
     case 786: /* HC model */
     case 957: /* Legend HC */
       receiver_short_length = 14;
-      snwhiteopt = xstrdup("1");
+      snwhiteopt.set("1");
       receiver_must_upper = false;
       /* This might be 8859-1 */
       receiver_charset = "windows-1252";
@@ -263,8 +263,8 @@ GarminFormat::rw_init(const QString& fname)
     mkshort_handle->set_length(receiver_short_length);
   }
 
-  if (snwhiteopt) {
-    mkshort_handle->set_whitespace_ok(xstrtoi(snwhiteopt, nullptr, 10));
+  if (snwhiteopt.has_value()) {
+    mkshort_handle->set_whitespace_ok(snwhiteopt);
   }
 
   /*
@@ -849,7 +849,7 @@ GarminFormat::waypoint_prepare()
     tx_waylist[i]->lat = wpt->latitude;
 
     if (deficon) {
-      icon = gt_find_icon_number_from_desc(deficon, PCX);
+      icon = gt_find_icon_number_from_desc(deficon.get(), PCX);
     } else {
       if (!wpt->gc_data->get_icon().isEmpty()) {
         icon = gt_find_icon_number_from_desc(wpt->gc_data->get_icon(), PCX);

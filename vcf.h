@@ -20,6 +20,7 @@
 #ifndef VCF_H_INCLUDED_
 #define VCF_H_INCLUDED_
 
+#include <QList>       // for QList
 #include <QString>     // for QString
 #include <QVector>     // for QVector
 
@@ -27,6 +28,7 @@
 #include "format.h"    // for Format
 #include "gbfile.h"    // for gbfile
 #include "geocache.h"  // for Geocache
+#include "option.h"    // for OptionBool
 
 
 class VcfFormat : public Format
@@ -66,7 +68,7 @@ private:
 
   gbfile* file_out{};
 
-  char* vcf_encrypt = nullptr;
+  OptionBool vcf_encrypt;
 
   QVector<arglist_t> vcf_args = {
     {

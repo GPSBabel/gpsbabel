@@ -46,6 +46,7 @@
 #include "geocache.h"                // for Geocache
 #include "formspec.h"                // for FormatSpecificData
 #include "inifile.h"                 // for inifile_t
+#include "option.h"
 #include "session.h"                 // for session_t
 #include "src/core/datetime.h"       // for DateTime
 
@@ -873,13 +874,13 @@ extern posn_status tracking_status;
 
 struct arglist_t {
   const QString argstring;
-  char** const argval{nullptr};
+  Option* const argval{nullptr};
   const QString helpstring;
   const QString defaultvalue;
   const uint32_t argtype{ARGTYPE_UNKNOWN};
   const QString minvalue;    /* minimum value for numeric options */
   const QString maxvalue;    /* maximum value for numeric options */
-  char* argvalptr{nullptr};         /* !!! internal helper. Not used in definitions !!! */
+  char* unused{nullptr};     /* TODO: delete from initialization lists */
 };
 
 enum ff_type {

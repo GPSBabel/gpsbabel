@@ -131,11 +131,11 @@ void TransformFilter::transform_tracks()
 
 void TransformFilter::process()
 {
-  timeless = opt_timeless && (*opt_timeless == '1');
+  timeless = opt_timeless;
 
-  bool delete_after = opt_delete && (*opt_delete == '1');
+  bool delete_after = opt_delete;
 
-  use_src_name = opt_rpt_name && (*opt_rpt_name == '1');
+  use_src_name = opt_rpt_name;
 
   name_digits = 3;
   if (rpt_name_digits && *rpt_name_digits) {
@@ -158,7 +158,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_waypts);
+      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_waypts.get()));
     }
   }
   if (opt_routes != nullptr) {
@@ -177,7 +177,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_routes);
+      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_routes.get()));
     }
   }
   if (opt_tracks != nullptr) {
@@ -196,7 +196,7 @@ void TransformFilter::process()
       }
       break;
     default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_tracks);
+      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_tracks.get()));
     }
   }
 }

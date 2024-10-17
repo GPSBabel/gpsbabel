@@ -157,25 +157,25 @@ void DiscardFilter::init()
   }
 
   if (nameopt) {
-    name_regex = generateRegExp(nameopt);
+    name_regex = generateRegExp(nameopt.get());
     if (!name_regex.isValid()) {
       fatal(FatalMsg() << "discard: matchname option is an invalid expression.");
     }
   }
   if (descopt) {
-    desc_regex = generateRegExp(descopt);
+    desc_regex = generateRegExp(descopt.get());
     if (!desc_regex.isValid()) {
       fatal(FatalMsg() << "discard: matchdesc option is an invalid expression.");
     }
   }
   if (cmtopt) {
-    cmt_regex = generateRegExp(cmtopt);
+    cmt_regex = generateRegExp(cmtopt.get());
     if (!cmt_regex.isValid()) {
       fatal(FatalMsg() << "discard: matchcmt option is an invalid expression.");
     }
   }
   if (iconopt) {
-    icon_regex = generateRegExp(iconopt);
+    icon_regex = generateRegExp(iconopt.get());
     if (!icon_regex.isValid()) {
       fatal(FatalMsg() << "discard: matchicon option is an invalid expression.");
     }

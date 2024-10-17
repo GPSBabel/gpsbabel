@@ -60,6 +60,7 @@
 #include "garmin_fs.h"  // for garmin_fs_t
 #include "gbfile.h"     // for gbfile
 #include "mkshort.h"    // for MakeShort
+#include "option.h"     // for OptionCString, OptionBool
 
 
 class GarminGPIFormat : public Format
@@ -307,10 +308,20 @@ private:
 
   /* Data Members */
 
-  char* opt_cat{}, *opt_pos{}, *opt_notes{}, *opt_hide_bitmap{}, *opt_descr{}, *opt_bitmap{};
-  char* opt_unique{}, *opt_alerts{}, *opt_units{}, *opt_speed{}, *opt_proximity{}, *opt_sleep{};
-  char* opt_lang{};
-  char* opt_writecodec{};
+  OptionCString opt_cat;
+  OptionBool opt_pos;
+  OptionBool opt_notes;
+  OptionBool opt_hide_bitmap;
+  OptionBool opt_descr;
+  OptionCString opt_bitmap;
+  OptionBool opt_unique;
+  OptionBool opt_alerts;
+  OptionCString opt_units;
+  OptionCString opt_speed;
+  OptionCString opt_proximity;
+  OptionCString opt_sleep;
+  OptionCString opt_lang;
+  OptionCString opt_writecodec;
   double defspeed{}, defproximity{};
   int alerts{};
 
