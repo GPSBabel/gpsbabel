@@ -22,11 +22,13 @@
 #ifndef SORT_H_INCLUDED_
 #define SORT_H_INCLUDED_
 
+#include <QList>     // for QList
 #include <QString>   // for QString
 #include <QVector>   // for QVector
 
 #include "defs.h"    // for arglist_t, ARGTYPE_BOOL, ARG_NOMINMAX, Waypoint
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool
 
 
 #if FILTERS_ENABLED
@@ -79,16 +81,16 @@ private:
   SortModeRteHd rte_sort_mode{SortModeRteHd::none};	/* How are we sorting these? */
   SortModeRteHd trk_sort_mode{SortModeRteHd::none};	/* How are we sorting these? */
 
-  char* opt_sm_gcid{};
-  char* opt_sm_shortname{};
-  char* opt_sm_description{};
-  char* opt_sm_time{};
-  char* opt_sm_rtenum{};
-  char* opt_sm_rtename{};
-  char* opt_sm_rtedesc{};
-  char* opt_sm_trknum{};
-  char* opt_sm_trkname{};
-  char* opt_sm_trkdesc{};
+  OptionBool opt_sm_gcid;
+  OptionBool opt_sm_shortname;
+  OptionBool opt_sm_description;
+  OptionBool opt_sm_time;
+  OptionBool opt_sm_rtenum;
+  OptionBool opt_sm_rtename;
+  OptionBool opt_sm_rtedesc;
+  OptionBool opt_sm_trknum;
+  OptionBool opt_sm_trkname;
+  OptionBool opt_sm_trkdesc;
 
   QVector<arglist_t> args = {
     {

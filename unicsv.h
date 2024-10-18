@@ -26,6 +26,7 @@
 
 #include <QDate>                  // for QDate
 #include <QDateTime>              // for QDateTime
+#include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QTime>                  // for QTime
 #include <QVector>                // for QVector
@@ -33,6 +34,7 @@
 #include "defs.h"
 #include "format.h"               // for Format
 #include "geocache.h"             // for Geocache, Geocache::status_t
+#include "option.h"               // for OptionCString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -198,14 +200,14 @@ private:
   std::bitset<fld_terminator> unicsv_outp_flags;
   grid_type unicsv_grid_idx{grid_unknown};
   int unicsv_datum_idx{};
-  char* opt_datum{nullptr};
-  char* opt_grid{nullptr};
-  char* opt_utc{nullptr};
-  char* opt_filename{nullptr};
-  char* opt_format{nullptr};
-  char* opt_prec{nullptr};
-  char* opt_fields{nullptr};
-  char* opt_codec{nullptr};
+  OptionCString opt_datum;
+  OptionCString opt_grid;
+  OptionCString opt_utc;
+  OptionBool opt_filename;
+  OptionBool opt_format;
+  OptionCString opt_prec;
+  OptionCString opt_fields;
+  OptionCString opt_codec;
   int unicsv_waypt_ct{};
   char unicsv_detect{};
   int llprec{};

@@ -21,12 +21,14 @@
 #ifndef TEXT_H_INCLUDED_
 #define TEXT_H_INCLUDED_
 
+#include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"               // for Format
 #include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionBool, OptionCString
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -63,12 +65,12 @@ private:
   gpsbabel::TextStream* file_out{nullptr};
   MakeShort* mkshort_handle{};
 
-  char* suppresssep = nullptr;
-  char* txt_encrypt = nullptr;
-  char* includelogs = nullptr;
-  char* degformat = nullptr;
-  char* altunits = nullptr;
-  char* split_output = nullptr;
+  OptionBool suppresssep;
+  OptionBool txt_encrypt;
+  OptionBool includelogs;
+  OptionCString degformat;
+  OptionCString altunits;
+  OptionBool split_output;
   int waypoint_count{};
   QString output_name;
 

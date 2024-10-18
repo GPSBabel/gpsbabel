@@ -986,7 +986,7 @@ GpxFormat::wr_init(const QString& fname)
   */
 
   if (opt_gpxver != nullptr) {
-    gpx_write_version = QVersionNumber::fromString(opt_gpxver).normalized();
+    gpx_write_version = QVersionNumber::fromString(opt_gpxver.get()).normalized();
   } else if (!gpx_highest_version_read.isNull()) {
     gpx_write_version = gpx_highest_version_read;
   } else {

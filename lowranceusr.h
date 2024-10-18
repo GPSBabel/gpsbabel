@@ -100,10 +100,11 @@
 
 #include "defs.h"
 #include "format.h"
-#include "formspec.h"             // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
-#include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
-#include "mkshort.h"              // for MakeShort
-#include "src/core/datetime.h"    // for DateTime
+#include "formspec.h"           // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
+#include "gbfile.h"             // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
+#include "mkshort.h"            // for MakeShort
+#include "option.h"             // for OptionBool, OptionCString
+#include "src/core/datetime.h"  // for DateTime
 
 
 class LowranceusrFormat : public Format
@@ -444,13 +445,13 @@ private:
   int            route_uid{};
   int            trail_uid{};
 
-  char*          opt_ignoreicons{};
-  char*          opt_writeasicons{};
-  char*          opt_seg_break{};
-  char*          opt_wversion{};
-  char*          opt_title{};
-  char*          opt_content_descr{};
-  char*          opt_serialnum{};
+  OptionBool  opt_ignoreicons;
+  OptionBool  opt_writeasicons;
+  OptionBool  opt_seg_break;
+  OptionCString  opt_wversion;
+  OptionCString  opt_title;
+  OptionCString  opt_content_descr;
+  OptionCString  opt_serialnum;
   int            opt_serialnum_i{};
 
   QList<const Waypoint*>* waypt_table{nullptr};
@@ -460,7 +461,7 @@ private:
   int            trail_point_count{};
   bool           merge_new_track{false};
   short          num_section_points{};
-  char*          merge{};
+  OptionBool  merge;
   int            reading_version{};
   int            rstream_version{};
   int            writing_version{};

@@ -27,12 +27,14 @@
 
 #include <cstdint>   // for uint8_t, uint16_t, uint32_t
 
+#include <QList>     // for QList
 #include <QString>   // for QString
 #include <QVector>   // for QVector
 
 #include "defs.h"
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
+#include "option.h"  // for OptionCString
 
 
 class GarminXTFormat : public Format
@@ -92,8 +94,8 @@ private:
 
   gbfile* fin{};
   route_head* track{};
-  char*	opt_xt_ftype = nullptr;
-  char*	opt_trk_header = nullptr;
+  OptionCString	opt_xt_ftype;
+  OptionCString	opt_trk_header;
 
   QVector<arglist_t> format_garmin_xt_args = {
     {"ftype", &opt_xt_ftype, "Garmin Mobile XT ([ATRK]/STRK)", "ATRK", ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr},

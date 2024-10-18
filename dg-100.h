@@ -30,17 +30,18 @@
 #ifndef DG100_H_INCLUDED_
 #define DG100_H_INCLUDED_
 
-#include <cstdint>           // for uint8_t, int16_t, uint16_t
-#include <cstdio>            // for size_t
+#include <cstdint>    // for uint8_t, int16_t, uint16_t
+#include <cstdio>     // for size_t
 
-#include <QDateTime>         // for QDateTime
-#include <QList>             // for QList
-#include <QString>           // for QString
-#include <QVector>           // for QVector
+#include <QDateTime>  // for QDateTime
+#include <QList>      // for QList
+#include <QString>    // for QString
+#include <QVector>    // for QVector
 
 #include "defs.h"
-#include "format.h"          // for Format
-#include "gbfile.h"          // for gbfile
+#include "format.h"   // for Format
+#include "gbfile.h"   // for gbfile
+#include "option.h"   // for OptionBool
 
 
 class Dg100Format : public Format
@@ -141,8 +142,8 @@ protected:
 
   /* GPSBabel integration */
 
-  char* erase{nullptr};
-  char* erase_only{nullptr};
+  OptionBool erase;
+  OptionBool erase_only;
 
   QVector<arglist_t> dg100_args = {
     {

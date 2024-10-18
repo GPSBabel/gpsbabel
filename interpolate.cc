@@ -40,14 +40,14 @@
 
 void InterpolateFilter::process()
 {
-  if (((opt_route != nullptr) && (route_count() == 0)) || ((opt_route == nullptr) && (track_count() == 0))) {
+  if ((opt_route && (route_count() == 0)) || (!opt_route && (track_count() == 0))) {
     fatal(FatalMsg() << MYNAME ": Found no routes or tracks to operate on.");
   }
 
   auto process_rte_lambda = [this](const route_head* rte)->void {
     process_rte(const_cast<route_head*>(rte));
   };
-  if (opt_route != nullptr) {
+  if (opt_route) {
     route_disp_all(process_rte_lambda, nullptr, nullptr);
   } else {
     track_disp_all(process_rte_lambda, nullptr, nullptr);
@@ -58,7 +58,7 @@ void InterpolateFilter::process_rte(route_head* rte)
 {
   // Steal all the wpts
   WaypointList wptlist;
-  if (opt_route != nullptr) {
+  if (opt_route) {
     route_swap_wpts(rte, wptlist);
   } else {
     track_swap_wpts(rte, wptlist);
@@ -121,14 +121,14 @@ void InterpolateFilter::process_rte(route_head* rte)
         } else {
           wpt_new->altitude = unknown_alt;
         }
-        if (opt_route != nullptr) {
+        if (opt_route) {
           route_add_wpt(rte, wpt_new);
         } else {
           track_add_wpt(rte, wpt_new);
         }
       }
     }
-    if (opt_route != nullptr) {
+    if (opt_route) {
       route_add_wpt(rte, wpt);
     } else {
       track_add_wpt(rte, wpt);
@@ -145,7 +145,7 @@ void InterpolateFilter::init()
   char* fm;
   if ((opt_time != nullptr) && (opt_dist != nullptr)) {
     fatal(FatalMsg() << MYNAME ": Can't interpolate on both time and distance.");
-  } else if ((opt_time != nullptr) && (opt_route != nullptr)) {
+  } else if ((opt_time != nullptr) && opt_route) {
     fatal(FatalMsg() << MYNAME ": Can't interpolate routes on time.");
   } else if (opt_time != nullptr) {
     max_time_step = 1000 * strtod(opt_time, nullptr); // milliseconds

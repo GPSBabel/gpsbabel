@@ -21,12 +21,14 @@
 #ifndef HTML_H_INCLUDED_
 #define HTML_H_INCLUDED_
 
+#include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"               // for Format
 #include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionCString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -67,11 +69,11 @@ private:
 
   int waypoint_number{};
 
-  char* stylesheet = nullptr;
-  char* html_encrypt = nullptr;
-  char* includelogs = nullptr;
-  char* degformat = nullptr;
-  char* altunits = nullptr;
+  OptionCString stylesheet;
+  OptionBool html_encrypt;
+  OptionBool includelogs;
+  OptionCString degformat;
+  OptionCString altunits;
 
   QVector<arglist_t> html_args = {
     {

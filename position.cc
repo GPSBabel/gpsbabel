@@ -28,6 +28,7 @@
 #include <QtGlobal>             // for qRound64, qint64
 
 #include "defs.h"
+#include "grtcirc.h"            // for gcdist, radtometers
 #include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED
@@ -74,7 +75,7 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
           }
         }
 
-        if (something_deleted && (purge_duplicates != nullptr)) {
+        if (something_deleted && purge_duplicates) {
           qlist.at(i).wpt->wpt_flags.marked_for_deletion = 1;
         }
       }

@@ -157,7 +157,6 @@ sentence is truncated - and missing part of the line, including the checksum.
 */
 
 #define MYNAME "nmea"
-#define CHECK_BOOL(a) if ((a) && (*(a) == '0')) (a) = NULL
 
 /*
  * Slightly different than the Magellan checksum fn.
@@ -226,12 +225,6 @@ NmeaFormat::rd_init(const QString& fname)
   datum = kDatumWGS84;
   had_checksum = false;
 
-  CHECK_BOOL(opt_gprmc);
-  CHECK_BOOL(opt_gpgga);
-  CHECK_BOOL(opt_gpvtg);
-  CHECK_BOOL(opt_gpgsa);
-  CHECK_BOOL(opt_gisteq);
-
   pcmpt_head.clear();
 
   if (getposnarg) {
@@ -283,15 +276,7 @@ NmeaFormat::rd_deinit()
 void
 NmeaFormat::wr_init(const QString& fname)
 {
-  CHECK_BOOL(opt_gprmc);
-  CHECK_BOOL(opt_gpgga);
-  CHECK_BOOL(opt_gpvtg);
-  CHECK_BOOL(opt_gpgsa);
-  CHECK_BOOL(opt_gisteq);
-
-  append_output = strtod(opt_append, nullptr);
-
-  file_out = gbfopen(fname, append_output ? "a+" : "w+", MYNAME);
+  file_out = gbfopen(fname, opt_append ? "a+" : "w+", MYNAME);
 
   sleepms = -1;
   if (opt_sleep) {
@@ -306,9 +291,9 @@ NmeaFormat::wr_init(const QString& fname)
   mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
 
   if (opt_gisteq) {
-    opt_gpgga = nullptr;
-    opt_gpvtg = nullptr;
-    opt_gpgsa = nullptr;
+    opt_gpgga.reset();
+    opt_gpvtg.reset();
+    opt_gpgsa.reset();
   }
 }
 
@@ -460,7 +445,6 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
    * as serial units will often spit a remembered position up and
    * that is more comfortable than nothing at all...
    */
-  CHECK_BOOL(opt_ignorefix);
   if ((fix <= 0) && (read_mode != rm_serial || (latdeg == 0.0 && lngdeg == 0.0)) && (!opt_ignorefix)) {
     return;
   }
@@ -997,9 +981,9 @@ NmeaFormat::read()
   }
 
   if (optdate) {
-    opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
+    opt_tm = QDate::fromString(optdate.get(), u"yyyyMMdd");
     if (!opt_tm.isValid()) {
-      fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
+      fatal(MYNAME ": Invalid date \"%s\"!\n", qPrintable(optdate.get()));
     }
   }
 
@@ -1062,7 +1046,7 @@ NmeaFormat::rd_position_init(const QString& fname)
 
   if (opt_baud) {
     if (!gbser_set_speed(gbser_handle, xstrtoi(opt_baud, nullptr, 10))) {
-      fatal(MYNAME ": Unable to set baud rate %s\n", opt_baud);
+      fatal(MYNAME ": Unable to set baud rate %s\n", qPrintable(opt_baud.get()));
     }
   }
   posn_fname = fname;

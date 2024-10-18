@@ -34,6 +34,7 @@
 
 #include "defs.h"
 #include "format.h"
+#include "option.h"                    // for OptionBool, OptionCString
 #include "src/core/datetime.h"         // for DateTime
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
@@ -138,7 +139,7 @@ private:
   void gx_trk_e(const QString& args, const QXmlStreamAttributes* attrs);
   void gx_trk_when(const QString& args, const QXmlStreamAttributes* attrs);
   void gx_trk_coord(const QString& args, const QXmlStreamAttributes* attrs);
-  void kml_output_linestyle(char* color, int width) const;
+  void kml_output_linestyle(const QString& color, int width) const;
   void kml_write_bitmap_style_(const QString& style, const QString& bitmap, bool highlighted, bool force_heading) const;
   void kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap, const QString& customstyle) const;
   void kml_output_timestamp(const Waypoint* waypointp) const;
@@ -193,21 +194,21 @@ private:
   QHash<const route_head*, track_trait_t> kml_track_traits_hash;
 
   // options
-  char* opt_deficon{nullptr};
-  char* opt_export_lines{nullptr};
-  char* opt_export_points{nullptr};
-  char* opt_export_track{nullptr};
-  char* opt_line_width{nullptr};
-  char* opt_line_color{nullptr};
-  char* opt_floating{nullptr};
-  char* opt_extrude{nullptr};
-  char* opt_trackdata{nullptr};
-  char* opt_trackdirection{nullptr};
-  char* opt_units{nullptr};
-  char* opt_labels{nullptr};
-  char* opt_max_position_points{nullptr};
-  char* opt_rotate_colors{nullptr};
-  char* opt_precision{nullptr};
+  OptionCString opt_deficon;
+  OptionBool opt_export_lines;
+  OptionBool opt_export_points;
+  OptionBool opt_export_track;
+  OptionCString opt_line_width;
+  OptionCString opt_line_color;
+  OptionBool opt_floating;
+  OptionBool opt_extrude;
+  OptionBool opt_trackdata;
+  OptionBool opt_trackdirection;
+  OptionCString opt_units;
+  OptionBool opt_labels;
+  OptionCString opt_max_position_points;
+  OptionCString opt_rotate_colors;
+  OptionCString opt_precision;
 
   bool export_lines{};
   bool export_points{};

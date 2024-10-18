@@ -30,6 +30,7 @@
 
 #include "defs.h"               // for ARG_NOMINMAX, route_head (ptr only), ARG...
 #include "filter.h"             // for Filter
+#include "option.h"             // for OptionCString, OptionBool
 #include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
@@ -107,24 +108,24 @@ private:
 
   /* Data Members */
 
-  char* opt_merge = nullptr;
-  char* opt_pack = nullptr;
-  char* opt_split = nullptr;
-  char* opt_sdistance = nullptr;
-  char* opt_move = nullptr;
-  char* opt_title = nullptr;
-  char* opt_start = nullptr;
-  char* opt_stop = nullptr;
-  char* opt_fix = nullptr;
-  char* opt_course = nullptr;
-  char* opt_speed = nullptr;
-  char* opt_name = nullptr;
-  char* opt_seg2trk = nullptr;
-  char* opt_trk2seg = nullptr;
-  char* opt_segment = nullptr;
-  char* opt_faketime = nullptr;
-  char* opt_discard = nullptr;
-  char* opt_minpoints = nullptr;
+  OptionCString opt_merge;
+  OptionBool opt_pack;
+  OptionCString opt_split;
+  OptionCString opt_sdistance;
+  OptionCString opt_move;
+  OptionCString opt_title;
+  OptionCString opt_start;
+  OptionCString opt_stop;
+  OptionCString opt_fix;
+  OptionBool opt_course;
+  OptionBool opt_speed;
+  OptionCString opt_name;
+  OptionBool opt_seg2trk;
+  OptionBool opt_trk2seg;
+  OptionBool opt_segment;
+  OptionCString opt_faketime;
+  OptionBool opt_discard;
+  OptionCString opt_minpoints;
   int minimum_points{0};
 
   QVector<arglist_t> args = {

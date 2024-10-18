@@ -35,6 +35,7 @@
 #include "defs.h"                // for arglist_t, ff_cap, route_head, Waypoint, computed_trkdata, ARG_NOMINMAX, ff_cap_read, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ff_cap_write, ff_type, ff_type_file
 #include "format.h"              // for Format
 #include "gbfile.h"              // for gbfile
+#include "option.h"              // for OptionBool, OptionCString
 #include "src/core/datetime.h"   // for DateTime
 #include "xmlgeneric.h"          // for cb_cdata, xg_functor_map_entry, cb_start, cb_end
 
@@ -132,8 +133,8 @@ private:
   double gtc_end_lat{};
   double gtc_end_long{};
 
-  char* opt_sport{};
-  char* opt_course{};
+  OptionCString opt_sport;
+  OptionBool opt_course;
 
   QVector<arglist_t> gtc_args = {
     {

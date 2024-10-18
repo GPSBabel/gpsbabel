@@ -28,20 +28,22 @@
 #ifndef IGC_H_INCLUDED_
 #define IGC_H_INCLUDED_
 
-#include <optional>              // for optional
-#include <QByteArray>            // for QByteArray
-#include <QDateTime>             // for QDateTime
-#include <QList>                 // for QList<>::const_iterator
-#include <QString>               // for QString, operator+, QStringLiteral
-#include <QVector>               // for QVector
-#include <QHash>                 // for QHash
+#include <optional>             // for optional
+
+#include <QByteArray>           // for QByteArray
+#include <QDateTime>            // for QDateTime
+#include <QList>                // for QList<>::const_iterator
+#include <QString>              // for QString, operator+, QStringLiteral
+#include <QVector>              // for QVector
+#include <QHash>                // for QHash
 
 #include "defs.h"
-#include "format.h"              // for Format
-#include "formspec.h"            // for FormatSpecificData, kFsIGC
-#include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
-#include "src/core/datetime.h"   // for DateTime
-#include "kml.h"                 // for wp_field
+#include "format.h"             // for Format
+#include "formspec.h"           // for FormatSpecificData, kFsIGC
+#include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
+#include "kml.h"                // for wp_field
+#include "option.h"             // for OptionBool, OptionCString
+#include "src/core/datetime.h"  // for DateTime
 
 /*
  * Notes on IGC extensions:
@@ -138,18 +140,18 @@ private:
     rec_bad = 1,		// Bad record
   };
 
-  char* opt_enl{nullptr};
-  char* opt_tas{nullptr};
-  char* opt_vat{nullptr};
-  char* opt_oat{nullptr};
-  char* opt_trt{nullptr};
-  char* opt_gsp{nullptr};
-  char* opt_fxa{nullptr};
-  char* opt_siu{nullptr};
-  char* opt_acz{nullptr};
-  char* opt_gfo{nullptr};
+  OptionBool opt_enl;
+  OptionBool opt_tas;
+  OptionBool opt_vat;
+  OptionBool opt_oat;
+  OptionBool opt_trt;
+  OptionBool opt_gsp;
+  OptionBool opt_fxa;
+  OptionBool opt_siu;
+  OptionBool opt_acz;
+  OptionBool opt_gfo;
 
-  const QHash<igc_ext_type_t, char**> ext_option_map = {
+  const QHash<igc_ext_type_t, OptionBool*> ext_option_map = {
     {igc_ext_type_t::ext_rec_enl, &opt_enl},
     {igc_ext_type_t::ext_rec_tas, &opt_tas},
     {igc_ext_type_t::ext_rec_vat, &opt_vat},
@@ -292,7 +294,7 @@ private:
   gbfile* file_out{};
   char manufacturer[4] {};
   const route_head* head{};
-  char* timeadj = nullptr;
+  OptionCString timeadj;
 
   QVector<arglist_t> igc_args = {
     {

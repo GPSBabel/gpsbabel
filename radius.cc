@@ -28,6 +28,7 @@
 #include <QtGlobal>         // QAddConst<>::Type, foreach
 
 #include "defs.h"           // for Waypoint, del_marked_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, xstrtoi, route_head, WaypointList, kMilesPerKilometer
+#include "grtcirc.h"         // for gcdist, radtomiles
 
 
 #if FILTERS_ENABLED
@@ -38,7 +39,7 @@ void RadiusFilter::process()
     double dist = radtomiles(gcdist(waypointp->position(),
                                     home_pos->position()));
 
-    if ((dist >= pos_dist) == (exclopt == nullptr)) {
+    if ((dist >= pos_dist) == !exclopt) {
       waypointp->wpt_flags.marked_for_deletion = 1;
     } else {
       auto* ed = new extra_data;
@@ -48,7 +49,7 @@ void RadiusFilter::process()
   }
   del_marked_wpts();
 
-  if (nosort == nullptr) {
+  if (!nosort) {
     auto dist_comp_lambda = [](const Waypoint* a, const Waypoint* b)->bool {
       const auto* aed = static_cast<const extra_data*>(a->extra_data);
       const auto* bed = static_cast<const extra_data*>(b->extra_data);

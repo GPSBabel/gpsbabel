@@ -413,7 +413,7 @@ void KmlFormat::wr_init(const QString& fname)
     unitsformatter->setunits(UnitsFormatter::units_t::aviation);
     break;
   default:
-    fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", opt_units);
+    fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", qPrintable(opt_units.get()));
     break;
   }
   /*
@@ -472,11 +472,11 @@ void KmlFormat::wr_position_deinit()
 }
 
 
-void KmlFormat::kml_output_linestyle(char* /*color*/, int width) const
+void KmlFormat::kml_output_linestyle(const QString& color, int width) const
 {
   // Style settings for line strings
   writer->writeStartElement(QStringLiteral("LineStyle"));
-  writer->writeTextElement(QStringLiteral("color"), opt_line_color);
+  writer->writeTextElement(QStringLiteral("color"), color);
   writer->writeTextElement(QStringLiteral("width"), QString::number(width));
   writer->writeEndElement(); // Close LineStyle tag
 }
@@ -516,7 +516,7 @@ void KmlFormat::kml_write_bitmap_style_(const QString& style, const QString& bit
   }
 
   if (is_multitrack) {
-    kml_output_linestyle(opt_line_color,
+    kml_output_linestyle(opt_line_color.get(),
                          highlighted ? line_width + 2 :
                          line_width);
   }
@@ -872,7 +872,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
 
   if (export_points) {
     writer->writeStartElement(QStringLiteral("Placemark"));
-    if (xstrtoi(opt_labels, nullptr, 10)) {
+    if (opt_labels) {
       writer->writeOptionalTextElement(QStringLiteral("name"), waypointp->shortname);
     }
     writer->writeEmptyElement(QStringLiteral("snippet"));
@@ -885,7 +885,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
       writer->writeStartElement(QStringLiteral("Style"));
       writer->writeStartElement(QStringLiteral("IconStyle"));
       writer->writeStartElement(QStringLiteral("Icon"));
-      writer->writeTextElement(QStringLiteral("href"), opt_deficon);
+      writer->writeTextElement(QStringLiteral("href"), opt_deficon.get());
       writer->writeEndElement(); // Close Icon tag
       writer->writeEndElement(); // Close IconStyle tag
       writer->writeEndElement(); // Close Style tag
@@ -944,7 +944,7 @@ void KmlFormat::kml_output_tailer(const route_head* header)
         kml_step_color();
         writer->writeTextElement(QStringLiteral("color"), QStringLiteral("%1%2")
                                  .arg(kml_color_sequencer.color.opacity, 2, 16, QChar('0')).arg(kml_color_sequencer.color.bbggrr, 6, 16, QChar('0')));
-        writer->writeTextElement(QStringLiteral("width"), opt_line_width);
+        writer->writeTextElement(QStringLiteral("width"), opt_line_width.get());
       } else {
         if (header->line_color.bbggrr >= 0) {
           writer->writeTextElement(QStringLiteral("color"), QStringLiteral("%1%2")
@@ -1455,7 +1455,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
   kml_output_timestamp(waypointp);
 
   // Icon - but only if it looks like a URL.
-  icon = opt_deficon ? opt_deficon : waypointp->icon_descr;
+  icon = opt_deficon ? opt_deficon.get() : waypointp->icon_descr;
   if (icon.contains("://")) {
     writer->writeStartElement(QStringLiteral("Style"));
     writer->writeStartElement(QStringLiteral("IconStyle"));
@@ -1844,14 +1844,14 @@ void KmlFormat::kml_mt_array_schema(const QString& field_name, const QString& di
 void KmlFormat::write()
 {
   // Parse options
-  export_lines = (0 == strcmp("1", opt_export_lines));
-  export_points = (0 == strcmp("1", opt_export_points));
-  export_track = (0 ==  strcmp("1", opt_export_track));
-  floating = (!! strcmp("0", opt_floating));
-  extrude = (!! strcmp("0", opt_extrude));
+  export_lines = opt_export_lines;
+  export_points = opt_export_points;
+  export_track = opt_export_track;
+  floating = opt_floating;
+  extrude = opt_extrude;
   rotate_colors = (!! opt_rotate_colors);
-  trackdata = (!! strcmp("0", opt_trackdata));
-  trackdirection = (!! strcmp("0", opt_trackdirection));
+  trackdata = opt_trackdata;
+  trackdirection = opt_trackdirection;
   line_width = xstrtoi(opt_line_width, nullptr, 10);
   precision = xstrtoi(opt_precision, nullptr, 10);
 
@@ -1902,7 +1902,7 @@ void KmlFormat::write()
   if (track_waypt_count() || route_waypt_count()) {
     writer->writeStartElement(QStringLiteral("Style"));
     writer->writeAttribute(QStringLiteral("id"), QStringLiteral("lineStyle"));
-    kml_output_linestyle(opt_line_color, line_width);
+    kml_output_linestyle(opt_line_color.get(), line_width);
     writer->writeEndElement(); // Close Style tag
   }
 

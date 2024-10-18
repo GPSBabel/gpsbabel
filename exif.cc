@@ -1178,7 +1178,7 @@ ExifFormat::exif_find_wpt_by_name(const Waypoint* wpt)
 {
   if (exif_wpt_ref != nullptr) {
     return;
-  } else if ((wpt->shortname != nullptr) && (case_ignore_strcmp(wpt->shortname, opt_name) == 0)) {
+  } else if ((wpt->shortname != nullptr) && (case_ignore_strcmp(wpt->shortname, opt_name.get()) == 0)) {
     exif_wpt_ref = wpt;
   }
 }
@@ -1502,7 +1502,7 @@ ExifFormat::wr_deinit()
   gbfclose(fout_);
 
   if (exif_success) {
-    if (*opt_overwrite == '1') {
+    if (opt_overwrite) {
       QFile::remove(exif_fout_name);
       QFile::rename(tmpname, exif_fout_name);
     }
@@ -1530,7 +1530,7 @@ ExifFormat::write()
       track_disp_all(nullptr, nullptr, exif_find_wpt_by_name_lambda);
     }
     if (exif_wpt_ref == nullptr) {
-      warning(MYNAME ": No matching point with name \"%s\" found.\n", opt_name);
+      warning(MYNAME ": No matching point with name \"%s\" found.\n", qPrintable(opt_name.get()));
     }
   } else {
     auto exif_find_wpt_by_time_lambda = [this](const Waypoint* waypointp)->void {

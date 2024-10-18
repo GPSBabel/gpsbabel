@@ -268,12 +268,12 @@ GlobalsatSportFormat::rd_init(const QString& fname)
     printf(MYNAME " rd_init()\n");
   }
   if (opt_dump_file) {
-    dumpfile = gbfopen(opt_dump_file, "wb", MYNAME);
+    dumpfile = gbfopen(opt_dump_file.get(), "wb", MYNAME);
     if (!dumpfile) {
-      printf(MYNAME " rd_init() creating dumpfile %s FAILED continue anyway\n", opt_dump_file);
+      printf(MYNAME " rd_init() creating dumpfile %s FAILED continue anyway\n", qPrintable(opt_dump_file.get()));
     } else {
       if (global_opts.debug_level > 1) {
-        printf(MYNAME " rd_init() creating dumpfile %s for writing binary copy of serial stream\n", opt_dump_file);
+        printf(MYNAME " rd_init() creating dumpfile %s for writing binary copy of serial stream\n", qPrintable(opt_dump_file.get()));
       }
     }
   }
@@ -288,11 +288,11 @@ GlobalsatSportFormat::rd_init(const QString& fname)
 
   }
   if (opt_timezone) {
-    if (QTimeZone::isTimeZoneIdAvailable(opt_timezone)) {
-      timezn = new QTimeZone(opt_timezone);
+    if (QTimeZone::isTimeZoneIdAvailable(opt_timezone.getba())) {
+      timezn = new QTimeZone(opt_timezone.getba());
     } else {
       list_timezones();
-      fatal(MYNAME ": Requested time zone \"%s\" not available.\n", opt_timezone);
+      fatal(MYNAME ": Requested time zone \"%s\" not available.\n", qPrintable(opt_timezone.get()));
     }
   } else {
     timezn = nullptr;

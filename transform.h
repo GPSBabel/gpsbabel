@@ -23,11 +23,13 @@
 #ifndef TRANSFORM_H_INCLUDED_
 #define TRANSFORM_H_INCLUDED_
 
-#include <QString>         // for QString
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
-#include "defs.h"          // for route_head (ptr only), ARG_NOMINMAX, ARGTY...
-#include "filter.h"        // for Filter
+#include "defs.h"    // for route_head (ptr only), ARG_NOMINMAX, ARGTY...
+#include "filter.h"  // for Filter
+#include "option.h"  // for OptionCString, OptionBool
 
 #if FILTERS_ENABLED
 
@@ -45,8 +47,13 @@ private:
   route_head* current_trk{};
   route_head* current_rte{};
 
-  char* opt_routes{}, *opt_tracks{}, *opt_waypts{}, *opt_delete{}, *rpt_name_digits{}, *opt_rpt_name{};
-  char* opt_timeless{};
+  OptionCString opt_routes;
+  OptionCString opt_tracks;
+  OptionCString opt_waypts;
+  OptionBool opt_delete;
+  OptionCString rpt_name_digits;
+  OptionBool opt_rpt_name;
+  OptionBool opt_timeless;
   bool timeless{};
   bool use_src_name{};
   QString current_namepart;

@@ -21,18 +21,20 @@
 #ifndef GARMIN_H_INCLUDED_
 #define GARMIN_H_INCLUDED_
 
-#include <cstdio>              // for size_t
+#include <cstdio>             // for size_t
 
-#include <QByteArray>          // for QByteArray
-#include <QString>             // for QString
-#include <QTextCodec>          // for QTextCodec
-#include <QVector>             // for QVector
+#include <QList>              // for QList
+#include <QByteArray>         // for QByteArray
+#include <QString>            // for QString
+#include <QTextCodec>         // for QTextCodec
+#include <QVector>            // for QVector
 
 #include "defs.h"
-#include "format.h"            // for Format
-#include "jeeps/gpsdevice.h"   // for gpsdevh
-#include "jeeps/gpssend.h"     // for GPS_PWay, GPS_SWay, GPS_PTrack, GPS_PPvt_Data, GPS_SLap
-#include "mkshort.h"           // for MakeShort
+#include "format.h"           // for Format
+#include "jeeps/gpsdevice.h"  // for gpsdevh
+#include "jeeps/gpssend.h"    // for GPS_PWay, GPS_SWay, GPS_PTrack, GPS_PPvt_Data, GPS_SLap
+#include "mkshort.h"          // for MakeShort
+#include "option.h"           // for OptionCString, OptionBool
 
 
 class GarminFormat : public Format
@@ -118,17 +120,17 @@ private:
   GPS_PTrack* tx_tracklist{};
   GPS_PTrack* cur_tx_tracklist_entry{};
   int my_track_count = 0;
-  char* getposn = nullptr;
-  char* poweroff = nullptr;
-  char* eraset = nullptr;
-  char* resettime = nullptr;
-  char* snlen = nullptr;
-  char* snwhiteopt = nullptr;
-  char* deficon = nullptr;
-  char* category = nullptr;
-  char* categorybitsopt = nullptr;
-  char* baudopt = nullptr;
-  char* opt_codec = nullptr;
+  OptionBool getposn;
+  OptionBool poweroff;
+  OptionBool eraset;
+  OptionBool resettime;
+  OptionCString snlen;
+  OptionBool snwhiteopt;
+  OptionCString deficon;
+  OptionCString category;
+  OptionCString categorybitsopt;
+  OptionCString baudopt;
+  OptionCString opt_codec;
   int baud = 0;
   int categorybits{};
   bool receiver_must_upper = true;

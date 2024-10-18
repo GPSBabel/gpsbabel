@@ -478,7 +478,7 @@ void IgcFormat::read()
         igc_ext_type_t ext = get_ext_type(ext_type);
         if (ext != igc_ext_type_t::ext_rec_unknown) {
           supported_extensions.append(name);
-          bool enabled = **ext_option_map.value(ext) == '1';
+          bool enabled = *ext_option_map.value(ext);
           if (enabled) {
             int factor = get_ext_factor(ext);
             ext_types_list.append(std::make_tuple(name, ext, begin, len, factor));
@@ -950,7 +950,7 @@ void IgcFormat::wr_track()
       if (strcmp(timeadj, "auto") == 0) {
         time_adj = correlate_tracks(pres_track, gnss_track);
       } else if (sscanf(timeadj, "%d", &time_adj) != 1) {
-        fatal(MYNAME ": bad timeadj argument '%s'\n", timeadj);
+        fatal(MYNAME ": bad timeadj argument '%s'\n", qPrintable(timeadj.get()));
       }
     } else {
       time_adj = 0;

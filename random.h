@@ -20,14 +20,16 @@
 #ifndef RANDOM_H_INCLUDED_
 #define RANDOM_H_INCLUDED_
 
-#include <random>            // for mt19937
+#include <random>     // for mt19937
 
-#include <QDateTime>         // for QDateTime
-#include <QString>           // for QString
-#include <QVector>           // for QVector
+#include <QList>      // for QList
+#include <QDateTime>  // for QDateTime
+#include <QString>    // for QString
+#include <QVector>    // for QVector
 
 #include "defs.h"
-#include "format.h"
+#include "format.h"   // for Format
+#include "option.h"   // for OptionCString, OptionBool
 
 
 class RandomFormat : public Format
@@ -82,9 +84,9 @@ private:
 
   /* Data Members */
 
-  char* opt_points{nullptr};
-  char* opt_seed{nullptr};
-  char* opt_nodelay{nullptr};
+  OptionCString opt_points;
+  OptionCString opt_seed;
+  OptionBool opt_nodelay;
 
   QVector<arglist_t> random_args = {
     {
