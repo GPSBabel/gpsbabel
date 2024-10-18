@@ -508,7 +508,7 @@ void Vecs::init_vec(Format* fmt)
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
-      if (arg.argval) {
+      if (arg.argval != nullptr) {
         arg.argval->reset();
       }
     }
@@ -590,7 +590,7 @@ void Vecs::free_options(QVector<arglist_t>* args)
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
-      if (arg.argval) {
+      if (arg.argval != nullptr) {
         arg.argval->reset();
       }
     }
@@ -679,7 +679,7 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
 {
   if (args) {
     for (const auto& arg : *args) {
-      if ((arg.argval != nullptr) & !arg.argval->isEmpty()) {
+      if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
         printf("options: module/option=value: %s/%s=\"%s\"",
                qPrintable(vecname), qPrintable(arg.argstring), qPrintable(arg.argval->get()));
         if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
