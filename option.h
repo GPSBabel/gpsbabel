@@ -29,6 +29,7 @@ public:
   enum option_t {
     type_cstring,
     type_boolean,
+    type_string,
   };
 
   /* Special Member Functions */
@@ -116,6 +117,56 @@ public:
 private:
   QString value_;
   QByteArray valueb_;
+};
+
+class OptionString : public Option
+{
+public:
+  /* Special Member Functions */
+  OptionString() = default;
+
+  explicit(false) operator const QString& () const
+  {
+    return value_;
+  }
+
+  explicit(false) operator bool () const
+  {
+    return !value_.isNull();
+  }
+
+  [[nodiscard]] option_t type() const override
+  {
+    return type_string;
+  }
+
+  [[nodiscard]] bool has_value() const override
+  {
+    return !value_.isNull();
+  }
+
+  void reset() override
+  {
+    value_ = QString();
+  }
+
+  [[nodiscard]] bool isEmpty() const override
+  {
+    return value_.isEmpty();
+  }
+
+  [[nodiscard]] const QString& get() const override
+  {
+    return value_;
+  }
+
+  void set(const QString& s) override
+  {
+    value_ = s;
+  }
+
+private:
+  QString value_;
 };
 
 class OptionBool : public Option

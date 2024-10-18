@@ -25,7 +25,7 @@
 #include <cmath>                            // for lround
 #include <cstdio>                           // for sscanf
 #include <cstdint>                          // for uint16_t
-#include <cstring>                          // for strchr, strncpy
+#include <cstring>                          // for strchr
 #include <optional>                         // for optional
 #include <utility>                          // for as_const
 
@@ -102,7 +102,7 @@ GpxFormat::gpx_reset_short_handle()
     mkshort_handle->set_whitespace_ok(false);
   }
 
-  mkshort_handle->set_length(xstrtoi(snlen, nullptr, 10));
+  mkshort_handle->set_length(snlen.get().toInt());
 }
 
 void
@@ -985,7 +985,7 @@ GpxFormat::wr_init(const QString& fname)
   * available use it, otherwise use the default.
   */
 
-  if (opt_gpxver != nullptr) {
+  if (opt_gpxver) {
     gpx_write_version = QVersionNumber::fromString(opt_gpxver.get()).normalized();
   } else if (!gpx_highest_version_read.isNull()) {
     gpx_write_version = gpx_highest_version_read;
@@ -1705,7 +1705,7 @@ void
 GpxFormat::write()
 {
 
-  elevation_precision = xstrtoi(opt_elevation_precision, nullptr, 10);
+  elevation_precision = opt_elevation_precision.get().toInt();
 
   gpx_reset_short_handle();
   auto gpx_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {

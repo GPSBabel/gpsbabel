@@ -22,11 +22,8 @@
 
 #include "kml.h"
 
-#include <cctype>                      // for tolower, toupper
 #include <cmath>                       // for fabs
 #include <cstdio>                      // for sscanf, printf
-#include <cstdlib>                     // for strtod
-#include <cstring>                     // for strcmp
 #include <optional>                    // for optional
 #include <tuple>                       // for tuple, make_tuple
 
@@ -105,8 +102,8 @@ const QVector<KmlFormat::mt_field_t> KmlFormat::mt_fields_def = {
 
 void KmlFormat::kml_init_color_sequencer(int steps_per_rev)
 {
-  if (rotate_colors) {
-    float color_step = strtod(opt_rotate_colors, nullptr);
+  if (opt_rotate_colors) {
+    float color_step = opt_rotate_colors.get().toFloat();
     if (color_step > 0.0f) {
       // step around circle by given number of degrees for each track(route)
       kml_color_sequencer.step = static_cast<float>(kml_color_limit) * 6.0f * color_step / 360.0f;
@@ -389,31 +386,28 @@ void KmlFormat::rd_deinit()
 
 void KmlFormat::wr_init(const QString& fname)
 {
-  char u = 's';
   waypt_init_bounds(&kml_bounds);
   kml_time_min = gpsbabel::DateTime();
   kml_time_max = gpsbabel::DateTime();
 
-  if (opt_units) {
-    u = tolower(opt_units[0]);
-  }
+  QChar u = (opt_units && !opt_units.isEmpty())? opt_units.get().front().toLower() : 's';
 
   unitsformatter = new UnitsFormatter();
-  switch (u) {
-  case 's':
+  switch (u.unicode()) {
+  case u's':
     unitsformatter->setunits(UnitsFormatter::units_t::statute);
     break;
-  case 'm':
+  case u'm':
     unitsformatter->setunits(UnitsFormatter::units_t::metric);
     break;
-  case 'n':
+  case u'n':
     unitsformatter->setunits(UnitsFormatter::units_t::nautical);
     break;
-  case 'a':
+  case u'a':
     unitsformatter->setunits(UnitsFormatter::units_t::aviation);
     break;
   default:
-    fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", qPrintable(opt_units.get()));
+    fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", qPrintable(opt_units));
     break;
   }
   /*
@@ -435,7 +429,7 @@ void KmlFormat::wr_position_init(const QString& fname)
   posnfilename = fname;
   posnfilenametmp = QStringLiteral("%1-").arg(fname);
   realtime_positioning = true;
-  max_position_points = xstrtoi(opt_max_position_points, nullptr, 10);
+  max_position_points = opt_max_position_points.get().toInt();
 }
 
 void KmlFormat::wr_deinit()
@@ -516,7 +510,7 @@ void KmlFormat::kml_write_bitmap_style_(const QString& style, const QString& bit
   }
 
   if (is_multitrack) {
-    kml_output_linestyle(opt_line_color.get(),
+    kml_output_linestyle(opt_line_color,
                          highlighted ? line_width + 2 :
                          line_width);
   }
@@ -885,7 +879,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
       writer->writeStartElement(QStringLiteral("Style"));
       writer->writeStartElement(QStringLiteral("IconStyle"));
       writer->writeStartElement(QStringLiteral("Icon"));
-      writer->writeTextElement(QStringLiteral("href"), opt_deficon.get());
+      writer->writeTextElement(QStringLiteral("href"), opt_deficon);
       writer->writeEndElement(); // Close Icon tag
       writer->writeEndElement(); // Close IconStyle tag
       writer->writeEndElement(); // Close Style tag
@@ -934,17 +928,17 @@ void KmlFormat::kml_output_tailer(const route_head* header)
     }
     writer->writeStartElement(QStringLiteral("Placemark"));
     writer->writeTextElement(QStringLiteral("name"), QStringLiteral("Path"));
-    if (!rotate_colors) {
+    if (!opt_rotate_colors) {
       writer->writeTextElement(QStringLiteral("styleUrl"), QStringLiteral("#lineStyle"));
     }
-    if (header->line_color.bbggrr >= 0 || header->line_width >= 0 || rotate_colors) {
+    if (header->line_color.bbggrr >= 0 || header->line_width >= 0 || opt_rotate_colors) {
       writer->writeStartElement(QStringLiteral("Style"));
       writer->writeStartElement(QStringLiteral("LineStyle"));
-      if (rotate_colors) {
+      if (opt_rotate_colors) {
         kml_step_color();
         writer->writeTextElement(QStringLiteral("color"), QStringLiteral("%1%2")
                                  .arg(kml_color_sequencer.color.opacity, 2, 16, QChar('0')).arg(kml_color_sequencer.color.bbggrr, 6, 16, QChar('0')));
-        writer->writeTextElement(QStringLiteral("width"), opt_line_width.get());
+        writer->writeTextElement(QStringLiteral("width"), opt_line_width);
       } else {
         if (header->line_color.bbggrr >= 0) {
           writer->writeTextElement(QStringLiteral("color"), QStringLiteral("%1%2")
@@ -1455,7 +1449,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
   kml_output_timestamp(waypointp);
 
   // Icon - but only if it looks like a URL.
-  icon = opt_deficon ? opt_deficon.get() : waypointp->icon_descr;
+  icon = opt_deficon ? opt_deficon : waypointp->icon_descr;
   if (icon.contains("://")) {
     writer->writeStartElement(QStringLiteral("Style"));
     writer->writeStartElement(QStringLiteral("IconStyle"));
@@ -1849,11 +1843,10 @@ void KmlFormat::write()
   export_track = opt_export_track;
   floating = opt_floating;
   extrude = opt_extrude;
-  rotate_colors = (!! opt_rotate_colors);
   trackdata = opt_trackdata;
   trackdirection = opt_trackdirection;
-  line_width = xstrtoi(opt_line_width, nullptr, 10);
-  precision = xstrtoi(opt_precision, nullptr, 10);
+  line_width = opt_line_width.get().toInt();
+  precision = opt_precision.get().toInt();
 
   writer->writeStartDocument();
 
@@ -1902,7 +1895,7 @@ void KmlFormat::write()
   if (track_waypt_count() || route_waypt_count()) {
     writer->writeStartElement(QStringLiteral("Style"));
     writer->writeAttribute(QStringLiteral("id"), QStringLiteral("lineStyle"));
-    kml_output_linestyle(opt_line_color.get(), line_width);
+    kml_output_linestyle(opt_line_color, line_width);
     writer->writeEndElement(); // Close Style tag
   }
 

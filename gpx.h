@@ -35,7 +35,7 @@
 #include "format.h"                    // for Format
 #include "formspec.h"                  // for FormatSpecificData
 #include "mkshort.h"                   // for MakeShort
-#include "option.h"                    // for OptionBool, OptionCString
+#include "option.h"                    // for OptionBool, OptionString
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
 #include "src/core/xmltag.h"           // for xml_tag
@@ -258,7 +258,7 @@ private:
   OptionBool opt_logpoint;
   OptionBool opt_humminbirdext;
   OptionBool opt_garminext;
-  OptionCString opt_elevation_precision;
+  OptionString opt_elevation_precision;
   int logpoint_ct = 0;
   int elevation_precision{};
 
@@ -266,7 +266,7 @@ private:
   const QVersionNumber gpx_1_0 = QVersionNumber(1,0).normalized();
   const QVersionNumber gpx_1_1 = QVersionNumber(1,1).normalized();
   QVersionNumber gpx_highest_version_read;
-  OptionCString opt_gpxver;
+  OptionString opt_gpxver;
   QVersionNumber gpx_write_version;
   QXmlStreamAttributes gpx_namespace_attribute;
 
@@ -285,9 +285,9 @@ private:
   QString link_type;
 
 
-  OptionCString snlen;
+  OptionString snlen;
   OptionBool suppresswhite;
-  OptionCString urlbase;
+  OptionString urlbase;
   route_head* trk_head{};
   route_head* rte_head{};
   const route_head* current_trk_head{};		// Output.
