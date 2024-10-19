@@ -62,7 +62,7 @@ private:
       "0", nullptr, nullptr
     },
     {
-      "distance", &opt_dist, "Distance interval in miles or kilometers",
+      "distance", &opt_dist, "Distance interval",
       nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
       ARG_NOMINMAX, nullptr
     },

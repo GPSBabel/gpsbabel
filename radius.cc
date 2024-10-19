@@ -32,11 +32,12 @@
 
 
 #if FILTERS_ENABLED
+#define MYNAME "Radius filter"
 
 void RadiusFilter::process()
 {
   foreach (Waypoint* waypointp, *global_waypoint_list) {
-    double dist = radtomiles(gcdist(waypointp->position(),
+    double dist = radtometers(gcdist(waypointp->position(),
                                     home_pos->position()));
 
     if ((dist >= pos_dist) == !exclopt) {
@@ -97,12 +98,8 @@ void RadiusFilter::init()
   pos_dist = 0;
 
   if (distopt != nullptr) {
-    char* fm;
-    pos_dist = strtod(distopt, &fm);
-
-    if ((*fm == 'k') || (*fm == 'K')) {
-      /* distance is kilometers, convert to miles */
-      pos_dist *= kMilesPerKilometer;
+    if (parse_distance(distopt, &pos_dist, kMetersPerMile, MYNAME) == 0) {
+      fatal(MYNAME ": No distance specified with distance option.\n");
     }
   }
 
