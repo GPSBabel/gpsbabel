@@ -26,7 +26,6 @@
 #include "height.h"
 #include <cmath>    // for floor
 #include <cstdint>  // for int8_t
-#include <cstdlib>  // for strtod
 
 #define MYNAME "height"
 
@@ -96,18 +95,11 @@ void HeightFilter::correct_height(const Waypoint* wpt)
 
 void HeightFilter::init()
 {
-  char* unit;
-
+  addf = 0.0;
   if (addopt != nullptr) {
-    addf = strtod(addopt, &unit);
-
-    if (*unit == 'f' || *unit== 'F') {
-      addf = FEET_TO_METERS(addf);
-    } else if ((*unit != 'm') && (*unit != 'M') && (*unit != '\0'))  {
-      fatal(MYNAME ": Invalid unit (\"%c\")! Please use \"m\" for meter or \"f\" for feet.\n", *unit);
+    if (parse_distance(addopt, &addf, 1.0, MYNAME) == 0) {
+      fatal(MYNAME ": No height specified with add option.");
     }
-  } else {
-    addf = 0.0;
   }
 }
 

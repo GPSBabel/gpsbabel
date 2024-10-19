@@ -55,7 +55,7 @@ private:
 
   QVector<arglist_t> args = {
     {
-      "add", &addopt, "Adds a constant value to every altitude (meter, append \"f\" (x.xxf) for feet)",
+      "add", &addopt, "Adds a constant value to every altitude",
       nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
     },
     {

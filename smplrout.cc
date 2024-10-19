@@ -66,7 +66,7 @@
 
 #include "defs.h"
 #include "smplrout.h"
-#include "grtcirc.h"            // for gcdist, linedist, radtometers, radtomiles, linepart
+#include "grtcirc.h"            // for gcdist, linedist, radtometers, linepart
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -96,13 +96,13 @@ double SimplifyRouteFilter::compute_track_error(const neighborhood& nb) const
   double track_error;
   switch (metric) {
   case metric_t::crosstrack:
-    track_error = radtomiles(linedist(
+    track_error = radtometers(linedist(
                                wpt1->position(),
                                wpt2->position(),
                                wpt3->position()));
     break;
   case metric_t::length:
-    track_error = radtomiles(
+    track_error = radtometers(
                     gcdist(wpt1->position(), wpt3->position()) +
                     gcdist(wpt3->position(), wpt2->position()) -
                     gcdist(wpt1->position(), wpt2->position()));
@@ -293,11 +293,8 @@ void SimplifyRouteFilter::init()
     if (metric == metric_t::relative) {
       error = strtod(erroropt, nullptr);
     } else {
-      int res = parse_distance(erroropt, &error, 1.0, MYNAME);
-      if (res == 0) {
-        error = 0;
-      } else if (res == 2) { /* parameter with unit */
-        error = METERS_TO_MILES(error);
+      if (parse_distance(erroropt, &error, kMetersPerMile, MYNAME) == 0) {
+        fatal(MYNAME ": No value specified with error option.\n");
       }
     }
   }

@@ -23,7 +23,6 @@
 
 #include <cmath>                  // for round
 #include <cstdio>                 // for printf, sscanf
-#include <cstdlib>                // for strtod
 #include <tuple>                  // for tie, tuple
 
 #include <QByteArray>             // for QByteArray
@@ -78,8 +77,8 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
                                                      waypointp->position());
         }
 
-        /* convert radians to float point statute miles */
-        dist = radtomiles(dist);
+        /* convert radians to meters */
+        dist = radtometers(dist);
 
         if (ed->distance > dist) {
           ed->distance = dist;
@@ -206,22 +205,17 @@ void ArcDistanceFilter::process()
 
 void ArcDistanceFilter::init()
 {
-  char* fm;
-
   if ((!arcfileopt && !rteopt && !trkopt) ||
       (arcfileopt && (rteopt || trkopt)) ||
       (rteopt && trkopt)) {
     fatal(MYNAME ": Incompatible or incomplete option values!\n");
   }
 
-  pos_dist = 0;
+  pos_dist = 0.0;
 
   if (distopt) {
-    pos_dist = strtod(distopt, &fm);
-
-    if ((*fm == 'k') || (*fm == 'K')) {
-      /* distance is kilometers, convert to mile */
-      pos_dist *= kMilesPerKilometer;
+    if (parse_distance(distopt, &pos_dist, kMetersPerMile, MYNAME) == 0) {
+      fatal(MYNAME ": No distance specified with distance option.\n");
     }
   }
 }

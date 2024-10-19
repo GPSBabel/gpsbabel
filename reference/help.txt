@@ -414,7 +414,7 @@ Supported data filters:
 	  correct               Use coords from duplicate points 
 	interpolate           Interpolate between trackpoints                   
 	  time                  Time interval in seconds 
-	  distance              Distance interval in miles or kilometers 
+	  distance              Distance interval 
 	  route                 Interpolate routes instead 
 	nuketypes             Remove all waypoints, tracks, or routes           
 	  waypoints             Remove all waypoints from data stream 
@@ -494,7 +494,7 @@ Supported data filters:
 	  del                   Delete source data after transformation 
 	  timeless              Create transformed points without times 
 	height                Manipulate altitudes                              
-	  add                   Adds a constant value to every altitude (meter, ap 
+	  add                   Adds a constant value to every altitude 
 	  wgs84tomsl            Converts WGS84 ellipsoidal height to orthometric h 
 	swap                  Swap latitude and longitude of all loaded points  
 	validate              Validate internal data structures                 
