@@ -152,7 +152,7 @@ void InterpolateFilter::init()
       fatal(FatalMsg() << MYNAME ": interpolation time should be positive!");
     }
   } else if (opt_dist != nullptr) {
-    if (parse_distance(opt_dist, &max_dist_step, kMetersPerMile , MYNAME) == 0) {
+    if (parse_distance(opt_dist, &max_dist_step, kMetersPerMile, MYNAME) == 0) {
       fatal(FatalMsg() << MYNAME ": no distance specified with distance option!");
     }
     if (max_dist_step <= 0) {

@@ -98,7 +98,7 @@ void RadiusFilter::init()
   pos_dist = 0;
 
   if (distopt != nullptr) {
-    if (parse_distance(distopt, &pos_dist, kMetersPerMile , MYNAME) == 0) {
+    if (parse_distance(distopt, &pos_dist, kMetersPerMile, MYNAME) == 0) {
       fatal(MYNAME ": No distance specified with distance option.");
     }
   }

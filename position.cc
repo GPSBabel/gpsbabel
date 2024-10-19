@@ -112,7 +112,7 @@ void PositionFilter::init()
   check_time = false;
 
   if (distopt != nullptr) {
-    if (parse_distance(distopt, &pos_dist, kMetersPerFoot , MYNAME) == 0) {
+    if (parse_distance(distopt, &pos_dist, kMetersPerFoot, MYNAME) == 0) {
       fatal(MYNAME ": No distance specified with distance option.");
     }
   }
