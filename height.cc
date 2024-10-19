@@ -26,7 +26,6 @@
 #include "height.h"
 #include <cmath>    // for floor
 #include <cstdint>  // for int8_t
-#include <cstdlib>  // for strtod
 
 #define MYNAME "height"
 

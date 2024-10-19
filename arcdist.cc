@@ -23,7 +23,6 @@
 
 #include <cmath>                  // for round
 #include <cstdio>                 // for printf, sscanf
-#include <cstdlib>                // for strtod
 #include <tuple>                  // for tie, tuple
 
 #include <QByteArray>             // for QByteArray
