@@ -33,7 +33,6 @@
 
 
 #if FILTERS_ENABLED
-#define MYNAME "Position filter"
 
 class PositionFilter:public Filter
 {

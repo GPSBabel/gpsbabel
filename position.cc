@@ -32,6 +32,7 @@
 #include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED
+#define MYNAME "Position filter"
 
 /* tear through a waypoint queue, processing points by distance */
 void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype)
