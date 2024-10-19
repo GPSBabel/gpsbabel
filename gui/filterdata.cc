@@ -30,10 +30,11 @@ QStringList WayPtsFilterData::makeOptionString()
     return args;
   }
 
+  static const QVector<QString> radius_units = {"mi", "km"};
   if (radius) {
     args << QString("-x");
     args << QString("radius,distance=%1%2,lat=%3,lon=%4")
-         .arg(radiusVal).arg("MK"[radiusUnit]).arg(latVal, 0, 'f', 8).arg(longVal, 0, 'f', 8);
+         .arg(radiusVal).arg(radius_units.at(radiusUnit)).arg(latVal, 0, 'f', 8).arg(longVal, 0, 'f', 8);
   }
   if (duplicates && (shortNames || locations)) {
     args << QString("-x");
@@ -47,9 +48,10 @@ QStringList WayPtsFilterData::makeOptionString()
     args << s;
   }
 
+  static const QVector<QString> position_units = {"ft", "m"};
   if (position) {
     args << QString("-x");
-    args << QString("position,distance=%1%2").arg(positionVal).arg("FM"[positionUnit]);
+    args << QString("position,distance=%1%2").arg(positionVal).arg(position_units.at(positionUnit));
   }
   return args;
 }

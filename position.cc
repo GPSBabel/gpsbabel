@@ -112,12 +112,8 @@ void PositionFilter::init()
   check_time = false;
 
   if (distopt != nullptr) {
-    char* fm;
-    pos_dist = strtod(distopt, &fm);
-
-    if (!((*fm == 'm') || (*fm == 'M'))) {
-      /* distance is feet */
-      pos_dist = FEET_TO_METERS(pos_dist);
+    if (parse_distance(distopt, &pos_dist, kMetersPerFoot , MYNAME) == 0) {
+      fatal(MYNAME ": No distance specified with distance option.");
     }
   }
 

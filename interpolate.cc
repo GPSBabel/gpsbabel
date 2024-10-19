@@ -91,7 +91,7 @@ void InterpolateFilter::process_rte(route_head* rte)
         // interpolate even if time is running backwards.
         npts = std::abs(*timespan) / max_time_step;
       } else if (opt_dist != nullptr) {
-        double distspan = radtomiles(gcdist(pos1, wpt->position()));
+        double distspan = radtometers(gcdist(pos1, wpt->position()));
         npts = distspan / max_dist_step;
       }
       if (!std::isfinite(npts) || (npts >= INT_MAX)) {
@@ -142,7 +142,6 @@ void InterpolateFilter::process_rte(route_head* rte)
 
 void InterpolateFilter::init()
 {
-  char* fm;
   if ((opt_time != nullptr) && (opt_dist != nullptr)) {
     fatal(FatalMsg() << MYNAME ": Can't interpolate on both time and distance.");
   } else if ((opt_time != nullptr) && opt_route) {
@@ -153,10 +152,8 @@ void InterpolateFilter::init()
       fatal(FatalMsg() << MYNAME ": interpolation time should be positive!");
     }
   } else if (opt_dist != nullptr) {
-    max_dist_step = strtod(opt_dist, &fm);
-    if ((*fm == 'k') || (*fm == 'K')) {
-      /* distance is kilometers, convert to miles */
-      max_dist_step *= kMilesPerKilometer;
+    if (parse_distance(opt_dist, &max_dist_step, kMetersPerMile , MYNAME) == 0) {
+      fatal(FatalMsg() << MYNAME ": no distance specified with distance option!");
     }
     if (max_dist_step <= 0) {
       fatal(FatalMsg() << MYNAME ": interpolation distance should be positive!");

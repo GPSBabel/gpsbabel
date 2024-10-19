@@ -22,10 +22,10 @@ option	radius	maxcount	Output no more than this number of points	integer		1		htt
 option	radius	asroute	Put resulting waypoints in route of this name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_asroute
 interpolate	Interpolate between trackpoints	https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html
 option	interpolate	time	Time interval in seconds	float		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_time
-option	interpolate	distance	Distance interval in miles or kilometers	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
+option	interpolate	distance	Distance interval	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
 option	interpolate	route	Interpolate routes instead	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_route
 height	Manipulate altitudes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html
-option	height	add	Adds a constant value to every altitude (meter, append "f" (x.xxf) for feet)	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_add
+option	height	add	Adds a constant value to every altitude	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_add
 option	height	wgs84tomsl	Converts WGS84 ellipsoidal height to orthometric height (MSL)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_wgs84tomsl
 track	Manipulate track lists	https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html
 option	track	move	Correct trackpoint timestamps by a delta	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_move
