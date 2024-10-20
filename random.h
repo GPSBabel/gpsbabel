@@ -29,7 +29,7 @@
 
 #include "defs.h"
 #include "format.h"   // for Format
-#include "option.h"   // for OptionCString, OptionBool
+#include "option.h"   // for OptionString, OptionBool
 
 
 class RandomFormat : public Format
@@ -84,8 +84,8 @@ private:
 
   /* Data Members */
 
-  OptionCString opt_points;
-  OptionCString opt_seed;
+  OptionString opt_points;
+  OptionString opt_seed;
   OptionBool opt_nodelay;
 
   QVector<arglist_t> random_args = {

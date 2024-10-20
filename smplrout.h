@@ -65,7 +65,7 @@
 
 #include "defs.h"
 #include "filter.h"  // for Filter
-#include "option.h"  // for OptionBool, OptionCString
+#include "option.h"  // for OptionBool, OptionString
 
 
 #if FILTERS_ENABLED
@@ -119,8 +119,8 @@ private:
   limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
 
-  OptionCString countopt;
-  OptionCString erroropt;
+  OptionString countopt;
+  OptionString erroropt;
   OptionBool xteopt;
   OptionBool lenopt;
   OptionBool relopt;

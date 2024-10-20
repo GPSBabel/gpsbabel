@@ -144,13 +144,13 @@ void TransformFilter::process()
 
   if (opt_waypts) {
     current_target = 'W';
-    if (opt_waypts.get().startsWith('R', Qt::CaseInsensitive)) {
-      transform_routes();
+    if (opt_waypts.startsWith('R', Qt::CaseInsensitive)) {
+    transform_routes();
       if (delete_after) {
         route_flush_all_routes();
       }
-    } else if (opt_waypts.get().startsWith('T', Qt::CaseInsensitive)) {
-      transform_tracks();
+    } else if (opt_waypts.startsWith('T', Qt::CaseInsensitive)) {
+    transform_tracks();
       if (delete_after) {
         route_flush_all_tracks();
       }
@@ -160,13 +160,13 @@ void TransformFilter::process()
   }
   if (opt_routes) {
     current_target = 'R';
-    if (opt_routes.get().startsWith('W', Qt::CaseInsensitive)) {
-      transform_waypoints();
+    if (opt_routes.startsWith('W', Qt::CaseInsensitive)) {
+    transform_waypoints();
       if (delete_after) {
         waypt_flush_all();
       }
-    } else if (opt_routes.get().startsWith('T', Qt::CaseInsensitive)) {
-      transform_tracks();
+    } else if (opt_routes.startsWith('T', Qt::CaseInsensitive)) {
+    transform_tracks();
       if (delete_after) {
         route_flush_all_tracks();
       }
@@ -176,12 +176,12 @@ void TransformFilter::process()
   }
   if (opt_tracks) {
     current_target = 'T';
-    if (opt_tracks.get().startsWith('W', Qt::CaseInsensitive)) {
+    if (opt_tracks.startsWith('W', Qt::CaseInsensitive)) {
       transform_waypoints();
       if (delete_after) {
         waypt_flush_all();
       }
-    } else if (opt_tracks.get().startsWith('R', Qt::CaseInsensitive)) {
+    } else if (opt_tracks.startsWith('R', Qt::CaseInsensitive)) {
       transform_routes();
       if (delete_after) {
         route_flush_all_routes();

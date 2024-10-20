@@ -80,7 +80,7 @@ RandomFormat::random_set_generator()
 {
   generator = new std::mt19937;
   if (opt_seed) {
-    generator->seed(xstrtoi(opt_seed, nullptr, 10));
+    generator->seed(opt_seed.get().toInt());
   } else {
     generator->seed(gpsbabel_time);
   }
@@ -205,7 +205,7 @@ RandomFormat::read()
   Waypoint* prev = nullptr;
   QDateTime time = current_time().toUTC();
 
-  int points = (opt_points) ? xstrtoi(opt_points, nullptr, 10) : rand_int(128) + 1;
+  int points = opt_points? opt_points.get().toInt() : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
     head = new route_head;
     if (doing_trks) {
@@ -244,7 +244,7 @@ RandomFormat::rd_position_init(const QString& /*unused*/)
   random_set_generator();
   realtime = new realtime_data;
   if (opt_points) {
-    realtime->points = xstrtoi(opt_points, nullptr, 10);
+    realtime->points = opt_points.get().toInt();
   }
   realtime->time = current_time().toUTC();
 }

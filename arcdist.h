@@ -28,7 +28,7 @@
 
 #include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_BOOL, Waypoint (ptr only)
 #include "filter.h"  // for Filter
-#include "option.h"  // for OptionBool, OptionCString
+#include "option.h"  // for OptionBool, OptionString
 
 #if FILTERS_ENABLED
 
@@ -61,8 +61,8 @@ private:
   /* Data Members */
 
   double pos_dist{};
-  OptionCString distopt;
-  OptionCString arcfileopt;
+  OptionString distopt;
+  OptionString arcfileopt;
   OptionBool rteopt;
   OptionBool trkopt;
   OptionBool exclopt;

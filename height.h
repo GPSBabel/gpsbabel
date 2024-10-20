@@ -32,7 +32,7 @@
 
 #include "defs.h"    // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_BOOL, ARGTYPE_END_REQ, ARGTYPE_FLOAT, Waypoint
 #include "filter.h"  // for Filter
-#include "option.h"  // for OptionBool, OptionCString
+#include "option.h"  // for OptionBool, OptionString
 
 #if FILTERS_ENABLED
 
@@ -47,7 +47,7 @@ public:
   void process() override;
 
 private:
-  OptionCString addopt;
+  OptionString addopt;
   OptionBool wgs84tomslopt;
   double addf{};
   // include static constexpr data member definitions with intializers for grid as private members.

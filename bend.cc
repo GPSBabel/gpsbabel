@@ -21,7 +21,7 @@
  */
 
 #include <cmath>            // macos wants abs from here!
-#include <cstdlib>          // for strtod, abs
+#include <cstdlib>          // for abs
 #include <utility>          // for as_const
 
 #include <QString>          // for QString
@@ -41,12 +41,12 @@ void BendFilter::init()
 {
   maxDist = 0.0;
   if (distopt) {
-    maxDist = strtod(distopt, nullptr);
+    maxDist = distopt.get().toDouble();
   }
 
   minAngle = 0.0;
   if (minangleopt) {
-    minAngle = strtod(minangleopt, nullptr);
+    minAngle = minangleopt.get().toDouble();
   }
 
   route_backup(&routes_orig);

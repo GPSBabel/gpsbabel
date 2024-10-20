@@ -23,7 +23,6 @@
 #include <cctype>                  // for isprint
 #include <cmath>                   // for fabs
 #include <cstdio>                  // for snprintf, sscanf, fprintf, fputc, stderr
-#include <cstdlib>                 // for strtod
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
 #include <iterator>                // for operator!=, reverse_iterator
 
@@ -280,15 +279,15 @@ NmeaFormat::wr_init(const QString& fname)
 
   sleepms = -1;
   if (opt_sleep) {
-    if (*opt_sleep) {
-      sleepms = 1e3 * strtod(opt_sleep, nullptr);
+    if (!opt_sleep.isEmpty()) {
+      sleepms = 1e3 * opt_sleep.get().toDouble();
     } else {
       sleepms = -1;
     }
   }
 
   mkshort_handle = new MakeShort;
-  mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
+  mkshort_handle->set_length(snlenopt.get().toInt());
 
   if (opt_gisteq) {
     opt_gpgga.reset();
@@ -816,7 +815,7 @@ NmeaFormat::nmea_fix_timestamps(route_head* track)
   }
 
   if (!prev_datetime.date().isValid()) {
-    if (optdate == nullptr) {
+    if (!optdate) {
       warning(MYNAME ": No date found within track (all points dropped)!\n");
       warning(MYNAME ": Please use option \"date\" to preset a valid date for those tracks.\n");
       track_del_head(track);
@@ -981,9 +980,9 @@ NmeaFormat::read()
   }
 
   if (optdate) {
-    opt_tm = QDate::fromString(optdate.get(), u"yyyyMMdd");
+    opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
     if (!opt_tm.isValid()) {
-      fatal(MYNAME ": Invalid date \"%s\"!\n", qPrintable(optdate.get()));
+      fatal(MYNAME ": Invalid date \"%s\"!\n", qPrintable(optdate));
     }
   }
 
@@ -1045,8 +1044,8 @@ NmeaFormat::rd_position_init(const QString& fname)
   gbser_flush(gbser_handle);
 
   if (opt_baud) {
-    if (!gbser_set_speed(gbser_handle, xstrtoi(opt_baud, nullptr, 10))) {
-      fatal(MYNAME ": Unable to set baud rate %s\n", qPrintable(opt_baud.get()));
+    if (!gbser_set_speed(gbser_handle, opt_baud.get().toInt())) {
+      fatal(MYNAME ": Unable to set baud rate %s\n", qPrintable(opt_baud));
     }
   }
   posn_fname = fname;

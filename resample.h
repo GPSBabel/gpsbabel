@@ -30,7 +30,7 @@
 
 #include "defs.h"              // for arglist_t, ARGTYPE_INT, Waypoint, route_head
 #include "filter.h"            // for Filter
-#include "option.h"            // for OptionCString
+#include "option.h"            // for OptionString
 #include "src/core/nvector.h"  // for NVector
 
 
@@ -69,9 +69,9 @@ private:
   int decimate_count{0};
   int interpolate_count{0};
 
-  OptionCString decimateopt;
-  OptionCString interpolateopt;
-  OptionCString averageopt;
+  OptionString decimateopt;
+  OptionString interpolateopt;
+  OptionString averageopt;
 
   QVector<arglist_t> args = {
     {

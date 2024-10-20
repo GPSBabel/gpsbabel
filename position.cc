@@ -22,7 +22,7 @@
 #include "position.h"
 
 #include <cmath>                // for abs
-#include <cstdlib>              // for strtod, abs
+#include <cstdlib>              // for abs
 
 #include <QList>                // for QList
 #include <QtGlobal>             // for qRound64, qint64
@@ -112,15 +112,15 @@ void PositionFilter::init()
   max_diff_time = 0;
   check_time = false;
 
-  if (distopt != nullptr) {
+  if (distopt) {
     if (parse_distance(distopt, &pos_dist, kMetersPerFoot, MYNAME) == 0) {
       fatal(MYNAME ": No distance specified with distance option.\n");
     }
   }
 
-  if (timeopt != nullptr) {
+  if (timeopt) {
     check_time = true;
-    max_diff_time = qRound64(strtod(timeopt, nullptr) * 1000.0);
+    max_diff_time = qRound64(timeopt.get().toDouble() * 1000.0);
   }
 }
 

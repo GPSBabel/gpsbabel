@@ -244,7 +244,7 @@ void ResampleFilter::init()
 
   if (averageopt) {
     bool ok;
-    average_count = QString(averageopt).toInt(&ok);
+    average_count = averageopt.get().toInt(&ok);
     if (!ok || average_count < 2) {
       fatal(FatalMsg() << MYNAME ": the average count must be greater than one.");
     }
@@ -252,7 +252,7 @@ void ResampleFilter::init()
 
   if (decimateopt) {
     bool ok;
-    decimate_count = QString(decimateopt).toInt(&ok);
+    decimate_count = decimateopt.get().toInt(&ok);
     if (!ok || decimate_count < 2) {
       fatal(FatalMsg() << MYNAME ": the decimate count must be greater than one.");
     }
@@ -260,7 +260,7 @@ void ResampleFilter::init()
 
   if (interpolateopt) {
     bool ok;
-    interpolate_count = QString(interpolateopt).toInt(&ok);
+    interpolate_count = interpolateopt.get().toInt(&ok);
     if (!ok || interpolate_count < 2) {
       fatal(FatalMsg() << MYNAME ": the interpolate count must be greater than one.");
     }
