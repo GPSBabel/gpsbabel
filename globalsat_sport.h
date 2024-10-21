@@ -230,7 +230,6 @@ private:
   bool isSizeSwapped{false};
 
   OptionBool showlist;                  // if true show a list instead of download tracks
-  OptionCString track;                  // if not 0 only download this track, if 0 download all
 
   OptionCString opt_dump_file;          // dump raw data to this file (optional)
   OptionBool opt_input_dump_file;       // if true input is from a dump-file instead of serial console
@@ -241,7 +240,6 @@ private:
 
   QVector<arglist_t> globalsat_args = {
     {"showlist", &showlist, "list tracks", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
-    {"track", &track, "get track", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
     {"dump-file", &opt_dump_file, "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr},
     {"input-is-dump-file", &opt_input_dump_file, "Dump raw data to this file", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
     {"timezone", &opt_timezone, "Time zone ID", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
