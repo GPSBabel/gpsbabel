@@ -308,8 +308,6 @@ file	rw----	geo	loc	Geocaching.com .loc	geo
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html
 option	geo	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html#fmt_geo_o_deficon
 
-option	geo	nuke_placer	Omit Placer name	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html#fmt_geo_o_nuke_placer
-
 file	rwrwrw	geojson	json	GeoJson	geojson
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html
 option	geojson	compact	Compact Output. Default is off.	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_compact
