@@ -342,8 +342,6 @@ serial	--r---	globalsat		GlobalSat GH625XT GPS training watch	globalsat
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html
 option	globalsat	showlist	list tracks	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_showlist
 
-option	globalsat	track	get track	integer	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_track
-
 option	globalsat	dump-file	Dump raw data to this file	outfile				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_dump-file
 
 option	globalsat	input-is-dump-file	Dump raw data to this file	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_input-is-dump-file

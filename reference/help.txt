@@ -170,7 +170,6 @@ File Types (-i and -o options):
 	  erase_only            (0/1) Only erase device data, do not download anything
 	globalsat             GlobalSat GH625XT GPS training watch
 	  showlist              (0/1) list tracks
-	  track                 get track
 	  dump-file             Dump raw data to this file
 	  input-is-dump-file    (0/1) Dump raw data to this file
 	  timezone              Time zone ID
