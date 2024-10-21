@@ -139,7 +139,7 @@ void TransformFilter::process()
 
   name_digits = 3;
   if (rpt_name_digits && !rpt_name_digits.isEmpty()) {
-    name_digits = rpt_name_digits.get().toInt();
+    name_digits = rpt_name_digits.toInt();
   }
 
   if (opt_waypts) {

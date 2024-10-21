@@ -129,29 +129,29 @@ QRegularExpression DiscardFilter::generateRegExp(const QString& glob_pattern)
 void DiscardFilter::init()
 {
   if (hdopopt) {
-    hdopf = hdopopt.get().toDouble();
+    hdopf = hdopopt.toDouble();
   } else {
     hdopf = -1.0;
   }
 
   if (vdopopt) {
-    vdopf = vdopopt.get().toDouble();
+    vdopf = vdopopt.toDouble();
   } else {
     vdopf = -1.0;
   }
 
   if (satopt) {
-    satpf = satopt.get().toInt();
+    satpf = satopt.toInt();
   } else {
     satpf = -1;
   }
 
   if (eleminopt) {
-    eleminpf = eleminopt.get().toInt();
+    eleminpf = eleminopt.toInt();
   }
 
   if (elemaxopt) {
-    elemaxpf = elemaxopt.get().toInt();
+    elemaxpf = elemaxopt.toInt();
   }
 
   if (nameopt) {

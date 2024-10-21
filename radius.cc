@@ -103,7 +103,7 @@ void RadiusFilter::init()
   }
 
   if (maxctarg) {
-    maxct = maxctarg.get().toInt();
+    maxct = maxctarg.toInt();
   } else {
     maxct = 0;
   }
@@ -111,10 +111,10 @@ void RadiusFilter::init()
   home_pos = new Waypoint;
 
   if (latopt) {
-    home_pos->latitude = latopt.get().toDouble();
+    home_pos->latitude = latopt.toDouble();
   }
   if (lonopt) {
-    home_pos->longitude = lonopt.get().toDouble();
+    home_pos->longitude = lonopt.toDouble();
   }
 }
 

@@ -429,7 +429,7 @@ void KmlFormat::wr_position_init(const QString& fname)
   posnfilename = fname;
   posnfilenametmp = QStringLiteral("%1-").arg(fname);
   realtime_positioning = true;
-  max_position_points = opt_max_position_points.get().toInt();
+  max_position_points = opt_max_position_points.toInt();
 }
 
 void KmlFormat::wr_deinit()
@@ -1845,8 +1845,8 @@ void KmlFormat::write()
   extrude = opt_extrude;
   trackdata = opt_trackdata;
   trackdirection = opt_trackdirection;
-  line_width = opt_line_width.get().toInt();
-  precision = opt_precision.get().toInt();
+  line_width = opt_line_width.toInt();
+  precision = opt_precision.toInt();
 
   writer->writeStartDocument();
 

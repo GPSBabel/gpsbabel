@@ -147,7 +147,7 @@ void InterpolateFilter::init()
   } else if (opt_time && opt_route) {
     fatal(FatalMsg() << MYNAME ": Can't interpolate routes on time.");
   } else if (opt_time) {
-    max_time_step = 1000 * opt_time.get().toDouble(); // milliseconds
+    max_time_step = 1000 * opt_time.toDouble(); // milliseconds
     if (max_time_step <= 0) {
       fatal(FatalMsg() << MYNAME ": interpolation time should be positive!");
     }

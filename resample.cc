@@ -243,25 +243,22 @@ void ResampleFilter::init()
 {
 
   if (averageopt) {
-    bool ok;
-    average_count = averageopt.get().toInt(&ok);
-    if (!ok || average_count < 2) {
+    average_count = averageopt.get().toInt();
+    if (average_count < 2) {
       fatal(FatalMsg() << MYNAME ": the average count must be greater than one.");
     }
   }
 
   if (decimateopt) {
-    bool ok;
-    decimate_count = decimateopt.get().toInt(&ok);
-    if (!ok || decimate_count < 2) {
+    decimate_count = decimateopt.get().toInt();
+    if (decimate_count < 2) {
       fatal(FatalMsg() << MYNAME ": the decimate count must be greater than one.");
     }
   }
 
   if (interpolateopt) {
-    bool ok;
-    interpolate_count = interpolateopt.get().toInt(&ok);
-    if (!ok || interpolate_count < 2) {
+    interpolate_count = interpolateopt.get().toInt();
+    if (interpolate_count < 2) {
       fatal(FatalMsg() << MYNAME ": the interpolate count must be greater than one.");
     }
     if (!averageopt || average_count < interpolate_count) {

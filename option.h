@@ -165,6 +165,9 @@ public:
     value_ = s;
   }
 
+  int toInt(QString* end = nullptr, int base = 10);
+  double toDouble(QString* end = nullptr);
+
 private:
   QString value_;
 };

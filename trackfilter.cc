@@ -1122,9 +1122,8 @@ void TrackFilter::process()
 
   // Performed last as previous options may have created "small" tracks.
   if (opt_minpoints) {
-    bool ok;
-    minimum_points = opt_minpoints.get().toInt(&ok);
-    if (!ok || minimum_points <= 0) {
+    minimum_points = opt_minpoints.toInt();
+    if (minimum_points <= 0) {
       fatal(MYNAME "-minimum_points: option value must be a positive integer!\n");
     }
     track_disp_all(trackfilter_minpoint_list_cb_f, nullptr, nullptr);
