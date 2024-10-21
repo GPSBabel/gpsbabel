@@ -28,7 +28,7 @@
 
 #include "defs.h"    // for ARG_NOMINMAX, arglist_t, ARGTYPE_BOOL, ARGTYPE_FILE
 #include "filter.h"  // for Filter
-#include "option.h"  // for OptionBool, OptionCString
+#include "option.h"  // for OptionBool, OptionString
 
 #if FILTERS_ENABLED
 
@@ -58,7 +58,7 @@ private:
 
   /* Data Members */
 
-  OptionCString polyfileopt;
+  OptionString polyfileopt;
   OptionBool exclopt;
 
   QVector<arglist_t> args = {

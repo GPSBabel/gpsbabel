@@ -29,7 +29,7 @@
 
 #include "defs.h"    // for route_head (ptr only), ARG_NOMINMAX, ARGTY...
 #include "filter.h"  // for Filter
-#include "option.h"  // for OptionCString, OptionBool
+#include "option.h"  // for OptionString, OptionBool
 
 #if FILTERS_ENABLED
 
@@ -47,11 +47,11 @@ private:
   route_head* current_trk{};
   route_head* current_rte{};
 
-  OptionCString opt_routes;
-  OptionCString opt_tracks;
-  OptionCString opt_waypts;
+  OptionString opt_routes;
+  OptionString opt_tracks;
+  OptionString opt_waypts;
   OptionBool opt_delete;
-  OptionCString rpt_name_digits;
+  OptionString rpt_name_digits;
   OptionBool opt_rpt_name;
   OptionBool opt_timeless;
   bool timeless{};
