@@ -1037,7 +1037,7 @@ int parse_speed(const QString& str, double* val, double scale, const char* modul
 /*
  * Color helpers.
  */
-int color_to_bbggrr(const char* cname);
+int color_to_bbggrr(const QString& cname);
 
 /*
  * A constant for unknown altitude.   It's tempting to just use zero
