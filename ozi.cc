@@ -96,8 +96,8 @@ OziFormat::ozi_alloc_fsdata()
   auto* fsdata = new ozi_fsdata;
 
   /* Provide defaults via command line defaults */
-  fsdata->fgcolor = color_to_bbggrr(wptfgcolor);
-  fsdata->bgcolor = color_to_bbggrr(wptbgcolor);
+  fsdata->fgcolor = color_to_bbggrr(wptfgcolor.get());
+  fsdata->bgcolor = color_to_bbggrr(wptbgcolor.get());
 
   return fsdata;
 }
