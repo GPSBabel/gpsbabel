@@ -19,10 +19,15 @@
 
  */
 
-#include <QHash>                 // for QHash
-#include <QString>               // for QString
+#include <assert.h>            // for assert
 
-#include "defs.h"
+#include <QByteArray>          // for QByteArray
+#include <QHash>               // for QHash
+#include <QRegularExpression>  // for QRegularExpression, QRegularExpressionMatch
+#include <QString>             // for QString, QTypeInfo<>::isRelocatable
+#include <QtGlobal>            // for qPrintable
+
+#include "defs.h"              // for fatal, color_to_bbggrr
 
 /*
  * Colors derived from http://www.w3.org/TR/SVG/types.html#ColorKeywords
@@ -209,10 +214,12 @@ color_to_bbggrr(const QString& cname)
     return color_num;
   }
 
-  if (cname.startsWith('#')) {
-    return (cname.mid(1, 2).toInt(nullptr, 16) +         // red
-           (cname.mid(3, 2).toInt(nullptr, 16) << 8) +   // green
-           (cname.mid(5, 2).toInt(nullptr, 16) << 16));  // blue
+  static const QRegularExpression re("^#(?<red>[[:xdigit:]]{2})(?<green>[[:xdigit:]]{2})(?<blue>[[:xdigit:]]{2})$");
+  assert(re.isValid());
+  if (QRegularExpressionMatch match = re.match(cname); match.hasMatch()) {
+    return (match.captured("red").toInt(nullptr, 16) +
+            (match.captured("green").toInt(nullptr, 16) << 8) +
+            (match.captured("blue").toInt(nullptr, 16) << 16));
   }
 
   if (color_table.contains(cname)) {
