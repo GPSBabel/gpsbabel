@@ -163,7 +163,6 @@ private:
   int wpt_a_ct{};
   grid_type grid_index{};
   int datum_index{};
-  const char* datum_str{};
   int current_line{};
   QString date_time_format;
   int precision = 3;

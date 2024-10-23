@@ -27,21 +27,11 @@
 #include <QString>              // for QString
 #include "defs.h"               // for grid_type
 
-#define DEFAULT_ICON_DESCR "Waypoint"
-#define DEFAULT_ICON_VALUE 18
-
-struct icon_mapping_t {
-  int mpssymnum;
-  int pcxsymnum;
-  const char* icon;
-};
 
 enum garmin_formats_e {MAPSOURCE, PCX, GARMIN_SERIAL, GDB};
 
 QString gt_find_desc_from_icon_number(int icon, garmin_formats_e garmin_format);
 int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_format);
-
-extern const icon_mapping_t garmin_icon_table[];
 
 enum gt_waypt_classes_e {
   gt_waypt_class_user_waypoint = 0,
@@ -59,14 +49,7 @@ enum gt_waypt_classes_e {
   gt_waypt_class_map_line
 };
 
-extern const char* const gt_waypt_class_names[];
-
-struct gt_country_code_t {
-  const char* cc;
-  const char* country;
-};
-
-extern const gt_country_code_t gt_country_codes[];
+extern const QStringList gt_waypt_class_names;
 
 const char* gt_get_icao_country(const QString& cc);
 const char* gt_get_icao_cc(const QString& country, const QString& shortname);
@@ -78,10 +61,7 @@ enum gt_display_modes_e {
   gt_display_mode_symbol_and_comment
 };
 
-extern const char* const gt_display_mode_names[];
-
-#define GT_DISPLAY_MODE_MIN gt_display_mode_symbol_and_name
-#define GT_DISPLAY_MODE_MAX gt_display_mode_symbol_and_comment
+extern const QStringList gt_display_mode_names;
 
 enum gt_gdb_display_modes_e {
   gt_gdb_display_mode_symbol = 0,
@@ -89,18 +69,16 @@ enum gt_gdb_display_modes_e {
   gt_gdb_display_mode_symbol_and_comment
 };
 
-unsigned char gt_convert_category(const char* name, int* category);
-
 unsigned char gt_switch_display_mode_value(unsigned char display_mode, int protoid, char device);
 
-grid_type gt_lookup_grid_type(const char* grid_name, const QString& module);
-const char* gt_get_mps_grid_longname(grid_type grid, const char* module);
-int gt_lookup_datum_index(const char* datum_str, const QString& module);
-const char* gt_get_mps_datum_name(int datum_index);
+grid_type gt_lookup_grid_type(const QString& grid_name, const QString& module);
+QString gt_get_mps_grid_longname(grid_type grid, const QString& module);
+int gt_lookup_datum_index(const QString& datum_str, const QString& module);
+QString gt_get_mps_datum_name(int datum_index);
 uint32_t gt_color_value(unsigned int garmin_index);
 uint32_t gt_color_value_by_name(const QString& name);
 int gt_color_index_by_name(const QString& name);
 int gt_color_index_by_rgb(int rgb);
-const char* gt_color_name(unsigned int garmin_index);
+QString gt_color_name(unsigned int garmin_index);
 
 #endif

@@ -33,7 +33,6 @@
 #include <ctime>                   // for gmtime, time_t, localtime, strftime, tm
 
 #include <optional>                // for optional
-#include <type_traits>             // for add_const_t
 #include <utility>                 // for pair, as_const, make_pair
 #include <QByteArray>              // for QByteArray
 #include <QChar>                   // for QChar, QChar::Other_Control
@@ -72,16 +71,6 @@ const QVector<QString> GarminTxtFormat::headers = {
   "Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink"
 };
 
-inline gt_display_modes_e& operator++(gt_display_modes_e& s) // prefix
-{
-  return s = static_cast<gt_display_modes_e>(s + 1);
-}
-inline gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
-{
-  gt_display_modes_e ret(s);
-  ++s;
-  return ret;
-}
 
 bool GarminTxtFormat::is_valid_alt(double alt)
 {
@@ -273,7 +262,7 @@ GarminTxtFormat::print_position(const Waypoint* wpt)
     fatal(MYNAME ": %s (%s) is outside of convertible area \"%s\"!\n",
           wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
           qPrintable(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
-          gt_get_mps_grid_longname(grid_index, MYNAME));
+          qPrintable(gt_get_mps_grid_longname(grid_index, MYNAME)));
   }
 }
 
@@ -419,18 +408,18 @@ GarminTxtFormat::print_string(const char* fmt, const QString& string)
 void
 GarminTxtFormat::write_waypt(const Waypoint* wpt)
 {
-  const char* wpt_type;
+  QString wpt_type;
 
   const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
 
   int i = garmin_fs_t::get_display(gmsd, 0);
-  if (i > GT_DISPLAY_MODE_MAX) {
+  if (!((i >= 0) && (i < gt_display_mode_names.size()))) {
     i = 0;
   }
-  const char* dspl_mode = gt_display_mode_names[i];
+  QString dspl_mode = gt_display_mode_names[i];
 
   int wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
-  if (wpt_class <= gt_waypt_class_map_line) {
+  if ((wpt_class >= 0) && (wpt_class < gt_waypt_class_names.size())) {
     wpt_type = gt_waypt_class_names[wpt_class];
   } else {
     wpt_type = gt_waypt_class_names[0];
@@ -450,7 +439,7 @@ GarminTxtFormat::write_waypt(const Waypoint* wpt)
   } else {
     *fout << "\t";
   }
-  *fout << QString::asprintf("%s\t", wpt_type);
+  *fout << wpt_type << "\t";
 
   print_position(wpt);
 
@@ -475,7 +464,7 @@ GarminTxtFormat::write_waypt(const Waypoint* wpt)
   if (x != -999) {
     print_temperature(x);
   }
-  *fout << QString::asprintf("\t%s\t", dspl_mode);
+  *fout << "\t" << dspl_mode << "\t";
 
   *fout << "Unknown\t"; 				/* Color is fixed: Unknown */
 
@@ -673,14 +662,14 @@ GarminTxtFormat::wr_init(const QString& fname)
     }
   }
 
-  datum_str = get_option_val(opt_datum, nullptr);
-  const char* grid_str = get_option_val(opt_grid, nullptr);
+  QString datum_str = get_option_val(opt_datum, nullptr);
+  QString grid_str = get_option_val(opt_grid, nullptr);
 
   grid_index = grid_lat_lon_dmm;
-  if (grid_str != nullptr) {
-    int i;
+  if (!grid_str.isEmpty()) {
+    bool ok;
 
-    if (sscanf(grid_str, "%d", &i)) {
+    if (int i = grid_str.toInt(&ok); ok) {
       grid_index = (grid_type) i;
       if ((grid_index < GRID_INDEX_MIN) || (grid_index > GRID_INDEX_MAX))
         fatal(MYNAME ": Grid index out of range (%d..%d)!",
@@ -752,8 +741,8 @@ GarminTxtFormat::write()
   grid_str = grid_str.replace('*', u'°');
   *fout << "Grid\t" << grid_str << "\r\n";
 
-  datum_str = gt_get_mps_datum_name(datum_index);
-  *fout << QString::asprintf("Datum\t%s\r\n\r\n", datum_str);
+  QString datum_str = gt_get_mps_datum_name(datum_index);
+  *fout << "Datum\t" << datum_str << "\r\n\r\n";
 
   waypoints = 0;
   gtxt_flags.enum_waypoints = 1;			/* enum all waypoints */
@@ -961,7 +950,7 @@ GarminTxtFormat::parse_display(const QString& str, int* val) const
     return false;
   }
 
-  for (gt_display_modes_e i = GT_DISPLAY_MODE_MIN; i <= GT_DISPLAY_MODE_MAX; ++i) {
+  for (int i = 0; i < gt_display_mode_names.size(); ++i) {
     if (case_ignore_strcmp(str, gt_display_mode_names[i]) == 0) {
       *val = i;
       return true;
@@ -1011,13 +1000,12 @@ GarminTxtFormat::parse_grid(const QStringList& lineparts)
     fatal(MYNAME ": Missing grid headline!\n");
   }
 
-  const QByteArray ba = lineparts.at(0).toUtf8();
-  const char* str = ba.constData();
-  if (strstr(str, "dd.ddddd") != nullptr) {
+  const QString str = lineparts.at(0);
+  if (str.contains("dd.ddddd")) {
     grid_index = grid_lat_lon_ddd;
-  } else if (strstr(str, "mm.mmm") != nullptr) {
+  } else if (str.contains("mm.mmm")) {
     grid_index = grid_lat_lon_dmm;
-  } else if (strstr(str, "mm'ss.s") != nullptr) {
+  } else if (str.contains("mm'ss.s")) {
     grid_index = grid_lat_lon_dms;
   } else {
     grid_index = gt_lookup_grid_type(str, MYNAME);
@@ -1032,7 +1020,7 @@ GarminTxtFormat::parse_datum(const QStringList& lineparts)
   }
 
   const auto& str = lineparts.at(0);
-  datum_index = gt_lookup_datum_index(CSTR(str), MYNAME);
+  datum_index = gt_lookup_datum_index(str, MYNAME);
 }
 
 void
@@ -1067,7 +1055,7 @@ GarminTxtFormat::parse_waypoint(const QStringList& lineparts)
       }
       break;
     case  3:
-      for (i = 0; i <= gt_waypt_class_map_line; i++) {
+      for (i = 0; i < gt_waypt_class_names.size(); i++) {
         if (case_ignore_strcmp(str, gt_waypt_class_names[i]) == 0) {
           garmin_fs_t::set_wpt_class(gmsd, i);
           break;
