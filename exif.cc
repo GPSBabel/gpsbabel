@@ -854,7 +854,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     printf(MYNAME "-GPSLongitude = %12.7f\n", wpt->longitude);
   }
   if (!datum.isEmpty()) {
-    int idatum = gt_lookup_datum_index(datum.constData(), MYNAME);
+    int idatum = gt_lookup_datum_index(datum, MYNAME);
     if (idatum < 0) {
       fatal(MYNAME ": Unknown GPSMapDatum \"%s\"!\n", datum.constData());
     }
