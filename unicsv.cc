@@ -465,7 +465,7 @@ UnicsvFormat::rd_init(const QString& fname)
   unicsv_detect = (!(global_opts.masked_objective & (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK)));
 
   unicsv_track = unicsv_route = nullptr;
-  unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
+  unicsv_datum_idx = gt_lookup_datum_index(opt_datum.get(), MYNAME);
 
   fin = new gpsbabel::TextStream;
   fin->open(fname, QIODevice::ReadOnly, MYNAME, opt_codec);
@@ -1091,7 +1091,7 @@ UnicsvFormat::read()
   fatal(MYNAME ": %s (%s) is outside of convertible area of grid \"%s\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
         qPrintable(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
-        gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
+        qPrintable(gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME)));
 }
 
 void
@@ -1697,7 +1697,7 @@ UnicsvFormat::wr_init(const QString& fname)
         fatal(MYNAME ": Grid index out of range (%d..%d)!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
-      unicsv_grid_idx = gt_lookup_grid_type(opt_grid, MYNAME);
+      unicsv_grid_idx = gt_lookup_grid_type(opt_grid.get(), MYNAME);
     }
   }
 
@@ -1711,7 +1711,7 @@ UnicsvFormat::wr_init(const QString& fname)
   {
     unicsv_datum_idx = kDatumWGS84;  /* internal, becomes CH1903 */
   } else {
-    unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
+    unicsv_datum_idx = gt_lookup_datum_index(opt_datum.get(), MYNAME);
   }
 
   llprec = xstrtoi(opt_prec, nullptr, 10);
