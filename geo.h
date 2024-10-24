@@ -27,7 +27,7 @@
 #include "defs.h"
 #include "format.h"          // for Format
 #include "geocache.h"        // for Geocache, Geocache::container_t
-#include "option.h"          // for OptionBool, OptionCString
+#include "option.h"          // for OptionBool, OptionString
 
 
 class GeoFormat : public Format
@@ -67,7 +67,7 @@ private:
 
   /* Data Members */
 
-  OptionCString deficon;
+  OptionString deficon;
 
   QVector<arglist_t> geo_args = {
     {"deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },

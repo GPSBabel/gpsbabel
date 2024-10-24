@@ -74,7 +74,7 @@ GarminXTFormat::format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_
 
   // get the option for the processing the track name
   if (opt_trk_header) {
-    method = xstrtoi(opt_trk_header, nullptr, 10);
+    method = opt_trk_header.toInt();
     // if method is out of range set to default
     if ((method < 0) || (method > 1)) {
       method = 0;
@@ -315,7 +315,7 @@ GarminXTFormat::format_garmin_xt_proc_atrk()
 
   // get the option for the processing the track name
   if (opt_trk_header) {
-    method = xstrtoi(opt_trk_header, nullptr, 10);
+    method = opt_trk_header.toInt();
   }
 
   if (! track) {
@@ -373,7 +373,7 @@ void
 GarminXTFormat::read()
 {
   // Saved Tracks file
-  if (strcmp(opt_xt_ftype, "STRK") == 0) {
+  if (opt_xt_ftype.get() == "STRK") {
     format_garmin_xt_proc_strk();
   } else { // Active Track file
     format_garmin_xt_proc_atrk();
