@@ -344,7 +344,7 @@ UnicsvFormat::unicsv_parse_status(const QString& str)
 QDateTime
 UnicsvFormat::unicsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const
 {
-  return make_datetime(date, time, is_localtime, opt_utc != nullptr, utc_offset);
+  return make_datetime(date, time, is_localtime, opt_utc, utc_offset);
 }
 
 bool
@@ -465,13 +465,14 @@ UnicsvFormat::rd_init(const QString& fname)
   unicsv_detect = (!(global_opts.masked_objective & (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK)));
 
   unicsv_track = unicsv_route = nullptr;
-  unicsv_datum_idx = gt_lookup_datum_index(opt_datum.get(), MYNAME);
+  unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
 
   fin = new gpsbabel::TextStream;
-  fin->open(fname, QIODevice::ReadOnly, MYNAME, opt_codec);
+  fin->open(fname, QIODevice::ReadOnly, MYNAME, opt_codec.get().toUtf8());
   unicsv_lineno = 0;
   if (opt_fields) {
-    QString fields = QString(opt_fields).replace('+', ',');
+    QString fields = opt_fields;
+    fields.replace('+', ',');
     unicsv_fondle_header(fields);
   } else if (buff = fin->readLine(); !buff.isNull()) {
     ++unicsv_lineno;
@@ -480,7 +481,7 @@ UnicsvFormat::rd_init(const QString& fname)
     unicsv_fieldsep = nullptr;
   }
 
-  utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
+  utc_offset = opt_utc? opt_utc.toInt() * SECONDS_PER_HOUR : 0;
 }
 
 void
@@ -1118,7 +1119,7 @@ UnicsvFormat::unicsv_print_date_time(const QDateTime& idt) const
     return;
   }
   QDateTime dt;
-  if (opt_utc != nullptr) {
+  if (opt_utc) {
     dt = idt.toOffsetFromUtc(utc_offset);
   } else {
     dt = idt.toLocalTime();
@@ -1509,7 +1510,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   if (unicsv_outp_flags[fld_date]) {
     if (wpt->creation_time.toTime_t() >= 2 * SECONDS_PER_DAY) {
       QDateTime dt;
-      if (opt_utc != nullptr) {
+      if (opt_utc) {
         dt = wpt->GetCreationTime().toOffsetFromUtc(utc_offset);
       } else {
         dt = wpt->GetCreationTime().toLocalTime();
@@ -1523,7 +1524,7 @@ UnicsvFormat::unicsv_waypt_disp_cb(const Waypoint* wpt)
   if (unicsv_outp_flags[fld_time]) {
     if (wpt->creation_time.isValid()) {
       QDateTime dt;
-      if (opt_utc != nullptr) {
+      if (opt_utc) {
         dt = wpt->GetCreationTime().toOffsetFromUtc(utc_offset);
       } else {
         dt = wpt->GetCreationTime().toLocalTime();
@@ -1679,7 +1680,7 @@ UnicsvFormat::wr_init(const QString& fname)
           ": option 'fields' is not supported on output");
   }
   fout = new gpsbabel::TextStream;
-  fout->open(fname, QIODevice::WriteOnly, MYNAME, opt_codec);
+  fout->open(fname, QIODevice::WriteOnly, MYNAME, opt_codec.get().toUtf8());
   fout->setRealNumberNotation(QTextStream::FixedNotation);
 
   unicsv_outp_flags.reset();
@@ -1688,16 +1689,17 @@ UnicsvFormat::wr_init(const QString& fname)
   unicsv_fieldsep = kUnicsvFieldSep;
   unicsv_waypt_ct = 0;
 
-  if (opt_grid != nullptr) {
-    int i;
+  if (QString grid_str = opt_grid; !grid_str.isEmpty()) {
+    // we don't use OptionString::toInt because we want the conversion status
+    bool ok;
 
-    if (sscanf(opt_grid, "%d", &i)) {
+    if (int i = grid_str.toInt(&ok); ok) {
       unicsv_grid_idx = (grid_type) i;
       if ((unicsv_grid_idx < GRID_INDEX_MIN) || (unicsv_grid_idx > GRID_INDEX_MAX))
         fatal(MYNAME ": Grid index out of range (%d..%d)!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
-      unicsv_grid_idx = gt_lookup_grid_type(opt_grid.get(), MYNAME);
+      unicsv_grid_idx = gt_lookup_grid_type(grid_str, MYNAME);
     }
   }
 
@@ -1711,11 +1713,11 @@ UnicsvFormat::wr_init(const QString& fname)
   {
     unicsv_datum_idx = kDatumWGS84;  /* internal, becomes CH1903 */
   } else {
-    unicsv_datum_idx = gt_lookup_datum_index(opt_datum.get(), MYNAME);
+    unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
   }
 
-  llprec = xstrtoi(opt_prec, nullptr, 10);
-  utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
+  llprec = opt_prec.toInt();
+  utc_offset = opt_utc? opt_utc.toInt() * SECONDS_PER_HOUR : 0;
 }
 
 void
