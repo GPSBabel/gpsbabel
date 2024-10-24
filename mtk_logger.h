@@ -63,7 +63,7 @@
 #include "defs.h"
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
-#include "option.h"  // for OptionBool, OptionCString
+#include "option.h"  // for OptionBool, OptionString
 
 
 class MtkLoggerBase
@@ -220,8 +220,8 @@ protected:
   OptionBool OPT_erase;  /* erase ? command option */
   OptionBool OPT_erase_only;  /* erase_only ? command option */
   OptionBool OPT_log_enable;  /* enable ? command option */
-  OptionCString csv_file; /* csv ? command option */
-  OptionCString OPT_block_size_kb; /* block_size_kb ? command option */
+  OptionString csv_file; /* csv ? command option */
+  OptionString OPT_block_size_kb; /* block_size_kb ? command option */
   MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
   mtk_loginfo mtk_info{};
@@ -280,7 +280,7 @@ protected:
   int mtk_erase();
   void mtk_read();
   int add_trackpoint(int idx, long unsigned int bmask, data_item* itm);
-  void mtk_csv_init(const char* csv_fname, long unsigned int bitmask);
+  void mtk_csv_init(const QString& csv_fname, long unsigned int bitmask);
   void mtk_csv_deinit();
   static int csv_line(gbfile* csvFile, int idx, long unsigned int bmask, data_item* itm);
   int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask);
