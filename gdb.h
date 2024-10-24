@@ -38,7 +38,7 @@
 #include "garmin_tables.h"  // for gt_waypt_classes_e
 #include "gbfile.h"         // for gbfile
 #include "mkshort.h"        // for MakeShort
-#include "option.h"         // for OptionBool, OptionCString
+#include "option.h"         // for OptionBool, OptionString
 
 
 class GdbFormat : public Format
@@ -162,11 +162,11 @@ private:
   WptNamePosnHash waypt_nameposn_out_hash;
   MakeShort* short_h{};
 
-  OptionCString gdb_opt_category;
-  OptionCString gdb_opt_ver;
+  OptionString gdb_opt_category;
+  OptionString gdb_opt_ver;
   OptionBool gdb_opt_via;
   OptionBool gdb_opt_roadbook;
-  OptionCString gdb_opt_bitcategory;
+  OptionString gdb_opt_bitcategory;
   OptionBool gdb_opt_drop_hidden_wpt;
 
   int waypt_flag{};
