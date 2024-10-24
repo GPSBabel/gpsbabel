@@ -49,3 +49,22 @@ gpsbabel -i garmin_gpi,languagecode=RU -f ${REFERENCE}/spb_metro_norm.gpi -x sor
 compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.csv
 compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi.csv
 
+# speed folly
+# These should be a speed of 30 in statute units, i.e. 30 mph, 0.5 miles
+gpsbabel -i gpx -f ${REFERENCE}/gpispeed.gpx -o garmin_gpi,speed=30,proximity=0.5,units=s -F ${TMPDIR}/gpispeed_s.gpi
+compare ${REFERENCE}/gpispeed.gpi ${TMPDIR}/gpispeed_s.gpi
+gpsbabel -i gpx -f ${REFERENCE}/gpispeed.gpx -o garmin_gpi,speed=30mph,proximity=0.5mi -F ${TMPDIR}/gpispeed_mph.gpi
+compare ${REFERENCE}/gpispeed.gpi ${TMPDIR}/gpispeed_mph.gpi
+# These should show @48 (kph), 804.7m
+gpsbabel -i garmin_gpi -f ${REFERENCE}/gpispeed.gpi -o unicsv -F ${TMPDIR}/gpispeed.csv
+compare ${REFERENCE}/gpispeed_m.csv ${TMPDIR}/gpispeed.csv
+gpsbabel -i garmin_gpi,units=m -f ${REFERENCE}/gpispeed.gpi -o unicsv -F ${TMPDIR}/gpispeed_m.csv
+compare ${REFERENCE}/gpispeed_m.csv ${TMPDIR}/gpispeed_m.csv
+# These should show @30 (mph), 804.7m
+gpsbabel -i garmin_gpi,units=s -f ${REFERENCE}/gpispeed.gpi -o unicsv -F ${TMPDIR}/gpispeed_s.csv
+compare ${REFERENCE}/gpispeed_s.csv ${TMPDIR}/gpispeed_s.csv
+# interpret speed from waypoint name
+gpsbabel -i unicsv -f ${REFERENCE}/gpispeed_s.csv -o garmin_gpi,alerts,units=s -F ${TMPDIR}/gpispeed_sn.gpi
+gpsbabel -i garmin_gpi,units=s -f ${TMPDIR}/gpispeed_sn.gpi -o unicsv -F  ${TMPDIR}/gpispeed_s2.csv
+compare ${REFERENCE}/gpispeed_s.csv ${TMPDIR}/gpispeed_s2.csv
+
