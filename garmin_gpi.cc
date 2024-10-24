@@ -126,9 +126,9 @@ GarminGPIFormat::gpi_read_string(const char* field) const
         if (res1.strlen + 4 + res2.strlen + 4 != l0) {
           fatal(MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, res1.strlen, res2.strlen, field);
         }
-        if (opt_lang && (opt_lang  == res1.lc)) {
+        if (opt_lang && (opt_lang.get().toUtf8()  == res1.lc)) {
           string = res1.str;
-        } else if (opt_lang && (opt_lang == res2.lc)) {
+        } else if (opt_lang && (opt_lang.get().toUtf8() == res2.lc)) {
           string = res2.str;
         } else {
           fatal(MYNAME ": Must select language code, %s and %s found.\n", res1.lc.constData(), res2.lc.constData());
@@ -729,11 +729,11 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
 #if 0
         wpt->shortname.truncate(pidx);
 #endif
-      } else if ((opt_speed) && (!wpt->speed_has_value())) {
+      } else if (opt_speed && (!wpt->speed_has_value())) {
         wpt->set_speed(defspeed);
       }
 
-      if ((opt_proximity) && (!wpt->proximity_has_value())) {
+      if (opt_proximity && (!wpt->proximity_has_value())) {
         wpt->set_proximity(defproximity);
       }
 
@@ -976,11 +976,11 @@ skip_empty_block:
 }
 
 void
-GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* image, const int image_sz) const
+GarminGPIFormat::write_category(const QString& /*unused*/, const unsigned char* image, const int image_sz) const
 {
   int sz = wdata_compute_size(wdata);
   sz += 8;  /* string header */
-  sz += str_from_unicode(opt_cat.get()).size();
+  sz += str_from_unicode(opt_cat).size();
 
   gbfputint32(0x80009, fout);
   if ((! opt_hide_bitmap) && image_sz) {
@@ -989,7 +989,7 @@ GarminGPIFormat::write_category(const char* /*unused*/, const unsigned char* ima
     gbfputint32(sz, fout);
   }
   gbfputint32(sz, fout);
-  write_string(str_from_unicode(opt_cat.get()), 1);
+  write_string(str_from_unicode(opt_cat), 1);
 
   wdata_write(wdata);
 
@@ -1052,7 +1052,7 @@ GarminGPIFormat::enum_waypt_cb(const Waypoint* ref) const
 }
 
 void
-GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** data, int* data_sz)
+GarminGPIFormat::load_bitmap_from_file(const QString& fname, const unsigned char** data, int* data_sz)
 {
   int i;
   int sz;
@@ -1207,6 +1207,19 @@ GarminGPIFormat::load_bitmap_from_file(const char* fname, const unsigned char** 
   gbfclose(f);
 }
 
+char GarminGPIFormat::parse_units(const QString& str)
+{
+  char result;
+  if (str.startsWith('m', Qt::CaseInsensitive)) {
+    result = 'm';
+  } else if (str.startsWith('s', Qt::CaseInsensitive)) {
+    result = 's';
+  } else {
+    fatal(MYNAME ": Unknown units parameter (%s).\n", qPrintable(str));
+  }
+  return result;
+}
+
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
@@ -1228,10 +1241,7 @@ GarminGPIFormat::rd_init(const QString& fname)
     fatal(MYNAME ": Unsupported code page (%d). File is likely encrypted.\n", codepage);
   }
 
-  units = tolower(opt_units[0]);
-  if ((units != 'm') && (units != 's')) {
-    fatal(MYNAME ": Unknown units parameter (%c).\n", opt_units[0]);
-  }
+  units = parse_units(opt_units);
 }
 
 void
@@ -1263,28 +1273,25 @@ GarminGPIFormat::wr_init(const QString& fname)
   codepage = 0;
 
   for (int i = 1250; i <= 1257; i++) {
-    if (QStringLiteral("windows-%1").arg(i).compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
+    if (QStringLiteral("windows-%1").arg(i).compare(opt_writecodec, Qt::CaseInsensitive) == 0) {
       codepage = i;
       break;
     }
   }
   if (! codepage) {
-    if (QString("utf8").compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
+    if (QStringLiteral("utf8").compare(opt_writecodec, Qt::CaseInsensitive) == 0) {
       codepage = 65001;
     }
   }
 
   if (! codepage) {
-    warning(MYNAME ": Unsupported character set (%s)!\n", qPrintable(opt_writecodec.get()));
+    warning(MYNAME ": Unsupported character set (%s)!\n", qPrintable(opt_writecodec));
     fatal(MYNAME ": Valid values are windows-1250 to windows-1257 and utf8.\n");
   }
 
-  codec = get_codec(opt_writecodec.getba());
+  codec = get_codec(opt_writecodec.get().toUtf8());
 
-  units = tolower(opt_units[0]);
-  if ((units != 'm') && (units != 's')) {
-    fatal(MYNAME ": Unknown units parameter (%c).\n", opt_units[0]);
-  }
+  units = parse_units(opt_units);
 
   alerts = (opt_alerts) ? 1 : 0;
 
@@ -1327,8 +1334,8 @@ GarminGPIFormat::wr_deinit()
   short_h = nullptr;
   gbfclose(fout);
 
-  if ((opt_sleep) && !gpsbabel_testmode()) {  /* don't sleep during 'testo' */
-    int sleep = xstrtoi(opt_sleep, nullptr, 10);
+  if (opt_sleep && !gpsbabel_testmode()) {  /* don't sleep during 'testo' */
+    int sleep = opt_sleep.toInt();
     if (sleep < 1) {
       sleep = 1;
     }
@@ -1359,14 +1366,14 @@ GarminGPIFormat::write()
   const unsigned char* image;
   int image_sz;
 
-  if (strlen(opt_cat) == 0) {
+  if (opt_cat.isEmpty()) {
     fatal(MYNAME ": Can't write empty category!\n");
   }
 
   if (opt_hide_bitmap) {
     image = nullptr;
     image_sz = 0;
-  } else if (opt_bitmap && *opt_bitmap) {
+  } else if (!opt_bitmap.isEmpty()) {
     load_bitmap_from_file(opt_bitmap, &image, &image_sz);
   } else {
     image = gpi_bitmap;  /* embedded GPSBabel icon in gpi format */
