@@ -47,7 +47,7 @@
 #include "defs.h"
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfclose, gbfopen, gbfread, gbfwrite, gbfile
-#include "option.h"   // for OptionCString, OptionBool
+#include "option.h"   // for OptionString, OptionBool
 
 
 class GlobalsatSportFormat : public Format
@@ -231,9 +231,9 @@ private:
 
   OptionBool showlist;                  // if true show a list instead of download tracks
 
-  OptionCString opt_dump_file;          // dump raw data to this file (optional)
+  OptionString opt_dump_file;          // dump raw data to this file (optional)
   OptionBool opt_input_dump_file;       // if true input is from a dump-file instead of serial console
-  OptionCString opt_timezone;
+  OptionString opt_timezone;
   gbfile* dumpfile{nullptr};             // used for creating bin/RAW datadump files, useful for testing
   gbfile* in_file{nullptr};              // used for reading from bin/RAW datadump files, useful for testing
   QTimeZone* timezn{nullptr};

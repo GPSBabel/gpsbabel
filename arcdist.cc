@@ -112,7 +112,7 @@ void ArcDistanceFilter::process()
     QString line;
 
     gpsbabel::TextStream stream;
-    stream.open(arcfileopt.get(), QIODevice::ReadOnly, MYNAME);
+    stream.open(arcfileopt, QIODevice::ReadOnly, MYNAME);
 
     auto* arcpt1 = new Waypoint;
     auto* arcpt2 = new Waypoint;

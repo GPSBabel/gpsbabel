@@ -74,7 +74,7 @@ discard	Remove unreliable points with high hdop or vdop	https://www.gpsbabel.org
 option	discard	hdop	Suppress points with higher hdop	float	-1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_hdop
 option	discard	vdop	Suppress points with higher vdop	float	-1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_vdop
 option	discard	hdopandvdop	Link hdop and vdop suppression with AND	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_hdopandvdop
-option	discard	sat	Minimum sats to keep points	integer	-1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_sat
+option	discard	sat	Minimum sats to keep points	integer	-1			https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_sat
 option	discard	fixnone	Suppress points without fix	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_fixnone
 option	discard	fixunknown	Suppress points with unknown fix	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_fixunknown
 option	discard	elemin	Suppress points below given elevation in meters	integer				https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html#fmt_discard_o_elemin

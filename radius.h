@@ -28,7 +28,7 @@
 
 #include "defs.h"     // for arglist_t, ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED, ARGTYPE_BOOL, ARGTYPE_INT, ARGTYPE_STRING, Waypoint
 #include "filter.h"   // for Filter
-#include "option.h"  // for OptionCString, OptionBool
+#include "option.h"  // for OptionString, OptionBool
 
 #if FILTERS_ENABLED
 
@@ -55,13 +55,13 @@ private:
   /* Data Members */
 
   double pos_dist{};
-  OptionCString distopt;
-  OptionCString latopt;
-  OptionCString lonopt;
+  OptionString distopt;
+  OptionString latopt;
+  OptionString lonopt;
   OptionBool exclopt;
   OptionBool nosort;
-  OptionCString maxctarg;
-  OptionCString routename;
+  OptionString maxctarg;
+  OptionString routename;
   int maxct{};
 
   Waypoint* home_pos{};

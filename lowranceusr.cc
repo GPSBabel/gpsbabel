@@ -92,7 +92,6 @@
 #include <cstdio>               // for printf, sprintf, SEEK_CUR
 #include <cstdint>              // for int64_t
 #include <cstdlib>              // for abs
-#include <cstring>              // for strcmp, strlen
 #include <numbers>              // for pi
 #include <utility>              // for as_const
 
@@ -347,9 +346,9 @@ LowranceusrFormat::wr_init(const QString& fname)
   file_out = gbfopen_le(fname, "wb", MYNAME);
   mkshort_handle = new MakeShort;
   waypt_out_count = 0;
-  writing_version = xstrtoi(opt_wversion, nullptr, 10);
+  writing_version = opt_wversion.toInt();
   if ((writing_version < 2) || (writing_version > 4)) {
-    fatal(MYNAME " wversion value %s is not supported !!\n", qPrintable(opt_wversion.get()));
+    fatal(MYNAME " wversion value %s is not supported !!\n", qPrintable(opt_wversion));
   }
   utf16le_codec = QTextCodec::codecForName("UTF-16LE");
   waypt_table = new QList<const Waypoint*>;
@@ -1884,7 +1883,7 @@ LowranceusrFormat::write()
 
     /* file title */
     buf = opt_title.isEmpty()?
-          QStringLiteral("GPSBabel generated USR data file") : opt_title.get();
+          QStringLiteral("GPSBabel generated USR data file") : opt_title;
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " data_write: Title = '%s'\n", qPrintable(buf));
     }
@@ -1903,12 +1902,12 @@ LowranceusrFormat::write()
     gbfputc(0, file_out);
 
     /* device serial number */
-    opt_serialnum_i = xstrtoi(opt_serialnum, nullptr, 10);
+    opt_serialnum_i = opt_serialnum.toInt();
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */
     buf = opt_content_descr.isEmpty()?
-          QStringLiteral("Waypoints, routes, and trails") : opt_content_descr.get();
+          QStringLiteral("Waypoints, routes, and trails") : opt_content_descr;
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " data_write: Description = '%s'\n", qPrintable(buf));
     }

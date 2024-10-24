@@ -36,7 +36,6 @@
 
 #include <cmath>                    // for fabs
 #include <cstdio>                   // for printf, SEEK_SET
-#include <cstdlib>                  // for strtol
 #include <cstring>                  // for memset, strstr, strcmp
 #include <iterator>                 // for next
 
@@ -1635,8 +1634,8 @@ GdbFormat::wr_init(const QString& fname)
   fout = gbfopen_le(fname, "wb", MYNAME);
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
 
-  gdb_category = (gdb_opt_category) ? xstrtoi(gdb_opt_category, nullptr, 10) : 0;
-  gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? xstrtoi(gdb_opt_ver, nullptr, 10) : 0;
+  gdb_category = gdb_opt_category ? gdb_opt_category.toInt() : 0;
+  gdb_ver = gdb_opt_ver.toInt();
 
   if (gdb_category) {
     if ((gdb_category < 1) || (gdb_category > 16)) {
@@ -1646,7 +1645,7 @@ GdbFormat::wr_init(const QString& fname)
   }
 
   if (gdb_opt_bitcategory) {
-    gdb_category = strtol(gdb_opt_bitcategory, nullptr, 0);
+    gdb_category = gdb_opt_bitcategory.toInt(nullptr, 0);
   }
 
   waypt_nameposn_out_hash.clear();
@@ -1674,9 +1673,6 @@ GdbFormat::wr_deinit()
 void
 GdbFormat::write()
 {
-  if (gdb_opt_ver) {
-    gdb_ver = xstrtoi(gdb_opt_ver, nullptr, 10);
-  }
   write_header();
 
   reset_short_handle("WPT");

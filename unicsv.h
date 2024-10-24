@@ -34,7 +34,7 @@
 #include "defs.h"
 #include "format.h"               // for Format
 #include "geocache.h"             // for Geocache, Geocache::status_t
-#include "option.h"               // for OptionCString, OptionBool
+#include "option.h"               // for OptionString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -200,14 +200,14 @@ private:
   std::bitset<fld_terminator> unicsv_outp_flags;
   grid_type unicsv_grid_idx{grid_unknown};
   int unicsv_datum_idx{};
-  OptionCString opt_datum;
-  OptionCString opt_grid;
-  OptionCString opt_utc;
+  OptionString opt_datum;
+  OptionString opt_grid;
+  OptionString opt_utc;
   OptionBool opt_filename;
   OptionBool opt_format;
-  OptionCString opt_prec;
-  OptionCString opt_fields;
-  OptionCString opt_codec;
+  OptionString opt_prec;
+  OptionString opt_fields;
+  OptionString opt_codec;
   int unicsv_waypt_ct{};
   char unicsv_detect{};
   int llprec{};

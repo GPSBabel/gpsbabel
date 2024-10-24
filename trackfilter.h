@@ -30,7 +30,7 @@
 
 #include "defs.h"               // for ARG_NOMINMAX, route_head (ptr only), ARG...
 #include "filter.h"             // for Filter
-#include "option.h"             // for OptionCString, OptionBool
+#include "option.h"             // for OptionString, OptionBool
 #include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
@@ -81,7 +81,7 @@ private:
   /* Member Functions */
 
   int trackfilter_opt_count();
-  static qint64 trackfilter_parse_time_opt(const char* arg);
+  static qint64 trackfilter_parse_time_opt(const QString& arg);
   static bool trackfilter_init_sort_cb(const route_head* ha, const route_head* hb);
   static bool trackfilter_merge_sort_cb(const Waypoint* wa, const Waypoint* wb);
   fix_type trackfilter_parse_fix(int* nsats);
@@ -97,35 +97,35 @@ private:
   void trackfilter_split();
   void trackfilter_move();
   void trackfilter_synth();
-  static QDateTime trackfilter_range_check(const char* timestr);
+  static QDateTime trackfilter_range_check(const QString& timestr);
   void trackfilter_range();
   void trackfilter_seg2trk();
   void trackfilter_trk2seg();
-  static faketime_t trackfilter_faketime_check(const char* timestr);
+  static faketime_t trackfilter_faketime_check(const QString& timestr);
   void trackfilter_faketime();
   static bool trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
   static void trackfilter_segment_head(const route_head* rte);
 
   /* Data Members */
 
-  OptionCString opt_merge;
+  OptionString opt_merge;
   OptionBool opt_pack;
-  OptionCString opt_split;
-  OptionCString opt_sdistance;
-  OptionCString opt_move;
-  OptionCString opt_title;
-  OptionCString opt_start;
-  OptionCString opt_stop;
-  OptionCString opt_fix;
+  OptionString opt_split;
+  OptionString opt_sdistance;
+  OptionString opt_move;
+  OptionString opt_title;
+  OptionString opt_start;
+  OptionString opt_stop;
+  OptionString opt_fix;
   OptionBool opt_course;
   OptionBool opt_speed;
-  OptionCString opt_name;
+  OptionString opt_name;
   OptionBool opt_seg2trk;
   OptionBool opt_trk2seg;
   OptionBool opt_segment;
-  OptionCString opt_faketime;
+  OptionString opt_faketime;
   OptionBool opt_discard;
-  OptionCString opt_minpoints;
+  OptionString opt_minpoints;
   int minimum_points{0};
 
   QVector<arglist_t> args = {

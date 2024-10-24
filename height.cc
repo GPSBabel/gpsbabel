@@ -83,7 +83,7 @@ void HeightFilter::correct_height(const Waypoint* wpt)
   auto* waypointp = const_cast<Waypoint*>(wpt);
 
   if (waypointp->altitude != unknown_alt) {
-    if (addopt != nullptr) {
+    if (addopt) {
       waypointp->altitude += addf;
     }
 
@@ -96,7 +96,7 @@ void HeightFilter::correct_height(const Waypoint* wpt)
 void HeightFilter::init()
 {
   addf = 0.0;
-  if (addopt != nullptr) {
+  if (addopt) {
     if (parse_distance(addopt, &addf, 1.0, MYNAME) == 0) {
       fatal(MYNAME ": No height specified with add option.");
     }

@@ -947,10 +947,10 @@ void IgcFormat::wr_track()
   // If both found, attempt to merge them
   if (pres_track && gnss_track) {
     if (timeadj) {
-      if (strcmp(timeadj, "auto") == 0) {
+      if (timeadj.get() == "auto") {
         time_adj = correlate_tracks(pres_track, gnss_track);
-      } else if (sscanf(timeadj, "%d", &time_adj) != 1) {
-        fatal(MYNAME ": bad timeadj argument '%s'\n", qPrintable(timeadj.get()));
+      } else {
+        time_adj = timeadj.toInt();
       }
     } else {
       time_adj = 0;
