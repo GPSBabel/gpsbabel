@@ -1,11 +1,14 @@
 rm -f ${TMPDIR}/subrip.srt
 gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip -F ${TMPDIR}/subrip.srt
 compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
-gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,gps_date=20110702,gps_time=174725.200 -F ${TMPDIR}/subrip.srt
-compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
-gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,video_time=000000,gps_date=20110702,gps_time=174725.200 -F ${TMPDIR}/subrip.srt
-compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
-gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,video_time=000000.200,gps_date=20110702,gps_time=174725.400 -F ${TMPDIR}/subrip.srt
-compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,gps_date=20110702,gps_time=174725.200 -F ${TMPDIR}/subrip2.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip2.srt
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,video_time=000000,gps_date=20110702,gps_time=174725.200 -F ${TMPDIR}/subrip3.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip3.srt
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,video_time=000000.200,gps_date=20110702,gps_time=174725.400 -F ${TMPDIR}/subrip4.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip4.srt
 gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,gps_date=20110702,gps_time=174725.400 -F ${TMPDIR}/subrip-shifted.srt
 compare  ${REFERENCE}/track/gpx_subsecond-sample-shifted~subrip.srt ${TMPDIR}/subrip-shifted.srt
+
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,format="%s km/h %e m\n%t %l" -F ${TMPDIR}/subrip5.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip5.srt
