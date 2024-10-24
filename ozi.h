@@ -47,7 +47,7 @@
 #include "format.h"               // for Format
 #include "formspec.h"             // for FormatSpecificData, kFsOzi
 #include "mkshort.h"              // for MakeShort
-#include "option.h"               // for OptionCString, OptionBool
+#include "option.h"               // for OptionString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -126,23 +126,23 @@ private:
   int route_wpt_count{};
   int new_track{};
 
-  OptionCString snlenopt;
+  OptionString snlenopt;
   OptionBool snwhiteopt;
   OptionBool snupperopt;
   OptionBool snuniqueopt;
-  OptionCString wptfgcolor;
-  OptionCString wptbgcolor;
+  OptionString wptfgcolor;
+  OptionString wptbgcolor;
   OptionBool pack_opt;
   int datum{};
-  OptionCString proximityarg;
+  OptionString proximityarg;
   double proximity{};
-  OptionCString altunit_opt;
-  OptionCString proxunit_opt;
+  OptionString altunit_opt;
+  OptionString proxunit_opt;
   char altunit{};
   char proxunit{};
   double alt_scale{};
   double prox_scale{};
-  OptionCString opt_codec;
+  OptionString opt_codec;
 
   QVector<arglist_t> ozi_args = {
     {
