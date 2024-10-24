@@ -234,6 +234,7 @@ LowranceusrFormat::lowranceusr4_writestr(const QString& buf, gbfile* file, int b
   QByteArray qba;
   if (bytes_per_char == 1) {
     qba = buf.toUtf8();
+    qba.truncate(MAXUSRSTRINGSIZE);
   } else {
     QScopedPointer<QTextEncoder> encoder(utf16le_codec->makeEncoder(QTextCodec::IgnoreHeader));
     qba = encoder->fromUnicode(buf);
@@ -1882,16 +1883,8 @@ LowranceusrFormat::write()
     gbfputint32(DataStreamVersion, file_out);
 
     /* file title */
-    if (int len = strlen(opt_title); len == 0) {
-      buf = QString("GPSBabel generated USR data file");
-    } else {
-      if (len > MAXUSRSTRINGSIZE) {
-        QString title = opt_title.get();
-        title.truncate(MAXUSRSTRINGSIZE);
-        opt_title.set(title); // truncate it before copy
-      }
-      buf = opt_title;
-    }
+    buf = opt_title.isEmpty()?
+          QStringLiteral("GPSBabel generated USR data file") : opt_title.get();
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " data_write: Title = '%s'\n", qPrintable(buf));
     }
@@ -1914,16 +1907,8 @@ LowranceusrFormat::write()
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */
-    if (int len = strlen(opt_content_descr); len == 0) {
-      buf = QString("Waypoints, routes, and trails");
-    } else {
-      if (len > MAXUSRSTRINGSIZE) {
-        QString content_descr = opt_content_descr.get();
-        content_descr.truncate(MAXUSRSTRINGSIZE);
-        opt_content_descr.set(content_descr); // truncate it before copy
-      }
-      buf = opt_content_descr;
-    }
+    buf = opt_content_descr.isEmpty()?
+          QStringLiteral("Waypoints, routes, and trails") : opt_content_descr.get();
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " data_write: Description = '%s'\n", qPrintable(buf));
     }
