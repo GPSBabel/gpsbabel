@@ -36,7 +36,7 @@
 
 #include "defs.h"
 #include "format.h"               // for Format
-#include "option.h"               // for OptionCString
+#include "option.h"               // for OptionString
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -69,8 +69,6 @@ private:
   /* Constants */
 
   static constexpr double kGarminUnknownAlt = 1.0e25;
-  static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
-  static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
 
   static const QVector<QString> headers;
 
@@ -111,7 +109,6 @@ private:
   /* Member Functions */
 
   static bool is_valid_alt(double alt);
-  static const char* get_option_val(const char* option, const char* def);
   void init_date_and_time_format();
   void convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon) const;
   void enum_waypt_cb(const Waypoint* wpt);
@@ -172,23 +169,23 @@ private:
   std::array<QList<std::pair<QString, int>>, unknown_header> header_mapping_info;
   QStringList header_column_names;
 
-  OptionCString opt_datum;
-  OptionCString opt_dist;
-  OptionCString opt_temp;
-  OptionCString opt_date_format;
-  OptionCString opt_time_format;
-  OptionCString opt_precision;
-  OptionCString opt_utc;
-  OptionCString opt_grid;
+  OptionString opt_datum;
+  OptionString opt_dist;
+  OptionString opt_temp;
+  OptionString opt_date_format;
+  OptionString opt_time_format;
+  OptionString opt_precision;
+  OptionString opt_utc;
+  OptionString opt_grid;
 
   QVector<arglist_t> garmin_txt_args = {
-    {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+    {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", "dd/mm/yyyy", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"dist",  &opt_dist,        "Distance unit [m=metric, s=statute]", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"grid",  &opt_grid,        "Write position using this grid.", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"prec",  &opt_precision,   "Precision of coordinates", "3", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
     {"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-    {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+    {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", "HH:mm:ss", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
   };
 

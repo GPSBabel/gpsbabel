@@ -79,24 +79,15 @@ bool GarminTxtFormat::is_valid_alt(double alt)
 
 /* helpers */
 
-const char*
-GarminTxtFormat::get_option_val(const char* option, const char* def)
-{
-  const char* c = (option != nullptr) ? option : def;
-  return c;
-}
-
 void
 GarminTxtFormat::init_date_and_time_format()
 {
   // This is old, and weird, code.. date_time_format is a global that's
   // explicitly malloced and freed elsewhere. This isn't very C++ at all,
   // but this format is on its deathbead for deprecation.
-  const char* d = get_option_val(opt_date_format, kDefaultDateFormat);
-  QString d1 = convert_human_date_format(d);
+  QString d1 = convert_human_date_format(opt_date_format);
 
-  const char* t = get_option_val(opt_time_format, kDefaultTimeFormat);
-  QString t1 = convert_human_time_format(t);
+  QString t1 = convert_human_time_format(opt_time_format);
 
   date_time_format = QStringLiteral("%1 %2").arg(d1, t1);
 }
@@ -625,11 +616,11 @@ GarminTxtFormat::track_disp_wpt_cb(const Waypoint* wpt)
 void
 GarminTxtFormat::garmin_txt_utc_option()
 {
-  if (opt_utc != nullptr) {
-    if (case_ignore_strcmp(opt_utc.get(), "utc") == 0) {
+  if (opt_utc) {
+    if (case_ignore_strcmp(opt_utc, "utc") == 0) {
       utc_offs = 0;
     } else {
-      utc_offs = xstrtoi(opt_utc, nullptr, 10);
+      utc_offs = opt_utc.toInt();
     }
     utc_offs *= (60 * 60);
     gtxt_flags.utc = 1;
@@ -652,27 +643,25 @@ GarminTxtFormat::wr_init(const QString& fname)
   fout = new gpsbabel::TextStream;
   fout->open(fname, QIODevice::WriteOnly, MYNAME, "windows-1252");
 
-  gtxt_flags.metric = (toupper(*get_option_val(opt_dist, "m")) == 'M');
-  gtxt_flags.celsius = (toupper(*get_option_val(opt_temp, "c")) == 'C');
+  gtxt_flags.metric = opt_dist.get().startsWith("m", Qt::CaseInsensitive);
+  gtxt_flags.celsius = opt_temp.get().startsWith("c", Qt::CaseInsensitive);
   init_date_and_time_format();
   if (opt_precision) {
-    precision = xstrtoi(opt_precision, nullptr, 10);
+    precision = opt_precision.toInt();
     if (precision < 0) {
-      fatal(MYNAME ": Invalid precision (%s)!", qPrintable(opt_precision.get()));
+      fatal(MYNAME ": Invalid precision (%s)!", qPrintable(opt_precision));
     }
   }
 
-  QString datum_str = get_option_val(opt_datum, nullptr);
-  QString grid_str = get_option_val(opt_grid, nullptr);
-
   grid_index = grid_lat_lon_dmm;
-  if (!grid_str.isEmpty()) {
+  if (QString grid_str = opt_grid; !grid_str.isEmpty()) {
+    // we don't use OptionString::toInt because we want the conversion status
     bool ok;
 
     if (int i = grid_str.toInt(&ok); ok) {
       grid_index = (grid_type) i;
       if ((grid_index < GRID_INDEX_MIN) || (grid_index > GRID_INDEX_MAX))
-        fatal(MYNAME ": Grid index out of range (%d..%d)!",
+        fatal(MYNAME ": Grid index out of range (%d..%d)!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
       grid_index = gt_lookup_grid_type(grid_str, MYNAME);
@@ -687,7 +676,7 @@ GarminTxtFormat::wr_init(const QString& fname)
     datum_index = kDatumWGS84;
     break;
   default:
-    datum_index = gt_lookup_datum_index(datum_str, MYNAME);
+    datum_index = gt_lookup_datum_index(opt_datum, MYNAME);
   }
 
   garmin_txt_utc_option();
