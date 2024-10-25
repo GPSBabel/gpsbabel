@@ -165,6 +165,8 @@ public:
     value_ = s;
   }
 
+  // TODO: register module and argstring and pass as id through toInt/toDouble
+  // to parse_integer/parse_double.
   int toInt(QString* end = nullptr, int base = 10);
   double toDouble(QString* end = nullptr);
 

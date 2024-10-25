@@ -1025,13 +1025,13 @@ int xstrtoi(const char* str, char** str_end, int base);
 /*
  *  From parse.c
  */
+int parse_integer(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr, int base = 10);
+double parse_double(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr);
 int parse_coordinates(const char* str, int datum, grid_type grid,
                       double* latitude, double* longitude, const char* module);
 int parse_coordinates(const QString& str, int datum, grid_type grid,
                       double* latitude, double* longitude, const char* module);
-int parse_distance(const char* str, double* val, double scale, const char* module);
 int parse_distance(const QString& str, double* val, double scale, const char* module);
-int parse_speed(const char* str, double* val, double scale, const char* module);
 int parse_speed(const QString& str, double* val, double scale, const char* module);
 
 /*

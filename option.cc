@@ -18,69 +18,17 @@
  */
 #include "option.h"
 
-#include <QDebug>              // for QDebug
 #include <QString>             // for QString
 
-#include <cstddef>             // for size_t
-#include <stdexcept>           // for invalid_argument, out_of_range
-#include <string>              // for stoi
-
-#include "defs.h"              // for fatal
-#include "src/core/logging.h"  // for FatalMsg
+#include "defs.h"              // for strToDouble, strToInt
 
 
 int OptionString::toInt(QString* end, int base)
 {
-  const QString& str = this->get();
-  auto ss = str.toStdString();
-  size_t pos = 0;
-  int result = 0;
-  try {
-    result = stoi(ss, &pos, base);
-  } catch (const std::invalid_argument&) {
-    fatal(FatalMsg() << "conversion to integer failed: invalid argument" << str);
-  } catch (const std::out_of_range&) {
-    fatal(FatalMsg() << "conversion to integer failed: out of range" << str);
-  } catch (...) {
-    fatal(FatalMsg() << "conversion to integer failed: unknown exception" << str);
-  }
-
-  QString remainder = QString::fromStdString(ss.erase(0, pos));
-  if ((end == nullptr) && !remainder.trimmed().isEmpty()) {
-    fatal(FatalMsg() << "conversion to integer failed: conversion of"  << str <<
-          "failed due to unexpected trailing data" << remainder);
-  }
-  if (end != nullptr) { // return possibly empty trailing portion of str
-    *end = remainder;
-  }
-
-  return result;
+  return parse_integer(value_, "???", nullptr, end, base);
 }
 
 double OptionString::toDouble(QString* end)
 {
-  const QString& str = this->get();
-  auto ss = str.toStdString();
-  size_t pos = 0;
-  double result = 0.0;
-  try {
-    result = stod(ss, &pos);
-  } catch (const std::invalid_argument&) {
-    fatal(FatalMsg() << "conversion to double failed: invalid argument" << str);
-  } catch (const std::out_of_range&) {
-    fatal(FatalMsg() << "conversion to double failed: out of range" << str);
-  } catch (...) {
-    fatal(FatalMsg() << "conversion to double failed: unknown exception" << str);
-  }
-
-  QString remainder = QString::fromStdString(ss.erase(0, pos));
-  if ((end == nullptr) && !remainder.trimmed().isEmpty()) {
-    fatal(FatalMsg() << "conversion to double failed: conversion of"  << str <<
-          "failed due to unexpected trailing data" << remainder);
-  }
-  if (end != nullptr) { // return possibly empty trailing portion of str
-    *end = remainder;
-  }
-
-  return result;
+  return parse_double(value_, "???", nullptr, end);
 }
