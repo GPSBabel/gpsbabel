@@ -52,9 +52,9 @@ compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi.c
 # speed folly
 # These should be a speed of 30 in statute units, i.e. 30 mph, 0.5 miles
 gpsbabel -i gpx -f ${REFERENCE}/gpispeed.gpx -o garmin_gpi,speed=30,proximity=0.5,units=s -F ${TMPDIR}/gpispeed_s.gpi
-compare ${REFERENCE}/gpispeed.gpi ${TMPDIR}/gpispeed_s.gpi
+bincompare ${REFERENCE}/gpispeed.gpi ${TMPDIR}/gpispeed_s.gpi
 gpsbabel -i gpx -f ${REFERENCE}/gpispeed.gpx -o garmin_gpi,speed=30mph,proximity=0.5mi -F ${TMPDIR}/gpispeed_mph.gpi
-compare ${REFERENCE}/gpispeed.gpi ${TMPDIR}/gpispeed_mph.gpi
+bincompare ${REFERENCE}/gpispeed.gpi ${TMPDIR}/gpispeed_mph.gpi
 # These should show @48 (kph), 804.7m
 gpsbabel -i garmin_gpi -f ${REFERENCE}/gpispeed.gpi -o unicsv -F ${TMPDIR}/gpispeed.csv
 compare ${REFERENCE}/gpispeed_m.csv ${TMPDIR}/gpispeed.csv
