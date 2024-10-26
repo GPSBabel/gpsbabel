@@ -34,7 +34,7 @@
 #include "jeeps/gpsdevice.h"  // for gpsdevh
 #include "jeeps/gpssend.h"    // for GPS_PWay, GPS_SWay, GPS_PTrack, GPS_PPvt_Data, GPS_SLap
 #include "mkshort.h"          // for MakeShort
-#include "option.h"           // for OptionCString, OptionBool
+#include "option.h"           // for OptionString, OptionBool
 
 
 class GarminFormat : public Format
@@ -124,14 +124,15 @@ private:
   OptionBool poweroff;
   OptionBool eraset;
   OptionBool resettime;
-  OptionCString snlen;
+  OptionString snlen;
   OptionBool snwhiteopt;
-  OptionCString deficon;
-  OptionCString category;
-  OptionCString categorybitsopt;
-  OptionCString baudopt;
-  OptionCString opt_codec;
+  OptionString deficon;
+  OptionString categoryopt;
+  OptionString categorybitsopt;
+  OptionString baudopt;
+  OptionString opt_codec;
   int baud = 0;
+  int category{};
   int categorybits{};
   bool receiver_must_upper = true;
   QTextCodec* codec{nullptr};
@@ -165,12 +166,12 @@ private:
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "category", &category, "Category number to use for written waypoints",
+      "category", &categoryopt, "Category number to use for written waypoints",
       nullptr, ARGTYPE_INT, "1", "16", nullptr
     },
     {
       "bitscategory", &categorybitsopt, "Bitmap of categories",
-      nullptr, ARGTYPE_INT, "1", "65535", nullptr
+      nullptr, ARGTYPE_BASE_AUTO | ARGTYPE_INT, "1", "65535", nullptr
     },
     {
       "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",

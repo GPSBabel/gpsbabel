@@ -25,14 +25,12 @@
 #include <cmath>                 // for atan2, modf, sqrt
 #include <cstdio>                // for fprintf, fflush, snprintf, snprintf
 #include <cstdint>               // for int32_t
-#include <cstdlib>               // for strtol
 #include <cstring>               // for memcpy, strlen, strncpy, strchr
 #include <ctime>                 // for time_t
 #include <utility>               // for as_const
 
 #include <QByteArray>            // for QByteArray
 #include <QChar>                 // for QChar
-#include <QList>                 // for QList<>::const_iterator
 #include <QString>               // for QString
 #include <QTextCodec>            // for QTextCodec
 #include <Qt>                    // for CaseInsensitive
@@ -80,7 +78,7 @@ void
 GarminFormat::rw_init(const QString& fname)
 {
   receiver_must_upper = true;
-  const char* receiver_charset = "US-ASCII";
+  QByteArray receiver_charset = "US-ASCII";
   /* Technically, even this is a little loose as spaces aren't allowed */
   const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
 
@@ -102,12 +100,11 @@ GarminFormat::rw_init(const QString& fname)
     return;
   }
 
-  if (categorybitsopt) {
-    categorybits = strtol(categorybitsopt, nullptr, 0);
-  }
+  category = categoryopt? (1 << (categoryopt.toInt() - 1)) : 0;
+  categorybits = categorybitsopt? categorybitsopt.toInt(nullptr, nullptr, 0) : 0;
 
   if (baudopt) {
-    baud = strtol(baudopt, nullptr, 0);
+    baud = baudopt.toInt();
     switch (baud) {
     case 9600:
     case 19200:
@@ -258,7 +255,7 @@ GarminFormat::rw_init(const QString& fname)
    * If the user provided a short_length, override the calculated value.
    */
   if (snlen) {
-    mkshort_handle->set_length(xstrtoi(snlen, nullptr, 10));
+    mkshort_handle->set_length(snlen.toInt());
   } else {
     mkshort_handle->set_length(receiver_short_length);
   }
@@ -287,13 +284,13 @@ GarminFormat::rw_init(const QString& fname)
    * However, this is still used for garmin_fs_garmin_after_read,
    * garmin_fs_garmin_before_write.
    */
-  if (opt_codec != nullptr) {
+  if (opt_codec) {
     // override expected codec with user supplied choice.
-    receiver_charset = opt_codec;
+    receiver_charset = opt_codec.get().toUtf8();
   }
   codec = get_codec(receiver_charset);
   if (global_opts.verbose_status) {
-    fprintf(stdout, "receiver charset detected as %s.\r\n", receiver_charset);
+    fprintf(stdout, "receiver charset detected as %s.\r\n", receiver_charset.constData());
   }
 
   valid_chars = valid_waypt_chars;
@@ -849,7 +846,7 @@ GarminFormat::waypoint_prepare()
     tx_waylist[i]->lat = wpt->latitude;
 
     if (deficon) {
-      icon = gt_find_icon_number_from_desc(deficon.get(), PCX);
+      icon = gt_find_icon_number_from_desc(deficon, PCX);
     } else {
       if (!wpt->gc_data->get_icon().isEmpty()) {
         icon = gt_find_icon_number_from_desc(wpt->gc_data->get_icon(), PCX);
@@ -877,7 +874,7 @@ GarminFormat::waypoint_prepare()
       tx_waylist[i]->time_populated = 1;
     }
     if (category) {
-      tx_waylist[i]->category = 1 << (xstrtoi(category, nullptr, 10) - 1);
+      tx_waylist[i]->category = category;
     }
     if (categorybits) {
       tx_waylist[i]->category = categorybits;
