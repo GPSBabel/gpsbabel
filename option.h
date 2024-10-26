@@ -175,10 +175,6 @@ public:
     id_ = id;
   }
 
-// TODO: add register conversion options for integer base conversion.
-// TODO: add register conversion option for trailing data.
-// TODO: use conversion options for Vecs::assign_option checks.
-// TODO: save result of Vecs assign_option check and provide it to users
 // We use overloads instead of default parameters to enable tool visibility into different usages.
   int toInt() const;
   int toInt(bool* ok) const;
