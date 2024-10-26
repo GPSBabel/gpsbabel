@@ -372,14 +372,14 @@ private:
   const route_head* csv_route = nullptr;
 
   OptionString styleopt;
-  OptionString snlenopt;
+  OptionInt snlenopt;
   OptionBool snwhiteopt;
   OptionBool snupperopt;
   OptionBool snuniqueopt;
   OptionBool prefer_shortnames;
   OptionString xcsv_urlbase;
   OptionString opt_datum;
-  OptionString opt_utc;
+  OptionInt opt_utc;
   int utc_offset{};
 
   QString intstylefile;

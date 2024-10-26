@@ -60,7 +60,7 @@ private:
   OptionDouble lonopt;
   OptionBool exclopt;
   OptionBool nosort;
-  OptionString maxctarg;
+  OptionInt maxctarg;
   OptionString routename;
   int maxct{};
 

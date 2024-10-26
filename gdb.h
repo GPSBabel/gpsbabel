@@ -162,11 +162,11 @@ private:
   WptNamePosnHash waypt_nameposn_out_hash;
   MakeShort* short_h{};
 
-  OptionString gdb_opt_category;
-  OptionString gdb_opt_ver;
+  OptionInt gdb_opt_category;
+  OptionInt gdb_opt_ver;
   OptionBool gdb_opt_via;
   OptionBool gdb_opt_roadbook;
-  OptionString gdb_opt_bitcategory;
+  OptionInt gdb_opt_bitcategory;
   OptionBool gdb_opt_drop_hidden_wpt;
 
   int waypt_flag{};

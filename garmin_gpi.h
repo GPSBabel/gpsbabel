@@ -320,7 +320,7 @@ private:
   OptionString opt_units;
   OptionDouble opt_speed;
   OptionDouble opt_proximity;
-  OptionString opt_sleep;
+  OptionInt opt_sleep;
   OptionString opt_lang;
   OptionString opt_writecodec;
   double defspeed{}, defproximity{};

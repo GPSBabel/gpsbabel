@@ -140,16 +140,16 @@ private:
   OptionBool opt_gpgga;
   OptionBool opt_gpvtg;
   OptionBool opt_gpgsa;
-  OptionString snlenopt;
-  OptionString optdate;
+  OptionInt snlenopt;
+  OptionInt optdate;
   OptionBool getposnarg;
-  OptionString opt_sleep;
-  OptionString opt_baud;
+  OptionInt opt_sleep;
+  OptionInt opt_baud;
   OptionBool opt_append;
   OptionBool opt_gisteq;
   OptionBool opt_ignorefix;
 
-  long sleepms{};
+  int sleepms{};
   int getposn{};
   bool amod_waypoint{};
 

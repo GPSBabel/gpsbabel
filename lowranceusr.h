@@ -448,10 +448,10 @@ private:
   OptionBool  opt_ignoreicons;
   OptionBool  opt_writeasicons;
   OptionBool  opt_seg_break;
-  OptionString  opt_wversion;
+  OptionInt  opt_wversion;
   OptionString  opt_title;
   OptionString  opt_content_descr;
-  OptionString  opt_serialnum;
+  OptionInt  opt_serialnum;
   int            opt_serialnum_i{};
 
   QList<const Waypoint*>* waypt_table{nullptr};

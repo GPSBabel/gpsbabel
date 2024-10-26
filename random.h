@@ -84,8 +84,8 @@ private:
 
   /* Data Members */
 
-  OptionString opt_points;
-  OptionString opt_seed;
+  OptionInt opt_points;
+  OptionInt opt_seed;
   OptionBool opt_nodelay;
 
   QVector<arglist_t> random_args = {

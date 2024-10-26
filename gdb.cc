@@ -1634,8 +1634,8 @@ GdbFormat::wr_init(const QString& fname)
   fout = gbfopen_le(fname, "wb", MYNAME);
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
 
-  gdb_category = gdb_opt_category ? gdb_opt_category.toInt() : 0;
-  gdb_ver = gdb_opt_ver.toInt();
+  gdb_category = gdb_opt_category ? gdb_opt_category.get_result() : 0;
+  gdb_ver = gdb_opt_ver.get_result();
 
   if (gdb_category) {
     if ((gdb_category < 1) || (gdb_category > 16)) {
@@ -1645,7 +1645,7 @@ GdbFormat::wr_init(const QString& fname)
   }
 
   if (gdb_opt_bitcategory) {
-    gdb_category = gdb_opt_bitcategory.toInt(nullptr, nullptr, 0);
+    gdb_category = gdb_opt_bitcategory.get_result();
   }
 
   waypt_nameposn_out_hash.clear();

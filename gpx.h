@@ -258,7 +258,7 @@ private:
   OptionBool opt_logpoint;
   OptionBool opt_humminbirdext;
   OptionBool opt_garminext;
-  OptionString opt_elevation_precision;
+  OptionInt opt_elevation_precision;
   int logpoint_ct = 0;
   int elevation_precision{};
 
@@ -285,7 +285,7 @@ private:
   QString link_type;
 
 
-  OptionString snlen;
+  OptionInt snlen;
   OptionBool suppresswhite;
   OptionString urlbase;
   route_head* trk_head{};

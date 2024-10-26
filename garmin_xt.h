@@ -95,7 +95,7 @@ private:
   gbfile* fin{};
   route_head* track{};
   OptionString	opt_xt_ftype;
-  OptionString	opt_trk_header;
+  OptionInt	opt_trk_header;
 
   QVector<arglist_t> format_garmin_xt_args = {
     {"ftype", &opt_xt_ftype, "Garmin Mobile XT ([ATRK]/STRK)", "ATRK", ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr},

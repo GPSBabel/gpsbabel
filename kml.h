@@ -198,7 +198,7 @@ private:
   OptionBool opt_export_lines;
   OptionBool opt_export_points;
   OptionBool opt_export_track;
-  OptionString opt_line_width;
+  OptionInt opt_line_width;
   OptionString opt_line_color;
   OptionBool opt_floating;
   OptionBool opt_extrude;
@@ -206,9 +206,9 @@ private:
   OptionBool opt_trackdirection;
   OptionString opt_units;
   OptionBool opt_labels;
-  OptionString opt_max_position_points;
+  OptionInt opt_max_position_points;
   OptionDouble opt_rotate_colors;
-  OptionString opt_precision;
+  OptionInt opt_precision;
 
   bool export_lines{};
   bool export_points{};

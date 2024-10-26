@@ -51,7 +51,7 @@ private:
   OptionString opt_tracks;
   OptionString opt_waypts;
   OptionBool opt_delete;
-  OptionString rpt_name_digits;
+  OptionInt rpt_name_digits;
   OptionBool opt_rpt_name;
   OptionBool opt_timeless;
   bool timeless{};

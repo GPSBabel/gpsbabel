@@ -286,7 +286,7 @@ void SimplifyRouteFilter::init()
 
   switch (limit_basis) {
   case limit_basis_t::count:
-    count = countopt.toInt();
+    count = countopt.get_result();
     break;
   case limit_basis_t::error: {
     if (metric == metric_t::relative) {

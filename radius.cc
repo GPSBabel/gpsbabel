@@ -103,7 +103,7 @@ void RadiusFilter::init()
   }
 
   if (maxctarg) {
-    maxct = maxctarg.toInt();
+    maxct = maxctarg.get_result();
   } else {
     maxct = 0;
   }

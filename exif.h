@@ -205,7 +205,7 @@ private:
 
   OptionBool opt_filename;
   OptionBool opt_overwrite;
-  OptionString opt_frame;
+  OptionInt opt_frame;
   OptionString opt_name;
   OptionString opt_offsettime;
 

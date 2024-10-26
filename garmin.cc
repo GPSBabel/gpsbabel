@@ -100,11 +100,11 @@ GarminFormat::rw_init(const QString& fname)
     return;
   }
 
-  category = categoryopt? (1 << (categoryopt.toInt() - 1)) : 0;
-  categorybits = categorybitsopt? categorybitsopt.toInt(nullptr, nullptr, 0) : 0;
+  category = categoryopt? (1 << (categoryopt.get_result() - 1)) : 0;
+  categorybits = categorybitsopt? categorybitsopt.get_result() : 0;
 
   if (baudopt) {
-    baud = baudopt.toInt();
+    baud = baudopt.get_result();
     switch (baud) {
     case 9600:
     case 19200:
@@ -255,7 +255,7 @@ GarminFormat::rw_init(const QString& fname)
    * If the user provided a short_length, override the calculated value.
    */
   if (snlen) {
-    mkshort_handle->set_length(snlen.toInt());
+    mkshort_handle->set_length(snlen.get_result());
   } else {
     mkshort_handle->set_length(receiver_short_length);
   }

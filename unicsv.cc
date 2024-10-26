@@ -481,7 +481,7 @@ UnicsvFormat::rd_init(const QString& fname)
     unicsv_fieldsep = nullptr;
   }
 
-  utc_offset = opt_utc? opt_utc.toInt() * SECONDS_PER_HOUR : 0;
+  utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
 }
 
 void
@@ -1715,8 +1715,8 @@ UnicsvFormat::wr_init(const QString& fname)
     unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
   }
 
-  llprec = opt_prec.toInt();
-  utc_offset = opt_utc? opt_utc.toInt() * SECONDS_PER_HOUR : 0;
+  llprec = opt_prec.get_result();
+  utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
 }
 
 void

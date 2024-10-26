@@ -382,7 +382,7 @@ OziFormat::wr_init(const QString& fname)
   /* set mkshort options from the command line if applicable */
   if (global_opts.synthesize_shortnames) {
 
-    mkshort_handle->set_length(snlenopt.toInt());
+    mkshort_handle->set_length(snlenopt.get_result());
 
     if (snwhiteopt.has_value()) {
       mkshort_handle->set_whitespace_ok(snwhiteopt);

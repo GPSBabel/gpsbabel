@@ -141,17 +141,17 @@ void DiscardFilter::init()
   }
 
   if (satopt) {
-    satpf = satopt.toInt();
+    satpf = satopt.get_result();
   } else {
     satpf = -1;
   }
 
   if (eleminopt) {
-    eleminpf = eleminopt.toInt();
+    eleminpf = eleminopt.get_result();
   }
 
   if (elemaxopt) {
-    elemaxpf = elemaxopt.toInt();
+    elemaxpf = elemaxopt.get_result();
   }
 
   if (nameopt) {

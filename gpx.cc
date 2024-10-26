@@ -102,7 +102,7 @@ GpxFormat::gpx_reset_short_handle()
     mkshort_handle->set_whitespace_ok(false);
   }
 
-  mkshort_handle->set_length(snlen.toInt());
+  mkshort_handle->set_length(snlen.get_result());
 }
 
 void
@@ -1703,7 +1703,7 @@ void
 GpxFormat::write()
 {
 
-  elevation_precision = opt_elevation_precision.toInt();
+  elevation_precision = opt_elevation_precision.get_result();
 
   gpx_reset_short_handle();
   auto gpx_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {

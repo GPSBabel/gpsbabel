@@ -119,7 +119,7 @@ private:
   limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
 
-  OptionString countopt;
+  OptionInt countopt;
   OptionDouble erroropt;
   OptionBool xteopt;
   OptionBool lenopt;

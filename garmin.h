@@ -124,12 +124,12 @@ private:
   OptionBool poweroff;
   OptionBool eraset;
   OptionBool resettime;
-  OptionString snlen;
+  OptionInt snlen;
   OptionBool snwhiteopt;
   OptionString deficon;
-  OptionString categoryopt;
-  OptionString categorybitsopt;
-  OptionString baudopt;
+  OptionInt categoryopt;
+  OptionInt categorybitsopt;
+  OptionInt baudopt;
   OptionString opt_codec;
   int baud = 0;
   int category{};

@@ -1335,7 +1335,7 @@ GarminGPIFormat::wr_deinit()
   gbfclose(fout);
 
   if (opt_sleep && !gpsbabel_testmode()) {  /* don't sleep during 'testo' */
-    int sleep = opt_sleep.toInt();
+    int sleep = opt_sleep.get_result();
     if (sleep < 1) {
       sleep = 1;
     }

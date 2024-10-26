@@ -1912,7 +1912,7 @@ XcsvFormat::rd_init(const QString& fname)
     fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
   }
 
-  utc_offset = opt_utc? opt_utc.toInt() * SECONDS_PER_HOUR : 0;
+  utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
 }
 
 void
@@ -1962,7 +1962,7 @@ XcsvFormat::wr_init(const QString& fname)
   if (global_opts.synthesize_shortnames) {
 
     if (snlenopt) {
-      xcsv_file->mkshort_handle.set_length(snlenopt.toInt());
+      xcsv_file->mkshort_handle.set_length(snlenopt.get_result());
     }
 
     if (snwhiteopt.has_value()) {

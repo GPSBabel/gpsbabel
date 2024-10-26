@@ -126,7 +126,7 @@ private:
   int route_wpt_count{};
   int new_track{};
 
-  OptionString snlenopt;
+  OptionInt snlenopt;
   OptionBool snwhiteopt;
   OptionBool snupperopt;
   OptionBool snuniqueopt;

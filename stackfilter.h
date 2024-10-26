@@ -52,7 +52,7 @@ private:
   OptionBool opt_discard;
   OptionBool opt_replace;
   OptionBool opt_swap;
-  OptionString opt_depth;
+  OptionInt opt_depth;
   OptionBool nowarn;
   int  warnings_enabled = 1;
   int  swapdepth = 0;

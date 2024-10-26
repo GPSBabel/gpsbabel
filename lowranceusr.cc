@@ -346,7 +346,7 @@ LowranceusrFormat::wr_init(const QString& fname)
   file_out = gbfopen_le(fname, "wb", MYNAME);
   mkshort_handle = new MakeShort;
   waypt_out_count = 0;
-  writing_version = opt_wversion.toInt();
+  writing_version = opt_wversion.get_result();
   if ((writing_version < 2) || (writing_version > 4)) {
     fatal(MYNAME " wversion value %s is not supported !!\n", qPrintable(opt_wversion));
   }
@@ -1902,7 +1902,7 @@ LowranceusrFormat::write()
     gbfputc(0, file_out);
 
     /* device serial number */
-    opt_serialnum_i = opt_serialnum.toInt();
+    opt_serialnum_i = opt_serialnum.get_result();
     gbfputint32(opt_serialnum_i, file_out);
 
     /* content description */

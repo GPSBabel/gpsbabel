@@ -74,7 +74,7 @@ GarminXTFormat::format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_
 
   // get the option for the processing the track name
   if (opt_trk_header) {
-    method = opt_trk_header.toInt();
+    method = opt_trk_header.get_result();
     // if method is out of range set to default
     if ((method < 0) || (method > 1)) {
       method = 0;
@@ -315,7 +315,7 @@ GarminXTFormat::format_garmin_xt_proc_atrk()
 
   // get the option for the processing the track name
   if (opt_trk_header) {
-    method = opt_trk_header.toInt();
+    method = opt_trk_header.get_result();
   }
 
   if (! track) {

@@ -152,17 +152,17 @@ protected:
   int skytraq_baud = 0;		/* detected baud rate */
 
   OptionBool    opt_erase;		/* erase after read? (0/1) */
-  OptionString opt_initbaud;		/* baud rate used to init device */
-  OptionString opt_dlbaud;		/* baud rate used for downloading tracks */
-  OptionString opt_read_at_once;	/* number of sectors to read at once (Venus6 only) */
-  OptionString opt_first_sector;	/* first sector to be read from the device (default: 0) */
-  OptionString opt_last_sector;	/* last sector to be read from the device (default: smart read everything) */
+  OptionInt opt_initbaud;		/* baud rate used to init device */
+  OptionInt opt_dlbaud;		/* baud rate used for downloading tracks */
+  OptionInt opt_read_at_once;	/* number of sectors to read at once (Venus6 only) */
+  OptionInt opt_first_sector;	/* first sector to be read from the device (default: 0) */
+  OptionInt opt_last_sector;	/* last sector to be read from the device (default: smart read everything) */
   OptionString opt_dump_file;		/* dump raw data to this file (optional) */
   OptionBool    opt_no_output;		/* disable output? (0/1) */
   OptionString opt_set_location;	/* set if the "targetlocation" options was used */
   OptionString opt_configure_logging;
-  OptionString opt_gps_utc_offset;
-  OptionString opt_gps_week_rollover;
+  OptionInt opt_gps_utc_offset;
+  OptionInt opt_gps_week_rollover;
 };
 
 class SkytraqFormat : public Format, private SkytraqBase

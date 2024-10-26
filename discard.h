@@ -53,11 +53,11 @@ private:
   OptionDouble hdopopt;
   OptionDouble vdopopt;
   OptionBool andopt;
-  OptionString satopt;
+  OptionInt satopt;
   OptionBool fixnoneopt;
   OptionBool fixunknownopt;
-  OptionString eleminopt;
-  OptionString elemaxopt;
+  OptionInt eleminopt;
+  OptionInt elemaxopt;
   OptionString nameopt;
   QRegularExpression name_regex;
   OptionString descopt;

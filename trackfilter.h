@@ -125,7 +125,7 @@ private:
   OptionBool opt_segment;
   OptionString opt_faketime;
   OptionBool opt_discard;
-  OptionString opt_minpoints;
+  OptionInt opt_minpoints;
   int minimum_points{0};
 
   QVector<arglist_t> args = {

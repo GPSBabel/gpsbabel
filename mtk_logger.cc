@@ -428,7 +428,7 @@ void MtkLoggerBase::mtk_read()
 
   unsigned int scan_step = 0x10000;
   unsigned int scan_bsize = 0x0400;
-  unsigned int read_bsize_kb = std::clamp(OPT_block_size_kb.toInt(), 1, 64);
+  unsigned int read_bsize_kb = std::clamp(OPT_block_size_kb.get_result(), 1, 64);
   unsigned int read_bsize = read_bsize_kb * 1024;
   dbg(2, "Download block size is %d bytes\n", read_bsize);
   if (init_scan) {

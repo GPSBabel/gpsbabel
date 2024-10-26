@@ -280,14 +280,14 @@ NmeaFormat::wr_init(const QString& fname)
   sleepms = -1;
   if (opt_sleep) {
     if (!opt_sleep.isEmpty()) {
-      sleepms = 1e3 * opt_sleep.toDouble();
+      sleepms = 1e3 * opt_sleep.get_result();
     } else {
       sleepms = -1;
     }
   }
 
   mkshort_handle = new MakeShort;
-  mkshort_handle->set_length(snlenopt.toInt());
+  mkshort_handle->set_length(snlenopt.get_result());
 
   if (opt_gisteq) {
     opt_gpgga.reset();
@@ -1044,7 +1044,7 @@ NmeaFormat::rd_position_init(const QString& fname)
   gbser_flush(gbser_handle);
 
   if (opt_baud) {
-    if (!gbser_set_speed(gbser_handle, opt_baud.toInt())) {
+    if (!gbser_set_speed(gbser_handle, opt_baud.get_result())) {
       fatal(MYNAME ": Unable to set baud rate %s\n", qPrintable(opt_baud));
     }
   }

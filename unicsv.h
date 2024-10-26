@@ -202,10 +202,10 @@ private:
   int unicsv_datum_idx{};
   OptionString opt_datum;
   OptionString opt_grid;
-  OptionString opt_utc;
+  OptionInt opt_utc;
   OptionBool opt_filename;
   OptionBool opt_format;
-  OptionString opt_prec;
+  OptionInt opt_prec;
   OptionString opt_fields;
   OptionString opt_codec;
   int unicsv_waypt_ct{};

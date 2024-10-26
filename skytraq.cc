@@ -519,7 +519,7 @@ SkytraqBase::gpstime_to_qdatetime(int week, int sec) const
    */
   qint64 gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
 
-  int week_rollover = opt_gps_week_rollover.toInt();
+  int week_rollover = opt_gps_week_rollover.get_result();
   if (week_rollover < 0) {
     int current_week = (QDateTime::currentSecsSinceEpoch() - gps_timet)/
                        (7*SECONDS_PER_DAY);
@@ -527,7 +527,7 @@ SkytraqBase::gpstime_to_qdatetime(int week, int sec) const
   }
   gps_timet += (week+week_rollover*1024)*7*SECONDS_PER_DAY + sec;
 
-  int override = opt_gps_utc_offset.toInt();
+  int override = opt_gps_utc_offset.get_result();
   if (override) {
     gps_timet -= override;
     return QDateTime::fromSecsSinceEpoch(gps_timet, QtUTC);
@@ -862,7 +862,7 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf) const
   rd_char(&errors);
   rd_char(&errors);
   rd_char(&errors);
-  skytraq_set_baud(opt_dlbaud.toInt());
+  skytraq_set_baud(opt_dlbaud.get_result());
 #endif
 
   cs = skytraq_calc_checksum(buf, i);
@@ -941,9 +941,9 @@ SkytraqBase::skytraq_read_tracks() const
   int rc;
   int got_sectors;
   int total_sectors_read = 0;
-  int read_at_once = std::max(opt_read_at_once.toInt(), 1);
-  int opt_first_sector_val = opt_first_sector.toInt();
-  int opt_last_sector_val = opt_last_sector.toInt();
+  int read_at_once = std::max(opt_read_at_once.get_result(), 1);
+  int opt_first_sector_val = opt_first_sector.get_result();
+  int opt_last_sector_val = opt_last_sector.get_result();
   int multi_read_supported = 1;
   gbfile* dumpfile = nullptr;
 
@@ -996,7 +996,7 @@ SkytraqBase::skytraq_read_tracks() const
   db(1, MYNAME ": opt_last_sector_val=%d\n", opt_last_sector_val);
   for (int i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
     for (t = 0, got_sectors = 0; (t < SECTOR_RETRIES) && (got_sectors <= 0); t++) {
-      if (opt_read_at_once.toInt() == 0  ||  multi_read_supported == 0) {
+      if (opt_read_at_once.get_result() == 0  ||  multi_read_supported == 0) {
         rc = skytraq_read_single_sector(i, buffer);
         if (rc == res_OK) {
           got_sectors = 1;
@@ -1012,7 +1012,7 @@ SkytraqBase::skytraq_read_tracks() const
         switch (rc) {
         case res_OK:
           got_sectors = read_at_once;
-          read_at_once = std::min(read_at_once*2, opt_read_at_once.toInt());
+          read_at_once = std::min(read_at_once*2, opt_read_at_once.get_result());
           break;
 
         case res_NACK:
@@ -1069,7 +1069,7 @@ SkytraqBase::skytraq_probe() const
 {
   int baud_rates[] = { 9600, 230400, 115200, 57600, 4800, 19200, 38400 };
   int baud_rates_count = sizeof(baud_rates)/sizeof(baud_rates[0]);
-  int initbaud = opt_initbaud.toInt();
+  int initbaud = opt_initbaud.get_result();
   uint8_t MSG_QUERY_SOFTWARE_VERSION[2] = { 0x02, 0x01 };
   struct {
     uint8_t id;
@@ -1214,7 +1214,7 @@ SkytraqBase::skytraq_read() const
     return;
   }
 
-  int dlbaud = opt_dlbaud.toInt();
+  int dlbaud = opt_dlbaud.get_result();
   if (dlbaud != 0  &&  dlbaud != skytraq_baud) {
     skytraq_set_baud(dlbaud);
   }
@@ -1256,8 +1256,8 @@ SkytraqfileFormat::read()
 {
   read_state st;
   int got_bytes;
-  int opt_first_sector_val = opt_first_sector.toInt();
-  int opt_last_sector_val = opt_last_sector.toInt();
+  int opt_first_sector_val = opt_first_sector.get_result();
+  int opt_last_sector_val = opt_last_sector.get_result();
 
   state_init(&st);
   auto* buffer = (uint8_t*) xmalloc(SECTOR_SIZE);

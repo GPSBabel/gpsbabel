@@ -221,7 +221,7 @@ protected:
   OptionBool OPT_erase_only;  /* erase_only ? command option */
   OptionBool OPT_log_enable;  /* enable ? command option */
   OptionString csv_file; /* csv ? command option */
-  OptionString OPT_block_size_kb; /* block_size_kb ? command option */
+  OptionInt OPT_block_size_kb; /* block_size_kb ? command option */
   MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
   mtk_loginfo mtk_info{};
