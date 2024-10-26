@@ -134,7 +134,7 @@ private:
   OptionString wptbgcolor;
   OptionBool pack_opt;
   int datum{};
-  OptionString proximityarg;
+  OptionDouble proximityarg;
   double proximity{};
   OptionString altunit_opt;
   OptionString proxunit_opt;

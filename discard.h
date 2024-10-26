@@ -50,8 +50,8 @@ private:
 
   /* Data Members */
 
-  OptionString hdopopt;
-  OptionString vdopopt;
+  OptionDouble hdopopt;
+  OptionDouble vdopopt;
   OptionBool andopt;
   OptionString satopt;
   OptionBool fixnoneopt;

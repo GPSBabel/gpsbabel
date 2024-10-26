@@ -55,9 +55,9 @@ private:
   /* Data Members */
 
   double pos_dist{};
-  OptionString distopt;
-  OptionString latopt;
-  OptionString lonopt;
+  OptionDouble distopt;
+  OptionDouble latopt;
+  OptionDouble lonopt;
   OptionBool exclopt;
   OptionBool nosort;
   OptionString maxctarg;

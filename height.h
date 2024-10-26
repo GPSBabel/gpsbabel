@@ -47,7 +47,7 @@ public:
   void process() override;
 
 private:
-  OptionString addopt;
+  OptionDouble addopt;
   OptionBool wgs84tomslopt;
   double addf{};
   // include static constexpr data member definitions with intializers for grid as private members.

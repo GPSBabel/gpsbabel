@@ -69,9 +69,9 @@ private:
   int decimate_count{0};
   int interpolate_count{0};
 
-  OptionString decimateopt;
-  OptionString interpolateopt;
-  OptionString averageopt;
+  OptionInt decimateopt;
+  OptionInt interpolateopt;
+  OptionInt averageopt;
 
   QVector<arglist_t> args = {
     {

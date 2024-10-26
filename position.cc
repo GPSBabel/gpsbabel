@@ -120,7 +120,7 @@ void PositionFilter::init()
 
   if (timeopt) {
     check_time = true;
-    max_diff_time = qRound64(timeopt.toDouble() * 1000.0);
+    max_diff_time = qRound64(timeopt.get_result() * 1000.0);
   }
 }
 

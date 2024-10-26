@@ -207,7 +207,7 @@ private:
   OptionString opt_units;
   OptionBool opt_labels;
   OptionString opt_max_position_points;
-  OptionString opt_rotate_colors;
+  OptionDouble opt_rotate_colors;
   OptionString opt_precision;
 
   bool export_lines{};

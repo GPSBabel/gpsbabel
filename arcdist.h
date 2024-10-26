@@ -61,7 +61,7 @@ private:
   /* Data Members */
 
   double pos_dist{};
-  OptionString distopt;
+  OptionDouble distopt;
   OptionString arcfileopt;
   OptionBool rteopt;
   OptionBool trkopt;

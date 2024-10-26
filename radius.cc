@@ -111,10 +111,10 @@ void RadiusFilter::init()
   home_pos = new Waypoint;
 
   if (latopt) {
-    home_pos->latitude = latopt.toDouble();
+    home_pos->latitude = latopt.get_result();
   }
   if (lonopt) {
-    home_pos->longitude = lonopt.toDouble();
+    home_pos->longitude = lonopt.get_result();
   }
 }
 

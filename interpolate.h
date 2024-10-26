@@ -49,9 +49,9 @@ private:
 
   /* Data Members */
 
-  OptionString opt_time;
+  OptionDouble opt_time;
   double max_time_step{0};
-  OptionString opt_dist;
+  OptionDouble opt_dist;
   double max_dist_step{0};
   OptionBool opt_route;
 

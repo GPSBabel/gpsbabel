@@ -30,6 +30,8 @@ public:
     type_cstring,
     type_boolean,
     type_string,
+    type_int,
+    type_double,
   };
 
   /* Special Member Functions */
@@ -188,6 +190,152 @@ public:
 private:
   QString value_;
   QString id_;
+};
+
+class OptionInt : public Option
+{
+public:
+  /* Special Member Functions */
+  OptionInt() = default;
+
+  explicit(false) operator const QString& () const
+  {
+    return value_;
+  }
+
+  explicit(false) operator bool () const
+  {
+    return !value_.isNull();
+  }
+
+  [[nodiscard]] option_t type() const override
+  {
+    return type_int;
+  }
+
+  [[nodiscard]] bool has_value() const override
+  {
+    return !value_.isNull();
+  }
+
+  void reset() override
+  {
+    value_ = QString();
+    result_ = 0;
+    end_ = QString();
+  }
+
+  [[nodiscard]] bool isEmpty() const override
+  {
+    return value_.isEmpty();
+  }
+
+  [[nodiscard]] const QString& get() const override
+  {
+    return value_;
+  }
+
+  void set(const QString& s) override
+  {
+    value_ = s;
+  }
+
+  void set_id(const QString& id) override
+  {
+    id_ = id;
+  }
+
+  void set_result(int result, const QString& end)
+  {
+    result_ = result;
+    end_ = end;
+  }
+
+  int get_result(QString* end = nullptr) const {
+    if (end != nullptr) {
+      *end = end_;
+    }
+    return result_;
+  }
+
+private:
+  QString value_;
+  QString id_;
+  int result_{};
+  QString end_;
+};
+
+class OptionDouble : public Option
+{
+public:
+  /* Special Member Functions */
+  OptionDouble() = default;
+
+  explicit(false) operator const QString& () const
+  {
+    return value_;
+  }
+
+  explicit(false) operator bool () const
+  {
+    return !value_.isNull();
+  }
+
+  [[nodiscard]] option_t type() const override
+  {
+    return type_double;
+  }
+
+  [[nodiscard]] bool has_value() const override
+  {
+    return !value_.isNull();
+  }
+
+  void reset() override
+  {
+    value_ = QString();
+    result_ = 0.0;
+    end_ = QString();
+  }
+
+  [[nodiscard]] bool isEmpty() const override
+  {
+    return value_.isEmpty();
+  }
+
+  [[nodiscard]] const QString& get() const override
+  {
+    return value_;
+  }
+
+  void set(const QString& s) override
+  {
+    value_ = s;
+  }
+
+  void set_id(const QString& id) override
+  {
+    id_ = id;
+  }
+
+  void set_result(double result, const QString& end)
+  {
+    result_ = result;
+    end_ = end;
+  }
+
+  double get_result(QString* end = nullptr) const {
+    if (end != nullptr) {
+      *end = end_;
+    }
+    return result_;
+  }
+
+private:
+  QString value_;
+  QString id_;
+  double result_{};
+  QString end_;
 };
 
 class OptionBool : public Option

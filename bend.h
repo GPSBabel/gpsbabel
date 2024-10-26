@@ -45,8 +45,8 @@ public:
   void deinit() override;
 
 private:
-  OptionString distopt;
-  OptionString minangleopt;
+  OptionDouble distopt;
+  OptionDouble minangleopt;
 
   double maxDist{};
   double minAngle{};

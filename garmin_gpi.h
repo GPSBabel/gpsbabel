@@ -318,8 +318,8 @@ private:
   OptionBool opt_unique;
   OptionBool opt_alerts;
   OptionString opt_units;
-  OptionString opt_speed;
-  OptionString opt_proximity;
+  OptionDouble opt_speed;
+  OptionDouble opt_proximity;
   OptionString opt_sleep;
   OptionString opt_lang;
   OptionString opt_writecodec;

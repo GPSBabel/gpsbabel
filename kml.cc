@@ -103,7 +103,7 @@ const QVector<KmlFormat::mt_field_t> KmlFormat::mt_fields_def = {
 void KmlFormat::kml_init_color_sequencer(int steps_per_rev)
 {
   if (opt_rotate_colors) {
-    float color_step = opt_rotate_colors.get().toFloat();
+    float color_step = opt_rotate_colors.get_result();
     if (color_step > 0.0f) {
       // step around circle by given number of degrees for each track(route)
       kml_color_sequencer.step = static_cast<float>(kml_color_limit) * 6.0f * color_step / 360.0f;

@@ -64,8 +64,8 @@ private:
 
   double pos_dist{};
   qint64 max_diff_time{};
-  OptionString distopt;
-  OptionString timeopt;
+  OptionDouble distopt;
+  OptionDouble timeopt;
   OptionBool purge_duplicates;
   bool check_time{};
 

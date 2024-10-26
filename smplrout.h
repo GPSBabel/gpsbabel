@@ -120,7 +120,7 @@ private:
   metric_t metric{metric_t::crosstrack};
 
   OptionString countopt;
-  OptionString erroropt;
+  OptionDouble erroropt;
   OptionBool xteopt;
   OptionBool lenopt;
   OptionBool relopt;

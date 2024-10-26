@@ -41,12 +41,12 @@ void BendFilter::init()
 {
   maxDist = 0.0;
   if (distopt) {
-    maxDist = distopt.toDouble();
+    maxDist = distopt.get_result();
   }
 
   minAngle = 0.0;
   if (minangleopt) {
-    minAngle = minangleopt.toDouble();
+    minAngle = minangleopt.get_result();
   }
 
   route_backup(&routes_orig);

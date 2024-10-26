@@ -129,13 +129,13 @@ QRegularExpression DiscardFilter::generateRegExp(const QString& glob_pattern)
 void DiscardFilter::init()
 {
   if (hdopopt) {
-    hdopf = hdopopt.toDouble();
+    hdopf = hdopopt.get_result();
   } else {
     hdopf = -1.0;
   }
 
   if (vdopopt) {
-    vdopf = vdopopt.toDouble();
+    vdopf = vdopopt.get_result();
   } else {
     vdopf = -1.0;
   }

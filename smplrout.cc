@@ -290,7 +290,7 @@ void SimplifyRouteFilter::init()
     break;
   case limit_basis_t::error: {
     if (metric == metric_t::relative) {
-      error = erroropt.toDouble();
+      error = erroropt.get_result();
     } else {
       if (parse_distance(erroropt, &error, kMetersPerMile, MYNAME) == 0) {
         fatal(MYNAME ": No value specified with error option.\n");
