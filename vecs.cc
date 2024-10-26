@@ -645,7 +645,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
       result = convert_integer(val, id, endp, integer_base(arg.argtype));
     }
     auto* int_option = dynamic_cast<OptionInt*>(arg.argval);
-    // TODO: enforce ARTYPE_INT <=> OptionInt
+    // ARTYPE_INT <=> OptionInt enforced in validate_arg
     if (int_option != nullptr) {
       int_option->set_result(result, end);
     }
