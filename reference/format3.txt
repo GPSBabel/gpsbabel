@@ -260,11 +260,11 @@ option	garmin_gpi	notes	Write notes to address field	boolean				https://www.gpsb
 
 option	garmin_gpi	position	Write position to address field	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_position
 
-option	garmin_gpi	proximity	Default proximity	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_proximity
+option	garmin_gpi	proximity	Default proximity	float				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_proximity
 
 option	garmin_gpi	sleep	After output job done sleep n second(s)	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_sleep
 
-option	garmin_gpi	speed	Default speed	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_speed
+option	garmin_gpi	speed	Default speed	float				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_speed
 
 option	garmin_gpi	unique	Create unique waypoint names (default = yes)	boolean	Y			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_unique
 
@@ -642,7 +642,7 @@ option	ozi	wptfgcolor	Waypoint foreground color	string	black			https://www.gpsba
 
 option	ozi	wptbgcolor	Waypoint background color	string	yellow			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_wptbgcolor
 
-option	ozi	proximity	Proximity distance	string	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_proximity
+option	ozi	proximity	Proximity distance	float	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_proximity
 
 option	ozi	altunit	Unit used in altitude values	string	feet			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_ozi.html#fmt_ozi_o_altunit
 

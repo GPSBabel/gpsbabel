@@ -22,7 +22,7 @@ option	radius	maxcount	Output no more than this number of points	integer		1		htt
 option	radius	asroute	Put resulting waypoints in route of this name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_asroute
 interpolate	Interpolate between trackpoints	https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html
 option	interpolate	time	Time interval in seconds	float		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_time
-option	interpolate	distance	Distance interval	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
+option	interpolate	distance	Distance interval	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
 option	interpolate	route	Interpolate routes instead	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_route
 height	Manipulate altitudes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html
 option	height	add	Adds a constant value to every altitude	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_add
@@ -99,7 +99,7 @@ option	stack	replace	(pop) Replace list (default)	boolean				https://www.gpsbabe
 option	stack	depth	(swap) Item to use (default=1)	integer		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_depth
 simplify	Simplify routes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html
 option	simplify	count	Maximum number of points in route	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_count
-option	simplify	error	Maximum error	string		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_error
+option	simplify	error	Maximum error	float		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_error
 option	simplify	crosstrack	Use cross-track error (default)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_crosstrack
 option	simplify	length	Use arclength error	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_length
 option	simplify	relative	Use relative error	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_relative

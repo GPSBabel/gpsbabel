@@ -132,7 +132,7 @@ private:
     },
     {
       "error", &erroropt, "Maximum error", nullptr,
-       ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPTE_FLOAT | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
+       ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_FLOAT | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
     },
     {
       "crosstrack", &xteopt, "Use cross-track error (default)", nullptr,
