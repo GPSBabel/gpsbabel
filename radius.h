@@ -77,7 +77,7 @@ private:
     },
     {
       "distance", &distopt, "Maximum distance from center",
-      nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "exclude", &exclopt,  "Exclude points close to center",

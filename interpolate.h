@@ -63,7 +63,7 @@ private:
     },
     {
       "distance", &opt_dist, "Distance interval",
-      nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
+      nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_FLOAT,
       ARG_NOMINMAX, nullptr
     },
     {
