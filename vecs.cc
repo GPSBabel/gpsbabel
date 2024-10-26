@@ -525,57 +525,60 @@ void Vecs::init_vecs()
   style_list = create_style_vec();
 }
 
-bool Vecs::is_integer(const QString& val)
+int Vecs::integer_base(uint32_t argtype)
 {
-#if 1
-  /* FIXME: Using scanf to validate input is not recommened.
-   * Users may have taken advantage of this flexibilty
-   * when interpreting ARGTYPE_INT.
-   * INT05-C. Do not use input functions to convert character
-   * data if they cannot handle all possible inputs
-   */
-  // note sscanf doesn't do range checking
-  // note some users allow hex input.
-  // note some users may interpret trailing data after
-  // conversion, typically to denote a unit.
-  int test;
-  return 1 == sscanf(CSTR(val), "%d", &test);
-#else
-  try {
-    (void) std::stoi(val.toStdString(), nullptr, 10);
-  } catch (const std::invalid_argument&) {
-    return false;
-  } catch (const std::out_of_range&) {
-    return false;
+  int base;
+  switch (argtype & ARGTYPE_BASEMASK) {
+  case ARGTYPE_BASE_AUTO:
+    base = 0;
+    break;
+  case ARGTYPE_BASE_16:
+    base = 16;
+    break;
+  case ARGTYPE_BASE_10:
+  default:
+    base = 10;
   }
-  return true;
-#endif
+  return base;
+
 }
 
-bool Vecs::is_float(const QString& val)
+bool Vecs::trailing_data_allowed(uint32_t argtype)
 {
-#if 1
-  /* FIXME: Using scanf to validate input is not recommened.
-   * Users may have taken advantage of this flexibilty
-   * when interpreting ARGTYPE_FLOAT.
-   * INT05-C. Do not use input functions to convert character
-   * data if they cannot handle all possible inputs
-   */
-  // note sscanf doesn't do range checking
-  // note some users may interpret trailing data after
-  // conversion, typically to denote a unit.
-  double test;
-  return 1 == sscanf(CSTR(val), "%lf", &test);
-#else
-  try {
-    (void) std::stod(val.toStdString(), nullptr);
-  } catch (const std::invalid_argument&) {
-    return false;
-  } catch (const std::out_of_range&) {
-    return false;
-  }
-  return true;
-#endif
+  return (argtype & ARGTYPE_ALLOW_TRAILING_DATA) == ARGTYPE_ALLOW_TRAILING_DATA;
+}
+
+bool Vecs::is_integer(const QString& val, const QString& id, uint32_t argtype)
+{
+  bool ok;
+  int base = integer_base(argtype);
+  QString end;
+  QString* endp = trailing_data_allowed(argtype) ? &end : nullptr;
+  (void) parse_integer(val, id, &ok, endp, base);
+  return ok;
+}
+
+int Vecs::convert_integer(const QString& val, const QString& id, QString* end, int base)
+{
+  // Fatal on conversion error
+  constexpr bool* dieonerror = nullptr;
+  return parse_integer(val, id, dieonerror, end, base);
+}
+
+bool Vecs::is_float(const QString& val, const QString& id, uint32_t argtype)
+{
+  bool ok;
+  QString end;
+  QString* endp = trailing_data_allowed(argtype) ? &end : nullptr;
+  (void) parse_double(val, id, &ok, endp);
+  return ok;
+}
+
+double Vecs::convert_float(const QString& val, const QString&id, QString* end)
+{
+  // Fatal on conversion error
+  constexpr bool* dieonerror = nullptr;
+  return parse_double(val, id, dieonerror, end);
 }
 
 bool Vecs::is_bool(const QString& val)
@@ -627,24 +630,29 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   QString rval(val);
+  QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
+  QString end;
+  QString* endp = trailing_data_allowed(arg.argtype)? &end: nullptr;
 
   switch (arg.argtype & ARGTYPE_TYPEMASK) {
   case ARGTYPE_INT:
     if (val.isEmpty()) {
       rval = '0';
     } else {
-      if (!is_integer(val)) {
-        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg.argstring));
-      }
+      // will fatal on conversion error
+      int result = convert_integer(val, id, endp, integer_base(arg.argtype));
+      //auto* int_option = dynamic_cast<OptionInt*>(arg.argval);
+      //int_option->set_result(result, end);
     }
     break;
   case ARGTYPE_FLOAT:
     if (val.isEmpty()) {
       rval = '0';
     } else {
-      if (!is_float(val)) {
-        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg.argstring));
-      }
+      // will fatal on conversion error
+      double result = convert_float(val, id, endp);
+      //auto* double_option = dynamic_cast<OptionDouble*>(arg.argval);
+      //double_option->set_result(result, end);
     }
     break;
   case ARGTYPE_BOOL:
@@ -673,7 +681,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   arg.argval->set(rval);
-  arg.argval->set_id(QStringLiteral("%1(%2)").arg(module, arg.argstring));
+  arg.argval->set_id(id);
 }
 
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
@@ -1125,33 +1133,34 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
     }
 #endif
     for (const auto& arg : *args) {
+      QString id = QStringLiteral("%1(%2)").arg(name, arg.argstring);
       if (arg.argval == nullptr) {
         Warning() << name << "option" << arg.argstring << "does not point to an Option instance.";
         ok = false;
       }
       if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_INT) {
-        if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue)) {
+        if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue, id, arg.argtype)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
           ok = false;
         }
-        if (!arg.minvalue.isNull() && !is_integer(arg.minvalue)) {
+        if (!arg.minvalue.isNull() && !is_integer(arg.minvalue, id, arg.argtype)) {
           Warning() << name << "Int option" << arg.argstring << "minimum value" << arg.minvalue << "is not an integer.";
           ok = false;
         }
-        if (!arg.maxvalue.isNull() && !is_integer(arg.maxvalue)) {
+        if (!arg.maxvalue.isNull() && !is_integer(arg.maxvalue, id, arg.argtype)) {
           Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
           ok = false;
         }
       } else if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_FLOAT) {
-        if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue)) {
+        if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue, id, arg.argtype)) {
           Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
           ok = false;
         }
-        if (!arg.minvalue.isNull() && !is_float(arg.minvalue)) {
+        if (!arg.minvalue.isNull() && !is_float(arg.minvalue, id, arg.argtype)) {
           Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
           ok = false;
         }
-        if (!arg.maxvalue.isNull() && !is_float(arg.maxvalue)) {
+        if (!arg.maxvalue.isNull() && !is_float(arg.maxvalue, id, arg.argtype)) {
           Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
           ok = false;
         }

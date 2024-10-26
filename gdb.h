@@ -187,7 +187,7 @@ private:
     },
     {
       "bitscategory", &gdb_opt_bitcategory, "Bitmap of categories",
-      nullptr, ARGTYPE_INT, "1", "65535", nullptr
+      nullptr, ARGTYPE_BASE_AUTO | ARGTYPE_INT, "1", "65535", nullptr
     },
     {
       "ver", &gdb_opt_ver,
