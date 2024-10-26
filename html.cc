@@ -65,7 +65,7 @@ HtmlFormat::wr_init(const QString& fname)
   } else {
     fatal(MYNAME ": Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", qPrintable(opt_altunits));
   }
-  
+
 }
 
 void
