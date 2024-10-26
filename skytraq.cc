@@ -23,6 +23,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <algorithm>       // for max, min
 #include <cctype>          // for isprint
 #include <cmath>           // for cos, sin, atan2, pow, sqrt
 #include <cstdarg>         // for va_end, va_list, va_start
@@ -63,9 +64,6 @@
 #define res_NACK		-2
 #define res_PROTOCOL_ERR	-3
 #define res_NOTFOUND		-4
-
-#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
-#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 
 void
@@ -436,19 +434,17 @@ SkytraqBase::skytraq_configure_logging() const
     0x00			// reserved
   };
 
-  if (opt_configure_logging) {
-    if (*opt_configure_logging) {
-      unsigned int nn = sscanf(opt_configure_logging, "%u:%u:%u:%u", &tmin, &tmax, &dmin, &dmax);
-      if (nn>3) {
-        db(0, "Reconfiguring logging to: tmin=%u, tmax=%u, dmin=%u, dmax=%u\n", tmin, tmax, dmin, dmax);
-        be_write32(MSG_LOG_CONFIGURE_CONTROL+5, tmin);
-        be_write32(MSG_LOG_CONFIGURE_CONTROL+1, tmax);
-        be_write32(MSG_LOG_CONFIGURE_CONTROL+13, dmin);
-        be_write32(MSG_LOG_CONFIGURE_CONTROL+9, dmax);
-      } else {
-        db(1, MYNAME "Option usage: configlog=tmin:tmax:dmin:dmax");
-        return -1;
-      }
+  if (!opt_configure_logging.isEmpty()) {
+    unsigned int nn = sscanf(opt_configure_logging.get().toUtf8(), "%u:%u:%u:%u", &tmin, &tmax, &dmin, &dmax);
+    if (nn>3) {
+      db(0, "Reconfiguring logging to: tmin=%u, tmax=%u, dmin=%u, dmax=%u\n", tmin, tmax, dmin, dmax);
+      be_write32(MSG_LOG_CONFIGURE_CONTROL+5, tmin);
+      be_write32(MSG_LOG_CONFIGURE_CONTROL+1, tmax);
+      be_write32(MSG_LOG_CONFIGURE_CONTROL+13, dmin);
+      be_write32(MSG_LOG_CONFIGURE_CONTROL+9, dmax);
+    } else {
+      db(1, MYNAME "Option usage: configlog=tmin:tmax:dmin:dmax");
+      return -1;
     }
   }
 
@@ -523,7 +519,7 @@ SkytraqBase::gpstime_to_qdatetime(int week, int sec) const
    */
   qint64 gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
 
-  int week_rollover = xstrtoi(opt_gps_week_rollover, nullptr, 10);
+  int week_rollover = opt_gps_week_rollover.toInt();
   if (week_rollover < 0) {
     int current_week = (QDateTime::currentSecsSinceEpoch() - gps_timet)/
                        (7*SECONDS_PER_DAY);
@@ -531,7 +527,7 @@ SkytraqBase::gpstime_to_qdatetime(int week, int sec) const
   }
   gps_timet += (week+week_rollover*1024)*7*SECONDS_PER_DAY + sec;
 
-  int override = xstrtoi(opt_gps_utc_offset, nullptr, 10);
+  int override = opt_gps_utc_offset.toInt();
   if (override) {
     gps_timet -= override;
     return QDateTime::fromSecsSinceEpoch(gps_timet, QtUTC);
@@ -866,7 +862,7 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf) const
   rd_char(&errors);
   rd_char(&errors);
   rd_char(&errors);
-  skytraq_set_baud(xstrtoi(opt_dlbaud, nullptr, 10));
+  skytraq_set_baud(opt_dlbaud.toInt());
 #endif
 
   cs = skytraq_calc_checksum(buf, i);
@@ -945,9 +941,9 @@ SkytraqBase::skytraq_read_tracks() const
   int rc;
   int got_sectors;
   int total_sectors_read = 0;
-  int read_at_once = MAX(xstrtoi(opt_read_at_once, nullptr, 10), 1);
-  int opt_first_sector_val = xstrtoi(opt_first_sector, nullptr, 10);
-  int opt_last_sector_val = xstrtoi(opt_last_sector, nullptr, 10);
+  int read_at_once = std::max(opt_read_at_once.toInt(), 1);
+  int opt_first_sector_val = opt_first_sector.toInt();
+  int opt_last_sector_val = opt_last_sector.toInt();
   int multi_read_supported = 1;
   gbfile* dumpfile = nullptr;
 
@@ -971,9 +967,9 @@ SkytraqBase::skytraq_read_tracks() const
   	sectors_used_b = (log_wr_ptr + SECTOR_SIZE - 1) / SECTOR_SIZE;
   	if (sectors_used_a != sectors_used_b) {
   		db(1, "Warning: device reported inconsistent number of used sectors (a=%i, b=%i), "\
-  		   "using max=%i\n", sectors_used_a, sectors_used_b, MAX(sectors_used_a, sectors_used_b));
+  		   "using max=%i\n", sectors_used_a, sectors_used_b, std::max(sectors_used_a, sectors_used_b));
   	}
-  	sectors_used = MAX(sectors_used_a, sectors_used_b);
+  	sectors_used = std::max(sectors_used_a, sectors_used_b);
   */
   if (opt_last_sector_val < 0) {
     sectors_used = sectors_total - sectors_free + 1 /*+5*/;
@@ -992,7 +988,7 @@ SkytraqBase::skytraq_read_tracks() const
   // m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
   if (opt_dump_file) {
-    dumpfile = gbfopen(opt_dump_file.get(), "w", MYNAME);
+    dumpfile = gbfopen(opt_dump_file, "w", MYNAME);
   }
 
   db(1, MYNAME ": Reading log data from device...\n");
@@ -1000,23 +996,23 @@ SkytraqBase::skytraq_read_tracks() const
   db(1, MYNAME ": opt_last_sector_val=%d\n", opt_last_sector_val);
   for (int i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
     for (t = 0, got_sectors = 0; (t < SECTOR_RETRIES) && (got_sectors <= 0); t++) {
-      if (xstrtoi(opt_read_at_once, nullptr, 10) == 0  ||  multi_read_supported == 0) {
+      if (opt_read_at_once.toInt() == 0  ||  multi_read_supported == 0) {
         rc = skytraq_read_single_sector(i, buffer);
         if (rc == res_OK) {
           got_sectors = 1;
         }
       } else {
         /* Try to read read_at_once sectors at once.
-         * If tere aren't any so many interesting ones, read the remainder (sectors_used-i).
+         * If there aren't so many interesting ones, read the remainder (sectors_used-i).
          * And read at least 1 sector.
          */
-        read_at_once = MAX(MIN(read_at_once, sectors_used-i), 1);
+        read_at_once = std::max(std::min(read_at_once, sectors_used-i), 1);
 
         rc = skytraq_read_multiple_sectors(i, read_at_once, buffer);
         switch (rc) {
         case res_OK:
           got_sectors = read_at_once;
-          read_at_once = MIN(read_at_once*2, xstrtoi(opt_read_at_once, nullptr, 10));
+          read_at_once = std::min(read_at_once*2, opt_read_at_once.toInt());
           break;
 
         case res_NACK:
@@ -1027,7 +1023,7 @@ SkytraqBase::skytraq_read_tracks() const
 
         default:
           /* On failure, try with less sectors */
-          read_at_once = MAX(read_at_once/2, 1);
+          read_at_once = std::max(read_at_once/2, 1);
         }
       }
     }
@@ -1073,7 +1069,7 @@ SkytraqBase::skytraq_probe() const
 {
   int baud_rates[] = { 9600, 230400, 115200, 57600, 4800, 19200, 38400 };
   int baud_rates_count = sizeof(baud_rates)/sizeof(baud_rates[0]);
-  int initbaud = xstrtoi(opt_initbaud, nullptr, 10);
+  int initbaud = opt_initbaud.toInt();
   uint8_t MSG_QUERY_SOFTWARE_VERSION[2] = { 0x02, 0x01 };
   struct {
     uint8_t id;
@@ -1164,9 +1160,9 @@ SkytraqBase::skytraq_set_location() const
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   uint8_t MSG_GET_LOCATION = 0x35;
 
-  db(3, MYNAME ": set_location='%s'\n", qPrintable(opt_set_location.get()));
+  db(3, MYNAME ": set_location='%s'\n", qPrintable(opt_set_location));
 
-  sscanf(opt_set_location, "%lf:%lf", &lat, &lng);
+  sscanf(opt_set_location.get().toUtf8(), "%lf:%lf", &lat, &lng);
   le_write_double(&MSG_SET_LOCATION[1], lat);
   le_write_double(&MSG_SET_LOCATION[9], lng);
   for (unsigned char i : MSG_SET_LOCATION) {
@@ -1218,13 +1214,13 @@ SkytraqBase::skytraq_read() const
     return;
   }
 
-  int dlbaud = xstrtoi(opt_dlbaud, nullptr, 10);
+  int dlbaud = opt_dlbaud.toInt();
   if (dlbaud != 0  &&  dlbaud != skytraq_baud) {
     skytraq_set_baud(dlbaud);
   }
 
   // read device unless no-output=true and dump-file=0 (i.e. no data needed at all)
-  if (!opt_no_output ||  opt_dump_file != nullptr) {
+  if (!opt_no_output ||  opt_dump_file) {
     skytraq_read_tracks();
   }
 
@@ -1260,8 +1256,8 @@ SkytraqfileFormat::read()
 {
   read_state st;
   int got_bytes;
-  int opt_first_sector_val = xstrtoi(opt_first_sector, nullptr, 10);
-  int opt_last_sector_val = xstrtoi(opt_last_sector, nullptr, 10);
+  int opt_first_sector_val = opt_first_sector.toInt();
+  int opt_last_sector_val = opt_last_sector.toInt();
 
   state_init(&st);
   auto* buffer = (uint8_t*) xmalloc(SECTOR_SIZE);
@@ -1378,7 +1374,7 @@ void MinihomerFormat::miniHomer_get_poi() const
  * -1 in case of errors
  *  the number of the POI will not be checked - if it is not correct, miniHome will send NACK
  */
-int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const char* opt_poi) const
+int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const QString& opt_poi) const
 {
 #define MSG_SET_POI_SIZE (sizeof(uint8_t)+sizeof(uint16_t)+3*sizeof(double)+sizeof(uint8_t))
   uint8_t MSG_SET_POI[MSG_SET_POI_SIZE] = {
@@ -1397,33 +1393,31 @@ int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const char* opt_poi) con
 
 
   int result = 0;		// result will be 0 if opt_poi isn't set
-  if (opt_poi) { 	// first check opt_poi
-    if (*opt_poi) {
-      lat=lng=alt=0.0;
-      /*
-       * parse format of <lat>:<lng>[:alt]
-       * we assume at least two elements in the value string
-       */
-      int n = sscanf(opt_poi, "%lf:%lf:%lf", &lat, &lng, &alt);
-      if (n >= 2) {
-        db(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f\n", n, opt_poi, poinames[poinum], poinum, lat, lng, alt);
-        lla2ecef(lat, lng, alt, &ecef_x, &ecef_y, &ecef_z);
-        db(1, MYNAME ": set POI[%s]='%f %f %f/%f %f %f'\n", poinames[poinum], lat, lng, alt, ecef_x, ecef_y, ecef_z);
-        be_write16(MSG_SET_POI+1, poinum);
-        be_write_double(MSG_SET_POI+3, ecef_x);
-        be_write_double(MSG_SET_POI+11, ecef_y);
-        be_write_double(MSG_SET_POI+19, ecef_z);
-        MSG_SET_POI[27]=0;
-        if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_POI, sizeof(MSG_SET_POI)) == res_OK) {
-          result=1;
-        } else {
-          warning(MYNAME ": cannot set poi %d '%s'\n", poinum, poinames[poinum]);
-          result=-1;
-        }
+  if (!opt_poi.isEmpty()) { 	// first check opt_poi
+    lat=lng=alt=0.0;
+    /*
+     * parse format of <lat>:<lng>[:alt]
+     * we assume at least two elements in the value string
+     */
+    int n = sscanf(opt_poi.toUtf8(), "%lf:%lf:%lf", &lat, &lng, &alt);
+    if (n >= 2) {
+      db(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f\n", n, qPrintable(opt_poi), poinames[poinum], poinum, lat, lng, alt);
+      lla2ecef(lat, lng, alt, &ecef_x, &ecef_y, &ecef_z);
+      db(1, MYNAME ": set POI[%s]='%f %f %f/%f %f %f'\n", poinames[poinum], lat, lng, alt, ecef_x, ecef_y, ecef_z);
+      be_write16(MSG_SET_POI+1, poinum);
+      be_write_double(MSG_SET_POI+3, ecef_x);
+      be_write_double(MSG_SET_POI+11, ecef_y);
+      be_write_double(MSG_SET_POI+19, ecef_z);
+      MSG_SET_POI[27]=0;
+      if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_POI, sizeof(MSG_SET_POI)) == res_OK) {
+        result=1;
       } else {
-        warning(MYNAME ": argument to %s needs to be like <lat>:<lng>[:<alt>]\n", poinames[poinum]);
+        warning(MYNAME ": cannot set poi %d '%s'\n", poinum, poinames[poinum]);
         result=-1;
       }
+    } else {
+      warning(MYNAME ": argument to %s needs to be like <lat>:<lng>[:<alt>]\n", poinames[poinum]);
+      result=-1;
     }
   }
   return result;

@@ -178,12 +178,12 @@ public:
 // TODO: use conversion options for Vecs::assign_option checks.
 // TODO: save result of Vecs assign_option check and provide it to users
 // We use overloads instead of default parameters to enable tool visibility into different usages.
-  int toInt();
-  int toInt(bool* ok);
-  int toInt(bool* ok, QString* end, int base);
-  double toDouble();
-  double toDouble(bool* ok);
-  double toDouble(bool* ok, QString* end);
+  int toInt() const;
+  int toInt(bool* ok) const;
+  int toInt(bool* ok, QString* end, int base) const;
+  double toDouble() const;
+  double toDouble(bool* ok) const;
+  double toDouble(bool* ok, QString* end) const;
 
 private:
   QString value_;

@@ -23,32 +23,32 @@
 #include "defs.h"              // for strToDouble, strToInt
 
 
-int OptionString::toInt()
+int OptionString::toInt() const
 {
   return parse_integer(value_, id_);
 }
 
-int OptionString::toInt(bool* ok)
+int OptionString::toInt(bool* ok) const
 {
   return parse_integer(value_, id_, ok);
 }
 
-int OptionString::toInt(bool* ok, QString* end, int base)
+int OptionString::toInt(bool* ok, QString* end, int base) const
 {
   return parse_integer(value_, id_, ok, end, base);
 }
 
-double OptionString::toDouble()
+double OptionString::toDouble() const
 {
   return parse_double(value_, id_);
 }
 
-double OptionString::toDouble(bool* ok)
+double OptionString::toDouble(bool* ok) const
 {
   return parse_double(value_, id_, ok);
 }
 
-double OptionString::toDouble(bool* ok, QString* end)
+double OptionString::toDouble(bool* ok, QString* end) const
 {
   return parse_double(value_, id_, ok, end);
 }
