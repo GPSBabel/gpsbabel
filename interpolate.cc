@@ -23,7 +23,7 @@
 
 #include <climits>              // for INT_MAX
 #include <cmath>                // for ceil, isfinite
-#include <cstdlib>              // for abs, strtod
+#include <cstdlib>              // for abs
 #include <optional>             // for optional
 
 #include <QString>              // for QString

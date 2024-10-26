@@ -39,7 +39,7 @@
 #include <cstring>                  // for memset, strstr, strcmp
 #include <iterator>                 // for next
 
-#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, xstrtoi, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
+#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
 #include "formspec.h"               // for FormatSpecificDataList
 #include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t
 #include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol

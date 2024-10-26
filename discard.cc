@@ -24,7 +24,7 @@
 #include <QDebug>              // for QDebug
 #include <QRegularExpression>  // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpressionMatch
 
-#include "defs.h"              // for Waypoint, fatal, route_head (ptr only), xstrtoi, del_marked_wpts, route_del_marked_wpts, route_disp_all, track_del_marked_wpts, track_disp_all, waypt_disp_all, fix_none, fix_unknown
+#include "defs.h"              // for Waypoint, fatal, route_head (ptr only), del_marked_wpts, route_del_marked_wpts, route_disp_all, track_del_marked_wpts, track_disp_all, waypt_disp_all, fix_none, fix_unknown
 #include "src/core/logging.h"  // for FatalMsg
 
 
