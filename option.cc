@@ -23,12 +23,32 @@
 #include "defs.h"              // for strToDouble, strToInt
 
 
-int OptionString::toInt(QString* end, int base)
+int OptionString::toInt()
 {
-  return parse_integer(value_, "???", nullptr, end, base);
+  return parse_integer(value_, id_);
 }
 
-double OptionString::toDouble(QString* end)
+int OptionString::toInt(bool* ok)
 {
-  return parse_double(value_, "???", nullptr, end);
+  return parse_integer(value_, id_, ok);
+}
+
+int OptionString::toInt(bool* ok, QString* end, int base)
+{
+  return parse_integer(value_, id_, ok, end, base);
+}
+
+double OptionString::toDouble()
+{
+  return parse_double(value_, id_);
+}
+
+double OptionString::toDouble(bool* ok)
+{
+  return parse_double(value_, id_, ok);
+}
+
+double OptionString::toDouble(bool* ok, QString* end)
+{
+  return parse_double(value_, id_, ok, end);
 }

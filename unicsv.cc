@@ -1689,17 +1689,16 @@ UnicsvFormat::wr_init(const QString& fname)
   unicsv_fieldsep = kUnicsvFieldSep;
   unicsv_waypt_ct = 0;
 
-  if (QString grid_str = opt_grid; !grid_str.isEmpty()) {
-    // we don't use OptionString::toInt because we want the conversion status
+  if (!opt_grid.isEmpty()) {
     bool ok;
 
-    if (int i = grid_str.toInt(&ok); ok) {
+    if (int i = opt_grid.toInt(&ok); ok) {
       unicsv_grid_idx = (grid_type) i;
       if ((unicsv_grid_idx < GRID_INDEX_MIN) || (unicsv_grid_idx > GRID_INDEX_MAX))
         fatal(MYNAME ": Grid index out of range (%d..%d)!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
-      unicsv_grid_idx = gt_lookup_grid_type(grid_str, MYNAME);
+      unicsv_grid_idx = gt_lookup_grid_type(opt_grid, MYNAME);
     }
   }
 

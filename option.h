@@ -54,6 +54,9 @@ public:
   [[nodiscard]] virtual bool isEmpty() const = 0;
   [[nodiscard]] virtual const QString& get() const = 0;
   virtual void set(const QString& s) = 0;
+  virtual void set_id(const QString& id)
+  {
+  }
 
   /* Data Members */
   // I.25: Prefer empty abstract classes as interfaces to class hierarchies
@@ -165,13 +168,26 @@ public:
     value_ = s;
   }
 
-  // TODO: register module and argstring and pass as id through toInt/toDouble
-  // to parse_integer/parse_double.
-  int toInt(QString* end = nullptr, int base = 10);
-  double toDouble(QString* end = nullptr);
+  void set_id(const QString& id) override
+  {
+    id_ = id;
+  }
+
+// TODO: add register conversion options for integer base conversion.
+// TODO: add register conversion option for trailing data.
+// TODO: use conversion options for Vecs::assign_option checks.
+// TODO: save result of Vecs assign_option check and provide it to users
+// We use overloads instead of default parameters to enable tool visibility into different usages.
+  int toInt();
+  int toInt(bool* ok);
+  int toInt(bool* ok, QString* end, int base);
+  double toDouble();
+  double toDouble(bool* ok);
+  double toDouble(bool* ok, QString* end);
 
 private:
   QString value_;
+  QString id_;
 };
 
 class OptionBool : public Option
@@ -180,7 +196,7 @@ public:
   /* Special Member Functions */
   OptionBool() = default;
 
-  /* Traditionally unsupplied bool options without default are considered to be false. */
+  /* Traditionally un-supplied bool options without default are considered to be false. */
   explicit(false) operator bool() const
   {
     return (!value_.isNull() && (value_ != '0'));

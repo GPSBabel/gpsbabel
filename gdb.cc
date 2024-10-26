@@ -1645,7 +1645,7 @@ GdbFormat::wr_init(const QString& fname)
   }
 
   if (gdb_opt_bitcategory) {
-    gdb_category = gdb_opt_bitcategory.toInt(nullptr, 0);
+    gdb_category = gdb_opt_bitcategory.toInt(nullptr, nullptr, 0);
   }
 
   waypt_nameposn_out_hash.clear();

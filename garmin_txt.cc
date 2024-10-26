@@ -654,17 +654,16 @@ GarminTxtFormat::wr_init(const QString& fname)
   }
 
   grid_index = grid_lat_lon_dmm;
-  if (QString grid_str = opt_grid; !grid_str.isEmpty()) {
-    // we don't use OptionString::toInt because we want the conversion status
+  if (!opt_grid.isEmpty()) {
     bool ok;
 
-    if (int i = grid_str.toInt(&ok); ok) {
+    if (int i = opt_grid.toInt(&ok); ok) {
       grid_index = (grid_type) i;
       if ((grid_index < GRID_INDEX_MIN) || (grid_index > GRID_INDEX_MAX))
         fatal(MYNAME ": Grid index out of range (%d..%d)!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
-      grid_index = gt_lookup_grid_type(grid_str, MYNAME);
+      grid_index = gt_lookup_grid_type(opt_grid, MYNAME);
     }
   }
 

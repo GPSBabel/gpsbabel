@@ -673,6 +673,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   arg.argval->set(rval);
+  arg.argval->set_id(QStringLiteral("%1(%2)").arg(module, arg.argstring));
 }
 
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
