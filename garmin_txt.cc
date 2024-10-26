@@ -617,12 +617,7 @@ void
 GarminTxtFormat::garmin_txt_utc_option()
 {
   if (opt_utc) {
-    if (case_ignore_strcmp(opt_utc, "utc") == 0) {
-      utc_offs = 0;
-    } else {
-      utc_offs = opt_utc.toInt();
-    }
-    utc_offs *= (60 * 60);
+    utc_offs = opt_utc.get_result() * 60 * 60;
     gtxt_flags.utc = 1;
   }
 }
@@ -647,7 +642,7 @@ GarminTxtFormat::wr_init(const QString& fname)
   gtxt_flags.celsius = opt_temp.get().startsWith("c", Qt::CaseInsensitive);
   init_date_and_time_format();
   if (opt_precision) {
-    precision = opt_precision.toInt();
+    precision = opt_precision.get_result();
     if (precision < 0) {
       fatal(MYNAME ": Invalid precision (%s)!", qPrintable(opt_precision));
     }

@@ -174,8 +174,8 @@ private:
   OptionString opt_temp;
   OptionString opt_date_format;
   OptionString opt_time_format;
-  OptionString opt_precision;
-  OptionString opt_utc;
+  OptionInt opt_precision;
+  OptionInt opt_utc;
   OptionString opt_grid;
 
   QVector<arglist_t> garmin_txt_args = {

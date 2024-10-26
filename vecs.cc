@@ -1163,13 +1163,11 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
           ok = false;
         }
-#ifdef INT_CONVERSION_FINISHED
         // ARGTYPE_INT => OptionInt
         if (const auto* opt = dynamic_cast<const OptionInt*>(arg.argval); opt == nullptr) {
           Warning() << name << "Int option" << arg.argstring << "argval is not of class OptionInt";
           ok = false;
         }
-#endif
       } else if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_FLOAT) {
         if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue, id, arg.argtype)) {
           Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
