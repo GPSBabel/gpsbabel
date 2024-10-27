@@ -619,18 +619,21 @@ void Vecs::exit_vecs()
 
 void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& val)
 {
+  QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
+
   if (arg.argval == nullptr) {
-    fatal("%s: No local variable defined for option \"%s\"!\n", qPrintable(module), qPrintable(arg.argstring));
+    fatal("%s: Program error - No local variable defined for option.\n", qPrintable(id));
   }
 
   arg.argval->reset();
+  arg.argval->set_id(id);
 
   if (val.isNull()) {
     return;
   }
 
   QString rval(val);
-  QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
+
   QString end;
   QString* endp = trailing_data_allowed(arg.argtype)? &end: nullptr;
 
@@ -648,6 +651,8 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
     // ARTYPE_INT <=> OptionInt enforced in validate_arg
     if (int_option != nullptr) {
       int_option->set_result(result, end);
+    } else {
+      fatal("%s: Program error - ARGTYPE_INT must be associatied with OptionInt.\n", qPrintable(id));
     }
   }
   break;
@@ -664,6 +669,8 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
     // ARGTYPE_FLOAT <=> OptionDouble enforced in validate_arg
     if (double_option != nullptr) {
       double_option->set_result(result, end);
+    } else {
+      fatal("%s: Program error - ARGTYPE_FLOAT must be associatied with OptionDouble.\n", qPrintable(id));
     }
   }
   break;
@@ -684,7 +691,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
             rval = '1';
           }
         } else {
-          warning("%s :Invalid logical value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg.argstring));
+          warning("%s: Invalid logical value \"%s\".\n", qPrintable(id), qPrintable(val));
           rval = '0';
         }
       }
@@ -693,7 +700,6 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   arg.argval->set(rval);
-  arg.argval->set_id(id);
 }
 
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)

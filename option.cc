@@ -20,7 +20,7 @@
 
 #include <QString>             // for QString
 
-#include "defs.h"              // for strToDouble, strToInt
+#include "defs.h"              // for parse_double, parse_integer
 
 
 int OptionString::toInt() const
