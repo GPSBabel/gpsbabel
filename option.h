@@ -25,15 +25,6 @@
 class Option /* Abstract Class */
 {
 public:
-  /* Types */
-  enum option_t {
-    type_cstring,
-    type_boolean,
-    type_string,
-    type_int,
-    type_double,
-  };
-
   /* Special Member Functions */
   Option() = default;
   // Provide virtual public destructor to avoid undefined behavior when
@@ -50,7 +41,6 @@ public:
   Option& operator=(Option&&) = delete;
 
   /* Member Functions */
-  [[nodiscard]] virtual option_t type() const = 0;
   [[nodiscard]] virtual bool has_value() const = 0;
   virtual void reset() = 0;
   [[nodiscard]] virtual bool isEmpty() const = 0;
@@ -65,7 +55,7 @@ public:
   // https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i25-prefer-empty-abstract-classes-as-interfaces-to-class-hierarchies
 };
 
-class OptionCString : public Option
+class [[deprecated]] OptionCString : public Option
 {
 public:
   /* Special Member Functions */
@@ -80,11 +70,6 @@ public:
   explicit(false) operator const char* () const
   {
     return value_.isNull()? nullptr : valueb_.constData();
-  }
-
-  [[nodiscard]] option_t type() const override
-  {
-    return type_cstring;
   }
 
   [[nodiscard]] bool has_value() const override
@@ -138,11 +123,6 @@ public:
   explicit(false) operator bool () const
   {
     return !value_.isNull();
-  }
-
-  [[nodiscard]] option_t type() const override
-  {
-    return type_string;
   }
 
   [[nodiscard]] bool has_value() const override
@@ -202,11 +182,6 @@ public:
   explicit(false) operator bool () const
   {
     return !value_.isNull();
-  }
-
-  [[nodiscard]] option_t type() const override
-  {
-    return type_int;
   }
 
   [[nodiscard]] bool has_value() const override
@@ -277,11 +252,6 @@ public:
     return !value_.isNull();
   }
 
-  [[nodiscard]] option_t type() const override
-  {
-    return type_double;
-  }
-
   [[nodiscard]] bool has_value() const override
   {
     return !value_.isNull();
@@ -344,11 +314,6 @@ public:
   explicit(false) operator bool() const
   {
     return (!value_.isNull() && (value_ != '0'));
-  }
-
-  [[nodiscard]] option_t type() const override
-  {
-    return type_boolean;
   }
 
   /* Note that has_value can be used to distinguish an option that wasn't supplied

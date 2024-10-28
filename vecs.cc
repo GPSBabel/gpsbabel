@@ -652,7 +652,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
     if (int_option != nullptr) {
       int_option->set_result(result, end);
     } else {
-      fatal("%s: Program error - ARGTYPE_INT must be associatied with OptionInt.\n", qPrintable(id));
+      fatal("%s: Program error - ARGTYPE_INT must be associated with OptionInt.\n", qPrintable(id));
     }
   }
   break;
@@ -670,7 +670,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
     if (double_option != nullptr) {
       double_option->set_result(result, end);
     } else {
-      fatal("%s: Program error - ARGTYPE_FLOAT must be associatied with OptionDouble.\n", qPrintable(id));
+      fatal("%s: Program error - ARGTYPE_FLOAT must be associated with OptionDouble.\n", qPrintable(id));
     }
   }
   break;
