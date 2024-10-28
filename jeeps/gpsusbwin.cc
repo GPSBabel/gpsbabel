@@ -55,6 +55,27 @@ typedef struct {
 static HANDLE usb_handle = INVALID_HANDLE_VALUE;
 static int usb_tx_packet_size ;
 
+[[gnu::format(printf, 1, 2)]] static void GPS_Serial_Error(const char* fmt, ...)
+{
+  va_list ap;
+  char msg[200];
+  char* s;
+  int b;
+
+  va_start(ap, fmt);
+  b = vsnprintf(msg, sizeof(msg), fmt, ap);
+  s = msg + b;
+  *s++ = ':';
+  *s++ = ' ';
+
+  FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, nullptr,
+                GetLastError(), 0, s, sizeof(msg) - b - 2, nullptr);
+
+  GPS_Error("%s", msg); // valid clang -Wformat-security warning
+
+  va_end(ap);
+}
+
 static int
 gusb_win_close(gpsdevh* /* handle */, bool /* exit_lib */)
 {
