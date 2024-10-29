@@ -72,7 +72,7 @@ private:
   QVector<arglist_t> args = {
     {
       "distance", &distopt, "Maximum positional distance",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "all", &purge_duplicates,

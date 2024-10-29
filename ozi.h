@@ -175,7 +175,7 @@ private:
     },
     {
       "proximity", &proximityarg, "Proximity distance",
-      "0",  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
+      "0",  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       "altunit", &altunit_opt, "Unit used in altitude values",

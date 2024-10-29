@@ -637,8 +637,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   QString end;
   QString* endp = trailing_data_allowed(arg.argtype)? &end: nullptr;
 
-  switch (arg.argtype & ARGTYPE_TYPEMASK) {
-  case ARGTYPE_INT: {
+  if (auto* int_option = dynamic_cast<OptionInt*>(arg.argval); int_option != nullptr) {
     int result;
     if (val.isEmpty()) {
       rval = '0';
@@ -647,16 +646,8 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
       // will fatal on conversion error
       result = convert_integer(val, id, endp, integer_base(arg.argtype));
     }
-    auto* int_option = dynamic_cast<OptionInt*>(arg.argval);
-    // ARTYPE_INT <=> OptionInt enforced in validate_arg
-    if (int_option != nullptr) {
-      int_option->set_result(result, end);
-    } else {
-      fatal("%s: Program error - ARGTYPE_INT must be associated with OptionInt.\n", qPrintable(id));
-    }
-  }
-  break;
-  case ARGTYPE_FLOAT: {
+    int_option->set_result(result, end);
+  } else if (auto* double_option = dynamic_cast<OptionDouble*>(arg.argval); double_option != nullptr) {
     double result;
     if (val.isEmpty()) {
       rval = '0';
@@ -665,16 +656,8 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
       // will fatal on conversion error
       result = convert_float(val, id, endp);
     }
-    auto* double_option = dynamic_cast<OptionDouble*>(arg.argval);
-    // ARGTYPE_FLOAT <=> OptionDouble enforced in validate_arg
-    if (double_option != nullptr) {
-      double_option->set_result(result, end);
-    } else {
-      fatal("%s: Program error - ARGTYPE_FLOAT must be associated with OptionDouble.\n", qPrintable(id));
-    }
-  }
-  break;
-  case ARGTYPE_BOOL:
+    double_option->set_result(result, end);
+  } else if (auto* bool_option = dynamic_cast<OptionBool*>(arg.argval); bool_option != nullptr) {
     if (val.isEmpty()) {
       rval = '1';
     } else {
@@ -696,7 +679,6 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
         }
       }
     }
-    break;
   }
 
   arg.argval->set(rval);
@@ -1156,7 +1138,51 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
         Warning() << name << "option" << arg.argstring << "does not point to an Option instance.";
         ok = false;
       }
-      if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_INT) {
+      if (const auto* int_option = dynamic_cast<const OptionInt*>(arg.argval); int_option != nullptr) {
+        if (trailing_data_allowed(arg.argtype)) {
+          // GUI QIntValidator will reject input with trailing data.
+          if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
+            Warning() << name << "OptionInt with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
+            ok = false;
+          }
+        } else {
+          if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_INT) {
+            Warning() << name << "OptionInt option without trailing data" << arg.argstring << "is not of ARGTYPE_INT.";
+            ok = false;
+          }
+        }
+      } else if (const auto* double_option = dynamic_cast<const OptionDouble*>(arg.argval); double_option != nullptr) {
+        if (trailing_data_allowed(arg.argtype)) {
+          // GUI QDoubleValidator will reject input with trailing data.
+          if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
+            Warning() << name << "OptionDouble with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
+            ok = false;
+          }
+        } else {
+          if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_FLOAT) {
+            Warning() << name << "OptionDouble without trailing data" << arg.argstring << "is not of ARGTYPE_FLOAT.";
+            ok = false;
+          }
+        }
+      } else if (const auto* bool_option = dynamic_cast<const OptionBool*>(arg.argval); bool_option != nullptr) {
+        if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_BOOL) {
+          Warning() << name << "OptionBool" << arg.argstring << "is not of ARGTYPE_BOOL.";
+          ok = false;
+        }
+      } else if (const auto* str_option = dynamic_cast<const OptionString*>(arg.argval); str_option != nullptr) {
+        if (((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) &&
+            ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_FILE) &&
+            ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_OUTFILE) &&
+            ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_UNKNOWN)) {
+          Warning() << name << "OptionString" << arg.argstring << "is not of ARGTYPE STRING, FILE, OUTFILE or UNKNOWN.";
+          ok = false;
+        }
+      } else {
+        Warning() << name << "Unexpected Option type" << arg.argstring << ".";
+        ok = false;
+      }
+      switch (arg.argtype & ARGTYPE_TYPEMASK) {
+      case ARGTYPE_INT:
         if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue, id, arg.argtype)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
           ok = false;
@@ -1169,12 +1195,8 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
           ok = false;
         }
-        // ARGTYPE_INT => OptionInt
-        if (const auto* opt = dynamic_cast<const OptionInt*>(arg.argval); opt == nullptr) {
-          Warning() << name << "Int option" << arg.argstring << "argval is not of class OptionInt";
-          ok = false;
-        }
-      } else if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_FLOAT) {
+        break;
+      case ARGTYPE_FLOAT:
         if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue, id, arg.argtype)) {
           Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
           ok = false;
@@ -1187,12 +1209,8 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
           ok = false;
         }
-        // ARGTYPE_FLOAT => OptionDouble
-        if (const auto* opt = dynamic_cast<const OptionDouble*>(arg.argval); opt == nullptr) {
-          Warning() << name << "Float option" << arg.argstring << "argval is not of class OptionDouble";
-          ok = false;
-        }
-      } else if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) {
+        break;
+      case ARGTYPE_BOOL:
         if (!arg.defaultvalue.isNull() && !is_bool(arg.defaultvalue)) {
           Warning() << name << "Bool option" << arg.argstring << "default value" << arg.defaultvalue << "is not an bool.";
           ok = false;
@@ -1205,29 +1223,16 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an bool.";
           ok = false;
         }
-        // ARGTYPE_BOOL => OptionBool
-        if (const auto* opt = dynamic_cast<const OptionBool*>(arg.argval); opt == nullptr) {
-          Warning() << name << "Bool option" << arg.argstring << "argval is not of class OptionBool";
-          ok = false;
-        }
-      }
-      // OptionInt => ARGTYPE_INT
-      if (const auto* opt = dynamic_cast<const OptionInt*>(arg.argval); opt != nullptr) {
-        if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_INT) {
-          Warning() << name << "OptionInt" << arg.argstring << "is of not of type ARGTYPE_INT";
-        }
-      }
-      // OptionDouble => ARGTYPE_DOUBLE
-      if (const auto* opt = dynamic_cast<const OptionDouble*>(arg.argval); opt != nullptr) {
-        if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_FLOAT) {
-          Warning() << name << "OptionDouble" << arg.argstring << "is of not of type ARGTYPE_FLOAT";
-        }
-      }
-      // OptionBool => ARGTYPE_BOOL
-      if (const auto* opt = dynamic_cast<const OptionBool*>(arg.argval); opt != nullptr) {
-        if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_BOOL) {
-          Warning() << name << "OptionBool" << arg.argstring << "is of not of type ARGTYPE_BOOL";
-        }
+        break;
+      case ARGTYPE_UNKNOWN:
+      case ARGTYPE_STRING:
+      case ARGTYPE_FILE:
+      case ARGTYPE_OUTFILE:
+        break;
+      default:
+        Warning() << name << "Unknown ARGTYPE for << arg.argstring.";
+        ok = false;
+        break;
       }
     }
   }

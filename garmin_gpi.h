@@ -357,7 +357,7 @@ private:
     },
     {
       "proximity", &opt_proximity, "Default proximity",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
+      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       "sleep", &opt_sleep, "After output job done sleep n second(s)",
@@ -365,7 +365,7 @@ private:
     },
     {
       "speed", &opt_speed, "Default speed",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
+      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       "unique", &opt_unique, "Create unique waypoint names (default = yes)",

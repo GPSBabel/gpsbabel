@@ -8,24 +8,24 @@ arc	Include Only Points Within Distance of Arc	https://www.gpsbabel.org/WEB_DOC_
 option	arc	file	File containing vertices of arc	file				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_file
 option	arc	rte	Route(s) are vertices of arc	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_rte
 option	arc	trk	Track(s) are vertices of arc	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_trk
-option	arc	distance	Maximum distance from arc	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_distance
+option	arc	distance	Maximum distance from arc	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_distance
 option	arc	exclude	Exclude points close to the arc	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_exclude
 option	arc	points	Use distance from vertices not lines	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_points
 option	arc	project	Move waypoints to its projection on lines or vertices	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_arc.html#fmt_arc_o_project
 radius	Include Only Points Within Radius	https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html
 option	radius	lat	Latitude for center point (D.DDDDD)	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_lat
 option	radius	lon	Longitude for center point (D.DDDDD)	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_lon
-option	radius	distance	Maximum distance from center	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_distance
+option	radius	distance	Maximum distance from center	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_distance
 option	radius	exclude	Exclude points close to center	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_exclude
 option	radius	nosort	Inhibit sort by distance to center	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_nosort
 option	radius	maxcount	Output no more than this number of points	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_maxcount
 option	radius	asroute	Put resulting waypoints in route of this name	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_radius.html#fmt_radius_o_asroute
 interpolate	Interpolate between trackpoints	https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html
 option	interpolate	time	Time interval in seconds	float		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_time
-option	interpolate	distance	Distance interval	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
+option	interpolate	distance	Distance interval	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
 option	interpolate	route	Interpolate routes instead	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_route
 height	Manipulate altitudes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html
-option	height	add	Adds a constant value to every altitude	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_add
+option	height	add	Adds a constant value to every altitude	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_add
 option	height	wgs84tomsl	Converts WGS84 ellipsoidal height to orthometric height (MSL)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_wgs84tomsl
 track	Manipulate track lists	https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html
 option	track	move	Correct trackpoint timestamps by a delta	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_track.html#fmt_track_o_move
@@ -67,7 +67,7 @@ option	duplicate	location	Suppress duplicate waypoint based on coords	boolean			
 option	duplicate	all	Suppress all instances of duplicates	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_duplicate.html#fmt_duplicate_o_all
 option	duplicate	correct	Use coords from duplicate points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_duplicate.html#fmt_duplicate_o_correct
 position	Remove Points Within Distance	https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html
-option	position	distance	Maximum positional distance	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html#fmt_position_o_distance
+option	position	distance	Maximum positional distance	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html#fmt_position_o_distance
 option	position	all	Suppress all points close to other points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html#fmt_position_o_all
 option	position	time	Maximum time in seconds between two points	float				https://www.gpsbabel.org/WEB_DOC_DIR/filter_position.html#fmt_position_o_time
 discard	Remove unreliable points with high hdop or vdop	https://www.gpsbabel.org/WEB_DOC_DIR/filter_discard.html
@@ -99,7 +99,7 @@ option	stack	replace	(pop) Replace list (default)	boolean				https://www.gpsbabe
 option	stack	depth	(swap) Item to use (default=1)	integer		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_stack.html#fmt_stack_o_depth
 simplify	Simplify routes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html
 option	simplify	count	Maximum number of points in route	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_count
-option	simplify	error	Maximum error	float		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_error
+option	simplify	error	Maximum error	string		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_error
 option	simplify	crosstrack	Use cross-track error (default)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_crosstrack
 option	simplify	length	Use arclength error	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_length
 option	simplify	relative	Use relative error	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_simplify.html#fmt_simplify_o_relative

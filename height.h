@@ -56,7 +56,7 @@ private:
   QVector<arglist_t> args = {
     {
       "add", &addopt, "Adds a constant value to every altitude",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
+      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_BEGIN_REQ | ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       "wgs84tomsl", &wgs84tomslopt, "Converts WGS84 ellipsoidal height to orthometric height (MSL)",
