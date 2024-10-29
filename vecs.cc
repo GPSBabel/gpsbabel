@@ -1151,6 +1151,19 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
             ok = false;
           }
         }
+
+        if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue, id, arg.argtype)) {
+          Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
+          ok = false;
+        }
+        if (!arg.minvalue.isNull() && !is_integer(arg.minvalue, id, arg.argtype)) {
+          Warning() << name << "Int option" << arg.argstring << "minimum value" << arg.minvalue << "is not an integer.";
+          ok = false;
+        }
+        if (!arg.maxvalue.isNull() && !is_integer(arg.maxvalue, id, arg.argtype)) {
+          Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
+          ok = false;
+        }
       } else if (const auto* double_option = dynamic_cast<const OptionDouble*>(arg.argval); double_option != nullptr) {
         if (trailing_data_allowed(arg.argtype)) {
           // GUI QDoubleValidator will reject input with trailing data.
@@ -1164,9 +1177,35 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
             ok = false;
           }
         }
+
+        if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue, id, arg.argtype)) {
+          Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
+          ok = false;
+        }
+        if (!arg.minvalue.isNull() && !is_float(arg.minvalue, id, arg.argtype)) {
+          Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
+          ok = false;
+        }
+        if (!arg.maxvalue.isNull() && !is_float(arg.maxvalue, id, arg.argtype)) {
+          Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
+          ok = false;
+        }
       } else if (const auto* bool_option = dynamic_cast<const OptionBool*>(arg.argval); bool_option != nullptr) {
         if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_BOOL) {
           Warning() << name << "OptionBool" << arg.argstring << "is not of ARGTYPE_BOOL.";
+          ok = false;
+        }
+
+        if (!arg.defaultvalue.isNull() && !is_bool(arg.defaultvalue)) {
+          Warning() << name << "Bool option" << arg.argstring << "default value" << arg.defaultvalue << "is not an bool.";
+          ok = false;
+        }
+        if (!arg.minvalue.isNull() && !is_bool(arg.minvalue)) {
+          Warning() << name << "Bool option" << arg.argstring << "minimum value" << arg.minvalue << "is not an bool.";
+          ok = false;
+        }
+        if (!arg.maxvalue.isNull() && !is_bool(arg.maxvalue)) {
+          Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an bool.";
           ok = false;
         }
       } else if (const auto* str_option = dynamic_cast<const OptionString*>(arg.argval); str_option != nullptr) {
@@ -1181,54 +1220,16 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
         Warning() << name << "Unexpected Option type" << arg.argstring << ".";
         ok = false;
       }
+
       switch (arg.argtype & ARGTYPE_TYPEMASK) {
       case ARGTYPE_INT:
-        if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue, id, arg.argtype)) {
-          Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
-          ok = false;
-        }
-        if (!arg.minvalue.isNull() && !is_integer(arg.minvalue, id, arg.argtype)) {
-          Warning() << name << "Int option" << arg.argstring << "minimum value" << arg.minvalue << "is not an integer.";
-          ok = false;
-        }
-        if (!arg.maxvalue.isNull() && !is_integer(arg.maxvalue, id, arg.argtype)) {
-          Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
-          ok = false;
-        }
-        break;
       case ARGTYPE_FLOAT:
-        if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue, id, arg.argtype)) {
-          Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
-          ok = false;
-        }
-        if (!arg.minvalue.isNull() && !is_float(arg.minvalue, id, arg.argtype)) {
-          Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
-          ok = false;
-        }
-        if (!arg.maxvalue.isNull() && !is_float(arg.maxvalue, id, arg.argtype)) {
-          Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
-          ok = false;
-        }
-        break;
       case ARGTYPE_BOOL:
-        if (!arg.defaultvalue.isNull() && !is_bool(arg.defaultvalue)) {
-          Warning() << name << "Bool option" << arg.argstring << "default value" << arg.defaultvalue << "is not an bool.";
-          ok = false;
-        }
-        if (!arg.minvalue.isNull() && !is_bool(arg.minvalue)) {
-          Warning() << name << "Bool option" << arg.argstring << "minimum value" << arg.minvalue << "is not an bool.";
-          ok = false;
-        }
-        if (!arg.maxvalue.isNull() && !is_bool(arg.maxvalue)) {
-          Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an bool.";
-          ok = false;
-        }
-        break;
-      case ARGTYPE_UNKNOWN:
       case ARGTYPE_STRING:
       case ARGTYPE_FILE:
       case ARGTYPE_OUTFILE:
         break;
+      case ARGTYPE_UNKNOWN:
       default:
         Warning() << name << "Unknown ARGTYPE for << arg.argstring.";
         ok = false;
