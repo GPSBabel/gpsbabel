@@ -390,7 +390,7 @@ void KmlFormat::wr_init(const QString& fname)
   kml_time_min = gpsbabel::DateTime();
   kml_time_max = gpsbabel::DateTime();
 
-  QChar u = (opt_units && !opt_units.isEmpty())? opt_units.get().front().toLower() : 's';
+  QChar u = opt_units.isEmpty()? 's' : opt_units.get().front().toLower();
 
   unitsformatter = new UnitsFormatter();
   switch (u.unicode()) {

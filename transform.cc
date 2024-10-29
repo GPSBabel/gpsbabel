@@ -138,7 +138,7 @@ void TransformFilter::process()
   use_src_name = opt_rpt_name;
 
   name_digits = 3;
-  if (rpt_name_digits && !rpt_name_digits.isEmpty()) {
+  if (!rpt_name_digits.isEmpty()) {
     name_digits = rpt_name_digits.get_result();
   }
 

@@ -245,7 +245,7 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
     datetimestring = dt.toUTC().toString(u"yyyyMMdd");
   }
 
-  if (opt_title && !opt_title.isEmpty()) {
+  if (!opt_title.isEmpty()) {
     if (opt_title.get().contains('%')) {
       // Uggh.  strftime format exposed to user.
 
@@ -434,7 +434,7 @@ void TrackFilter::trackfilter_split()
 
     /* check additional options */
 
-    opt_interval = (opt_split && !opt_split.isEmpty() && (opt_split.get() != TRACKFILTER_SPLIT_OPTION));
+    opt_interval = (!opt_split.isEmpty() && (opt_split.get() != TRACKFILTER_SPLIT_OPTION));
     if (opt_interval != 0) {
       static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
@@ -470,7 +470,7 @@ void TrackFilter::trackfilter_split()
       }
     }
 
-    opt_distance = (opt_sdistance && !opt_sdistance.isEmpty() && (opt_sdistance.get() != TRACKFILTER_SDIST_OPTION));
+    opt_distance = (!opt_sdistance.isEmpty() && (opt_sdistance.get() != TRACKFILTER_SDIST_OPTION));
     if (opt_distance != 0) {
       static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());

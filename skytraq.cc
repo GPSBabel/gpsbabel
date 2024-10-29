@@ -1435,7 +1435,6 @@ MinihomerFormat::rd_deinit()
   skytraq_rd_deinit();
   mhport.clear();
 }
-#define SETPOI(poinum, poiname) if (opt_set_poi_##poiname )  {miniHomer_set_poi(poinum, opt_set_poi_##poiname);}
 void
 MinihomerFormat::read()
 {
