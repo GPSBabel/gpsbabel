@@ -31,10 +31,10 @@
 namespace gpsbabel
 {
 
-LatLon::LatLon(double latitude, double longitude)
+LatLon::LatLon(double latitude, double longitude) : lat(latitude), lon(longitude)
 {
-  lat = latitude;
-  lon = longitude;
+  
+  
 }
 
 NVector::NVector(double latitude_degrees, double longitude_degrees)
