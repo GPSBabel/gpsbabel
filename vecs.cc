@@ -496,8 +496,8 @@ Vecs& Vecs::Instance()
  * so we have to exclude this from the check.
  * The possibility of detachment is also why the type of element
  * on the list must be default constructable. This is why we have
- * to supply a default for any const members of arglist_t.  Without
- * the default the default constructor would be implicitly deleted.
+ * to supply a default for any const members of arglist_t.  Without the
+ * default intializer the default constructor would be implicitly deleted.
  */
 
 void Vecs::init_vec(Format* fmt)
