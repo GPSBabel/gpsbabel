@@ -89,8 +89,8 @@ public:
   template<class MyFormat>
   void xml_init(const QString& fname, MyFormat* instance, const QList<xg_fmt_map_entry<MyFormat>>& tbl,
                 const char* encoding = nullptr,
-                const QStringList ignorelist = QStringList(),
-                const QStringList skiplist = QStringList())
+                const QStringList& ignorelist = QStringList(),
+                const QStringList& skiplist = QStringList())
   {
     build_xg_tag_map(instance, tbl);
 
@@ -165,7 +165,7 @@ private:
 
   XgCallbackBase* xml_tbl_lookup(const QString& tag, xg_cb_type cb_type);
   void xml_common_init(const QString& fname, const char* encoding,
-                       const QStringList ignorelist, const QStringList skiplist);
+                       const QStringList& ignorelist, const QStringList& skiplist);
   xg_shortcut xml_shortcut(QStringView name);
   void xml_run_parser(QXmlStreamReader& reader);
 
