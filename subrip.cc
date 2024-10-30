@@ -205,7 +205,6 @@ SubripFormat::wr_init(const QString& fname)
   vspeed = 0;
   gradient = 0;
 
-// FIXME: why is the impicit bool selected and not the implicit const QString&?????
   if (opt_gpstime != opt_gpsdate) {
     fatal(FatalMsg() << MYNAME ": Either both or neither of the gps_date and gps_time options must be supplied!");
   }
