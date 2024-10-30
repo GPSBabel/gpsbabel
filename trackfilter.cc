@@ -239,7 +239,7 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsba
 {
   QString datetimestring;
 
-  if (opt_interval != 0) {
+  if (opt_interval) {
     datetimestring = dt.toUTC().toString(u"yyyyMMddhhmmss");
   } else {
     datetimestring = dt.toUTC().toString(u"yyyyMMdd");
@@ -434,8 +434,8 @@ void TrackFilter::trackfilter_split()
 
     /* check additional options */
 
-    opt_interval = (!opt_split.isEmpty() && (opt_split.get() != TRACKFILTER_SPLIT_OPTION));
-    if (opt_interval != 0) {
+    opt_interval = !opt_split.isEmpty();
+    if (opt_interval) {
       static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
       QRegularExpressionMatch match = re.match(opt_split);
@@ -470,8 +470,8 @@ void TrackFilter::trackfilter_split()
       }
     }
 
-    opt_distance = (!opt_sdistance.isEmpty() && (opt_sdistance.get() != TRACKFILTER_SDIST_OPTION));
-    if (opt_distance != 0) {
+    opt_distance = !opt_sdistance.isEmpty();
+    if (opt_distance) {
       static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
       QRegularExpressionMatch match = re.match(opt_sdistance);
@@ -519,7 +519,7 @@ void TrackFilter::trackfilter_split()
 
       bool new_track_flag;
 
-      if ((opt_interval == 0) && (opt_distance == 0)) {
+      if (!opt_interval && !opt_distance) {
 //      FIXME: This whole function needs to be reconsidered for arbitrary time.
         new_track_flag = prev_wpt->GetCreationTime().toLocalTime().date() !=
                          wpt->GetCreationTime().toLocalTime().date();
@@ -636,7 +636,7 @@ void TrackFilter::trackfilter_synth()
         }
         if (opt_speed) {
           if (last_speed_time.msecsTo(wpt->GetCreationTime()) != 0) {
-            // If we have multiple points with the same time and
+            // If we have multiple points with the same time, and
             // we use the pair of points about which the time ticks then we will
             // underestimate the distance and compute low speeds on average.
             // Therefore, if we have multiple points with the same time use the
