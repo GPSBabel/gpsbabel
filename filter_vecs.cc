@@ -61,7 +61,7 @@
 template <typename T>
 Filter* fltfactory()
 {
-  static_assert(std::is_base_of<Filter, T>::value, "T must be derived from Filter");
+  static_assert(std::is_base_of_v<Filter, T>, "T must be derived from Filter");
   return new T();
 }
 

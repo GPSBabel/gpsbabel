@@ -83,12 +83,10 @@
 #include "googletakeout.h"     // for GoogleTakeoutFormat
 
 
-#define MYNAME "vecs"
-
 template <typename T>
 Format* fmtfactory(const QString& filename)
 {
-  static_assert(std::is_base_of<Format, T>::value, "T must be derived from Format");
+  static_assert(std::is_base_of_v<Format, T>, "T must be derived from Format");
   return new T(filename);
 }
 
@@ -490,7 +488,7 @@ Vecs& Vecs::Instance()
  * that we are not modifying a Qt COW copy.
  * Qt has an undocumented but public member function isDetached().
  * If the list is detached it implies it is not shared, then functions
- * then might detach, like the iterator begin which is implicitly used
+ * that might detach, like the iterator begin which is implicitly used
  * in the range based for loop, won't cause a copy to be created.
  * We can make sure this is true for at least our regression cases
  * with assertions.
@@ -743,9 +741,9 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
   }
 
   /*
-   * For style based formats let xcsv know the style file.  Otherwise
+   * For style based formats let xcsv know the style file.  Otherwise,
    * make sure xcsv knows no style file is in use. This covers the case
-   * that we are processing xcsv,style= and it was preceeded by an xcsv
+   * that we are processing xcsv,style= and it was preceded by a xcsv
    * format that utilized an internal style file.
    */
   auto* xcsvfmt = dynamic_cast<XcsvFormat*>(fmtdata.fmt);
@@ -797,7 +795,7 @@ QString Vecs::get_option(const QStringList& options, const QString& argname)
   QString rval; // null
 
   for (const auto& option : options) {
-    int split = option.indexOf('=');
+    auto split = option.indexOf('=');
     const QString option_name = option.left(split);
     if (option_name.compare(argname, Qt::CaseInsensitive) == 0) {
       /*

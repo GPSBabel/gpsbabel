@@ -84,7 +84,7 @@ XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
   std::for_each(ignorelist.cbegin(), ignorelist.cend(), [this](const QString& tag)->void {
     xg_shortcut_taglist.insert(tag, xg_shortcut::sc_ignore);
   });
-    
+
   std::for_each(skiplist.cbegin(), skiplist.cend(), [this](const QString& tag)->void {
     xg_shortcut_taglist.insert(tag, xg_shortcut::sc_skip);
   });

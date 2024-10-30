@@ -19,7 +19,7 @@
 
  */
 
-#include <assert.h>            // for assert
+#include <cassert>             // for assert
 
 #include <QByteArray>          // for QByteArray
 #include <QHash>               // for QHash
