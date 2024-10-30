@@ -165,7 +165,7 @@ private:
 
   void humminbird_rte_head(const route_head* rte);
   void humminbird_rte_tail(const route_head* rte);
-  static QString wpt_to_id(const Waypoint*);
+  static QString wpt_to_id(const Waypoint* wpt);
   void humminbird_write_rtept(const Waypoint* wpt) const;
   void humminbird_write_waypoint(const Waypoint* wpt);
   void humminbird_write_waypoint_wrapper(const Waypoint* wpt);
