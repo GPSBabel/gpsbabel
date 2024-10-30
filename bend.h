@@ -64,7 +64,7 @@ private:
     },
   };
 
-  Waypoint* create_wpt_dest(const Waypoint* wpt_orig, const Waypoint* wpt_adj) const;
+  Waypoint* create_wpt_dest(const Waypoint* wpt_orig, const Waypoint* wpt_orig_adj) const;
   int is_small_angle(const Waypoint* wpt_orig,
                      const Waypoint* wpt_orig_prev,
                      const Waypoint* wpt_orig_next) const;
