@@ -168,6 +168,7 @@ set(SUPPORT
   inifile.cc
   main.cc
   mkshort.cc
+  option.cc
   parse.cc
   rgbcolors.cc
   route.cc

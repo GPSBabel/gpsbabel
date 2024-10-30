@@ -34,7 +34,7 @@
 
 #include "defs.h"
 #include "format.h"
-#include "option.h"                    // for OptionBool, OptionCString
+#include "option.h"                    // for OptionBool, OptionString
 #include "src/core/datetime.h"         // for DateTime
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
@@ -194,21 +194,21 @@ private:
   QHash<const route_head*, track_trait_t> kml_track_traits_hash;
 
   // options
-  OptionCString opt_deficon;
+  OptionString opt_deficon;
   OptionBool opt_export_lines;
   OptionBool opt_export_points;
   OptionBool opt_export_track;
-  OptionCString opt_line_width;
-  OptionCString opt_line_color;
+  OptionInt opt_line_width;
+  OptionString opt_line_color;
   OptionBool opt_floating;
   OptionBool opt_extrude;
   OptionBool opt_trackdata;
   OptionBool opt_trackdirection;
-  OptionCString opt_units;
+  OptionString opt_units;
   OptionBool opt_labels;
-  OptionCString opt_max_position_points;
-  OptionCString opt_rotate_colors;
-  OptionCString opt_precision;
+  OptionInt opt_max_position_points;
+  OptionDouble opt_rotate_colors;
+  OptionInt opt_precision;
 
   bool export_lines{};
   bool export_points{};
@@ -218,7 +218,6 @@ private:
   bool trackdata{};
   bool trackdirection{};
   int max_position_points{};
-  bool rotate_colors{};
   int line_width{};
   int precision{};
 

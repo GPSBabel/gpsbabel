@@ -50,7 +50,7 @@
 #include "defs.h"      // for arglist_t, ff_cap, Waypoint, ARG_NOMINMAX, ARGTYPE_BOOL, ff_cap_none, ARGTYPE_INT, ARGTYPE_STRING, ff_cap_read, ff_cap_write, ff_type, ff_type_file
 #include "format.h"    // for Format
 #include "gbfile.h"    // for gbfile, gbsize_t
-#include "option.h"    // for OptionCString, OptionBool
+#include "option.h"    // for OptionString, OptionBool
 
 
 class ExifFormat : public Format
@@ -205,9 +205,9 @@ private:
 
   OptionBool opt_filename;
   OptionBool opt_overwrite;
-  OptionCString opt_frame;
-  OptionCString opt_name;
-  OptionCString opt_offsettime;
+  OptionInt opt_frame;
+  OptionString opt_name;
+  OptionString opt_offsettime;
 
   QVector<arglist_t> exif_args = {
     { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },

@@ -722,7 +722,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
     }
 
     if (offset_tag || opt_offsettime) {
-      QByteArray time_tag = opt_offsettime? QByteArray(opt_offsettime) : exif_read_str(offset_tag);
+      QString time_tag = opt_offsettime? opt_offsettime : QString(exif_read_str(offset_tag));
       // string should be +HH:MM or -HH:MM
       static const QRegularExpression re(R"(^([+-])(\d{2}):(\d{2})$)");
       assert(re.isValid());
@@ -739,7 +739,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
       } else if (opt_offsettime) {
         // Only warn for user supplied offsets.
         // Offset tags may indicate the offset was unknown, e.g. "   :  ".
-        warning(MYNAME ": OffsetTime is expected to be +HH:MM or -HH:MM, but was %s.\n", time_tag.constData());
+        warning(MYNAME ": OffsetTime is expected to be +HH:MM or -HH:MM, but was %s.\n", qPrintable(time_tag));
       }
     }
 
@@ -1178,7 +1178,7 @@ ExifFormat::exif_find_wpt_by_name(const Waypoint* wpt)
 {
   if (exif_wpt_ref != nullptr) {
     return;
-  } else if ((wpt->shortname != nullptr) && (case_ignore_strcmp(wpt->shortname, opt_name.get()) == 0)) {
+  } else if ((wpt->shortname != nullptr) && (case_ignore_strcmp(wpt->shortname, opt_name) == 0)) {
     exif_wpt_ref = wpt;
   }
 }
@@ -1530,7 +1530,7 @@ ExifFormat::write()
       track_disp_all(nullptr, nullptr, exif_find_wpt_by_name_lambda);
     }
     if (exif_wpt_ref == nullptr) {
-      warning(MYNAME ": No matching point with name \"%s\" found.\n", qPrintable(opt_name.get()));
+      warning(MYNAME ": No matching point with name \"%s\" found.\n", qPrintable(opt_name));
     }
   } else {
     auto exif_find_wpt_by_time_lambda = [this](const Waypoint* waypointp)->void {
@@ -1540,7 +1540,7 @@ ExifFormat::write()
     route_disp_all(nullptr, nullptr, exif_find_wpt_by_time_lambda);
     waypt_disp_all(exif_find_wpt_by_time_lambda);
 
-    qint64 frame = xstrtoi(opt_frame, nullptr, 10);
+    qint64 frame = opt_frame.get_result();
 
     if (exif_wpt_ref == nullptr) {
       warning(MYNAME ": No point with a valid timestamp found.\n");

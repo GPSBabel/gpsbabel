@@ -57,7 +57,6 @@
 */
 
 #include <cassert>
-#include <cstdlib>              // for strtod, strtol
 #include <iterator>             // for prev
 
 #include <QDateTime>            // for QDateTime
@@ -287,11 +286,11 @@ void SimplifyRouteFilter::init()
 
   switch (limit_basis) {
   case limit_basis_t::count:
-    count = strtol(countopt, nullptr, 10);
+    count = countopt.get_result();
     break;
   case limit_basis_t::error: {
     if (metric == metric_t::relative) {
-      error = strtod(erroropt, nullptr);
+      error = erroropt.get_result();
     } else {
       if (parse_distance(erroropt, &error, kMetersPerMile, MYNAME) == 0) {
         fatal(MYNAME ": No value specified with error option.\n");

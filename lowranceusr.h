@@ -103,7 +103,7 @@
 #include "formspec.h"           // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
 #include "gbfile.h"             // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
 #include "mkshort.h"            // for MakeShort
-#include "option.h"             // for OptionBool, OptionCString
+#include "option.h"             // for OptionBool, OptionString
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -448,10 +448,10 @@ private:
   OptionBool  opt_ignoreicons;
   OptionBool  opt_writeasicons;
   OptionBool  opt_seg_break;
-  OptionCString  opt_wversion;
-  OptionCString  opt_title;
-  OptionCString  opt_content_descr;
-  OptionCString  opt_serialnum;
+  OptionInt  opt_wversion;
+  OptionString  opt_title;
+  OptionString  opt_content_descr;
+  OptionInt  opt_serialnum;
   int            opt_serialnum_i{};
 
   QList<const Waypoint*>* waypt_table{nullptr};

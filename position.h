@@ -29,7 +29,7 @@
 
 #include "defs.h"     // for arglist_t, route_head (ptr only), ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED, ARGTYPE_BOOL, Waypoint, WaypointList (ptr only)
 #include "filter.h"   // for Filter
-#include "option.h"  // for OptionCString, OptionBool
+#include "option.h"  // for OptionString, OptionBool
 
 
 #if FILTERS_ENABLED
@@ -64,15 +64,15 @@ private:
 
   double pos_dist{};
   qint64 max_diff_time{};
-  OptionCString distopt;
-  OptionCString timeopt;
+  OptionDouble distopt;
+  OptionDouble timeopt;
   OptionBool purge_duplicates;
   bool check_time{};
 
   QVector<arglist_t> args = {
     {
       "distance", &distopt, "Maximum positional distance",
-      nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "all", &purge_duplicates,

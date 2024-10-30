@@ -754,7 +754,7 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
     break;
   }
 
-  if (QString creator = created_by.get(); !creator.isEmpty()) {
+  if (QString creator = created_by; !creator.isEmpty()) {
     if (!gpsbabel_testmode()) {
       if (creator == "GPSBabel") {
         creator += '-';
@@ -770,7 +770,7 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
     osm_disp_feature(waypoint);
   }
 
-  osm_write_opt_tag(opt_tagnd.get());
+  osm_write_opt_tag(opt_tagnd);
 
   fout->writeEndElement(); // node
 }
@@ -813,7 +813,7 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
     return;
   }
 
-  if (QString creator = created_by.get(); !creator.isEmpty()) {
+  if (QString creator = created_by; !creator.isEmpty()) {
     if (!gpsbabel_testmode()) {
       if (creator == "GPSBabel") {
         creator += '-';
@@ -826,7 +826,7 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
   osm_write_tag("name", route->rte_name);
   osm_write_tag("note", route->rte_desc);
 
-  osm_write_opt_tag(opt_tag.get());
+  osm_write_opt_tag(opt_tag);
 
   fout->writeEndElement(); // way
 }

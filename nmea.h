@@ -34,7 +34,7 @@
 #include "format.h"    // for Format
 #include "gbfile.h"    // for gbfile
 #include "mkshort.h"   // for MakeShort
-#include "option.h"    // for OptionBool, OptionCString
+#include "option.h"    // for OptionBool, OptionString
 
 
 class NmeaFormat : public Format
@@ -140,16 +140,16 @@ private:
   OptionBool opt_gpgga;
   OptionBool opt_gpvtg;
   OptionBool opt_gpgsa;
-  OptionCString snlenopt;
-  OptionCString optdate;
+  OptionInt snlenopt;
+  OptionInt optdate;
   OptionBool getposnarg;
-  OptionCString opt_sleep;
-  OptionCString opt_baud;
+  OptionInt opt_sleep;
+  OptionInt opt_baud;
   OptionBool opt_append;
   OptionBool opt_gisteq;
   OptionBool opt_ignorefix;
 
-  long sleepms{};
+  int sleepms{};
   int getposn{};
   bool amod_waypoint{};
 

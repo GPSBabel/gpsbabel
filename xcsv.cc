@@ -253,7 +253,7 @@ XcsvFormat::yyyymmdd_to_time(const QString& s)
 QDateTime
 XcsvFormat::xcsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const
 {
-  return make_datetime(date, time, is_localtime, opt_utc != nullptr, utc_offset);
+  return make_datetime(date, time, is_localtime, opt_utc, utc_offset);
 }
 
 /*
@@ -1882,7 +1882,7 @@ XcsvFormat::rd_init(const QString& fname)
       fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
     }
 
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt.get()));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
   }
 
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == wptdata)) {
@@ -1900,7 +1900,7 @@ XcsvFormat::rd_init(const QString& fname)
   xcsv_file->fname = fname;
 
   QString datum_name;
-  if (opt_datum != nullptr) {
+  if (opt_datum) {
     datum_name = opt_datum;
   } else if (!xcsv_style->gps_datum_name.isEmpty()) {
     datum_name = xcsv_style->gps_datum_name;
@@ -1912,7 +1912,7 @@ XcsvFormat::rd_init(const QString& fname)
     fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
   }
 
-  utc_offset = (opt_utc == nullptr)? 0 : xstrtoi(opt_utc, nullptr, 10) * SECONDS_PER_HOUR;
+  utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
 }
 
 void
@@ -1940,7 +1940,7 @@ XcsvFormat::wr_init(const QString& fname)
       fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
     }
 
-    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt.get()));
+    xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
   }
 
   xcsv_file = new XcsvFile;
@@ -1962,7 +1962,7 @@ XcsvFormat::wr_init(const QString& fname)
   if (global_opts.synthesize_shortnames) {
 
     if (snlenopt) {
-      xcsv_file->mkshort_handle.set_length(xstrtoi(snlenopt, nullptr, 10));
+      xcsv_file->mkshort_handle.set_length(snlenopt.get_result());
     }
 
     if (snwhiteopt.has_value()) {
@@ -1982,7 +1982,7 @@ XcsvFormat::wr_init(const QString& fname)
   }
 
   QString datum_name;
-  if (opt_datum != nullptr) {
+  if (opt_datum) {
     datum_name = opt_datum;
   } else if (!xcsv_style->gps_datum_name.isEmpty()) {
     datum_name = xcsv_style->gps_datum_name;

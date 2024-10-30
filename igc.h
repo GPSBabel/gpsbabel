@@ -42,7 +42,7 @@
 #include "formspec.h"           // for FormatSpecificData, kFsIGC
 #include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
 #include "kml.h"                // for wp_field
-#include "option.h"             // for OptionBool, OptionCString
+#include "option.h"             // for OptionBool, OptionString
 #include "src/core/datetime.h"  // for DateTime
 
 /*
@@ -294,7 +294,7 @@ private:
   gbfile* file_out{};
   char manufacturer[4] {};
   const route_head* head{};
-  OptionCString timeadj;
+  OptionString timeadj;
 
   QVector<arglist_t> igc_args = {
     {

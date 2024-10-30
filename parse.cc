@@ -20,15 +20,150 @@
 
  */
 
-#include <cctype>           // for isspace
-#include <cmath>            // for fabs
-#include <cstdio>           // for sscanf
-#include <cstdlib>          // for strtod
+#include <cmath>                   // for fabs
+#include <cstdio>                  // for sscanf
+#include <stdexcept>               // for invalid_argument, out_of_range
+#include <string>                  // for stod
 
-#include <QString>          // for QString
+#include <QString>                 // for QString
+#include <QtGlobal>                // for qPrintable
 
-#include "defs.h"           // for case_ignore_strcmp, fatal, KPH_TO_MPS, MPH_TO_MPS, warning, FEET_TO_METERS, KNOTS_TO_MPS, CSTR, FATHOMS_TO_METERS, MILES_TO_METERS, NMILES_TO_METERS, kDatumWGS84, grid_type, parse_coordinates, parse_distance, parse_speed, grid_bng, grid_lat_lon_ddd, grid_lat_lo...
-#include "jeeps/gpsmath.h"  // for GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UKOSMap_To_WGS84_H, GPS_Math_UTM_EN_To_Known_Datum
+#include "defs.h"                  // for case_ignore_strcmp, fatal, grid_type, KPH_TO_MPS, MPH_TO_MPS, warning, FEET_TO_METERS, KNOTS_TO_MPS, kDatumWGS84, FATHOMS_TO_METERS, MILES_TO_METERS, NMILES_TO_METERS, parse_coordinates, CSTR, parse_distance, parse_double, parse_integer, parse_speed
+#include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UKOSMap_To_WGS84_H, GPS_Math_UTM_EN_To_Known_Datum
+
+
+/*
+ * parse_integer
+ *
+ *  str:     input string
+ *  id:      identifier for error messages
+ *  ok:      conversion status.
+ *           if nullptr any conversion errors will fatal.
+ *  end:     unconverted trailing portion of string.
+ *           if nullptr a non-empty trailing portion will cause a conversion error.
+ *  base:    conversion base
+ */
+
+int parse_integer(const QString& str, const QString& id, bool* ok, QString* end, int base)
+{
+  auto ss = str.toStdString();
+  size_t pos = 0;
+  int result = 0;
+  try {
+    result = stoi(ss, &pos, base);
+  } catch (const std::invalid_argument&) {
+    if (ok == nullptr) {
+      fatal("%s: conversion to integer failed: invalid argument \"%s\".\n",
+            qPrintable(id), qPrintable(str));
+    } else {
+      *ok = false;
+      return 0;
+    }
+  } catch (const std::out_of_range&) {
+    if (ok == nullptr) {
+      fatal("%s: conversion to integer failed: out of range \"%s\".\n",
+            qPrintable(id), qPrintable(str));
+    } else {
+      *ok = false;
+      return 0;
+    }
+  } catch (...) {
+    if (ok == nullptr) {
+      fatal("%s: conversion to integer failed: unknown exception \"%s\".\n",
+            qPrintable(id), qPrintable(str));
+    } else {
+      *ok = false;
+      return 0;
+    }
+  }
+
+  QString remainder = QString::fromStdString(ss.erase(0, pos));
+  if ((end == nullptr) && !remainder.trimmed().isEmpty()) {
+    if (ok == nullptr) {
+      fatal("%s: conversion to integer failed: conversion of \"%s\" failed due to unexpected trailing data \"%s\".\n",
+            qPrintable(id), qPrintable(str), qPrintable(remainder));
+    } else {
+      *ok = false;
+      return 0;
+    }
+  }
+  if (end != nullptr) { // return possibly empty trailing portion of str
+    *end = remainder;
+  }
+
+  if (ok != nullptr) {
+    *ok = true;
+  }
+
+  return result;
+}
+
+/*
+ * parse_double
+ *
+ *  str:     input string
+ *  id:      identifier for error messages
+ *  ok:      conversion status.
+ *           if nullptr any conversion errors will fatal.
+ *  end:     unconverted trailing portion of string.
+ *           if nullptr a non-empty trailing portion will cause a conversion error.
+ *  base:    conversion base
+ *
+ */
+
+double parse_double(const QString& str, const QString& id, bool* ok, QString* end)
+{
+  auto ss = str.toStdString();
+  size_t pos = 0;
+  double result = 0.0;
+  try {
+    result = stod(ss, &pos);
+  } catch (const std::invalid_argument&) {
+    if (ok == nullptr) {
+      fatal("%s: conversion to double failed: invalid argument \"%s\".\n",
+            qPrintable(id), qPrintable(str));
+    } else {
+      *ok = false;
+      return 0.0;
+    }
+  } catch (const std::out_of_range&) {
+    if (ok == nullptr) {
+      fatal("%s: conversion to double failed: out of range \"%s\".\n",
+            qPrintable(id), qPrintable(str));
+    } else {
+      *ok = false;
+      return 0.0;
+    }
+  } catch (...) {
+    if (ok == nullptr) {
+      fatal("%s: conversion to double failed: unknown exception \"%s\".\n",
+            qPrintable(id), qPrintable(str));
+    } else {
+      *ok = false;
+      return 0.0;
+    }
+  }
+
+  QString remainder = QString::fromStdString(ss.erase(0, pos));
+  if ((end == nullptr) && !remainder.trimmed().isEmpty()) {
+    if (ok == nullptr) {
+      fatal("%s: conversion to double failed: conversion of \"%s\" failed due to unexpected trailing data \"%s\".\n",
+            qPrintable(id), qPrintable(str), qPrintable(remainder));
+    } else {
+      *ok = false;
+      return 0.0;
+    }
+  }
+  if (end != nullptr) { // return possibly empty trailing portion of str
+    *end = remainder;
+  }
+
+  if (ok != nullptr) {
+    *ok = true;
+  }
+
+  return result;
+}
 
 /*
  * parse_distance:
@@ -40,27 +175,23 @@
  */
 
 int
-parse_distance(const char* str, double* val, double scale, const char* module)
+parse_distance(const QString& str, double* val, double scale, const char* module)
 {
-  char* unit;
-
-  if ((str == nullptr) || (*str == '\0')) {
+  if (str.isEmpty()) {
     return 0;
   }
-  *val = strtod(str, &unit);
-  if (unit == nullptr) {
-    fatal("%s: Unconvertible numeric value (%s)!\n", module, str);
-  }
+
+  QString unit;
+  constexpr bool* dieonfailure = nullptr;
+  *val = parse_double(str, module, dieonfailure, &unit);
 
   if (fabs(*val) + 1 >= 1.0e25) {
     return 0; /* not only Garmin uses this as 'unknown value' */
   }
 
-  while (isspace(*unit)) {
-    unit++;
-  }
+  unit = unit.trimmed();
 
-  if (*unit == '\0') {
+  if (unit.isEmpty()) {
     *val *= scale;
     return 1;
   }
@@ -81,15 +212,9 @@ parse_distance(const char* str, double* val, double scale, const char* module)
   } else if (case_ignore_strcmp(unit, "fa") == 0) {
     *val = FATHOMS_TO_METERS(*val);
   } else {
-    fatal("%s: Unsupported distance unit in item '%s'!\n", module, str);
+    fatal("%s: Unsupported distance unit in item '%s'!\n", module, qPrintable(str));
   }
   return 2;
-}
-
-int
-parse_distance(const QString& str, double* val, double scale, const char* module)
-{
-  return parse_distance(CSTR(str), val, scale, module);
 }
 
 /*
@@ -101,24 +226,20 @@ parse_distance(const QString& str, double* val, double scale, const char* module
  *  module:  calling module, i.e. "garmin_txt"
  */
 int
-parse_speed(const char* str, double* val, const double scale, const char* module)
+parse_speed(const QString& str, double* val, const double scale, const char* module)
 {
-  char* unit;
 
-  if ((str == nullptr) || (*str == '\0')) {
+  if (str.isEmpty()) {
     return 0;
   }
 
-  *val = strtod(str, &unit);
-  if (unit == nullptr) {
-    fatal("%s: Unconvertible numeric value (%s)!\n", module, str);
-  }
+  QString unit;
+  constexpr bool* dieonfailure = nullptr;
+  *val = parse_double(str, module, dieonfailure, &unit);
 
-  while (isspace(*unit)) {
-    unit++;
-  }
+  unit = unit.trimmed();
 
-  if (*unit == '\0') {
+  if (unit.isEmpty()) {
     *val *= scale;
     return 1;
   }
@@ -142,16 +263,10 @@ parse_speed(const char* str, double* val, const double scale, const char* module
   } else if (case_ignore_strcmp(unit, "mih") == 0) {
     *val = MPH_TO_MPS(*val);
   } else {
-    warning("%s: Unsupported speed unit '%s' in item '%s'!\n", module, unit, str);
+    warning("%s: Unsupported speed unit '%s' in item '%s'!\n", module, qPrintable(unit), qPrintable(str));
   }
 
   return 2;
-}
-
-int
-parse_speed(const QString& str, double* val, const double scale, const char* module)
-{
-  return parse_speed(CSTR(str), val, scale, module);
 }
 
 /*

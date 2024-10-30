@@ -38,7 +38,6 @@
 
 #include "ozi.h"
 
-#include <cctype>                 // for tolower
 #include <cmath>                  // for lround
 
 #include <QByteArray>             // for QByteArray
@@ -72,7 +71,7 @@ void
 OziFormat::ozi_open_io(const QString& fname, QIODevice::OpenModeFlag mode)
 {
   stream = new gpsbabel::TextStream;
-  stream->open(fname, mode, MYNAME, opt_codec);
+  stream->open(fname, mode, MYNAME, opt_codec.get().toUtf8());
 
   if (mode & QFile::WriteOnly) {
     stream->setRealNumberNotation(QTextStream::FixedNotation);
@@ -96,8 +95,8 @@ OziFormat::ozi_alloc_fsdata()
   auto* fsdata = new ozi_fsdata;
 
   /* Provide defaults via command line defaults */
-  fsdata->fgcolor = color_to_bbggrr(wptfgcolor.get());
-  fsdata->bgcolor = color_to_bbggrr(wptbgcolor.get());
+  fsdata->fgcolor = color_to_bbggrr(wptfgcolor);
+  fsdata->bgcolor = color_to_bbggrr(wptbgcolor);
 
   return fsdata;
 }
@@ -323,37 +322,33 @@ OziFormat::ozi_route_pr()
 void
 OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
 {
-  altunit = tolower(*altunit_opt);
-  switch (altunit) {
-  case 'm': /* meters, okay */
-    alt_scale = 1.0;
-    break;
-  case 'f': /* feet, okay */
-    alt_scale = FEET_TO_METERS(1.0);
-    break;
-  default:
-    fatal(MYNAME ": Unknown value (%s) for option 'altunit'!\n", qPrintable(altunit_opt.get()));
+  if (altunit_opt.get().startsWith('m', Qt::CaseInsensitive)) {
+    altunit = 'm';
+    alt_scale = 1.0; /* meters */
+  } else if (altunit_opt.get().startsWith('f', Qt::CaseInsensitive)) {
+    altunit = 'f';
+    alt_scale = FEET_TO_METERS(1.0); /* feet */
+  } else {
+    fatal(MYNAME ": Unknown value (%s) for option 'altunit'!\n", qPrintable(altunit_opt));
   }
   if (direction != 0) {
-    alt_scale = 1 / alt_scale;
+    alt_scale = 1.0 / alt_scale;
   }
 
-  proxunit = tolower(*proxunit_opt);
-  switch (proxunit) {
-  case 'm': /* miles, okay */
-    prox_scale = MILES_TO_METERS(1.0);
-    break;
-  case 'n': /* nautical miles, okay */
-    prox_scale = NMILES_TO_METERS(1.0);
-    break;
-  case 'k': /* kilometers, okay */
-    prox_scale = 1000.0;
-    break;
-  default:
-    fatal(MYNAME ": Unknown value (%s) for option 'proxunit'!\n", qPrintable(proxunit_opt.get()));
+  if (proxunit_opt.get().startsWith('m')) {
+    proxunit = 'm';
+    prox_scale = MILES_TO_METERS(1.0); /* miles */
+  } else if (proxunit_opt.get().startsWith('n')) {
+    proxunit = 'n';
+    prox_scale = NMILES_TO_METERS(1.0); /* nautical miles */
+  } else if (proxunit_opt.get().startsWith('k')) {
+    proxunit = 'k';
+    prox_scale = 1000.0; /* kilometers */
+  } else {
+    fatal(MYNAME ": Unknown value (%s) for option 'proxunit'!\n", qPrintable(proxunit_opt));
   }
   if (direction != 0) {
-    prox_scale = 1 / prox_scale;
+    prox_scale = 1.0 / prox_scale;
   }
 }
 
@@ -387,7 +382,7 @@ OziFormat::wr_init(const QString& fname)
   /* set mkshort options from the command line if applicable */
   if (global_opts.synthesize_shortnames) {
 
-    mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
+    mkshort_handle->set_length(snlenopt.get_result());
 
     if (snwhiteopt.has_value()) {
       mkshort_handle->set_whitespace_ok(snwhiteopt);
@@ -405,7 +400,7 @@ OziFormat::wr_init(const QString& fname)
   }
 
   ozi_init_units(1);
-  parse_distance(proximityarg, &proximity, 1 / prox_scale, MYNAME);
+  parse_distance(proximityarg, &proximity, 1.0 / prox_scale, MYNAME);
 }
 
 void

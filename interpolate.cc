@@ -23,7 +23,7 @@
 
 #include <climits>              // for INT_MAX
 #include <cmath>                // for ceil, isfinite
-#include <cstdlib>              // for abs, strtod
+#include <cstdlib>              // for abs
 #include <optional>             // for optional
 
 #include <QString>              // for QString
@@ -84,13 +84,13 @@ void InterpolateFilter::process_rte(route_head* rte)
 
       // How many points need to be inserted?
       double npts = 0;
-      if (opt_time != nullptr) {
+      if (opt_time) {
         if (!timespan.has_value()) {
           fatal(FatalMsg() << MYNAME ": points must have valid times to interpolate by time!");
         }
         // interpolate even if time is running backwards.
         npts = std::abs(*timespan) / max_time_step;
-      } else if (opt_dist != nullptr) {
+      } else if (opt_dist) {
         double distspan = radtometers(gcdist(pos1, wpt->position()));
         npts = distspan / max_dist_step;
       }
@@ -142,16 +142,16 @@ void InterpolateFilter::process_rte(route_head* rte)
 
 void InterpolateFilter::init()
 {
-  if ((opt_time != nullptr) && (opt_dist != nullptr)) {
+  if (opt_time && opt_dist) {
     fatal(FatalMsg() << MYNAME ": Can't interpolate on both time and distance.");
-  } else if ((opt_time != nullptr) && opt_route) {
+  } else if (opt_time && opt_route) {
     fatal(FatalMsg() << MYNAME ": Can't interpolate routes on time.");
-  } else if (opt_time != nullptr) {
-    max_time_step = 1000 * strtod(opt_time, nullptr); // milliseconds
+  } else if (opt_time) {
+    max_time_step = 1000 * opt_time.get_result(); // milliseconds
     if (max_time_step <= 0) {
       fatal(FatalMsg() << MYNAME ": interpolation time should be positive!");
     }
-  } else if (opt_dist != nullptr) {
+  } else if (opt_dist) {
     if (parse_distance(opt_dist, &max_dist_step, kMetersPerMile, MYNAME) == 0) {
       fatal(FatalMsg() << MYNAME ": no distance specified with distance option!");
     }

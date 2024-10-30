@@ -40,7 +40,7 @@
 #include "format.h"               // for Format
 #include "garmin_fs.h"            // for garmin_fs_t
 #include "mkshort.h"              // for MakeShort
-#include "option.h"               // for OptionCString, OptionBool
+#include "option.h"               // for OptionString, OptionBool
 #include "src/core/datetime.h"    // for DateTime
 #include "src/core/textstream.h"  // for TextStream
 
@@ -371,15 +371,15 @@ private:
   const route_head* csv_track = nullptr;
   const route_head* csv_route = nullptr;
 
-  OptionCString styleopt;
-  OptionCString snlenopt;
+  OptionString styleopt;
+  OptionInt snlenopt;
   OptionBool snwhiteopt;
   OptionBool snupperopt;
   OptionBool snuniqueopt;
   OptionBool prefer_shortnames;
-  OptionCString xcsv_urlbase;
-  OptionCString opt_datum;
-  OptionCString opt_utc;
+  OptionString xcsv_urlbase;
+  OptionString opt_datum;
+  OptionInt opt_utc;
   int utc_offset{};
 
   QString intstylefile;

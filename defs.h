@@ -866,8 +866,18 @@ extern posn_status tracking_status;
  * for "groups" of exactly one option. */
 #define ARGTYPE_BEGIN_REQ  0x04000000U
 #define ARGTYPE_END_REQ    0x02000000U
+/* For integer conversions specify the base to allow strict error checking and
+ * proper conversion in Vecs */
+#define ARGTYPE_BASE_10   0x00000000U
+#define ARGTYPE_BASE_AUTO 0x00100000U
+#define ARGTYPE_BASE_16   0x00200000U
+
+/* For integer and double conversions is trailing data allowed?
+ * This allows strict error checking in Vecs */
+#define ARGTYPE_ALLOW_TRAILING_DATA 0x00400000U
 
 #define ARGTYPE_TYPEMASK 0x00000fffU
+#define ARGTYPE_BASEMASK 0x00300000U
 #define ARGTYPE_FLAGMASK 0xfffff000U
 
 #define ARG_NOMINMAX nullptr, nullptr
@@ -1025,13 +1035,13 @@ int xstrtoi(const char* str, char** str_end, int base);
 /*
  *  From parse.c
  */
+int parse_integer(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr, int base = 10);
+double parse_double(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr);
 int parse_coordinates(const char* str, int datum, grid_type grid,
                       double* latitude, double* longitude, const char* module);
 int parse_coordinates(const QString& str, int datum, grid_type grid,
                       double* latitude, double* longitude, const char* module);
-int parse_distance(const char* str, double* val, double scale, const char* module);
 int parse_distance(const QString& str, double* val, double scale, const char* module);
-int parse_speed(const char* str, double* val, double scale, const char* module);
 int parse_speed(const QString& str, double* val, double scale, const char* module);
 
 /*

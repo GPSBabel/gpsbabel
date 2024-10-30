@@ -21,13 +21,12 @@
 
 #include "radius.h"
 
-#include <cstdlib>          // for strtod
 #include <utility>          // for as_const
 
 #include <QString>          // for QString
 #include <QtGlobal>         // QAddConst<>::Type, foreach
 
-#include "defs.h"           // for Waypoint, del_marked_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, xstrtoi, route_head, WaypointList, kMilesPerKilometer
+#include "defs.h"           // for Waypoint, del_marked_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, route_head, WaypointList, kMilesPerKilometer
 #include "grtcirc.h"         // for gcdist, radtomiles
 
 
@@ -60,7 +59,7 @@ void RadiusFilter::process()
   }
 
   route_head* rte_head = nullptr;
-  if (routename != nullptr) {
+  if (routename) {
     rte_head = new route_head;
     rte_head->rte_name = routename;
     route_add_head(rte_head);
@@ -80,10 +79,10 @@ void RadiusFilter::process()
     delete static_cast<extra_data*>(wp->extra_data);
     wp->extra_data = nullptr;
 
-    if ((maxctarg != nullptr) && (i >= maxct)) {
+    if (maxctarg && (i >= maxct)) {
       delete wp;
     } else {
-      if (routename != nullptr) {
+      if (routename) {
         route_add_wpt(rte_head, wp);
       } else {
         waypt_add(wp);
@@ -97,25 +96,25 @@ void RadiusFilter::init()
 {
   pos_dist = 0;
 
-  if (distopt != nullptr) {
+  if (distopt) {
     if (parse_distance(distopt, &pos_dist, kMetersPerMile, MYNAME) == 0) {
       fatal(MYNAME ": No distance specified with distance option.\n");
     }
   }
 
-  if (maxctarg != nullptr) {
-    maxct = xstrtoi(maxctarg, nullptr, 10);
+  if (maxctarg) {
+    maxct = maxctarg.get_result();
   } else {
     maxct = 0;
   }
 
   home_pos = new Waypoint;
 
-  if (latopt != nullptr) {
-    home_pos->latitude = strtod(latopt, nullptr);
+  if (latopt) {
+    home_pos->latitude = latopt.get_result();
   }
-  if (lonopt != nullptr) {
-    home_pos->longitude = strtod(lonopt, nullptr);
+  if (lonopt) {
+    home_pos->longitude = lonopt.get_result();
   }
 }
 
