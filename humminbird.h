@@ -172,8 +172,7 @@ private:
 
   /* Data Members */
 
-  QVector<arglist_t> humminbird_args = {
-  };
+  QVector<arglist_t> humminbird_args;
 };
 
 class HumminbirdHTFormat : public Format, private HumminbirdBase
@@ -214,8 +213,7 @@ private:
 
   /* Data Members */
 
-  QVector<arglist_t> humminbirdht_args = {
-  };
+  QVector<arglist_t> humminbirdht_args;
 };
 
 #endif // HUMMINBIRD_H_INCLUDED_
