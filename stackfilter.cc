@@ -107,7 +107,7 @@ void StackFilter::init()
   }
 
   if (opt_depth) {
-    swapdepth = xstrtoi(opt_depth, nullptr, 10);
+    swapdepth = opt_depth.get_result();
   }
   if (opt_push) {
     if (opt_pop || opt_append || opt_discard || opt_replace ||

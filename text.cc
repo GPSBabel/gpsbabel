@@ -22,6 +22,8 @@
 #include "text.h"
 
 #include <QIODevice>               // for QIODevice, QIODevice::WriteOnly
+#include <QRegularExpression>      // for QRegularExpression
+#include <QRegularExpressionMatch> // for QRegularExpressionMatch
 #include <QString>                 // for QString, operator!=
 #include <QTextStream>             // for QTextStream
 #include <Qt>                      // for CaseInsensitive
@@ -49,6 +51,23 @@ TextFormat::wr_init(const QString& fname)
     file_out->open(fname, QIODevice::WriteOnly, MYNAME);
   }
   mkshort_handle = new MakeShort;
+
+  static const QRegularExpression re("^(?:ddd|dmm|dms)$");
+  assert(re.isValid());
+  if (re.match(opt_degformat).hasMatch()) {
+    degformat = opt_degformat.get().at(2).toLatin1();
+  } else {
+    fatal(MYNAME ": Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", qPrintable(opt_degformat));
+  }
+
+  if (opt_altunits.get().startsWith('f')) {
+    altunits = 'f';
+  } else if (opt_altunits.get().startsWith('m')) {
+    altunits = 'm';
+  } else {
+    fatal(MYNAME ": Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", qPrintable(opt_altunits));
+  }
+
 }
 
 void
@@ -84,13 +103,13 @@ TextFormat::text_disp(const Waypoint* wpt)
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
   QString position = QStringLiteral("%1 (%2%3 %4 %5)")
-                     .arg(pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", false))
+                     .arg(pretty_deg_format(wpt->latitude, wpt->longitude, degformat, " ", false))
                      .arg(utmz)
                      .arg(utmzc)
                      .arg(utme, 6, 'f', 0)
                      .arg(utmn, 7, 'f', 0);
   if (wpt->altitude != unknown_alt) {
-    position += QStringLiteral(" alt:%1").arg((int)((altunits[0]=='f') ? METERS_TO_FEET(wpt->altitude) : wpt->altitude));
+    position += QStringLiteral(" alt:%1").arg((int)((altunits == 'f') ? METERS_TO_FEET(wpt->altitude) : wpt->altitude));
   }
   QString sn = global_opts.synthesize_shortnames ? mkshort_handle->mkshort_from_wpt(wpt) : wpt->shortname;
   *file_out << sn.leftJustified(16) << "  " <<  position.rightJustified(59) << "\n";
@@ -156,7 +175,7 @@ TextFormat::text_disp(const Waypoint* wpt)
         if (logpart) {
           double lat = logpart->xml_attribute("lat").toDouble();
           double lon = logpart->xml_attribute("lon").toDouble();
-          *file_out << pretty_deg_format(lat, lon, degformat[2], " ", false) << "\n";
+          *file_out << pretty_deg_format(lat, lon, degformat, " ", false) << "\n";
         }
 
         logpart = curlog->xml_findfirst(u"groundspeak:text");

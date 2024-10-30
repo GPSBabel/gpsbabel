@@ -65,7 +65,7 @@
 
 #include "defs.h"
 #include "filter.h"  // for Filter
-#include "option.h"  // for OptionBool, OptionCString
+#include "option.h"  // for OptionBool, OptionString
 
 
 #if FILTERS_ENABLED
@@ -119,8 +119,8 @@ private:
   limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
 
-  OptionCString countopt;
-  OptionCString erroropt;
+  OptionInt countopt;
+  OptionDouble erroropt;
   OptionBool xteopt;
   OptionBool lenopt;
   OptionBool relopt;
@@ -132,7 +132,7 @@ private:
     },
     {
       "error", &erroropt, "Maximum error", nullptr,
-      ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
+       ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
     },
     {
       "crosstrack", &xteopt, "Use cross-track error (default)", nullptr,

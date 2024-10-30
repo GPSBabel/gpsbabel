@@ -32,7 +32,7 @@
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
 #include "mkshort.h"  // for MakeShort
-#include "option.h"   // for OptionCString
+#include "option.h"   // for OptionString
 
 
 class TpgFormat : public Format
@@ -74,7 +74,7 @@ private:
   gbfile* tpg_file_in{};
   gbfile* tpg_file_out{};
   MakeShort* mkshort_handle{};
-  OptionCString tpg_datum_opt;
+  OptionString tpg_datum_opt;
   int tpg_datum_idx{};
 
   int waypt_out_count{};

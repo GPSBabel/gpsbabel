@@ -79,7 +79,7 @@ GtrnctrFormat::wr_init(const QString& fname)
 
   if (opt_sport) {
     for (unsigned int i = 0; i < std::size(gtc_sportlist); i++) {
-      if (0 == case_ignore_strncmp(opt_sport.get(), gtc_sportlist[i], 2)) {
+      if (0 == case_ignore_strncmp(opt_sport, gtc_sportlist[i], 2)) {
         gtc_sport = i;
         break;
       }

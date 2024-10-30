@@ -28,7 +28,7 @@
 
 #include "defs.h"    // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
 #include "filter.h"  // for Filter
-#include "option.h"  // for OptionCString, OptionBool
+#include "option.h"  // for OptionString, OptionBool
 
 #if FILTERS_ENABLED
 
@@ -49,9 +49,9 @@ private:
 
   /* Data Members */
 
-  OptionCString opt_time;
+  OptionDouble opt_time;
   double max_time_step{0};
-  OptionCString opt_dist;
+  OptionDouble opt_dist;
   double max_dist_step{0};
   OptionBool opt_route;
 
@@ -63,7 +63,7 @@ private:
     },
     {
       "distance", &opt_dist, "Distance interval",
-      nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
+      nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING,
       ARG_NOMINMAX, nullptr
     },
     {

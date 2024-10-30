@@ -25,12 +25,6 @@
 class Option /* Abstract Class */
 {
 public:
-  /* Types */
-  enum option_t {
-    type_cstring,
-    type_boolean,
-  };
-
   /* Special Member Functions */
   Option() = default;
   // Provide virtual public destructor to avoid undefined behavior when
@@ -47,19 +41,21 @@ public:
   Option& operator=(Option&&) = delete;
 
   /* Member Functions */
-  [[nodiscard]] virtual option_t type() const = 0;
   [[nodiscard]] virtual bool has_value() const = 0;
   virtual void reset() = 0;
   [[nodiscard]] virtual bool isEmpty() const = 0;
   [[nodiscard]] virtual const QString& get() const = 0;
   virtual void set(const QString& s) = 0;
+  virtual void set_id(const QString& id)
+  {
+  }
 
   /* Data Members */
   // I.25: Prefer empty abstract classes as interfaces to class hierarchies
   // https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i25-prefer-empty-abstract-classes-as-interfaces-to-class-hierarchies
 };
 
-class OptionCString : public Option
+class [[deprecated]] OptionCString : public Option
 {
 public:
   /* Special Member Functions */
@@ -74,11 +70,6 @@ public:
   explicit(false) operator const char* () const
   {
     return value_.isNull()? nullptr : valueb_.constData();
-  }
-
-  [[nodiscard]] option_t type() const override
-  {
-    return type_cstring;
   }
 
   [[nodiscard]] bool has_value() const override
@@ -118,21 +109,211 @@ private:
   QByteArray valueb_;
 };
 
+class OptionString : public Option
+{
+public:
+  /* Special Member Functions */
+  OptionString() = default;
+
+  explicit(false) operator const QString& () const
+  {
+    return value_;
+  }
+
+  explicit(false) operator bool () const
+  {
+    return !value_.isNull();
+  }
+
+  [[nodiscard]] bool has_value() const override
+  {
+    return !value_.isNull();
+  }
+
+  void reset() override
+  {
+    value_ = QString();
+  }
+
+  [[nodiscard]] bool isEmpty() const override
+  {
+    return value_.isEmpty();
+  }
+
+  [[nodiscard]] const QString& get() const override
+  {
+    return value_;
+  }
+
+  void set(const QString& s) override
+  {
+    value_ = s;
+  }
+
+  void set_id(const QString& id) override
+  {
+    id_ = id;
+  }
+
+// We use overloads instead of default parameters to enable tool visibility into different usages.
+  int toInt() const;
+  int toInt(bool* ok) const;
+  int toInt(bool* ok, QString* end, int base) const;
+  double toDouble() const;
+  double toDouble(bool* ok) const;
+  double toDouble(bool* ok, QString* end) const;
+
+private:
+  QString value_;
+  QString id_;
+};
+
+class OptionInt : public Option
+{
+public:
+  /* Special Member Functions */
+  OptionInt() = default;
+
+  explicit(false) operator const QString& () const
+  {
+    return value_;
+  }
+
+  explicit(false) operator bool () const
+  {
+    return !value_.isNull();
+  }
+
+  [[nodiscard]] bool has_value() const override
+  {
+    return !value_.isNull();
+  }
+
+  void reset() override
+  {
+    value_ = QString();
+    result_ = 0;
+    end_ = QString();
+  }
+
+  [[nodiscard]] bool isEmpty() const override
+  {
+    return value_.isEmpty();
+  }
+
+  [[nodiscard]] const QString& get() const override
+  {
+    return value_;
+  }
+
+  void set(const QString& s) override
+  {
+    value_ = s;
+  }
+
+  void set_id(const QString& id) override
+  {
+    id_ = id;
+  }
+
+  void set_result(int result, const QString& end)
+  {
+    result_ = result;
+    end_ = end;
+  }
+
+  int get_result(QString* end = nullptr) const {
+    if (end != nullptr) {
+      *end = end_;
+    }
+    return result_;
+  }
+
+private:
+  QString value_;
+  QString id_;
+  int result_{};
+  QString end_;
+};
+
+class OptionDouble : public Option
+{
+public:
+  /* Special Member Functions */
+  OptionDouble() = default;
+
+  explicit(false) operator const QString& () const
+  {
+    return value_;
+  }
+
+  explicit(false) operator bool () const
+  {
+    return !value_.isNull();
+  }
+
+  [[nodiscard]] bool has_value() const override
+  {
+    return !value_.isNull();
+  }
+
+  void reset() override
+  {
+    value_ = QString();
+    result_ = 0.0;
+    end_ = QString();
+  }
+
+  [[nodiscard]] bool isEmpty() const override
+  {
+    return value_.isEmpty();
+  }
+
+  [[nodiscard]] const QString& get() const override
+  {
+    return value_;
+  }
+
+  void set(const QString& s) override
+  {
+    value_ = s;
+  }
+
+  void set_id(const QString& id) override
+  {
+    id_ = id;
+  }
+
+  void set_result(double result, const QString& end)
+  {
+    result_ = result;
+    end_ = end;
+  }
+
+  double get_result(QString* end = nullptr) const {
+    if (end != nullptr) {
+      *end = end_;
+    }
+    return result_;
+  }
+
+private:
+  QString value_;
+  QString id_;
+  double result_{};
+  QString end_;
+};
+
 class OptionBool : public Option
 {
 public:
   /* Special Member Functions */
   OptionBool() = default;
 
-  /* Traditionally unsupplied bool options without default are considered to be false. */
+  /* Traditionally un-supplied bool options without default are considered to be false. */
   explicit(false) operator bool() const
   {
     return (!value_.isNull() && (value_ != '0'));
-  }
-
-  [[nodiscard]] option_t type() const override
-  {
-    return type_boolean;
   }
 
   /* Note that has_value can be used to distinguish an option that wasn't supplied

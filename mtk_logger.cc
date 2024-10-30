@@ -54,6 +54,7 @@
 
 #include "mtk_logger.h"
 
+#include <algorithm>            // for clamp
 #include <cctype>               // for isdigit
 #include <cstdarg>              // for va_end, va_start
 #include <cstring>              // for memcmp, memset, strncmp, strlen, memmove, strchr, strcpy, strerror, strstr
@@ -72,9 +73,9 @@
 #include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
 #include <QThread>              // for QThread
 #include <QtCore>               // for qPrintable, UTC
-#include <cerrno>               // for errno, ERANGE
+#include <cerrno>               // for errno
 #include <cmath>                // for fabs
-#include <cstdlib>              // for strtoul, strtol
+#include <cstdlib>              // for strtoul
 
 #include "defs.h"
 #include "gbfile.h"             // for gbfprintf, gbfputc, gbfputs, gbfclose, gbfopen, gbfile
@@ -427,12 +428,7 @@ void MtkLoggerBase::mtk_read()
 
   unsigned int scan_step = 0x10000;
   unsigned int scan_bsize = 0x0400;
-  unsigned int read_bsize_kb = strtol(OPT_block_size_kb, nullptr, 10);
-  if (errno == ERANGE || read_bsize_kb < 1) {
-    read_bsize_kb = 1;
-  } else if (read_bsize_kb > 64) {
-    read_bsize_kb = 64;
-  }
+  unsigned int read_bsize_kb = std::clamp(OPT_block_size_kb.get_result(), 1, 64);
   unsigned int read_bsize = read_bsize_kb * 1024;
   dbg(2, "Download block size is %d bytes\n", read_bsize);
   if (init_scan) {
@@ -733,21 +729,21 @@ int MtkLoggerBase::add_trackpoint(int idx, unsigned long bmask, data_item* itm)
 
 
 /********************** MTK Logger -- CSV output *************************/
-void MtkLoggerBase::mtk_csv_init(const char* csv_fname, unsigned long bitmask)
+void MtkLoggerBase::mtk_csv_init(const QString& csv_fname, unsigned long bitmask)
 {
   FILE* cf;
 
-  dbg(1, "Opening csv output file %s...\n", csv_fname);
+  dbg(1, "Opening csv output file %s...\n", qPrintable(csv_fname));
 
   // can't use gbfopen here - it will fatal() if file doesn't exist
-  if ((cf = ufopen(QString::fromUtf8(csv_fname), "r")) != nullptr) {
+  if ((cf = ufopen(csv_fname, "r")) != nullptr) {
     fclose(cf);
-    warning(MYNAME ": CSV file %s already exist ! Cowardly refusing to overwrite.\n", csv_fname);
+    warning(MYNAME ": CSV file %s already exist ! Cowardly refusing to overwrite.\n", qPrintable(csv_fname));
     return;
   }
 
   if ((cd = gbfopen(csv_fname, "w", MYNAME)) == nullptr) {
-    fatal(MYNAME ": Can't open csv file '%s'\n", csv_fname);
+    fatal(MYNAME ": Can't open csv file '%s'\n", qPrintable(csv_fname));
   }
 
   /* Add the header line */
@@ -1396,8 +1392,8 @@ void MtkLoggerBase::file_read()
 
   mtk_info.logLen = mtk_log_len(mtk_info.bitmask);
   dbg(3, "Log item size %d bytes\n", mtk_info.logLen);
-  if (csv_file && *csv_file) {
-    mtk_csv_init(static_cast<const char*>(csv_file), mtk_info.bitmask);
+  if (!csv_file.isEmpty()) {
+    mtk_csv_init(csv_file, mtk_info.bitmask);
   }
 
   while (pos < fsize && (bLen = fread(&buf[j], 1, sizeof(buf)-j, fl)) > 0) {

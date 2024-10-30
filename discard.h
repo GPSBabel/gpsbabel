@@ -29,7 +29,7 @@
 
 #include "defs.h"              // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_STRING, ARGTYPE_BOOL, ARGTYPE_INT, ARGTYPE_FLOAT, route_head, ARGTYPE_END_REQ, Waypoint, gpsdata_type
 #include "filter.h"            // for Filter
-#include "option.h"            // for OptionCString, OptionBool
+#include "option.h"            // for OptionString, OptionBool
 
 #if FILTERS_ENABLED
 class DiscardFilter:public Filter
@@ -50,21 +50,21 @@ private:
 
   /* Data Members */
 
-  OptionCString hdopopt;
-  OptionCString vdopopt;
+  OptionDouble hdopopt;
+  OptionDouble vdopopt;
   OptionBool andopt;
-  OptionCString satopt;
+  OptionInt satopt;
   OptionBool fixnoneopt;
   OptionBool fixunknownopt;
-  OptionCString eleminopt;
-  OptionCString elemaxopt;
-  OptionCString nameopt;
+  OptionInt eleminopt;
+  OptionInt elemaxopt;
+  OptionString nameopt;
   QRegularExpression name_regex;
-  OptionCString descopt;
+  OptionString descopt;
   QRegularExpression desc_regex;
-  OptionCString cmtopt;
+  OptionString cmtopt;
   QRegularExpression cmt_regex;
-  OptionCString iconopt;
+  OptionString iconopt;
   QRegularExpression icon_regex;
 
   double hdopf{};
@@ -88,7 +88,7 @@ private:
     },
     {
       "sat", &satopt, "Minimum sats to keep points",
-      "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
+      "-1", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
     },
     {
       "fixnone", &fixnoneopt, "Suppress points without fix",

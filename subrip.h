@@ -31,7 +31,7 @@
 #include "defs.h"
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
-#include "option.h"   // for OptionCString
+#include "option.h"   // for OptionString
 
 
 class SubripFormat : public Format
@@ -65,10 +65,10 @@ private:
 
   /* Data Members */
 
-  OptionCString opt_videotime;
-  OptionCString opt_gpstime;
-  OptionCString opt_gpsdate;
-  OptionCString opt_format;
+  OptionString opt_videotime;
+  OptionString opt_gpstime;
+  OptionString opt_gpsdate;
+  OptionString opt_format;
   QDateTime gps_datetime;    // Date time corresponding to video video_offset_ms
   QDateTime video_datetime;  // Date time corresponding to video time 00:00:00,000.
   int video_offset_ms{0};

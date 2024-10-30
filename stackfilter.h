@@ -28,7 +28,7 @@
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, ARGTYPE_BEGIN_EXCL
 #include "filter.h"  // for Filter
-#include "option.h"  // for OptionBool, OptionCString
+#include "option.h"  // for OptionBool, OptionString
 
 #if FILTERS_ENABLED
 
@@ -52,7 +52,7 @@ private:
   OptionBool opt_discard;
   OptionBool opt_replace;
   OptionBool opt_swap;
-  OptionCString opt_depth;
+  OptionInt opt_depth;
   OptionBool nowarn;
   int  warnings_enabled = 1;
   int  swapdepth = 0;

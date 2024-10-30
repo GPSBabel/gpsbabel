@@ -36,11 +36,10 @@
 
 #include <cmath>                    // for fabs
 #include <cstdio>                   // for printf, SEEK_SET
-#include <cstdlib>                  // for strtol
 #include <cstring>                  // for memset, strstr, strcmp
 #include <iterator>                 // for next
 
-#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, xstrtoi, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
+#include "defs.h"                   // for Waypoint, warning, route_head, fatal, UrlLink, bounds, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
 #include "formspec.h"               // for FormatSpecificDataList
 #include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t
 #include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
@@ -1635,8 +1634,8 @@ GdbFormat::wr_init(const QString& fname)
   fout = gbfopen_le(fname, "wb", MYNAME);
   ftmp = gbfopen_le(nullptr, "wb", MYNAME);
 
-  gdb_category = (gdb_opt_category) ? xstrtoi(gdb_opt_category, nullptr, 10) : 0;
-  gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? xstrtoi(gdb_opt_ver, nullptr, 10) : 0;
+  gdb_category = gdb_opt_category ? gdb_opt_category.get_result() : 0;
+  gdb_ver = gdb_opt_ver.get_result();
 
   if (gdb_category) {
     if ((gdb_category < 1) || (gdb_category > 16)) {
@@ -1646,7 +1645,7 @@ GdbFormat::wr_init(const QString& fname)
   }
 
   if (gdb_opt_bitcategory) {
-    gdb_category = strtol(gdb_opt_bitcategory, nullptr, 0);
+    gdb_category = gdb_opt_bitcategory.get_result();
   }
 
   waypt_nameposn_out_hash.clear();
@@ -1674,9 +1673,6 @@ GdbFormat::wr_deinit()
 void
 GdbFormat::write()
 {
-  if (gdb_opt_ver) {
-    gdb_ver = xstrtoi(gdb_opt_ver, nullptr, 10);
-  }
   write_header();
 
   reset_short_handle("WPT");
