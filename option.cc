@@ -52,3 +52,66 @@ double OptionString::toDouble(bool* ok, QString* end) const
 {
   return parse_double(value_, id_, ok, end);
 }
+
+void OptionInt::init(const QString& id, bool allow_trailing_data, int base)
+{
+  id_ = id;
+  base_ = base;
+  allow_trailing_data_ = allow_trailing_data;
+}
+
+void OptionInt::reset()
+{
+  value_ = QString();
+  result_ = 0;
+  end_ = QString();
+}
+
+void OptionInt::set(const QString& s)
+{
+  value_ = s;
+
+  // Fatal on conversion error.
+  QString* endp = allow_trailing_data_? &end_: nullptr;
+  constexpr bool* dieonerror = nullptr;
+  result_ = parse_integer(value_, id_, dieonerror, endp, base_);
+}
+
+int OptionInt::get_result(QString* end) const
+{
+  if (end != nullptr) {
+    *end = end_;
+  }
+  return result_;
+}
+
+void OptionDouble::init(const QString& id, bool allow_trailing_data, int /* base */)
+{
+  id_ = id;
+  allow_trailing_data_ = allow_trailing_data;
+}
+
+void OptionDouble::reset()
+{
+  value_ = QString();
+  result_ = 0.0;
+  end_ = QString();
+}
+
+void OptionDouble::set(const QString& s)
+{
+  value_ = s;
+
+  // Fatal on conversion error.
+  QString* endp = allow_trailing_data_? &end_: nullptr;
+  constexpr bool* dieonerror = nullptr;
+  result_ = parse_double(value_, id_, dieonerror, endp);
+}
+
+double OptionDouble::get_result(QString* end) const
+{
+  if (end != nullptr) {
+    *end = end_;
+  }
+  return result_;
+}

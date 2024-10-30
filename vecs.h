@@ -146,9 +146,7 @@ private:
   static int integer_base(uint32_t argtype);
   static bool trailing_data_allowed(uint32_t argtype);
   static bool is_integer(const QString& val, const QString& id, uint32_t argtype);
-  static int convert_integer(const QString& val, const QString& id, QString* end, int base);
   static bool is_float(const QString& val, const QString& id, uint32_t argtype);
-  static double convert_float(const QString& val, const QString& id, QString* end);
   static bool is_bool(const QString& val);
   static QVector<style_vec_t> create_style_vec();
   QVector<vecinfo_t> sort_and_unify_vecs() const;
