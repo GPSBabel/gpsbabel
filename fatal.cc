@@ -20,8 +20,12 @@
  */
 
 #include <cstdarg>             // for va_end, va_list, va_start
-#include <cstdio>              // for vfprintf, stderr, fflush, fprintf, stdout
+#include <cstdio>              // for fflush, stdout
 #include <cstdlib>             // for exit
+
+#include <QDebug>              // for QDebug
+#include <QString>             // for QString
+#include <QtGlobal>            // for qDebug
 
 #include "defs.h"              // for Fatal, debug_print, fatal, warning
 #include "src/core/logging.h"  // for FatalMsg
@@ -43,8 +47,9 @@ fatal(const char* fmt, ...)
 
   va_list ap;
   va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
+  QString msg = QString::vasprintf(fmt, ap);
   va_end(ap);
+  qDebug().noquote() << msg;
   exit(1);
 }
 
@@ -53,6 +58,7 @@ warning(const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
+  QString msg = QString::vasprintf(fmt, ap);
   va_end(ap);
+  qDebug().noquote() << msg;
 }

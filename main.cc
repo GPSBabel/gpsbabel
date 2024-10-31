@@ -24,6 +24,7 @@
 #include <cstring>                    // for strcmp
 
 #include <QCoreApplication>           // for QCoreApplication
+#include <QDateTime>                  // for QDateTime
 #include <QElapsedTimer>              // for QElapsedTimer
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
@@ -54,6 +55,7 @@
 #include "session.h"                  // for start_session, session_exit, session_init
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/file.h"            // for File
+#include "src/core/logging.h"         // for Warning
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
 
@@ -193,11 +195,22 @@ print_extended_info()
     "\n");
 }
 
-static void MessageHandler(QtMsgType /* type */, const QMessageLogContext& /* context */, const QString& msg)
+static void setMessagePattern(const QString& id = QString())
 {
+  if (id.isEmpty()) {
+    setMessagePattern("%{if-category}%{category}: %{endif}%{message}");
+  } else {
+    qSetMessagePattern(QStringLiteral("%{if-category}%{category}: %{endif}%1: %{message}").arg(id));
+  }
+}
+
+static void MessageHandler(QtMsgType  type, const QMessageLogContext& context, const QString& msg)
+{
+  QString message = qFormatLogMessage(type, context, msg);
   /* flush any buffered standard output */
   fflush(stdout);
-  fprintf(stderr, "%s\n", qPrintable(msg));
+  fprintf(stderr, "%s\n", qPrintable(message));
+  fflush(stderr);
 }
 
 static void
@@ -243,6 +256,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     timer.start();
   }
   start_session(ivecs.fmtname, fname);
+  setMessagePattern(ivecs.fmtname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
     Vecs::init_vec(ivecs.fmt, ivecs.fmtname);
@@ -263,6 +277,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     ivecs->read();
     ivecs->rd_deinit();
   }
+  setMessagePattern();
   if (global_opts.debug_level > 0)  {
     Warning().noquote() << QStringLiteral("%1: reader %2 took %3 seconds.")
                         .arg(MYNAME, ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
@@ -275,6 +290,7 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
   if (global_opts.debug_level > 0)  {
     timer.start();
   }
+  setMessagePattern(ovecs.fmtname);
   if (ovecs.isDynamic()) {
     ovecs.fmt = ovecs.factory(ofname);
     Vecs::init_vec(ovecs.fmt, ovecs.fmtname);
@@ -295,6 +311,7 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
     ovecs->write();
     ovecs->wr_deinit();
   }
+  setMessagePattern();
   if (global_opts.debug_level > 0)  {
     Warning().noquote() << QStringLiteral("%1: writer %2 took %3 seconds.")
                         .arg(MYNAME, ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
@@ -460,6 +477,7 @@ run(const char* prog_name)
         if (global_opts.debug_level > 0)  {
           timer.start();
         }
+        setMessagePattern(filter.fltname);
         if (filter.isDynamic()) {
           filter.flt = filter.factory();
           FilterVecs::init_filter_vec(filter.flt, filter.fltname);
@@ -480,6 +498,7 @@ run(const char* prog_name)
           filter->deinit();
           FilterVecs::free_filter_vec(filter.flt);
         }
+        setMessagePattern();
         if (global_opts.debug_level > 0)  {
           Warning().noquote() << QStringLiteral("%1: filter %2 took %3 seconds.")
                               .arg(MYNAME, filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
@@ -649,17 +668,23 @@ run(const char* prog_name)
     }
 
     if (ivecs.isDynamic()) {
+      setMessagePattern(ivecs.fmtname);
       ivecs.fmt = ivecs.factory(fname);
       Vecs::init_vec(ivecs.fmt, ivecs.fmtname);
+      setMessagePattern();
     }
     if (ovecs && ovecs.isDynamic()) {
+      setMessagePattern(ovecs.fmtname);
       ovecs.fmt = ovecs.factory(ofname);
       Vecs::init_vec(ovecs.fmt, ovecs.fmtname);
+      setMessagePattern();
     }
 
     start_session(ivecs.fmtname, fname);
+    setMessagePattern(ivecs.fmtname);
     Vecs::prepare_format(ivecs);
     ivecs->rd_position_init(fname);
+    setMessagePattern();
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
       fatal("Realtime tracking (-T) is exclusive of other modes.\n");
@@ -670,19 +695,24 @@ run(const char* prog_name)
     }
 
     if (ovecs) {
+      setMessagePattern(ovecs.fmtname);
       Vecs::prepare_format(ovecs);
       ovecs->wr_position_init(ofname);
+      setMessagePattern();
     }
 
     tracking_status.request_terminate = 0;
     while (!tracking_status.request_terminate) {
+      setMessagePattern(ivecs.fmtname);
       Waypoint* wpt = ivecs->rd_position(&tracking_status);
+      setMessagePattern();
 
       if (tracking_status.request_terminate) {
         delete wpt;
         break;
       }
       if (wpt) {
+        setMessagePattern(ovecs.fmtname);
         if (ovecs) {
 //          ovecs->wr_position_init(ofname);
           ovecs->wr_position(wpt);
@@ -692,13 +722,18 @@ run(const char* prog_name)
           fbOutput.waypt_disp(wpt);
         }
         delete wpt;
+        setMessagePattern();
       }
     }
+    setMessagePattern(ivecs.fmtname);
     Vecs::prepare_format(ivecs);
     ivecs->rd_position_deinit();
+    setMessagePattern();
     if (ovecs) {
+      setMessagePattern(ovecs.fmtname);
       Vecs::prepare_format(ovecs);
       ovecs->wr_position_deinit();
+      setMessagePattern();
     }
 
     if (ovecs && ovecs.isDynamic()) {
@@ -786,6 +821,7 @@ main(int argc, char* argv[])
     }
   }
   qInstallMessageHandler(MessageHandler);
+  setMessagePattern();
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
