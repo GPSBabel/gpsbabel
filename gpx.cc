@@ -1001,7 +1001,7 @@ GpxFormat::wr_init(const QString& fname)
   // normalization makes them null.
   if (gpx_write_version.isNull() || (gpx_write_version < gpx_1_0)) {
     fatal(FatalMsg() << MYNAME ": gpx version number"
-          << gpx_write_version << "not valid.");
+          << gpx_write_version.toString() << "not valid.");
   }
 
   writer->setAutoFormatting(true);
