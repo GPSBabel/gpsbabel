@@ -128,7 +128,7 @@ private:
   OptionBool snwhiteopt;
   OptionString deficon;
   OptionInt categoryopt;
-  OptionInt categorybitsopt;
+  OptionInt categorybitsopt{false, 0};
   OptionInt baudopt;
   OptionString opt_codec;
   int baud = 0;
@@ -171,7 +171,7 @@ private:
     },
     {
       "bitscategory", &categorybitsopt, "Bitmap of categories",
-      nullptr, ARGTYPE_BASE_AUTO | ARGTYPE_INT, "1", "65535", nullptr
+      nullptr, ARGTYPE_INT, "1", "65535", nullptr
     },
     {
       "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",

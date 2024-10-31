@@ -245,7 +245,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
   start_session(ivecs.fmtname, fname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
-    Vecs::init_vec(ivecs.fmt);
+    Vecs::init_vec(ivecs.fmt, ivecs.fmtname);
     Vecs::prepare_format(ivecs);
 
     ivecs->rd_init(fname);
@@ -277,7 +277,7 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
   }
   if (ovecs.isDynamic()) {
     ovecs.fmt = ovecs.factory(ofname);
-    Vecs::init_vec(ovecs.fmt);
+    Vecs::init_vec(ovecs.fmt, ovecs.fmtname);
     Vecs::prepare_format(ovecs);
 
     ovecs->wr_init(ofname);
@@ -462,7 +462,7 @@ run(const char* prog_name)
         }
         if (filter.isDynamic()) {
           filter.flt = filter.factory();
-          FilterVecs::init_filter_vec(filter.flt);
+          FilterVecs::init_filter_vec(filter.flt, filter.fltname);
           FilterVecs::prepare_filter(filter);
 
           filter->init();
@@ -650,11 +650,11 @@ run(const char* prog_name)
 
     if (ivecs.isDynamic()) {
       ivecs.fmt = ivecs.factory(fname);
-      Vecs::init_vec(ivecs.fmt);
+      Vecs::init_vec(ivecs.fmt, ivecs.fmtname);
     }
     if (ovecs && ovecs.isDynamic()) {
       ovecs.fmt = ovecs.factory(ofname);
-      Vecs::init_vec(ovecs.fmt);
+      Vecs::init_vec(ovecs.fmt, ovecs.fmtname);
     }
 
     start_session(ivecs.fmtname, fname);

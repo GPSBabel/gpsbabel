@@ -61,7 +61,7 @@ private:
   /* Data Members */
 
   double pos_dist{};
-  OptionDouble distopt;
+  OptionDouble distopt{true};
   OptionString arcfileopt;
   OptionBool rteopt;
   OptionBool trkopt;
@@ -71,7 +71,7 @@ private:
 
   QVector<arglist_t> args = {
     {
-      "file", &arcfileopt,  "File containing vertices of arc",
+      "file", &arcfileopt, "File containing vertices of arc",
       nullptr, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
     },
     {
@@ -84,7 +84,7 @@ private:
     },
     {
       "distance", &distopt, "Maximum distance from arc",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr, ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "exclude", &exclopt, "Exclude points close to the arc", nullptr,

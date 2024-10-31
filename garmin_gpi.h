@@ -318,8 +318,8 @@ private:
   OptionBool opt_unique;
   OptionBool opt_alerts;
   OptionString opt_units;
-  OptionDouble opt_speed;
-  OptionDouble opt_proximity;
+  OptionDouble opt_speed{true};
+  OptionDouble opt_proximity{true};
   OptionInt opt_sleep;
   OptionString opt_lang;
   OptionString opt_writecodec;
@@ -357,7 +357,7 @@ private:
     },
     {
       "proximity", &opt_proximity, "Default proximity",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+      nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       "sleep", &opt_sleep, "After output job done sleep n second(s)",
@@ -365,7 +365,7 @@ private:
     },
     {
       "speed", &opt_speed, "Default speed",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+      nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       "unique", &opt_unique, "Create unique waypoint names (default = yes)",

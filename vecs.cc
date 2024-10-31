@@ -497,10 +497,10 @@ Vecs& Vecs::Instance()
  * The possibility of detachment is also why the type of element
  * on the list must be default constructable. This is why we have
  * to supply a default for any const members of arglist_t.  Without the
- * default intializer the default constructor would be implicitly deleted.
+ * default initializer the default constructor would be implicitly deleted.
  */
 
-void Vecs::init_vec(Format* fmt)
+void Vecs::init_vec(Format* fmt, const QString& fmtname)
 {
   QVector<arglist_t>* args = fmt->get_args();
   if (args && !args->isEmpty()) {
@@ -508,6 +508,8 @@ void Vecs::init_vec(Format* fmt)
     for (auto& arg : *args) {
       if (arg.argval != nullptr) {
         arg.argval->reset();
+        QString id = QStringLiteral("%1(%2)").arg(fmtname, arg.argstring);
+        arg.argval->init(id);
       }
     }
   }
@@ -517,66 +519,10 @@ void Vecs::init_vecs()
 {
   for (const auto& vec : d_ptr_->vec_list) {
     if (vec.vec != nullptr) {
-      init_vec(vec.vec);
+      init_vec(vec.vec, vec.name);
     }
   }
   style_list = create_style_vec();
-}
-
-int Vecs::integer_base(uint32_t argtype)
-{
-  int base;
-  switch (argtype & ARGTYPE_BASEMASK) {
-  case ARGTYPE_BASE_AUTO:
-    base = 0;
-    break;
-  case ARGTYPE_BASE_16:
-    base = 16;
-    break;
-  case ARGTYPE_BASE_10:
-  default:
-    base = 10;
-  }
-  return base;
-
-}
-
-bool Vecs::trailing_data_allowed(uint32_t argtype)
-{
-  return (argtype & ARGTYPE_ALLOW_TRAILING_DATA) == ARGTYPE_ALLOW_TRAILING_DATA;
-}
-
-bool Vecs::is_integer(const QString& val, const QString& id, uint32_t argtype)
-{
-  bool ok;
-  int base = integer_base(argtype);
-  QString end;
-  QString* endp = trailing_data_allowed(argtype) ? &end : nullptr;
-  (void) parse_integer(val, id, &ok, endp, base);
-  return ok;
-}
-
-int Vecs::convert_integer(const QString& val, const QString& id, QString* end, int base)
-{
-  // Fatal on conversion error
-  constexpr bool* dieonerror = nullptr;
-  return parse_integer(val, id, dieonerror, end, base);
-}
-
-bool Vecs::is_float(const QString& val, const QString& id, uint32_t argtype)
-{
-  bool ok;
-  QString end;
-  QString* endp = trailing_data_allowed(argtype) ? &end : nullptr;
-  (void) parse_double(val, id, &ok, endp);
-  return ok;
-}
-
-double Vecs::convert_float(const QString& val, const QString& id, QString* end)
-{
-  // Fatal on conversion error
-  constexpr bool* dieonerror = nullptr;
-  return parse_double(val, id, dieonerror, end);
 }
 
 bool Vecs::is_bool(const QString& val)
@@ -624,7 +570,6 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   arg.argval->reset();
-  arg.argval->set_id(id);
 
   if (val.isNull()) {
     return;
@@ -632,29 +577,14 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
 
   QString rval(val);
 
-  QString end;
-  QString* endp = trailing_data_allowed(arg.argtype)? &end: nullptr;
-
   if (auto* int_option = dynamic_cast<OptionInt*>(arg.argval); int_option != nullptr) {
-    int result;
     if (val.isEmpty()) {
       rval = '0';
-      result = 0;
-    } else {
-      // will fatal on conversion error
-      result = convert_integer(val, id, endp, integer_base(arg.argtype));
     }
-    int_option->set_result(result, end);
   } else if (auto* double_option = dynamic_cast<OptionDouble*>(arg.argval); double_option != nullptr) {
-    double result;
     if (val.isEmpty()) {
       rval = '0';
-      result = 0.0;
-    } else {
-      // will fatal on conversion error
-      result = convert_float(val, id, endp);
     }
-    double_option->set_result(result, end);
   } else if (auto* bool_option = dynamic_cast<OptionBool*>(arg.argval); bool_option != nullptr) {
     if (val.isEmpty()) {
       rval = '1';
@@ -1131,13 +1061,12 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
     }
 #endif
     for (const auto& arg : *args) {
-      QString id = QStringLiteral("%1(%2)").arg(name, arg.argstring);
       if (arg.argval == nullptr) {
         Warning() << name << "option" << arg.argstring << "does not point to an Option instance.";
         ok = false;
       }
       if (const auto* int_option = dynamic_cast<const OptionInt*>(arg.argval); int_option != nullptr) {
-        if (trailing_data_allowed(arg.argtype)) {
+        if (int_option->trailing_data_allowed()) {
           // GUI QIntValidator will reject input with trailing data.
           if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
             Warning() << name << "OptionInt with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
@@ -1150,20 +1079,20 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           }
         }
 
-        if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue, id, arg.argtype)) {
+        if (!arg.defaultvalue.isNull() && !int_option->isValid(arg.defaultvalue)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
           ok = false;
         }
-        if (!arg.minvalue.isNull() && !is_integer(arg.minvalue, id, arg.argtype)) {
+        if (!arg.minvalue.isNull() && !int_option->isValid(arg.minvalue)) {
           Warning() << name << "Int option" << arg.argstring << "minimum value" << arg.minvalue << "is not an integer.";
           ok = false;
         }
-        if (!arg.maxvalue.isNull() && !is_integer(arg.maxvalue, id, arg.argtype)) {
+        if (!arg.maxvalue.isNull() && !int_option->isValid(arg.maxvalue)) {
           Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
           ok = false;
         }
       } else if (const auto* double_option = dynamic_cast<const OptionDouble*>(arg.argval); double_option != nullptr) {
-        if (trailing_data_allowed(arg.argtype)) {
+        if (double_option->trailing_data_allowed()) {
           // GUI QDoubleValidator will reject input with trailing data.
           if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
             Warning() << name << "OptionDouble with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
@@ -1176,15 +1105,15 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           }
         }
 
-        if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue, id, arg.argtype)) {
+        if (!arg.defaultvalue.isNull() && !double_option->isValid(arg.defaultvalue)) {
           Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
           ok = false;
         }
-        if (!arg.minvalue.isNull() && !is_float(arg.minvalue, id, arg.argtype)) {
+        if (!arg.minvalue.isNull() && !double_option->isValid(arg.minvalue)) {
           Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
           ok = false;
         }
-        if (!arg.maxvalue.isNull() && !is_float(arg.maxvalue, id, arg.argtype)) {
+        if (!arg.maxvalue.isNull() && !double_option->isValid(arg.maxvalue)) {
           Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
           ok = false;
         }
