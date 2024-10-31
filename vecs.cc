@@ -500,7 +500,7 @@ Vecs& Vecs::Instance()
  * default initializer the default constructor would be implicitly deleted.
  */
 
-void Vecs::init_vec(Format* fmt)
+void Vecs::init_vec(Format* fmt, const QString& fmtname)
 {
   QVector<arglist_t>* args = fmt->get_args();
   if (args && !args->isEmpty()) {
@@ -508,6 +508,8 @@ void Vecs::init_vec(Format* fmt)
     for (auto& arg : *args) {
       if (arg.argval != nullptr) {
         arg.argval->reset();
+        QString id = QStringLiteral("%1(%2)").arg(fmtname, arg.argstring);
+        arg.argval->init(id);
       }
     }
   }
@@ -517,7 +519,7 @@ void Vecs::init_vecs()
 {
   for (const auto& vec : d_ptr_->vec_list) {
     if (vec.vec != nullptr) {
-      init_vec(vec.vec);
+      init_vec(vec.vec, vec.name);
     }
   }
   style_list = create_style_vec();
@@ -568,7 +570,6 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   arg.argval->reset();
-  arg.argval->init(id);
 
   if (val.isNull()) {
     return;
@@ -1060,7 +1061,6 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
     }
 #endif
     for (const auto& arg : *args) {
-      QString id = QStringLiteral("%1(%2)").arg(name, arg.argstring);
       if (arg.argval == nullptr) {
         Warning() << name << "option" << arg.argstring << "does not point to an Option instance.";
         ok = false;
