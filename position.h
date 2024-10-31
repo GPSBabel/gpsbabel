@@ -64,7 +64,7 @@ private:
 
   double pos_dist{};
   qint64 max_diff_time{};
-  OptionDouble distopt;
+  OptionDouble distopt{true};
   OptionDouble timeopt;
   OptionBool purge_duplicates;
   bool check_time{};
@@ -72,7 +72,7 @@ private:
   QVector<arglist_t> args = {
     {
       "distance", &distopt, "Maximum positional distance",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr, ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "all", &purge_duplicates,

@@ -55,7 +55,7 @@ private:
   /* Data Members */
 
   double pos_dist{};
-  OptionDouble distopt;
+  OptionDouble distopt{true};
   OptionDouble latopt;
   OptionDouble lonopt;
   OptionBool exclopt;
@@ -68,23 +68,23 @@ private:
 
   QVector<arglist_t> args = {
     {
-      "lat", &latopt,       "Latitude for center point (D.DDDDD)",
+      "lat", &latopt, "Latitude for center point (D.DDDDD)",
       nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
-      "lon", &lonopt,       "Longitude for center point (D.DDDDD)",
+      "lon", &lonopt, "Longitude for center point (D.DDDDD)",
       nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "distance", &distopt, "Maximum distance from center",
-      nullptr,  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr, ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
-      "exclude", &exclopt,  "Exclude points close to center",
+      "exclude", &exclopt, "Exclude points close to center",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "nosort", &nosort,    "Inhibit sort by distance to center",
+      "nosort", &nosort, "Inhibit sort by distance to center",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {

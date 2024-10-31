@@ -53,11 +53,9 @@ double OptionString::toDouble(bool* ok, QString* end) const
   return parse_double(value_, id_, ok, end);
 }
 
-void OptionInt::init(const QString& id, bool allow_trailing_data, int base)
+void OptionInt::init(const QString& id)
 {
   id_ = id;
-  base_ = base;
-  allow_trailing_data_ = allow_trailing_data;
 }
 
 void OptionInt::reset()
@@ -77,6 +75,15 @@ void OptionInt::set(const QString& s)
   result_ = parse_integer(value_, id_, dieonerror, endp, base_);
 }
 
+bool OptionInt::isValid(const QString& s) const
+{
+  bool ok;
+  QString end;
+  QString* endp = allow_trailing_data_? &end : nullptr;
+  (void) parse_integer(s, id_, &ok, endp, base_);
+  return ok;
+}
+
 int OptionInt::get_result(QString* end) const
 {
   if (end != nullptr) {
@@ -85,10 +92,14 @@ int OptionInt::get_result(QString* end) const
   return result_;
 }
 
-void OptionDouble::init(const QString& id, bool allow_trailing_data, int /* base */)
+bool OptionInt::trailing_data_allowed() const
+{
+  return allow_trailing_data_;
+}
+
+void OptionDouble::init(const QString& id)
 {
   id_ = id;
-  allow_trailing_data_ = allow_trailing_data;
 }
 
 void OptionDouble::reset()
@@ -108,10 +119,24 @@ void OptionDouble::set(const QString& s)
   result_ = parse_double(value_, id_, dieonerror, endp);
 }
 
+bool OptionDouble::isValid(const QString& s) const
+{
+  bool ok;
+  QString end;
+  QString* endp = allow_trailing_data_? &end : nullptr;
+  (void) parse_double(s, id_, &ok, endp);
+  return ok;
+}
+
 double OptionDouble::get_result(QString* end) const
 {
   if (end != nullptr) {
     *end = end_;
   }
   return result_;
+}
+
+bool OptionDouble::trailing_data_allowed() const
+{
+  return allow_trailing_data_;
 }

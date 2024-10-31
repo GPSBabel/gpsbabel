@@ -523,48 +523,6 @@ void Vecs::init_vecs()
   style_list = create_style_vec();
 }
 
-int Vecs::integer_base(uint32_t argtype)
-{
-  int base;
-  switch (argtype & ARGTYPE_BASEMASK) {
-  case ARGTYPE_BASE_AUTO:
-    base = 0;
-    break;
-  case ARGTYPE_BASE_16:
-    base = 16;
-    break;
-  case ARGTYPE_BASE_10:
-  default:
-    base = 10;
-  }
-  return base;
-
-}
-
-bool Vecs::trailing_data_allowed(uint32_t argtype)
-{
-  return (argtype & ARGTYPE_ALLOW_TRAILING_DATA) == ARGTYPE_ALLOW_TRAILING_DATA;
-}
-
-bool Vecs::is_integer(const QString& val, const QString& id, uint32_t argtype)
-{
-  bool ok;
-  int base = integer_base(argtype);
-  QString end;
-  QString* endp = trailing_data_allowed(argtype) ? &end : nullptr;
-  (void) parse_integer(val, id, &ok, endp, base);
-  return ok;
-}
-
-bool Vecs::is_float(const QString& val, const QString& id, uint32_t argtype)
-{
-  bool ok;
-  QString end;
-  QString* endp = trailing_data_allowed(argtype) ? &end : nullptr;
-  (void) parse_double(val, id, &ok, endp);
-  return ok;
-}
-
 bool Vecs::is_bool(const QString& val)
 {
   return val.startsWith('y', Qt::CaseInsensitive) ||
@@ -610,9 +568,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   arg.argval->reset();
-  int base = integer_base(arg.argtype);
-  bool allow_trailing_data = trailing_data_allowed(arg.argtype);
-  arg.argval->init(id, allow_trailing_data, base);
+  arg.argval->init(id);
 
   if (val.isNull()) {
     return;
@@ -1110,7 +1066,7 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
         ok = false;
       }
       if (const auto* int_option = dynamic_cast<const OptionInt*>(arg.argval); int_option != nullptr) {
-        if (trailing_data_allowed(arg.argtype)) {
+        if (int_option->trailing_data_allowed()) {
           // GUI QIntValidator will reject input with trailing data.
           if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
             Warning() << name << "OptionInt with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
@@ -1123,20 +1079,20 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           }
         }
 
-        if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue, id, arg.argtype)) {
+        if (!arg.defaultvalue.isNull() && !int_option->isValid(arg.defaultvalue)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
           ok = false;
         }
-        if (!arg.minvalue.isNull() && !is_integer(arg.minvalue, id, arg.argtype)) {
+        if (!arg.minvalue.isNull() && !int_option->isValid(arg.minvalue)) {
           Warning() << name << "Int option" << arg.argstring << "minimum value" << arg.minvalue << "is not an integer.";
           ok = false;
         }
-        if (!arg.maxvalue.isNull() && !is_integer(arg.maxvalue, id, arg.argtype)) {
+        if (!arg.maxvalue.isNull() && !int_option->isValid(arg.maxvalue)) {
           Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
           ok = false;
         }
       } else if (const auto* double_option = dynamic_cast<const OptionDouble*>(arg.argval); double_option != nullptr) {
-        if (trailing_data_allowed(arg.argtype)) {
+        if (double_option->trailing_data_allowed()) {
           // GUI QDoubleValidator will reject input with trailing data.
           if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
             Warning() << name << "OptionDouble with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
@@ -1149,15 +1105,15 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           }
         }
 
-        if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue, id, arg.argtype)) {
+        if (!arg.defaultvalue.isNull() && !double_option->isValid(arg.defaultvalue)) {
           Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
           ok = false;
         }
-        if (!arg.minvalue.isNull() && !is_float(arg.minvalue, id, arg.argtype)) {
+        if (!arg.minvalue.isNull() && !double_option->isValid(arg.minvalue)) {
           Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
           ok = false;
         }
-        if (!arg.maxvalue.isNull() && !is_float(arg.maxvalue, id, arg.argtype)) {
+        if (!arg.maxvalue.isNull() && !double_option->isValid(arg.maxvalue)) {
           Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
           ok = false;
         }
