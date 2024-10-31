@@ -51,7 +51,7 @@ private:
 
   OptionDouble opt_time;
   double max_time_step{0};
-  OptionDouble opt_dist;
+  OptionDouble opt_dist{true};
   double max_dist_step{0};
   OptionBool opt_route;
 
@@ -63,7 +63,7 @@ private:
     },
     {
       "distance", &opt_dist, "Distance interval",
-      nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING,
+      nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
       ARG_NOMINMAX, nullptr
     },
     {

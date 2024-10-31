@@ -43,7 +43,7 @@ public:
   [[nodiscard]] virtual bool has_value() const = 0;
   [[nodiscard]] virtual bool isEmpty() const = 0;
   [[nodiscard]] virtual const QString& get() const = 0;
-  virtual void init(const QString& id, bool allow_trailing_data, int base) {}
+  virtual void init(const QString& id) {}
   virtual void reset() = 0;
   virtual void set(const QString& s) = 0;
 
@@ -83,7 +83,7 @@ public:
     return value_;
   }
 
-  void init(const QString& id, bool /* allow_trailing_data */, int /* base */) override
+  void init(const QString& id) override
   {
     id_ = id;
   }
@@ -116,6 +116,10 @@ class OptionInt : public Option
 public:
   /* Special Member Functions */
   OptionInt() = default;
+  explicit OptionInt(bool allow_trailing_data, int base) :
+    allow_trailing_data_(allow_trailing_data),
+    base_(base)
+  {}
 
   explicit(false) operator const QString& () const
   {
@@ -142,18 +146,20 @@ public:
     return value_;
   }
 
-  void init(const QString& id, bool allow_trailing_data, int base) override;
+  void init(const QString& id) override;
   void reset() override;
   void set(const QString& s) override;
+  bool isValid(const QString& s) const;
   int get_result(QString* end = nullptr) const;
+  bool trailing_data_allowed() const;
 
 private:
   QString value_;
   QString id_;
   int result_{};
   QString end_;
-  int base_{10};
   bool allow_trailing_data_{false};
+  int base_{10};
 };
 
 class OptionDouble : public Option
@@ -161,6 +167,9 @@ class OptionDouble : public Option
 public:
   /* Special Member Functions */
   OptionDouble() = default;
+  explicit OptionDouble(bool allow_trailing_data) :
+    allow_trailing_data_(allow_trailing_data)
+  {}
 
   explicit(false) operator const QString& () const
   {
@@ -187,10 +196,12 @@ public:
     return value_;
   }
 
-  void init(const QString& id, bool allow_trailing_data, int /* base */) override;
+  void init(const QString& id) override;
   void reset() override;
   void set(const QString& s) override;
+  bool isValid(const QString& s) const;
   double get_result(QString* end = nullptr) const;
+  bool trailing_data_allowed() const;
 
 private:
   QString value_;

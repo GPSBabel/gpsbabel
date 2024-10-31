@@ -120,19 +120,19 @@ private:
   metric_t metric{metric_t::crosstrack};
 
   OptionInt countopt;
-  OptionDouble erroropt;
+  OptionDouble erroropt{true};
   OptionBool xteopt;
   OptionBool lenopt;
   OptionBool relopt;
 
   QVector<arglist_t> args = {
     {
-      "count", &countopt,  "Maximum number of points in route",
+      "count", &countopt, "Maximum number of points in route",
       nullptr, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", nullptr, nullptr
     },
     {
       "error", &erroropt, "Maximum error", nullptr,
-       ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
+       ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
     },
     {
       "crosstrack", &xteopt, "Use cross-track error (default)", nullptr,

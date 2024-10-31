@@ -166,7 +166,7 @@ private:
   OptionInt gdb_opt_ver;
   OptionBool gdb_opt_via;
   OptionBool gdb_opt_roadbook;
-  OptionInt gdb_opt_bitcategory;
+  OptionInt gdb_opt_bitcategory{false, 0};
   OptionBool gdb_opt_drop_hidden_wpt;
 
   int waypt_flag{};
@@ -187,7 +187,7 @@ private:
     },
     {
       "bitscategory", &gdb_opt_bitcategory, "Bitmap of categories",
-      nullptr, ARGTYPE_BASE_AUTO | ARGTYPE_INT, "1", "65535", nullptr
+      nullptr, ARGTYPE_INT, "1", "65535", nullptr
     },
     {
       "ver", &gdb_opt_ver,

@@ -71,7 +71,7 @@ public:
 
   /* Member Functions */
 
-  static void init_vec(Format* fmt);
+  static void init_vec(Format* fmt, const QString& fmtname);
   void init_vecs();
   static void free_options(QVector<arglist_t>* args);
   static void exit_vec(Format* fmt);
@@ -143,10 +143,6 @@ private:
 
   /* Member Functions */
 
-  static int integer_base(uint32_t argtype);
-  static bool trailing_data_allowed(uint32_t argtype);
-  static bool is_integer(const QString& val, const QString& id, uint32_t argtype);
-  static bool is_float(const QString& val, const QString& id, uint32_t argtype);
   static bool is_bool(const QString& val);
   static QVector<style_vec_t> create_style_vec();
   QVector<vecinfo_t> sort_and_unify_vecs() const;

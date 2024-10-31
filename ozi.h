@@ -134,7 +134,7 @@ private:
   OptionString wptbgcolor;
   OptionBool pack_opt;
   int datum{};
-  OptionDouble proximityarg;
+  OptionDouble proximityarg{true};
   double proximity{};
   OptionString altunit_opt;
   OptionString proxunit_opt;
@@ -175,7 +175,7 @@ private:
     },
     {
       "proximity", &proximityarg, "Proximity distance",
-      "0",  ARGTYPE_ALLOW_TRAILING_DATA | ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+      "0", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       "altunit", &altunit_opt, "Unit used in altitude values",
