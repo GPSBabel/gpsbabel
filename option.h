@@ -19,7 +19,6 @@
 #ifndef OPTION_H_INCLUDED_
 #define OPTION_H_INCLUDED_
 
-#include <QByteArray>  // for QByteArray
 #include <QString>     // for QString, operator!=
 
 class Option /* Abstract Class */
