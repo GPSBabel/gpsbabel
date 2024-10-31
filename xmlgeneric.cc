@@ -67,7 +67,7 @@ XmlGenericReader::xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 
 void
 XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
-         const QStringList ignorelist, const QStringList skiplist)
+         const QStringList& ignorelist, const QStringList& skiplist)
 {
   rd_fname = fname;
 

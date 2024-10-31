@@ -165,15 +165,14 @@ private:
 
   void humminbird_rte_head(const route_head* rte);
   void humminbird_rte_tail(const route_head* rte);
-  static QString wpt_to_id(const Waypoint*);
+  static QString wpt_to_id(const Waypoint* wpt);
   void humminbird_write_rtept(const Waypoint* wpt) const;
   void humminbird_write_waypoint(const Waypoint* wpt);
   void humminbird_write_waypoint_wrapper(const Waypoint* wpt);
 
   /* Data Members */
 
-  QVector<arglist_t> humminbird_args = {
-  };
+  QVector<arglist_t> humminbird_args;
 };
 
 class HumminbirdHTFormat : public Format, private HumminbirdBase
@@ -214,8 +213,7 @@ private:
 
   /* Data Members */
 
-  QVector<arglist_t> humminbirdht_args = {
-  };
+  QVector<arglist_t> humminbirdht_args;
 };
 
 #endif // HUMMINBIRD_H_INCLUDED_

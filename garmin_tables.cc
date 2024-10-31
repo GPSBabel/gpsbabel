@@ -730,9 +730,9 @@ gt_color_value(const unsigned int garmin_index)
 uint32_t
 gt_color_value_by_name(const QString& name)
 {
-  for (int i = 0; i < gt_colors.size(); ++i) {
-    if (QString::compare(gt_colors[i].name, name, Qt::CaseInsensitive) == 0) {
-      return gt_colors[i].rgb;
+  for (const auto& gt_color : gt_colors) {
+    if (QString::compare(gt_color.name, name, Qt::CaseInsensitive) == 0) {
+      return gt_color.rgb;
     }
   }
 
