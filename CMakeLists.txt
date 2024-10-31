@@ -431,6 +431,7 @@ set(TESTS
   validate_formats
   validate
   vcard
+  vecs
   xcsv
 )
 
