@@ -497,7 +497,7 @@ Vecs& Vecs::Instance()
  * The possibility of detachment is also why the type of element
  * on the list must be default constructable. This is why we have
  * to supply a default for any const members of arglist_t.  Without the
- * default intializer the default constructor would be implicitly deleted.
+ * default initializer the default constructor would be implicitly deleted.
  */
 
 void Vecs::init_vec(Format* fmt)
@@ -556,13 +556,6 @@ bool Vecs::is_integer(const QString& val, const QString& id, uint32_t argtype)
   return ok;
 }
 
-int Vecs::convert_integer(const QString& val, const QString& id, QString* end, int base)
-{
-  // Fatal on conversion error
-  constexpr bool* dieonerror = nullptr;
-  return parse_integer(val, id, dieonerror, end, base);
-}
-
 bool Vecs::is_float(const QString& val, const QString& id, uint32_t argtype)
 {
   bool ok;
@@ -570,13 +563,6 @@ bool Vecs::is_float(const QString& val, const QString& id, uint32_t argtype)
   QString* endp = trailing_data_allowed(argtype) ? &end : nullptr;
   (void) parse_double(val, id, &ok, endp);
   return ok;
-}
-
-double Vecs::convert_float(const QString& val, const QString& id, QString* end)
-{
-  // Fatal on conversion error
-  constexpr bool* dieonerror = nullptr;
-  return parse_double(val, id, dieonerror, end);
 }
 
 bool Vecs::is_bool(const QString& val)
@@ -624,7 +610,9 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   arg.argval->reset();
-  arg.argval->set_id(id);
+  int base = integer_base(arg.argtype);
+  bool allow_trailing_data = trailing_data_allowed(arg.argtype);
+  arg.argval->init(id, allow_trailing_data, base);
 
   if (val.isNull()) {
     return;
@@ -632,29 +620,14 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
 
   QString rval(val);
 
-  QString end;
-  QString* endp = trailing_data_allowed(arg.argtype)? &end: nullptr;
-
   if (auto* int_option = dynamic_cast<OptionInt*>(arg.argval); int_option != nullptr) {
-    int result;
     if (val.isEmpty()) {
       rval = '0';
-      result = 0;
-    } else {
-      // will fatal on conversion error
-      result = convert_integer(val, id, endp, integer_base(arg.argtype));
     }
-    int_option->set_result(result, end);
   } else if (auto* double_option = dynamic_cast<OptionDouble*>(arg.argval); double_option != nullptr) {
-    double result;
     if (val.isEmpty()) {
       rval = '0';
-      result = 0.0;
-    } else {
-      // will fatal on conversion error
-      result = convert_float(val, id, endp);
     }
-    double_option->set_result(result, end);
   } else if (auto* bool_option = dynamic_cast<OptionBool*>(arg.argval); bool_option != nullptr) {
     if (val.isEmpty()) {
       rval = '1';
