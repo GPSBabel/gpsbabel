@@ -927,7 +927,7 @@ void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
 char* xstrdup(const char* s);
 
-FILE* xfopen(const QString& fname, const char* type, const QString& errtxt);
+FILE* xfopen(const QString& fname, const char* type);
 
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);
@@ -1028,11 +1028,11 @@ int xstrtoi(const char* str, char** str_end, int base);
 int parse_integer(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr, int base = 10);
 double parse_double(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr);
 int parse_coordinates(const char* str, int datum, grid_type grid,
-                      double* latitude, double* longitude, const char* module);
+                      double* latitude, double* longitude);
 int parse_coordinates(const QString& str, int datum, grid_type grid,
-                      double* latitude, double* longitude, const char* module);
-int parse_distance(const QString& str, double* val, double scale, const char* module);
-int parse_speed(const QString& str, double* val, double scale, const char* module);
+                      double* latitude, double* longitude);
+int parse_distance(const QString& str, double* val, double scale);
+int parse_speed(const QString& str, double* val, double scale);
 
 /*
  * Color helpers.

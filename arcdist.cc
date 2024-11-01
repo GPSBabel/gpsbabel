@@ -37,7 +37,6 @@
 
 
 #if FILTERS_ENABLED
-#define MYNAME "Arc filter"
 
 #define BADVAL 999999
 
@@ -112,7 +111,7 @@ void ArcDistanceFilter::process()
     QString line;
 
     gpsbabel::TextStream stream;
-    stream.open(arcfileopt, QIODevice::ReadOnly, MYNAME);
+    stream.open(arcfileopt, QIODevice::ReadOnly);
 
     auto* arcpt1 = new Waypoint;
     auto* arcpt2 = new Waypoint;
@@ -134,7 +133,7 @@ void ArcDistanceFilter::process()
       int argsfound = sscanf(CSTR(line), "%lf %lf", &arcpt2->latitude, &arcpt2->longitude);
 
       if ((argsfound != 2) && (line.trimmed().size() > 0)) {
-        warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline);
+        warning("Warning: Arc file contains unusable vertex on line %d.\n", fileline);
       } else {
         Waypoint* arcpttmp = arcpt1;
         arcdist_arc_disp_wpt_cb(arcpt2);
@@ -199,7 +198,7 @@ void ArcDistanceFilter::process()
   }
   del_marked_wpts();
   if (global_opts.verbose_status > 0) {
-    printf(MYNAME "-arc: %u waypoint(s) removed.\n", removed);
+    printf("arc: %u waypoint(s) removed.\n", removed);
   }
 }
 
@@ -208,14 +207,14 @@ void ArcDistanceFilter::init()
   if ((!arcfileopt && !rteopt && !trkopt) ||
       (arcfileopt && (rteopt || trkopt)) ||
       (rteopt && trkopt)) {
-    fatal(MYNAME ": Incompatible or incomplete option values!\n");
+    fatal("Incompatible or incomplete option values!\n");
   }
 
   pos_dist = 0.0;
 
   if (distopt) {
-    if (parse_distance(distopt, &pos_dist, kMetersPerMile, MYNAME) == 0) {
-      fatal(MYNAME ": No distance specified with distance option.\n");
+    if (parse_distance(distopt, &pos_dist, kMetersPerMile) == 0) {
+      fatal("No distance specified with distance option.\n");
     }
   }
 }

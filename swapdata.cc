@@ -24,7 +24,6 @@
 #include "swapdata.h"
 #include <utility>     // for swap
 
-#define MYNAME "swapdata"
 
 #if FILTERS_ENABLED
 

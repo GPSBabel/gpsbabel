@@ -24,7 +24,6 @@
 #include "nukedata.h"
 
 #if FILTERS_ENABLED
-#define MYNAME "nukedata"
 
 void NukeDataFilter::process()
 {

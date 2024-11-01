@@ -32,7 +32,6 @@
 #include <QtGlobal>            // for qEnvironmentVariable, qPrintable
 #include <utility>
 
-#define MYNAME "inifile"
 
 struct inifile_t {
   QHash<QString, InifileSection> sections;
@@ -104,7 +103,7 @@ open_gpsbabel_inifile()
 }
 
 static void
-inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
+inifile_load_file(QTextStream* stream, inifile_t* inifile)
 {
   QString buf;
   InifileSection section;
@@ -125,7 +124,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
         section_name = buf.mid(1, buf.indexOf(']') - 1).trimmed();
       }
       if (section_name.isEmpty()) {
-        fatal("%s: invalid section header '%s' in '%s'.\n", myname, qPrintable(section_name),
+        fatal("invalid section header '%s' in '%s'.\n", qPrintable(section_name),
               qPrintable(inifile->source));
       }
 
@@ -135,7 +134,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
       section = inifile->sections.value(section_name);
     } else {
       if (section.name.isEmpty()) {
-        fatal("%s: missing section header in '%s'.\n", myname,
+        fatal("missing section header in '%s'.\n",
               qPrintable(inifile->source));
       }
 
@@ -170,12 +169,11 @@ inifile_find_value(const inifile_t* inifile, const QString& sec_name, const QStr
 /*
 	inifile_init:
 	  reads inifile filename into memory
-	  myname represents the calling module
 
 	  filename == NULL: try to open global gpsbabel.ini
  */
 inifile_t*
-inifile_init(const QString& filename, const char* myname)
+inifile_init(const QString& filename)
 {
   QString name;
 
@@ -197,7 +195,7 @@ inifile_init(const QString& filename, const char* myname)
   auto* result = new inifile_t;
   QFileInfo fileinfo(file);
   result->source = fileinfo.absoluteFilePath();
-  inifile_load_file(&stream, result, myname);
+  inifile_load_file(&stream, result);
 
   file.close();
   return result;

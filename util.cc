@@ -118,13 +118,13 @@ xrealloc(void* p, size_t s)
  * Wrapper for open that honours - for stdin, stdout, unifies error text.
  */
 FILE*
-xfopen(const QString& fname, const char* type, const QString& errtxt)
+xfopen(const QString& fname, const char* type)
 {
   bool am_writing = strchr(type, 'w') != nullptr;
 
   if (fname.isEmpty()) {
-    fatal("%s must have a filename specified for %s.\n",
-          qPrintable(errtxt), am_writing ? "write" : "read");
+    fatal("must have a filename specified for %s.\n",
+          am_writing ? "write" : "read");
   }
 
   if (fname == "-") {
@@ -136,8 +136,8 @@ xfopen(const QString& fname, const char* type, const QString& errtxt)
     // vs. the STD C library used for the actual file I/O. It's worth it
     // to get a better error message.
     QFileInfo info(fname);
-    fatal("%s cannot open '%s' for %s.  Error was '%s'.\n",
-          qPrintable(errtxt), qPrintable(info.absoluteFilePath()),
+    fatal("cannot open '%s' for %s.  Error was '%s'.\n",
+          qPrintable(info.absoluteFilePath()),
           am_writing ? "write" : "read",
           strerror(errno));
   }

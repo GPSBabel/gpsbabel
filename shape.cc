@@ -40,8 +40,6 @@
 #endif
 
 
-#define MYNAME "shape"
-
 /************************************************************************/
 /*                              SHPOpenGpsbabel()                       */
 /************************************************************************/
@@ -147,11 +145,11 @@ ShapeFormat::DBFCreateGpsbabel(const QString& pszFilename)
 [[noreturn]] void ShapeFormat::dump_fields() const
 {
   char name[12];
-  warning(MYNAME ": Database fields:\n");
+  warning("Database fields:\n");
   const int nFields = DBFGetFieldCount(ihandledb);
   for (int i = 0; i < nFields; i++) {
     DBFFieldType type = DBFGetFieldInfo(ihandledb, i, name, nullptr, nullptr);
-    warning(MYNAME ": Field Index: %2d, Field Name: %12s, Field Type %d\n", i, name, type);
+    warning("Field Index: %2d, Field Name: %12s, Field Type %d\n", i, name, type);
   }
   fatal("\n");
 }
@@ -160,8 +158,8 @@ void ShapeFormat::check_field_index(const int fieldIdx) const
 {
   const int maxFields = DBFGetFieldCount(ihandledb);
   if (fieldIdx < 0 || fieldIdx >= maxFields) {
-    warning(MYNAME ": dbf file for %s doesn't have a field index number %d.\n", qPrintable(ifname), fieldIdx);
-    warning(MYNAME ": the minimum field number is 0 and the maximum field number is %d.\n",maxFields-1);
+    warning("dbf file for %s doesn't have a field index number %d.\n", qPrintable(ifname), fieldIdx);
+    warning("the minimum field number is 0 and the maximum field number is %d.\n",maxFields-1);
     dump_fields();
   }
 }
@@ -170,7 +168,7 @@ int ShapeFormat::get_field_index(const QString& fieldName) const
 {
   const int fieldIdx = DBFGetFieldIndex(ihandledb, CSTR(fieldName));
   if (fieldIdx < 0) {
-    warning(MYNAME ": dbf file for %s doesn't have a field named '%s'.\n", qPrintable(ifname), qPrintable(fieldName));
+    warning("dbf file for %s doesn't have a field named '%s'.\n", qPrintable(ifname), qPrintable(fieldName));
     dump_fields();
   }
   return fieldIdx;
@@ -183,21 +181,21 @@ ShapeFormat::rd_init(const QString& fname)
   // TODO: The .prj file can define the the coordinate system and projection information.
   ihandle = SHPOpenGpsbabel(fname, "rb");
   if (ihandle == nullptr) {
-    fatal(MYNAME ": Cannot open shp file %s for reading\n", qPrintable(ifname));
+    fatal("Cannot open shp file %s for reading\n", qPrintable(ifname));
   }
 
   ihandledb = DBFOpenGpsbabel(fname, "rb");
   if (ihandledb == nullptr) {
-    fatal(MYNAME ": Cannot open dbf file %s for reading\n", qPrintable(ifname));
+    fatal("Cannot open dbf file %s for reading\n", qPrintable(ifname));
   }
   const char* codepage = DBFGetCodePage(ihandledb);
   if (codepage) {
     QString qcodepage(codepage);
     if (qcodepage.compare(u"UTF-8", Qt::CaseInsensitive)) {
-      warning(MYNAME ": dbf file %s is in code page %s, but we always process dbf files as UTF-8.\n",qPrintable(ifname),codepage);
+      warning("dbf file %s is in code page %s, but we always process dbf files as UTF-8.\n",qPrintable(ifname),codepage);
     }
   } else {
-    warning(MYNAME ": dbf file %s uses unknown code page, assuming UTF-8.\n", qPrintable(ifname));
+    warning("dbf file %s uses unknown code page, assuming UTF-8.\n", qPrintable(ifname));
   }
 }
 
@@ -469,12 +467,12 @@ ShapeFormat::write()
     ohandle = SHPCreateGpsbabel(ofname, SHPT_POINT);
 
     if (ohandle == nullptr) {
-      fatal(MYNAME ": Cannot open shp file %s for writing\n",
+      fatal("Cannot open shp file %s for writing\n",
             qPrintable(ofname));
     }
     ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
     if (ohandledb == nullptr) {
-      fatal(MYNAME ": Cannot open dbf file %s for writing\n",
+      fatal("Cannot open dbf file %s for writing\n",
             qPrintable(ofname));
     }
     nameFieldIdx=DBFAddField(ohandledb,"name",FTString,100,0);
@@ -489,12 +487,12 @@ ShapeFormat::write()
     ohandle = SHPCreateGpsbabel(ofname, SHPT_ARC);
 
     if (ohandle == nullptr) {
-      fatal(MYNAME ": Cannot open shp file %s for writing\n",
+      fatal("Cannot open shp file %s for writing\n",
             qPrintable(ofname));
     }
     ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
     if (ohandledb == nullptr) {
-      fatal(MYNAME ": Cannot open dbf file %s for writing\n",
+      fatal("Cannot open dbf file %s for writing\n",
             qPrintable(ofname));
     }
     nameFieldIdx=DBFAddField(ohandledb,"name",FTString,100,0);
@@ -515,7 +513,7 @@ ShapeFormat::write()
     break;
   }
   case posndata:
-    fatal(MYNAME ": Realtime positioning not supported\n");
+    fatal("Realtime positioning not supported\n");
     break;
   }
 }

@@ -27,7 +27,6 @@
 #include <cmath>    // for floor
 #include <cstdint>  // for int8_t
 
-#define MYNAME "height"
 
 #if FILTERS_ENABLED
 
@@ -53,10 +52,10 @@ double HeightFilter::wgs84_separation(double lat, double lon)
 {
   /* sanity checks to prevent segfault on bad data */
   if ((lat > 90.0) || (lat < -90.0)) {
-    fatal(MYNAME ": Invalid latitude value (%f)\n", lat);
+    fatal("Invalid latitude value (%f)\n", lat);
   }
   if ((lon > 180.0) || (lon < -180.0)) {
-    fatal(MYNAME ": Invalid longitude value (%f)\n", lon);
+    fatal("Invalid longitude value (%f)\n", lon);
   }
 
   auto ilat = static_cast<int>(floor((90.0+lat)/geoid_grid_deg));
@@ -97,8 +96,8 @@ void HeightFilter::init()
 {
   addf = 0.0;
   if (addopt) {
-    if (parse_distance(addopt, &addf, 1.0, MYNAME) == 0) {
-      fatal(MYNAME ": No height specified with add option.");
+    if (parse_distance(addopt, &addf, 1.0) == 0) {
+      fatal("No height specified with add option.");
     }
   }
 }

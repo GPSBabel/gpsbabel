@@ -52,8 +52,6 @@
 #include "mkshort.h"             // for MakeShort
 
 
-#define MYNAME "GARMIN"
-
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 
@@ -118,7 +116,7 @@ GarminFormat::rw_init(const QString& fname)
   }
 
   if (GPS_Init(qPrintable(fname)) < 0) {
-    fatal(MYNAME ":Can't init %s\n", qPrintable(fname));
+    fatal("Can't init %s\n", qPrintable(fname));
   }
 
   /*
@@ -350,7 +348,7 @@ GarminFormat::waypt_read()
   }
 
   if ((n = GPS_Command_Get_Waypoint(portname, &way, waypt_read_cb)) < 0) {
-    fatal(MYNAME  ":Can't get waypoint from %s\n", portname);
+    fatal("Can't get waypoint from %s\n", portname);
   }
 
   for (int i = 0; i < n; i++) {
@@ -671,7 +669,7 @@ GarminFormat::rd_position(posn_status* posn_status)
    * error, do it now.
    */
   if (gps_errno) {
-    fatal(MYNAME ": Fatal error reading position.\n");
+    fatal("Fatal error reading position.\n");
   }
 
   delete wpt;
@@ -698,7 +696,7 @@ GarminFormat::read()
   }
   if (!(global_opts.masked_objective &
         (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK))) {
-    fatal(MYNAME ": Nothing to do.\n");
+    fatal("Nothing to do.\n");
   }
 }
 
@@ -707,7 +705,7 @@ GarminFormat::sane_GPS_Way_New()
 {
   GPS_PWay way = GPS_Way_New();
   if (!way) {
-    fatal(MYNAME ":not enough memory\n");
+    fatal("not enough memory\n");
   }
 
   /*
@@ -892,7 +890,7 @@ GarminFormat::waypoint_write()
   int n = waypoint_prepare();
 
   if (int32_t ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
-    fatal(MYNAME ":communication error sending waypoints..\n");
+    fatal("communication error sending waypoints..\n");
   }
 
   for (int i = 0; i < n; ++i) {

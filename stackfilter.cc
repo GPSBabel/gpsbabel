@@ -24,8 +24,6 @@
 
 #if FILTERS_ENABLED
 
-#define MYNAME "Stack filter"
-
 void StackFilter::process()
 {
   stack_elt* tmp_elt = nullptr;
@@ -58,7 +56,7 @@ void StackFilter::process()
   } else if (opt_pop) {
     tmp_elt = stack;
     if (!tmp_elt) {
-      fatal(MYNAME ": stack empty\n");
+      fatal("stack empty\n");
     }
     if (opt_append) {
       waypt_append(&(stack->waypts));
@@ -83,7 +81,7 @@ void StackFilter::process()
     tmp_elt = stack;
     while (swapdepth > 1) {
       if (!tmp_elt->next) {
-        fatal(MYNAME ": swap with nonexistent element\n");
+        fatal("swap with nonexistent element\n");
       }
       tmp_elt = tmp_elt->next;
       swapdepth--;
@@ -131,7 +129,7 @@ void StackFilter::init()
   }
 
   if (invalid) {
-    fatal(MYNAME ": invalid combination of options\n");
+    fatal("invalid combination of options\n");
   }
 
 }
@@ -146,7 +144,7 @@ void StackFilter::exit()
   stack_elt* tmp_elt = nullptr;
 
   if (warnings_enabled && stack) {
-    warning(MYNAME " Warning: leftover stack entries; "
+    warning("Warning: leftover stack entries; "
             "check command line for mistakes\n");
   }
   while (stack) {

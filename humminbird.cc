@@ -35,8 +35,6 @@
 #include "src/core/datetime.h"  // for DateTime
 
 
-#define MYNAME "humminbird"
-
 #define WPT_NAME_LEN		12
 #define RTE_NAME_LEN		20
 #define TRK_NAME_LEN		20
@@ -207,7 +205,7 @@ HumminbirdBase::inverse_gudermannian_i1924(const double x)
 void
 HumminbirdBase::humminbird_rd_init(const QString& fname)
 {
-  fin_ = gbfopen_be(fname, "rb", MYNAME);
+  fin_ = gbfopen_be(fname, "rb");
 
   wpt_num_to_wpt_hash.clear();
 }
@@ -225,7 +223,7 @@ HumminbirdBase::humminbird_read_wpt(gbfile* fin)
   static_assert(sizeof(w) == 32);
 
   if (! gbfread(&w, 1, sizeof(w), fin)) {
-    fatal(MYNAME ": Unexpected end of file!\n");
+    fatal("Unexpected end of file!\n");
   }
 
   /* Fix endianness - these are now BE */
@@ -287,7 +285,7 @@ HumminbirdBase::humminbird_read_route(gbfile* fin) const
   static_assert(sizeof(hrte) == 132);
 
   if (! gbfread(&hrte, 1, sizeof(hrte), fin)) {
-    fatal(MYNAME ": Unexpected end of file!\n");
+    fatal("Unexpected end of file!\n");
   }
 
   hrte.time = be_read32(&hrte.time);
@@ -319,7 +317,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
   static_assert(sizeof(th) == 64);
 
   if (! gbfread(&th, 1, sizeof(th), fin)) {
-    fatal(MYNAME ": Unexpected end of file reading header!\n");
+    fatal("Unexpected end of file reading header!\n");
   }
 
   th.trk_num     = be_read16(&th.trk_num);
@@ -343,7 +341,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
   }
 
   if (th.num_points > max_points) {
-    fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
+    fatal("Too many track points! (%d)\n", th.num_points);
   }
 
   /* num_points is actually one too big, because it includes the value in
@@ -351,7 +349,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
      freak-value filter below looks at points[i+1] */
   auto* points = new humminbird_trk_point_t[th.num_points]();
   if (! gbfread(points, sizeof(humminbird_trk_point_t), th.num_points-1, fin)) {
-    fatal(MYNAME ": Unexpected end of file reading points!\n");
+    fatal("Unexpected end of file reading points!\n");
   }
 
   int32_t accum_east = th.start_east;
@@ -428,7 +426,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
   char namebuf[TRK_NAME_LEN];
 
   if (! gbfread(&th, 1, sizeof(th), fin)) {
-    fatal(MYNAME ": Unexpected end of file reading header!\n");
+    fatal("Unexpected end of file reading header!\n");
   }
 
   th.trk_num     = be_read16(&th.trk_num);
@@ -445,7 +443,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
   int max_points = (file_len - (sizeof(th) + sizeof(uint32_t) + TRK_NAME_LEN)) / sizeof(humminbird_trk_point_old_t);
 
   if (th.num_points > max_points) {
-    fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
+    fatal("Too many track points! (%d)\n", th.num_points);
   }
 
   /* num_points is actually one too big, because it includes the value in
@@ -453,7 +451,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
      freak-value filter below looks at points[i+1] */
   auto* points = new humminbird_trk_point_old_t[th.num_points]();
   if (! gbfread(points, sizeof(humminbird_trk_point_old_t), th.num_points-1, fin)) {
-    fatal(MYNAME ": Unexpected end of file reading points!\n");
+    fatal("Unexpected end of file reading points!\n");
   }
 
   int32_t accum_east = th.start_east;
@@ -544,7 +542,7 @@ HumminbirdBase::humminbird_read()
       humminbird_read_track_old(fin_);
       return; /* Don't continue. The rest of the file is all zeores */
     default:
-      fatal(MYNAME ": Invalid record header \"0x%08X\" (no or unknown humminbird file)!\n", signature);
+      fatal("Invalid record header \"0x%08X\" (no or unknown humminbird file)!\n", signature);
     }
   }
 }
@@ -555,7 +553,7 @@ HumminbirdBase::humminbird_read()
 void
 HumminbirdBase::humminbird_wr_init(const QString& fname)
 {
-  fout_ = gbfopen_be(fname, "wb", MYNAME);
+  fout_ = gbfopen_be(fname, "wb");
 
   wptname_sh = new MakeShort;
 
@@ -854,8 +852,8 @@ HumminbirdFormat::humminbird_write_rtept(const Waypoint* wpt) const
     humrte->points[humrte->count] = wpt_id_to_wpt_num_hash.value(id);
     humrte->count++;
   } else {
-    warning(MYNAME ": Sorry, routes are limited to %d points!\n", MAX_RTE_POINTS);
-    fatal(MYNAME ": You can use our simplify filter to reduce the number of route points.\n");
+    warning("Sorry, routes are limited to %d points!\n", MAX_RTE_POINTS);
+    fatal("You can use our simplify filter to reduce the number of route points.\n");
   }
 }
 

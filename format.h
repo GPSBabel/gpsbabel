@@ -66,7 +66,7 @@ public:
   virtual void rd_init(const QString& /* fname */)
   {
     fatal("Format does not support reading.\n");
-//	fin = gbfopen(fname, "r", MYNAME);
+//	fin = gbfopen(fname, "r");
   }
 
   virtual void rd_deinit()
@@ -111,7 +111,7 @@ public:
   virtual void wr_init(const QString& /* fname */)
   {
     fatal("Format does not support writing.\n");
-//	fout = gbfopen(fname, "w", MYNAME);
+//	fout = gbfopen(fname, "w");
   }
 
   virtual void wr_deinit()

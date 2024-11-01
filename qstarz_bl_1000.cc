@@ -35,9 +35,6 @@
 #include "src/core/logging.h"  // for Fatal
 
 
-#define MYNAME "Qstarz BL-1000"
-
-
 enum BL1000_POINT_TYPE {
   BL1000_POINT_TYPE_UNKNOWN = '-',
   BL1000_POINT_TYPE_WAY_POINT = 'B', // Button push
@@ -135,7 +132,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   stream >> unused2;
 
   if (stream.status() != QDataStream::Ok) {
-    fatal(FatalMsg() << MYNAME << ": File format error on " << fname << ". Perhaps this isn't a Qstarz BL-1000 file");
+    fatal(FatalMsg() << "File format error on " << fname << ". Perhaps this isn't a Qstarz BL-1000 file");
   }
 
   BL1000_POINT_TYPE type;
@@ -171,7 +168,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   default:
     type = BL1000_POINT_TYPE_UNKNOWN;
 
-    fatal(FatalMsg() << MYNAME << ": File format error on " << fname << ". Unexpected value for RCR (record reason): " << rcr);
+    fatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for RCR (record reason): " << rcr);
 
     break;
   }
@@ -205,7 +202,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
     fix = fix_unknown;
 
     if (type != BL1000_POINT_TYPE_UNKNOWN) {
-      fatal(FatalMsg() << MYNAME << ": File format error on " << fname << ". Unexpected value for fix quality: " << fixQuality);
+      fatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for fix quality: " << fixQuality);
     }
 
     break;
@@ -219,11 +216,11 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   // qDebug(waypoint)
 
   if ((waypoint->latitude < -90) || (waypoint->latitude > 90)) {
-    fatal(FatalMsg() << MYNAME << ": File format error on " << fname << ". Unexpected value for latitude: " << waypoint->latitude);
+    fatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for latitude: " << waypoint->latitude);
   }
 
   if ((waypoint->longitude < -180) || (waypoint->longitude > 180)) {
-    fatal(FatalMsg() << MYNAME << ": File format error on " << fname << ". Unexpected value for longitude: " << waypoint->longitude);
+    fatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for longitude: " << waypoint->longitude);
   }
 
   waypoint->altitude = altitude;
@@ -273,7 +270,7 @@ QstarzBL1000Format::read()
 {
   QFile file(fname);
   if (!file.open(QIODevice::ReadOnly)) {
-    fatal(FatalMsg() << MYNAME << ": Error opening file " << fname);
+    fatal(FatalMsg() << "Error opening file " << fname);
   }
 
   QDataStream stream(&file);

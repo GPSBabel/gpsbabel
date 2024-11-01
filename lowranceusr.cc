@@ -118,8 +118,6 @@
 /* from waypt.c, we need to iterate over waypoints when extracting routes */
 extern WaypointList* global_waypoint_list;
 
-#define MYNAME "Lowrance USR"
-
 /* below couple of functions mostly borrowed from raymarine.c */
 
 /* make waypoint shortnames unique */
@@ -142,7 +140,7 @@ LowranceusrFormat::register_waypt(const Waypoint* wpt) const
   }
 
   if (global_opts.debug_level >= 2) {
-    printf(MYNAME " adding waypt %s (%s) to table at index %s\n",
+    printf("adding waypt %s (%s) to table at index %s\n",
            qPrintable(wpt->shortname), qPrintable(wpt->description), QByteArray::number(waypt_table->size()).constData());
   }
 
@@ -166,7 +164,7 @@ LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int u
   }
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " lowranceusr4_find_waypt: warning, failed finding waypoint with ids %u %d %d\n",
+    printf("lowranceusr4_find_waypt: warning, failed finding waypoint with ids %u %d %d\n",
            uid_unit, uid_seq_low, uid_seq_high);
   }
   return nullptr;
@@ -188,7 +186,7 @@ LowranceusrFormat::lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, 
   }
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " lowranceusr4_find_global_waypt: warning, failed finding waypoint with ids %08x %08x %08x %08x\n",
+    printf("lowranceusr4_find_global_waypt: warning, failed finding waypoint with ids %08x %08x %08x %08x\n",
            id1, id2, id3, id4);
   }
   return nullptr;
@@ -329,7 +327,7 @@ LowranceusrFormat::lowranceusr4_find_index_from_icon_desc_and_color_desc(const Q
 void
 LowranceusrFormat::rd_init(const QString& fname)
 {
-  file_in = gbfopen_le(fname, "rb", MYNAME);
+  file_in = gbfopen_le(fname, "rb");
   utf16le_codec = QTextCodec::codecForName("UTF-16LE");
 }
 
@@ -343,12 +341,12 @@ LowranceusrFormat::rd_deinit()
 void
 LowranceusrFormat::wr_init(const QString& fname)
 {
-  file_out = gbfopen_le(fname, "wb", MYNAME);
+  file_out = gbfopen_le(fname, "wb");
   mkshort_handle = new MakeShort;
   waypt_out_count = 0;
   writing_version = opt_wversion.get_result();
   if ((writing_version < 2) || (writing_version > 4)) {
-    fatal(MYNAME " wversion value %s is not supported !!\n", qPrintable(opt_wversion));
+    fatal("wversion value %s is not supported !!\n", qPrintable(opt_wversion));
   }
   utf16le_codec = QTextCodec::codecForName("UTF-16LE");
   waypt_table = new QList<const Waypoint*>;
@@ -400,7 +398,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   if (object_num_present) {
     short object_num = gbfgetint16(file_in);
     if (global_opts.debug_level == 99) {
-      printf(MYNAME " parse_waypt: %5d", object_num);
+      printf("parse_waypt: %5d", object_num);
     }
   }
 
@@ -447,7 +445,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
         printf(" %5d %7.1f", (int)METERS_TO_FEET(wpt_tmp->altitude), wpt_tmp->altitude);
       }
     } else {
-      printf(MYNAME " parse_waypt: Waypt name = '%s' Lat = %+f Lon = %+f alt = ",
+      printf("parse_waypt: Waypt name = '%s' Lat = %+f Lon = %+f alt = ",
              qPrintable(wpt_tmp->shortname), wpt_tmp->latitude, wpt_tmp->longitude);
       if (wpt_tmp->altitude == unknown_alt) {
         printf("UNKNOWN ALT\n");
@@ -474,7 +472,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
     if (global_opts.debug_level == 99) {
       printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
     } else {
-      printf(MYNAME " parse_waypt: creation time '%s', waypt_time %" PRId64 "\n",
+      printf("parse_waypt: creation time '%s', waypt_time %" PRId64 "\n",
              qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")), waypt_time);
     }
   }
@@ -496,7 +494,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
     if (global_opts.debug_level == 99) {
       printf(" %04x (%d)", (int)waypt_type, (int)waypt_type);
     } else {
-      printf(MYNAME " parse_waypt: waypt_type = %d\n",waypt_type);
+      printf("parse_waypt: waypt_type = %d\n",waypt_type);
     }
   }
 
@@ -606,7 +604,7 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
 
   if (global_opts.debug_level > 1) {
     if (global_opts.debug_level == 99) {
-      printf(MYNAME " parse_waypoints: ");
+      printf("parse_waypoints: ");
       if (reading_version > 4) {
         printf("%08x %08x %08x %08x ",
                fsdata->UUID1, fsdata->UUID2, fsdata->UUID3, fsdata->UUID4);
@@ -634,7 +632,7 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const
       printf(" %08x %8.3f %08x %08x %08x\n",
              unused_byte, fsdata->depth, loran_GRI, loran_Tda, loran_Tdb);
     } else {
-      printf(MYNAME " parse_waypoints: version = %d, name = %s, uid_unit = %u, "
+      printf("parse_waypoints: version = %d, name = %s, uid_unit = %u, "
              "uid_seq_low = %d, uid_seq_high = %d, lat = %+.10f, lon = %+.10f, depth = %f\n",
              waypoint_version, qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
              fsdata->uid_seq_low, fsdata->uid_seq_high,
@@ -657,18 +655,18 @@ LowranceusrFormat::lowranceusr_parse_waypts() const
   }
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " parse_waypts: Num Waypoints = %d\n", NumWaypoints);
+    printf("parse_waypts: Num Waypoints = %d\n", NumWaypoints);
   }
 
   if (global_opts.debug_level == 99) {
     if (reading_version > 3) {
-      printf(MYNAME " parse_waypts: ");
+      printf("parse_waypts: ");
       if (reading_version > 4) {
         printf("Universal ID                        ");
       }
       printf("              Sequence Number  Stream  Waypoint\n");
 
-      printf(MYNAME " parse_waypoints: ");
+      printf("parse_waypoints: ");
       if (reading_version > 4) {
         printf("    ID1      ID2      ID3      ID4  ");
       }
@@ -679,7 +677,7 @@ LowranceusrFormat::lowranceusr_parse_waypts() const
       printf(" Latitude        Longitude       Flags    ICON Color        Length Description     ");
       printf(" Date       Time  Unknown  Depth    LoranGRI LoranTda LoranTdb\n");
 
-      printf(MYNAME " parse_waypoints: ");
+      printf("parse_waypoints: ");
       if (reading_version > 4) {
         printf("-------- -------- -------- -------- ");
       }
@@ -690,13 +688,13 @@ LowranceusrFormat::lowranceusr_parse_waypts() const
       printf(" --------------- --------------- -------- ---- ------------ ------ ----------------");
       printf(" ---------- ----- -------- -------- -------- -------- --------\n");
     } else {
-      printf(MYNAME " parse_waypts: Number Name            Longitude       Latitude       Altitude       Time            ");
+      printf("parse_waypts: Number Name            Longitude       Latitude       Altitude       Time            ");
       printf(" ICON ID (dec)    Flag (dec)");
       if (reading_version == 3) {
         printf(" Depth (ft)");
       }
       printf("\n");
-      printf(MYNAME " parse_waypts: ------ --------------- --------------- -------------- -------------- ----------------");
+      printf("parse_waypts: ------ --------------- --------------- -------------- -------------- ----------------");
       printf(" ---------------- ----------");
       if (reading_version == 3) {
         printf(" ----------");
@@ -719,7 +717,7 @@ LowranceusrFormat::lowranceusr_parse_waypts() const
       lowranceusr4_parse_waypt(wpt_tmp);
       break;
     default:
-      Warning() << MYNAME << ": Unknown internal version " << reading_version;
+      Warning() << "Unknown internal version " << reading_version;
     }
     waypt_add(wpt_tmp);
   }
@@ -738,7 +736,7 @@ LowranceusrFormat::lowranceusr_parse_route() const
   short num_legs = gbfgetint16(file_in);
 
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_route: Route '%s', Num Legs = %d", qPrintable(name), num_legs);
+    printf("parse_route: Route '%s', Num Legs = %d", qPrintable(name), num_legs);
   }
 
   /* route reversed */
@@ -748,15 +746,15 @@ LowranceusrFormat::lowranceusr_parse_route() const
   }
 
   if (global_opts.debug_level == 99) {
-    printf(MYNAME " parse_route:  Name            Longitude        Latitude       Altitude      Time             Unknown  ICON ID (dec)    Flag (dec) Depth (ft)\n");
-    printf(MYNAME " parse_route:  --------------- ---------------  -------------- ------------- ---------------- -------- ---------------- ---------- ----------\n");
+    printf("parse_route:  Name            Longitude        Latitude       Altitude      Time             Unknown  ICON ID (dec)    Flag (dec) Depth (ft)\n");
+    printf("parse_route:  --------------- ---------------  -------------- ------------- ---------------- -------- ---------------- ---------- ----------\n");
   }
 
   /* waypoints */
   for (int j = 0; j < num_legs; j++) {
     auto* wpt_tmp = new Waypoint;
     if (global_opts.debug_level == 99) {
-      printf(MYNAME " parse_route:");
+      printf("parse_route:");
     }
     lowranceusr_parse_waypt(wpt_tmp, 0); /* Indicate object number missing */
     route_add_wpt(rte_head, wpt_tmp);
@@ -785,7 +783,7 @@ LowranceusrFormat::lowranceusr4_parse_route() const
   /* UID unit number */
   fsdata->uid_unit = gbfgetint32(file_in);
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_route: Unit %u (0x%08x)\n", fsdata->uid_unit, fsdata->uid_unit);
+    printf("parse_route: Unit %u (0x%08x)\n", fsdata->uid_unit, fsdata->uid_unit);
   }
 
   /* 64-bit UID sequence number */
@@ -795,7 +793,7 @@ LowranceusrFormat::lowranceusr4_parse_route() const
   /* Route stream version number */
   int route_version = gbfgetint16(file_in);
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_route: Version = %d\n", route_version);
+    printf("parse_route: Version = %d\n", route_version);
   }
 
   /* Route name; input is 2 bytes per char, we convert to 1 */
@@ -813,10 +811,10 @@ LowranceusrFormat::lowranceusr4_parse_route() const
 
   if (global_opts.debug_level > 1) {
     if (reading_version >= 5) {
-      printf(MYNAME " parse_route: route '%s' (UUID %08x %08x %8x %08x) has %d legs\n",
+      printf("parse_route: route '%s' (UUID %08x %08x %8x %08x) has %d legs\n",
              qPrintable(rte_head->rte_name), UUID1, UUID2, UUID3, UUID4, num_legs);
     } else {
-      printf(MYNAME " parse_route: route '%s' has %d legs\n",
+      printf("parse_route: route '%s' has %d legs\n",
              qPrintable(rte_head->rte_name), num_legs);
     }
   }
@@ -830,7 +828,7 @@ LowranceusrFormat::lowranceusr4_parse_route() const
       const Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
-          printf(MYNAME " parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
+          printf("parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
                  j, qPrintable(wpt_tmp->shortname), wpt_tmp->longitude, wpt_tmp->latitude);
         }
         route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
@@ -846,7 +844,7 @@ LowranceusrFormat::lowranceusr4_parse_route() const
       const Waypoint* wpt_tmp = lowranceusr4_find_global_waypt(UUID1, UUID2, UUID3, UUID4);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
-          printf(MYNAME " parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
+          printf("parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
                  j, qPrintable(wpt_tmp->shortname), wpt_tmp->longitude, wpt_tmp->latitude);
         }
         route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
@@ -863,7 +861,7 @@ LowranceusrFormat::lowranceusr4_parse_route() const
 
   /* Mystery byte, discard */
   if (global_opts.debug_level == 99) {
-    printf(MYNAME " parse_route: end of route %02x\n", gbfgetc(file_in));
+    printf("parse_route: end of route %02x\n", gbfgetc(file_in));
   } else {
     gbfgetc(file_in);
   }
@@ -883,7 +881,7 @@ LowranceusrFormat::lowranceusr_parse_routes()
   }
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " parse_routes: Num Routes = %d\n", num_routes);
+    printf("parse_routes: Num Routes = %d\n", num_routes);
   }
 
   for (int i = 0; i < num_routes; i++) {
@@ -909,7 +907,7 @@ LowranceusrFormat::lowranceusr_parse_icons() const
   short int num_icons = gbfgetint16(file_in);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " parse_icons: Num Event Marker Icons = %d\n", num_icons);
+    printf("parse_icons: Num Event Marker Icons = %d\n", num_icons);
   }
 
   for (int i = 0; i < num_icons && !gbfeof(file_in); i++) {
@@ -933,7 +931,7 @@ LowranceusrFormat::lowranceusr_parse_icons() const
       wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_number);
 
       if (global_opts.debug_level > 1) {
-        printf(MYNAME " parse_icons: '%s' %d %16.16s %+15.10f %+15.10f\n",
+        printf("parse_icons: '%s' %d %16.16s %+15.10f %+15.10f\n",
                qPrintable(wpt_tmp->shortname), icon_number, qPrintable(wpt_tmp->icon_descr), wpt_tmp->latitude, wpt_tmp->longitude);
       }
       waypt_add(wpt_tmp);
@@ -951,28 +949,28 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
   }
 
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_trails: Trail '%s'\n", qPrintable(trk_head->rte_name));
+    printf("parse_trails: Trail '%s'\n", qPrintable(trk_head->rte_name));
   }
 
   /* visible */
   char visible = gbfgetc(file_in);
 
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_trails: Visible '%x' - %s\n", visible, (visible ? "Yes" : "No"));
+    printf("parse_trails: Visible '%x' - %s\n", visible, (visible ? "Yes" : "No"));
   }
 
   /* num trail points */
   short num_trail_points = gbfgetint16(file_in);
 
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_trails: Num Trail Points = %d\n", num_trail_points);
+    printf("parse_trails: Num Trail Points = %d\n", num_trail_points);
   }
 
   /* max trail size */
   int itmp = gbfgetint16(file_in);
 
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " parse_trails: Max Trail size = %d\n", itmp);
+    printf("parse_trails: Max Trail size = %d\n", itmp);
   }
 
   if (num_trail_points) {
@@ -982,7 +980,7 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
       num_section_points = gbfgetint16(file_in);
 
       if (global_opts.debug_level > 1) {
-        printf(MYNAME " parse_trails: Num Section Points = %d\n", num_section_points);
+        printf("parse_trails: Num Section Points = %d\n", num_section_points);
       }
 
       for (int j = 0; j < num_section_points && !gbfeof(file_in); j++, num_trail_points--) {
@@ -1010,7 +1008,7 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
         track_add_wpt(trk_head, wpt_tmp);
 
         if (global_opts.debug_level > 2) {
-          printf(MYNAME " parse_trails: Trail pt lat %f lon %f\n", wpt_tmp->latitude, wpt_tmp->longitude);
+          printf("parse_trails: Trail pt lat %f lon %f\n", wpt_tmp->latitude, wpt_tmp->longitude);
         }
       }
     }
@@ -1036,10 +1034,10 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
   /* Trail stream version number */
   int trail_version = gbfgetint16(file_in);
   if (global_opts.debug_level == 99) {
-    printf(MYNAME " parse_trails: trail Version %d\n", trail_version);
+    printf("parse_trails: trail Version %d\n", trail_version);
   }
   if ((trail_version < 3) || (trail_version > 5)) {
-    fatal(MYNAME " trail version %d not supported!!", trail_version);
+    fatal("trail version %d not supported!!", trail_version);
   }
 
   /* Trail name; input is 2 bytes per char, we convert to 1 */
@@ -1048,7 +1046,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
     trk_head->rte_name = name;
   }
   if (global_opts.debug_level >= 2) {
-    printf(MYNAME " parse_trails: Trail '%s'\n", qPrintable(trk_head->rte_name));
+    printf("parse_trails: Trail '%s'\n", qPrintable(trk_head->rte_name));
   }
 
   /* Flags, discard for now */
@@ -1063,7 +1061,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
     trk_head->rte_desc = desc;
   }
   if (global_opts.debug_level == 99) {
-    printf(MYNAME " parse_trails: Comment '%s'\n", qPrintable(desc));
+    printf("parse_trails: Comment '%s'\n", qPrintable(desc));
   }
 
   /* Creation date/time, discard for now */
@@ -1072,12 +1070,12 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
   int create_time = gbfgetint32(file_in);
   if (global_opts.debug_level == 99) {
     QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
-    printf(MYNAME " parse_trails: creation date/time = %s\n", qPrintable(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
+    printf("parse_trails: creation date/time = %s\n", qPrintable(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
   }
 
   /* Some flag bytes */
   if (global_opts.debug_level == 99) {
-    printf(MYNAME " parse_trails: unknown flag bytes %02x %02x %02x\n",
+    printf("parse_trails: unknown flag bytes %02x %02x %02x\n",
            gbfgetc(file_in), gbfgetc(file_in), gbfgetc(file_in));
   } else {
     /* just discard */
@@ -1089,7 +1087,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
   /* Mysterious attribute "data count" */
   int attr_count = gbfgetint32(file_in);
   if (global_opts.debug_level == 99) {
-    printf(MYNAME " parse_trails: attribute count %4d : (", attr_count);
+    printf("parse_trails: attribute count %4d : (", attr_count);
     for (int i=0; i<attr_count; i++) {
       if (trail_version == 5) {
         printf("%08x ", gbfgetint32(file_in));
@@ -1112,12 +1110,12 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
   int num_trail_pts = gbfgetint32(file_in);
 
   if (global_opts.debug_level >= 2) {
-    printf(MYNAME " parse_trails: trail %d name='%s' color=%d flags=%d has %d (%x) trailpoints\n",
+    printf("parse_trails: trail %d name='%s' color=%d flags=%d has %d (%x) trailpoints\n",
            *trail_num, qPrintable(trk_head->rte_name), trail_color, trail_flags, num_trail_pts, num_trail_pts);
 
     if (global_opts.debug_level == 99) {
-      printf(MYNAME " parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
-      printf(MYNAME " parse_trails: -------------- -------------- -- -------- -- -------- -- --------\n");
+      printf("parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
+      printf("parse_trails: -------------- -------------- -- -------- -- -------- -- --------\n");
     }
   }
   for (int j = 0; j < num_trail_pts; ++j) {
@@ -1136,10 +1134,10 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num) const
 
     if (global_opts.debug_level >= 2) {
       if (global_opts.debug_level == 99) {
-        printf(MYNAME " parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
+        printf("parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
         printf(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
       } else {
-        printf(MYNAME " parse_trails: added trailpoint %+.9f,%+.9f to trail %s\n",
+        printf("parse_trails: added trailpoint %+.9f,%+.9f to trail %s\n",
                wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(trk_head->rte_name));
       }
     }
@@ -1177,7 +1175,7 @@ LowranceusrFormat::lowranceusr_parse_trails()
   }
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " parse_trails: Num Trails = %d\n", num_trails);
+    printf("parse_trails: Num Trails = %d\n", num_trails);
   }
 
   for (int i = trail_num = 0; i < num_trails && !gbfeof(file_in); i++) {
@@ -1199,11 +1197,11 @@ LowranceusrFormat::read()
   reading_version = gbfgetint16(file_in);
   rstream_version = gbfgetint16(file_in);
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " input_file: USR File Format %d (Version = %d)\n", reading_version, rstream_version);
+    printf("input_file: USR File Format %d (Version = %d)\n", reading_version, rstream_version);
   }
 
   if ((reading_version < 2) || (reading_version > 6)) {
-    fatal(MYNAME " input file is a USR format that is not supported\n");
+    fatal("input file is a USR format that is not supported\n");
   }
 
   if (reading_version >= 4) {
@@ -1211,19 +1209,19 @@ LowranceusrFormat::read()
     /* Starting with USR version 4 have an unknown here */
     int unknown = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " input_file: Unknown %d (%x)\n", unknown, unknown);
+      printf("input_file: Unknown %d (%x)\n", unknown, unknown);
     }
 
     /* USR files also now contain a file title */
     QString title = lowranceusr4_readstr(file_in, 1);
     if (!title.isEmpty() && global_opts.debug_level >= 1) {
-      printf(MYNAME " file title: '%s'\n", qPrintable(title));
+      printf("file title: '%s'\n", qPrintable(title));
     }
 
     /* AND a date created string */
     QString creation_date = lowranceusr4_readstr(file_in, 1);
     if (!creation_date.isEmpty()  && global_opts.debug_level >= 1) {
-      printf(MYNAME " date string: '%s'\n", qPrintable(creation_date));
+      printf("date string: '%s'\n", qPrintable(creation_date));
     }
 
     /* Creation date/time, discard for now */
@@ -1232,7 +1230,7 @@ LowranceusrFormat::read()
     int create_time = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
       QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
-      printf(MYNAME " creation date/time : '%s'\n", qPrintable(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
+      printf("creation date/time : '%s'\n", qPrintable(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
     }
 
     unsigned char byte = gbfgetc(file_in); /* unused, apparently */
@@ -1241,13 +1239,13 @@ LowranceusrFormat::read()
     /* AND the serial number of the unit that created the file */
     uint serial_num = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " device serial number: %u\n", serial_num);
+      printf("device serial number: %u\n", serial_num);
     }
 
     /* AND a comment on the file contents */
     QString comment = lowranceusr4_readstr(file_in, 1);
     if (!comment.isEmpty() && global_opts.debug_level >= 1) {
-      printf(MYNAME " content description: '%s'\n", qPrintable(comment));
+      printf("content description: '%s'\n", qPrintable(comment));
     }
   }
 
@@ -1304,7 +1302,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
 
   if (global_opts.debug_level > 2) {
     /* print lat/lon/alt on one easily greppable line */
-    printf(MYNAME " waypt_disp: Waypt name = '%s' Lat = %+16.10f  Lon = %+16.10f  Alt = %f\n",
+    printf("waypt_disp: Waypt name = '%s' Lat = %+16.10f  Lon = %+16.10f  Alt = %f\n",
            qPrintable(wpt->shortname), wpt->latitude, wpt->longitude, wpt->altitude);
   }
 
@@ -1317,7 +1315,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt) const
   gbfwrite(name_qba.constData(), 1, text_len, file_out);
 
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " waypt_disp: Waypt name = '%s' ", qPrintable(name));
+    printf("waypt_disp: Waypt name = '%s' ", qPrintable(name));
   }
 
   /**
@@ -1477,7 +1475,7 @@ LowranceusrFormat::lowranceusr_waypt_pr(const Waypoint* wpt)
   gbfputint16(waypt_out_count, file_out);
 
   if (global_opts.debug_level >= 3) {
-    printf(MYNAME " waypt_pr: waypoint #%d\n",waypt_out_count);
+    printf("waypt_pr: waypoint #%d\n",waypt_out_count);
   }
 
   waypt_out_count++;
@@ -1497,14 +1495,14 @@ LowranceusrFormat::lowranceusr4_write_waypoints()
   route_disp_all(nullptr, nullptr, register_waypt_lambda);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing %s waypoints\n", QByteArray::number(waypt_table->size()).constData());
+    printf("writing %s waypoints\n", QByteArray::number(waypt_table->size()).constData());
   }
 
   gbfputint32(waypt_table->size(), file_out);
   waypt_uid = 0;
   for (int i = 0; i < waypt_table->size(); ++i) {
     if (global_opts.debug_level >= 2) {
-      printf(MYNAME " writing out waypt %d (%s - %s)\n",
+      printf("writing out waypt %d (%s - %s)\n",
              i, qPrintable(waypt_table->at(i)->shortname), qPrintable(waypt_table->at(i)->description));
     }
     lowranceusr4_waypt_disp((waypt_table->at(i)));
@@ -1569,7 +1567,7 @@ LowranceusrFormat::lowranceusr_trail_hdr(const route_head* trk)
     text_len = MAXUSRSTRINGSIZE;
   }
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " trail_hdr: trail name '%s' ", qPrintable(trk->rte_name));
+    printf("trail_hdr: trail name '%s' ", qPrintable(trk->rte_name));
   }
   gbfputint32(text_len, file_out);
   gbfwrite(CSTR(name), 1, text_len, file_out);
@@ -1622,7 +1620,7 @@ LowranceusrFormat::lowranceusr_route_hdr(const route_head* rte)
   gbfwrite(&route_reversed, 1, 1, file_out);
 
   if (global_opts.debug_level >= 1)
-    printf(MYNAME " route_hdr: route name \"%s\" num_legs = %d\n",
+    printf("route_hdr: route name \"%s\" num_legs = %d\n",
            qPrintable(rte->rte_name), num_legs);
 }
 
@@ -1630,7 +1628,7 @@ void
 LowranceusrFormat::lowranceusr4_route_hdr(const route_head* rte)
 {
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing route #%d (%s) with %d waypts\n",
+    printf("writing route #%d (%s) with %d waypts\n",
            route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct());
   }
 
@@ -1677,7 +1675,7 @@ LowranceusrFormat::lowranceusr4_route_leg_disp(const Waypoint* wpt) const
       gbfputint32(i, file_out); // Sequence Low
       gbfputint32(0, file_out); // Sequence High
       if (global_opts.debug_level > 1) {
-        printf(MYNAME " wrote route leg with waypt '%s'\n", qPrintable(wpt->shortname));
+        printf("wrote route leg with waypt '%s'\n", qPrintable(wpt->shortname));
       }
       break;
     }
@@ -1700,7 +1698,7 @@ LowranceusrFormat::lowranceusr_trail_disp(const Waypoint* wpt)
     int lon = lon_deg_to_mm(wpt->longitude);
 
     if (global_opts.debug_level > 1) {
-      printf(MYNAME " trail_disp: Trail point #%d lat = %f long = %f\n",trail_point_count, wpt->latitude, wpt->longitude);
+      printf("trail_disp: Trail point #%d lat = %f long = %f\n",trail_point_count, wpt->latitude, wpt->longitude);
     }
 
     gbfputint32(lat, file_out);
@@ -1735,7 +1733,7 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
     gbfputs(name, file_out);
 
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " trail_hdr: trail name = %s\n", CSTR(name));
+      printf("trail_hdr: trail name = %s\n", CSTR(name));
     }
   }
 
@@ -1754,7 +1752,7 @@ LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head* /*unused*/)
     num_section_points = num_trail_points;
 
     if (global_opts.debug_level >= 1)
-      printf(MYNAME " merge_trail_tlr: num_trail_points = %d\nmax_trail_size = %d\nnum_section_points = %d\n",
+      printf("merge_trail_tlr: num_trail_points = %d\nmax_trail_size = %d\nnum_section_points = %d\n",
              num_trail_points, max_trail_size, num_section_points);
 
     const char visible=1;
@@ -1774,7 +1772,7 @@ void
 LowranceusrFormat::lowranceusr4_trail_hdr(const route_head* trail)
 {
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing trail %d (%s) with %d trailpoints\n",
+    printf("writing trail %d (%s) with %d trailpoints\n",
            trail_uid, qPrintable(trail->rte_name), trail->rte_waypt_ct());
   }
 
@@ -1855,7 +1853,7 @@ LowranceusrFormat::write()
 
   int NumWaypoints = waypt_count();
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " data_write: Num Waypoints = %d\n", NumWaypoints);
+    printf("data_write: Num Waypoints = %d\n", NumWaypoints);
   }
 
   // If writeasicons option specified then all Waypoints processed are written as
@@ -1885,7 +1883,7 @@ LowranceusrFormat::write()
     buf = opt_title.isEmpty()?
           QStringLiteral("GPSBabel generated USR data file") : opt_title;
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " data_write: Title = '%s'\n", qPrintable(buf));
+      printf("data_write: Title = '%s'\n", qPrintable(buf));
     }
     lowranceusr4_writestr(buf, file_out, 1);
 
@@ -1909,7 +1907,7 @@ LowranceusrFormat::write()
     buf = opt_content_descr.isEmpty()?
           QStringLiteral("Waypoints, routes, and trails") : opt_content_descr;
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " data_write: Description = '%s'\n", qPrintable(buf));
+      printf("data_write: Description = '%s'\n", qPrintable(buf));
     }
     lowranceusr4_writestr(buf, file_out, 1);
 
@@ -1926,7 +1924,7 @@ LowranceusrFormat::write()
   lowrance_route_count=0;
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " data_write: Num routes = %d\n", NumRoutes);
+    printf("data_write: Num routes = %d\n", NumRoutes);
   }
 
   if ((writing_version == 2) || (writing_version == 3)) {
@@ -2024,12 +2022,12 @@ LowranceusrFormat::write()
       track_disp_all(lowranceusr_merge_trail_hdr_2_lambda, nullptr, lowranceusr_trail_disp_lambda);
     } else {
       /* MERGE NEEDS SOME MORE WORK */
-      fatal(MYNAME " output file USR %d format is not supported with merge option\n", writing_version);
+      fatal("output file USR %d format is not supported with merge option\n", writing_version);
     }
 
   } else {
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " data_write: Num trails = %d\n", NumTrails);
+      printf("data_write: Num trails = %d\n", NumTrails);
     }
     if ((writing_version == 2) || (writing_version == 3)) {
       // USR version 2 & 3 use 16-bit count

@@ -52,8 +52,6 @@
 #include "gbser.h"                     // for gbser_deinit, gbser_flush, gbser_init, gbser_read_wait, gbser_readc_wait, gbser_set_speed, gbser_write, gbser_ERROR, gbser_OK, gbser_NOTHING
 
 
-#define MYNAME "DG-100"
-
 const Dg100Format::dg100_command Dg100Format::dg100_commands[] = {
   { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   /* the getfileheader answer has variable length, -1 is a dummy value */
@@ -645,13 +643,13 @@ void
 Dg100Format::common_rd_init(const QString& fname)
 {
   if (isfile) {
-    fin = gbfopen(fname, "rb", MYNAME);
+    fin = gbfopen(fname, "rb");
   } else {
     if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
-      fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
+      fatal("Can't open port '%s'\n", qPrintable(fname));
     }
     if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
-      fatal(MYNAME ": Can't configure port '%s'\n", qPrintable(fname));
+      fatal("Can't configure port '%s'\n", qPrintable(fname));
     }
     // Toss anything that came in before our speed was set, particularly
     // for the bluetooth BT-335 product.

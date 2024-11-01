@@ -63,7 +63,6 @@
 #include "src/core/textstream.h"  // for TextStream
 
 
-#define MYNAME        "OZI"
 #define BADCHARS	",\r\n"
 #define DAYS_SINCE_1990	25569
 
@@ -71,7 +70,7 @@ void
 OziFormat::ozi_open_io(const QString& fname, QIODevice::OpenModeFlag mode)
 {
   stream = new gpsbabel::TextStream;
-  stream->open(fname, mode, MYNAME, opt_codec.get().toUtf8());
+  stream->open(fname, mode, opt_codec.get().toUtf8());
 
   if (mode & QFile::WriteOnly) {
     stream->setRealNumberNotation(QTextStream::FixedNotation);
@@ -329,7 +328,7 @@ OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
     altunit = 'f';
     alt_scale = FEET_TO_METERS(1.0); /* feet */
   } else {
-    fatal(MYNAME ": Unknown value (%s) for option 'altunit'!\n", qPrintable(altunit_opt));
+    fatal("Unknown value (%s) for option 'altunit'!\n", qPrintable(altunit_opt));
   }
   if (direction != 0) {
     alt_scale = 1.0 / alt_scale;
@@ -345,7 +344,7 @@ OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
     proxunit = 'k';
     prox_scale = 1000.0; /* kilometers */
   } else {
-    fatal(MYNAME ": Unknown value (%s) for option 'proxunit'!\n", qPrintable(proxunit_opt));
+    fatal("Unknown value (%s) for option 'proxunit'!\n", qPrintable(proxunit_opt));
   }
   if (direction != 0) {
     prox_scale = 1.0 / prox_scale;
@@ -400,7 +399,7 @@ OziFormat::wr_init(const QString& fname)
   }
 
   ozi_init_units(1);
-  parse_distance(proximityarg, &proximity, 1.0 / prox_scale, MYNAME);
+  parse_distance(proximityarg, &proximity, 1.0 / prox_scale);
 }
 
 void
@@ -671,7 +670,7 @@ OziFormat::read()
       datum = GPS_Lookup_Datum_Index(buff);
 
       if (datum < 0) {
-        fatal(MYNAME ": Unsupported datum '%s'.\n", qPrintable(buff));
+        fatal("Unsupported datum '%s'.\n", qPrintable(buff));
       }
     } else if (linecount == 3) {
       if (buff.startsWith( "Altitude is in ", Qt::CaseInsensitive)) {
@@ -683,7 +682,7 @@ OziFormat::read()
           altunit = 'm';
           alt_scale = 1.0;
         } else {
-          fatal(MYNAME ": Unknown unit (%s) used by altitude values!\n", qPrintable(unit));
+          fatal("Unknown unit (%s) used by altitude values!\n", qPrintable(unit));
         }
       }
     } else if ((linecount == 5) && (ozi_objective == trkdata)) {
@@ -722,7 +721,7 @@ OziFormat::read()
           ozi_parse_waypt(i, s, wpt_tmp, fsdata);
           break;
         case posndata:
-          fatal(MYNAME ": realtime positioning not supported.\n");
+          fatal("realtime positioning not supported.\n");
           break;
         }
         i++;
@@ -757,7 +756,7 @@ OziFormat::read()
         }
         break;
       case posndata:
-        fatal(MYNAME ": realtime positioning not supported.\n");
+        fatal("realtime positioning not supported.\n");
         break;
       }
 

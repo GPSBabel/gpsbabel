@@ -66,7 +66,6 @@
 #define ICON_MULTI_TRK ICON_BASE "track-directional/track-0.png"
 #define ICON_DIR ICON_BASE "track-directional/track-%1.png" // format string where next arg is rotational degrees.
 
-#define MYNAME "kml"
 
 const QStringList KmlFormat::kml_tags_to_ignore = {
   "kml",
@@ -122,7 +121,7 @@ void KmlFormat::kml_step_color()
   // Note that color_seq may be outside this range if the cast from float to int fails.
   int color_seq = static_cast<int>(kml_color_sequencer.seq) % (kml_color_limit * 6);
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME ": kml_color_sequencer seq %f %d, step %f\n", kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
+    printf("kml_color_sequencer seq %f %d, step %f\n", kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
   }
   if ((color_seq >= (0*kml_color_limit)) && (color_seq < (1*kml_color_limit))) {
     kml_color_sequencer.color.bbggrr = kml_bgr_to_color(0, color_seq, kml_color_limit);
@@ -137,7 +136,7 @@ void KmlFormat::kml_step_color()
   } else if ((color_seq >= (5*kml_color_limit)) && (color_seq < (6*kml_color_limit))) {
     kml_color_sequencer.color.bbggrr = kml_bgr_to_color(6*kml_color_limit-color_seq, 0, kml_color_limit);
   } else { // should not occur, but to be safe generate a legal color.
-    warning(MYNAME ": Error in color conversion - using default color.\n");
+    warning("Error in color conversion - using default color.\n");
     kml_color_sequencer.color.bbggrr = kml_bgr_to_color(102, 102, 102);
   }
   // compute next color.
@@ -147,7 +146,7 @@ void KmlFormat::kml_step_color()
 void KmlFormat::wpt_s(const QString& /*args*/, const QXmlStreamAttributes* /*attrs*/)
 {
   if (wpt_tmp) {
-    fatal(MYNAME ": wpt_s: invalid kml file\n");
+    fatal("wpt_s: invalid kml file\n");
   }
   wpt_tmp = new Waypoint;
   wpt_tmp_queued = false;
@@ -161,7 +160,7 @@ void KmlFormat::wpt_s(const QString& /*args*/, const QXmlStreamAttributes* /*att
 void KmlFormat::wpt_e(const QString& /*args*/, const QXmlStreamAttributes* /*attrs*/)
 {
   if (!wpt_tmp) {
-    fatal(MYNAME ": wpt_e: invalid kml file\n");
+    fatal("wpt_e: invalid kml file\n");
   }
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
@@ -176,7 +175,7 @@ void KmlFormat::wpt_e(const QString& /*args*/, const QXmlStreamAttributes* /*att
 void KmlFormat::wpt_name(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (!wpt_tmp) {
-    fatal(MYNAME ": wpt_name: invalid kml file\n");
+    fatal("wpt_name: invalid kml file\n");
   }
   wpt_tmp->shortname = args;
 }
@@ -184,7 +183,7 @@ void KmlFormat::wpt_name(const QString& args, const QXmlStreamAttributes* /*attr
 void KmlFormat::wpt_desc(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (!wpt_tmp) {
-    fatal(MYNAME ": wpt_desc: invalid kml file\n");
+    fatal("wpt_desc: invalid kml file\n");
   }
   wpt_tmp->description += args.trimmed();
 }
@@ -192,7 +191,7 @@ void KmlFormat::wpt_desc(const QString& args, const QXmlStreamAttributes* /*attr
 void KmlFormat::wpt_time(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (!wpt_tmp) {
-    fatal(MYNAME ": wpt_time: invalid kml file\n");
+    fatal("wpt_time: invalid kml file\n");
   }
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
@@ -255,7 +254,7 @@ void KmlFormat::trk_coord(const QString& args, const QXmlStreamAttributes* /*att
       trkpt->latitude = coords[1].toDouble();
       trkpt->longitude = coords[0].toDouble();
     } else {
-      Warning() << MYNAME << ": malformed coordinates " << vec;
+      Warning() << "malformed coordinates " << vec;
     }
     track_add_wpt(trk_head, trkpt);
   }
@@ -275,7 +274,7 @@ void KmlFormat::trk_coord(const QString& args, const QXmlStreamAttributes* /*att
     if (!trk_head->rte_waypt_empty()) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
       if (trk_head->rte_waypt_ct() < 2) {
-        fatal(MYNAME ": attempt to interpolate TimeSpan with too few points.");
+        fatal("attempt to interpolate TimeSpan with too few points.");
       }
       qint64 ms_per_waypoint = timespan_ms / (trk_head->rte_waypt_ct() - 1);
       foreach (Waypoint* trackpoint, trk_head->waypoint_list) {
@@ -307,7 +306,7 @@ void KmlFormat::gx_trk_e(const QString& /*args*/, const QXmlStreamAttributes* /*
   // Check that for every temporal value (kml:when) in a kml:Track there is a position (kml:coord) value.
   // Check that for every temporal value (kml:when) in a gx:Track there is a position (gx:coord) value.
   if (gx_trk_times->size() != gx_trk_coords->size()) {
-    fatal(MYNAME ": There were more coord elements than the number of when elements.\n");
+    fatal("There were more coord elements than the number of when elements.\n");
   }
 
   // In KML 2.3 kml:Track elements kml:coord and kml:when elements are not required to be in any order.
@@ -346,7 +345,7 @@ void KmlFormat::gx_trk_e(const QString& /*args*/, const QXmlStreamAttributes* /*
 void KmlFormat::gx_trk_when(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (! gx_trk_times) {
-    fatal(MYNAME ": gx_trk_when: invalid kml file\n");
+    fatal("gx_trk_when: invalid kml file\n");
   }
   gx_trk_times->append(xml_parse_time(args));
 }
@@ -354,7 +353,7 @@ void KmlFormat::gx_trk_when(const QString& args, const QXmlStreamAttributes* /*a
 void KmlFormat::gx_trk_coord(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (! gx_trk_coords) {
-    fatal(MYNAME ": gx_trk_coord: invalid kml file\n");
+    fatal("gx_trk_coord: invalid kml file\n");
   }
 
   double lat;
@@ -362,7 +361,7 @@ void KmlFormat::gx_trk_coord(const QString& args, const QXmlStreamAttributes* /*
   double alt;
   int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
   if (EOF != n && 2 != n && 3 != n) {
-    fatal(MYNAME ": coord field decode failure on \"%s\".\n", qPrintable(args));
+    fatal("coord field decode failure on \"%s\".\n", qPrintable(args));
   }
   gx_trk_coords->append(std::make_tuple(n, lat, lon, alt));
 }
@@ -1508,7 +1507,7 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
   if (global_opts.debug_level >= 3) {
-    printf(MYNAME ": New KML SimpleArray: %s\n", qPrintable(name));
+    printf("New KML SimpleArray: %s\n", qPrintable(name));
   }
   foreach (const Waypoint* wpt, header->waypoint_list) {
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
@@ -1550,14 +1549,14 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       if (fs_igc && fs_igc->get_value(member).has_value()) {
         double value = fs_igc->get_value(member).value();
         if (global_opts.debug_level >= 6) {
-          printf(MYNAME ": Writing KML SimpleArray data: %s of %f\n", qPrintable(name), value);
+          printf("Writing KML SimpleArray data: %s of %f\n", qPrintable(name), value);
         }
         writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
         // No igc_fsdata present, but we still need to write out the SimpleArray.
         // This can happen when merging tracks with different sets of IGC extensions.
       } else {
         if (global_opts.debug_level >= 7) {
-          printf(MYNAME ": Writing empty KML SimpleArray data for %s\n", qPrintable(name));
+          printf("Writing empty KML SimpleArray data for %s\n", qPrintable(name));
         }
         writer->writeTextElement(QStringLiteral("gx:value"), QString());
       }

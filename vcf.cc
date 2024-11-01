@@ -31,13 +31,10 @@
 #include "geocache.h"  // for Geocache, Geocache::UtfString
 
 
-#define MYNAME "VCF"
-
-
 void
 VcfFormat::wr_init(const QString& fname)
 {
-  file_out = gbfopen(fname, "w", MYNAME);
+  file_out = gbfopen(fname, "w");
 }
 
 void

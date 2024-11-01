@@ -31,12 +31,10 @@
 
 #if FILTERS_ENABLED
 
-#define MYNAME "duplicate"
-
 void DuplicateFilter::init()
 {
   if (!lcopt && !snopt) {
-    fatal(MYNAME ": one or both of the shortname and location options are required.\n");
+    fatal("one or both of the shortname and location options are required.\n");
   }
 }
 

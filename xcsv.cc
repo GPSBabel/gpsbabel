@@ -65,8 +65,6 @@
 #include "strptime.h"              // for strptime
 
 
-#define MYNAME	"XCSV"
-
 const QHash<QString, XcsvStyle::xcsv_token> XcsvStyle::xcsv_tokens {
   { "ALT_FEET", XT_ALT_FEET },
   { "ALT_METERS", XT_ALT_METERS },
@@ -199,14 +197,14 @@ QString XcsvStyle::dequote(const QString& in)
 void XcsvStyle::validate_fieldmap(const field_map& fmp, bool is_output)
 {
   if (fmp.key.isEmpty()) {
-    fatal(FatalMsg() << MYNAME << ": xcsv style is missing" <<
+    fatal(FatalMsg() << "xcsv style is missing" <<
           (is_output ? "output" : "input") << "field type.");
   }
   if (fmp.val.isNull()) {
-    fatal(FatalMsg() << MYNAME << ": xcsv style" << fmp.key.constData() << "is missing default.");
+    fatal(FatalMsg() << "xcsv style" << fmp.key.constData() << "is missing default.");
   }
   if (is_output && fmp.printfc.isNull()) {
-    fatal(FatalMsg() << MYNAME << ": xcsv style" << fmp.key.constData() << "output is missing format specifier.");
+    fatal(FatalMsg() << "xcsv style" << fmp.key.constData() << "output is missing format specifier.");
   }
 }
 
@@ -287,7 +285,7 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
       bad_time_parse = true;
     }
     if ((time_result.has_value() && !time_result->isValid()) || bad_time_parse) {
-      fatal(MYNAME ": couldn't parse time from string '%s' with format '%s'.\n",
+      fatal("couldn't parse time from string '%s' with format '%s'.\n",
             s, format);
     }
     if (time_result.has_value()) {
@@ -307,7 +305,7 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
       bad_date_parse = true;
     }
     if ((date_result.has_value() && !date_result->isValid()) || bad_date_parse) {
-      fatal(MYNAME ": couldn't parse date from string '%s' with format '%s'.\n",
+      fatal("couldn't parse date from string '%s' with format '%s'.\n",
             s, format);
     }
     if (date_result.has_value()) {
@@ -379,7 +377,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   Geocache* gc_data = nullptr;
 
   if (fmp.printfc.isNull()) {
-    fatal(MYNAME ": xcsv style '%s' is missing format specifier", fmp.key.constData());
+    fatal("xcsv style '%s' is missing format specifier", fmp.key.constData());
   }
 
   if (0 == strcmp(fmp.printfc.constData(), "\"%s\"")) {
@@ -504,7 +502,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   /* SPECIAL COORDINATES/GRID */
   case XcsvStyle::XT_MAP_EN_BNG:
     parse_coordinates(s, kDatumOSGB36, grid_bng,
-                      &wpt->latitude, &wpt->longitude, MYNAME);
+                      &wpt->latitude, &wpt->longitude);
     break;
   case XcsvStyle::XT_UTM_ZONE:
     parse_data->utm_zone = xstrtoi(s, nullptr, 10);
@@ -805,7 +803,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     } else if (strncmp(fmp.key.constData(), "LAT_10E", 7) == 0) {
       wpt->latitude = strtod(s, nullptr) / pow(10.0, strtod(fmp.key.constData()+7, nullptr));
     } else {
-      warning(MYNAME ": Unknown style directive: %s\n", fmp.key.constData());
+      warning("Unknown style directive: %s\n", fmp.key.constData());
     }
     break;
 
@@ -863,7 +861,7 @@ XcsvFormat::read()
                                  xcsv_style->field_encloser, linecount);
 
       if (xcsv_style->ifields.isEmpty()) {
-        fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", qPrintable(xcsv_style->description)? qPrintable(xcsv_style->description) : "unknown");
+        fatal("attempt to read, but style '%s' has no IFIELDs in it.\n", qPrintable(xcsv_style->description)? qPrintable(xcsv_style->description) : "unknown");
       }
 
       int ifield_idx = 0;
@@ -1226,7 +1224,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       double north;
       double east;
       if (! GPS_Math_WGS84_To_UKOSMap_H(wpt->latitude, wpt->longitude, &east, &north, map))
-        fatal(MYNAME ": Position (%.5f/%.5f) outside of BNG.\n",
+        fatal("Position (%.5f/%.5f) outside of BNG.\n",
               wpt->latitude, wpt->longitude);
       buff = QString::asprintf(fmp.printfc.constData(), map, qRound(east), qRound(north));
     }
@@ -1590,7 +1588,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       }
       break;
     default:
-      warning(MYNAME ": Unknown style directive: %s\n", fmp.key.constData());
+      warning("Unknown style directive: %s\n", fmp.key.constData());
       break;
     }
     QString obuff = csv_stringclean(buff, xcsv_style->badchars);
@@ -1789,7 +1787,7 @@ XcsvStyle::xcsv_parse_style_line(XcsvStyle* style, QString line)
     } else if (p == u"WAYPOINT") {
       style->datatype = wptdata;
     } else {
-      fatal(FatalMsg() << MYNAME << ": Unknown data type" << p);
+      fatal(FatalMsg() << "Unknown data type" << p);
     }
 
   } else if (op == u"IFIELD") {
@@ -1847,7 +1845,7 @@ XcsvStyle::xcsv_read_style(const QString& fname)
   XcsvStyle style;
 
   gpsbabel::TextStream stream;
-  stream.open(fname, QIODevice::ReadOnly, MYNAME);
+  stream.open(fname, QIODevice::ReadOnly);
   QString sbuff;
   while (stream.readLineInto(&sbuff)) {
     xcsv_parse_style_line(&style, sbuff.trimmed());
@@ -1879,7 +1877,7 @@ XcsvFormat::rd_init(const QString& fname)
     xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
-      fatal(MYNAME ": XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
+      fatal("XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
     }
 
     xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
@@ -1887,15 +1885,15 @@ XcsvFormat::rd_init(const QString& fname)
 
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == wptdata)) {
     if (global_opts.masked_objective & (TRKDATAMASK|RTEDATAMASK)) {
-      warning(MYNAME " attempt to read %s as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", qPrintable(fname));
+      warning("attempt to read %s as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", qPrintable(fname));
     }
   }
 
   xcsv_file = new XcsvFile;
   if (xcsv_style->codecname.isEmpty()) {
-    xcsv_file->stream.open(fname, QIODevice::ReadOnly, MYNAME);
+    xcsv_file->stream.open(fname, QIODevice::ReadOnly);
   } else {
-    xcsv_file->stream.open(fname, QIODevice::ReadOnly, MYNAME, CSTR(xcsv_style->codecname));
+    xcsv_file->stream.open(fname, QIODevice::ReadOnly, CSTR(xcsv_style->codecname));
   }
   xcsv_file->fname = fname;
 
@@ -1909,7 +1907,7 @@ XcsvFormat::rd_init(const QString& fname)
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
   if (xcsv_file->gps_datum_idx < 0) {
-    fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+    fatal("datum \"%s\" is not supported.", qPrintable(datum_name));
   }
 
   utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
@@ -1937,7 +1935,7 @@ XcsvFormat::wr_init(const QString& fname)
     xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
-      fatal(MYNAME ": XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
+      fatal("XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
     }
 
     xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
@@ -1945,9 +1943,9 @@ XcsvFormat::wr_init(const QString& fname)
 
   xcsv_file = new XcsvFile;
   if (xcsv_style->codecname.isEmpty()) {
-    xcsv_file->stream.open(fname, QIODevice::WriteOnly | QIODevice::Text, MYNAME);
+    xcsv_file->stream.open(fname, QIODevice::WriteOnly | QIODevice::Text);
   } else {
-    xcsv_file->stream.open(fname, QIODevice::WriteOnly | QIODevice::Text, MYNAME, CSTR(xcsv_style->codecname));
+    xcsv_file->stream.open(fname, QIODevice::WriteOnly | QIODevice::Text, CSTR(xcsv_style->codecname));
   }
   xcsv_file->fname = fname;
 
@@ -1991,7 +1989,7 @@ XcsvFormat::wr_init(const QString& fname)
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
   if (xcsv_file->gps_datum_idx < 0) {
-    fatal(MYNAME ": datum \"%s\" is not supported.", qPrintable(datum_name));
+    fatal("datum \"%s\" is not supported.", qPrintable(datum_name));
   }
 }
 

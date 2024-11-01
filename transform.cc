@@ -31,8 +31,6 @@
 #if FILTERS_ENABLED
 
 
-#define MYNAME "transform"
-
 void TransformFilter::transform_waypoints()
 {
   auto* rte = new route_head;
@@ -155,7 +153,7 @@ void TransformFilter::process()
         route_flush_all_tracks();
       }
     } else {
-      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_waypts));
+      fatal("Invalid option value (%s)!\n", qPrintable(opt_waypts));
     }
   }
   if (opt_routes) {
@@ -171,7 +169,7 @@ void TransformFilter::process()
         route_flush_all_tracks();
       }
     } else {
-      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_routes));
+      fatal("Invalid option value (%s)!\n", qPrintable(opt_routes));
     }
   }
   if (opt_tracks) {
@@ -187,7 +185,7 @@ void TransformFilter::process()
         route_flush_all_routes();
       }
     } else {
-      fatal(MYNAME ": Invalid option value (%s)!\n", qPrintable(opt_tracks));
+      fatal("Invalid option value (%s)!\n", qPrintable(opt_tracks));
     }
   }
 }

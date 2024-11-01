@@ -42,11 +42,11 @@
 
 
 void GoogleTakeoutFormat::takeout_fatal(const QString& message) {
-  fatal(FatalMsg() << MYNAME << ": " << message);
+  fatal(FatalMsg() << "" << message);
 }
 
 void GoogleTakeoutFormat::takeout_warning(const QString& message) {
-  Warning() << MYNAME << ": " << message;
+  Warning() << "" << message;
 }
 
 /* create a waypoint from late7/lone7 and optional metadata */
@@ -264,7 +264,7 @@ GoogleTakeoutFormat::read()
     }
   }
   if (global_opts.debug_level >= 1) {
-    Debug(1) << MYNAME << ": Processed " << items << " items: " <<
+    Debug(1) << "Processed " << items << " items: " <<
       place_visits << " " << PLACE_VISIT << ", " << activity_segments <<
       " " << ACTIVITY_SEGMENT << " (" << points << " points total)";
   }

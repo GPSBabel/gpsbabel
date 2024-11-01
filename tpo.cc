@@ -88,9 +88,6 @@
 #include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
 
 
-#define MYNAME	"TPO"
-
-
 /*******************************************************************************/
 /*                                      READ                                   */
 /*******************************************************************************/
@@ -111,7 +108,7 @@ TpoFormatBase::tpo_check_version_string()
   /* check for the presence of a 3.0-style id string */
   /* Note this check also finds version 4 id strings, e.g. "TOPO! Ver. 4.5.0" */
   if (strncmp(v3_id_string, string_buffer, strlen(v3_id_string)) == 0) {
-    /*		fatal(MYNAME ": gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer); */
+    /*		fatal("gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer); */
 //fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
 
     gbfseek(tpo_file_in, -(string_size+1), SEEK_CUR);
@@ -166,7 +163,7 @@ TpoFormatBase::tpo_read_until_section(const char* section_name, int seek_bytes)
 
   while (true) {
     if (gbfread(&byte, 1, 1, tpo_file_in) < 1) {
-      fatal(MYNAME ": malformed input file - attempt to read past end");
+      fatal("malformed input file - attempt to read past end");
     }
     header_size++;
 
@@ -916,11 +913,11 @@ void TpoFormatBase::tpo_process_tracks()
 
 
         if (buf[jj] == 0) {
-          fatal(MYNAME ": Found unexpected ZERO\n");
+          fatal("Found unexpected ZERO\n");
         }
 
         if (latscale == 0 || lonscale == 0) {
-          fatal(MYNAME ": Found bad scales lonscale=0x%x latscale=0x%x\n", lonscale, latscale);
+          fatal("Found bad scales lonscale=0x%x latscale=0x%x\n", lonscale, latscale);
         }
 
 
@@ -976,11 +973,11 @@ void TpoFormatBase::tpo_process_tracks()
           printf("%02x - lat mult = %d, lon mult=%d, byte %u\n", buf[jj], scarray[buf[jj] & 0xf], scarray[buf[jj] >> 4], jj);
         }
         if (buf[jj] == 0) {
-          fatal(MYNAME ": Found unexpected ZERO\n");
+          fatal("Found unexpected ZERO\n");
         }
 
         if ((latscale == 0) || (lonscale == 0)) {
-          fatal(MYNAME ": Found bad scales lonscale=0x%x latscale=0x%x while trying to scale a single byte trackpoint\n", lonscale, latscale);
+          fatal("Found bad scales lonscale=0x%x latscale=0x%x while trying to scale a single byte trackpoint\n", lonscale, latscale);
         }
 
         if constexpr(debug > 3) {
@@ -1489,12 +1486,12 @@ void TpoFormatBase::tpo_read_3_x()
 void
 TpoFormatBase::tpo_rd_init(const QString& fname)
 {
-  tpo_file_in = gbfopen_le(fname, "rb", MYNAME);
+  tpo_file_in = gbfopen_le(fname, "rb");
   tpo_check_version_string();
 
   if (tpo_version == 2.0) {
     if (doing_wpts || doing_rtes) {
-      fatal(MYNAME ": this file format only supports tracks, not waypoints or routes.\n");
+      fatal("this file format only supports tracks, not waypoints or routes.\n");
     }
 
     /*fprintf(stderr,"Version 2.x, Looking for CTopoRoute\n"); */
@@ -1506,7 +1503,7 @@ TpoFormatBase::tpo_rd_init(const QString& fname)
      * plus four bytes is the end of the embedded PNG image */
     tpo_read_until_section("Red Without Arrow", 17);
   } else {
-    fatal(MYNAME ": gpsbabel can only read TPO versions through 3.x.x\n");
+    fatal("gpsbabel can only read TPO versions through 3.x.x\n");
   }
 }
 
@@ -1527,6 +1524,6 @@ TpoFormatBase::tpo_read()
 //printf("\nFound a version 3.x file\n");
     tpo_read_3_x();
   } else {
-    fatal(MYNAME ": gpsbabel can only read TPO versions through 3.x.x\n");
+    fatal("gpsbabel can only read TPO versions through 3.x.x\n");
   }
 }

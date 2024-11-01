@@ -41,13 +41,11 @@
 #include "src/core/xmltag.h"       // for xml_findfirst, xml_tag, xml_attribute, fs_xml, xml_findnext
 
 
-#define MYNAME "HTML"
-
 void
 HtmlFormat::wr_init(const QString& fname)
 {
   file_out = new gpsbabel::TextStream;
-  file_out->open(fname, QIODevice::WriteOnly, MYNAME);
+  file_out->open(fname, QIODevice::WriteOnly);
   mkshort_handle = new MakeShort;
 
   static const QRegularExpression re("^(?:ddd|dmm|dms)$");
@@ -55,7 +53,7 @@ HtmlFormat::wr_init(const QString& fname)
   if (re.match(opt_degformat).hasMatch()) {
     degformat = opt_degformat.get().at(2).toLatin1();
   } else {
-    fatal(MYNAME ": Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", qPrintable(opt_degformat));
+    fatal("Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", qPrintable(opt_degformat));
   }
 
   if (opt_altunits.get().startsWith('f')) {
@@ -63,7 +61,7 @@ HtmlFormat::wr_init(const QString& fname)
   } else if (opt_altunits.get().startsWith('m')) {
     altunits = 'm';
   } else {
-    fatal(MYNAME ": Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", qPrintable(opt_altunits));
+    fatal("Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", qPrintable(opt_altunits));
   }
 
 }

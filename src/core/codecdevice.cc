@@ -31,8 +31,8 @@
 namespace gpsbabel
 {
 
-CodecDevice::CodecDevice(const QString& fname, const char* module, const char* codec_name) :
-  fname_(fname), module_(module), codec_name_(codec_name)
+CodecDevice::CodecDevice(const QString& fname, const char* codec_name) :
+  fname_(fname), codec_name_(codec_name)
 {
 }
 
@@ -46,7 +46,7 @@ bool CodecDevice::open(QIODevice::OpenMode mode)
   codec_ = QTextCodec::codecForName(codec_name_);
   if (codec_ == nullptr) {
     list_codecs();
-    fatal("%s: Unsupported codec '%s'.\n", module_, codec_name_);
+    fatal("Unsupported codec '%s'.\n", codec_name_);
     // return false;
   }
 

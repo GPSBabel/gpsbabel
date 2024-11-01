@@ -66,7 +66,6 @@ public:
 private:
   /* Constants */
 
-  static constexpr char MYNAME[] = "Google Takeout";
   static constexpr char TIMELINE_OBJECTS[] = "timelineObjects";
   static constexpr char16_t PLACE_VISIT[] = u"placeVisit";
   static constexpr char16_t ACTIVITY_SEGMENT[] = u"activitySegment";

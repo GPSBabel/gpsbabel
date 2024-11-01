@@ -38,7 +38,6 @@
 #include "src/core/datetime.h"  // for DateTime
 
 
-#define MYNAME "GTM"
 #define EPOCH89DIFF 631065600
 /* was 631076400 but that seems to include a three-hour bias */
 #define WAYPOINTSTYLES \
@@ -166,7 +165,7 @@ void GtmFormat::set_datum(int n)
   }
 
   if (indatum == -1) {
-    warning(MYNAME ": Unsupported datum (%d), won't convert to WGS84\n", n);
+    warning("Unsupported datum (%d), won't convert to WGS84\n", n);
   }
 }
 
@@ -184,17 +183,17 @@ void GtmFormat::convert_datum(double* lat, double* lon) const
 void
 GtmFormat::rd_init(const QString& fname)
 {
-  file_in = gbfopen_le(fname, "rb", MYNAME);
+  file_in = gbfopen_le(fname, "rb");
   int version = fread_integer(file_in);
   QString name = fread_fixedstring(file_in, 10);
   if (version == -29921) {
-    fatal(MYNAME ": Uncompress the file first\n");
+    fatal("Uncompress the file first\n");
   }
   if (name != "TrackMaker") {
-    fatal(MYNAME ": Invalid file format\n");
+    fatal("Invalid file format\n");
   }
   if (version != 211) {
-    fatal(MYNAME ": Invalid format version\n");
+    fatal("Invalid format version\n");
   }
 
   /* Header */
@@ -247,7 +246,7 @@ GtmFormat::wr_init(const QString& fname)
   };
   track_disp_all(count_track_styles_lambda, nullptr, nullptr);
 
-  file_out = gbfopen_le(fname, "wb", MYNAME);	/* little endian */
+  file_out = gbfopen_le(fname, "wb");	/* little endian */
 
   /* Header */
   fwrite_integer(file_out, 211);
@@ -384,7 +383,7 @@ GtmFormat::read()
   //       If ts_count != real_track_list.size() we don't know how to line up
   //       the tracklogs, and the real tracks, with the tracklog styles.
   if (ts_count != real_track_list.size()) {
-    warning(MYNAME ": The number of tracklog entries with the new flag "
+    warning("The number of tracklog entries with the new flag "
            "set doesn't match the number of tracklog style entries.\n"
            "  This is unexpected and may indicate a malformed input file.\n"
            "  As a result the track names may be incorrect.\n");

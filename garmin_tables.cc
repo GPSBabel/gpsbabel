@@ -33,8 +33,6 @@
 #include "jeeps/gpsmath.h"       // for GPS_Lookup_Datum_Index, GPS_Math_Get_Datum_Name
 #include "src/core/logging.h"    // for Fatal
 
-#define MYNAME "garmin_tables"
-
 // these tables are in an include file so they can be shared with mkicondoc.
 #include "garmin_icon_tables.h"  // for garmin_icon_table, garmin_smart_icon_table
 
@@ -452,7 +450,7 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
       }
       break;
     default:
-      fatal(MYNAME ": unknown garmin format.\n");
+      fatal("unknown garmin format.\n");
     }
   }
   return DEFAULT_ICON_DESCR;
@@ -501,7 +499,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
         case GARMIN_SERIAL:
           return icon_mapping.pcxsymnum;
         default:
-          fatal(MYNAME ": unknown garmin format.\n");
+          fatal("unknown garmin format.\n");
         }
       }
     }
@@ -516,7 +514,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
       case GARMIN_SERIAL:
         return icon_mapping.pcxsymnum;
       default:
-        fatal(MYNAME ": unknown garmin format.\n");
+        fatal("unknown garmin format.\n");
       }
     }
   }
@@ -648,7 +646,7 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
 }
 
 grid_type
-gt_lookup_grid_type(const QString& grid_name, const QString& module)
+gt_lookup_grid_type(const QString& grid_name)
 {
   for (const auto& grid_mapping : gt_mps_grid_names) {
     if (QString::compare(grid_name, grid_mapping.shortname, Qt::CaseInsensitive) == 0 ||
@@ -657,19 +655,19 @@ gt_lookup_grid_type(const QString& grid_name, const QString& module)
     }
   }
 
-  fatal(FatalMsg().nospace().noquote() << module <<
-        ": Unsupported grid (" << grid_name <<
+  fatal(FatalMsg().nospace().noquote() <<
+        "Unsupported grid (" << grid_name <<
         "). See GPSBabel help for supported grids.");
 
   return grid_unknown;	/* (warnings) */
 }
 
 QString
-gt_get_mps_grid_longname(const grid_type grid, const QString& module)
+gt_get_mps_grid_longname(const grid_type grid)
 {
   if ((grid < GRID_INDEX_MIN) || (grid > GRID_INDEX_MAX)) {
-    fatal(FatalMsg().nospace().noquote() << module <<
-          ": Grid index out of range " << grid <<
+    fatal(FatalMsg().nospace().noquote() <<
+          "Grid index out of range " << grid <<
           " (" << GRID_INDEX_MIN << ".." << GRID_INDEX_MAX << ")!");
   }
   return gt_mps_grid_names[grid].longname;
@@ -690,7 +688,7 @@ gt_get_mps_datum_name(const int datum_index)
 }
 
 int
-gt_lookup_datum_index(const QString& datum_str, const QString& module)
+gt_lookup_datum_index(const QString& datum_str)
 {
   QString name = datum_str;
 
@@ -710,8 +708,8 @@ gt_lookup_datum_index(const QString& datum_str, const QString& module)
   }
 
   if (result < 0) {
-    fatal(FatalMsg().nospace().noquote() << module <<
-          ": Unsupported datum (" << datum_str <<
+    fatal(FatalMsg().nospace().noquote() <<
+          "Unsupported datum (" << datum_str <<
           "). See GPSBabel help for supported datums.");
   }
   return result;

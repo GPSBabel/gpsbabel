@@ -55,16 +55,14 @@
 #include "src/core/datetime.h"  // for DateTime
 
 
-#define MYNAME "GlobalsatSport"
-
 void
 GlobalsatSportFormat::serial_init(const char* fname)
 {
   if (serial_handle = gbser_init(fname), nullptr == serial_handle) {
-    fatal(MYNAME ": Can't open port '%s'\n", fname);
+    fatal("Can't open port '%s'\n", fname);
   }
   if (gbser_set_speed(serial_handle, 115200) != gbser_OK) {
-    fatal(MYNAME ": Can't configure port '%s'\n", fname);
+    fatal("Can't configure port '%s'\n", fname);
   }
   // Toss anything that came in before our speed was set
   gbser_flush(serial_handle);
@@ -74,12 +72,12 @@ void
 GlobalsatSportFormat::serial_deinit()
 {
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " serial_deinit()\n");
+    printf("serial_deinit()\n");
   }
   gbser_deinit(serial_handle);
   serial_handle = nullptr;
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " serial_deinit() Done\n");
+    printf("serial_deinit() Done\n");
   }
 }
 
@@ -122,7 +120,7 @@ GlobalsatSportFormat::recv_byte()
   } else {
     result = gbfgetc(in_file);
     if (result < 0) {
-      fatal(MYNAME ": read error");
+      fatal("read error");
     }
   }
   // Check if byte should be dumped also into a file
@@ -265,15 +263,15 @@ void
 GlobalsatSportFormat::rd_init(const QString& fname)
 {
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " rd_init()\n");
+    printf("rd_init()\n");
   }
   if (opt_dump_file) {
-    dumpfile = gbfopen(opt_dump_file, "wb", MYNAME);
+    dumpfile = gbfopen(opt_dump_file, "wb");
     if (!dumpfile) {
-      printf(MYNAME " rd_init() creating dumpfile %s FAILED continue anyway\n", qPrintable(opt_dump_file));
+      printf("rd_init() creating dumpfile %s FAILED continue anyway\n", qPrintable(opt_dump_file));
     } else {
       if (global_opts.debug_level > 1) {
-        printf(MYNAME " rd_init() creating dumpfile %s for writing binary copy of serial stream\n", qPrintable(opt_dump_file));
+        printf("rd_init() creating dumpfile %s for writing binary copy of serial stream\n", qPrintable(opt_dump_file));
       }
     }
   }
@@ -281,7 +279,7 @@ GlobalsatSportFormat::rd_init(const QString& fname)
     serial_init(qPrintable(fname));
   } else {
     // read from dump-file instead of serial
-    in_file = gbfopen(fname, "rb", MYNAME);
+    in_file = gbfopen(fname, "rb");
     if (!in_file) {
       fatal("Could not open dumpfile for input: %s", qPrintable(fname));
     }
@@ -292,7 +290,7 @@ GlobalsatSportFormat::rd_init(const QString& fname)
       timezn = new QTimeZone(opt_timezone.get().toUtf8());
     } else {
       list_timezones();
-      fatal(MYNAME ": Requested time zone \"%s\" not available.\n", qPrintable(opt_timezone));
+      fatal("Requested time zone \"%s\" not available.\n", qPrintable(opt_timezone));
     }
   } else {
     timezn = nullptr;
@@ -304,7 +302,7 @@ void
 GlobalsatSportFormat::rd_deinit()
 {
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " rd_deinit()\n");
+    printf("rd_deinit()\n");
   }
   if (!opt_input_dump_file) {
     serial_deinit();
@@ -322,7 +320,7 @@ GlobalsatSportFormat::rd_deinit()
     timezn = nullptr;
   }
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " rd_deinit() Done\n");
+    printf("rd_deinit() Done\n");
   }
 }
 
@@ -330,7 +328,7 @@ void
 GlobalsatSportFormat::waypoint_read()
 {
   if (global_opts.debug_level > 1) {
-    printf(MYNAME "   waypoint_read()\n");
+    printf("waypoint_read()\n");
   }
   //CommandGetTrackFileHeaders
   globalsat_send_simple(CommandGetWaypoints);
@@ -353,7 +351,7 @@ void
 GlobalsatSportFormat::track_read()
 {
   if (global_opts.debug_level > 1) {
-    printf(MYNAME "   track_read()\n");
+    printf("track_read()\n");
   }
   //CommandGetTrackFileHeaders
   globalsat_send_simple(CommandGetTrackFileHeaders);
@@ -432,7 +430,7 @@ GlobalsatSportFormat::track_read()
         int track_length;
         uint8_t* track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
         if ((track_length == 0) || (track_payload == nullptr)) {
-          fatal(MYNAME ": track length is 0 bytes or payload nonexistent.\n");
+          fatal("track length is 0 bytes or payload nonexistent.\n");
         }
         //      printf("Got track package!!! Train data\n");
 
@@ -489,7 +487,7 @@ GlobalsatSportFormat::track_read()
           globalsat_send_simple(CommandGetNextTrackSection);
           track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
           if ((track_length == 0) || (track_payload == nullptr)) {
-            fatal(MYNAME ": track length is 0 bytes or payload nonexistent.\n");
+            fatal("track length is 0 bytes or payload nonexistent.\n");
           }
           //	printf("Got track package!!! Laps data\n");
 
@@ -668,7 +666,7 @@ void
 GlobalsatSportFormat::route_read()
 {
   if (global_opts.debug_level > 1) {
-    printf(MYNAME "   route_read() TODO\n");
+    printf("route_read() TODO\n");
   }
 }
 
@@ -676,7 +674,7 @@ void
 GlobalsatSportFormat::read()
 {
   if (global_opts.debug_level > 1) {
-    printf(MYNAME " read()\n");
+    printf("read()\n");
   }
 
   if (global_opts.masked_objective & WPTDATAMASK) {
@@ -690,6 +688,6 @@ GlobalsatSportFormat::read()
   }
   if (!(global_opts.masked_objective &
         (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK))) {
-    fatal(MYNAME ": Nothing to do.\n");
+    fatal("Nothing to do.\n");
   }
 }

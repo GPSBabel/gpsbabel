@@ -39,8 +39,6 @@
 #include "src/core/xmltag.h"       // for xml_findfirst, xml_tag, xml_attribute, fs_xml, xml_findnext
 
 
-#define MYNAME "TEXT"
-
 void
 TextFormat::wr_init(const QString& fname)
 {
@@ -48,7 +46,7 @@ TextFormat::wr_init(const QString& fname)
   output_name = fname;
   if (!split_output) {
     file_out = new gpsbabel::TextStream;
-    file_out->open(fname, QIODevice::WriteOnly, MYNAME);
+    file_out->open(fname, QIODevice::WriteOnly);
   }
   mkshort_handle = new MakeShort;
 
@@ -57,7 +55,7 @@ TextFormat::wr_init(const QString& fname)
   if (re.match(opt_degformat).hasMatch()) {
     degformat = opt_degformat.get().at(2).toLatin1();
   } else {
-    fatal(MYNAME ": Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", qPrintable(opt_degformat));
+    fatal("Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", qPrintable(opt_degformat));
   }
 
   if (opt_altunits.get().startsWith('f')) {
@@ -65,7 +63,7 @@ TextFormat::wr_init(const QString& fname)
   } else if (opt_altunits.get().startsWith('m')) {
     altunits = 'm';
   } else {
-    fatal(MYNAME ": Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", qPrintable(opt_altunits));
+    fatal("Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", qPrintable(opt_altunits));
   }
 
 }
@@ -97,7 +95,7 @@ TextFormat::text_disp(const Waypoint* wpt)
     QString thisfname(output_name);
     thisfname += QString::number(waypoint_count);
     file_out = new gpsbabel::TextStream;
-    file_out->open(thisfname, QIODevice::WriteOnly, MYNAME);
+    file_out->open(thisfname, QIODevice::WriteOnly);
   }
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,

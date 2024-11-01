@@ -33,8 +33,6 @@
 #include "src/core/logging.h"   // for Fatal
 
 
-#define MYNAME "subrip"
-
 /* internal helper functions */
 
 QTime
@@ -206,19 +204,19 @@ SubripFormat::wr_init(const QString& fname)
   gradient = 0;
 
   if (opt_gpstime != opt_gpsdate) {
-    fatal(FatalMsg() << MYNAME ": Either both or neither of the gps_date and gps_time options must be supplied!");
+    fatal(FatalMsg() << "Either both or neither of the gps_date and gps_time options must be supplied!");
   }
   gps_datetime = QDateTime();
   if (opt_gpstime && opt_gpsdate) {
     QDate gps_date = QDate::fromString(opt_gpsdate, u"yyyyMMdd");
     if (!gps_date.isValid()) {
-      fatal(FatalMsg().nospace() << MYNAME ": option gps_date value (" << opt_gpsdate.get() << ") is invalid.  Expected yyyymmdd.");
+      fatal(FatalMsg().nospace() << "option gps_date value (" << opt_gpsdate.get() << ") is invalid.  Expected yyyymmdd.");
     }
     QTime gps_time = QTime::fromString(opt_gpstime, u"HHmmss");
     if (!gps_time.isValid()) {
       gps_time = QTime::fromString(opt_gpstime, u"HHmmss.z");
       if (!gps_time.isValid()) {
-        fatal(FatalMsg().nospace() << MYNAME ": option gps_time value (" << opt_gpstime.get() << ") is invalid.  Expected hhmmss[.sss]");
+        fatal(FatalMsg().nospace() << "option gps_time value (" << opt_gpstime.get() << ") is invalid.  Expected hhmmss[.sss]");
       }
     }
     gps_datetime = QDateTime(gps_date, gps_time, QtUTC);
@@ -230,7 +228,7 @@ SubripFormat::wr_init(const QString& fname)
     if (!video_time.isValid()) {
       video_time = QTime::fromString(opt_videotime, u"HHmmss.z");
       if (!video_time.isValid()) {
-        fatal(FatalMsg().nospace() << MYNAME ": option video_time value (" << opt_videotime.get() << ") is invalid.  Expected hhmmss[.sss].");
+        fatal(FatalMsg().nospace() << "option video_time value (" << opt_videotime.get() << ") is invalid.  Expected hhmmss[.sss].");
       }
     }
     video_offset_ms = video_time.msecsSinceStartOfDay();
@@ -238,7 +236,7 @@ SubripFormat::wr_init(const QString& fname)
 
   video_datetime = QDateTime();
 
-  fout = gbfopen(fname, "wb", MYNAME);
+  fout = gbfopen(fname, "wb");
 }
 
 void

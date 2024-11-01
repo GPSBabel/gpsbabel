@@ -61,7 +61,6 @@
 
 static constexpr bool DEBUG_LOCALE = false;
 
-#define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
 #define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
 
@@ -198,7 +197,7 @@ print_extended_info()
 static void setMessagePattern(const QString& id = QString())
 {
   if (id.isEmpty()) {
-    setMessagePattern("%{if-category}%{category}: %{endif}%{message}");
+    qSetMessagePattern("%{if-category}%{category}: %{endif}main: %{message}");
   } else {
     qSetMessagePattern(QStringLiteral("%{if-category}%{category}: %{endif}%1: %{message}").arg(id));
   }
@@ -279,8 +278,8 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
   }
   setMessagePattern();
   if (global_opts.debug_level > 0)  {
-    Warning().noquote() << QStringLiteral("%1: reader %2 took %3 seconds.")
-                        .arg(MYNAME, ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+    Warning().noquote() << QStringLiteral("reader %1 took %2 seconds.")
+                        .arg(ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
   }
 }
 
@@ -313,8 +312,8 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
   }
   setMessagePattern();
   if (global_opts.debug_level > 0)  {
-    Warning().noquote() << QStringLiteral("%1: writer %2 took %3 seconds.")
-                        .arg(MYNAME, ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+    Warning().noquote() << QStringLiteral("writer %1 took %2 seconds.")
+                        .arg(ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
   }
 }
 
@@ -500,8 +499,8 @@ run(const char* prog_name)
         }
         setMessagePattern();
         if (global_opts.debug_level > 0)  {
-          Warning().noquote() << QStringLiteral("%1: filter %2 took %3 seconds.")
-                              .arg(MYNAME, filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+          Warning().noquote() << QStringLiteral("filter %1 took %2 seconds.")
+                              .arg(filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
         }
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(argument));
@@ -520,26 +519,26 @@ run(const char* prog_name)
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        warning("GPSBabel Version: %s\n", gpsbabel_version);
+        warning("GPSBabel Version: %s", gpsbabel_version);
         if(sizeof(kVersionSHA) > 1) {
-          warning(MYNAME ": Repository SHA: %s\n", kVersionSHA);
+          warning("Repository SHA: %s", kVersionSHA);
         }
         if(sizeof(kVersionDate) > 1) {
           QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
           if (date.isValid()) {
-            warning(MYNAME ": Date: %s\n", qPrintable(date.toUTC().toString(Qt::ISODate)));
+            warning("Date: %s", qPrintable(date.toUTC().toString(Qt::ISODate)));
           }
         }
-        warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
+        warning("Compiled with Qt %s for architecture %s",
                 QT_VERSION_STR,
                 qPrintable(QSysInfo::buildAbi()));
-        warning(MYNAME ": Running with Qt %s on %s, %s\n", qVersion(),
+        warning("Running with Qt %s on %s, %s", qVersion(),
                 qPrintable(QSysInfo::prettyProductName()),
                 qPrintable(QSysInfo::currentCpuArchitecture()));
-        warning(MYNAME ": QLocale::system() is %s\n", qPrintable(QLocale::system().name()));
-        warning(MYNAME ": QLocale() is %s\n", qPrintable(QLocale().name()));
+        warning("QLocale::system() is %s", qPrintable(QLocale::system().name()));
+        warning("QLocale() is %s", qPrintable(QLocale().name()));
         QTextCodec* defaultcodec = QTextCodec::codecForLocale();
-        warning(MYNAME ": QTextCodec::codecForLocale() is %s, mib %d\n",
+        warning("QTextCodec::codecForLocale() is %s, mib %d",
                 defaultcodec->name().constData(),defaultcodec->mibEnum());
       }
       break;
@@ -587,7 +586,7 @@ run(const char* prog_name)
       if (argument.isEmpty()) {	/* from GUI to preserve inconsistent options */
         global_opts.inifile = nullptr;
       } else {
-        global_opts.inifile = inifile_init(argument, MYNAME);
+        global_opts.inifile = inifile_init(argument);
       }
       break;
     case 'b':
@@ -832,7 +831,7 @@ main(int argc, char* argv[])
   gpsbabel_time = current_time().toTime_t();			/* frozen in testmode */
 
   if (!gpsbabel_testmode()) {	/* within testo ? */
-    global_opts.inifile = inifile_init(QString(), MYNAME);
+    global_opts.inifile = inifile_init(QString());
   }
 
   assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);

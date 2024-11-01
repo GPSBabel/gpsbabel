@@ -25,7 +25,6 @@
 #include <cstdio>
 
 #if FILTERS_ENABLED
-#define MYNAME "validate"
 
 void ValidateFilter::validate_head(const route_head* /*unused*/)
 {
@@ -42,7 +41,7 @@ void ValidateFilter::validate_head_trl(const route_head* header)
     fprintf(stderr, "%s %d ct: %d, waypt_count: %d, segments %d\n", segment_type, header->rte_num,  point_ct, header->rte_waypt_ct(), segment_ct);
   }
   if (!debug && (point_ct != header->rte_waypt_ct())) {
-    fatal(MYNAME ":%s %d count mismatch, expected %d, actual %d\n", segment_type, header->rte_num, header->rte_waypt_ct(), point_ct);
+    fatal("%s %d count mismatch, expected %d, actual %d\n", segment_type, header->rte_num, header->rte_waypt_ct(), point_ct);
   }
 }
 
@@ -72,7 +71,7 @@ void ValidateFilter::process()
     fprintf(stderr, "point ct: %d, waypt_count: %d\n", point_ct, waypt_count());
   }
   if (!debug && (point_ct != waypt_count())) {
-    fatal(MYNAME ":Waypoint count mismatch, expected %d, actual %d\n", waypt_count(), point_ct);
+    fatal("Waypoint count mismatch, expected %d, actual %d\n", waypt_count(), point_ct);
   }
 
   head_ct = 0;
@@ -88,10 +87,10 @@ void ValidateFilter::process()
     fprintf(stderr, "total route point ct: %d, route_waypt_count: %d\n", total_point_ct, route_waypt_count());
   }
   if (!debug && (head_ct != route_count())) {
-    fatal(MYNAME ":Route count mismatch, expected %d, actual %d\n", route_count(), head_ct);
+    fatal("Route count mismatch, expected %d, actual %d\n", route_count(), head_ct);
   }
   if (!debug && (total_point_ct != route_waypt_count())) {
-    fatal(MYNAME ":Total route waypoint count mismatch, expected %d, actual %d\n", route_waypt_count(), total_point_ct);
+    fatal("Total route waypoint count mismatch, expected %d, actual %d\n", route_waypt_count(), total_point_ct);
   }
 
   head_ct = 0;
@@ -107,15 +106,15 @@ void ValidateFilter::process()
     fprintf(stderr, "total track point ct: %d, track_waypt_count: %d\n", total_point_ct, track_waypt_count());
   }
   if (!debug && (head_ct != track_count())) {
-    fatal(MYNAME ":Track count mismatch, expected %d, actual %d\n", track_count(), head_ct);
+    fatal("Track count mismatch, expected %d, actual %d\n", track_count(), head_ct);
   }
   if (!debug && (total_point_ct != track_waypt_count())) {
-    fatal(MYNAME ":Total track waypoint count mismatch, expected %d, actual %d\n", track_waypt_count(), total_point_ct);
+    fatal("Total track waypoint count mismatch, expected %d, actual %d\n", track_waypt_count(), total_point_ct);
   }
 
   if (checkempty) {
     if (waypt_count()==0 && route_waypt_count()==0 && track_waypt_count()==0) {
-      fatal(MYNAME ":No input\n");
+      fatal("No input\n");
     }
   }
 }
