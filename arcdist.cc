@@ -198,7 +198,7 @@ void ArcDistanceFilter::process()
   }
   del_marked_wpts();
   if (global_opts.verbose_status > 0) {
-    printf("arc: %u waypoint(s) removed.\n", removed);
+    info("%u waypoint(s) removed.\n", removed);
   }
 }
 

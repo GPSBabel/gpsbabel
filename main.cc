@@ -203,7 +203,7 @@ static void setMessagePattern(const QString& id = QString())
   }
 }
 
-static void MessageHandler(QtMsgType  type, const QMessageLogContext& context, const QString& msg)
+static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
   QString message = qFormatLogMessage(type, context, msg);
   /* flush any buffered standard output */
@@ -519,26 +519,26 @@ run(const char* prog_name)
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        warning("GPSBabel Version: %s", gpsbabel_version);
+        info("GPSBabel Version: %s\n", gpsbabel_version);
         if(sizeof(kVersionSHA) > 1) {
-          warning("Repository SHA: %s", kVersionSHA);
+          info("Repository SHA: %s\n", kVersionSHA);
         }
         if(sizeof(kVersionDate) > 1) {
           QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
           if (date.isValid()) {
-            warning("Date: %s", qPrintable(date.toUTC().toString(Qt::ISODate)));
+            info("Date: %s\n", qPrintable(date.toUTC().toString(Qt::ISODate)));
           }
         }
-        warning("Compiled with Qt %s for architecture %s",
+        info("Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
                 qPrintable(QSysInfo::buildAbi()));
-        warning("Running with Qt %s on %s, %s", qVersion(),
+        info("Running with Qt %s on %s, %s\n", qVersion(),
                 qPrintable(QSysInfo::prettyProductName()),
                 qPrintable(QSysInfo::currentCpuArchitecture()));
-        warning("QLocale::system() is %s", qPrintable(QLocale::system().name()));
-        warning("QLocale() is %s", qPrintable(QLocale().name()));
+        info("QLocale::system() is %s\n", qPrintable(QLocale::system().name()));
+        info("QLocale() is %s\n", qPrintable(QLocale().name()));
         QTextCodec* defaultcodec = QTextCodec::codecForLocale();
-        warning("QTextCodec::codecForLocale() is %s, mib %d",
+        info("QTextCodec::codecForLocale() is %s, mib %d\n",
                 defaultcodec->name().constData(),defaultcodec->mibEnum());
       }
       break;

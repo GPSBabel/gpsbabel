@@ -49,12 +49,32 @@ fatal(const char* fmt, ...)
   va_start(ap, fmt);
   QString msg = QString::vasprintf(fmt, ap);
   va_end(ap);
-  qDebug().noquote() << msg;
+  qCritical().noquote() << msg;
   exit(1);
 }
 
 void
 warning(const char* fmt, ...)
+{
+  va_list ap;
+  va_start(ap, fmt);
+  QString msg = QString::vasprintf(fmt, ap);
+  va_end(ap);
+  qWarning().noquote() << msg;
+}
+
+void
+info(const char* fmt, ...)
+{
+  va_list ap;
+  va_start(ap, fmt);
+  QString msg = QString::vasprintf(fmt, ap);
+  va_end(ap);
+  qInfo().noquote() << msg;
+}
+
+void
+debug(const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);

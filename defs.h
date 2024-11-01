@@ -918,6 +918,8 @@ enum ff_cap {
 // negativeIndex, arrayIndexOutOfBoundsCond.
 [[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char* fmt, ...);
 [[gnu::format(printf, 1, 2)]] void warning(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void info(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void debug(const char* fmt, ...);
 
 void printposn(double c, bool is_lat);
 
