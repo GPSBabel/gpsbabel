@@ -326,7 +326,7 @@ void
 GlobalsatSportFormat::waypoint_read()
 {
   if (global_opts.debug_level > 1) {
-    db.log("waypoint_read()\n");
+    db.log("  waypoint_read()\n");
   }
   //CommandGetTrackFileHeaders
   globalsat_send_simple(CommandGetWaypoints);
@@ -349,7 +349,7 @@ void
 GlobalsatSportFormat::track_read()
 {
   if (global_opts.debug_level > 1) {
-    db.log("track_read()\n");
+    db.log("  track_read()\n");
   }
   //CommandGetTrackFileHeaders
   globalsat_send_simple(CommandGetTrackFileHeaders);
