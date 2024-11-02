@@ -99,13 +99,12 @@
 
 void MtkLoggerBase::dbg(int l, const char* msg, ...)
 {
-  va_list ap;
-  va_start(ap, msg);
   if (global_opts.debug_level >= l) {
-    vfprintf(stderr,msg, ap);
-    fflush(stderr);
+    va_list ap;
+    va_start(ap, msg);
+    db.vlog(msg, ap);
+    va_end(ap);
   }
-  va_end(ap);
 }
 
 // Returns a fully qualified pathname to a temporary file that is a copy
@@ -159,7 +158,7 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
   if (strncmp(cmd, CMD_LOG_ERASE, 12) == 0) {
     cmd_erase = 1;
     if (global_opts.verbose_status || global_opts.debug_level > 0) {
-      fprintf(stderr, "Erasing    ");
+      db.log("Erasing    ");
     }
   }
   // dbg(6, "## Send '%s' -- Expect '%s' in %d sec\n", cmd, expect, timeout_sec);
@@ -185,13 +184,13 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
     dbg(8, "Read %d bytes: '%s'\n", len, line);
     if (cmd_erase && (global_opts.verbose_status || (global_opts.debug_level > 0 && global_opts.debug_level <= 3))) {
       // erase cmd progress wheel -- only for debug level 1-3
-      fprintf(stderr,"\b%c", LIVE_CHAR[loops%4]);
+      db.log("\b%c", LIVE_CHAR[loops%4]);
       fflush(stderr);
     }
     if (len > 5 && line[0] == '$') {
       if (expect_len > 0 && strncmp(&line[1], expect, expect_len) == 0) {
         if (cmd_erase && (global_opts.verbose_status || global_opts.debug_level > 0)) {
-          fprintf(stderr,"\n");
+          db.log("\n");
         }
         dbg(6, "NMEA command success !\n");
         if ((len - 4) > expect_len) {  // alloc and copy data segment...
@@ -508,7 +507,7 @@ mtk_retry:
             }
           } else {
             if (null_len == chunk_size) {  // 0x00 block - bad block....
-              fprintf(stderr, "FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
+              warning("FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
             }
             if (ff_len == chunk_size) {  // 0xff block - read complete...
               len = ff_len;
@@ -564,7 +563,7 @@ mtk_retry:
         if (addr >= addr_max) {
           perc = 100;
         }
-        fprintf(stderr, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
+        db.log("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
       }
     }
   }
@@ -577,7 +576,7 @@ mtk_retry:
     fclose(dout);
   }
   if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
-    fprintf(stderr,"\n");
+    db.log("\n");
   }
 
   // Fixme - Order or. Enable - parse - erase ??
@@ -924,11 +923,11 @@ int MtkLoggerBase::mtk_parse(unsigned char* data, int dataLen, unsigned int bmas
 
   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n", count, dataLen);
   if (global_opts.debug_level > 5) {
-    fprintf(stderr,"# Data block:");
+    db.log("# Data block:");
     for (int j = 0; j<dataLen; j++) {
-      fprintf(stderr,"%.2x ", data[j]);
+      db.log("%.2x ", data[j]);
     }
-    fprintf(stderr,"\n");
+    db.log("\n");
     fflush(stderr);
   }
 
@@ -1211,11 +1210,11 @@ int MtkLoggerBase::mtk_parse_info(const unsigned char* data, int dataLen)
     }
   } else {
     if (global_opts.debug_level > 0) {
-      fprintf(stderr,"#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
+      db.log("#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
       for (bm=0; bm<16; bm++) {
-        fprintf(stderr, "%.2x ", data[bm]);
+        db.log("%.2x ", data[bm]);
       }
-      fprintf(stderr,"\n");
+      db.log("\n");
     }
     return 0;
   }

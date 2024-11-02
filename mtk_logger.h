@@ -214,6 +214,7 @@ protected:
   };
 
 
+  DebugLog db;
   void* fd{};  /* serial fd */
   FILE* fl{};  /* bin.file fd */
   char* port{}; /* serial port name */
@@ -270,7 +271,7 @@ protected:
 
   gbfile* cd{};
 
-  [[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...);
+  [[gnu::format(printf, 3, 4)]] void dbg(int l, const char* msg, ...);
   static QString GetTempName(bool backup);
   int do_send_cmd(const char* cmd, int cmdLen);
   int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec);
