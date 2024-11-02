@@ -22,7 +22,7 @@
 #include "arcdist.h"
 
 #include <cmath>                  // for round
-#include <cstdio>                 // for printf, sscanf
+#include <cstdio>                 // for sscanf
 #include <tuple>                  // for tie, tuple
 
 #include <QByteArray>             // for QByteArray
