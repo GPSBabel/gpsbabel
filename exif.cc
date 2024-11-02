@@ -136,9 +136,9 @@ ExifFormat::print_buff(const char* buf, int sz, const char* cmt)
 {
   int i;
 
-  printf("%s: ", cmt);
+  db.log("%s: ", cmt);
   for (i = 0; i < sz; i++) {
-    printf("%02x ", buf[i] & 0xFF);
+    db.log("%02x ", buf[i] & 0xFF);
   }
   for (i = 0; i < sz; i++) {
     char c = buf[i];
@@ -147,7 +147,7 @@ ExifFormat::print_buff(const char* buf, int sz, const char* cmt)
     } else if (! isprint(c)) {
       c = '.';
     }
-    printf("%c", c);
+    db.log("%c", c);
   }
 }
 
@@ -320,12 +320,12 @@ ExifFormat::exif_load_apps()
     app->marker = gbfgetuint16(fin_);
     app->len = gbfgetuint16(fin_);
     if (global_opts.debug_level >= 3) {
-      printf("api = %02X, len = %u (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin_));
+      db.log("api = %02X, len = %u (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin_));
     }
     if (exif_app_ || (app->marker == 0xFFDA)) { /* compressed data */
       gbfcopyfrom(app->fcache, fin_, 0x7FFFFFFF);
       if (global_opts.debug_level >= 3) {
-        printf("compressed data size = %u\n", gbftell(app->fcache));
+        db.log("compressed data size = %u\n", gbftell(app->fcache));
       }
     } else {
       gbfcopyfrom(app->fcache, fin_, app->len - 2);
@@ -401,7 +401,7 @@ ExifFormat::exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t of
       name = "private";
       break;
     }
-    printf("offs 0x%08X: Number of items in IFD%d \"%s\" = %d (0x%04x)\n",
+    db.log("offs 0x%08X: Number of items in IFD%d \"%s\" = %d (0x%04x)\n",
            offs, ifd_nr, name, ifd->count, ifd->count);
   }
   if (ifd->count == 0) {
@@ -520,49 +520,49 @@ ExifFormat::exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t of
         }
     }
     if (global_opts.debug_level >= 3) {
-      printf("offs 0x%08X: ifd=%d id=0x%04X t=0x%04X c=%4u s=%4u",
+      db.log("offs 0x%08X: ifd=%d id=0x%04X t=0x%04X c=%4u s=%4u",
              tag->tag_offset, ifd->nr, tag->id, tag->type, tag->count, tag->size);
       if (tag->size > 4) {
-        printf(" o=0x%08X", tag->offset);
+        db.log(" o=0x%08X", tag->offset);
       } else {
-        printf(" v=0x%02X%02X%02X%02X", tag->raw[0], tag->raw[1], tag->raw[2], tag->raw[3]);
+        db.log(" v=0x%02X%02X%02X%02X", tag->raw[0], tag->raw[1], tag->raw[2], tag->raw[3]);
       }
       if (tag->type == EXIF_TYPE_ASCII) {
         QByteArray str = exif_read_str(tag);
-        printf(" \"%s\"", str.constData());
+        db.log(" \"%s\"", str.constData());
       } else {
         for (unsigned idx = 0; idx < std::min(tag->count, 4u); ++idx) {
           if (tag->type == EXIF_TYPE_BYTE) {
-            printf(" %u", tag->data.at(0).toByteArray().at(idx));
+            db.log(" %u", tag->data.at(0).toByteArray().at(idx));
           } else if (tag->type == EXIF_TYPE_SBYTE) {
-            printf(" %d", tag->data.at(0).toByteArray().at(idx));
+            db.log(" %d", tag->data.at(0).toByteArray().at(idx));
           } else if (tag->type == EXIF_TYPE_UNK) {
-            printf(" 0x%02X", tag->data.at(0).toByteArray().at(idx));
+            db.log(" 0x%02X", tag->data.at(0).toByteArray().at(idx));
           } else if (tag->type == EXIF_TYPE_RAT) {
-            printf(" %+#g(%u/%u)", exif_read_double(tag, idx), tag->data.at(idx * 2).value<uint32_t>(), tag->data.at((idx * 2) + 1).value<uint32_t>());
+            db.log(" %+#g(%u/%u)", exif_read_double(tag, idx), tag->data.at(idx * 2).value<uint32_t>(), tag->data.at((idx * 2) + 1).value<uint32_t>());
           } else if (tag->type == EXIF_TYPE_SRAT) {
-            printf(" %+#g(%d/%d)", exif_read_double(tag, idx), tag->data.at(idx * 2).value<int32_t>(), tag->data.at((idx * 2) + 1).value<int32_t>());
+            db.log(" %+#g(%d/%d)", exif_read_double(tag, idx), tag->data.at(idx * 2).value<int32_t>(), tag->data.at((idx * 2) + 1).value<int32_t>());
           } else if (tag->type == EXIF_TYPE_SHORT) {
-            printf(" %u", tag->data.at(idx).value<uint16_t>());
+            db.log(" %u", tag->data.at(idx).value<uint16_t>());
           } else if (tag->type == EXIF_TYPE_SSHORT) {
-            printf(" %d", tag->data.at(idx).value<int16_t>());
+            db.log(" %d", tag->data.at(idx).value<int16_t>());
           } else if (tag->type == EXIF_TYPE_LONG) {
-            printf(" %u", tag->data.at(idx).value<uint32_t>());
+            db.log(" %u", tag->data.at(idx).value<uint32_t>());
           } else if (tag->type == EXIF_TYPE_SLONG) {
-            printf(" %d", tag->data.at(idx).value<int32_t>());
+            db.log(" %d", tag->data.at(idx).value<int32_t>());
           } else if (tag->type == EXIF_TYPE_FLOAT) {
-            printf(" %+#g", tag->data.at(idx).value<float>());
+            db.log(" %+#g", tag->data.at(idx).value<float>());
           } else if (tag->type == EXIF_TYPE_DOUBLE) {
-            printf(" %+#g", tag->data.at(idx).value<double>());
+            db.log(" %+#g", tag->data.at(idx).value<double>());
           } else {
-            printf(" 0x%0*X", 2 * exif_type_size(tag->type), tag->data.at(idx).value<uint32_t>());
+            db.log(" 0x%0*X", 2 * exif_type_size(tag->type), tag->data.at(idx).value<uint32_t>());
           }
         }
         if (tag->count > 4) {
-          printf(" ...");
+          db.log(" ...");
         }
       }
-      printf("\n");
+      db.log("\n");
     }
 #ifndef NDEBUG
     exif_validate_tag_structure(tag);
@@ -570,7 +570,7 @@ ExifFormat::exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t of
   }
 
   if (global_opts.debug_level >= 3) {
-    printf("offs 0x%08X: Next IFD=0x%08X\n", next_ifd_offs,  ifd->next_ifd);
+    db.log("offs 0x%08X: Next IFD=0x%08X\n", next_ifd_offs,  ifd->next_ifd);
   }
 
   return ifd;
@@ -587,9 +587,9 @@ ExifFormat::exif_read_app(ExifApp* app)
   gbfile* fin = app->fexif;
 
   if (global_opts.debug_level >= 3) {
-    printf("read_app...\n");
+    db.log("read_app...\n");
     print_buff((const char*)fin->handle.mem, 8, "offs 0x00000000: Image File Header");
-    printf("\n");
+    db.log("\n");
   }
   exif_ifd_ofs = gps_ifd_ofs = inter_ifd_ofs = 0;
 
@@ -633,7 +633,7 @@ ExifFormat::exif_examine_app(ExifApp* app)
   uint16_t endianness = gbfgetint16(ftmp);
 
   if (global_opts.debug_level >= 3) {
-    printf("endianness = 0x%04X\n", endianness);
+    db.log("endianness = 0x%04X\n", endianness);
   }
   if (endianness == 0x4949) {
     ftmp->big_endian = 0;
@@ -680,7 +680,7 @@ ExifFormat::exif_find_tag(ExifApp* app, const uint16_t ifd_nr, const uint16_t ta
 }
 
 QDateTime
-ExifFormat::exif_get_exif_time(ExifApp* app) const
+ExifFormat::exif_get_exif_time(ExifApp* app)
 {
   QDateTime res;
 
@@ -755,7 +755,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app) const
 }
 
 Waypoint*
-ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
+ExifFormat::exif_waypt_from_exif_app(ExifApp* app)
 {
   ExifTag* tag;
   char lat_ref = '\0';
@@ -848,8 +848,8 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
   }
 
   if (global_opts.debug_level >= 3) {
-    printf("GPSLatitude =  %12.7f\n", wpt->latitude);
-    printf("GPSLongitude = %12.7f\n", wpt->longitude);
+    db.log("GPSLatitude =  %12.7f\n", wpt->latitude);
+    db.log("GPSLongitude = %12.7f\n", wpt->longitude);
   }
   if (!datum.isEmpty()) {
     int idatum = gt_lookup_datum_index(datum);
@@ -879,7 +879,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     }
     wpt->altitude = sign * alt;
     if (global_opts.debug_level >= 3) {
-      printf("GPSAltitude =  %12.7f m\n", wpt->altitude);
+      db.log("GPSAltitude =  %12.7f m\n", wpt->altitude);
     }
   }
 
@@ -900,7 +900,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
     }
     if (global_opts.debug_level >= 3) {
       if (wpt->speed_has_value()) {
-        printf("GPSSpeed = %12.2f m/s\n", wpt->speed_value());
+        db.log("GPSSpeed = %12.2f m/s\n", wpt->speed_value());
       }
     }
   }
@@ -920,7 +920,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app) const
   gps_datetime = QDateTime(datestamp, timestamp, QtUTC);
   if (gps_datetime.isValid()) {
     if (global_opts.debug_level >= 3) {
-      printf("GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODateWithMs)));
+      db.log("GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODateWithMs)));
     }
     wpt->SetCreationTime(gps_datetime);
   } else {
@@ -1005,7 +1005,7 @@ ExifFormat::Rational<int32_t> ExifFormat::exif_dec2frac(double val, double toler
 }
 
 ExifFormat::ExifTag*
-ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, const int count, const int index, const void* data) const
+ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, const int count, const int index, const void* data)
 {
   ExifTag* tag = nullptr;
   uint16_t size;
@@ -1108,7 +1108,7 @@ ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16
 
 
 void
-ExifFormat::exif_put_double(const int ifd_nr, const int tag_id, const int index, const double val) const
+ExifFormat::exif_put_double(const int ifd_nr, const int tag_id, const int index, const double val)
 {
   // TODO: It seems wrong to throw away the sign.
   double d = fabs(val);
@@ -1117,14 +1117,14 @@ ExifFormat::exif_put_double(const int ifd_nr, const int tag_id, const int index,
 
 
 void
-ExifFormat::exif_put_str(const int ifd_nr, const int tag_id, const char* val) const
+ExifFormat::exif_put_str(const int ifd_nr, const int tag_id, const char* val)
 {
   int len = (val) ? strlen(val) + 1 : 0;
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_ASCII, len, 0, val);
 }
 
 void
-ExifFormat::exif_put_coord(const int ifd_nr, const int tag_id, const double val) const
+ExifFormat::exif_put_coord(const int ifd_nr, const int tag_id, const double val)
 {
   double vdeg;
   double vmin;
@@ -1140,19 +1140,19 @@ ExifFormat::exif_put_coord(const int ifd_nr, const int tag_id, const double val)
 }
 
 void
-ExifFormat::exif_put_long(const int ifd_nr, const int tag_id, const int index, const int32_t val) const
+ExifFormat::exif_put_long(const int ifd_nr, const int tag_id, const int index, const int32_t val)
 {
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_LONG, 1, index, &val);
 }
 
 void
-ExifFormat::exif_put_short(const int ifd_nr, const int tag_id, const int index, const int16_t val) const
+ExifFormat::exif_put_short(const int ifd_nr, const int tag_id, const int index, const int16_t val)
 {
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_SHORT, 1, index, &val);
 }
 
 void
-ExifFormat::exif_remove_tag(const int ifd_nr, const int tag_id) const
+ExifFormat::exif_remove_tag(const int ifd_nr, const int tag_id)
 {
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_BYTE, 0, 0, nullptr);
 }
@@ -1307,7 +1307,7 @@ ExifFormat::exif_write_ifd(ExifIfd* ifd, const char next, gbfile* fout)
 }
 
 void
-ExifFormat::exif_write_apps() const
+ExifFormat::exif_write_apps()
 {
   gbfputuint16(0xFFD8, fout_);
 
