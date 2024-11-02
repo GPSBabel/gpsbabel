@@ -22,7 +22,6 @@
 
 #include "defs.h"
 #include "validate.h"
-#include <cstdio>
 
 #if FILTERS_ENABLED
 
