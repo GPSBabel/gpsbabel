@@ -83,14 +83,11 @@ debug(const char* fmt, ...)
   qDebug().noquote() << msg;
 }
 
-int DebugLog::log(const char* fmt, ...)
+int DebugLog::vlog(const char* fmt, va_list args1)
 {
-  va_list args1;
-  va_start(args1, fmt);
   va_list args2;
   va_copy(args2, args1);
   char cbuf[1 + vsnprintf(nullptr, 0, fmt, args1)];
-  va_end(args1);
   vsnprintf(cbuf, sizeof cbuf, fmt, args2);
   va_end(args2);
 
@@ -105,6 +102,15 @@ int DebugLog::log(const char* fmt, ...)
     buf_.remove(0, idx + 1);
   }
 
+  return rc;
+}
+
+int DebugLog::log(const char* fmt, ...)
+{
+  va_list args1;
+  va_start(args1, fmt);
+  int rc = vlog(fmt, args1);
+  va_end(args1);
   return rc;
 }
 

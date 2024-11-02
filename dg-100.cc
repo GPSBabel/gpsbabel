@@ -32,7 +32,7 @@
 #include <cassert>                     // for assert
 #include <cstdarg>                     // for va_end, va_list, va_start
 #include <cstdint>                     // for uint8_t, uint16_t, int16_t
-#include <cstdio>                      // for fprintf, stderr, size_t, vfprintf
+#include <cstdio>                      // for size_t, va_list
 #include <cstdlib>                     // for abs
 #include <cstring>                     // for memcpy, memcmp, strcmp
 
@@ -79,7 +79,7 @@ const Dg100Format::dg100_command Dg100Format::dg200_commands[] = {
 
 /* helper functions */
 const Dg100Format::dg100_command*
-Dg100Format::dg100_findcmd(int id) const
+Dg100Format::dg100_findcmd(int id)
 {
   /* linear search should be OK as long as dg100_numcommands is small */
   for (unsigned int i = 0; i < model->numcommands; i++) {
@@ -118,14 +118,14 @@ Dg100Format::dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned ch
     return;
   }
 
-  fprintf(stderr, "%s", hdr);
+  db.log("%s", hdr);
 
   for (unsigned int i = 0; i < sz; i++)  {
-    fprintf(stderr, "%02x ", buf[i]);
+    db.log("%02x ", buf[i]);
   }
 
   if (include_nl) {
-    fprintf(stderr, "\n");
+    db.log("\n");
   }
 }
 
@@ -135,7 +135,7 @@ Dg100Format::dg100_log(const char* fmt, ...)
   va_list ap;
   va_start(ap, fmt);
   if (global_opts.debug_level > 0) {
-    vfprintf(stderr, fmt, ap);
+    db.log(fmt, ap);
   }
   va_end(ap);
 }
@@ -166,7 +166,7 @@ Dg100Format::bin2deg(int val)
 }
 
 void
-Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
+Dg100Format::process_gpsfile(uint8_t data[], route_head** track)
 {
   const int recordsizes[3] = {8, 20, 32};
 
@@ -174,7 +174,7 @@ Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
    * determines the format of all subsequent records in the file */
   int style = be_read32(data + 28);
   if (style > 2) {
-    fprintf(stderr, "unknown GPS record style %d", style);
+    warning("unknown GPS record style %d", style);
     return;
   }
   int recsize = recordsizes[style];
@@ -256,7 +256,7 @@ Dg100Format::dg100_checksum(const uint8_t buf[], int count)
 
 /* communication functions */
 size_t
-Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len) const
+Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len)
 {
   uint8_t frame[FRAME_MAXLEN];
 
@@ -320,7 +320,7 @@ Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len) cons
 }
 
 int
-Dg100Format::dg100_recv_byte() const
+Dg100Format::dg100_recv_byte()
 {
   int result;
   if (isfile) {
@@ -344,7 +344,7 @@ Dg100Format::dg100_recv_byte() const
 }
 
 int
-Dg100Format::dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms) const
+Dg100Format::dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
 {
   if (isfile) {
     return gbfread(buf, 1, len, fin);
@@ -357,7 +357,7 @@ Dg100Format::dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
  * framing around the data), so the caller must copy the data before calling
  * this function again */
 int
-Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** payload) const
+Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** payload)
 {
   static uint8_t buf[FRAME_MAXLEN];
   uint16_t payload_end_seq;
@@ -487,7 +487,7 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
 
 /* return value: number of bytes copied into buf, -1 on error */
 int
-Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
+Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 {
   const dg100_command* cmdinfo;
   uint8_t* data;
@@ -496,7 +496,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
 
   /* check whether the received frame matches the expected answer type */
   if (cmdinfo->id != expected_id) {
-    fprintf(stderr, "ERROR: answer type %02x, expecting %02x", cmdinfo->id, expected_id);
+    warning("ERROR: answer type %02x, expecting %02x", cmdinfo->id, expected_id);
     return -1;
   }
 
@@ -505,7 +505,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
 
   /* check for buffer overflow */
   if (len < copysize) {
-    fprintf(stderr, "ERROR: buffer too small, size=%u, need=%u", len, copysize);
+    warning("ERROR: buffer too small, size=%u, need=%u", len, copysize);
     return -1;
   }
 
@@ -516,7 +516,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
 /* the number of bytes to be sent is determined by cmd,
  * count is the size of recvbuf */
 int
-Dg100Format::dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count) const
+Dg100Format::dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
 {
   const dg100_command* cmdinfo = dg100_findcmd(cmd);
   assert(cmdinfo != nullptr);
@@ -539,7 +539,7 @@ Dg100Format::dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size
 
 /* higher level communication functions */
 QList<int>
-Dg100Format::dg100_getfileheaders() const
+Dg100Format::dg100_getfileheaders()
 {
   QList<int> headers;
   uint8_t request[2];
@@ -580,7 +580,7 @@ Dg100Format::dg100_getfileheaders() const
 }
 
 void
-Dg100Format::dg100_getconfig() const
+Dg100Format::dg100_getconfig()
 {
   uint8_t answer[45];
 
@@ -588,7 +588,7 @@ Dg100Format::dg100_getconfig() const
 }
 
 void
-Dg100Format::dg100_getfile(int16_t num, route_head** track) const
+Dg100Format::dg100_getfile(int16_t num, route_head** track)
 {
   uint8_t request[2];
   uint8_t answer[2048];
@@ -599,7 +599,7 @@ Dg100Format::dg100_getfile(int16_t num, route_head** track) const
 }
 
 void
-Dg100Format::dg100_getfiles() const
+Dg100Format::dg100_getfiles()
 {
   route_head* track = nullptr;
 
@@ -622,14 +622,14 @@ Dg100Format::dg100_getfiles() const
 }
 
 int
-Dg100Format::dg100_erase() const
+Dg100Format::dg100_erase()
 {
   uint8_t request[2] = { 0xFF, 0xFF };
   uint8_t answer[4];
 
   dg100_request(dg100cmd_erase, request, answer, sizeof(answer));
   if (be_read32(answer) != 1) {
-    fprintf(stderr, "dg100_erase() FAILED\n");
+    warning("dg100_erase() FAILED\n");
     return(-1);
   }
   return(0);
