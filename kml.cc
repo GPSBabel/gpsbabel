@@ -23,7 +23,7 @@
 #include "kml.h"
 
 #include <cmath>                       // for fabs
-#include <cstdio>                      // for sscanf, printf
+#include <cstdio>                      // for sscanf, EOF
 #include <optional>                    // for optional
 #include <tuple>                       // for tuple, make_tuple
 
@@ -121,7 +121,7 @@ void KmlFormat::kml_step_color()
   // Note that color_seq may be outside this range if the cast from float to int fails.
   int color_seq = static_cast<int>(kml_color_sequencer.seq) % (kml_color_limit * 6);
   if (global_opts.debug_level >= 1) {
-    printf("kml_color_sequencer seq %f %d, step %f\n", kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
+    debug("kml_color_sequencer seq %f %d, step %f\n", kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
   }
   if ((color_seq >= (0*kml_color_limit)) && (color_seq < (1*kml_color_limit))) {
     kml_color_sequencer.color.bbggrr = kml_bgr_to_color(0, color_seq, kml_color_limit);
@@ -1507,7 +1507,7 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
   if (global_opts.debug_level >= 3) {
-    printf("New KML SimpleArray: %s\n", qPrintable(name));
+    debug("New KML SimpleArray: %s\n", qPrintable(name));
   }
   foreach (const Waypoint* wpt, header->waypoint_list) {
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
@@ -1549,14 +1549,14 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       if (fs_igc && fs_igc->get_value(member).has_value()) {
         double value = fs_igc->get_value(member).value();
         if (global_opts.debug_level >= 6) {
-          printf("Writing KML SimpleArray data: %s of %f\n", qPrintable(name), value);
+          debug("Writing KML SimpleArray data: %s of %f\n", qPrintable(name), value);
         }
         writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
         // No igc_fsdata present, but we still need to write out the SimpleArray.
         // This can happen when merging tracks with different sets of IGC extensions.
       } else {
         if (global_opts.debug_level >= 7) {
-          printf("Writing empty KML SimpleArray data for %s\n", qPrintable(name));
+          debug("Writing empty KML SimpleArray data for %s\n", qPrintable(name));
         }
         writer->writeTextElement(QStringLiteral("gx:value"), QString());
       }
