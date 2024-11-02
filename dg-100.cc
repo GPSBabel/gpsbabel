@@ -135,7 +135,7 @@ Dg100Format::dg100_log(const char* fmt, ...)
   va_list ap;
   va_start(ap, fmt);
   if (global_opts.debug_level > 0) {
-    db.log(fmt, ap);
+    db.vlog(fmt, ap);
   }
   va_end(ap);
 }

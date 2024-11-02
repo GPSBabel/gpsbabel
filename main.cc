@@ -25,6 +25,7 @@
 
 #include <QCoreApplication>           // for QCoreApplication
 #include <QDateTime>                  // for QDateTime
+#include <QDebug>                     // for QDebug
 #include <QElapsedTimer>              // for QElapsedTimer
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
@@ -55,7 +56,6 @@
 #include "session.h"                  // for start_session, session_exit, session_init
 #include "src/core/datetime.h"        // for DateTime
 #include "src/core/file.h"            // for File
-#include "src/core/logging.h"         // for Warning
 #include "src/core/usasciicodec.h"    // for UsAsciiCodec
 #include "vecs.h"                     // for Vecs
 
@@ -278,7 +278,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
   }
   setMessagePattern();
   if (global_opts.debug_level > 0)  {
-    Warning().noquote() << QStringLiteral("reader %1 took %2 seconds.")
+    qDebug().noquote() << QStringLiteral("reader %1 took %2 seconds.")
                         .arg(ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
   }
 }
@@ -312,7 +312,7 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
   }
   setMessagePattern();
   if (global_opts.debug_level > 0)  {
-    Warning().noquote() << QStringLiteral("writer %1 took %2 seconds.")
+    qDebug().noquote() << QStringLiteral("writer %1 took %2 seconds.")
                         .arg(ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
   }
 }
@@ -499,7 +499,7 @@ run(const char* prog_name)
         }
         setMessagePattern();
         if (global_opts.debug_level > 0)  {
-          Warning().noquote() << QStringLiteral("filter %1 took %2 seconds.")
+          qDebug().noquote() << QStringLiteral("filter %1 took %2 seconds.")
                               .arg(filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
         }
       }  else {
@@ -777,7 +777,7 @@ main(int argc, char* argv[])
 #endif
 
   if constexpr (DEBUG_LOCALE) {
-    printf("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
+    debug("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
   }
 
   // Create a QCoreApplication object to handle application initialization.
@@ -794,7 +794,7 @@ main(int argc, char* argv[])
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
   if constexpr (DEBUG_LOCALE) {
-    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, nullptr));
+    debug("Locale after initial setup: %s\n",setlocale(LC_ALL, nullptr));
   }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
@@ -802,21 +802,21 @@ main(int argc, char* argv[])
   // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
   if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
     if constexpr (DEBUG_LOCALE) {
-      printf("Resetting LC_NUMERIC\n");
+      debug("Resetting LC_NUMERIC\n");
     }
     setlocale(LC_NUMERIC,"C");
     if constexpr (DEBUG_LOCALE) {
-      printf("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
+      debug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
   /* reset LC_TIME for strftime */
   if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
     if constexpr (DEBUG_LOCALE) {
-      printf("Resetting LC_TIME\n");
+      debug("Resetting LC_TIME\n");
     }
     setlocale(LC_TIME,"C");
     if constexpr (DEBUG_LOCALE) {
-      printf("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
+      debug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
   qInstallMessageHandler(MessageHandler);

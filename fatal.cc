@@ -60,6 +60,9 @@ warning(const char* fmt, ...)
   va_start(ap, fmt);
   QString msg = QString::vasprintf(fmt, ap);
   va_end(ap);
+  if (msg.endsWith('\n')) {
+    msg.chop(1);
+  }
   qWarning().noquote() << msg;
 }
 
@@ -70,6 +73,9 @@ info(const char* fmt, ...)
   va_start(ap, fmt);
   QString msg = QString::vasprintf(fmt, ap);
   va_end(ap);
+  if (msg.endsWith('\n')) {
+    msg.chop(1);
+  }
   qInfo().noquote() << msg;
 }
 
@@ -80,6 +86,9 @@ debug(const char* fmt, ...)
   va_start(ap, fmt);
   QString msg = QString::vasprintf(fmt, ap);
   va_end(ap);
+  if (msg.endsWith('\n')) {
+    msg.chop(1);
+  }
   qDebug().noquote() << msg;
 }
 
