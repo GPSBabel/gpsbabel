@@ -213,7 +213,7 @@ private:
   void serial_init(const char* fname);
   void serial_deinit();
   int serial_recv_byte() const;
-  void serial_write_byte(uint8_t byte) const;
+  void serial_write_byte(uint8_t byte);
   int recv_byte();
   void write_byte(uint8_t byte);
   void globalsat_write_package(uint8_t* payload, uint32_t size);
@@ -222,10 +222,11 @@ private:
   void globalsat_probe_device();
   void waypoint_read();
   void track_read();
-  static void route_read();
+  void route_read();
 
   /* Data Members */
 
+  DebugLog db;
   void* serial_handle{nullptr};
   bool isSizeSwapped{false};
 

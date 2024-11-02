@@ -921,6 +921,16 @@ enum ff_cap {
 [[gnu::format(printf, 1, 2)]] void info(const char* fmt, ...);
 [[gnu::format(printf, 1, 2)]] void debug(const char* fmt, ...);
 
+class DebugLog
+{
+public:
+  [[gnu::format(printf, 2, 3)]] int log(const char* fmt, ...);
+  int flush();
+  
+private:
+  QString buf_;
+};
+
 void printposn(double c, bool is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);

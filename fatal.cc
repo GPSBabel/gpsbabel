@@ -82,3 +82,42 @@ debug(const char* fmt, ...)
   va_end(ap);
   qDebug().noquote() << msg;
 }
+
+int DebugLog::log(const char* fmt, ...)
+{
+  va_list args1;
+  va_start(args1, fmt);
+  va_list args2;
+  va_copy(args2, args1);
+  char cbuf[1 + vsnprintf(nullptr, 0, fmt, args1)];
+  va_end(args1);
+  vsnprintf(cbuf, sizeof cbuf, fmt, args2);
+  va_end(args2);
+
+  buf_.append(QString::asprintf("%s", cbuf));
+
+  int rc = 0;
+
+  for (auto idx = buf_.indexOf('\n'); idx >= 0; idx = buf_.indexOf('\n')) {
+    auto msg = buf_.sliced(0, idx + 1).toLocal8Bit();
+    debug("%s", msg.constData());
+    rc += msg.size();
+    buf_.remove(0, idx + 1);
+  }
+
+  return rc;
+}
+
+int DebugLog::flush()
+{
+  int rc = 0;
+
+  if (!buf_.isEmpty()) {
+    auto msg = buf_.toLocal8Bit();
+    debug("%s", msg.constData());
+    rc += msg.size();
+    buf_ = QString();
+  }
+
+  return rc;
+}
