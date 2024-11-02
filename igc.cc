@@ -272,7 +272,7 @@ void IgcFormat::read()
 
   while (true) {
     if (global_opts.debug_level >= 8) {
-      printf("Processing IGC file line %i\n", current_line);
+      db.log("Processing IGC file line %i\n", current_line);
     }
     igc_rec_type_t rec_type = get_record(&ibuf);
     current_line++;
@@ -378,21 +378,21 @@ void IgcFormat::read()
       if (!ext_types_list.isEmpty()) {
         auto* fsdata = new igc_fsdata;
         if (global_opts.debug_level >= 7) {
-          printf("Record: %s\n",qPrintable(ibuf_q));
+          db.log("Record: %s\n",qPrintable(ibuf_q));
         }
         if (global_opts.debug_level >= 6) {
-          printf("Adding extension data:");
+          db.log("Adding extension data:");
         }
         for (const auto& [name, ext, start, len, factor] : ext_types_list) {
           double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
           fsdata->set_value(ext, ext_data, pres_wpt);
           if (global_opts.debug_level >= 6) {
-            printf(" %s:%f", qPrintable(name), ext_data);
+            db.log(" %s:%f", qPrintable(name), ext_data);
           }
         }
         if (global_opts.debug_level >= 6) {
-          printf("\n");
+          db.log("\n");
         }
         pres_wpt->fs.FsChainAdd(fsdata);
       }
@@ -438,13 +438,13 @@ void IgcFormat::read()
         break;
       } else if (global_opts.debug_level >= 5) {
         if (strcmp(tmp_str, "OOI") == 0) {
-          printf("Observer Input> %s\n", ibuf + 4);
+          db.log("Observer Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, "PLT") == 0) {
-          printf("Pilot Input> %s\n", ibuf + 4);
+          db.log("Pilot Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, manufacturer) == 0) {
-          printf("Manufacturer Input> %s\n", ibuf + 4);
+          db.log("Manufacturer Input> %s\n", ibuf + 4);
         } else {
-          printf("Anonymous Input> %s\n", ibuf + 1);
+          db.log("Anonymous Input> %s\n", ibuf + 1);
         }
       }
       break;
@@ -487,19 +487,19 @@ void IgcFormat::read()
         }
       }
       if (global_opts.debug_level >= 1) {
-        printf("I record: %s\nExtensions present: %s\n", qPrintable(ibuf_q),
+        db.log("I record: %s\nExtensions present: %s\n", qPrintable(ibuf_q),
                qPrintable(present_extensions.join(' ')));
       }
       if (global_opts.debug_level >= 2) {
-        printf("Non-excluded extensions defined in I record:\n");
-        printf("(Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
+        db.log("Non-excluded extensions defined in I record:\n");
+        db.log("(Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
         for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
-          printf("Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
+          db.log("Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {
-          printf("Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
+          db.log("Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
                  qPrintable(unsupported_extensions.join(' ')));
-          printf("Supported extensions (These are present in the I record and supported):\t%s\n",
+          db.log("Supported extensions (These are present in the I record and supported):\t%s\n",
                  qPrintable(supported_extensions.join(' ')));
         }
       }
@@ -852,7 +852,7 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
   } while (alt_diff > -10.0);
   gpsbabel::DateTime pres_time = (*std::prev(wpt_rit))->GetCreationTime();
   if (global_opts.debug_level >= 1) {
-    printf("pressure landing time %s\n", CSTR(pres_time.toPrettyString()));
+    db.log("pressure landing time %s\n", CSTR(pres_time.toPrettyString()));
   }
 
   // Deduce the landing time from the GNSS altitude track based on
@@ -871,12 +871,12 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
             radtometers(gcdist(wpt->position(), (*wpt_rit)->position())) /
             (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
-      printf("speed=%.2fm/s\n", speed);
+      db.log("speed=%.2fm/s\n", speed);
     }
   } while (speed < 2.5);
   gpsbabel::DateTime gnss_time = (*std::prev(wpt_rit))->GetCreationTime();
   if (global_opts.debug_level >= 1) {
-    printf("gnss landing time %s\n", CSTR(gnss_time.toPrettyString()));
+    db.log("gnss landing time %s\n", CSTR(gnss_time.toPrettyString()));
   }
   // Time adjustment is difference between the two estimated landing times
   int time_diff = gnss_time.secsTo(pres_time);
@@ -955,7 +955,7 @@ void IgcFormat::wr_track()
       time_adj = 0;
     }
     if (global_opts.debug_level >= 1) {
-      printf("adjusting time by %ds\n", time_adj);
+      db.log("adjusting time by %ds\n", time_adj);
     }
     // Iterate through waypoints in both tracks simultaneously
     Interpolater interpolater;

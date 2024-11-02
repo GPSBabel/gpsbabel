@@ -285,11 +285,12 @@ private:
   void wr_task_tlr(const route_head* rte);
   void wr_tasks();
   void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt);
-  static int correlate_tracks(const route_head* pres_track, const route_head* gnss_track);
+  int correlate_tracks(const route_head* pres_track, const route_head* gnss_track);
   void wr_track();
 
   /* Data Members */
 
+  DebugLog db;
   gbfile* file_in{};
   gbfile* file_out{};
   char manufacturer[4] {};
