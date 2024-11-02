@@ -96,11 +96,13 @@ int DebugLog::vlog(const char* fmt, va_list args1)
 {
   va_list args2;
   va_copy(args2, args1);
-  char cbuf[1 + vsnprintf(nullptr, 0, fmt, args1)];
-  vsnprintf(cbuf, sizeof cbuf, fmt, args2);
+  size_t cbufsz = 1 + vsnprintf(nullptr, 0, fmt, args1);
+  char* cbuf = new char[cbufsz];
+  vsnprintf(cbuf, cbufsz, fmt, args2);
   va_end(args2);
 
   buf_.append(QString::asprintf("%s", cbuf));
+  delete[] cbuf;
 
   int rc = 0;
 
