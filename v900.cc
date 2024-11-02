@@ -75,7 +75,7 @@ for a little more info, see structures:
 
 #include <cassert>     // for assert
 #include <cstdarg>     // for va_end, va_start
-#include <cstdio>      // for fclose, fgets, fread, vfprintf, stderr, va_list
+#include <cstdio>      // for fclose, fgets, fread, va_list
 #include <cstdlib>     // for strtod
 #include <cstring>     // for strncmp, strcat, strcpy, strstr
 
@@ -91,15 +91,12 @@ for a little more info, see structures:
 void
 V900Format::v900_log(const char* fmt, ...)
 {
-  va_list ap;
-
-  if (global_opts.debug_level < 1) {
-    return;
+  if (global_opts.debug_level >= 1) {
+    va_list ap;
+    va_start(ap, fmt);
+    db.vlog(fmt, ap);
+    va_end(ap);
   }
-
-  va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
-  va_end(ap);
 }
 
 void
