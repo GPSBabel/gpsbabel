@@ -27,7 +27,7 @@
 #include <cctype>                  // for toupper
 #include <cmath>                   // for fabs, floor
 #include <cstdint>                 // for uint16_t
-#include <cstdio>                  // for sscanf, fprintf, snprintf, stderr
+#include <cstdio>                  // for snprintf, sscanf
 #include <cstdlib>                 // for abs
 #include <cstring>                 // for strstr, strlen
 #include <ctime>                   // for gmtime, time_t, localtime, strftime, tm
@@ -267,8 +267,7 @@ GarminTxtFormat::print_date_and_time(const time_t time, const bool time_only)
   }
   if (time_only) {
     tm = *gmtime(&time);
-    snprintf(tbuf, sizeof(tbuf), "%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
-    *fout << QString::asprintf("%s", tbuf);
+    *fout << QString::asprintf("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
   } else if (time != 0) {
     if (gtxt_flags.utc) {
       time_t t = time + utc_offs;
@@ -965,7 +964,7 @@ GarminTxtFormat::bind_fields(const header_type ht)
       int field_no = field_idx + 1;
       header_mapping_info[ht].append(std::make_pair(name, field_no));
       if (global_opts.debug_level >= 2) {
-        fprintf(stderr, "Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
+        debug("Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
       }
     } else {
       warning("Field %s not recognized!\n", qPrintable(name));
