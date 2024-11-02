@@ -59,7 +59,7 @@
 #define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
 
 #define GPI_DBG global_opts.debug_level >= 3
-#define PP if (GPI_DBG) warning("@%1$6x (%1$8d): ", gbftell(fin))
+#define PP if (GPI_DBG) warning("@%6x (%8d): ", gbftell(fin), gbftell(fin))
 
 /*******************************************************************************
 * %%%                             gpi reader                               %%% *
@@ -530,17 +530,17 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     if (GPI_DBG) {
       int x;
       std::unique_ptr<unsigned char[]> b(new unsigned char[sz]);
-      fprintf(stderr, "Tag: %x\n", tag);
+      db.log("Tag: %x\n", tag);
       gbfread(b.get(), 1, sz, fin);
-      fprintf(stderr, "\n");
+      db.log("\n");
       for (x = 0; x < sz; x++) {
-        fprintf(stderr, "%02x ", b[x]);
+        db.log("%02x ", b[x]);
       }
-      fprintf(stderr, "\n");
+      db.log("\n");
       for (x = 0; x < sz; x++) {
-        fprintf(stderr, "%c", isalnum(b[x]) ? b[x] : '.');
+        db.log("%c", isalnum(b[x]) ? b[x] : '.');
       }
-      fprintf(stderr, "\n");
+      db.log("\n");
     }
   break;
   default:
@@ -1089,19 +1089,19 @@ GarminGPIFormat::load_bitmap_from_file(const QString& fname, const unsigned char
   }
 
   if (GPI_DBG) {
-    printf("data size:             0x%x (%d)\n", src_h.size, src_h.size);
-    printf("image data offset:     0x%x (%d)\n", src_h.image_offset, src_h.image_offset);
-    printf("header size:           0x%x (%d)\n", src_h.header_size, src_h.header_size);
-    printf("image width:           0x%x (%d)\n", src_h.width, src_h.width);
-    printf("image height:          0x%x (%d)\n", src_h.height, src_h.height);
-    printf("number of planes:      0x%x (%d)\n", src_h.planes, src_h.planes);
-    printf("bits per pixel:        0x%x (%d)\n", src_h.bpp, src_h.bpp);
-    printf("compression type:      0x%x (%d)\n", src_h.compression_type, src_h.compression_type);
-    printf("image size:            0x%x (%d)\n", src_h.image_data_size, src_h.image_data_size);
-    printf("horizontal resolution: 0x%x (%d)\n", src_h.resolution_h, src_h.resolution_h);
-    printf("vertical resolution:   0x%x (%d)\n", src_h.resolution_v, src_h.resolution_v);
-    printf("number of colors:      0x%x (%d)\n", src_h.used_colors, src_h.used_colors);
-    printf("important colors:      0x%x (%d)\n", src_h.important_colors, src_h.important_colors);
+    debug("data size:             0x%x (%d)\n", src_h.size, src_h.size);
+    debug("image data offset:     0x%x (%d)\n", src_h.image_offset, src_h.image_offset);
+    debug("header size:           0x%x (%d)\n", src_h.header_size, src_h.header_size);
+    debug("image width:           0x%x (%d)\n", src_h.width, src_h.width);
+    debug("image height:          0x%x (%d)\n", src_h.height, src_h.height);
+    debug("number of planes:      0x%x (%d)\n", src_h.planes, src_h.planes);
+    debug("bits per pixel:        0x%x (%d)\n", src_h.bpp, src_h.bpp);
+    debug("compression type:      0x%x (%d)\n", src_h.compression_type, src_h.compression_type);
+    debug("image size:            0x%x (%d)\n", src_h.image_data_size, src_h.image_data_size);
+    debug("horizontal resolution: 0x%x (%d)\n", src_h.resolution_h, src_h.resolution_h);
+    debug("vertical resolution:   0x%x (%d)\n", src_h.resolution_v, src_h.resolution_v);
+    debug("number of colors:      0x%x (%d)\n", src_h.used_colors, src_h.used_colors);
+    debug("important colors:      0x%x (%d)\n", src_h.important_colors, src_h.important_colors);
   }
 
   /* sort out unsupported files */
