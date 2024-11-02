@@ -487,14 +487,14 @@ void IgcFormat::read()
         }
       }
       if (global_opts.debug_level >= 1) {
-        db.log("I record: %s\nExtensions present: %s\n", qPrintable(ibuf_q),
-               qPrintable(present_extensions.join(' ')));
+        db.log("I record: %s\n", qPrintable(ibuf_q));
+        db.log("Extensions present: %s\n", qPrintable(present_extensions.join(' ')));
       }
       if (global_opts.debug_level >= 2) {
         db.log("Non-excluded extensions defined in I record:\n");
         db.log("(Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
         for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
-          db.log("Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
+          db.log("   Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {
           db.log("Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
