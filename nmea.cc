@@ -20,7 +20,7 @@
 
  */
 
-#include <cctype>                  // for isprint
+#include <cassert>                 // for assert
 #include <cmath>                   // for fabs
 #include <cstdio>                  // for snprintf, sscanf, fprintf, fputc, stderr
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
@@ -31,12 +31,12 @@
 #include <QDateTime>               // for QDateTime
 #include <QDebug>                  // for QDebug
 #include <QList>                   // for QList
+#include <QRegularExpression>      // for QRegularExpression
 #include <QString>                 // for QString
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for hex
 #include <QThread>                 // for QThread
 #include <QTime>                   // for QTime
-#include <Qt>                      // for UTC
 #include <QtGlobal>                // for qPrintable, foreach
 
 #include "defs.h"
@@ -1050,12 +1050,13 @@ NmeaFormat::rd_position_init(const QString& fname)
 }
 
 void
-NmeaFormat::safe_print(int cnt, const char* b)
+NmeaFormat::safe_print(const QString& b)
 {
-  for (int i = 0; i < cnt; i++) {
-    char c = isprint(b[i]) ? b[i] : '.';
-    fputc(c, stderr);
-  }
+  static const QRegularExpression re("[^[:print:]]");
+  assert(re.isValid());
+
+  QString str(b);
+  qDebug().noquote() << str.replace(re, ".");
 }
 
 int NmeaFormat::hunt_sirf()
@@ -1067,7 +1068,7 @@ int NmeaFormat::hunt_sirf()
 
   for (brp = br; *brp > 0; brp++) {
     if (global_opts.debug_level > 1) {
-      fprintf(stderr, "Trying %d\n", *brp);
+      debug("Trying %d\n", *brp);
     }
 
     /*
@@ -1116,7 +1117,7 @@ NmeaFormat::rd_position(posn_status* /*unused*/)
     ibuf[0] = 0;
     int rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 2000, 0x0a, 0x0d);
     if (global_opts.debug_level > 1) {
-      safe_print(strlen(ibuf), ibuf);
+      safe_print(ibuf);
     }
     if (rv < 0) {
       if (am_sirf == 0) {
