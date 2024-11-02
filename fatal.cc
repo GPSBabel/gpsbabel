@@ -49,6 +49,9 @@ fatal(const char* fmt, ...)
   va_start(ap, fmt);
   QString msg = QString::vasprintf(fmt, ap);
   va_end(ap);
+  if (msg.endsWith('\n')) {
+    msg.chop(1);
+  }
   qCritical().noquote() << msg;
   exit(1);
 }
