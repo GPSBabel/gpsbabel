@@ -227,7 +227,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
     }
 
     if (enclosed) {
-      Warning() << "" <<
+      Warning() <<
               "Warning- Unbalanced Field Enclosures" <<
               enclosed_in <<
               "on line" <<
