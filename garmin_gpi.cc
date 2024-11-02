@@ -59,7 +59,7 @@
 #define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
 
 #define GPI_DBG global_opts.debug_level >= 3
-#define PP if (GPI_DBG) warning("@%6x (%8d): ", gbftell(fin), gbftell(fin))
+#define PP if (GPI_DBG) db.log("@%6x (%8d): ", gbftell(fin), gbftell(fin))
 
 /*******************************************************************************
 * %%%                             gpi reader                               %%% *
@@ -81,7 +81,7 @@ GarminGPIFormat::gpi_gmsd_init(Waypoint* wpt)
 }
 
 GarminGPIFormat::lc_string
-GarminGPIFormat::gpi_read_lc_string() const
+GarminGPIFormat::gpi_read_lc_string()
 {
   lc_string result;
 
@@ -105,7 +105,7 @@ GarminGPIFormat::gpi_read_lc_string() const
 
 /* read a standard string with or without 'EN' (or whatever) header */
 QString
-GarminGPIFormat::gpi_read_string(const char* field) const
+GarminGPIFormat::gpi_read_string(const char* field)
 {
   QByteArray string;
 
@@ -149,7 +149,7 @@ GarminGPIFormat::gpi_read_string(const char* field) const
 
   QString result = str_to_unicode(string).trimmed();
   if (GPI_DBG) {
-    warning("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : qPrintable(result));
+    db.log("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : qPrintable(result));
   }
   return result;
 }
@@ -175,7 +175,7 @@ GarminGPIFormat::read_header()
   rdata->crdate = gbfgetint32(fin);
   if (GPI_DBG) {
     time_t crdate = GPS_Math_Gtime_To_Utime(rdata->crdate);
-    warning("crdate = %lld (%s)\n", (long long) rdata->crdate,
+    db.log("crdate = %lld (%s)\n", (long long) rdata->crdate,
             CSTR(QDateTime::fromSecsSinceEpoch(crdate, QtUTC).toString(Qt::ISODate)));
   }
 
@@ -209,14 +209,14 @@ GarminGPIFormat::read_header()
   codepage = gbfgetuint16(fin);
   if (GPI_DBG) {
     PP;
-    warning("Code Page: %d\n",codepage);
+    db.log("Code Page: %d\n",codepage);
   }
   (void) gbfgetint16(fin);     /* typically 0, but  0x11 in
             Garminonline.de files.  */
 
   if (GPI_DBG) {
     PP;
-    warning("< leaving header\n");
+    db.log("< leaving header\n");
   }
 }
 
@@ -226,7 +226,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
 {
   if (GPI_DBG) {
     PP;
-    warning("> reading poi (size %d)\n", sz);
+    db.log("> reading poi (size %d)\n", sz);
   }
   PP;
   int len = 0;
@@ -234,7 +234,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
     len = gbfgetint32(fin);  /* sub-header size */
   }
   if (GPI_DBG) {
-  warning("poi sublen = %d (0x%x)\n", len, len);
+  db.log("poi sublen = %d (0x%x)\n", len, len);
   }
   (void) len;
   int pos = gbftell(fin);
@@ -267,7 +267,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
 
   if (GPI_DBG) {
     PP;
-    warning("< leaving poi\n");
+    db.log("< leaving poi\n");
   }
 }
 
@@ -278,12 +278,12 @@ GarminGPIFormat::read_poi_list(const int sz)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    warning("> reading poi list (-> %x / %d )\n", pos + sz, pos + sz);
+    db.log("> reading poi list (-> %x / %d )\n", pos + sz, pos + sz);
   }
   PP;
   int i = gbfgetint32(fin);  /* mostly 23 (0x17) */
   if (GPI_DBG) {
-    warning("list sublen = %d (0x%x)\n", i, i);
+    db.log("list sublen = %d (0x%x)\n", i, i);
   }
   (void) i;
 
@@ -306,7 +306,7 @@ GarminGPIFormat::read_poi_list(const int sz)
   }
   if (GPI_DBG) {
     PP;
-    warning("< leaving poi list\n");
+    db.log("< leaving poi list\n");
   }
 }
 
@@ -316,13 +316,13 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    warning("> reading poi group (-> %x / %d)\n", pos + sz, pos + sz);
+    db.log("> reading poi group (-> %x / %d)\n", pos + sz, pos + sz);
   }
   if (tag == 0x80009) {
     PP;
     int subsz = gbfgetint32(fin);  /* ? offset to category data ? */
     if (GPI_DBG) {
-      warning("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
+      db.log("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
     }
     (void)subsz;
   }
@@ -337,7 +337,7 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
 
   if (GPI_DBG) {
     PP;
-    warning("< leaving poi group\n");
+    db.log("< leaving poi group\n");
   }
 }
 
@@ -363,7 +363,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 
   if (GPI_DBG) {
     PP;
-    warning("%s: tag = 0x%x (size %d)\n", caller, tag, sz);
+    db.log("%s: tag = 0x%x (size %d)\n", caller, tag, sz);
   }
   if ((tag >= 0x80000) && (tag <= 0x800ff)) {
     sz += 4;
@@ -456,7 +456,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
     if (GPI_DBG) {
-      warning("GPI Address field mask: %d (0x%02x)\n", mask, mask);
+      db.log("GPI Address field mask: %d (0x%02x)\n", mask, mask);
     }
     if ((mask & GPI_ADDR_CITY) && !(str = gpi_read_string("City")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
@@ -509,7 +509,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 
     mask = gbfgetint16(fin); /* phone fields mask */
     if (GPI_DBG) {
-      warning("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
+      db.log("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
     }
     if ((mask & 1) && !(str = gpi_read_string("Phone")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);

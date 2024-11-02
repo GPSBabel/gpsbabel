@@ -615,14 +615,15 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
 {
   if (args) {
+    DebugLog db;
     for (const auto& arg : *args) {
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
-        printf("options: module/option=value: %s/%s=\"%s\"",
+        db.log("options: module/option=value: %s/%s=\"%s\"",
                qPrintable(vecname), qPrintable(arg.argstring), qPrintable(arg.argval->get()));
         if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
-          printf(" (=default)");
+          db.log(" (=default)");
         }
-        printf("\n");
+        db.log("\n");
       }
     }
   }
