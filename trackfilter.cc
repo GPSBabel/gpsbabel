@@ -25,7 +25,6 @@ static constexpr bool TRACKF_DBG = false;
 #include <algorithm>                       // for_each, sort, stable_sort
 #include <cassert>                         // for assert
 #include <cmath>                           // for nan
-#include <cstdio>                          // for printf
 #include <cstdlib>                         // for abs
 #include <ctime>                           // for gmtime, strftime, time_t, tm
 #include <iterator>                        // for next
@@ -406,7 +405,7 @@ void TrackFilter::trackfilter_merge()
     }
 
     if (global_opts.verbose_status > 0) {
-      printf("merge: %d track point(s) merged, %d dropped.\n", track_waypt_count(), original_waypt_count - track_waypt_count());
+      info("merge: %d track point(s) merged, %d dropped.\n", track_waypt_count(), original_waypt_count - track_waypt_count());
     }
     if ((original_waypt_count > 0) && (track_waypt_count() == 0)) {
       warning("merge: All %d track points have been dropped!\n", original_waypt_count);
@@ -462,7 +461,7 @@ void TrackFilter::trackfilter_split()
         }
 
         if constexpr(TRACKF_DBG) {
-          printf("interval %f seconds\n", interval);
+          debug("interval %f seconds\n", interval);
         }
       } else {
         fatal("invalid timer interval specified \"%s\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", qPrintable(opt_split));
@@ -493,7 +492,7 @@ void TrackFilter::trackfilter_split()
         }
 
         if constexpr(TRACKF_DBG) {
-          printf("distance %f meters\n", distance);
+          debug("distance %f meters\n", distance);
         }
       } else {
         fatal("invalid distance specified \"%s\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", qPrintable(opt_sdistance.get()));
@@ -524,7 +523,7 @@ void TrackFilter::trackfilter_split()
                          wpt->GetCreationTime().toLocalTime().date();
         if constexpr(TRACKF_DBG) {
           if (new_track_flag) {
-            printf("new day %s\n", qPrintable(wpt->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
+            debug("new day %s\n", qPrintable(wpt->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
           }
         }
       } else {
@@ -536,7 +535,7 @@ void TrackFilter::trackfilter_split()
           if (curdist <= distance) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
-            printf("sdistance, %g > %g\n", curdist, distance);
+            debug("sdistance, %g > %g\n", curdist, distance);
           }
         }
 
@@ -545,14 +544,14 @@ void TrackFilter::trackfilter_split()
           if (tr_interval <= interval) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
-            printf("split, %g > %g\n", tr_interval, interval);
+            debug("split, %g > %g\n", tr_interval, interval);
           }
         }
 
       }
       if (new_track_flag) {
         if constexpr(TRACKF_DBG) {
-          printf("splitting new track\n");
+          debug("splitting new track\n");
         }
         curr = new route_head;
         trackfilter_split_init_rte_name(curr, wpt->GetCreationTime());
