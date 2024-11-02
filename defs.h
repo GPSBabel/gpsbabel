@@ -927,7 +927,7 @@ public:
   int vlog(const char* fmt, va_list args1);
   [[gnu::format(printf, 2, 3)]] int log(const char* fmt, ...);
   int flush();
-  
+
 private:
   QString buf_;
 };
