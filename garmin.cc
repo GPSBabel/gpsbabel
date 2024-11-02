@@ -23,7 +23,7 @@
 
 #include <climits>               // for INT_MAX
 #include <cmath>                 // for atan2, modf, sqrt
-#include <cstdio>                // for fprintf, fflush, snprintf, snprintf
+#include <cstdio>                // for snprintf, size_t
 #include <cstdint>               // for int32_t
 #include <cstring>               // for memcpy, strlen, strncpy, strchr
 #include <ctime>                 // for time_t
@@ -240,12 +240,10 @@ GarminFormat::rw_init(const QString& fname)
   }
 
   if (global_opts.debug_level > 0)  {
-    fprintf(stderr, "Waypoint type: %d\n"
-            "Chosen waypoint length %d\n",
-            gps_waypt_type, receiver_short_length);
+    debug("Waypoint type: %d\n", gps_waypt_type);
+    debug("Chosen waypoint length %d\n", receiver_short_length);
     if (gps_category_type) {
-      fprintf(stderr, "Waypoint category type: %d\n",
-              gps_category_type);
+      debug("Waypoint category type: %d\n", gps_category_type);
     }
   }
 
@@ -288,7 +286,7 @@ GarminFormat::rw_init(const QString& fname)
   }
   codec = get_codec(receiver_charset);
   if (global_opts.verbose_status) {
-    fprintf(stdout, "receiver charset detected as %s.\r\n", receiver_charset.constData());
+    info("receiver charset detected as %s.\n", receiver_charset.constData());
   }
 
   valid_chars = valid_waypt_chars;
@@ -897,8 +895,7 @@ GarminFormat::waypoint_write()
     GPS_Way_Del(&tx_waylist[i]);
   }
   if (global_opts.verbose_status) {
-    fprintf(stdout, "\r\n");
-    fflush(stdout);
+    info("\n");
   }
   xfree(tx_waylist);
 }
