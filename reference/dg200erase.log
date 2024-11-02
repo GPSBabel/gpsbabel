@@ -1,3 +1,5 @@
+dg-200-bin: options: module/option=value: dg-200-bin/erase="1"
+dg-200-bin: options: module/option=value: dg-200-bin/erase_only="0" (=default)
 dg-200-bin: TX: Frame Start a0 a2 Payload_Len 0003 Cmd: getfileheader
 dg-200-bin: RX: Start a0a2 Len 0005 Cmd: getfileheader
 dg-200-bin: found 0 headers, nextheader=0
@@ -6,3 +8,5 @@ dg-200-bin: TX: Frame Start a0 a2 Payload_Len 0001 Cmd: getconfig
 dg-200-bin: RX: Start a0a2 Len 002e Cmd: getconfig
 dg-200-bin: TX: Frame Start a0 a2 Payload_Len 0003 Cmd: erase
 dg-200-bin: RX: Start a0a2 Len 0005 Cmd: erase
+gpx: options: module/option=value: gpx/snlen="32" (=default)
+gpx: options: module/option=value: gpx/elevprec="3" (=default)
