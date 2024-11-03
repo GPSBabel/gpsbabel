@@ -1,7 +1,7 @@
 /*
     Functions to indicate inconsistent or fatal conditions.
 
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2014,2024 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,12 +25,23 @@
 
 #include <QByteArray>          // for QByteArray
 #include <QDebug>              // for QDebug
-#include <QString>             // for QString
 #include <QtGlobal>            // for qCritical, qDebug, qInfo, qWarning
 
 #include "defs.h"              // for DebugLog, fatal, debug, info, warning
 #include "src/core/logging.h"  // for FatalMsg
 
+static QByteArray xvasprintf(const char* fmt, va_list args)
+{
+  va_list args2;
+  va_copy(args2, args);
+  auto cbufsz = 1 + vsnprintf(nullptr, 0, fmt, args);
+  char* cbuf = new char[cbufsz];
+  vsnprintf(cbuf, cbufsz, fmt, args2);
+  va_end(args2);
+  QByteArray rval(cbuf);
+  delete[] cbuf;
+  return rval;
+}
 
 [[noreturn]] void fatal(QDebug& msginstance)
 {
@@ -43,10 +54,10 @@
 [[noreturn]] void
 fatal(const char* fmt, ...)
 {
-  va_list ap;
-  va_start(ap, fmt);
-  QString msg = QString::vasprintf(fmt, ap);
-  va_end(ap);
+  va_list args;
+  va_start(args, fmt);
+  QByteArray msg = xvasprintf(fmt, args);
+  va_end(args);
   if (msg.endsWith('\n')) {
     msg.chop(1);
   }
@@ -57,10 +68,10 @@ fatal(const char* fmt, ...)
 void
 warning(const char* fmt, ...)
 {
-  va_list ap;
-  va_start(ap, fmt);
-  QString msg = QString::vasprintf(fmt, ap);
-  va_end(ap);
+  va_list args;
+  va_start(args, fmt);
+  QByteArray msg = xvasprintf(fmt, args);
+  va_end(args);
   if (msg.endsWith('\n')) {
     msg.chop(1);
   }
@@ -70,10 +81,10 @@ warning(const char* fmt, ...)
 void
 info(const char* fmt, ...)
 {
-  va_list ap;
-  va_start(ap, fmt);
-  QString msg = QString::vasprintf(fmt, ap);
-  va_end(ap);
+  va_list args;
+  va_start(args, fmt);
+  QByteArray msg = xvasprintf(fmt, args);
+  va_end(args);
   if (msg.endsWith('\n')) {
     msg.chop(1);
   }
@@ -83,33 +94,28 @@ info(const char* fmt, ...)
 void
 debug(const char* fmt, ...)
 {
-  va_list ap;
-  va_start(ap, fmt);
-  QString msg = QString::vasprintf(fmt, ap);
-  va_end(ap);
+  va_list args;
+  va_start(args, fmt);
+  QByteArray msg = xvasprintf(fmt, args);
+  va_end(args);
   if (msg.endsWith('\n')) {
     msg.chop(1);
   }
   qDebug().noquote() << msg;
 }
 
-int DebugLog::vlog(const char* fmt, va_list args1)
+int DebugLog::vlog(const char* fmt, va_list args)
 {
-  va_list args2;
-  va_copy(args2, args1);
-  auto cbufsz = 1 + vsnprintf(nullptr, 0, fmt, args1);
-  char* cbuf = new char[cbufsz];
-  vsnprintf(cbuf, cbufsz, fmt, args2);
-  va_end(args2);
-
-  buf_.append(cbuf);
-  delete[] cbuf;
-
   int rc = 0;
+
+  buf_.append(xvasprintf(fmt, args));
 
   for (auto idx = buf_.indexOf('\n'); idx >= 0; idx = buf_.indexOf('\n')) {
     QByteArray msg = buf_.sliced(0, idx + 1);
-    debug("%s", msg.constData());
+    if (msg.endsWith('\n')) {
+      msg.chop(1);
+    }
+    qDebug().noquote() << msg;
     rc += msg.size();
     buf_.remove(0, idx + 1);
   }
@@ -119,10 +125,10 @@ int DebugLog::vlog(const char* fmt, va_list args1)
 
 int DebugLog::log(const char* fmt, ...)
 {
-  va_list args1;
-  va_start(args1, fmt);
-  int rc = vlog(fmt, args1);
-  va_end(args1);
+  va_list args;
+  va_start(args, fmt);
+  int rc = vlog(fmt, args);
+  va_end(args);
   return rc;
 }
 
@@ -131,7 +137,10 @@ int DebugLog::flush()
   int rc = 0;
 
   if (!buf_.isEmpty()) {
-    debug("%s", buf_.constData());
+    if (buf_.endsWith('\n')) {
+      buf_.chop(1);
+    }
+    qDebug().noquote() << buf_;
     rc += buf_.size();
     buf_ = QByteArray();
   }
