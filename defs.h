@@ -929,7 +929,7 @@ public:
   int flush();
 
 private:
-  QString buf_;
+  QByteArray buf_;
 };
 
 void printposn(double c, bool is_lat);

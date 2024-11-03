@@ -23,6 +23,7 @@
 #include <cstdio>              // for vsnprintf
 #include <cstdlib>             // for exit
 
+#include <QByteArray>          // for QByteArray
 #include <QDebug>              // for QDebug
 #include <QString>             // for QString
 #include <QtGlobal>            // for qCritical, qDebug, qInfo, qWarning
@@ -101,13 +102,13 @@ int DebugLog::vlog(const char* fmt, va_list args1)
   vsnprintf(cbuf, cbufsz, fmt, args2);
   va_end(args2);
 
-  buf_.append(QString::asprintf("%s", cbuf));
+  buf_.append(cbuf);
   delete[] cbuf;
 
   int rc = 0;
 
   for (auto idx = buf_.indexOf('\n'); idx >= 0; idx = buf_.indexOf('\n')) {
-    auto msg = buf_.sliced(0, idx + 1).toLocal8Bit();
+    QByteArray msg = buf_.sliced(0, idx + 1);
     debug("%s", msg.constData());
     rc += msg.size();
     buf_.remove(0, idx + 1);
@@ -130,10 +131,9 @@ int DebugLog::flush()
   int rc = 0;
 
   if (!buf_.isEmpty()) {
-    auto msg = buf_.toLocal8Bit();
-    debug("%s", msg.constData());
-    rc += msg.size();
-    buf_ = QString();
+    debug("%s", buf_.constData());
+    rc += buf_.size();
+    buf_ = QByteArray();
   }
 
   return rc;
