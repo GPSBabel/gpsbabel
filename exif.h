@@ -167,7 +167,7 @@ private:
   static uint32_t exif_ifd_size(ExifIfd* ifd);
   ExifApp* exif_load_apps();
 #ifndef NDEBUG
-  void exif_validate_tag_structure(const ExifTag* tag);
+  static void exif_validate_tag_structure(const ExifTag* tag);
 #endif
   ExifIfd* exif_read_ifd(ExifApp* app, uint16_t ifd_nr, gbsize_t offs, uint32_t* exif_ifd_ofs, uint32_t* gps_ifd_ofs, uint32_t* inter_ifd_ofs);
   void exif_read_app(ExifApp* app);
