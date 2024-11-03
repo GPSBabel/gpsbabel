@@ -19,15 +19,15 @@
 
  */
 
-#include <cstdarg>             // for va_end, va_list, va_start
-#include <cstdio>              // for fflush, stdout
+#include <cstdarg>             // for va_copy, va_end, va_list, va_start
+#include <cstdio>              // for vsnprintf
 #include <cstdlib>             // for exit
 
 #include <QDebug>              // for QDebug
 #include <QString>             // for QString
-#include <QtGlobal>            // for qDebug
+#include <QtGlobal>            // for qCritical, qDebug, qInfo, qWarning
 
-#include "defs.h"              // for Fatal, debug_print, fatal, warning
+#include "defs.h"              // for DebugLog, fatal, debug, info, warning
 #include "src/core/logging.h"  // for FatalMsg
 
 
@@ -42,9 +42,6 @@
 [[noreturn]] void
 fatal(const char* fmt, ...)
 {
-  /* flush any buffered standard output */
-  fflush(stdout);
-
   va_list ap;
   va_start(ap, fmt);
   QString msg = QString::vasprintf(fmt, ap);
@@ -99,7 +96,7 @@ int DebugLog::vlog(const char* fmt, va_list args1)
 {
   va_list args2;
   va_copy(args2, args1);
-  size_t cbufsz = 1 + vsnprintf(nullptr, 0, fmt, args1);
+  auto cbufsz = 1 + vsnprintf(nullptr, 0, fmt, args1);
   char* cbuf = new char[cbufsz];
   vsnprintf(cbuf, cbufsz, fmt, args2);
   va_end(args2);
