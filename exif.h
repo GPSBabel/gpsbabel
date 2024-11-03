@@ -160,8 +160,8 @@ private:
   static QString exif_time_str(const QDateTime& time);
   static QByteArray exif_read_str(ExifTag* tag);
   static double exif_read_double(const ExifTag* tag, int index);
-  double exif_read_coord(const ExifTag* tag);
-  QTime exif_read_timestamp(const ExifTag* tag);
+  static double exif_read_coord(const ExifTag* tag);
+  static QTime exif_read_timestamp(const ExifTag* tag);
   static QDate exif_read_datestamp(const ExifTag* tag);
   void exif_release_apps();
   static uint32_t exif_ifd_size(ExifIfd* ifd);
@@ -173,7 +173,7 @@ private:
   void exif_read_app(ExifApp* app);
   void exif_examine_app(ExifApp* app);
   static ExifIfd* exif_find_ifd(ExifApp* app, uint16_t ifd_nr);
-  ExifTag* exif_find_tag(ExifApp* app, uint16_t ifd_nr, uint16_t tag_id);
+  static ExifTag* exif_find_tag(ExifApp* app, uint16_t ifd_nr, uint16_t tag_id);
   QDateTime exif_get_exif_time(ExifApp* app);
   Waypoint* exif_waypt_from_exif_app(ExifApp* app);
   static Rational<int> exif_dec2frac(double val, double tolerance);
@@ -189,7 +189,7 @@ private:
   static bool exif_sort_tags_cb(const ExifTag& A, const ExifTag& B);
   static bool exif_sort_ifds_cb(const ExifIfd& A, const ExifIfd& B);
   static void exif_write_value(ExifTag* tag, gbfile* fout);
-  void exif_write_ifd(ExifIfd* ifd, char next, gbfile* fout);
+  static void exif_write_ifd(ExifIfd* ifd, char next, gbfile* fout);
   void exif_write_apps();
 
   /* Data Members */
