@@ -94,7 +94,7 @@ V900Format::v900_log(const char* fmt, ...)
   if (global_opts.debug_level >= 1) {
     va_list ap;
     va_start(ap, fmt);
-    db.vlog(fmt, ap);
+    db.gbVLog(fmt, ap);
     va_end(ap);
   }
 }
@@ -109,7 +109,7 @@ V900Format::rd_init(const QString& fname)
    */
   fin = ufopen(fname, "rb");
   if (!fin) {
-    fatal("v900: could not open '%s'.\n", qPrintable(fname));
+    gbFatal("v900: could not open '%s'.\n", qPrintable(fname));
   }
 }
 
@@ -163,7 +163,7 @@ V900Format::read()
   /* first, determine if this is advanced mode by reading the first line.
            since the first line does not contain any nulls, it can be safely read by fgets(). */
   if (!fgets(line.text, sizeof(line), fin)) {
-    fatal("v900: error reading header (first) line from input file\n");
+    gbFatal("v900: error reading header (first) line from input file\n");
   }
   int is_advanced_mode = (nullptr != strstr(line.text,"PDOP")); /* PDOP field appears only in advanced mode */
 
@@ -197,7 +197,7 @@ V900Format::read()
     bad |= (line.bas.common.comma9 != ',');
 
     if (bad) {
-      warning("v900: skipping malformed record at line %d\n", lc);
+      gbWarning("v900: skipping malformed record at line %d\n", lc);
     }
 
     line.bas.common.comma1 = 0;
@@ -213,7 +213,7 @@ V900Format::read()
       /* change all "," characters to NULLs.
                so every field is null terminated.
              */
-      assert(line.adv.comma10==','); // TODO: abort with fatal()
+      assert(line.adv.comma10==','); // TODO: abort with gbFatal()
       assert(line.adv.comma11==',');
       assert(line.adv.comma12==',');
       assert(line.adv.comma13==',');

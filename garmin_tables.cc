@@ -450,7 +450,7 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
       }
       break;
     default:
-      fatal("unknown garmin format.\n");
+      gbFatal("unknown garmin format.\n");
     }
   }
   return DEFAULT_ICON_DESCR;
@@ -499,7 +499,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
         case GARMIN_SERIAL:
           return icon_mapping.pcxsymnum;
         default:
-          fatal("unknown garmin format.\n");
+          gbFatal("unknown garmin format.\n");
         }
       }
     }
@@ -514,7 +514,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
       case GARMIN_SERIAL:
         return icon_mapping.pcxsymnum;
       default:
-        fatal("unknown garmin format.\n");
+        gbFatal("unknown garmin format.\n");
       }
     }
   }
@@ -655,7 +655,7 @@ gt_lookup_grid_type(const QString& grid_name)
     }
   }
 
-  fatal(FatalMsg().nospace().noquote() <<
+  gbFatal(FatalMsg().nospace().noquote() <<
         "Unsupported grid (" << grid_name <<
         "). See GPSBabel help for supported grids.");
 
@@ -666,7 +666,7 @@ QString
 gt_get_mps_grid_longname(const grid_type grid)
 {
   if ((grid < GRID_INDEX_MIN) || (grid > GRID_INDEX_MAX)) {
-    fatal(FatalMsg().nospace().noquote() <<
+    gbFatal(FatalMsg().nospace().noquote() <<
           "Grid index out of range " << grid <<
           " (" << GRID_INDEX_MIN << ".." << GRID_INDEX_MAX << ")!");
   }
@@ -708,7 +708,7 @@ gt_lookup_datum_index(const QString& datum_str)
   }
 
   if (result < 0) {
-    fatal(FatalMsg().nospace().noquote() <<
+    gbFatal(FatalMsg().nospace().noquote() <<
           "Unsupported datum (" << datum_str <<
           "). See GPSBabel help for supported datums.");
   }

@@ -18,7 +18,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "defs.h"              // for fatal, warning
+#include "defs.h"              // for gbFatal, gbWarning
 #include "inifile.h"
 #include "src/core/file.h"     // for File
 #include <QByteArray>          // for QByteArray
@@ -76,7 +76,7 @@ open_gpsbabel_inifile()
     if (QFile(envstr).open(QIODevice::ReadOnly)) {
       return envstr;
     }
-    warning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
+    gbWarning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
     return res;
   }
   QString name = find_gpsbabel_inifile("");  // Check in current directory first.
@@ -124,7 +124,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile)
         section_name = buf.mid(1, buf.indexOf(']') - 1).trimmed();
       }
       if (section_name.isEmpty()) {
-        fatal("invalid section header '%s' in '%s'.\n", qPrintable(section_name),
+        gbFatal("invalid section header '%s' in '%s'.\n", qPrintable(section_name),
               qPrintable(inifile->source));
       }
 
@@ -134,7 +134,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile)
       section = inifile->sections.value(section_name);
     } else {
       if (section.name.isEmpty()) {
-        fatal("missing section header in '%s'.\n",
+        gbFatal("missing section header in '%s'.\n",
               qPrintable(inifile->source));
       }
 

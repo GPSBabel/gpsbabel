@@ -113,7 +113,7 @@ void PositionFilter::init()
 
   if (distopt) {
     if (parse_distance(distopt, &pos_dist, kMetersPerFoot) == 0) {
-      fatal("No distance specified with distance option.\n");
+      gbFatal("No distance specified with distance option.\n");
     }
   }
 

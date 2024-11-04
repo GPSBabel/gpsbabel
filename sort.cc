@@ -84,7 +84,7 @@ void SortFilter::process()
     waypt_sort(sort_comp_wpt_by_time);
     break;
   default:
-    fatal("unknown waypoint sort mode.");
+    gbFatal("unknown waypoint sort mode.");
   }
 
   switch (rte_sort_mode)  {
@@ -100,7 +100,7 @@ void SortFilter::process()
     route_sort(sort_comp_rh_by_number);
     break;
   default:
-    fatal("unknown route sort mode.");
+    gbFatal("unknown route sort mode.");
   }
 
   switch (trk_sort_mode)  {
@@ -116,7 +116,7 @@ void SortFilter::process()
     track_sort(sort_comp_rh_by_number);
     break;
   default:
-    fatal("unknown track sort mode.");
+    gbFatal("unknown track sort mode.");
   }
 }
 
@@ -134,7 +134,7 @@ void SortFilter::init()
   } else if (!opt_sm_description && !opt_sm_gcid && !opt_sm_shortname && opt_sm_time) {
     wpt_sort_mode = SortModeWpt::time;
   } else {
-    fatal("At most one of the options description, gcid, shortname and time may be selected.");
+    gbFatal("At most one of the options description, gcid, shortname and time may be selected.");
   }
 
   // sort routes by
@@ -147,7 +147,7 @@ void SortFilter::init()
   } else if (!opt_sm_rtedesc && !opt_sm_rtename && opt_sm_rtenum) {
     rte_sort_mode = SortModeRteHd::number;
   } else {
-    fatal("At most one of the options rtedesc, rtename and rtenum may be selected.");
+    gbFatal("At most one of the options rtedesc, rtename and rtenum may be selected.");
   }
 
   // sort tracks by
@@ -160,7 +160,7 @@ void SortFilter::init()
   } else if (!opt_sm_trkdesc && !opt_sm_trkname && opt_sm_trknum) {
     trk_sort_mode = SortModeRteHd::number;
   } else {
-    fatal("At most one of the options trkdesc, trkname and trknum may be selected.");
+    gbFatal("At most one of the options trkdesc, trkname and trknum may be selected.");
   }
 }
 

@@ -147,7 +147,7 @@ GeoJsonFormat::read()
   QJsonParseError error{};
   QJsonDocument document = QJsonDocument::fromJson(file_content.toUtf8(), &error);
   if (error.error != QJsonParseError::NoError) {
-    fatal(FatalMsg().nospace() << "GeoJSON parse error in " << ifd->fileName() << ": " << error.errorString());
+    gbFatal(FatalMsg().nospace() << "GeoJSON parse error in " << ifd->fileName() << ": " << error.errorString());
   }
   QJsonObject rootObject = document.object();
 

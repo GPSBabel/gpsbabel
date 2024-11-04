@@ -229,7 +229,7 @@ private:
       ret = 1;
       break;
     default:
-      warning("igc.h: IgcFormat::get_ext_factor(): unknown extension (%i), returning factor of zero.\n",int(type));
+      gbWarning("igc.h: IgcFormat::get_ext_factor(): unknown extension (%i), returning factor of zero.\n",int(type));
       break;
     }
     return ret;
@@ -455,7 +455,7 @@ struct igc_fsdata : public FormatSpecificData {
       ret = gfo;
       break;
     default:
-      fatal("igc.h: igc_fsdata::get_value(IgcFormat::igc_ext_type_t defn_type): Invalid igc_ext_type\n");
+      gbFatal("igc.h: igc_fsdata::get_value(IgcFormat::igc_ext_type_t defn_type): Invalid igc_ext_type\n");
       break;
     }
     return ret;
@@ -495,7 +495,7 @@ struct igc_fsdata : public FormatSpecificData {
       ret = gfo;
       break;
     default:
-      fatal("igc.h: igc_fsdata::get_value(KmlFormat::wp_field defn_type): Invalid wp_field\n");
+      gbFatal("igc.h: igc_fsdata::get_value(KmlFormat::wp_field defn_type): Invalid wp_field\n");
       break;
     }
     return ret;

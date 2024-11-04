@@ -66,7 +66,7 @@ void ReverseRouteFilter::init()
   case trkdata:
     break;
   default:
-    fatal("This filter only works in track "
+    gbFatal("This filter only works in track "
           "or route (-t or -r) mode.\n");
   }
 }

@@ -27,7 +27,7 @@
 #include <QDebug>              // for QDebug
 #include <QtGlobal>            // for qCritical, qDebug, qInfo, qWarning
 
-#include "defs.h"              // for DebugLog, fatal, debug, info, warning
+#include "defs.h"              // for DebugLog, gbFatal, gbDebug, gbInfo, gbWarning
 #include "src/core/logging.h"  // for FatalMsg
 
 static QByteArray xvasprintf(const char* fmt, va_list args)
@@ -43,7 +43,7 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
   return rval;
 }
 
-[[noreturn]] void fatal(QDebug& msginstance)
+[[noreturn]] void gbFatal(QDebug& msginstance)
 {
   auto* myinstance = new FatalMsg;
   myinstance->swap(msginstance);
@@ -52,7 +52,7 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
 }
 
 [[noreturn]] void
-fatal(const char* fmt, ...)
+gbFatal(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -66,7 +66,7 @@ fatal(const char* fmt, ...)
 }
 
 void
-warning(const char* fmt, ...)
+gbWarning(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -79,7 +79,7 @@ warning(const char* fmt, ...)
 }
 
 void
-info(const char* fmt, ...)
+gbInfo(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -92,7 +92,7 @@ info(const char* fmt, ...)
 }
 
 void
-debug(const char* fmt, ...)
+gbDebug(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -104,7 +104,7 @@ debug(const char* fmt, ...)
   qDebug().noquote() << msg;
 }
 
-int DebugLog::vlog(const char* fmt, va_list args)
+int DebugLog::gbVLog(const char* fmt, va_list args)
 {
   int rc = 0;
 
@@ -123,16 +123,16 @@ int DebugLog::vlog(const char* fmt, va_list args)
   return rc;
 }
 
-int DebugLog::log(const char* fmt, ...)
+int DebugLog::gbLog(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  int rc = vlog(fmt, args);
+  int rc = gbVLog(fmt, args);
   va_end(args);
   return rc;
 }
 
-int DebugLog::flush()
+int DebugLog::gbFlush()
 {
   int rc = 0;
 

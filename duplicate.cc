@@ -34,7 +34,7 @@
 void DuplicateFilter::init()
 {
   if (!lcopt && !snopt) {
-    fatal("one or both of the shortname and location options are required.\n");
+    gbFatal("one or both of the shortname and location options are required.\n");
   }
 }
 

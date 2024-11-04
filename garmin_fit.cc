@@ -84,7 +84,7 @@ GarminFitFormat::fit_parse_header()
 
   int len = gbfgetc(fin);
   if (len == EOF || len < 12) {
-    fatal("Bad header\n");
+    gbFatal("Bad header\n");
   }
   if (global_opts.debug_level >= 1) {
     Debug(1) << "header len=" << len;
@@ -92,7 +92,7 @@ GarminFitFormat::fit_parse_header()
 
   int ver = gbfgetc(fin);
   if (ver == EOF || (ver >> 4) > 2)
-    fatal("Unsupported protocol version %d.%d\n",
+    gbFatal("Unsupported protocol version %d.%d\n",
           ver >> 4, ver & 0xf);
   if (global_opts.debug_level >= 1) {
     Debug(1) << "protocol version=" << ver;
@@ -104,10 +104,10 @@ GarminFitFormat::fit_parse_header()
   fit_data.len = gbfgetuint32(fin);
   // File signature
   if (gbfread(sig, 4, 1, fin) != 1) {
-    fatal("Unexpected end of file\n");
+    gbFatal("Unexpected end of file\n");
   }
   if (sig[0] != '.' || sig[1] != 'F' || sig[2] != 'I' || sig[3] != 'T') {
-    fatal(".FIT signature missing\n");
+    gbFatal(".FIT signature missing\n");
   }
 
   if (global_opts.debug_level >= 1) {
@@ -126,14 +126,14 @@ GarminFitFormat::fit_parse_header()
       for (unsigned int i = 0; i < kReadHeaderCrcLen; ++i) {
         int data = gbfgetc(fin);
         if (data == EOF) {
-          fatal("File %s truncated\n", qPrintable(fin->name));
+          gbFatal("File %s truncated\n", qPrintable(fin->name));
         }
         crc = fit_crc16(data, crc);
       }
       if (crc != 0) {
         Warning().nospace() << "Header CRC mismatch in file " <<  fin->name << ".";
         if (!opt_recoverymode) {
-          fatal(FatalMsg().nospace() << "File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
+          gbFatal(FatalMsg().nospace() << "File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
         }
       } else if (global_opts.debug_level >= 1) {
         Debug(1) << "Header CRC verified.";
@@ -829,7 +829,7 @@ GarminFitFormat::fit_check_file_crc() const
   if (crc != 0) {
     Warning().nospace() << "File CRC mismatch in file " <<  fin->name << ".";
     if (!opt_recoverymode) {
-      fatal(FatalMsg().nospace() << "File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
+      gbFatal(FatalMsg().nospace() << "File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
     }
   } else if (global_opts.debug_level >= 1) {
     Debug(1) << "File CRC verified.";
@@ -861,10 +861,10 @@ GarminFitFormat::read()
     }
   } catch (ReaderException& e) {
     if (opt_recoverymode) {
-      warning("%s\n",e.what());
-      warning("Aborting read and continuing processing.\n");
+      gbWarning("%s\n",e.what());
+      gbWarning("Aborting read and continuing processing.\n");
     } else {
-      fatal("%s  Use recoverymode option at your risk.\n",e.what());
+      gbFatal("%s  Use recoverymode option at your risk.\n",e.what());
     }
   }
 }
@@ -1093,7 +1093,7 @@ GarminFitFormat::fit_write_file_finish() const
   // Update data records size in file header
   gbsize_t file_size = gbftell(fout);
   if (file_size < kWriteHeaderCrcLen) {
-    fatal("File %s truncated\n", qPrintable(fout->name));
+    gbFatal("File %s truncated\n", qPrintable(fout->name));
   }
   gbfseek(fout, 0, SEEK_SET);
   fit_write_file_header(file_size - kWriteHeaderCrcLen, 0);
@@ -1104,7 +1104,7 @@ GarminFitFormat::fit_write_file_finish() const
   for (unsigned int i = 0; i < kWriteHeaderLen; ++i) {
     int data = gbfgetc(fout);
     if (data == EOF) {
-      fatal("File %s truncated\n", qPrintable(fout->name));
+      gbFatal("File %s truncated\n", qPrintable(fout->name));
     }
     crc = fit_crc16(data, crc);
   }

@@ -592,11 +592,11 @@ void Waypoint::NormalizePosition()
   }
 
   if ((this->latitude < -90) || (this->latitude > 90.0))
-    fatal(FatalMsg() << this->session->name
+    gbFatal(FatalMsg() << this->session->name
           << "Invalid latitude" << lat_orig << "in waypoint"
           << this->shortname);
   if ((this->longitude < -180) || (this->longitude > 180.0))
-    fatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
+    gbFatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
           << this->shortname);
 }
 

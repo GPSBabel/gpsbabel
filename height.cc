@@ -52,10 +52,10 @@ double HeightFilter::wgs84_separation(double lat, double lon)
 {
   /* sanity checks to prevent segfault on bad data */
   if ((lat > 90.0) || (lat < -90.0)) {
-    fatal("Invalid latitude value (%f)\n", lat);
+    gbFatal("Invalid latitude value (%f)\n", lat);
   }
   if ((lon > 180.0) || (lon < -180.0)) {
-    fatal("Invalid longitude value (%f)\n", lon);
+    gbFatal("Invalid longitude value (%f)\n", lon);
   }
 
   auto ilat = static_cast<int>(floor((90.0+lat)/geoid_grid_deg));
@@ -97,7 +97,7 @@ void HeightFilter::init()
   addf = 0.0;
   if (addopt) {
     if (parse_distance(addopt, &addf, 1.0) == 0) {
-      fatal("No height specified with add option.");
+      gbFatal("No height specified with add option.");
     }
   }
 }

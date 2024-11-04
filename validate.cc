@@ -37,10 +37,10 @@ void ValidateFilter::validate_head_trl(const route_head* header)
   total_point_ct += point_ct;
   total_segment_ct += segment_ct;
   if (opt_debug) {
-    debug("%s %d ct: %d, waypt_count: %d, segments %d\n", segment_type, header->rte_num,  point_ct, header->rte_waypt_ct(), segment_ct);
+    gbDebug("%s %d ct: %d, waypt_count: %d, segments %d\n", segment_type, header->rte_num,  point_ct, header->rte_waypt_ct(), segment_ct);
   }
   if (!opt_debug && (point_ct != header->rte_waypt_ct())) {
-    fatal("%s %d count mismatch, expected %d, actual %d\n", segment_type, header->rte_num, header->rte_waypt_ct(), point_ct);
+    gbFatal("%s %d count mismatch, expected %d, actual %d\n", segment_type, header->rte_num, header->rte_waypt_ct(), point_ct);
   }
 }
 
@@ -60,15 +60,15 @@ void ValidateFilter::process()
 
   point_ct = 0;
   if (opt_debug) {
-    debug("\n");
-    debug("Processing waypts\n");
+    gbDebug("\n");
+    gbDebug("Processing waypts\n");
   }
   waypt_disp_all(validate_point_f);
   if (opt_debug) {
-    debug("point ct: %d, waypt_count: %d\n", point_ct, waypt_count());
+    gbDebug("point ct: %d, waypt_count: %d\n", point_ct, waypt_count());
   }
   if (!opt_debug && (point_ct != waypt_count())) {
-    fatal("Waypoint count mismatch, expected %d, actual %d\n", waypt_count(), point_ct);
+    gbFatal("Waypoint count mismatch, expected %d, actual %d\n", waypt_count(), point_ct);
   }
 
   head_ct = 0;
@@ -76,19 +76,19 @@ void ValidateFilter::process()
   total_segment_ct = 0;
   segment_type = "route";
   if (opt_debug) {
-    debug("\n");
-    debug("Processing routes\n");
+    gbDebug("\n");
+    gbDebug("Processing routes\n");
   }
   route_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (opt_debug) {
-    debug("route head ct: %d, route_count: %d, total segment count: %d\n", head_ct, route_count(), total_segment_ct);
-    debug("total route point ct: %d, route_waypt_count: %d\n", total_point_ct, route_waypt_count());
+    gbDebug("route head ct: %d, route_count: %d, total segment count: %d\n", head_ct, route_count(), total_segment_ct);
+    gbDebug("total route point ct: %d, route_waypt_count: %d\n", total_point_ct, route_waypt_count());
   }
   if (!opt_debug && (head_ct != route_count())) {
-    fatal("Route count mismatch, expected %d, actual %d\n", route_count(), head_ct);
+    gbFatal("Route count mismatch, expected %d, actual %d\n", route_count(), head_ct);
   }
   if (!opt_debug && (total_point_ct != route_waypt_count())) {
-    fatal("Total route waypoint count mismatch, expected %d, actual %d\n", route_waypt_count(), total_point_ct);
+    gbFatal("Total route waypoint count mismatch, expected %d, actual %d\n", route_waypt_count(), total_point_ct);
   }
 
   head_ct = 0;
@@ -96,24 +96,24 @@ void ValidateFilter::process()
   total_segment_ct = 0;
   segment_type = "track";
   if (opt_debug) {
-    debug("\n");
-    debug("Processing tracks\n");
+    gbDebug("\n");
+    gbDebug("Processing tracks\n");
   }
   track_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (opt_debug) {
-    debug("track head ct: %d, track_count: %d, total segment count: %d\n", head_ct, track_count(), total_segment_ct);
-    debug("total track point ct: %d, track_waypt_count: %d\n", total_point_ct, track_waypt_count());
+    gbDebug("track head ct: %d, track_count: %d, total segment count: %d\n", head_ct, track_count(), total_segment_ct);
+    gbDebug("total track point ct: %d, track_waypt_count: %d\n", total_point_ct, track_waypt_count());
   }
   if (!opt_debug && (head_ct != track_count())) {
-    fatal("Track count mismatch, expected %d, actual %d\n", track_count(), head_ct);
+    gbFatal("Track count mismatch, expected %d, actual %d\n", track_count(), head_ct);
   }
   if (!opt_debug && (total_point_ct != track_waypt_count())) {
-    fatal("Total track waypoint count mismatch, expected %d, actual %d\n", track_waypt_count(), total_point_ct);
+    gbFatal("Total track waypoint count mismatch, expected %d, actual %d\n", track_waypt_count(), total_point_ct);
   }
 
   if (opt_checkempty) {
     if (waypt_count()==0 && route_waypt_count()==0 && track_waypt_count()==0) {
-      fatal("No input\n");
+      gbFatal("No input\n");
     }
   }
 }

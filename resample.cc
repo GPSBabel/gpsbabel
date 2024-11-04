@@ -32,7 +32,7 @@
 #include <QTextStream>          // for qSetRealNumberPrecision
 #include <QtGlobal>             // for qDebug, qint64
 
-#include "defs.h"               // for Waypoint, route_head, fatal, WaypointList, track_add_wpt, track_disp_all, RouteList, track_add_head, track_del_wpt, track_swap, UrlList, gb_color, global_options, global_opts
+#include "defs.h"               // for Waypoint, route_head, gbFatal, WaypointList, track_add_wpt, track_disp_all, RouteList, track_add_head, track_del_wpt, track_swap, UrlList, gb_color, global_options, global_opts
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for FatalMsg
 #include "src/core/nvector.h"   // for NVector
@@ -192,7 +192,7 @@ void ResampleFilter::process()
 {
   if (interpolateopt) {
     if (track_count() == 0) {
-      fatal(FatalMsg() << "Found no tracks to operate on.");
+      gbFatal(FatalMsg() << "Found no tracks to operate on.");
     }
 
     auto interpolate_rte_lambda = [this](const route_head* rte)->void {
@@ -227,7 +227,7 @@ void ResampleFilter::process()
 
   if (decimateopt) {
     if (track_count() == 0) {
-      fatal(FatalMsg() << "Found no tracks to operate on.");
+      gbFatal(FatalMsg() << "Found no tracks to operate on.");
     }
 
     auto decimate_rte_lambda = [this](const route_head* rte)->void {
@@ -243,24 +243,24 @@ void ResampleFilter::init()
   if (averageopt) {
     average_count = averageopt.get_result();
     if (average_count < 2) {
-      fatal(FatalMsg() << "the average count must be greater than one.");
+      gbFatal(FatalMsg() << "the average count must be greater than one.");
     }
   }
 
   if (decimateopt) {
     decimate_count = decimateopt.get_result();
     if (decimate_count < 2) {
-      fatal(FatalMsg() << "the decimate count must be greater than one.");
+      gbFatal(FatalMsg() << "the decimate count must be greater than one.");
     }
   }
 
   if (interpolateopt) {
     interpolate_count = interpolateopt.get_result();
     if (interpolate_count < 2) {
-      fatal(FatalMsg() << "the interpolate count must be greater than one.");
+      gbFatal(FatalMsg() << "the interpolate count must be greater than one.");
     }
     if (!averageopt || average_count < interpolate_count) {
-      fatal(FatalMsg() << "the average option must be used with interpolation, and the average count must be greater than or equal to the interpolation count.");
+      gbFatal(FatalMsg() << "the average option must be used with interpolation, and the average count must be greater than or equal to the interpolation count.");
     }
   }
 }

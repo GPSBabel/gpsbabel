@@ -56,7 +56,7 @@ void StackFilter::process()
   } else if (opt_pop) {
     tmp_elt = stack;
     if (!tmp_elt) {
-      fatal("stack empty\n");
+      gbFatal("stack empty\n");
     }
     if (opt_append) {
       waypt_append(&(stack->waypts));
@@ -81,7 +81,7 @@ void StackFilter::process()
     tmp_elt = stack;
     while (swapdepth > 1) {
       if (!tmp_elt->next) {
-        fatal("swap with nonexistent element\n");
+        gbFatal("swap with nonexistent element\n");
       }
       tmp_elt = tmp_elt->next;
       swapdepth--;
@@ -129,7 +129,7 @@ void StackFilter::init()
   }
 
   if (invalid) {
-    fatal("invalid combination of options\n");
+    gbFatal("invalid combination of options\n");
   }
 
 }
@@ -144,7 +144,7 @@ void StackFilter::exit()
   stack_elt* tmp_elt = nullptr;
 
   if (warnings_enabled && stack) {
-    warning("Warning: leftover stack entries; "
+    gbWarning("Warning: leftover stack entries; "
             "check command line for mistakes\n");
   }
   while (stack) {

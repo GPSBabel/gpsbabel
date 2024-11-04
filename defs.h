@@ -907,8 +907,8 @@ enum ff_cap {
 #define FF_CAP_RW_WPT \
 	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
 
-[[noreturn]] void fatal(QDebug& msginstance);
-// cppcheck 2.10.3 fails to assign noreturn attribute to fatal if
+[[noreturn]] void gbFatal(QDebug& msginstance);
+// cppcheck 2.10.3 fails to assign noreturn attribute to gbFatal if
 // the noreturn attribute is listed before the gnu::format attribute.
 // A PR to resolve this is https://github.com/danmar/cppcheck/pull/4971,
 // but cppcheck works if the noreturn attribute follows the gnu::format
@@ -916,17 +916,17 @@ enum ff_cap {
 // This can have a large effect on codacy issues from cppcheck
 // nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
 // negativeIndex, arrayIndexOutOfBoundsCond.
-[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void warning(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void info(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void debug(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void gbFatal(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbWarning(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...);
 
 class DebugLog
 {
 public:
-  int vlog(const char* fmt, va_list args1);
-  [[gnu::format(printf, 2, 3)]] int log(const char* fmt, ...);
-  int flush();
+  int gbVLog(const char* fmt, va_list args1);
+  [[gnu::format(printf, 2, 3)]] int gbLog(const char* fmt, ...);
+  int gbFlush();
 
 private:
   QByteArray buf_;

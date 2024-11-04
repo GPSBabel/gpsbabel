@@ -241,7 +241,7 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
       *consumed = 0;	/* for a possible date */
       return {};
     }
-    fatal(FatalMsg() << "Could not parse date string (" << str << ").");
+    gbFatal(FatalMsg() << "Could not parse date string (" << str << ").");
   }
 
   if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
@@ -270,12 +270,12 @@ UnicsvFormat::unicsv_parse_date(const char* str, int* consumed)
       *consumed = 0;
       return {};	/* don't stop here */
     }
-    fatal(FatalMsg() << "Could not parse date string (" << str << ").");
+    gbFatal(FatalMsg() << "Could not parse date string (" << str << ").");
   }
 
   QDate result{tm.tm_year, tm.tm_mon, tm.tm_mday};
   if (!result.isValid()) {
-    fatal(FatalMsg() << "Invalid date parsed from string (" << str << ").");
+    gbFatal(FatalMsg() << "Invalid date parsed from string (" << str << ").");
   }
   return result;
 }
@@ -300,7 +300,7 @@ UnicsvFormat::unicsv_parse_time(const char* str, QDate& date)
   }
   int ct = sscanf(str, "%d%*1[.://]%d%*1[.://]%d%lf", &hour, &min, &sec, &frac_sec);
   if (ct < 3) {
-    fatal(FatalMsg() << "Could not parse time string (" << str << ").");
+    gbFatal(FatalMsg() << "Could not parse time string (" << str << ").");
   }
   if (ct >= 4) {
     // Don't round up and ripple through seconds, minutes, hours.
@@ -312,7 +312,7 @@ UnicsvFormat::unicsv_parse_time(const char* str, QDate& date)
 
   QTime result{hour, min, sec, msec};
   if (!result.isValid()) {
-    fatal(FatalMsg() << "Invalid time parsed from string (" << str << ").");
+    gbFatal(FatalMsg() << "Invalid time parsed from string (" << str << ").");
   }
   return result;
 }
@@ -415,14 +415,14 @@ UnicsvFormat::unicsv_fondle_header(QString header)
 
     if (it == fields_def.cend()) { // not found
       if (global_opts.debug_level) {
-        warning("Unhandled column \"%s\".\n", qPrintable(value));
+        gbWarning("Unhandled column \"%s\".\n", qPrintable(value));
       }
     } else { // found
       const field_t f = *it;
       unicsv_fields_tab.last() = f.type;
 
       if (global_opts.debug_level) {
-        warning("Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f.name), f.type);
+        gbWarning("Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f.name), f.type);
       }
 
       /* handle some special items */
@@ -1013,19 +1013,19 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
         if (! GPS_Math_EN_To_UKOSNG_Map(
               bng_easting, bng_northing,
               &bnge, &bngn, bngz)) {
-          fatal("Unable to convert BNG coordinates (%.f %.f)!\n",
+          gbFatal("Unable to convert BNG coordinates (%.f %.f)!\n",
                 bng_easting, bng_northing);
         }
         if (! GPS_Math_UKOSMap_To_WGS84_H(
               bngz, bnge, bngn,
               &wpt->latitude, &wpt->longitude))
-          fatal("Unable to convert BNG coordinates (%s %.f %.f)!\n",
+          gbFatal("Unable to convert BNG coordinates (%s %.f %.f)!\n",
                 bngz, bnge, bngn);
       } else { // traditional zone easting northing
         if (! GPS_Math_UKOSMap_To_WGS84_H(
               CSTR(bng_zone), bng_easting, bng_northing,
               &wpt->latitude, &wpt->longitude))
-          fatal("Unable to convert BNG coordinates (%s %.f %.f)!\n",
+          gbFatal("Unable to convert BNG coordinates (%s %.f %.f)!\n",
                 CSTR(bng_zone), bng_easting, bng_northing);
       }
       src_datum = kDatumWGS84;	/* don't convert afterwards */
@@ -1087,7 +1087,7 @@ UnicsvFormat::read()
 [[noreturn]] void UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
 {
   *fout << "#####\n";
-  fatal("%s (%s) is outside of convertible area of grid \"%s\"!\n",
+  gbFatal("%s (%s) is outside of convertible area of grid \"%s\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
         qPrintable(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
         qPrintable(gt_get_mps_grid_longname(unicsv_grid_idx)));
@@ -1674,7 +1674,7 @@ void
 UnicsvFormat::wr_init(const QString& fname)
 {
   if (opt_fields) {
-    fatal(FatalMsg() <<
+    gbFatal(FatalMsg() <<
           "option 'fields' is not supported on output");
   }
   fout = new gpsbabel::TextStream;
@@ -1693,7 +1693,7 @@ UnicsvFormat::wr_init(const QString& fname)
     if (int i = opt_grid.toInt(&ok); ok) {
       unicsv_grid_idx = (grid_type) i;
       if ((unicsv_grid_idx < GRID_INDEX_MIN) || (unicsv_grid_idx > GRID_INDEX_MAX))
-        fatal("Grid index out of range (%d..%d)!\n",
+        gbFatal("Grid index out of range (%d..%d)!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
       unicsv_grid_idx = gt_lookup_grid_type(opt_grid);
@@ -1734,7 +1734,7 @@ void
 UnicsvFormat::unicsv_check_modes(bool test)
 {
   if (test) {
-    fatal(FatalMsg() <<
+    gbFatal(FatalMsg() <<
           "Invalid combination of -w, -t, -r selected. Use only one.");
   }
 }
@@ -1760,7 +1760,7 @@ UnicsvFormat::write()
     route_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb_lambda);
     break;
   case posndata:
-    fatal(FatalMsg() << "Realtime positioning not supported.");
+    gbFatal(FatalMsg() << "Realtime positioning not supported.");
   }
 
   *fout << "No" << unicsv_fieldsep;

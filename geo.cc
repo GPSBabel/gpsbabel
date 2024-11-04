@@ -90,7 +90,7 @@ void GeoFormat::read()
 
   GeoReadLoc(reader);
   if (reader.hasError())  {
-    fatal("Read error: %s (%s, line %ld, col %ld)\n",
+    gbFatal("Read error: %s (%s, line %ld, col %ld)\n",
           qPrintable(reader.errorString()),
           qPrintable(ifile.fileName()),
           (long) reader.lineNumber(),

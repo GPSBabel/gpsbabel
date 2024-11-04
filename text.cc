@@ -55,7 +55,7 @@ TextFormat::wr_init(const QString& fname)
   if (re.match(opt_degformat).hasMatch()) {
     degformat = opt_degformat.get().at(2).toLatin1();
   } else {
-    fatal("Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", qPrintable(opt_degformat));
+    gbFatal("Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", qPrintable(opt_degformat));
   }
 
   if (opt_altunits.get().startsWith('f')) {
@@ -63,7 +63,7 @@ TextFormat::wr_init(const QString& fname)
   } else if (opt_altunits.get().startsWith('m')) {
     altunits = 'm';
   } else {
-    fatal("Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", qPrintable(opt_altunits));
+    gbFatal("Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", qPrintable(opt_altunits));
   }
 
 }

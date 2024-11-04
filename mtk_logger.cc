@@ -102,7 +102,7 @@ void MtkLoggerBase::dbg(int l, const char* msg, ...)
   if (global_opts.debug_level >= l) {
     va_list ap;
     va_start(ap, msg);
-    db.vlog(msg, ap);
+    db.gbVLog(msg, ap);
     va_end(ap);
   }
 }
@@ -127,7 +127,7 @@ int MtkLoggerBase::do_send_cmd(const char* cmd, int cmdLen)
   dbg(6, "Send %s ", cmd);
   int rc = gbser_print(fd, cmd);
   if (rc != gbser_OK) {
-    fatal("Write error (%d)\n", rc);
+    gbFatal("Write error (%d)\n", rc);
   }
 
   return cmdLen;
@@ -158,12 +158,12 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
   if (strncmp(cmd, CMD_LOG_ERASE, 12) == 0) {
     cmd_erase = 1;
     if (global_opts.verbose_status || global_opts.debug_level > 0) {
-      db.log("Erasing    ");
+      db.gbLog("Erasing    ");
     }
   }
   // dbg(6, "## Send '%s' -- Expect '%s' in %d sec\n", cmd, expect, timeout_sec);
 
-  do_send_cmd(cmd, strlen(cmd)); // success or fatal()...
+  do_send_cmd(cmd, strlen(cmd)); // success or gbFatal()...
 
   int done = 0;
   int loops = 0;
@@ -174,7 +174,7 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
       if (rc == gbser_TIMEOUT && time(nullptr) > tout) {
         dbg(2, "NMEA command '%s' timeout !\n", cmd);
         return -1;
-        // fatal("do_cmd(): Read error (%d)\n", rc);
+        // gbFatal("do_cmd(): Read error (%d)\n", rc);
       }
       len = -1;
     } else {
@@ -184,13 +184,13 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
     dbg(8, "Read %d bytes: '%s'\n", len, line);
     if (cmd_erase && (global_opts.verbose_status || (global_opts.debug_level > 0 && global_opts.debug_level <= 3))) {
       // erase cmd progress wheel -- only for debug level 1-3
-      db.log("\b%c", LIVE_CHAR[loops%4]);
+      db.gbLog("\b%c", LIVE_CHAR[loops%4]);
       fflush(stderr);
     }
     if (len > 5 && line[0] == '$') {
       if (expect_len > 0 && strncmp(&line[1], expect, expect_len) == 0) {
         if (cmd_erase && (global_opts.verbose_status || global_opts.debug_level > 0)) {
-          db.log("\n");
+          db.gbLog("\n");
         }
         dbg(6, "NMEA command success !\n");
         if ((len - 4) > expect_len) {  // alloc and copy data segment...
@@ -249,7 +249,7 @@ void MtkLoggerBase::mtk_rd_init(const QString& fname)
   errno = 0;
   dbg(1, "Opening port %s...\n", port);
   if ((fd = gbser_init(port)) == nullptr) {
-    fatal("Can't initialise port \"%s\" (%s)\n", port, strerror(errno));
+    gbFatal("Can't initialise port \"%s\" (%s)\n", port, strerror(errno));
   }
 
   // verify that we have a MTK based logger...
@@ -269,12 +269,12 @@ void MtkLoggerBase::mtk_rd_init(const QString& fname)
   }
   if (rc) {
     dbg(1, "Set baud rate to %d failed (%d)\n", MTK_BAUDRATE, rc);
-    fatal("Failed to set baudrate !\n");
+    gbFatal("Failed to set baudrate !\n");
   }
 
   rc = do_cmd("$PMTK605*31\r\n", "PMTK705,", &model, 10);
   if (rc != 0) {
-    fatal("This is not a MTK based GPS ! (or is device turned off ?)\n");
+    gbFatal("This is not a MTK based GPS ! (or is device turned off ?)\n");
   }
 
   // say hello to GR245 to make it display "USB PROCESSING"
@@ -363,7 +363,7 @@ void MtkLoggerBase::mtk_read()
   if (dout == nullptr) {
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      fatal("Can't create temporary file %s",
+      gbFatal("Can't create temporary file %s",
             qPrintable(TEMP_DATA_BIN));
     }
   }
@@ -418,7 +418,7 @@ void MtkLoggerBase::mtk_read()
     QFile::rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      fatal("Can't create temporary file %s",
+      gbFatal("Can't create temporary file %s",
             qPrintable(TEMP_DATA_BIN));
     }
   }
@@ -438,10 +438,10 @@ void MtkLoggerBase::mtk_read()
   unsigned int line_size = 2*read_bsize + 32; // logdata as nmea/hex.
   unsigned int data_size = read_bsize + 32;
   if ((line = (char*) xmalloc(line_size)) == nullptr) {
-    fatal("Can't allocate %u bytes for NMEA buffer\n",  line_size);
+    gbFatal("Can't allocate %u bytes for NMEA buffer\n",  line_size);
   }
   if ((data = (unsigned char*) xmalloc(data_size)) ==  nullptr) {
-    fatal("Can't allocate %u bytes for data buffer\n",  data_size);
+    gbFatal("Can't allocate %u bytes for data buffer\n",  data_size);
   }
   memset(line, '\0', line_size);
   memset(data, '\0', data_size);
@@ -469,7 +469,7 @@ mtk_retry:
           retry_cnt++;
           goto mtk_retry;
         } // else
-        fatal("mtk_read(): Read error (%d)\n", rc);
+        gbFatal("mtk_read(): Read error (%d)\n", rc);
       }
       int len = strlen(line);
       dbg(8, "Read %d bytes: '%s'\n", len, line);
@@ -507,7 +507,7 @@ mtk_retry:
             }
           } else {
             if (null_len == chunk_size) {  // 0x00 block - bad block....
-              warning("FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
+              gbWarning("FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
             }
             if (ff_len == chunk_size) {  // 0xff block - read complete...
               len = ff_len;
@@ -555,7 +555,7 @@ mtk_retry:
     } else {
       fseek(dout, addr, SEEK_SET);
       if (fwrite(data, 1, rcvd_bsize, dout) != rcvd_bsize) {
-        fatal("Failed to write temp. binary file\n");
+        gbFatal("Failed to write temp. binary file\n");
       }
       addr += rcvd_bsize;
       if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
@@ -563,7 +563,7 @@ mtk_retry:
         if (addr >= addr_max) {
           perc = 100;
         }
-        db.log("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
+        db.gbLog("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
       }
     }
   }
@@ -576,7 +576,7 @@ mtk_retry:
     fclose(dout);
   }
   if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
-    db.log("\n");
+    db.gbLog("\n");
   }
 
   // Fixme - Order or. Enable - parse - erase ??
@@ -732,15 +732,15 @@ void MtkLoggerBase::mtk_csv_init(const QString& csv_fname, unsigned long bitmask
 
   dbg(1, "Opening csv output file %s...\n", qPrintable(csv_fname));
 
-  // can't use gbfopen here - it will fatal() if file doesn't exist
+  // can't use gbfopen here - it will gbFatal() if file doesn't exist
   if ((cf = ufopen(csv_fname, "r")) != nullptr) {
     fclose(cf);
-    warning("CSV file %s already exist ! Cowardly refusing to overwrite.\n", qPrintable(csv_fname));
+    gbWarning("CSV file %s already exist ! Cowardly refusing to overwrite.\n", qPrintable(csv_fname));
     return;
   }
 
   if ((cd = gbfopen(csv_fname, "w")) == nullptr) {
-    fatal("Can't open csv file '%s'\n", qPrintable(csv_fname));
+    gbFatal("Can't open csv file '%s'\n", qPrintable(csv_fname));
   }
 
   /* Add the header line */
@@ -923,11 +923,11 @@ int MtkLoggerBase::mtk_parse(unsigned char* data, int dataLen, unsigned int bmas
 
   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n", count, dataLen);
   if (global_opts.debug_level > 5) {
-    db.log("# Data block:");
+    db.gbLog("# Data block:");
     for (int j = 0; j<dataLen; j++) {
-      db.log("%.2x ", data[j]);
+      db.gbLog("%.2x ", data[j]);
     }
-    db.log("\n");
+    db.gbLog("\n");
     fflush(stderr);
   }
 
@@ -1210,11 +1210,11 @@ int MtkLoggerBase::mtk_parse_info(const unsigned char* data, int dataLen)
     }
   } else {
     if (global_opts.debug_level > 0) {
-      db.log("#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
+      db.gbLog("#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
       for (bm=0; bm<16; bm++) {
-        db.log("%.2x ", data[bm]);
+        db.gbLog("%.2x ", data[bm]);
       }
-      db.log("\n");
+      db.gbLog("\n");
     }
     return 0;
   }
@@ -1239,7 +1239,7 @@ int MtkLoggerBase::mtk_log_len(unsigned int bitmask)
   for (int i = 0; i<32; i++) {
     if ((1U<<i) & bitmask) {
       if (i > DISTANCE && global_opts.debug_level > 0) {
-        warning("Unknown size/meaning of bit %d\n", i);
+        gbWarning("Unknown size/meaning of bit %d\n", i);
       }
       if ((i == SID || i == ELEVATION || i == AZIMUTH || i == SNR) && (1U<<SID) & bitmask) {
         len += log_type[i].size*32;  // worst case, max sat. count..
@@ -1264,7 +1264,7 @@ void MtkLoggerBase::file_init(const QString& fname)
 {
   dbg(4, "Opening file %s...\n", qPrintable(fname));
   if (fl = ufopen(fname, "rb"), nullptr == fl) {
-    fatal("Can't open file '%s'\n", qPrintable(fname));
+    gbFatal("Can't open file '%s'\n", qPrintable(fname));
   }
   switch (mtk_device) {
   case HOLUX_M241:
@@ -1320,7 +1320,7 @@ void MtkLoggerBase::file_read()
   fseek(fl, 0L, SEEK_END);
   long fsize = ftell(fl);
   if (fsize <= 0) {
-    fatal("File has size %ld\n", fsize);
+    gbFatal("File has size %ld\n", fsize);
   }
 
   fseek(fl, 0L, SEEK_SET);

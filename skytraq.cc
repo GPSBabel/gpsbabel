@@ -70,7 +70,7 @@ SkytraqBase::dbg(int l, const char* msg, ...)
   if (global_opts.debug_level >= l) {
     va_list ap;
     va_start(ap, msg);
-    db.vlog(msg, ap);
+    db.gbVLog(msg, ap);
     va_end(ap);
   }
 }
@@ -96,7 +96,7 @@ SkytraqBase::rd_char(int* errors)
       return c;
     }
   }
-  fatal("Too many read errors on serial port\n");
+  gbFatal("Too many read errors on serial port\n");
   return -1;
 }
 
@@ -176,7 +176,7 @@ SkytraqBase::wr_char(int c)
   int rc;
   dbg(4, "Sending: %02x '%c'\n", (unsigned)c, isprint(c) ? c : '.');
   if (rc = gbser_writec(serial_handle, c), gbser_OK != rc) {
-    fatal("Write error (%d)\n", rc);
+    gbFatal("Write error (%d)\n", rc);
   }
 }
 
@@ -247,11 +247,11 @@ SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len)
 
   unsigned int rcv_cs = rd_char(&errors);
   if (rcv_cs != calc_cs) {
-    fatal("Checksum error: got 0x%02x, expected 0x%02x\n", rcv_cs, calc_cs);
+    gbFatal("Checksum error: got 0x%02x, expected 0x%02x\n", rcv_cs, calc_cs);
   }
 
   if (rd_word() != 0x0D0A) {
-    fatal("Didn't get message end tag (CR/LF)\n");
+    gbFatal("Didn't get message end tag (CR/LF)\n");
   }
 
   return res_OK;
@@ -390,7 +390,7 @@ SkytraqBase::skytraq_set_baud(int baud)
     MSG_CONFIGURE_SERIAL_PORT[2] = 6;
     break;
   default:
-    fatal("Unsupported baud rate: %ibd\n", baud);
+    gbFatal("Unsupported baud rate: %ibd\n", baud);
   }
 
   int rc = skytraq_wr_msg_verify(MSG_CONFIGURE_SERIAL_PORT, sizeof(MSG_CONFIGURE_SERIAL_PORT));
@@ -774,7 +774,7 @@ SkytraqBase::process_data_sector(read_state* pst, const uint8_t* buf, int len)
   for (plen = 0; plen < len  &&  buf[plen] != 0xFF; plen += ilen) {
     ilen = process_data_item(pst, reinterpret_cast<const item_frame*>(&buf[plen]), len-plen);
     if (ilen <= 0) {
-      fatal("Error %i while processing data item #%i (starts at %i)\n",
+      gbFatal("Error %i while processing data item #%i (starts at %i)\n",
             ilen, pst->tpn, plen);
     }
   }
@@ -795,7 +795,7 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf)
   uint8_t buffer[16];
 
   if (sector > 0xFF) {
-    fatal("Invalid sector number (%i)\n", sector);
+    gbFatal("Invalid sector number (%i)\n", sector);
   }
 
   dbg(2, "Reading sector #%i...\n", sector);
@@ -884,11 +884,11 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
   unsigned int i;
 
   if (first_sector < 0  ||  first_sector > 0xFFFF) {
-    fatal("Invalid sector number (%i)\n", first_sector);
+    gbFatal("Invalid sector number (%i)\n", first_sector);
   }
   be_write16(&MSG_LOG_READ_MULTI_SECTORS[1], first_sector);
   if (sector_count > 0xFFFF) {
-    fatal("Invalid sector count (%i)\n", sector_count);
+    gbFatal("Invalid sector count (%i)\n", sector_count);
   }
   be_write16(&MSG_LOG_READ_MULTI_SECTORS[3], sector_count);
 
@@ -948,7 +948,7 @@ SkytraqBase::skytraq_read_tracks()
   state_init(&st);
 
   if (skytraq_get_log_buffer_status(&log_wr_ptr, &sectors_free, &sectors_total) != res_OK) {
-    fatal("Can't get log buffer status\n");
+    gbFatal("Can't get log buffer status\n");
   }
 
   dbg(1, "Device status: free sectors: %i / total sectors: %i / %i%% used / write ptr: %i\n",
@@ -1026,7 +1026,7 @@ SkytraqBase::skytraq_read_tracks()
       }
     }
     if (got_sectors <= 0) {
-      fatal("Error reading sector %i\n", i);
+      gbFatal("Error reading sector %i\n", i);
     }
 
     total_sectors_read += got_sectors;
@@ -1168,7 +1168,7 @@ SkytraqBase::skytraq_set_location()
   }
   dbg(3, "\n");
   if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_LOCATION, sizeof(MSG_SET_LOCATION)) != res_OK) {
-    fatal("cannot set new location\n");
+    gbFatal("cannot set new location\n");
   }
   {
     char buf[32];
@@ -1185,10 +1185,10 @@ void
 SkytraqBase::skytraq_rd_init(const QString& fname)
 {
   if ((serial_handle = gbser_init(qPrintable(fname))) == nullptr) {
-    fatal("Can't open port '%s'\n", qPrintable(fname));
+    gbFatal("Can't open port '%s'\n", qPrintable(fname));
   }
   if ((skytraq_baud = skytraq_probe()) <= 0) {
-    fatal("Can't find skytraq device on '%s'\n", qPrintable(fname));
+    gbFatal("Can't find skytraq device on '%s'\n", qPrintable(fname));
   }
 }
 
@@ -1237,7 +1237,7 @@ SkytraqfileFormat::rd_init(const QString& fname)
 {
   dbg(1, "Opening file...\n");
   if ((file_handle = gbfopen(fname, "rb")) == nullptr) {
-    fatal("Can't open file '%s'\n", qPrintable(fname));
+    gbFatal("Can't open file '%s'\n", qPrintable(fname));
   }
 }
 
@@ -1336,7 +1336,7 @@ void MinihomerFormat::miniHomer_get_poi()
     MSG_GET_POI[1]=(poi>>8)&0xff;
     MSG_GET_POI[2]=(poi)&0xff;
     if (skytraq_wr_msg_verify((uint8_t*)&MSG_GET_POI, sizeof(MSG_GET_POI)) != res_OK) {
-      warning("cannot read poi %d '%s'\n", poi, poinames[poi]);
+      gbWarning("cannot read poi %d '%s'\n", poi, poinames[poi]);
     }
     skytraq_rd_msg(buf, 25);
     double ecef_x = be_read_double(buf+1);
@@ -1406,11 +1406,11 @@ int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const QString& opt_poi)
       if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_POI, sizeof(MSG_SET_POI)) == res_OK) {
         result=1;
       } else {
-        warning("cannot set poi %d '%s'\n", poinum, poinames[poinum]);
+        gbWarning("cannot set poi %d '%s'\n", poinum, poinames[poinum]);
         result=-1;
       }
     } else {
-      warning("argument to %s needs to be like <lat>:<lng>[:<alt>]\n", poinames[poinum]);
+      gbWarning("argument to %s needs to be like <lat>:<lng>[:<alt>]\n", poinames[poinum]);
       result=-1;
     }
   }

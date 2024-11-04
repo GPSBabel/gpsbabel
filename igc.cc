@@ -98,7 +98,7 @@ retry:
   }
 
   if (len < 3 || c[0] < 'A' || c[0] > 'Z') {
-    warning("bad input record: '%s'\n", c);
+    gbWarning("bad input record: '%s'\n", c);
     return rec_bad;
   }
   return (igc_rec_type_t) c[0];
@@ -111,7 +111,7 @@ void IgcFormat::rd_init(const QString& fname)
   file_in = gbfopen(fname, "r");
   // File must begin with a manufacturer/ID record
   if (get_record(&ibuf) != rec_manuf_id || sscanf(ibuf, "A%3[A-Z]", manufacturer) != 1) {
-    fatal("%s is not an IGC file\n", qPrintable(fname));
+    gbFatal("%s is not an IGC file\n", qPrintable(fname));
   }
 }
 
@@ -153,7 +153,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
                &day, &month, &year,
                &hour, &minute, &second,
                flight_date, task_num, &num_tp, task_desc) < 9) {
-      fatal("task id (C) record parse error A. \n'%s'", rec);
+      gbFatal("task id (C) record parse error A. \n'%s'", rec);
     }
     task_num[4] = '\0';
     if (year < 70) {
@@ -163,7 +163,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
     }
     creation = QDateTime(QDate(year, month, day), QTime(hour, minute, second), QtUTC);
     if (!creation.isValid()) {
-      fatal("bad date time\n%s\n", rec);
+      gbFatal("bad date time\n%s\n", rec);
     }
 
     // Create a route to store the task data in.
@@ -179,7 +179,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
   if (sscanf(rec, "C%2u%2u%3u%1[NS]%3u%2u%3u%1[WE]%78[^\r]\r\n",
              &lat_deg, &lat_min, &lat_frac, lat_hemi,
              &lon_deg, &lon_min, &lon_frac, lon_hemi, tmp_str) < 8) {
-    fatal("task waypoint (C) record parse error\n%s", rec);
+    gbFatal("task waypoint (C) record parse error\n%s", rec);
   }
 
   auto* wpt = new Waypoint;
@@ -223,7 +223,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
     break;
 
   default:
-    fatal("task id (C) record internal error B\n%s", rec);
+    gbFatal("task id (C) record internal error B\n%s", rec);
     break;
   }
 
@@ -272,7 +272,7 @@ void IgcFormat::read()
 
   while (true) {
     if (global_opts.debug_level >= 8) {
-      db.log("Processing IGC file line %i\n", current_line);
+      db.gbLog("Processing IGC file line %i\n", current_line);
     }
     igc_rec_type_t rec_type = get_record(&ibuf);
     current_line++;
@@ -280,13 +280,13 @@ void IgcFormat::read()
     switch (rec_type) {
     case rec_manuf_id:
       // Manufacturer/ID record already found in rd_init().
-      warning("duplicate manufacturer/ID record\n");
+      gbWarning("duplicate manufacturer/ID record\n");
       break;
 
     case rec_header:
       // Get the header sub type
       if (sscanf(ibuf, "H%*1[FOPS]%3s", tmp_str) != 1) {
-        fatal("header (H) record parse error\n%s\n%s\n", ibuf, tmp_str);
+        gbFatal("header (H) record parse error\n%s\n%s\n", ibuf, tmp_str);
       }
       // Optional long name of record sub type is followed by a
       // colon.  Actual header data follows that.
@@ -302,7 +302,7 @@ void IgcFormat::read()
         int month;
         int year;
         if (sscanf(hdr_data, "%2d%2d%2d", &day, &month, &year) != 3) {
-          fatal("date (H) record parse error\n'%s'\n", ibuf);
+          gbFatal("date (H) record parse error\n'%s'\n", ibuf);
         }
         if (year < 70) {
           year += 2000;
@@ -311,7 +311,7 @@ void IgcFormat::read()
         }
         date = QDate(year, month, day);
         if (!date.isValid()) {
-          fatal("bad date\n%s\n", ibuf);
+          gbFatal("bad date\n%s\n", ibuf);
         }
       } else {
         // Store other header data in the track descriptions
@@ -327,7 +327,7 @@ void IgcFormat::read()
     case rec_fix: {
       // Date must appear in file before the first fix record
       if (!date.isValid()) {
-        fatal("bad date\n");
+        gbFatal("bad date\n");
       }
       // Create a track for pressure altitude waypoints
       if (!pres_head) {
@@ -349,7 +349,7 @@ void IgcFormat::read()
                  &hours, &mins, &secs, &lat_deg, &lat_min, &lat_frac,
                  lat_hemi, &lon_deg, &lon_min, &lon_frac, lon_hemi,
                  &validity, &pres_alt, &gnss_alt) != 14) {
-        fatal("fix (B) record parse error\n%s\n", ibuf);
+        gbFatal("fix (B) record parse error\n%s\n", ibuf);
       }
       pres_wpt = new Waypoint;
 
@@ -361,7 +361,7 @@ void IgcFormat::read()
 
       tod = QTime(hours, mins, secs);
       if (!tod.isValid()) {
-        fatal("bad time\n%s\n", ibuf);
+        gbFatal("bad time\n%s\n", ibuf);
       }
 
       // Increment date if we pass midnight UTC
@@ -378,21 +378,21 @@ void IgcFormat::read()
       if (!ext_types_list.isEmpty()) {
         auto* fsdata = new igc_fsdata;
         if (global_opts.debug_level >= 7) {
-          db.log("Record: %s\n",qPrintable(ibuf_q));
+          db.gbLog("Record: %s\n",qPrintable(ibuf_q));
         }
         if (global_opts.debug_level >= 6) {
-          db.log("Adding extension data:");
+          db.gbLog("Adding extension data:");
         }
         for (const auto& [name, ext, start, len, factor] : ext_types_list) {
           double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
           fsdata->set_value(ext, ext_data, pres_wpt);
           if (global_opts.debug_level >= 6) {
-            db.log(" %s:%f", qPrintable(name), ext_data);
+            db.gbLog(" %s:%f", qPrintable(name), ext_data);
           }
         }
         if (global_opts.debug_level >= 6) {
-          db.log("\n");
+          db.gbLog("\n");
         }
         pres_wpt->fs.FsChainAdd(fsdata);
       }
@@ -429,7 +429,7 @@ void IgcFormat::read()
     case rec_log_book:
       // Get the log book sub type
       if (sscanf(ibuf, "L%3s", tmp_str) != 1) {
-        fatal("log book (L) record parse error\n'%s'\n", ibuf);
+        gbFatal("log book (L) record parse error\n'%s'\n", ibuf);
       }
 
       if (strcmp(tmp_str, "PFC") == 0) {
@@ -438,13 +438,13 @@ void IgcFormat::read()
         break;
       } else if (global_opts.debug_level >= 5) {
         if (strcmp(tmp_str, "OOI") == 0) {
-          db.log("Observer Input> %s\n", ibuf + 4);
+          db.gbLog("Observer Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, "PLT") == 0) {
-          db.log("Pilot Input> %s\n", ibuf + 4);
+          db.gbLog("Pilot Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, manufacturer) == 0) {
-          db.log("Manufacturer Input> %s\n", ibuf + 4);
+          db.gbLog("Manufacturer Input> %s\n", ibuf + 4);
         } else {
-          db.log("Anonymous Input> %s\n", ibuf + 1);
+          db.gbLog("Anonymous Input> %s\n", ibuf + 1);
         }
       }
       break;
@@ -487,19 +487,19 @@ void IgcFormat::read()
         }
       }
       if (global_opts.debug_level >= 1) {
-        db.log("I record: %s\n", qPrintable(ibuf_q));
-        db.log("Extensions present: %s\n", qPrintable(present_extensions.join(' ')));
+        db.gbLog("I record: %s\n", qPrintable(ibuf_q));
+        db.gbLog("Extensions present: %s\n", qPrintable(present_extensions.join(' ')));
       }
       if (global_opts.debug_level >= 2) {
-        db.log("Non-excluded extensions defined in I record:\n");
-        db.log("(Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
+        db.gbLog("Non-excluded extensions defined in I record:\n");
+        db.gbLog("(Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
         for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
-          db.log("   Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
+          db.gbLog("   Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {
-          db.log("Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
+          db.gbLog("Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
                  qPrintable(unsupported_extensions.join(' ')));
-          db.log("Supported extensions (These are present in the I record and supported):\t%s\n",
+          db.gbLog("Supported extensions (These are present in the I record and supported):\t%s\n",
                  qPrintable(supported_extensions.join(' ')));
         }
       }
@@ -534,7 +534,7 @@ void IgcFormat::read()
 
     default:
     case rec_bad:
-      fatal("failure reading file\n");
+      gbFatal("failure reading file\n");
       break;
     }
   }
@@ -638,7 +638,7 @@ QByteArray IgcFormat::latlon2str(const Waypoint* wpt)
   char str[18];
   if (snprintf(str, sizeof(str), "%02ld%05ld%c%03ld%05ld%c",
                lat_digits.quot, lat_digits.rem, lat_hemi, lon_digits.quot, lon_digits.rem, lon_hemi) != 17) {
-    fatal("Bad waypoint format '%s'\n", str);
+    gbFatal("Bad waypoint format '%s'\n", str);
   }
   return str;
 }
@@ -647,7 +647,7 @@ QByteArray IgcFormat::date2str(const gpsbabel::DateTime& dt)
 {
   QByteArray str = dt.toUTC().toString(u"ddMMyy").toUtf8();
   if (str.size() != 6) {
-    fatal("Bad date format '%s'\n", str.constData());
+    gbFatal("Bad date format '%s'\n", str.constData());
   }
   return str;
 }
@@ -656,7 +656,7 @@ QByteArray IgcFormat::tod2str(const gpsbabel::DateTime& tod)
 {
   QByteArray str = tod.toUTC().toString(u"hhmmss").toUtf8();
   if (str.size() != 6) {
-    fatal("Bad time of day format '%s'\n", str.constData());
+    gbFatal("Bad time of day format '%s'\n", str.constData());
   }
   return str;
 }
@@ -679,7 +679,7 @@ void IgcFormat::wr_header()
     // Date in header record is that of the first fix record
     date = track->waypoint_list.front()->GetCreationTime();
     if (!date.isValid()) {
-      fatal("Bad track timestamp\n");
+      gbFatal("Bad track timestamp\n");
     }
   } else {
     // This is a bit silly, there aren't any tracks!
@@ -732,7 +732,7 @@ void IgcFormat::wr_task_hdr(const route_head* rte, unsigned int task_num)
   int num_tps = rte->rte_waypt_ct() - 2;
 
   if (num_tps < 0) {
-    fatal("Empty task route\n");
+    gbFatal("Empty task route\n");
   }
   // See if the takeoff and landing waypoints are there or if we need to
   // generate them.
@@ -746,9 +746,9 @@ void IgcFormat::wr_task_hdr(const route_head* rte, unsigned int task_num)
     num_tps--;
   }
   if (num_tps < 0) {
-    fatal("Too few waypoints in task route\n");
+    gbFatal("Too few waypoints in task route\n");
   } else if (num_tps > 99) {
-    fatal("Too much waypoints (more than 99) in task route.\n");
+    gbFatal("Too much waypoints (more than 99) in task route.\n");
   }
   // Gather data to write to the task identification (first) record
   gpsbabel::DateTime rte_time = wpt->GetCreationTime().isValid() ? wpt->GetCreationTime() : current_time();
@@ -808,7 +808,7 @@ void IgcFormat::wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
 {
   gpsbabel::DateTime tt = wpt->GetCreationTime();
   if (!tt.isValid()) {
-    fatal("Bad track timestamp\n");
+    gbFatal("Bad track timestamp\n");
   }
 
   if (unknown_alt == pres_alt) {
@@ -852,7 +852,7 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
   } while (alt_diff > -10.0);
   gpsbabel::DateTime pres_time = (*std::prev(wpt_rit))->GetCreationTime();
   if (global_opts.debug_level >= 1) {
-    db.log("pressure landing time %s\n", CSTR(pres_time.toPrettyString()));
+    db.gbLog("pressure landing time %s\n", CSTR(pres_time.toPrettyString()));
   }
 
   // Deduce the landing time from the GNSS altitude track based on
@@ -871,17 +871,17 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
             radtometers(gcdist(wpt->position(), (*wpt_rit)->position())) /
             (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
-      db.log("speed=%.2fm/s\n", speed);
+      db.gbLog("speed=%.2fm/s\n", speed);
     }
   } while (speed < 2.5);
   gpsbabel::DateTime gnss_time = (*std::prev(wpt_rit))->GetCreationTime();
   if (global_opts.debug_level >= 1) {
-    db.log("gnss landing time %s\n", CSTR(gnss_time.toPrettyString()));
+    db.gbLog("gnss landing time %s\n", CSTR(gnss_time.toPrettyString()));
   }
   // Time adjustment is difference between the two estimated landing times
   int time_diff = gnss_time.secsTo(pres_time);
   if (15 * 60 < abs(time_diff)) {
-    warning("excessive time adjustment %ds\n", time_diff);
+    gbWarning("excessive time adjustment %ds\n", time_diff);
   }
   return time_diff;
 }
@@ -955,7 +955,7 @@ void IgcFormat::wr_track()
       time_adj = 0;
     }
     if (global_opts.debug_level >= 1) {
-      db.log("adjusting time by %ds\n", time_adj);
+      db.gbLog("adjusting time by %ds\n", time_adj);
     }
     // Iterate through waypoints in both tracks simultaneously
     Interpolater interpolater;

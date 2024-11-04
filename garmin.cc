@@ -111,12 +111,12 @@ GarminFormat::rw_init(const QString& fname)
     case 115200:
       break;
     default:
-      fatal("Baud rate %d is not supported\n", baud);
+      gbFatal("Baud rate %d is not supported\n", baud);
     }
   }
 
   if (GPS_Init(qPrintable(fname)) < 0) {
-    fatal("Can't init %s\n", qPrintable(fname));
+    gbFatal("Can't init %s\n", qPrintable(fname));
   }
 
   /*
@@ -150,7 +150,7 @@ GarminFormat::rw_init(const QString& fname)
 
   switch (gps_waypt_type) {	/* waypoint type as defined by jeeps */
   case 0:
-    fatal("Garmin unit %d does not support waypoint xfer.",
+    gbFatal("Garmin unit %d does not support waypoint xfer.",
           gps_save_id);
 
     break;
@@ -240,10 +240,10 @@ GarminFormat::rw_init(const QString& fname)
   }
 
   if (global_opts.debug_level > 0)  {
-    debug("Waypoint type: %d\n", gps_waypt_type);
-    debug("Chosen waypoint length %d\n", receiver_short_length);
+    gbDebug("Waypoint type: %d\n", gps_waypt_type);
+    gbDebug("Chosen waypoint length %d\n", receiver_short_length);
     if (gps_category_type) {
-      debug("Waypoint category type: %d\n", gps_category_type);
+      gbDebug("Waypoint category type: %d\n", gps_category_type);
     }
   }
 
@@ -286,7 +286,7 @@ GarminFormat::rw_init(const QString& fname)
   }
   codec = get_codec(receiver_charset);
   if (global_opts.verbose_status) {
-    info("receiver charset detected as %s.\n", receiver_charset.constData());
+    gbInfo("receiver charset detected as %s.\n", receiver_charset.constData());
   }
 
   valid_chars = valid_waypt_chars;
@@ -346,7 +346,7 @@ GarminFormat::waypt_read()
   }
 
   if ((n = GPS_Command_Get_Waypoint(portname, &way, waypt_read_cb)) < 0) {
-    fatal("Can't get waypoint from %s\n", portname);
+    gbFatal("Can't get waypoint from %s\n", portname);
   }
 
   for (int i = 0; i < n; i++) {
@@ -667,7 +667,7 @@ GarminFormat::rd_position(posn_status* posn_status)
    * error, do it now.
    */
   if (gps_errno) {
-    fatal("Fatal error reading position.\n");
+    gbFatal("Fatal error reading position.\n");
   }
 
   delete wpt;
@@ -694,7 +694,7 @@ GarminFormat::read()
   }
   if (!(global_opts.masked_objective &
         (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK))) {
-    fatal("Nothing to do.\n");
+    gbFatal("Nothing to do.\n");
   }
 }
 
@@ -703,7 +703,7 @@ GarminFormat::sane_GPS_Way_New()
 {
   GPS_PWay way = GPS_Way_New();
   if (!way) {
-    fatal("not enough memory\n");
+    gbFatal("not enough memory\n");
   }
 
   /*
@@ -888,14 +888,14 @@ GarminFormat::waypoint_write()
   int n = waypoint_prepare();
 
   if (int32_t ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb); ret < 0) {
-    fatal("communication error sending waypoints..\n");
+    gbFatal("communication error sending waypoints..\n");
   }
 
   for (int i = 0; i < n; ++i) {
     GPS_Way_Del(&tx_waylist[i]);
   }
   if (global_opts.verbose_status) {
-    info("\n");
+    gbInfo("\n");
   }
   xfree(tx_waylist);
 }

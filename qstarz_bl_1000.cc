@@ -132,7 +132,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   stream >> unused2;
 
   if (stream.status() != QDataStream::Ok) {
-    fatal(FatalMsg() << "File format error on " << fname << ". Perhaps this isn't a Qstarz BL-1000 file");
+    gbFatal(FatalMsg() << "File format error on " << fname << ". Perhaps this isn't a Qstarz BL-1000 file");
   }
 
   BL1000_POINT_TYPE type;
@@ -168,7 +168,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   default:
     type = BL1000_POINT_TYPE_UNKNOWN;
 
-    fatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for RCR (record reason): " << rcr);
+    gbFatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for RCR (record reason): " << rcr);
 
     break;
   }
@@ -202,7 +202,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
     fix = fix_unknown;
 
     if (type != BL1000_POINT_TYPE_UNKNOWN) {
-      fatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for fix quality: " << fixQuality);
+      gbFatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for fix quality: " << fixQuality);
     }
 
     break;
@@ -216,11 +216,11 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   // qDebug(waypoint)
 
   if ((waypoint->latitude < -90) || (waypoint->latitude > 90)) {
-    fatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for latitude: " << waypoint->latitude);
+    gbFatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for latitude: " << waypoint->latitude);
   }
 
   if ((waypoint->longitude < -180) || (waypoint->longitude > 180)) {
-    fatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for longitude: " << waypoint->longitude);
+    gbFatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for longitude: " << waypoint->longitude);
   }
 
   waypoint->altitude = altitude;
@@ -270,7 +270,7 @@ QstarzBL1000Format::read()
 {
   QFile file(fname);
   if (!file.open(QIODevice::ReadOnly)) {
-    fatal(FatalMsg() << "Error opening file " << fname);
+    gbFatal(FatalMsg() << "Error opening file " << fname);
   }
 
   QDataStream stream(&file);

@@ -42,7 +42,7 @@
 
 
 void GoogleTakeoutFormat::takeout_fatal(const QString& message) {
-  fatal(FatalMsg() << message);
+  gbFatal(FatalMsg() << message);
 }
 
 void GoogleTakeoutFormat::takeout_warning(const QString& message) {

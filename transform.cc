@@ -153,7 +153,7 @@ void TransformFilter::process()
         route_flush_all_tracks();
       }
     } else {
-      fatal("Invalid option value (%s)!\n", qPrintable(opt_waypts));
+      gbFatal("Invalid option value (%s)!\n", qPrintable(opt_waypts));
     }
   }
   if (opt_routes) {
@@ -169,7 +169,7 @@ void TransformFilter::process()
         route_flush_all_tracks();
       }
     } else {
-      fatal("Invalid option value (%s)!\n", qPrintable(opt_routes));
+      gbFatal("Invalid option value (%s)!\n", qPrintable(opt_routes));
     }
   }
   if (opt_tracks) {
@@ -185,7 +185,7 @@ void TransformFilter::process()
         route_flush_all_routes();
       }
     } else {
-      fatal("Invalid option value (%s)!\n", qPrintable(opt_tracks));
+      gbFatal("Invalid option value (%s)!\n", qPrintable(opt_tracks));
     }
   }
 }

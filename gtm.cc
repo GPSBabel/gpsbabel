@@ -165,7 +165,7 @@ void GtmFormat::set_datum(int n)
   }
 
   if (indatum == -1) {
-    warning("Unsupported datum (%d), won't convert to WGS84\n", n);
+    gbWarning("Unsupported datum (%d), won't convert to WGS84\n", n);
   }
 }
 
@@ -187,13 +187,13 @@ GtmFormat::rd_init(const QString& fname)
   int version = fread_integer(file_in);
   QString name = fread_fixedstring(file_in, 10);
   if (version == -29921) {
-    fatal("Uncompress the file first\n");
+    gbFatal("Uncompress the file first\n");
   }
   if (name != "TrackMaker") {
-    fatal("Invalid file format\n");
+    gbFatal("Invalid file format\n");
   }
   if (version != 211) {
-    fatal("Invalid format version\n");
+    gbFatal("Invalid format version\n");
   }
 
   /* Header */
@@ -383,7 +383,7 @@ GtmFormat::read()
   //       If ts_count != real_track_list.size() we don't know how to line up
   //       the tracklogs, and the real tracks, with the tracklog styles.
   if (ts_count != real_track_list.size()) {
-    warning("The number of tracklog entries with the new flag "
+    gbWarning("The number of tracklog entries with the new flag "
            "set doesn't match the number of tracklog style entries.\n"
            "  This is unexpected and may indicate a malformed input file.\n"
            "  As a result the track names may be incorrect.\n");

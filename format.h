@@ -65,7 +65,7 @@ public:
 
   virtual void rd_init(const QString& /* fname */)
   {
-    fatal("Format does not support reading.\n");
+    gbFatal("Format does not support reading.\n");
 //	fin = gbfopen(fname, "r");
   }
 
@@ -110,7 +110,7 @@ public:
 
   virtual void wr_init(const QString& /* fname */)
   {
-    fatal("Format does not support writing.\n");
+    gbFatal("Format does not support writing.\n");
 //	fout = gbfopen(fname, "w");
   }
 
@@ -133,7 +133,7 @@ public:
 
   virtual void rd_position_init(const QString& /* fname */)
   {
-    fatal("Realtime tracking (-T) is not supported by this input type.\n");
+    gbFatal("Realtime tracking (-T) is not supported by this input type.\n");
   }
 
   virtual Waypoint* rd_position(posn_status* /* status */)
@@ -151,7 +151,7 @@ public:
 
   virtual void wr_position(Waypoint* /* wpt */)
   {
-    fatal("This output format does not support output of realtime positioning.\n");
+    gbFatal("This output format does not support output of realtime positioning.\n");
   }
 
   virtual void wr_position_deinit()
