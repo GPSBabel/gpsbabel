@@ -51,7 +51,7 @@
 #include "src/core/datetime.h"       // for DateTime
 
 
-#define gbLogCStr(qstr) qPrintable(qstr)
+#define gbLogCStr(qstr) qUtf8Printable(qstr)
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
 
@@ -930,7 +930,7 @@ public:
   int gbFlush();
 
 private:
-  QByteArray buf_;
+  QString buf_;
 };
 
 void printposn(double c, bool is_lat);

@@ -30,6 +30,7 @@
 #include "defs.h"              // for DebugLog, gbFatal, gbDebug, gbInfo, gbWarning
 #include "src/core/logging.h"  // for FatalMsg
 
+#ifdef PIGS_FLY
 static QByteArray xvasprintf(const char* fmt, va_list args)
 {
   va_list args2;
@@ -42,6 +43,7 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
   delete[] cbuf;
   return rval;
 }
+#endif
 
 [[noreturn]] void gbFatal(QDebug& msginstance)
 {
@@ -56,7 +58,7 @@ gbFatal(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  QByteArray msg = xvasprintf(fmt, args);
+  QString msg = QString::vasprintf(fmt, args);
   va_end(args);
   if (msg.endsWith('\n')) {
     msg.chop(1);
@@ -70,7 +72,7 @@ gbWarning(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  QByteArray msg = xvasprintf(fmt, args);
+  QString msg = QString::vasprintf(fmt, args);
   va_end(args);
   if (msg.endsWith('\n')) {
     msg.chop(1);
@@ -83,7 +85,7 @@ gbInfo(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  QByteArray msg = xvasprintf(fmt, args);
+  QString msg = QString::vasprintf(fmt, args);
   va_end(args);
   if (msg.endsWith('\n')) {
     msg.chop(1);
@@ -96,7 +98,7 @@ gbDebug(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  QByteArray msg = xvasprintf(fmt, args);
+  QString msg = QString::vasprintf(fmt, args);
   va_end(args);
   if (msg.endsWith('\n')) {
     msg.chop(1);
@@ -108,10 +110,10 @@ int DebugLog::gbVLog(const char* fmt, va_list args)
 {
   int rc = 0;
 
-  buf_.append(xvasprintf(fmt, args));
+  buf_.append(QString::vasprintf(fmt, args));
 
   for (auto idx = buf_.indexOf('\n'); idx >= 0; idx = buf_.indexOf('\n')) {
-    QByteArray msg = buf_.sliced(0, idx + 1);
+    QString msg = buf_.sliced(0, idx + 1);
     if (msg.endsWith('\n')) {
       msg.chop(1);
     }
@@ -142,7 +144,7 @@ int DebugLog::gbFlush()
     }
     qDebug().noquote() << buf_;
     rc += buf_.size();
-    buf_ = QByteArray();
+    buf_ = QString();
   }
 
   return rc;
