@@ -189,8 +189,8 @@ void XmlGenericReader::xml_read()
   xml_run_parser(reader);
   if (reader.hasError())  {
     gbFatal("Read error: %s (%s, line %lld, col %lld)\n",
-          qPrintable(reader.errorString()),
-          qPrintable(file.fileName()),
+          gbLogCStr(reader.errorString()),
+          gbLogCStr(file.fileName()),
           reader.lineNumber(),
           reader.columnNumber());
   }
@@ -214,7 +214,7 @@ void XmlGenericReader::xml_readstring(const char* str)
   xml_run_parser(reader);
   if (reader.hasError())  {
     gbFatal("Read error: %s (%s, line %lld, col %lld)\n",
-          qPrintable(reader.errorString()),
+          gbLogCStr(reader.errorString()),
           "unknown",
           reader.lineNumber(),
           reader.columnNumber());

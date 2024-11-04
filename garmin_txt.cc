@@ -249,9 +249,9 @@ GarminTxtFormat::print_position(const Waypoint* wpt)
   if (! valid) {
     *fout << "#####\n";
     gbFatal("%s (%s) is outside of convertible area \"%s\"!\n",
-          wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-          qPrintable(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
-          qPrintable(gt_get_mps_grid_longname(grid_index)));
+          wpt->shortname.isEmpty() ? "Waypoint" : gbLogCStr(wpt->shortname),
+          gbLogCStr(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
+          gbLogCStr(gt_get_mps_grid_longname(grid_index)));
   }
 }
 
@@ -641,7 +641,7 @@ GarminTxtFormat::wr_init(const QString& fname)
   if (opt_precision) {
     precision = opt_precision.get_result();
     if (precision < 0) {
-      gbFatal("Invalid precision (%s)!", qPrintable(opt_precision));
+      gbFatal("Invalid precision (%s)!", gbLogCStr(opt_precision));
     }
   }
 
@@ -876,7 +876,7 @@ GarminTxtFormat::parse_categories(const QString& str) const
     QString cin = catstring.trimmed();
     if (!cin.isEmpty()) {
       if (std::optional<uint16_t> cat = garmin_fs_t::convert_category(cin); !cat.has_value()) {
-        gbWarning("Unable to convert category \"%s\" at line %d!\n", qPrintable(cin), current_line);
+        gbWarning("Unable to convert category \"%s\" at line %d!\n", gbLogCStr(cin), current_line);
       } else {
         res = res | *cat;
       }
@@ -909,7 +909,7 @@ GarminTxtFormat::parse_temperature(const QString& str, double* temperature) cons
     }
     return true;
   } else {
-    gbFatal("Invalid temperature \"%s\" at line %d!\n", qPrintable(str), current_line);
+    gbFatal("Invalid temperature \"%s\" at line %d!\n", gbLogCStr(str), current_line);
   }
   return false;
 }
@@ -936,7 +936,7 @@ GarminTxtFormat::parse_display(const QString& str, int* val) const
       return true;
     }
   }
-  gbWarning("Unknown display mode \"%s\" at line %d.\n", qPrintable(str), current_line);
+  gbWarning("Unknown display mode \"%s\" at line %d.\n", gbLogCStr(str), current_line);
   return false;
 }
 
@@ -964,10 +964,10 @@ GarminTxtFormat::bind_fields(const header_type ht)
       int field_no = field_idx + 1;
       header_mapping_info[ht].append(std::make_pair(name, field_no));
       if (global_opts.debug_level >= 2) {
-        gbDebug("Binding field \"%s\" to internal number %d (%d,%d)\n", qPrintable(name), field_no, ht, i);
+        gbDebug("Binding field \"%s\" to internal number %d (%d,%d)\n", gbLogCStr(name), field_no, ht, i);
       }
     } else {
-      gbWarning("Field %s not recognized!\n", qPrintable(name));
+      gbWarning("Field %s not recognized!\n", gbLogCStr(name));
     }
   }
   header_column_names.clear();
@@ -1333,7 +1333,7 @@ GarminTxtFormat::read()
       parse_track_header(lineparts);
     } else if (linetype.compare(u"Map", Qt::CaseInsensitive) == 0) /* do nothing */ ;
     else {
-      gbFatal("Unknown identifier (%s) at line %d!\n", qPrintable(linetype), current_line);
+      gbFatal("Unknown identifier (%s) at line %d!\n", gbLogCStr(linetype), current_line);
     }
 
   }

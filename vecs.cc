@@ -566,7 +566,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
 
   if (arg.argval == nullptr) {
-    gbFatal("%s: Program error - No local variable defined for option.\n", qPrintable(id));
+    gbFatal("%s: Program error - No local variable defined for option.\n", gbLogCStr(id));
   }
 
   arg.argval->reset();
@@ -602,7 +602,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
             rval = '1';
           }
         } else {
-          gbWarning("%s: Invalid logical value \"%s\".\n", qPrintable(id), qPrintable(val));
+          gbWarning("%s: Invalid logical value \"%s\".\n", gbLogCStr(id), gbLogCStr(val));
           rval = '0';
         }
       }
@@ -619,7 +619,7 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
     for (const auto& arg : *args) {
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
         db.gbLog("options: module/option=value: %s/%s=\"%s\"",
-               qPrintable(vecname), qPrintable(arg.argstring), qPrintable(arg.argval->get()));
+               gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
         if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
           db.gbLog(" (=default)");
         }
@@ -643,7 +643,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
       }
     }
     if (!valid) {
-      gbWarning("'%s' is an unknown option to %s.\n", qPrintable(option_name), qPrintable(name));
+      gbWarning("'%s' is an unknown option to %s.\n", gbLogCStr(option_name), gbLogCStr(name));
     }
   }
 }

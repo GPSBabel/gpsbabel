@@ -227,6 +227,6 @@ color_to_bbggrr(const QString& cname)
     return (entry.b << 16) + (entry.g << 8) + entry.r;
   }
 
-  gbFatal("unrecognized color name %s\n", qPrintable(cname));
+  gbFatal("unrecognized color name %s\n", gbLogCStr(cname));
   return -1;
 }

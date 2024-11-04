@@ -737,7 +737,7 @@ ExifFormat::exif_get_exif_time(ExifApp* app)
       } else if (opt_offsettime) {
         // Only warn for user supplied offsets.
         // Offset tags may indicate the offset was unknown, e.g. "   :  ".
-        gbWarning("OffsetTime is expected to be +HH:MM or -HH:MM, but was %s.\n", qPrintable(time_tag));
+        gbWarning("OffsetTime is expected to be +HH:MM or -HH:MM, but was %s.\n", gbLogCStr(time_tag));
       }
     }
 
@@ -920,7 +920,7 @@ ExifFormat::exif_waypt_from_exif_app(ExifApp* app)
   gps_datetime = QDateTime(datestamp, timestamp, QtUTC);
   if (gps_datetime.isValid()) {
     if (global_opts.debug_level >= 3) {
-      db.gbLog("GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODateWithMs)));
+      db.gbLog("GPSTimeStamp =   %s\n", gbLogCStr(gps_datetime.toString(Qt::ISODateWithMs)));
     }
     wpt->SetCreationTime(gps_datetime);
   } else {
@@ -1447,7 +1447,7 @@ ExifFormat::read()
 
   exif_app_ = exif_load_apps();
   if (exif_app_ == nullptr) {
-    gbFatal("No EXIF header in source file \"%s\".", qPrintable(fin_->name));
+    gbFatal("No EXIF header in source file \"%s\".", gbLogCStr(fin_->name));
   }
 
   exif_examine_app(exif_app_);
@@ -1476,7 +1476,7 @@ ExifFormat::wr_init(const QString& fname)
   }
   exif_app_ = exif_load_apps();
   if (exif_app_ == nullptr) {
-    gbFatal("No EXIF header found in source file \"%s\".", qPrintable(fin_->name));
+    gbFatal("No EXIF header found in source file \"%s\".", gbLogCStr(fin_->name));
   }
   exif_examine_app(exif_app_);
   gbfclose(fin_);
@@ -1528,7 +1528,7 @@ ExifFormat::write()
       track_disp_all(nullptr, nullptr, exif_find_wpt_by_name_lambda);
     }
     if (exif_wpt_ref == nullptr) {
-      gbWarning("No matching point with name \"%s\" found.\n", qPrintable(opt_name));
+      gbWarning("No matching point with name \"%s\" found.\n", gbLogCStr(opt_name));
     }
   } else {
     auto exif_find_wpt_by_time_lambda = [this](const Waypoint* waypointp)->void {
@@ -1544,11 +1544,11 @@ ExifFormat::write()
       gbWarning("No point with a valid timestamp found.\n");
     } else if (std::abs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)) > frame) {
       QString time_str = exif_time_str(exif_time_ref);
-      gbWarning("No matching point found for image date %s!\n", qPrintable(time_str));
+      gbWarning("No matching point found for image date %s!\n", gbLogCStr(time_str));
       if (exif_wpt_ref != nullptr) {
         QString str = exif_time_str(exif_wpt_ref->creation_time);
         gbWarning("Best is from %s, %lld second(s) away.\n",
-                qPrintable(str), std::abs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)));
+                gbLogCStr(str), std::abs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)));
       }
       exif_wpt_ref = nullptr;
     }

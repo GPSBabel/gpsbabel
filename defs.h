@@ -51,6 +51,7 @@
 #include "src/core/datetime.h"       // for DateTime
 
 
+#define gbLogCStr(qstr) qPrintable(qstr)
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
 

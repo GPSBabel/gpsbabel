@@ -532,7 +532,7 @@ void TpoFormatBase::tpo_process_tracks()
 
     if constexpr(debug) {
       db.gbLog("Track style %u: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",
-             ii, styles[ii].color[0], styles[ii].color[1], styles[ii].color[2], styles[ii].wide, styles[ii].dash, qPrintable(styles[ii].name));
+             ii, styles[ii].color[0], styles[ii].color[1], styles[ii].color[2], styles[ii].wide, styles[ii].dash, gbLogCStr(styles[ii].name));
     }
   }
 
@@ -591,13 +591,13 @@ void TpoFormatBase::tpo_process_tracks()
     if (name_length) {
       gbfread(track_name, 1, name_length, tpo_file_in);
       if constexpr(debug > 2) {
-        db.gbLog(", length %.0fm?, named %s\n", track_length, qPrintable(track_name));
+        db.gbLog(", length %.0fm?, named %s\n", track_length, gbLogCStr(track_name));
       }
     } else { // Assign a generic track name
       track_name = "TRK ";
       track_name += QString::number(ii + 1);
       if constexpr(debug > 2) {
-        db.gbLog(", length %.0fm?, inventing name %s\n", track_length, qPrintable(track_name));
+        db.gbLog(", length %.0fm?, inventing name %s\n", track_length, gbLogCStr(track_name));
       }
     }
     track_temp->rte_name = track_name;
@@ -624,10 +624,10 @@ void TpoFormatBase::tpo_process_tracks()
 
     if constexpr(debug) {
       db.gbLog("Track Name: %s, ?Type?: %u, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
-             qPrintable(track_name), line_type,
-             qPrintable(styles[track_style].name),
+             gbLogCStr(track_name), line_type,
+             gbLogCStr(styles[track_style].name),
              styles[track_style].wide, styles[track_style].dash,
-             qPrintable(rgb));
+             gbLogCStr(rgb));
     }
 
     // Track description
@@ -810,7 +810,7 @@ void TpoFormatBase::tpo_process_tracks()
         track_add_wpt(track_temp, waypoint_temp);
         cnttp++;
         if (((abs(waypoint_temp->latitude - lastlat) > 1.0) && lastlat) || ((abs(waypoint_temp->longitude - lastlon) > 1.0) && lastlon)) {
-          gbWarning("WARNING! Track '%s' point #%d is more than 1 degree from the last track point!\n  (probably corrupt - try splitting in two at sharp corners)\n", qPrintable(track_name), cnttp);
+          gbWarning("WARNING! Track '%s' point #%d is more than 1 degree from the last track point!\n  (probably corrupt - try splitting in two at sharp corners)\n", gbLogCStr(track_name), cnttp);
         }
         lastlat = waypoint_temp->latitude;
         lastlon = waypoint_temp->longitude;
@@ -998,7 +998,7 @@ void TpoFormatBase::tpo_process_tracks()
         }
 
         if (((abs(waypoint_temp->latitude - lastlat) > 1) && lastlat) || ((abs(waypoint_temp->longitude - lastlon) > 1) && lastlon)) {
-          gbWarning("WARNING! Track '%s' point #%i is more than 1 degree from the last track point!\n  (probably corrupt - try splitting in two at sharp corners)\n", qPrintable(track_name), cnttp);
+          gbWarning("WARNING! Track '%s' point #%i is more than 1 degree from the last track point!\n  (probably corrupt - try splitting in two at sharp corners)\n", gbLogCStr(track_name), cnttp);
         }
         lastlat = waypoint_temp->latitude;
         lastlon = waypoint_temp->longitude;

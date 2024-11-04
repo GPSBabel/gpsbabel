@@ -91,8 +91,8 @@ void GeoFormat::read()
   GeoReadLoc(reader);
   if (reader.hasError())  {
     gbFatal("Read error: %s (%s, line %ld, col %ld)\n",
-          qPrintable(reader.errorString()),
-          qPrintable(ifile.fileName()),
+          gbLogCStr(reader.errorString()),
+          gbLogCStr(ifile.fileName()),
           (long) reader.lineNumber(),
           (long) reader.columnNumber());
   }

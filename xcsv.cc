@@ -861,7 +861,7 @@ XcsvFormat::read()
                                  xcsv_style->field_encloser, linecount);
 
       if (xcsv_style->ifields.isEmpty()) {
-        gbFatal("attempt to read, but style '%s' has no IFIELDs in it.\n", qPrintable(xcsv_style->description)? qPrintable(xcsv_style->description) : "unknown");
+        gbFatal("attempt to read, but style '%s' has no IFIELDs in it.\n", gbLogCStr(xcsv_style->description)? gbLogCStr(xcsv_style->description) : "unknown");
       }
 
       int ifield_idx = 0;
@@ -1885,7 +1885,7 @@ XcsvFormat::rd_init(const QString& fname)
 
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == wptdata)) {
     if (global_opts.masked_objective & (TRKDATAMASK|RTEDATAMASK)) {
-      gbWarning("attempt to read %s as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", qPrintable(fname));
+      gbWarning("attempt to read %s as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", gbLogCStr(fname));
     }
   }
 
@@ -1907,7 +1907,7 @@ XcsvFormat::rd_init(const QString& fname)
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
   if (xcsv_file->gps_datum_idx < 0) {
-    gbFatal("datum \"%s\" is not supported.", qPrintable(datum_name));
+    gbFatal("datum \"%s\" is not supported.", gbLogCStr(datum_name));
   }
 
   utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
@@ -1989,7 +1989,7 @@ XcsvFormat::wr_init(const QString& fname)
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
   if (xcsv_file->gps_datum_idx < 0) {
-    gbFatal("datum \"%s\" is not supported.", qPrintable(datum_name));
+    gbFatal("datum \"%s\" is not supported.", gbLogCStr(datum_name));
   }
 }
 

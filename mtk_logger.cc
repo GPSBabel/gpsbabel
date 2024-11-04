@@ -364,18 +364,18 @@ void MtkLoggerBase::mtk_read()
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
       gbFatal("Can't create temporary file %s",
-            qPrintable(TEMP_DATA_BIN));
+            gbLogCStr(TEMP_DATA_BIN));
     }
   }
   fseek(dout, 0L,SEEK_END);
   unsigned long dsize = ftell(dout);
   if (dsize > 1024) {
-    dbg(1, "Temp %s file exists. with size %lu\n", qPrintable(TEMP_DATA_BIN),
+    dbg(1, "Temp %s file exists. with size %lu\n", gbLogCStr(TEMP_DATA_BIN),
         dsize);
     dpos = 0;
     init_scan = 1;
   }
-  dbg(1, "Download %s -> %s\n", port, qPrintable(TEMP_DATA_BIN));
+  dbg(1, "Download %s -> %s\n", port, gbLogCStr(TEMP_DATA_BIN));
 
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &fusage, 2);
@@ -411,7 +411,7 @@ void MtkLoggerBase::mtk_read()
   dbg(1, "Download %dkB from device\n", (addr_max+1) >> 10);
 
   if (dsize > addr_max) {
-    dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", qPrintable(TEMP_DATA_BIN), dsize, addr_max);
+    dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", gbLogCStr(TEMP_DATA_BIN), dsize, addr_max);
     fclose(dout);
     dsize = 0;
     init_scan = 0;
@@ -419,7 +419,7 @@ void MtkLoggerBase::mtk_read()
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
       gbFatal("Can't create temporary file %s",
-            qPrintable(TEMP_DATA_BIN));
+            gbLogCStr(TEMP_DATA_BIN));
     }
   }
 
@@ -536,9 +536,9 @@ mtk_retry:
         fseek(dout, addr, SEEK_SET);
         if (fread(line, 1, rcvd_bsize, dout) == rcvd_bsize && memcmp(line, data, rcvd_bsize) == 0) {
           dpos = addr;
-          dbg(2, "%s same at %d\n", qPrintable(TEMP_DATA_BIN), addr);
+          dbg(2, "%s same at %d\n", gbLogCStr(TEMP_DATA_BIN), addr);
         } else {
-          dbg(2, "%s differs at %d\n", qPrintable(TEMP_DATA_BIN), addr);
+          dbg(2, "%s differs at %d\n", gbLogCStr(TEMP_DATA_BIN), addr);
           init_scan = 0;
           addr = dpos;
           bsize = read_bsize;
@@ -730,17 +730,17 @@ void MtkLoggerBase::mtk_csv_init(const QString& csv_fname, unsigned long bitmask
 {
   FILE* cf;
 
-  dbg(1, "Opening csv output file %s...\n", qPrintable(csv_fname));
+  dbg(1, "Opening csv output file %s...\n", gbLogCStr(csv_fname));
 
   // can't use gbfopen here - it will gbFatal() if file doesn't exist
   if ((cf = ufopen(csv_fname, "r")) != nullptr) {
     fclose(cf);
-    gbWarning("CSV file %s already exist ! Cowardly refusing to overwrite.\n", qPrintable(csv_fname));
+    gbWarning("CSV file %s already exist ! Cowardly refusing to overwrite.\n", gbLogCStr(csv_fname));
     return;
   }
 
   if ((cd = gbfopen(csv_fname, "w")) == nullptr) {
-    gbFatal("Can't open csv file '%s'\n", qPrintable(csv_fname));
+    gbFatal("Can't open csv file '%s'\n", gbLogCStr(csv_fname));
   }
 
   /* Add the header line */
@@ -1262,9 +1262,9 @@ void MtkLoggerBase::file_init_m241(const QString& fname)
 
 void MtkLoggerBase::file_init(const QString& fname)
 {
-  dbg(4, "Opening file %s...\n", qPrintable(fname));
+  dbg(4, "Opening file %s...\n", gbLogCStr(fname));
   if (fl = ufopen(fname, "rb"), nullptr == fl) {
-    gbFatal("Can't open file '%s'\n", qPrintable(fname));
+    gbFatal("Can't open file '%s'\n", gbLogCStr(fname));
   }
   switch (mtk_device) {
   case HOLUX_M241:

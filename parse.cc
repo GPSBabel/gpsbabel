@@ -54,7 +54,7 @@ int parse_integer(const QString& str, const QString& id, bool* ok, QString* end,
   } catch (const std::invalid_argument&) {
     if (ok == nullptr) {
       gbFatal("%s: conversion to integer failed: invalid argument \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0;
@@ -62,7 +62,7 @@ int parse_integer(const QString& str, const QString& id, bool* ok, QString* end,
   } catch (const std::out_of_range&) {
     if (ok == nullptr) {
       gbFatal("%s: conversion to integer failed: out of range \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0;
@@ -70,7 +70,7 @@ int parse_integer(const QString& str, const QString& id, bool* ok, QString* end,
   } catch (...) {
     if (ok == nullptr) {
       gbFatal("%s: conversion to integer failed: unknown exception \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0;
@@ -81,7 +81,7 @@ int parse_integer(const QString& str, const QString& id, bool* ok, QString* end,
   if ((end == nullptr) && !remainder.trimmed().isEmpty()) {
     if (ok == nullptr) {
       gbFatal("%s: conversion to integer failed: conversion of \"%s\" failed due to unexpected trailing data \"%s\".\n",
-            qPrintable(id), qPrintable(str), qPrintable(remainder));
+            gbLogCStr(id), gbLogCStr(str), gbLogCStr(remainder));
     } else {
       *ok = false;
       return 0;
@@ -121,7 +121,7 @@ double parse_double(const QString& str, const QString& id, bool* ok, QString* en
   } catch (const std::invalid_argument&) {
     if (ok == nullptr) {
       gbFatal("%s: conversion to double failed: invalid argument \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0.0;
@@ -129,7 +129,7 @@ double parse_double(const QString& str, const QString& id, bool* ok, QString* en
   } catch (const std::out_of_range&) {
     if (ok == nullptr) {
       gbFatal("%s: conversion to double failed: out of range \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0.0;
@@ -137,7 +137,7 @@ double parse_double(const QString& str, const QString& id, bool* ok, QString* en
   } catch (...) {
     if (ok == nullptr) {
       gbFatal("%s: conversion to double failed: unknown exception \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0.0;
@@ -148,7 +148,7 @@ double parse_double(const QString& str, const QString& id, bool* ok, QString* en
   if ((end == nullptr) && !remainder.trimmed().isEmpty()) {
     if (ok == nullptr) {
       gbFatal("%s: conversion to double failed: conversion of \"%s\" failed due to unexpected trailing data \"%s\".\n",
-            qPrintable(id), qPrintable(str), qPrintable(remainder));
+            gbLogCStr(id), gbLogCStr(str), gbLogCStr(remainder));
     } else {
       *ok = false;
       return 0.0;
@@ -211,7 +211,7 @@ parse_distance(const QString& str, double* val, double scale)
   } else if (case_ignore_strcmp(unit, "fa") == 0) {
     *val = FATHOMS_TO_METERS(*val);
   } else {
-    gbFatal("Unsupported distance unit in item '%s'!\n", qPrintable(str));
+    gbFatal("Unsupported distance unit in item '%s'!\n", gbLogCStr(str));
   }
   return 2;
 }
@@ -261,7 +261,7 @@ parse_speed(const QString& str, double* val, const double scale)
   } else if (case_ignore_strcmp(unit, "mih") == 0) {
     *val = MPH_TO_MPS(*val);
   } else {
-    gbWarning("Unsupported speed unit '%s' in item '%s'!\n", qPrintable(unit), qPrintable(str));
+    gbWarning("Unsupported speed unit '%s' in item '%s'!\n", gbLogCStr(unit), gbLogCStr(str));
   }
 
   return 2;

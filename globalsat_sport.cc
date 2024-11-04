@@ -266,10 +266,10 @@ GlobalsatSportFormat::rd_init(const QString& fname)
   if (opt_dump_file) {
     dumpfile = gbfopen(opt_dump_file, "wb");
     if (!dumpfile) {
-      gbWarning("rd_init() creating dumpfile %s FAILED continue anyway\n", qPrintable(opt_dump_file));
+      gbWarning("rd_init() creating dumpfile %s FAILED continue anyway\n", gbLogCStr(opt_dump_file));
     } else {
       if (global_opts.debug_level > 1) {
-        db.gbLog("rd_init() creating dumpfile %s for writing binary copy of serial stream\n", qPrintable(opt_dump_file));
+        db.gbLog("rd_init() creating dumpfile %s for writing binary copy of serial stream\n", gbLogCStr(opt_dump_file));
       }
     }
   }
@@ -279,7 +279,7 @@ GlobalsatSportFormat::rd_init(const QString& fname)
     // read from dump-file instead of serial
     in_file = gbfopen(fname, "rb");
     if (!in_file) {
-      gbFatal("Could not open dumpfile for input: %s", qPrintable(fname));
+      gbFatal("Could not open dumpfile for input: %s", gbLogCStr(fname));
     }
 
   }
@@ -288,7 +288,7 @@ GlobalsatSportFormat::rd_init(const QString& fname)
       timezn = new QTimeZone(opt_timezone.get().toUtf8());
     } else {
       list_timezones();
-      gbFatal("Requested time zone \"%s\" not available.\n", qPrintable(opt_timezone));
+      gbFatal("Requested time zone \"%s\" not available.\n", gbLogCStr(opt_timezone));
     }
   } else {
     timezn = nullptr;

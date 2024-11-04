@@ -1158,7 +1158,7 @@ SkytraqBase::skytraq_set_location()
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   uint8_t MSG_GET_LOCATION = 0x35;
 
-  dbg(3, "set_location='%s'\n", qPrintable(opt_set_location));
+  dbg(3, "set_location='%s'\n", gbLogCStr(opt_set_location));
 
   sscanf(opt_set_location.get().toUtf8(), "%lf:%lf", &lat, &lng);
   le_write_double(&MSG_SET_LOCATION[1], lat);
@@ -1185,10 +1185,10 @@ void
 SkytraqBase::skytraq_rd_init(const QString& fname)
 {
   if ((serial_handle = gbser_init(qPrintable(fname))) == nullptr) {
-    gbFatal("Can't open port '%s'\n", qPrintable(fname));
+    gbFatal("Can't open port '%s'\n", gbLogCStr(fname));
   }
   if ((skytraq_baud = skytraq_probe()) <= 0) {
-    gbFatal("Can't find skytraq device on '%s'\n", qPrintable(fname));
+    gbFatal("Can't find skytraq device on '%s'\n", gbLogCStr(fname));
   }
 }
 
@@ -1237,7 +1237,7 @@ SkytraqfileFormat::rd_init(const QString& fname)
 {
   dbg(1, "Opening file...\n");
   if ((file_handle = gbfopen(fname, "rb")) == nullptr) {
-    gbFatal("Can't open file '%s'\n", qPrintable(fname));
+    gbFatal("Can't open file '%s'\n", gbLogCStr(fname));
   }
 }
 
@@ -1395,7 +1395,7 @@ int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const QString& opt_poi)
      */
     int n = sscanf(opt_poi.toUtf8(), "%lf:%lf:%lf", &lat, &lng, &alt);
     if (n >= 2) {
-      dbg(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f\n", n, qPrintable(opt_poi), poinames[poinum], poinum, lat, lng, alt);
+      dbg(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f\n", n, gbLogCStr(opt_poi), poinames[poinum], poinum, lat, lng, alt);
       lla2ecef(lat, lng, alt, &ecef_x, &ecef_y, &ecef_z);
       dbg(1, "set POI[%s]='%f %f %f/%f %f %f'\n", poinames[poinum], lat, lng, alt, ecef_x, ecef_y, ecef_z);
       be_write16(MSG_SET_POI+1, poinum);

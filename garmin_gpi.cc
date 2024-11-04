@@ -149,7 +149,7 @@ GarminGPIFormat::gpi_read_string(const char* field)
 
   QString result = str_to_unicode(string).trimmed();
   if (GPI_DBG) {
-    db.gbLog("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : qPrintable(result));
+    db.gbLog("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : gbLogCStr(result));
   }
   return result;
 }
@@ -1213,7 +1213,7 @@ char GarminGPIFormat::parse_units(const QString& str)
   } else if (str.startsWith('s', Qt::CaseInsensitive)) {
     result = 's';
   } else {
-    gbFatal("Unknown units parameter (%s).\n", qPrintable(str));
+    gbFatal("Unknown units parameter (%s).\n", gbLogCStr(str));
   }
   return result;
 }
@@ -1283,7 +1283,7 @@ GarminGPIFormat::wr_init(const QString& fname)
   }
 
   if (! codepage) {
-    gbWarning("Unsupported character set (%s)!\n", qPrintable(opt_writecodec));
+    gbWarning("Unsupported character set (%s)!\n", gbLogCStr(opt_writecodec));
     gbFatal("Valid values are windows-1250 to windows-1257 and utf8.\n");
   }
 

@@ -980,7 +980,7 @@ NmeaFormat::read()
   if (optdate) {
     opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
     if (!opt_tm.isValid()) {
-      gbFatal("Invalid date \"%s\"!\n", qPrintable(optdate));
+      gbFatal("Invalid date \"%s\"!\n", gbLogCStr(optdate));
     }
   }
 
@@ -1036,14 +1036,14 @@ NmeaFormat::rd_position_init(const QString& fname)
     read_mode = rm_serial;
     gbser_set_speed(gbser_handle, 4800);
   } else {
-    gbFatal("Could not open '%s' for position tracking.\n", qPrintable(fname));
+    gbFatal("Could not open '%s' for position tracking.\n", gbLogCStr(fname));
   }
 
   gbser_flush(gbser_handle);
 
   if (opt_baud) {
     if (!gbser_set_speed(gbser_handle, opt_baud.get_result())) {
-      gbFatal("Unable to set baud rate %s\n", qPrintable(opt_baud));
+      gbFatal("Unable to set baud rate %s\n", gbLogCStr(opt_baud));
     }
   }
   posn_fname = fname;
@@ -1134,7 +1134,7 @@ NmeaFormat::rd_position(posn_status* /*unused*/)
           continue;
         }
       }
-      gbFatal("No data received on %s.\n", qPrintable(posn_fname));
+      gbFatal("No data received on %s.\n", gbLogCStr(posn_fname));
     }
     nmea_parse_one_line(ibuf);
     if (lt != last_read_time) {

@@ -126,7 +126,7 @@ GarminFitFormat::fit_parse_header()
       for (unsigned int i = 0; i < kReadHeaderCrcLen; ++i) {
         int data = gbfgetc(fin);
         if (data == EOF) {
-          gbFatal("File %s truncated\n", qPrintable(fin->name));
+          gbFatal("File %s truncated\n", gbLogCStr(fin->name));
         }
         crc = fit_crc16(data, crc);
       }
@@ -1093,7 +1093,7 @@ GarminFitFormat::fit_write_file_finish() const
   // Update data records size in file header
   gbsize_t file_size = gbftell(fout);
   if (file_size < kWriteHeaderCrcLen) {
-    gbFatal("File %s truncated\n", qPrintable(fout->name));
+    gbFatal("File %s truncated\n", gbLogCStr(fout->name));
   }
   gbfseek(fout, 0, SEEK_SET);
   fit_write_file_header(file_size - kWriteHeaderCrcLen, 0);
@@ -1104,7 +1104,7 @@ GarminFitFormat::fit_write_file_finish() const
   for (unsigned int i = 0; i < kWriteHeaderLen; ++i) {
     int data = gbfgetc(fout);
     if (data == EOF) {
-      gbFatal("File %s truncated\n", qPrintable(fout->name));
+      gbFatal("File %s truncated\n", gbLogCStr(fout->name));
     }
     crc = fit_crc16(data, crc);
   }

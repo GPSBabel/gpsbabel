@@ -646,10 +646,10 @@ Dg100Format::common_rd_init(const QString& fname)
     fin = gbfopen(fname, "rb");
   } else {
     if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
-      gbFatal("Can't open port '%s'\n", qPrintable(fname));
+      gbFatal("Can't open port '%s'\n", gbLogCStr(fname));
     }
     if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
-      gbFatal("Can't configure port '%s'\n", qPrintable(fname));
+      gbFatal("Can't configure port '%s'\n", gbLogCStr(fname));
     }
     // Toss anything that came in before our speed was set, particularly
     // for the bluetooth BT-335 product.

@@ -59,7 +59,7 @@ TpgFormat::tpg_common_init()
 {
   tpg_datum_idx = GPS_Lookup_Datum_Index(tpg_datum_opt);
   if (tpg_datum_idx < 0) {
-    gbFatal("Datum '%s' is not recognized.\n", qPrintable(tpg_datum_opt));
+    gbFatal("Datum '%s' is not recognized.\n", gbLogCStr(tpg_datum_opt));
   }
 }
 

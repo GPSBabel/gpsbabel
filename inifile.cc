@@ -124,8 +124,8 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile)
         section_name = buf.mid(1, buf.indexOf(']') - 1).trimmed();
       }
       if (section_name.isEmpty()) {
-        gbFatal("invalid section header '%s' in '%s'.\n", qPrintable(section_name),
-              qPrintable(inifile->source));
+        gbFatal("invalid section header '%s' in '%s'.\n", gbLogCStr(section_name),
+              gbLogCStr(inifile->source));
       }
 
       // form lowercase key to implement CaseInsensitive matching.
@@ -135,7 +135,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile)
     } else {
       if (section.name.isEmpty()) {
         gbFatal("missing section header in '%s'.\n",
-              qPrintable(inifile->source));
+              gbLogCStr(inifile->source));
       }
 
       // Store key in lower case to implement CaseInsensitive matching.

@@ -384,7 +384,7 @@ run(const char* prog_name)
       argument = FETCH_OPTARG;
       ivecs = Vecs::Instance().find_vec(argument);
       if (!ivecs) {
-        gbFatal("Input type '%s' not recognized\n", qPrintable(argument));
+        gbFatal("Input type '%s' not recognized\n", gbLogCStr(argument));
       }
       break;
     case 'o':
@@ -394,7 +394,7 @@ run(const char* prog_name)
       argument = FETCH_OPTARG;
       ovecs = Vecs::Instance().find_vec(argument);
       if (!ovecs) {
-        gbFatal("Output type '%s' not recognized\n", qPrintable(argument));
+        gbFatal("Output type '%s' not recognized\n", gbLogCStr(argument));
       }
       break;
     case 'f':
@@ -503,7 +503,7 @@ run(const char* prog_name)
                               .arg(filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
         }
       }  else {
-        gbFatal("Unknown filter '%s'\n",qPrintable(argument));
+        gbFatal("Unknown filter '%s'\n",gbLogCStr(argument));
       }
       break;
     case 'D':
@@ -526,17 +526,17 @@ run(const char* prog_name)
         if(sizeof(kVersionDate) > 1) {
           QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
           if (date.isValid()) {
-            gbInfo("Date: %s\n", qPrintable(date.toUTC().toString(Qt::ISODate)));
+            gbInfo("Date: %s\n", gbLogCStr(date.toUTC().toString(Qt::ISODate)));
           }
         }
         gbInfo("Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
-                qPrintable(QSysInfo::buildAbi()));
+                gbLogCStr(QSysInfo::buildAbi()));
         gbInfo("Running with Qt %s on %s, %s\n", qVersion(),
-                qPrintable(QSysInfo::prettyProductName()),
-                qPrintable(QSysInfo::currentCpuArchitecture()));
-        gbInfo("QLocale::system() is %s\n", qPrintable(QLocale::system().name()));
-        gbInfo("QLocale() is %s\n", qPrintable(QLocale().name()));
+                gbLogCStr(QSysInfo::prettyProductName()),
+                gbLogCStr(QSysInfo::currentCpuArchitecture()));
+        gbInfo("QLocale::system() is %s\n", gbLogCStr(QLocale::system().name()));
+        gbInfo("QLocale() is %s\n", gbLogCStr(QLocale().name()));
         QTextCodec* defaultcodec = QTextCodec::codecForLocale();
         gbInfo("QTextCodec::codecForLocale() is %s, mib %d\n",
                 defaultcodec->name().constData(),defaultcodec->mibEnum());
@@ -603,7 +603,7 @@ run(const char* prog_name)
       break;
 
     default:
-      gbFatal("Unknown option '%s'.\n", qPrintable(qargs.at(argn)));
+      gbFatal("Unknown option '%s'.\n", gbLogCStr(qargs.at(argn)));
       break;
     }
 

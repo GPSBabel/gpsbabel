@@ -137,7 +137,7 @@ xfopen(const QString& fname, const char* type)
     // to get a better error message.
     QFileInfo info(fname);
     gbFatal("cannot open '%s' for %s.  Error was '%s'.\n",
-          qPrintable(info.absoluteFilePath()),
+          gbLogCStr(info.absoluteFilePath()),
           am_writing ? "write" : "read",
           strerror(errno));
   }

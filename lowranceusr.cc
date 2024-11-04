@@ -141,7 +141,7 @@ LowranceusrFormat::register_waypt(const Waypoint* wpt)
 
   if (global_opts.debug_level >= 2) {
     db.gbLog("adding waypt %s (%s) to table at index %s\n",
-           qPrintable(wpt->shortname), qPrintable(wpt->description), QByteArray::number(waypt_table->size()).constData());
+           gbLogCStr(wpt->shortname), gbLogCStr(wpt->description), QByteArray::number(waypt_table->size()).constData());
   }
 
   waypt_table->append(wpt);
@@ -346,7 +346,7 @@ LowranceusrFormat::wr_init(const QString& fname)
   waypt_out_count = 0;
   writing_version = opt_wversion.get_result();
   if ((writing_version < 2) || (writing_version > 4)) {
-    gbFatal("wversion value %s is not supported !!\n", qPrintable(opt_wversion));
+    gbFatal("wversion value %s is not supported !!\n", gbLogCStr(opt_wversion));
   }
   utf16le_codec = QTextCodec::codecForName("UTF-16LE");
   waypt_table = new QList<const Waypoint*>;
@@ -434,9 +434,9 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   if (global_opts.debug_level > 1) {
     if (global_opts.debug_level == 99) {
       if (wpt_tmp->shortname.length() > 16) {
-        db.gbLog(" %.13s...", qPrintable(wpt_tmp->shortname));
+        db.gbLog(" %.13s...", gbLogCStr(wpt_tmp->shortname));
       } else {
-        db.gbLog(" %16.16s", qPrintable(wpt_tmp->shortname));
+        db.gbLog(" %16.16s", gbLogCStr(wpt_tmp->shortname));
       }
       db.gbLog(" %+15.10f %+15.10f", wpt_tmp->latitude, wpt_tmp->longitude);
       if (wpt_tmp->altitude == unknown_alt) {
@@ -446,7 +446,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
       }
     } else {
       db.gbLog("parse_waypt: Waypt name = '%s' Lat = %+f Lon = %+f alt = ",
-             qPrintable(wpt_tmp->shortname), wpt_tmp->latitude, wpt_tmp->longitude);
+             gbLogCStr(wpt_tmp->shortname), wpt_tmp->latitude, wpt_tmp->longitude);
       if (wpt_tmp->altitude == unknown_alt) {
         db.gbLog("UNKNOWN ALT\n");
       } else {
@@ -470,10 +470,10 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
 
   if (global_opts.debug_level > 2) {
     if (global_opts.debug_level == 99) {
-      db.gbLog(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
+      db.gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
     } else {
       db.gbLog("parse_waypt: creation time '%s', waypt_time %" PRId64 "\n",
-             qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")), waypt_time);
+             gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")), waypt_time);
     }
   }
 
@@ -613,28 +613,28 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
              fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
              waypoint_version, QByteArray::number(name.length()).constData());
       if (name.length() > 16) {
-        db.gbLog(" %13.13s...", qPrintable(name));
+        db.gbLog(" %13.13s...", gbLogCStr(name));
       } else {
-        db.gbLog(" %16.16s", qPrintable(name));
+        db.gbLog(" %16.16s", gbLogCStr(name));
       }
       if (reading_version > 4) {
         db.gbLog("  %10u ", fsdata->uid_unit2);
       }
       db.gbLog(" %+15.10f %+15.10f", wpt_tmp->longitude, wpt_tmp->latitude);
       db.gbLog(" %08x %4d %4d %7s", fsdata->flags, fsdata->icon_num, fsdata->color,
-             (fsdata->color_desc == nullptr ? "unk" : qPrintable(fsdata->color_desc)));
+             (fsdata->color_desc == nullptr ? "unk" : gbLogCStr(fsdata->color_desc)));
       if (desc.length() > 16) {
-        db.gbLog(" %6s %.13s...", QByteArray::number(desc.length()).constData(), qPrintable(desc));
+        db.gbLog(" %6s %.13s...", QByteArray::number(desc.length()).constData(), gbLogCStr(desc));
       } else {
-        db.gbLog(" %6s %16s", QByteArray::number(desc.length()).constData(), qPrintable(desc));
+        db.gbLog(" %6s %16s", QByteArray::number(desc.length()).constData(), gbLogCStr(desc));
       }
-      db.gbLog(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
+      db.gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
       db.gbLog(" %08x %8.3f %08x %08x %08x\n",
              unused_byte, fsdata->depth, loran_GRI, loran_Tda, loran_Tdb);
     } else {
       db.gbLog("parse_waypoints: version = %d, name = %s, uid_unit = %u, "
              "uid_seq_low = %d, uid_seq_high = %d, lat = %+.10f, lon = %+.10f, depth = %f\n",
-             waypoint_version, qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
+             waypoint_version, gbLogCStr(wpt_tmp->shortname), fsdata->uid_unit,
              fsdata->uid_seq_low, fsdata->uid_seq_high,
              wpt_tmp->longitude, wpt_tmp->latitude, fsdata->depth);
     }
@@ -736,7 +736,7 @@ LowranceusrFormat::lowranceusr_parse_route()
   short num_legs = gbfgetint16(file_in);
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_route: Route '%s', Num Legs = %d", qPrintable(name), num_legs);
+    db.gbLog("parse_route: Route '%s', Num Legs = %d", gbLogCStr(name), num_legs);
   }
 
   /* route reversed */
@@ -812,10 +812,10 @@ LowranceusrFormat::lowranceusr4_parse_route()
   if (global_opts.debug_level > 1) {
     if (reading_version >= 5) {
       db.gbLog("parse_route: route '%s' (UUID %08x %08x %8x %08x) has %d legs\n",
-             qPrintable(rte_head->rte_name), UUID1, UUID2, UUID3, UUID4, num_legs);
+             gbLogCStr(rte_head->rte_name), UUID1, UUID2, UUID3, UUID4, num_legs);
     } else {
       db.gbLog("parse_route: route '%s' has %d legs\n",
-             qPrintable(rte_head->rte_name), num_legs);
+             gbLogCStr(rte_head->rte_name), num_legs);
     }
   }
 
@@ -829,7 +829,7 @@ LowranceusrFormat::lowranceusr4_parse_route()
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
           db.gbLog("parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
-                 j, qPrintable(wpt_tmp->shortname), wpt_tmp->longitude, wpt_tmp->latitude);
+                 j, gbLogCStr(wpt_tmp->shortname), wpt_tmp->longitude, wpt_tmp->latitude);
         }
         route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
       }
@@ -845,7 +845,7 @@ LowranceusrFormat::lowranceusr4_parse_route()
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
           db.gbLog("parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
-                 j, qPrintable(wpt_tmp->shortname), wpt_tmp->longitude, wpt_tmp->latitude);
+                 j, gbLogCStr(wpt_tmp->shortname), wpt_tmp->longitude, wpt_tmp->latitude);
         }
         route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
       }
@@ -932,7 +932,7 @@ LowranceusrFormat::lowranceusr_parse_icons()
 
       if (global_opts.debug_level > 1) {
         db.gbLog("parse_icons: '%s' %d %16.16s %+15.10f %+15.10f\n",
-               qPrintable(wpt_tmp->shortname), icon_number, qPrintable(wpt_tmp->icon_descr), wpt_tmp->latitude, wpt_tmp->longitude);
+               gbLogCStr(wpt_tmp->shortname), icon_number, gbLogCStr(wpt_tmp->icon_descr), wpt_tmp->latitude, wpt_tmp->longitude);
       }
       waypt_add(wpt_tmp);
     }
@@ -949,7 +949,7 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
   }
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_trails: Trail '%s'\n", qPrintable(trk_head->rte_name));
+    db.gbLog("parse_trails: Trail '%s'\n", gbLogCStr(trk_head->rte_name));
   }
 
   /* visible */
@@ -1046,7 +1046,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
     trk_head->rte_name = name;
   }
   if (global_opts.debug_level >= 2) {
-    db.gbLog("parse_trails: Trail '%s'\n", qPrintable(trk_head->rte_name));
+    db.gbLog("parse_trails: Trail '%s'\n", gbLogCStr(trk_head->rte_name));
   }
 
   /* Flags, discard for now */
@@ -1061,7 +1061,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
     trk_head->rte_desc = desc;
   }
   if (global_opts.debug_level == 99) {
-    db.gbLog("parse_trails: Comment '%s'\n", qPrintable(desc));
+    db.gbLog("parse_trails: Comment '%s'\n", gbLogCStr(desc));
   }
 
   /* Creation date/time, discard for now */
@@ -1070,7 +1070,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
   int create_time = gbfgetint32(file_in);
   if (global_opts.debug_level == 99) {
     QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
-    db.gbLog("parse_trails: creation date/time = %s\n", qPrintable(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
+    db.gbLog("parse_trails: creation date/time = %s\n", gbLogCStr(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
   }
 
   /* Some flag bytes */
@@ -1111,7 +1111,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
 
   if (global_opts.debug_level >= 2) {
     db.gbLog("parse_trails: trail %d name='%s' color=%d flags=%d has %d (%x) trailpoints\n",
-           *trail_num, qPrintable(trk_head->rte_name), trail_color, trail_flags, num_trail_pts, num_trail_pts);
+           *trail_num, gbLogCStr(trk_head->rte_name), trail_color, trail_flags, num_trail_pts, num_trail_pts);
 
     if (global_opts.debug_level == 99) {
       db.gbLog("parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
@@ -1135,10 +1135,10 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
     if (global_opts.debug_level >= 2) {
       if (global_opts.debug_level == 99) {
         db.gbLog("parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
-        db.gbLog(" '%s'", qPrintable(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
+        db.gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
       } else {
         db.gbLog("parse_trails: added trailpoint %+.9f,%+.9f to trail %s\n",
-               wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(trk_head->rte_name));
+               wpt_tmp->longitude, wpt_tmp->latitude, gbLogCStr(trk_head->rte_name));
       }
     }
 
@@ -1215,13 +1215,13 @@ LowranceusrFormat::read()
     /* USR files also now contain a file title */
     QString title = lowranceusr4_readstr(file_in, 1);
     if (!title.isEmpty() && global_opts.debug_level >= 1) {
-      db.gbLog("file title: '%s'\n", qPrintable(title));
+      db.gbLog("file title: '%s'\n", gbLogCStr(title));
     }
 
     /* AND a date created string */
     QString creation_date = lowranceusr4_readstr(file_in, 1);
     if (!creation_date.isEmpty()  && global_opts.debug_level >= 1) {
-      db.gbLog("date string: '%s'\n", qPrintable(creation_date));
+      db.gbLog("date string: '%s'\n", gbLogCStr(creation_date));
     }
 
     /* Creation date/time, discard for now */
@@ -1230,7 +1230,7 @@ LowranceusrFormat::read()
     int create_time = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
       QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
-      db.gbLog("creation date/time : '%s'\n", qPrintable(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
+      db.gbLog("creation date/time : '%s'\n", gbLogCStr(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
     }
 
     unsigned char byte = gbfgetc(file_in); /* unused, apparently */
@@ -1245,7 +1245,7 @@ LowranceusrFormat::read()
     /* AND a comment on the file contents */
     QString comment = lowranceusr4_readstr(file_in, 1);
     if (!comment.isEmpty() && global_opts.debug_level >= 1) {
-      db.gbLog("content description: '%s'\n", qPrintable(comment));
+      db.gbLog("content description: '%s'\n", gbLogCStr(comment));
     }
   }
 
@@ -1303,7 +1303,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt)
   if (global_opts.debug_level > 2) {
     /* print lat/lon/alt on one easily greppable line */
     db.gbLog("waypt_disp: Waypt name = '%s' Lat = %+16.10f  Lon = %+16.10f  Alt = %f\n",
-           qPrintable(wpt->shortname), wpt->latitude, wpt->longitude, wpt->altitude);
+           gbLogCStr(wpt->shortname), wpt->latitude, wpt->longitude, wpt->altitude);
   }
 
   QByteArray name_qba = name.toLatin1();
@@ -1315,7 +1315,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt)
   gbfwrite(name_qba.constData(), 1, text_len, file_out);
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("waypt_disp: Waypt name = '%s' ", qPrintable(name));
+    db.gbLog("waypt_disp: Waypt name = '%s' ", gbLogCStr(name));
   }
 
   /**
@@ -1341,7 +1341,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt)
     /* Lowrance needs it as seconds since Jan 1, 2000 */
     waypt_time -= base_time_secs;
     if (global_opts.debug_level >= 2) {
-      db.gbLog("creation_time %" PRId64 ", '%s'", waypt_time, qPrintable(wpt->GetCreationTime().toString(u"yyyy-MM-dd hh:mm:ss")));
+      db.gbLog("creation_time %" PRId64 ", '%s'", waypt_time, gbLogCStr(wpt->GetCreationTime().toString(u"yyyy-MM-dd hh:mm:ss")));
     }
   } else {
     /* If false, make sure it is an unknown time value */
@@ -1503,7 +1503,7 @@ LowranceusrFormat::lowranceusr4_write_waypoints()
   for (int i = 0; i < waypt_table->size(); ++i) {
     if (global_opts.debug_level >= 2) {
       db.gbLog("writing out waypt %d (%s - %s)\n",
-             i, qPrintable(waypt_table->at(i)->shortname), qPrintable(waypt_table->at(i)->description));
+             i, gbLogCStr(waypt_table->at(i)->shortname), gbLogCStr(waypt_table->at(i)->description));
     }
     lowranceusr4_waypt_disp((waypt_table->at(i)));
   }
@@ -1567,7 +1567,7 @@ LowranceusrFormat::lowranceusr_trail_hdr(const route_head* trk)
     text_len = MAXUSRSTRINGSIZE;
   }
   if (global_opts.debug_level >= 1) {
-    db.gbLog("trail_hdr: trail name '%s' ", qPrintable(trk->rte_name));
+    db.gbLog("trail_hdr: trail name '%s' ", gbLogCStr(trk->rte_name));
   }
   gbfputint32(text_len, file_out);
   gbfwrite(CSTR(name), 1, text_len, file_out);
@@ -1621,7 +1621,7 @@ LowranceusrFormat::lowranceusr_route_hdr(const route_head* rte)
 
   if (global_opts.debug_level >= 1)
     db.gbLog("route_hdr: route name \"%s\" num_legs = %d\n",
-           qPrintable(rte->rte_name), num_legs);
+           gbLogCStr(rte->rte_name), num_legs);
 }
 
 void
@@ -1629,7 +1629,7 @@ LowranceusrFormat::lowranceusr4_route_hdr(const route_head* rte)
 {
   if (global_opts.debug_level >= 1) {
     db.gbLog("writing route #%d (%s) with %d waypts\n",
-           route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct());
+           route_uid, gbLogCStr(rte->rte_name), rte->rte_waypt_ct());
   }
 
   const auto* fs = reinterpret_cast<lowranceusr4_fsdata*>(rte->fs.FsChainFind(kFsLowranceusr4));
@@ -1675,7 +1675,7 @@ LowranceusrFormat::lowranceusr4_route_leg_disp(const Waypoint* wpt)
       gbfputint32(i, file_out); // Sequence Low
       gbfputint32(0, file_out); // Sequence High
       if (global_opts.debug_level > 1) {
-        db.gbLog("wrote route leg with waypt '%s'\n", qPrintable(wpt->shortname));
+        db.gbLog("wrote route leg with waypt '%s'\n", gbLogCStr(wpt->shortname));
       }
       break;
     }
@@ -1773,7 +1773,7 @@ LowranceusrFormat::lowranceusr4_trail_hdr(const route_head* trail)
 {
   if (global_opts.debug_level >= 1) {
     db.gbLog("writing trail %d (%s) with %d trailpoints\n",
-           trail_uid, qPrintable(trail->rte_name), trail->rte_waypt_ct());
+           trail_uid, gbLogCStr(trail->rte_name), trail->rte_waypt_ct());
   }
 
   /* UID unit number */
@@ -1883,7 +1883,7 @@ LowranceusrFormat::write()
     buf = opt_title.isEmpty()?
           QStringLiteral("GPSBabel generated USR data file") : opt_title;
     if (global_opts.debug_level >= 1) {
-      db.gbLog("data_write: Title = '%s'\n", qPrintable(buf));
+      db.gbLog("data_write: Title = '%s'\n", gbLogCStr(buf));
     }
     lowranceusr4_writestr(buf, file_out, 1);
 
@@ -1907,7 +1907,7 @@ LowranceusrFormat::write()
     buf = opt_content_descr.isEmpty()?
           QStringLiteral("Waypoints, routes, and trails") : opt_content_descr;
     if (global_opts.debug_level >= 1) {
-      db.gbLog("data_write: Description = '%s'\n", qPrintable(buf));
+      db.gbLog("data_write: Description = '%s'\n", gbLogCStr(buf));
     }
     lowranceusr4_writestr(buf, file_out, 1);
 

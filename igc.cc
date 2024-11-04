@@ -111,7 +111,7 @@ void IgcFormat::rd_init(const QString& fname)
   file_in = gbfopen(fname, "r");
   // File must begin with a manufacturer/ID record
   if (get_record(&ibuf) != rec_manuf_id || sscanf(ibuf, "A%3[A-Z]", manufacturer) != 1) {
-    gbFatal("%s is not an IGC file\n", qPrintable(fname));
+    gbFatal("%s is not an IGC file\n", gbLogCStr(fname));
   }
 }
 
@@ -378,7 +378,7 @@ void IgcFormat::read()
       if (!ext_types_list.isEmpty()) {
         auto* fsdata = new igc_fsdata;
         if (global_opts.debug_level >= 7) {
-          db.gbLog("Record: %s\n",qPrintable(ibuf_q));
+          db.gbLog("Record: %s\n",gbLogCStr(ibuf_q));
         }
         if (global_opts.debug_level >= 6) {
           db.gbLog("Adding extension data:");
@@ -388,7 +388,7 @@ void IgcFormat::read()
 
           fsdata->set_value(ext, ext_data, pres_wpt);
           if (global_opts.debug_level >= 6) {
-            db.gbLog(" %s:%f", qPrintable(name), ext_data);
+            db.gbLog(" %s:%f", gbLogCStr(name), ext_data);
           }
         }
         if (global_opts.debug_level >= 6) {
@@ -487,20 +487,20 @@ void IgcFormat::read()
         }
       }
       if (global_opts.debug_level >= 1) {
-        db.gbLog("I record: %s\n", qPrintable(ibuf_q));
-        db.gbLog("Extensions present: %s\n", qPrintable(present_extensions.join(' ')));
+        db.gbLog("I record: %s\n", gbLogCStr(ibuf_q));
+        db.gbLog("Extensions present: %s\n", gbLogCStr(present_extensions.join(' ')));
       }
       if (global_opts.debug_level >= 2) {
         db.gbLog("Non-excluded extensions defined in I record:\n");
         db.gbLog("(Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
         for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
-          db.gbLog("   Extension %s (%i): Begin: %i; Length: %i\n", qPrintable(name), int(ext), begin, len);
+          db.gbLog("   Extension %s (%i): Begin: %i; Length: %i\n", gbLogCStr(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {
           db.gbLog("Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
-                 qPrintable(unsupported_extensions.join(' ')));
+                 gbLogCStr(unsupported_extensions.join(' ')));
           db.gbLog("Supported extensions (These are present in the I record and supported):\t%s\n",
-                 qPrintable(supported_extensions.join(' ')));
+                 gbLogCStr(supported_extensions.join(' ')));
         }
       }
     }

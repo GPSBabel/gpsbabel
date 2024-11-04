@@ -328,7 +328,7 @@ OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
     altunit = 'f';
     alt_scale = FEET_TO_METERS(1.0); /* feet */
   } else {
-    gbFatal("Unknown value (%s) for option 'altunit'!\n", qPrintable(altunit_opt));
+    gbFatal("Unknown value (%s) for option 'altunit'!\n", gbLogCStr(altunit_opt));
   }
   if (direction != 0) {
     alt_scale = 1.0 / alt_scale;
@@ -344,7 +344,7 @@ OziFormat::ozi_init_units(const int direction)	/* 0 = in; 1 = out */
     proxunit = 'k';
     prox_scale = 1000.0; /* kilometers */
   } else {
-    gbFatal("Unknown value (%s) for option 'proxunit'!\n", qPrintable(proxunit_opt));
+    gbFatal("Unknown value (%s) for option 'proxunit'!\n", gbLogCStr(proxunit_opt));
   }
   if (direction != 0) {
     prox_scale = 1.0 / prox_scale;
@@ -670,7 +670,7 @@ OziFormat::read()
       datum = GPS_Lookup_Datum_Index(buff);
 
       if (datum < 0) {
-        gbFatal("Unsupported datum '%s'.\n", qPrintable(buff));
+        gbFatal("Unsupported datum '%s'.\n", gbLogCStr(buff));
       }
     } else if (linecount == 3) {
       if (buff.startsWith( "Altitude is in ", Qt::CaseInsensitive)) {
@@ -682,7 +682,7 @@ OziFormat::read()
           altunit = 'm';
           alt_scale = 1.0;
         } else {
-          gbFatal("Unknown unit (%s) used by altitude values!\n", qPrintable(unit));
+          gbFatal("Unknown unit (%s) used by altitude values!\n", gbLogCStr(unit));
         }
       }
     } else if ((linecount == 5) && (ozi_objective == trkdata)) {

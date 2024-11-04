@@ -102,14 +102,14 @@ V900Format::v900_log(const char* fmt, ...)
 void
 V900Format::rd_init(const QString& fname)
 {
-  v900_log("%s(%s)\n",__func__,qPrintable(fname));
+  v900_log("%s(%s)\n",__func__,gbLogCStr(fname));
   /* note: file is opened in binary mode, since lines end with \r\n, and in windows text mode
      that will be translated to a single \n, making the line len one character shorter than
      on linux machines.
    */
   fin = ufopen(fname, "rb");
   if (!fin) {
-    gbFatal("v900: could not open '%s'.\n", qPrintable(fname));
+    gbFatal("v900: could not open '%s'.\n", gbLogCStr(fname));
   }
 }
 

@@ -190,7 +190,7 @@ void ArcDistanceFilter::process()
         }
         if (global_opts.debug_level >= 1) {
           gbWarning("Including waypoint %s at dist:%f lat:%f lon:%f\n",
-                  qPrintable(wp->shortname), ed->distance, wp->latitude, wp->longitude);
+                  gbLogCStr(wp->shortname), ed->distance, wp->latitude, wp->longitude);
         }
       }
       delete ed;

@@ -415,14 +415,14 @@ UnicsvFormat::unicsv_fondle_header(QString header)
 
     if (it == fields_def.cend()) { // not found
       if (global_opts.debug_level) {
-        gbWarning("Unhandled column \"%s\".\n", qPrintable(value));
+        gbWarning("Unhandled column \"%s\".\n", gbLogCStr(value));
       }
     } else { // found
       const field_t f = *it;
       unicsv_fields_tab.last() = f.type;
 
       if (global_opts.debug_level) {
-        gbWarning("Interpreting column \"%s\" as %s(%d).\n", qPrintable(value), qPrintable(f.name), f.type);
+        gbWarning("Interpreting column \"%s\" as %s(%d).\n", gbLogCStr(value), gbLogCStr(f.name), f.type);
       }
 
       /* handle some special items */
@@ -1088,9 +1088,9 @@ UnicsvFormat::read()
 {
   *fout << "#####\n";
   gbFatal("%s (%s) is outside of convertible area of grid \"%s\"!\n",
-        wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-        qPrintable(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
-        qPrintable(gt_get_mps_grid_longname(unicsv_grid_idx)));
+        wpt->shortname.isEmpty() ? "Waypoint" : gbLogCStr(wpt->shortname),
+        gbLogCStr(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
+        gbLogCStr(gt_get_mps_grid_longname(unicsv_grid_idx)));
 }
 
 void

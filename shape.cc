@@ -158,7 +158,7 @@ void ShapeFormat::check_field_index(const int fieldIdx) const
 {
   const int maxFields = DBFGetFieldCount(ihandledb);
   if (fieldIdx < 0 || fieldIdx >= maxFields) {
-    gbWarning("dbf file for %s doesn't have a field index number %d.\n", qPrintable(ifname), fieldIdx);
+    gbWarning("dbf file for %s doesn't have a field index number %d.\n", gbLogCStr(ifname), fieldIdx);
     gbWarning("the minimum field number is 0 and the maximum field number is %d.\n",maxFields-1);
     dump_fields();
   }
@@ -168,7 +168,7 @@ int ShapeFormat::get_field_index(const QString& fieldName) const
 {
   const int fieldIdx = DBFGetFieldIndex(ihandledb, CSTR(fieldName));
   if (fieldIdx < 0) {
-    gbWarning("dbf file for %s doesn't have a field named '%s'.\n", qPrintable(ifname), qPrintable(fieldName));
+    gbWarning("dbf file for %s doesn't have a field named '%s'.\n", gbLogCStr(ifname), gbLogCStr(fieldName));
     dump_fields();
   }
   return fieldIdx;
@@ -181,21 +181,21 @@ ShapeFormat::rd_init(const QString& fname)
   // TODO: The .prj file can define the the coordinate system and projection information.
   ihandle = SHPOpenGpsbabel(fname, "rb");
   if (ihandle == nullptr) {
-    gbFatal("Cannot open shp file %s for reading\n", qPrintable(ifname));
+    gbFatal("Cannot open shp file %s for reading\n", gbLogCStr(ifname));
   }
 
   ihandledb = DBFOpenGpsbabel(fname, "rb");
   if (ihandledb == nullptr) {
-    gbFatal("Cannot open dbf file %s for reading\n", qPrintable(ifname));
+    gbFatal("Cannot open dbf file %s for reading\n", gbLogCStr(ifname));
   }
   const char* codepage = DBFGetCodePage(ihandledb);
   if (codepage) {
     QString qcodepage(codepage);
     if (qcodepage.compare(u"UTF-8", Qt::CaseInsensitive)) {
-      gbWarning("dbf file %s is in code page %s, but we always process dbf files as UTF-8.\n",qPrintable(ifname),codepage);
+      gbWarning("dbf file %s is in code page %s, but we always process dbf files as UTF-8.\n",gbLogCStr(ifname),codepage);
     }
   } else {
-    gbWarning("dbf file %s uses unknown code page, assuming UTF-8.\n", qPrintable(ifname));
+    gbWarning("dbf file %s uses unknown code page, assuming UTF-8.\n", gbLogCStr(ifname));
   }
 }
 
@@ -468,12 +468,12 @@ ShapeFormat::write()
 
     if (ohandle == nullptr) {
       gbFatal("Cannot open shp file %s for writing\n",
-            qPrintable(ofname));
+            gbLogCStr(ofname));
     }
     ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
     if (ohandledb == nullptr) {
       gbFatal("Cannot open dbf file %s for writing\n",
-            qPrintable(ofname));
+            gbLogCStr(ofname));
     }
     nameFieldIdx=DBFAddField(ohandledb,"name",FTString,100,0);
     auto write_wpt_lambda = [this](const Waypoint* wpt)->void {
@@ -488,12 +488,12 @@ ShapeFormat::write()
 
     if (ohandle == nullptr) {
       gbFatal("Cannot open shp file %s for writing\n",
-            qPrintable(ofname));
+            gbLogCStr(ofname));
     }
     ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
     if (ohandledb == nullptr) {
       gbFatal("Cannot open dbf file %s for writing\n",
-            qPrintable(ofname));
+            gbLogCStr(ofname));
     }
     nameFieldIdx=DBFAddField(ohandledb,"name",FTString,100,0);
     auto poly_init_lambda = [this](const route_head* rte)->void {

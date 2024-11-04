@@ -104,7 +104,7 @@ gzapi_open(gbfile* self, const char* mode)
   if (self->handle.gz == nullptr) {
     gbFatal("Cannot %s file '%s'!\n",
           (self->mode == 'r') ? "open" : "create",
-          qPrintable(self->name));
+          gbLogCStr(self->name));
   }
 
   return self;
@@ -294,10 +294,10 @@ stdapi_seek(gbfile* self, int32_t offset, int whence)
       break;
     default:
       gbFatal("Unknown seek operation (%d) for file %s!\n",
-            whence, qPrintable(self->name));
+            whence, gbLogCStr(self->name));
     }
     gbFatal("Unable to set file (%s) to position (%llu)!\n",
-          qPrintable(self->name), (long long unsigned) pos);
+          gbLogCStr(self->name), (long long unsigned) pos);
   }
   return 0;
 }
@@ -310,7 +310,7 @@ stdapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self
 
   if ((result < members) && (error_number = ferror(self->handle.std))) {
     gbFatal("Error %d occurred during read of file '%s'!\n",
-          error_number, qPrintable(self->name));
+          error_number, gbLogCStr(self->name));
   }
   return result;
 }
@@ -810,7 +810,7 @@ gbfwrite(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* f
   if (result != members) {
     gbFatal("Could not write %lld bytes to %s (result %d)!\n",
           (long long int)(members - result) * size,
-          qPrintable(file->name),
+          gbLogCStr(file->name),
           result);
   }
 
@@ -878,7 +878,7 @@ gbftell(gbfile* file)
   gbsize_t result = file->filetell(file);
   if ((signed) result == -1)
     gbFatal("Could not determine position of file '%s'!\n",
-          qPrintable(file->name));
+          gbLogCStr(file->name));
   return result;
 }
 
@@ -914,7 +914,7 @@ gbfgetint32(gbfile* file)
   char buf[4];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    gbFatal("Unexpected end of file (%s)!\n", qPrintable(file->name));
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   if (file->big_endian) {
@@ -934,7 +934,7 @@ gbfgetint16(gbfile* file)
   char buf[2];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    gbFatal("Unexpected end of file (%s)!\n", qPrintable(file->name));
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   if (file->big_endian) {
@@ -954,7 +954,7 @@ gbfgetdbl(gbfile* file)
   char buf[8];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    gbFatal("Unexpected end of file (%s)!\n", qPrintable(file->name));
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   return endian_read_double(buf, ! file->big_endian);
@@ -970,7 +970,7 @@ gbfgetflt(gbfile* file)
   char buf[4];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    gbFatal("Unexpected end of file (%s)!\n", qPrintable(file->name));
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   return endian_read_float(buf, ! file->big_endian);
@@ -995,7 +995,7 @@ gbfgetcstr_old(gbfile* file)
     }
 
     if (c == EOF) {
-      gbFatal("Unexpected end of file (%s)!\n", qPrintable(file->name));
+      gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
     }
 
     if (len == file->buffsz) {
@@ -1042,12 +1042,12 @@ gbfgetpstr(gbfile* file)
 {
   int len = gbfgetc(file);
   if (len == EOF) {
-    gbFatal("Unexpected end of file (%s)!\n", qPrintable(file->name));
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
   QByteArray ba;
   ba.resize(len);
   if (gbfread(ba.data(), 1, len, file) != (gbsize_t) len) {
-    gbFatal("Unexpected end of file (%s)!\n", qPrintable(file->name));
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   return QString(ba);

@@ -116,7 +116,7 @@ GarminFormat::rw_init(const QString& fname)
   }
 
   if (GPS_Init(qPrintable(fname)) < 0) {
-    gbFatal("Can't init %s\n", qPrintable(fname));
+    gbFatal("Can't init %s\n", gbLogCStr(fname));
   }
 
   /*
