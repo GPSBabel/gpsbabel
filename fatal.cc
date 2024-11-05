@@ -23,8 +23,8 @@
 #include <cstdio>              // for vsnprintf
 #include <cstdlib>             // for exit
 
-#include <QByteArray>          // for QByteArray
 #include <QDebug>              // for QDebug
+#include <QString>             // for QString
 #include <QtGlobal>            // for qCritical, qDebug, qInfo, qWarning
 
 #include "defs.h"              // for DebugLog, gbFatal, gbDebug, gbInfo, gbWarning
@@ -59,6 +59,7 @@ gbFatal(const char* fmt, ...)
   va_list args;
   va_start(args, fmt);
   gbVLog(QtCriticalMsg, fmt, args);
+  gbFlush(QtCriticalMsg);
   va_end(args);
   exit(1);
 }
@@ -97,24 +98,23 @@ static QString gbCriticalLogString_;
 
 static QString& getLogString(QtMsgType type)
 {
-  QString& logString = gbDebugLogString_;
   switch (type)
   {
   case QtDebugMsg:
-    logString = gbDebugLogString_;
+    return gbDebugLogString_;
     break;
   case QtInfoMsg:
-    logString = gbInfoLogString_;
+    return gbInfoLogString_;
     break;
   case QtWarningMsg:
-    logString = gbWarningLogString_;
+    return gbWarningLogString_;
     break;
   case QtCriticalMsg:
   case QtFatalMsg:
-    logString = gbCriticalLogString_;
+  default:
+    return gbCriticalLogString_;
     break;
   }
-  return logString;
 }
 
 static void sendLogMsg(QtMsgType type, const QString& msg)
@@ -132,6 +132,7 @@ static void sendLogMsg(QtMsgType type, const QString& msg)
     break;
   case QtCriticalMsg:
   case QtFatalMsg:
+  default:
     qCritical().noquote() << msg;
     break;
   }
