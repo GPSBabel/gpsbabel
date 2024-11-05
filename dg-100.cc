@@ -174,7 +174,7 @@ Dg100Format::process_gpsfile(uint8_t data[], route_head** track)
    * determines the format of all subsequent records in the file */
   int style = be_read32(data + 28);
   if (style > 2) {
-    gbWarning("unknown GPS record style %d", style);
+    gbWarning("unknown GPS record style %d\n", style);
     return;
   }
   int recsize = recordsizes[style];
@@ -496,7 +496,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 
   /* check whether the received frame matches the expected answer type */
   if (cmdinfo->id != expected_id) {
-    gbWarning("ERROR: answer type %02x, expecting %02x", cmdinfo->id, expected_id);
+    gbWarning("ERROR: answer type %02x, expecting %02x\n", cmdinfo->id, expected_id);
     return -1;
   }
 
@@ -505,7 +505,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 
   /* check for buffer overflow */
   if (len < copysize) {
-    gbWarning("ERROR: buffer too small, size=%u, need=%u", len, copysize);
+    gbWarning("ERROR: buffer too small, size=%u, need=%u\n", len, copysize);
     return -1;
   }
 

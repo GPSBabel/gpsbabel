@@ -844,7 +844,7 @@ HumminbirdFormat::humminbird_write_rtept(const Waypoint* wpt) const
 
   if (!wpt_id_to_wpt_num_hash.contains(id)) {
     // This should not occur, we just scanned all waypoints and routes.
-    gbWarning("Missing waypoint reference in route, point dropped from route.");
+    gbWarning("Missing waypoint reference in route, point dropped from route.\n");
     return;
   }
 

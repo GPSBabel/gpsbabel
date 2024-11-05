@@ -47,6 +47,10 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
 
 [[noreturn]] void gbFatal(QDebug& msginstance)
 {
+  gbFlush(QtDebugMsg);
+  gbFlush(QtInfoMsg);
+  gbFlush(QtWarningMsg);
+
   auto* myinstance = new FatalMsg;
   myinstance->swap(msginstance);
   delete myinstance;
@@ -56,6 +60,10 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
 [[noreturn]] void
 gbFatal(const char* fmt, ...)
 {
+  gbFlush(QtDebugMsg);
+  gbFlush(QtInfoMsg);
+  gbFlush(QtWarningMsg);
+
   va_list args;
   va_start(args, fmt);
   gbVLog(QtCriticalMsg, fmt, args);
