@@ -58,12 +58,8 @@ gbFatal(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  QString msg = QString::vasprintf(fmt, args);
+  gbVLog(QtCriticalMsg, fmt, args);
   va_end(args);
-  if (msg.endsWith('\n')) {
-    msg.chop(1);
-  }
-  qCritical().noquote() << msg;
   exit(1);
 }
 
@@ -72,12 +68,8 @@ gbWarning(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  QString msg = QString::vasprintf(fmt, args);
+  gbVLog(QtWarningMsg, fmt, args);
   va_end(args);
-  if (msg.endsWith('\n')) {
-    msg.chop(1);
-  }
-  qWarning().noquote() << msg;
 }
 
 void
@@ -85,12 +77,8 @@ gbInfo(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  QString msg = QString::vasprintf(fmt, args);
+  gbVLog(QtInfoMsg, fmt, args);
   va_end(args);
-  if (msg.endsWith('\n')) {
-    msg.chop(1);
-  }
-  qInfo().noquote() << msg;
 }
 
 void
@@ -98,30 +86,72 @@ gbDebug(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  QString msg = QString::vasprintf(fmt, args);
+  gbVLog(QtDebugMsg, fmt, args);
   va_end(args);
-  if (msg.endsWith('\n')) {
-    msg.chop(1);
-  }
-  qDebug().noquote() << msg;
 }
 
 static QString gbDebugLogString_;
+static QString gbInfoLogString_;
+static QString gbWarningLogString_;
+static QString gbCriticalLogString_;
 
-int gbVLog(const char* fmt, va_list args)
+static QString& getLogString(QtMsgType type)
+{
+  QString& logString = gbDebugLogString_;
+  switch (type)
+  {
+  case QtDebugMsg:
+    logString = gbDebugLogString_;
+    break;
+  case QtInfoMsg:
+    logString = gbInfoLogString_;
+    break;
+  case QtWarningMsg:
+    logString = gbWarningLogString_;
+    break;
+  case QtCriticalMsg:
+  case QtFatalMsg:
+    logString = gbCriticalLogString_;
+    break;
+  }
+  return logString;
+}
+
+static void sendLogMsg(QtMsgType type, const QString& msg)
+{
+  switch (type)
+  {
+  case QtDebugMsg:
+    qDebug().noquote() << msg;
+    break;
+  case QtInfoMsg:
+    qInfo().noquote() << msg;
+    break;
+  case QtWarningMsg:
+    qWarning().noquote() << msg;
+    break;
+  case QtCriticalMsg:
+  case QtFatalMsg:
+    qCritical().noquote() << msg;
+    break;
+  }
+}
+
+int gbVLog(QtMsgType type, const char* fmt, va_list args)
 {
   int rc = 0;
+  QString& logString = getLogString(type);
 
-  gbDebugLogString_.append(QString::vasprintf(fmt, args));
+  logString.append(QString::vasprintf(fmt, args));
 
-  for (auto idx = gbDebugLogString_.indexOf('\n'); idx >= 0; idx = gbDebugLogString_.indexOf('\n')) {
-    QString msg = gbDebugLogString_.sliced(0, idx + 1);
+  for (auto idx = logString.indexOf('\n'); idx >= 0; idx = logString.indexOf('\n')) {
+    QString msg = logString.sliced(0, idx + 1);
     if (msg.endsWith('\n')) {
       msg.chop(1);
     }
-    qDebug().noquote() << msg;
+    sendLogMsg(type, msg);
     rc += msg.size();
-    gbDebugLogString_.remove(0, idx + 1);
+    logString.remove(0, idx + 1);
   }
 
   return rc;
@@ -131,22 +161,23 @@ int gbLog(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  int rc = gbVLog(fmt, args);
+  int rc = gbVLog(QtDebugMsg, fmt, args);
   va_end(args);
   return rc;
 }
 
-int gbFlush()
+int gbFlush(QtMsgType type)
 {
   int rc = 0;
+  QString& logString = getLogString(type);
 
-  if (!gbDebugLogString_.isEmpty()) {
-    if (gbDebugLogString_.endsWith('\n')) {
-      gbDebugLogString_.chop(1);
+  if (!logString.isEmpty()) {
+    if (logString.endsWith('\n')) {
+      logString.chop(1);
     }
-    qDebug().noquote() << gbDebugLogString_;
-    rc += gbDebugLogString_.size();
-    gbDebugLogString_ = QString();
+    sendLogMsg(type, logString);
+    rc += logString.size();
+    logString = QString();
   }
 
   return rc;

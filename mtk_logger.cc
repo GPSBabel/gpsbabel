@@ -102,7 +102,7 @@ void MtkLoggerBase::dbg(int l, const char* msg, ...)
   if (global_opts.debug_level >= l) {
     va_list ap;
     va_start(ap, msg);
-    gbVLog(msg, ap);
+    gbVLog(QtDebugMsg, msg, ap);
     va_end(ap);
   }
 }

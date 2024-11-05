@@ -135,7 +135,7 @@ Dg100Format::dg100_log(const char* fmt, ...)
   if (global_opts.debug_level > 0) {
     va_list ap;
     va_start(ap, fmt);
-    gbVLog(fmt, ap);
+    gbVLog(QtDebugMsg, fmt, ap);
     va_end(ap);
   }
 }
