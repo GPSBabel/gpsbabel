@@ -1106,7 +1106,7 @@ int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
 
   int32_t datum = GPS_Lookup_Datum_Index("Palestine 1923");
   if (datum < 0) {
-    gbFatal("Unable to find Palestine 1923 in internal tables");
+    gbFatal("Unable to find Palestine 1923 in internal tables\n");
   }
   int32_t ellipse = GPS_Datums[datum].ellipse;
 
@@ -1142,7 +1142,7 @@ void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon)
   double phi, lambda, alt, a, b;
   int32_t datum = GPS_Lookup_Datum_Index("Palestine 1923");
   if (datum < 0) {
-    gbFatal("Unable to find Palestine 1923 in internal tables");
+    gbFatal("Unable to find Palestine 1923 in internal tables\n");
   }
   int32_t ellipse = GPS_Datums[datum].ellipse;
 

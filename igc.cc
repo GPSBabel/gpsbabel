@@ -153,7 +153,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
                &day, &month, &year,
                &hour, &minute, &second,
                flight_date, task_num, &num_tp, task_desc) < 9) {
-      gbFatal("task id (C) record parse error A. \n'%s'", rec);
+      gbFatal("task id (C) record parse error A. \n'%s'\n", rec);
     }
     task_num[4] = '\0';
     if (year < 70) {
@@ -179,7 +179,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
   if (sscanf(rec, "C%2u%2u%3u%1[NS]%3u%2u%3u%1[WE]%78[^\r]\r\n",
              &lat_deg, &lat_min, &lat_frac, lat_hemi,
              &lon_deg, &lon_min, &lon_frac, lon_hemi, tmp_str) < 8) {
-    gbFatal("task waypoint (C) record parse error\n%s", rec);
+    gbFatal("task waypoint (C) record parse error\n%s\n", rec);
   }
 
   auto* wpt = new Waypoint;
@@ -223,7 +223,7 @@ void IgcFormat::TaskRecordReader::igc_task_rec(const char* rec)
     break;
 
   default:
-    gbFatal("task id (C) record internal error B\n%s", rec);
+    gbFatal("task id (C) record internal error B\n%s\n", rec);
     break;
   }
 

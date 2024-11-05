@@ -150,7 +150,7 @@ GarminFormat::rw_init(const QString& fname)
 
   switch (gps_waypt_type) {	/* waypoint type as defined by jeeps */
   case 0:
-    gbFatal("Garmin unit %d does not support waypoint xfer.",
+    gbFatal("Garmin unit %d does not support waypoint xfer.\n",
           gps_save_id);
 
     break;

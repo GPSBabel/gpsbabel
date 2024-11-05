@@ -363,7 +363,7 @@ void MtkLoggerBase::mtk_read()
   if (dout == nullptr) {
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      gbFatal("Can't create temporary file %s",
+      gbFatal("Can't create temporary file %s\n",
             gbLogCStr(TEMP_DATA_BIN));
     }
   }
@@ -418,7 +418,7 @@ void MtkLoggerBase::mtk_read()
     QFile::rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      gbFatal("Can't create temporary file %s",
+      gbFatal("Can't create temporary file %s\n",
             gbLogCStr(TEMP_DATA_BIN));
     }
   }

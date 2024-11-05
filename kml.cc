@@ -274,7 +274,7 @@ void KmlFormat::trk_coord(const QString& args, const QXmlStreamAttributes* /*att
     if (!trk_head->rte_waypt_empty()) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
       if (trk_head->rte_waypt_ct() < 2) {
-        gbFatal("attempt to interpolate TimeSpan with too few points.");
+        gbFatal("attempt to interpolate TimeSpan with too few points.\n");
       }
       qint64 ms_per_waypoint = timespan_ms / (trk_head->rte_waypt_ct() - 1);
       foreach (Waypoint* trackpoint, trk_head->waypoint_list) {
@@ -544,7 +544,7 @@ void KmlFormat::kml_write_bitmap_style(kml_point_type pt_type, const QString& bi
     force_heading = true;
     break;
   default:
-    gbFatal("kml_output_point: unknown point type");
+    gbFatal("kml_output_point: unknown point type\n");
     break;
   }
 
@@ -859,7 +859,7 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
     style = "#route";
     break;
   default:
-    gbFatal("kml_output_point: unknown point type");
+    gbFatal("kml_output_point: unknown point type\n");
     break;
   }
 
@@ -1225,7 +1225,7 @@ QString KmlFormat::kml_gc_mkstar(int rating)
   QString star_content;
 
   if (rating < 0 || rating > 50 || rating % 5 != 0) {
-    gbFatal("Bogus difficulty or terrain rating.");
+    gbFatal("Bogus difficulty or terrain rating.\n");
   }
 
   if (0 == rating % 10) {
@@ -1562,7 +1562,7 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       }
       break;
     default:
-      gbFatal("Bad member type");
+      gbFatal("Bad member type\n");
     }
   }
   writer->writeEndElement(); // Close SimpleArrayData tag

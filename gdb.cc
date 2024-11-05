@@ -366,19 +366,19 @@ GdbFormat::read_file_header()
   	misinterpreted.
   */
   if (strcmp(buf, "MsRcf") != 0) {
-    gbFatal("Invalid file \"%s\"!", gbLogCStr(fin->name));
+    gbFatal("Invalid file \"%s\"!\n", gbLogCStr(fin->name));
   }
 
   int reclen = FREAD_i32;
   Q_UNUSED(reclen);
   QByteArray drec = FREAD_STR();
   if (drec.at(0) != 'D') {
-    gbFatal("Invalid file \"%s\"!", gbLogCStr(fin->name));
+    gbFatal("Invalid file \"%s\"!\n", gbLogCStr(fin->name));
   }
 
   gdb_ver = drec.at(1) - 'k' + 1;
   if ((gdb_ver < kGDBVerMin) || (gdb_ver > kGDBVerMax)) {
-    gbFatal("Unknown or/and unsupported GDB version (%d.0)!", gdb_ver);
+    gbFatal("Unknown or/and unsupported GDB version (%d.0)!\n", gdb_ver);
   }
 
   if (global_opts.verbose_status > 0) {
@@ -402,7 +402,7 @@ GdbFormat::read_file_header()
 
   QByteArray applicationField = FREAD_STR();
   if (!((applicationField == "MapSource") || (applicationField == "BaseCamp"))) {
-    gbFatal("Not a recognized signature in header");
+    gbFatal("Not a recognized signature in header\n");
   }
 }
 
@@ -978,7 +978,7 @@ GdbFormat::read()
 
     int len = FREAD_i32;
     if (FREAD(&typ, 1) < 1) {
-      gbFatal("Attempt to read past EOF.");
+      gbFatal("Attempt to read past EOF.\n");
     }
     if (typ == 'V') {
       break;  /* break the loop */
@@ -1027,7 +1027,7 @@ GdbFormat::read()
 
     int delta = len - gbftell(ftmp);
     if (delta > 1000000) {
-      gbFatal("Internal consistency error.  Delta too big");
+      gbFatal("Internal consistency error.  Delta too big\n");
     }
 
     // Avoid finite loop on bogus beta files from '06.
@@ -1628,7 +1628,7 @@ GdbFormat::wr_init(const QString& fname)
 
   if (gdb_category) {
     if ((gdb_category < 1) || (gdb_category > 16)) {
-      gbFatal("cat must be between 1 and 16!");
+      gbFatal("cat must be between 1 and 16!\n");
     }
     gdb_category = 1 << (gdb_category - 1);
   }

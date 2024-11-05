@@ -115,14 +115,14 @@ GarminGPIFormat::gpi_read_string(const char* field)
     if (first == 0) {
 
       if (gbfgetc(fin) != 0) {
-        gbFatal("Error reading field '%s'!", field);
+        gbFatal("Error reading field '%s'!\n", field);
       }
 
       lc_string res1 = gpi_read_lc_string();
       if ((res1.strlen + 4) < l0) { // dual language?
         lc_string res2 = gpi_read_lc_string();
         if (res1.strlen + 4 + res2.strlen + 4 != l0) {
-          gbFatal("Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, res1.strlen, res2.strlen, field);
+          gbFatal("Error out of sync (wrong size %d/%d/%d) on field '%s'!\n", l0, res1.strlen, res2.strlen, field);
         }
         if (opt_lang && (opt_lang.get().toUtf8()  == res1.lc)) {
           string = res1.str;
@@ -133,7 +133,7 @@ GarminGPIFormat::gpi_read_string(const char* field)
         }
       } else { // normal case, single language
         if (res1.strlen + 4 != l0) {
-          gbFatal("Error out of sync (wrong size %d/%d) on field '%s'!", l0, res1.strlen, field);
+          gbFatal("Error out of sync (wrong size %d/%d) on field '%s'!\n", l0, res1.strlen, field);
         }
         string = res1.str;
       }
@@ -1063,7 +1063,7 @@ GarminGPIFormat::load_bitmap_from_file(const QString& fname, const unsigned char
 
   gbfile* f = gbfopen_le(fname, "rb");
   if (gbfgetint16(f) != 0x4d42) {
-    gbFatal("No BMP image.");
+    gbFatal("No BMP image.\n");
   }
 
   /* read a standard bmp file header */

@@ -1037,7 +1037,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
     gbDebug("parse_trails: trail Version %d\n", trail_version);
   }
   if ((trail_version < 3) || (trail_version > 5)) {
-    gbFatal("trail version %d not supported!!", trail_version);
+    gbFatal("trail version %d not supported!!\n", trail_version);
   }
 
   /* Trail name; input is 2 bytes per char, we convert to 1 */

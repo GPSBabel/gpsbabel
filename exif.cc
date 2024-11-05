@@ -625,10 +625,10 @@ ExifFormat::exif_examine_app(ExifApp* app)
   gbfrewind(ftmp);
   uint32_t ident = gbfgetuint32(ftmp);
   if (ident != 0x66697845) {
-    gbFatal("Invalid EXIF header magic.");
+    gbFatal("Invalid EXIF header magic.\n");
   }
   if (gbfgetint16(ftmp) != 0) {
-    gbFatal("Error in EXIF header.");
+    gbFatal("Error in EXIF header.\n");
   }
   uint16_t endianness = gbfgetint16(ftmp);
 
@@ -1082,7 +1082,7 @@ ExifFormat::exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16
       double val = *static_cast<const double*>(data);
 
       if ((val < 0.0) && (type == EXIF_TYPE_RAT)) {
-        gbFatal("A negative value cannot be stored as type RATIONAL.");
+        gbFatal("A negative value cannot be stored as type RATIONAL.\n");
       }
 
       Rational<int32_t> rat = exif_dec2frac(val, 1e-11);
@@ -1349,7 +1349,7 @@ ExifFormat::exif_write_apps()
         // IFD1_TAG_COMPRESSION should be 6 indicating JPEG compressed image data.
         tag_size = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_SIZE);
         if (tag_size == nullptr) {
-          gbFatal("Invalid image file, in IFD1 both JPEGInterchangeFormat and JPEGInterchangeFormatLength must exist for compressed thumbnails.");
+          gbFatal("Invalid image file, in IFD1 both JPEGInterchangeFormat and JPEGInterchangeFormatLength must exist for compressed thumbnails.\n");
         }
         auto offset = tag_offset->data.at(0).value<uint32_t>();
         auto size = tag_size->data.at(0).value<uint32_t>();
@@ -1360,7 +1360,7 @@ ExifFormat::exif_write_apps()
         // IFD1_TAG_COMPRESSION should be 1 indicating uncompressed image data.
         tag_size = exif_find_tag(app, IFD1, IFD1_TAG_STRIP_BYTE_COUNTS);
         if ((tag_size == nullptr) || (tag_size->count != tag_offset->count)) {
-          gbFatal("Invalid image file, in IFD1 both StripOffsets and StripByteCounts must exist and have equal counts for uncompressed thumbnails.");
+          gbFatal("Invalid image file, in IFD1 both StripOffsets and StripByteCounts must exist and have equal counts for uncompressed thumbnails.\n");
         }
         for (unsigned idx = 0; idx < tag_offset->count; idx++) {
           auto offset = tag_offset->data.at(idx).value<uint32_t>();
@@ -1442,12 +1442,12 @@ ExifFormat::read()
   uint16_t soi = gbfgetuint16(fin_);
   /* only jpeg for now */
   if (soi != 0xFFD8) {
-    gbFatal("Unknown image file.");
+    gbFatal("Unknown image file.\n");
   }
 
   exif_app_ = exif_load_apps();
   if (exif_app_ == nullptr) {
-    gbFatal("No EXIF header in source file \"%s\".", gbLogCStr(fin_->name));
+    gbFatal("No EXIF header in source file \"%s\".\n", gbLogCStr(fin_->name));
   }
 
   exif_examine_app(exif_app_);
@@ -1467,16 +1467,16 @@ ExifFormat::wr_init(const QString& fname)
 
   fin_ = gbfopen_be(fname, "rb");
   if (fin_->is_pipe) {
-    gbFatal("Sorry, this format cannot be used with pipes!");
+    gbFatal("Sorry, this format cannot be used with pipes!\n");
   }
 
   uint16_t soi = gbfgetuint16(fin_);
   if (soi != 0xFFD8) {
-    gbFatal("Unknown image file.");
+    gbFatal("Unknown image file.\n");
   }
   exif_app_ = exif_load_apps();
   if (exif_app_ == nullptr) {
-    gbFatal("No EXIF header found in source file \"%s\".", gbLogCStr(fin_->name));
+    gbFatal("No EXIF header found in source file \"%s\".\n", gbLogCStr(fin_->name));
   }
   exif_examine_app(exif_app_);
   gbfclose(fin_);

@@ -641,7 +641,7 @@ GarminTxtFormat::wr_init(const QString& fname)
   if (opt_precision) {
     precision = opt_precision.get_result();
     if (precision < 0) {
-      gbFatal("Invalid precision (%s)!", gbLogCStr(opt_precision));
+      gbFatal("Invalid precision (%s)!\n", gbLogCStr(opt_precision));
     }
   }
 
@@ -944,7 +944,7 @@ void
 GarminTxtFormat::bind_fields(const header_type ht)
 {
   if ((grid_index < 0) || (datum_index < 0)) {
-    gbFatal("Incomplete or invalid file header!");
+    gbFatal("Incomplete or invalid file header!\n");
   }
 
   if (header_column_names.isEmpty()) {

@@ -164,7 +164,7 @@ void MakeShort::set_repeating_whitespace_ok(bool ok)
 void MakeShort::set_defname(const char* s)
 {
   if (s == nullptr) {
-    gbFatal("set_defname called without a valid name.");
+    gbFatal("set_defname called without a valid name.\n");
   }
   defname_ = s;
 }

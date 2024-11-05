@@ -163,7 +163,7 @@ TpoFormatBase::tpo_read_until_section(const char* section_name, int seek_bytes)
 
   while (true) {
     if (gbfread(&byte, 1, 1, tpo_file_in) < 1) {
-      gbFatal("malformed input file - attempt to read past end");
+      gbFatal("malformed input file - attempt to read past end\n");
     }
     header_size++;
 

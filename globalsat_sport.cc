@@ -118,7 +118,7 @@ GlobalsatSportFormat::recv_byte()
   } else {
     result = gbfgetc(in_file);
     if (result < 0) {
-      gbFatal("read error");
+      gbFatal("read error\n");
     }
   }
   // Check if byte should be dumped also into a file
@@ -279,7 +279,7 @@ GlobalsatSportFormat::rd_init(const QString& fname)
     // read from dump-file instead of serial
     in_file = gbfopen(fname, "rb");
     if (!in_file) {
-      gbFatal("Could not open dumpfile for input: %s", gbLogCStr(fname));
+      gbFatal("Could not open dumpfile for input: %s\n", gbLogCStr(fname));
     }
 
   }

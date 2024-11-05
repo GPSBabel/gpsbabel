@@ -97,7 +97,7 @@ void HeightFilter::init()
   addf = 0.0;
   if (addopt) {
     if (parse_distance(addopt, &addf, 1.0) == 0) {
-      gbFatal("No height specified with add option.");
+      gbFatal("No height specified with add option.\n");
     }
   }
 }

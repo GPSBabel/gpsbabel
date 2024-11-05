@@ -46,7 +46,7 @@ namespace gpsbabel
 XmlStreamWriter::xml_stack_list_entry_t& XmlStreamWriter::activeStack()
 {
   if (stack_list.isEmpty()) {
-    gbFatal("xmlstreamwriter: programming error: the stack* functions are used incorrectly.");
+    gbFatal("xmlstreamwriter: programming error: the stack* functions are used incorrectly.\n");
   }
   return stack_list.last();
 }

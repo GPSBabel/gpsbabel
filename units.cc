@@ -34,7 +34,7 @@ UnitsFormatter::setunits(units_t u)
     units = u;
     break;
   default:
-    gbFatal("not done yet");
+    gbFatal("not done yet\n");
     break;
   }
 }
@@ -71,7 +71,7 @@ UnitsFormatter::fmt_distance(const double distance_meters) const
     break;
 
   default:
-    gbFatal("not done yet");
+    gbFatal("not done yet\n");
     break;
   }
 
@@ -100,7 +100,7 @@ UnitsFormatter::fmt_altitude(const double distance_meters) const
     break;
 
   default:
-    gbFatal("not done yet");
+    gbFatal("not done yet\n");
     break;
   }
 
@@ -132,7 +132,7 @@ UnitsFormatter::fmt_speed(const double speed_meters_per_sec) const
     }
     break;
   default:
-    gbFatal("not done yet");
+    gbFatal("not done yet\n");
 
   }
   return {d, tag};

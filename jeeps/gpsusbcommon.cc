@@ -236,7 +236,7 @@ gusb_id_unit(garmin_unit_info_t* gu)
       return;
     }
   }
-  gbFatal("Unable to sync with Garmin USB device in %d attempts.", i);
+  gbFatal("Unable to sync with Garmin USB device in %d attempts.\n", i);
 }
 
 void

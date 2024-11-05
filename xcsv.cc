@@ -377,7 +377,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   Geocache* gc_data = nullptr;
 
   if (fmp.printfc.isNull()) {
-    gbFatal("xcsv style '%s' is missing format specifier", fmp.key.constData());
+    gbFatal("xcsv style '%s' is missing format specifier\n", fmp.key.constData());
   }
 
   if (0 == strcmp(fmp.printfc.constData(), "\"%s\"")) {
@@ -1907,7 +1907,7 @@ XcsvFormat::rd_init(const QString& fname)
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
   if (xcsv_file->gps_datum_idx < 0) {
-    gbFatal("datum \"%s\" is not supported.", gbLogCStr(datum_name));
+    gbFatal("datum \"%s\" is not supported.\n", gbLogCStr(datum_name));
   }
 
   utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
@@ -1989,7 +1989,7 @@ XcsvFormat::wr_init(const QString& fname)
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
   if (xcsv_file->gps_datum_idx < 0) {
-    gbFatal("datum \"%s\" is not supported.", gbLogCStr(datum_name));
+    gbFatal("datum \"%s\" is not supported.\n", gbLogCStr(datum_name));
   }
 }
 

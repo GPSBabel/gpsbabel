@@ -131,7 +131,7 @@ gzapi_seek(gbfile* self, int32_t offset, int whence)
     if (self->is_pipe) {
       gbFatal("This format cannot be used in piped commands!\n");
     }
-    gbFatal("online compression not yet supported for this format!");
+    gbFatal("online compression not yet supported for this format!\n");
   }
   return 0;
 }
