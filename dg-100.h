@@ -110,8 +110,8 @@ protected:
 
   const dg100_command* dg100_findcmd(int id);
   static QDateTime bintime2utc(int date, int time);
-  void dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf);
-  [[gnu::format(printf, 2, 3)]] void dg100_log(const char* fmt, ...);
+  static void dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf);
+  [[gnu::format(printf, 1, 2)]] static void dg100_log(const char* fmt, ...);
   static float bin2deg(int val);
   void process_gpsfile(uint8_t* data, route_head** track);
   static uint16_t dg100_checksum(const uint8_t* buf, int count);
@@ -132,7 +132,6 @@ protected:
 
   /* Data Members */
 
-  DebugLog db;
   const model_t* model{nullptr};
   void* serial_handle{nullptr};
   gbfile* fin{nullptr};

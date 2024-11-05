@@ -124,12 +124,11 @@ private:
 
   /* Member Functions */
 
-  [[gnu::format(printf, 2, 3)]] void v900_log(const char* fmt, ...);
+  [[gnu::format(printf, 1, 2)]] static void v900_log(const char* fmt, ...);
   static QDateTime bintime2utc(int date, int time);
 
   /* Data Members */
 
-  DebugLog db;
   FILE* fin = nullptr;
 };
 

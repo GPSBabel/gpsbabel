@@ -222,11 +222,10 @@ private:
   void globalsat_probe_device();
   void waypoint_read();
   void track_read();
-  void route_read();
+  static void route_read();
 
   /* Data Members */
 
-  DebugLog db;
   void* serial_handle{nullptr};
   bool isSizeSwapped{false};
 

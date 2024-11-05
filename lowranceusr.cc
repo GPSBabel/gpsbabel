@@ -140,7 +140,7 @@ LowranceusrFormat::register_waypt(const Waypoint* wpt)
   }
 
   if (global_opts.debug_level >= 2) {
-    db.gbLog("adding waypt %s (%s) to table at index %s\n",
+    gbLog("adding waypt %s (%s) to table at index %s\n",
            gbLogCStr(wpt->shortname), gbLogCStr(wpt->description), QByteArray::number(waypt_table->size()).constData());
   }
 
@@ -164,7 +164,7 @@ LowranceusrFormat::lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int u
   }
 
   if (global_opts.debug_level >= 1) {
-    db.gbLog("lowranceusr4_find_waypt: warning, failed finding waypoint with ids %u %d %d\n",
+    gbLog("lowranceusr4_find_waypt: warning, failed finding waypoint with ids %u %d %d\n",
            uid_unit, uid_seq_low, uid_seq_high);
   }
   return nullptr;
@@ -186,7 +186,7 @@ LowranceusrFormat::lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, 
   }
 
   if (global_opts.debug_level >= 1) {
-    db.gbLog("lowranceusr4_find_global_waypt: warning, failed finding waypoint with ids %08x %08x %08x %08x\n",
+    gbLog("lowranceusr4_find_global_waypt: warning, failed finding waypoint with ids %08x %08x %08x %08x\n",
            id1, id2, id3, id4);
   }
   return nullptr;
@@ -398,7 +398,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   if (object_num_present) {
     short object_num = gbfgetint16(file_in);
     if (global_opts.debug_level == 99) {
-      db.gbLog("parse_waypt: %5d", object_num);
+      gbLog("parse_waypt: %5d", object_num);
     }
   }
 
@@ -434,23 +434,23 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   if (global_opts.debug_level > 1) {
     if (global_opts.debug_level == 99) {
       if (wpt_tmp->shortname.length() > 16) {
-        db.gbLog(" %.13s...", gbLogCStr(wpt_tmp->shortname));
+        gbLog(" %.13s...", gbLogCStr(wpt_tmp->shortname));
       } else {
-        db.gbLog(" %16.16s", gbLogCStr(wpt_tmp->shortname));
+        gbLog(" %16.16s", gbLogCStr(wpt_tmp->shortname));
       }
-      db.gbLog(" %+15.10f %+15.10f", wpt_tmp->latitude, wpt_tmp->longitude);
+      gbLog(" %+15.10f %+15.10f", wpt_tmp->latitude, wpt_tmp->longitude);
       if (wpt_tmp->altitude == unknown_alt) {
-        db.gbLog(" %13s", "UNKNOWN ALT");
+        gbLog(" %13s", "UNKNOWN ALT");
       } else {
-        db.gbLog(" %5d %7.1f", (int)METERS_TO_FEET(wpt_tmp->altitude), wpt_tmp->altitude);
+        gbLog(" %5d %7.1f", (int)METERS_TO_FEET(wpt_tmp->altitude), wpt_tmp->altitude);
       }
     } else {
-      db.gbLog("parse_waypt: Waypt name = '%s' Lat = %+f Lon = %+f alt = ",
+      gbLog("parse_waypt: Waypt name = '%s' Lat = %+f Lon = %+f alt = ",
              gbLogCStr(wpt_tmp->shortname), wpt_tmp->latitude, wpt_tmp->longitude);
       if (wpt_tmp->altitude == unknown_alt) {
-        db.gbLog("UNKNOWN ALT\n");
+        gbLog("UNKNOWN ALT\n");
       } else {
-        db.gbLog("%d (%f)\n", (int)METERS_TO_FEET(wpt_tmp->altitude), wpt_tmp->altitude);
+        gbLog("%d (%f)\n", (int)METERS_TO_FEET(wpt_tmp->altitude), wpt_tmp->altitude);
       }
     }
   }
@@ -470,9 +470,9 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
 
   if (global_opts.debug_level > 2) {
     if (global_opts.debug_level == 99) {
-      db.gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
+      gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
     } else {
-      db.gbLog("parse_waypt: creation time '%s', waypt_time %" PRId64 "\n",
+      gbLog("parse_waypt: creation time '%s', waypt_time %" PRId64 "\n",
              gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")), waypt_time);
     }
   }
@@ -484,7 +484,7 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
     icon_number = gbfgetint32(file_in);
   }
   if (global_opts.debug_level == 99) {
-    db.gbLog(" %08x (%d)", icon_number, icon_number);
+    gbLog(" %08x (%d)", icon_number, icon_number);
   }
   wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_number);
 
@@ -492,9 +492,9 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
   short waypt_type = gbfgetint16(file_in);
   if (global_opts.debug_level > 2) {
     if (global_opts.debug_level == 99) {
-      db.gbLog(" %04x (%d)", (int)waypt_type, (int)waypt_type);
+      gbLog(" %04x (%d)", (int)waypt_type, (int)waypt_type);
     } else {
-      db.gbLog("parse_waypt: waypt_type = %d\n",waypt_type);
+      gbLog("parse_waypt: waypt_type = %d\n",waypt_type);
     }
   }
 
@@ -504,17 +504,17 @@ LowranceusrFormat::lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_pre
     if (std::abs(depth_feet - 99999.0)  > .1) {
       wpt_tmp->set_depth(FEET_TO_METERS(depth_feet));
       if (global_opts.debug_level == 99) {
-        db.gbLog("   %10.1f", depth_feet);
+        gbLog("   %10.1f", depth_feet);
       }
     } else {
       if (global_opts.debug_level == 99) {
-        db.gbLog("      UNKNOWN");
+        gbLog("      UNKNOWN");
       }
     }
   }
 
   if (global_opts.debug_level == 99) {
-    db.gbLog("\n");
+    gbLog("\n");
   }
 }
 
@@ -604,35 +604,35 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
 
   if (global_opts.debug_level > 1) {
     if (global_opts.debug_level == 99) {
-      db.gbLog("parse_waypoints: ");
+      gbLog("parse_waypoints: ");
       if (reading_version > 4) {
-        db.gbLog("%08x %08x %08x %08x ",
+        gbLog("%08x %08x %08x %08x ",
                fsdata->UUID1, fsdata->UUID2, fsdata->UUID3, fsdata->UUID4);
       }
-      db.gbLog(" %10u %8d %8d %8d %6s",
+      gbLog(" %10u %8d %8d %8d %6s",
              fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
              waypoint_version, QByteArray::number(name.length()).constData());
       if (name.length() > 16) {
-        db.gbLog(" %13.13s...", gbLogCStr(name));
+        gbLog(" %13.13s...", gbLogCStr(name));
       } else {
-        db.gbLog(" %16.16s", gbLogCStr(name));
+        gbLog(" %16.16s", gbLogCStr(name));
       }
       if (reading_version > 4) {
-        db.gbLog("  %10u ", fsdata->uid_unit2);
+        gbLog("  %10u ", fsdata->uid_unit2);
       }
-      db.gbLog(" %+15.10f %+15.10f", wpt_tmp->longitude, wpt_tmp->latitude);
-      db.gbLog(" %08x %4d %4d %7s", fsdata->flags, fsdata->icon_num, fsdata->color,
+      gbLog(" %+15.10f %+15.10f", wpt_tmp->longitude, wpt_tmp->latitude);
+      gbLog(" %08x %4d %4d %7s", fsdata->flags, fsdata->icon_num, fsdata->color,
              (fsdata->color_desc == nullptr ? "unk" : gbLogCStr(fsdata->color_desc)));
       if (desc.length() > 16) {
-        db.gbLog(" %6s %.13s...", QByteArray::number(desc.length()).constData(), gbLogCStr(desc));
+        gbLog(" %6s %.13s...", QByteArray::number(desc.length()).constData(), gbLogCStr(desc));
       } else {
-        db.gbLog(" %6s %16s", QByteArray::number(desc.length()).constData(), gbLogCStr(desc));
+        gbLog(" %6s %16s", QByteArray::number(desc.length()).constData(), gbLogCStr(desc));
       }
-      db.gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
-      db.gbLog(" %08x %8.3f %08x %08x %08x\n",
+      gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
+      gbLog(" %08x %8.3f %08x %08x %08x\n",
              unused_byte, fsdata->depth, loran_GRI, loran_Tda, loran_Tdb);
     } else {
-      db.gbLog("parse_waypoints: version = %d, name = %s, uid_unit = %u, "
+      gbLog("parse_waypoints: version = %d, name = %s, uid_unit = %u, "
              "uid_seq_low = %d, uid_seq_high = %d, lat = %+.10f, lon = %+.10f, depth = %f\n",
              waypoint_version, gbLogCStr(wpt_tmp->shortname), fsdata->uid_unit,
              fsdata->uid_seq_low, fsdata->uid_seq_high,
@@ -655,51 +655,51 @@ LowranceusrFormat::lowranceusr_parse_waypts()
   }
 
   if (global_opts.debug_level >= 1) {
-    db.gbLog("parse_waypts: Num Waypoints = %d\n", NumWaypoints);
+    gbLog("parse_waypts: Num Waypoints = %d\n", NumWaypoints);
   }
 
   if (global_opts.debug_level == 99) {
     if (reading_version > 3) {
-      db.gbLog("parse_waypts: ");
+      gbLog("parse_waypts: ");
       if (reading_version > 4) {
-        db.gbLog("Universal ID                        ");
+        gbLog("Universal ID                        ");
       }
-      db.gbLog("              Sequence Number  Stream  Waypoint\n");
+      gbLog("              Sequence Number  Stream  Waypoint\n");
 
-      db.gbLog("parse_waypoints: ");
+      gbLog("parse_waypoints: ");
       if (reading_version > 4) {
-        db.gbLog("    ID1      ID2      ID3      ID4  ");
+        gbLog("    ID1      ID2      ID3      ID4  ");
       }
-      db.gbLog("Unit Number     Low      High  Version Length Name            ");
+      gbLog("Unit Number     Low      High  Version Length Name            ");
       if (reading_version > 4) {
-        db.gbLog(" Unit Number2");
+        gbLog(" Unit Number2");
       }
-      db.gbLog(" Latitude        Longitude       Flags    ICON Color        Length Description     ");
-      db.gbLog(" Date       Time  Unknown  Depth    LoranGRI LoranTda LoranTdb\n");
+      gbLog(" Latitude        Longitude       Flags    ICON Color        Length Description     ");
+      gbLog(" Date       Time  Unknown  Depth    LoranGRI LoranTda LoranTdb\n");
 
-      db.gbLog("parse_waypoints: ");
+      gbLog("parse_waypoints: ");
       if (reading_version > 4) {
-        db.gbLog("-------- -------- -------- -------- ");
+        gbLog("-------- -------- -------- -------- ");
       }
-      db.gbLog("----------- -------- -------- -------- ------ ----------------");
+      gbLog("----------- -------- -------- -------- ------ ----------------");
       if (reading_version > 4) {
-        db.gbLog(" ------------");
+        gbLog(" ------------");
       }
-      db.gbLog(" --------------- --------------- -------- ---- ------------ ------ ----------------");
-      db.gbLog(" ---------- ----- -------- -------- -------- -------- --------\n");
+      gbLog(" --------------- --------------- -------- ---- ------------ ------ ----------------");
+      gbLog(" ---------- ----- -------- -------- -------- -------- --------\n");
     } else {
-      db.gbLog("parse_waypts: Number Name            Longitude       Latitude       Altitude       Time            ");
-      db.gbLog(" ICON ID (dec)    Flag (dec)");
+      gbLog("parse_waypts: Number Name            Longitude       Latitude       Altitude       Time            ");
+      gbLog(" ICON ID (dec)    Flag (dec)");
       if (reading_version == 3) {
-        db.gbLog(" Depth (ft)");
+        gbLog(" Depth (ft)");
       }
-      db.gbLog("\n");
-      db.gbLog("parse_waypts: ------ --------------- --------------- -------------- -------------- ----------------");
-      db.gbLog(" ---------------- ----------");
+      gbLog("\n");
+      gbLog("parse_waypts: ------ --------------- --------------- -------------- -------------- ----------------");
+      gbLog(" ---------------- ----------");
       if (reading_version == 3) {
-        db.gbLog(" ----------");
+        gbLog(" ----------");
       }
-      db.gbLog("\n");
+      gbLog("\n");
     }
   }
 
@@ -736,25 +736,25 @@ LowranceusrFormat::lowranceusr_parse_route()
   short num_legs = gbfgetint16(file_in);
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_route: Route '%s', Num Legs = %d", gbLogCStr(name), num_legs);
+    gbLog("parse_route: Route '%s', Num Legs = %d", gbLogCStr(name), num_legs);
   }
 
   /* route reversed */
   char reversed = gbfgetc(file_in);
   if (global_opts.debug_level > 1) {
-    db.gbLog(", reversed '%x' - %s\n", reversed, (reversed ? "Yes" : "No"));
+    gbLog(", reversed '%x' - %s\n", reversed, (reversed ? "Yes" : "No"));
   }
 
   if (global_opts.debug_level == 99) {
-    db.gbLog("parse_route:  Name            Longitude        Latitude       Altitude      Time             Unknown  ICON ID (dec)    Flag (dec) Depth (ft)\n");
-    db.gbLog("parse_route:  --------------- ---------------  -------------- ------------- ---------------- -------- ---------------- ---------- ----------\n");
+    gbLog("parse_route:  Name            Longitude        Latitude       Altitude      Time             Unknown  ICON ID (dec)    Flag (dec) Depth (ft)\n");
+    gbLog("parse_route:  --------------- ---------------  -------------- ------------- ---------------- -------- ---------------- ---------- ----------\n");
   }
 
   /* waypoints */
   for (int j = 0; j < num_legs; j++) {
     auto* wpt_tmp = new Waypoint;
     if (global_opts.debug_level == 99) {
-      db.gbLog("parse_route:");
+      gbLog("parse_route:");
     }
     lowranceusr_parse_waypt(wpt_tmp, 0); /* Indicate object number missing */
     route_add_wpt(rte_head, wpt_tmp);
@@ -783,7 +783,7 @@ LowranceusrFormat::lowranceusr4_parse_route()
   /* UID unit number */
   fsdata->uid_unit = gbfgetint32(file_in);
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_route: Unit %u (0x%08x)\n", fsdata->uid_unit, fsdata->uid_unit);
+    gbLog("parse_route: Unit %u (0x%08x)\n", fsdata->uid_unit, fsdata->uid_unit);
   }
 
   /* 64-bit UID sequence number */
@@ -793,7 +793,7 @@ LowranceusrFormat::lowranceusr4_parse_route()
   /* Route stream version number */
   int route_version = gbfgetint16(file_in);
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_route: Version = %d\n", route_version);
+    gbLog("parse_route: Version = %d\n", route_version);
   }
 
   /* Route name; input is 2 bytes per char, we convert to 1 */
@@ -811,10 +811,10 @@ LowranceusrFormat::lowranceusr4_parse_route()
 
   if (global_opts.debug_level > 1) {
     if (reading_version >= 5) {
-      db.gbLog("parse_route: route '%s' (UUID %08x %08x %8x %08x) has %d legs\n",
+      gbLog("parse_route: route '%s' (UUID %08x %08x %8x %08x) has %d legs\n",
              gbLogCStr(rte_head->rte_name), UUID1, UUID2, UUID3, UUID4, num_legs);
     } else {
-      db.gbLog("parse_route: route '%s' has %d legs\n",
+      gbLog("parse_route: route '%s' has %d legs\n",
              gbLogCStr(rte_head->rte_name), num_legs);
     }
   }
@@ -828,7 +828,7 @@ LowranceusrFormat::lowranceusr4_parse_route()
       const Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
-          db.gbLog("parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
+          gbLog("parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
                  j, gbLogCStr(wpt_tmp->shortname), wpt_tmp->longitude, wpt_tmp->latitude);
         }
         route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
@@ -844,7 +844,7 @@ LowranceusrFormat::lowranceusr4_parse_route()
       const Waypoint* wpt_tmp = lowranceusr4_find_global_waypt(UUID1, UUID2, UUID3, UUID4);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
-          db.gbLog("parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
+          gbLog("parse_route: added leg #%d routepoint %s (%+.10f, %+.10f)\n",
                  j, gbLogCStr(wpt_tmp->shortname), wpt_tmp->longitude, wpt_tmp->latitude);
         }
         route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
@@ -861,7 +861,7 @@ LowranceusrFormat::lowranceusr4_parse_route()
 
   /* Mystery byte, discard */
   if (global_opts.debug_level == 99) {
-    db.gbLog("parse_route: end of route %02x\n", gbfgetc(file_in));
+    gbLog("parse_route: end of route %02x\n", gbfgetc(file_in));
   } else {
     gbfgetc(file_in);
   }
@@ -881,7 +881,7 @@ LowranceusrFormat::lowranceusr_parse_routes()
   }
 
   if (global_opts.debug_level >= 1) {
-    db.gbLog("parse_routes: Num Routes = %d\n", num_routes);
+    gbLog("parse_routes: Num Routes = %d\n", num_routes);
   }
 
   for (int i = 0; i < num_routes; i++) {
@@ -907,7 +907,7 @@ LowranceusrFormat::lowranceusr_parse_icons()
   short int num_icons = gbfgetint16(file_in);
 
   if (global_opts.debug_level >= 1) {
-    db.gbLog("parse_icons: Num Event Marker Icons = %d\n", num_icons);
+    gbLog("parse_icons: Num Event Marker Icons = %d\n", num_icons);
   }
 
   for (int i = 0; i < num_icons && !gbfeof(file_in); i++) {
@@ -931,7 +931,7 @@ LowranceusrFormat::lowranceusr_parse_icons()
       wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_number);
 
       if (global_opts.debug_level > 1) {
-        db.gbLog("parse_icons: '%s' %d %16.16s %+15.10f %+15.10f\n",
+        gbLog("parse_icons: '%s' %d %16.16s %+15.10f %+15.10f\n",
                gbLogCStr(wpt_tmp->shortname), icon_number, gbLogCStr(wpt_tmp->icon_descr), wpt_tmp->latitude, wpt_tmp->longitude);
       }
       waypt_add(wpt_tmp);
@@ -949,28 +949,28 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
   }
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_trails: Trail '%s'\n", gbLogCStr(trk_head->rte_name));
+    gbLog("parse_trails: Trail '%s'\n", gbLogCStr(trk_head->rte_name));
   }
 
   /* visible */
   char visible = gbfgetc(file_in);
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_trails: Visible '%x' - %s\n", visible, (visible ? "Yes" : "No"));
+    gbLog("parse_trails: Visible '%x' - %s\n", visible, (visible ? "Yes" : "No"));
   }
 
   /* num trail points */
   short num_trail_points = gbfgetint16(file_in);
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_trails: Num Trail Points = %d\n", num_trail_points);
+    gbLog("parse_trails: Num Trail Points = %d\n", num_trail_points);
   }
 
   /* max trail size */
   int itmp = gbfgetint16(file_in);
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("parse_trails: Max Trail size = %d\n", itmp);
+    gbLog("parse_trails: Max Trail size = %d\n", itmp);
   }
 
   if (num_trail_points) {
@@ -980,7 +980,7 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
       num_section_points = gbfgetint16(file_in);
 
       if (global_opts.debug_level > 1) {
-        db.gbLog("parse_trails: Num Section Points = %d\n", num_section_points);
+        gbLog("parse_trails: Num Section Points = %d\n", num_section_points);
       }
 
       for (int j = 0; j < num_section_points && !gbfeof(file_in); j++, num_trail_points--) {
@@ -1008,7 +1008,7 @@ LowranceusrFormat::lowranceusr_parse_trail(int* trail_num)
         track_add_wpt(trk_head, wpt_tmp);
 
         if (global_opts.debug_level > 2) {
-          db.gbLog("parse_trails: Trail pt lat %f lon %f\n", wpt_tmp->latitude, wpt_tmp->longitude);
+          gbLog("parse_trails: Trail pt lat %f lon %f\n", wpt_tmp->latitude, wpt_tmp->longitude);
         }
       }
     }
@@ -1034,7 +1034,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
   /* Trail stream version number */
   int trail_version = gbfgetint16(file_in);
   if (global_opts.debug_level == 99) {
-    db.gbLog("parse_trails: trail Version %d\n", trail_version);
+    gbLog("parse_trails: trail Version %d\n", trail_version);
   }
   if ((trail_version < 3) || (trail_version > 5)) {
     gbFatal("trail version %d not supported!!", trail_version);
@@ -1046,7 +1046,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
     trk_head->rte_name = name;
   }
   if (global_opts.debug_level >= 2) {
-    db.gbLog("parse_trails: Trail '%s'\n", gbLogCStr(trk_head->rte_name));
+    gbLog("parse_trails: Trail '%s'\n", gbLogCStr(trk_head->rte_name));
   }
 
   /* Flags, discard for now */
@@ -1061,7 +1061,7 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
     trk_head->rte_desc = desc;
   }
   if (global_opts.debug_level == 99) {
-    db.gbLog("parse_trails: Comment '%s'\n", gbLogCStr(desc));
+    gbLog("parse_trails: Comment '%s'\n", gbLogCStr(desc));
   }
 
   /* Creation date/time, discard for now */
@@ -1070,12 +1070,12 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
   int create_time = gbfgetint32(file_in);
   if (global_opts.debug_level == 99) {
     QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
-    db.gbLog("parse_trails: creation date/time = %s\n", gbLogCStr(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
+    gbLog("parse_trails: creation date/time = %s\n", gbLogCStr(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
   }
 
   /* Some flag bytes */
   if (global_opts.debug_level == 99) {
-    db.gbLog("parse_trails: unknown flag bytes %02x %02x %02x\n",
+    gbLog("parse_trails: unknown flag bytes %02x %02x %02x\n",
            gbfgetc(file_in), gbfgetc(file_in), gbfgetc(file_in));
   } else {
     /* just discard */
@@ -1087,15 +1087,15 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
   /* Mysterious attribute "data count" */
   int attr_count = gbfgetint32(file_in);
   if (global_opts.debug_level == 99) {
-    db.gbLog("parse_trails: attribute count %4d : (", attr_count);
+    gbLog("parse_trails: attribute count %4d : (", attr_count);
     for (int i=0; i<attr_count; i++) {
       if (trail_version == 5) {
-        db.gbLog("%08x ", gbfgetint32(file_in));
+        gbLog("%08x ", gbfgetint32(file_in));
       } else {
-        db.gbLog("%02x ", gbfgetc(file_in));
+        gbLog("%02x ", gbfgetc(file_in));
       }
     }
-    db.gbLog(")\n");
+    gbLog(")\n");
   } else {
     /* just discard */
     for (int i=0; i<attr_count; i++) {
@@ -1110,12 +1110,12 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
   int num_trail_pts = gbfgetint32(file_in);
 
   if (global_opts.debug_level >= 2) {
-    db.gbLog("parse_trails: trail %d name='%s' color=%d flags=%d has %d (%x) trailpoints\n",
+    gbLog("parse_trails: trail %d name='%s' color=%d flags=%d has %d (%x) trailpoints\n",
            *trail_num, gbLogCStr(trk_head->rte_name), trail_color, trail_flags, num_trail_pts, num_trail_pts);
 
     if (global_opts.debug_level == 99) {
-      db.gbLog("parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
-      db.gbLog("parse_trails: -------------- -------------- -- -------- -- -------- -- --------\n");
+      gbLog("parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
+      gbLog("parse_trails: -------------- -------------- -- -------- -- -------- -- --------\n");
     }
   }
   for (int j = 0; j < num_trail_pts; ++j) {
@@ -1134,10 +1134,10 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
 
     if (global_opts.debug_level >= 2) {
       if (global_opts.debug_level == 99) {
-        db.gbLog("parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
-        db.gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
+        gbLog("parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
+        gbLog(" '%s'", gbLogCStr(wpt_tmp->GetCreationTime().toString(u"yyyy/MM/dd hh:mm:ss")));
       } else {
-        db.gbLog("parse_trails: added trailpoint %+.9f,%+.9f to trail %s\n",
+        gbLog("parse_trails: added trailpoint %+.9f,%+.9f to trail %s\n",
                wpt_tmp->longitude, wpt_tmp->latitude, gbLogCStr(trk_head->rte_name));
       }
     }
@@ -1150,12 +1150,12 @@ LowranceusrFormat::lowranceusr4_parse_trail(int* trail_num)
       int flag = gbfgetc(file_in);
       float value = gbfgetflt(file_in);
       if (global_opts.debug_level == 99) {
-        db.gbLog(" %02x %f", flag, value);
+        gbLog(" %02x %f", flag, value);
       }
     }
 
     if (global_opts.debug_level == 99) {
-      db.gbLog("\n");
+      gbLog("\n");
     }
   }
 }
@@ -1175,7 +1175,7 @@ LowranceusrFormat::lowranceusr_parse_trails()
   }
 
   if (global_opts.debug_level >= 1) {
-    db.gbLog("parse_trails: Num Trails = %d\n", num_trails);
+    gbLog("parse_trails: Num Trails = %d\n", num_trails);
   }
 
   for (int i = trail_num = 0; i < num_trails && !gbfeof(file_in); i++) {
@@ -1197,7 +1197,7 @@ LowranceusrFormat::read()
   reading_version = gbfgetint16(file_in);
   rstream_version = gbfgetint16(file_in);
   if (global_opts.debug_level >= 1) {
-    db.gbLog("input_file: USR File Format %d (Version = %d)\n", reading_version, rstream_version);
+    gbLog("input_file: USR File Format %d (Version = %d)\n", reading_version, rstream_version);
   }
 
   if ((reading_version < 2) || (reading_version > 6)) {
@@ -1209,19 +1209,19 @@ LowranceusrFormat::read()
     /* Starting with USR version 4 have an unknown here */
     int unknown = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
-      db.gbLog("input_file: Unknown %d (%x)\n", unknown, unknown);
+      gbLog("input_file: Unknown %d (%x)\n", unknown, unknown);
     }
 
     /* USR files also now contain a file title */
     QString title = lowranceusr4_readstr(file_in, 1);
     if (!title.isEmpty() && global_opts.debug_level >= 1) {
-      db.gbLog("file title: '%s'\n", gbLogCStr(title));
+      gbLog("file title: '%s'\n", gbLogCStr(title));
     }
 
     /* AND a date created string */
     QString creation_date = lowranceusr4_readstr(file_in, 1);
     if (!creation_date.isEmpty()  && global_opts.debug_level >= 1) {
-      db.gbLog("date string: '%s'\n", gbLogCStr(creation_date));
+      gbLog("date string: '%s'\n", gbLogCStr(creation_date));
     }
 
     /* Creation date/time, discard for now */
@@ -1230,7 +1230,7 @@ LowranceusrFormat::read()
     int create_time = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
       QDateTime qdt = lowranceusr4_get_timestamp(create_date, create_time);
-      db.gbLog("creation date/time : '%s'\n", gbLogCStr(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
+      gbLog("creation date/time : '%s'\n", gbLogCStr(qdt.toString(u"yyyy-MM-dd hh:mm:ss AP")));
     }
 
     unsigned char byte = gbfgetc(file_in); /* unused, apparently */
@@ -1239,13 +1239,13 @@ LowranceusrFormat::read()
     /* AND the serial number of the unit that created the file */
     uint serial_num = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
-      db.gbLog("device serial number: %u\n", serial_num);
+      gbLog("device serial number: %u\n", serial_num);
     }
 
     /* AND a comment on the file contents */
     QString comment = lowranceusr4_readstr(file_in, 1);
     if (!comment.isEmpty() && global_opts.debug_level >= 1) {
-      db.gbLog("content description: '%s'\n", gbLogCStr(comment));
+      gbLog("content description: '%s'\n", gbLogCStr(comment));
     }
   }
 
@@ -1302,7 +1302,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt)
 
   if (global_opts.debug_level > 2) {
     /* print lat/lon/alt on one easily greppable line */
-    db.gbLog("waypt_disp: Waypt name = '%s' Lat = %+16.10f  Lon = %+16.10f  Alt = %f\n",
+    gbLog("waypt_disp: Waypt name = '%s' Lat = %+16.10f  Lon = %+16.10f  Alt = %f\n",
            gbLogCStr(wpt->shortname), wpt->latitude, wpt->longitude, wpt->altitude);
   }
 
@@ -1315,7 +1315,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt)
   gbfwrite(name_qba.constData(), 1, text_len, file_out);
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("waypt_disp: Waypt name = '%s' ", gbLogCStr(name));
+    gbLog("waypt_disp: Waypt name = '%s' ", gbLogCStr(name));
   }
 
   /**
@@ -1341,13 +1341,13 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt)
     /* Lowrance needs it as seconds since Jan 1, 2000 */
     waypt_time -= base_time_secs;
     if (global_opts.debug_level >= 2) {
-      db.gbLog("creation_time %" PRId64 ", '%s'", waypt_time, gbLogCStr(wpt->GetCreationTime().toString(u"yyyy-MM-dd hh:mm:ss")));
+      gbLog("creation_time %" PRId64 ", '%s'", waypt_time, gbLogCStr(wpt->GetCreationTime().toString(u"yyyy-MM-dd hh:mm:ss")));
     }
   } else {
     /* If false, make sure it is an unknown time value */
     waypt_time = 0;
     if (global_opts.debug_level >= 2) {
-      db.gbLog("creation_time UNKNOWN");
+      gbLog("creation_time UNKNOWN");
     }
   }
 
@@ -1377,7 +1377,7 @@ LowranceusrFormat::lowranceusr_waypt_disp(const Waypoint* wpt)
   }
 
   if (global_opts.debug_level > 1) {
-    db.gbLog("\n");
+    gbLog("\n");
   }
 }
 
@@ -1475,7 +1475,7 @@ LowranceusrFormat::lowranceusr_waypt_pr(const Waypoint* wpt)
   gbfputint16(waypt_out_count, file_out);
 
   if (global_opts.debug_level >= 3) {
-    db.gbLog("waypt_pr: waypoint #%d\n",waypt_out_count);
+    gbLog("waypt_pr: waypoint #%d\n",waypt_out_count);
   }
 
   waypt_out_count++;
@@ -1495,14 +1495,14 @@ LowranceusrFormat::lowranceusr4_write_waypoints()
   route_disp_all(nullptr, nullptr, register_waypt_lambda);
 
   if (global_opts.debug_level >= 1) {
-    db.gbLog("writing %s waypoints\n", QByteArray::number(waypt_table->size()).constData());
+    gbLog("writing %s waypoints\n", QByteArray::number(waypt_table->size()).constData());
   }
 
   gbfputint32(waypt_table->size(), file_out);
   waypt_uid = 0;
   for (int i = 0; i < waypt_table->size(); ++i) {
     if (global_opts.debug_level >= 2) {
-      db.gbLog("writing out waypt %d (%s - %s)\n",
+      gbLog("writing out waypt %d (%s - %s)\n",
              i, gbLogCStr(waypt_table->at(i)->shortname), gbLogCStr(waypt_table->at(i)->description));
     }
     lowranceusr4_waypt_disp((waypt_table->at(i)));
@@ -1567,7 +1567,7 @@ LowranceusrFormat::lowranceusr_trail_hdr(const route_head* trk)
     text_len = MAXUSRSTRINGSIZE;
   }
   if (global_opts.debug_level >= 1) {
-    db.gbLog("trail_hdr: trail name '%s' ", gbLogCStr(trk->rte_name));
+    gbLog("trail_hdr: trail name '%s' ", gbLogCStr(trk->rte_name));
   }
   gbfputint32(text_len, file_out);
   gbfwrite(CSTR(name), 1, text_len, file_out);
@@ -1580,11 +1580,11 @@ LowranceusrFormat::lowranceusr_trail_hdr(const route_head* trk)
   num_section_points = num_trail_points;
 
   if (global_opts.debug_level) {
-    db.gbLog("num_trail_points = %d ", num_trail_points);
+    gbLog("num_trail_points = %d ", num_trail_points);
     if (global_opts.debug_level > 1) {
-      db.gbLog("max_trail_size = %d num_section_points = %d\n", max_trail_size, num_section_points);
+      gbLog("max_trail_size = %d num_section_points = %d\n", max_trail_size, num_section_points);
     } else {
-      db.gbLog("\n");
+      gbLog("\n");
     }
   }
 
@@ -1620,7 +1620,7 @@ LowranceusrFormat::lowranceusr_route_hdr(const route_head* rte)
   gbfwrite(&route_reversed, 1, 1, file_out);
 
   if (global_opts.debug_level >= 1)
-    db.gbLog("route_hdr: route name \"%s\" num_legs = %d\n",
+    gbLog("route_hdr: route name \"%s\" num_legs = %d\n",
            gbLogCStr(rte->rte_name), num_legs);
 }
 
@@ -1628,7 +1628,7 @@ void
 LowranceusrFormat::lowranceusr4_route_hdr(const route_head* rte)
 {
   if (global_opts.debug_level >= 1) {
-    db.gbLog("writing route #%d (%s) with %d waypts\n",
+    gbLog("writing route #%d (%s) with %d waypts\n",
            route_uid, gbLogCStr(rte->rte_name), rte->rte_waypt_ct());
   }
 
@@ -1675,7 +1675,7 @@ LowranceusrFormat::lowranceusr4_route_leg_disp(const Waypoint* wpt)
       gbfputint32(i, file_out); // Sequence Low
       gbfputint32(0, file_out); // Sequence High
       if (global_opts.debug_level > 1) {
-        db.gbLog("wrote route leg with waypt '%s'\n", gbLogCStr(wpt->shortname));
+        gbLog("wrote route leg with waypt '%s'\n", gbLogCStr(wpt->shortname));
       }
       break;
     }
@@ -1698,7 +1698,7 @@ LowranceusrFormat::lowranceusr_trail_disp(const Waypoint* wpt)
     int lon = lon_deg_to_mm(wpt->longitude);
 
     if (global_opts.debug_level > 1) {
-      db.gbLog("trail_disp: Trail point #%d lat = %f long = %f\n",trail_point_count, wpt->latitude, wpt->longitude);
+      gbLog("trail_disp: Trail point #%d lat = %f long = %f\n",trail_point_count, wpt->latitude, wpt->longitude);
     }
 
     gbfputint32(lat, file_out);
@@ -1733,7 +1733,7 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
     gbfputs(name, file_out);
 
     if (global_opts.debug_level >= 1) {
-      db.gbLog("trail_hdr: trail name = %s\n", CSTR(name));
+      gbLog("trail_hdr: trail name = %s\n", CSTR(name));
     }
   }
 
@@ -1752,7 +1752,7 @@ LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head* /*unused*/)
     num_section_points = num_trail_points;
 
     if (global_opts.debug_level >= 1)
-      db.gbLog("merge_trail_tlr: num_trail_points = %d\nmax_trail_size = %d\nnum_section_points = %d\n",
+      gbLog("merge_trail_tlr: num_trail_points = %d\nmax_trail_size = %d\nnum_section_points = %d\n",
              num_trail_points, max_trail_size, num_section_points);
 
     const char visible=1;
@@ -1772,7 +1772,7 @@ void
 LowranceusrFormat::lowranceusr4_trail_hdr(const route_head* trail)
 {
   if (global_opts.debug_level >= 1) {
-    db.gbLog("writing trail %d (%s) with %d trailpoints\n",
+    gbLog("writing trail %d (%s) with %d trailpoints\n",
            trail_uid, gbLogCStr(trail->rte_name), trail->rte_waypt_ct());
   }
 
@@ -1853,7 +1853,7 @@ LowranceusrFormat::write()
 
   int NumWaypoints = waypt_count();
   if (global_opts.debug_level >= 1) {
-    db.gbLog("data_write: Num Waypoints = %d\n", NumWaypoints);
+    gbLog("data_write: Num Waypoints = %d\n", NumWaypoints);
   }
 
   // If writeasicons option specified then all Waypoints processed are written as
@@ -1883,7 +1883,7 @@ LowranceusrFormat::write()
     buf = opt_title.isEmpty()?
           QStringLiteral("GPSBabel generated USR data file") : opt_title;
     if (global_opts.debug_level >= 1) {
-      db.gbLog("data_write: Title = '%s'\n", gbLogCStr(buf));
+      gbLog("data_write: Title = '%s'\n", gbLogCStr(buf));
     }
     lowranceusr4_writestr(buf, file_out, 1);
 
@@ -1907,7 +1907,7 @@ LowranceusrFormat::write()
     buf = opt_content_descr.isEmpty()?
           QStringLiteral("Waypoints, routes, and trails") : opt_content_descr;
     if (global_opts.debug_level >= 1) {
-      db.gbLog("data_write: Description = '%s'\n", gbLogCStr(buf));
+      gbLog("data_write: Description = '%s'\n", gbLogCStr(buf));
     }
     lowranceusr4_writestr(buf, file_out, 1);
 
@@ -1924,7 +1924,7 @@ LowranceusrFormat::write()
   lowrance_route_count=0;
 
   if (global_opts.debug_level >= 1) {
-    db.gbLog("data_write: Num routes = %d\n", NumRoutes);
+    gbLog("data_write: Num routes = %d\n", NumRoutes);
   }
 
   if ((writing_version == 2) || (writing_version == 3)) {
@@ -2027,7 +2027,7 @@ LowranceusrFormat::write()
 
   } else {
     if (global_opts.debug_level >= 1) {
-      db.gbLog("data_write: Num trails = %d\n", NumTrails);
+      gbLog("data_write: Num trails = %d\n", NumTrails);
     }
     if ((writing_version == 2) || (writing_version == 3)) {
       // USR version 2 & 3 use 16-bit count

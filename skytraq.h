@@ -112,7 +112,7 @@ protected:
 
   /* Member Functions */
 
-  [[gnu::format(printf, 3, 4)]] void dbg(int l, const char* msg, ...);
+  [[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...);
   void rd_drain();
   int rd_char(int* errors);
   int rd_buf(uint8_t* buf, int len);
@@ -148,7 +148,6 @@ protected:
 
   /* Data Members */
 
-  DebugLog db;
   void* serial_handle = nullptr;		/* IO file descriptor */
   int skytraq_baud = 0;		/* detected baud rate */
 

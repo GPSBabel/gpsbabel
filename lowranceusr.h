@@ -389,8 +389,8 @@ private:
 
   static bool same_points(const Waypoint* A, const Waypoint* B);
   void register_waypt(const Waypoint* wpt);
-  const Waypoint* lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high);
-  const Waypoint* lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4);
+  static const Waypoint* lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high);
+  static const Waypoint* lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4);
   QString lowranceusr4_readstr(gbfile* file, int bytes_per_char) const;
   void lowranceusr4_writestr(const QString& buf, gbfile* file, int bytes_per_char) const;
   static gpsbabel::DateTime lowranceusr4_get_timestamp(unsigned int jd_number, unsigned int msecs);
@@ -434,7 +434,6 @@ private:
 
   /* Data Members */
 
-  DebugLog db;
   gbfile*        file_in{};
   gbfile*        file_out{};
   MakeShort*     mkshort_handle{};

@@ -155,7 +155,7 @@ private:
 
   /* Member Functions */
 
-  void print_buff(const char* buf, int sz, const char* cmt);
+  static void print_buff(const char* buf, int sz, const char* cmt);
   static uint16_t exif_type_size(uint16_t type);
   static QString exif_time_str(const QDateTime& time);
   static QByteArray exif_read_str(ExifTag* tag);
@@ -169,9 +169,9 @@ private:
 #ifndef NDEBUG
   static void exif_validate_tag_structure(const ExifTag* tag);
 #endif
-  ExifIfd* exif_read_ifd(ExifApp* app, uint16_t ifd_nr, gbsize_t offs, uint32_t* exif_ifd_ofs, uint32_t* gps_ifd_ofs, uint32_t* inter_ifd_ofs);
-  void exif_read_app(ExifApp* app);
-  void exif_examine_app(ExifApp* app);
+  static ExifIfd* exif_read_ifd(ExifApp* app, uint16_t ifd_nr, gbsize_t offs, uint32_t* exif_ifd_ofs, uint32_t* gps_ifd_ofs, uint32_t* inter_ifd_ofs);
+  static void exif_read_app(ExifApp* app);
+  static void exif_examine_app(ExifApp* app);
   static ExifIfd* exif_find_ifd(ExifApp* app, uint16_t ifd_nr);
   static ExifTag* exif_find_tag(ExifApp* app, uint16_t ifd_nr, uint16_t tag_id);
   QDateTime exif_get_exif_time(ExifApp* app);
@@ -194,7 +194,6 @@ private:
 
   /* Data Members */
 
-  DebugLog db;
   gbfile* fin_{};
   gbfile* fout_{};
   QList<ExifApp*>* exif_apps{};

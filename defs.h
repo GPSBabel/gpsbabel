@@ -922,16 +922,9 @@ enum ff_cap {
 [[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...);
 [[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...);
 
-class DebugLog
-{
-public:
-  int gbVLog(const char* fmt, va_list args1);
-  [[gnu::format(printf, 2, 3)]] int gbLog(const char* fmt, ...);
-  int gbFlush();
-
-private:
-  QString buf_;
-};
+int gbVLog(const char* fmt, va_list args1);
+[[gnu::format(printf, 1, 2)]] int gbLog(const char* fmt, ...);
+int gbFlush();
 
 void printposn(double c, bool is_lat);
 

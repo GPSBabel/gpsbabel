@@ -196,6 +196,7 @@ print_extended_info()
 
 static void setMessagePattern(const QString& id = QString())
 {
+  gbFlush();
   if (id.isEmpty()) {
     qSetMessagePattern("%{if-category}%{category}: %{endif}main: %{message}");
   } else {

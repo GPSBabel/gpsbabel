@@ -386,7 +386,6 @@ private:
   };
 
 
-  DebugLog db;
   gbfile* fin{}, *fout{};
   uint16_t codepage{};	/* code-page, e.g. 1252, 65001 */
   reader_data_t* rdata{};

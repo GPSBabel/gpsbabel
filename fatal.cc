@@ -106,26 +106,28 @@ gbDebug(const char* fmt, ...)
   qDebug().noquote() << msg;
 }
 
-int DebugLog::gbVLog(const char* fmt, va_list args)
+static QString gbDebugLogString_;
+
+int gbVLog(const char* fmt, va_list args)
 {
   int rc = 0;
 
-  buf_.append(QString::vasprintf(fmt, args));
+  gbDebugLogString_.append(QString::vasprintf(fmt, args));
 
-  for (auto idx = buf_.indexOf('\n'); idx >= 0; idx = buf_.indexOf('\n')) {
-    QString msg = buf_.sliced(0, idx + 1);
+  for (auto idx = gbDebugLogString_.indexOf('\n'); idx >= 0; idx = gbDebugLogString_.indexOf('\n')) {
+    QString msg = gbDebugLogString_.sliced(0, idx + 1);
     if (msg.endsWith('\n')) {
       msg.chop(1);
     }
     qDebug().noquote() << msg;
     rc += msg.size();
-    buf_.remove(0, idx + 1);
+    gbDebugLogString_.remove(0, idx + 1);
   }
 
   return rc;
 }
 
-int DebugLog::gbLog(const char* fmt, ...)
+int gbLog(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -134,17 +136,17 @@ int DebugLog::gbLog(const char* fmt, ...)
   return rc;
 }
 
-int DebugLog::gbFlush()
+int gbFlush()
 {
   int rc = 0;
 
-  if (!buf_.isEmpty()) {
-    if (buf_.endsWith('\n')) {
-      buf_.chop(1);
+  if (!gbDebugLogString_.isEmpty()) {
+    if (gbDebugLogString_.endsWith('\n')) {
+      gbDebugLogString_.chop(1);
     }
-    qDebug().noquote() << buf_;
-    rc += buf_.size();
-    buf_ = QString();
+    qDebug().noquote() << gbDebugLogString_;
+    rc += gbDebugLogString_.size();
+    gbDebugLogString_ = QString();
   }
 
   return rc;

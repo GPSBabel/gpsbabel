@@ -120,7 +120,6 @@ protected:
 
   /* Data Members */
 
-  DebugLog db;
   char* dumpheader = nullptr;
   gbfile* tpo_file_in{};
 

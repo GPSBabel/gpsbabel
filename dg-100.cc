@@ -118,14 +118,14 @@ Dg100Format::dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned ch
     return;
   }
 
-  db.gbLog("%s", hdr);
+  gbLog("%s", hdr);
 
   for (unsigned int i = 0; i < sz; i++)  {
-    db.gbLog("%02x ", buf[i]);
+    gbLog("%02x ", buf[i]);
   }
 
   if (include_nl) {
-    db.gbLog("\n");
+    gbLog("\n");
   }
 }
 
@@ -135,7 +135,7 @@ Dg100Format::dg100_log(const char* fmt, ...)
   if (global_opts.debug_level > 0) {
     va_list ap;
     va_start(ap, fmt);
-    db.gbVLog(fmt, ap);
+    gbVLog(fmt, ap);
     va_end(ap);
   }
 }
