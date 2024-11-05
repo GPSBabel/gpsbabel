@@ -617,12 +617,12 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
   if (args) {
     for (const auto& arg : *args) {
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
-        gbLog("options: module/option=value: %s/%s=\"%s\"",
+        gbDebug("options: module/option=value: %s/%s=\"%s\"",
                gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
         if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
-          gbLog(" (=default)");
+          gbDebug(" (=default)");
         }
-        gbLog("\n");
+        gbDebug("\n");
       }
     }
   }

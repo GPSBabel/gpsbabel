@@ -272,7 +272,7 @@ void IgcFormat::read()
 
   while (true) {
     if (global_opts.debug_level >= 8) {
-      gbLog("Processing IGC file line %i\n", current_line);
+      gbDebug("Processing IGC file line %i\n", current_line);
     }
     igc_rec_type_t rec_type = get_record(&ibuf);
     current_line++;
@@ -378,21 +378,21 @@ void IgcFormat::read()
       if (!ext_types_list.isEmpty()) {
         auto* fsdata = new igc_fsdata;
         if (global_opts.debug_level >= 7) {
-          gbLog("Record: %s\n",gbLogCStr(ibuf_q));
+          gbDebug("Record: %s\n",gbLogCStr(ibuf_q));
         }
         if (global_opts.debug_level >= 6) {
-          gbLog("Adding extension data:");
+          gbDebug("Adding extension data:");
         }
         for (const auto& [name, ext, start, len, factor] : ext_types_list) {
           double ext_data = ibuf_q.mid(start,len).toInt() / factor;
 
           fsdata->set_value(ext, ext_data, pres_wpt);
           if (global_opts.debug_level >= 6) {
-            gbLog(" %s:%f", gbLogCStr(name), ext_data);
+            gbDebug(" %s:%f", gbLogCStr(name), ext_data);
           }
         }
         if (global_opts.debug_level >= 6) {
-          gbLog("\n");
+          gbDebug("\n");
         }
         pres_wpt->fs.FsChainAdd(fsdata);
       }
@@ -438,13 +438,13 @@ void IgcFormat::read()
         break;
       } else if (global_opts.debug_level >= 5) {
         if (strcmp(tmp_str, "OOI") == 0) {
-          gbLog("Observer Input> %s\n", ibuf + 4);
+          gbDebug("Observer Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, "PLT") == 0) {
-          gbLog("Pilot Input> %s\n", ibuf + 4);
+          gbDebug("Pilot Input> %s\n", ibuf + 4);
         } else if (strcmp(tmp_str, manufacturer) == 0) {
-          gbLog("Manufacturer Input> %s\n", ibuf + 4);
+          gbDebug("Manufacturer Input> %s\n", ibuf + 4);
         } else {
-          gbLog("Anonymous Input> %s\n", ibuf + 1);
+          gbDebug("Anonymous Input> %s\n", ibuf + 1);
         }
       }
       break;
@@ -487,19 +487,19 @@ void IgcFormat::read()
         }
       }
       if (global_opts.debug_level >= 1) {
-        gbLog("I record: %s\n", gbLogCStr(ibuf_q));
-        gbLog("Extensions present: %s\n", gbLogCStr(present_extensions.join(' ')));
+        gbDebug("I record: %s\n", gbLogCStr(ibuf_q));
+        gbDebug("Extensions present: %s\n", gbLogCStr(present_extensions.join(' ')));
       }
       if (global_opts.debug_level >= 2) {
-        gbLog("Non-excluded extensions defined in I record:\n");
-        gbLog("(Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
+        gbDebug("Non-excluded extensions defined in I record:\n");
+        gbDebug("(Note: IGC records are one-initialized. QStrings are zero-initialized.)\n");
         for (const auto& [name, ext, begin, len, factor] : ext_types_list) {
-          gbLog("   Extension %s (%i): Begin: %i; Length: %i\n", gbLogCStr(name), int(ext), begin, len);
+          gbDebug("   Extension %s (%i): Begin: %i; Length: %i\n", gbLogCStr(name), int(ext), begin, len);
         }
         if (global_opts.debug_level >= 3) {
-          gbLog("Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
+          gbDebug("Unsupported extensions (I will not ingest these, they are unsupported):\t%s\n",
                  gbLogCStr(unsupported_extensions.join(' ')));
-          gbLog("Supported extensions (These are present in the I record and supported):\t%s\n",
+          gbDebug("Supported extensions (These are present in the I record and supported):\t%s\n",
                  gbLogCStr(supported_extensions.join(' ')));
         }
       }
@@ -852,7 +852,7 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
   } while (alt_diff > -10.0);
   gpsbabel::DateTime pres_time = (*std::prev(wpt_rit))->GetCreationTime();
   if (global_opts.debug_level >= 1) {
-    gbLog("pressure landing time %s\n", CSTR(pres_time.toPrettyString()));
+    gbDebug("pressure landing time %s\n", CSTR(pres_time.toPrettyString()));
   }
 
   // Deduce the landing time from the GNSS altitude track based on
@@ -871,12 +871,12 @@ int IgcFormat::correlate_tracks(const route_head* pres_track, const route_head* 
             radtometers(gcdist(wpt->position(), (*wpt_rit)->position())) /
             (0.001 * deltat_msec);
     if (global_opts.debug_level >= 2) {
-      gbLog("speed=%.2fm/s\n", speed);
+      gbDebug("speed=%.2fm/s\n", speed);
     }
   } while (speed < 2.5);
   gpsbabel::DateTime gnss_time = (*std::prev(wpt_rit))->GetCreationTime();
   if (global_opts.debug_level >= 1) {
-    gbLog("gnss landing time %s\n", CSTR(gnss_time.toPrettyString()));
+    gbDebug("gnss landing time %s\n", CSTR(gnss_time.toPrettyString()));
   }
   // Time adjustment is difference between the two estimated landing times
   int time_diff = gnss_time.secsTo(pres_time);
@@ -955,7 +955,7 @@ void IgcFormat::wr_track()
       time_adj = 0;
     }
     if (global_opts.debug_level >= 1) {
-      gbLog("adjusting time by %ds\n", time_adj);
+      gbDebug("adjusting time by %ds\n", time_adj);
     }
     // Iterate through waypoints in both tracks simultaneously
     Interpolater interpolater;

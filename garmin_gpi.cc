@@ -59,7 +59,7 @@
 #define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
 
 #define GPI_DBG global_opts.debug_level >= 3
-#define PP if (GPI_DBG) gbLog("@%6x (%8d): ", gbftell(fin), gbftell(fin))
+#define PP if (GPI_DBG) gbDebug("@%6x (%8d): ", gbftell(fin), gbftell(fin))
 
 /*******************************************************************************
 * %%%                             gpi reader                               %%% *
@@ -149,7 +149,7 @@ GarminGPIFormat::gpi_read_string(const char* field)
 
   QString result = str_to_unicode(string).trimmed();
   if (GPI_DBG) {
-    gbLog("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : gbLogCStr(result));
+    gbDebug("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : gbLogCStr(result));
   }
   return result;
 }
@@ -175,7 +175,7 @@ GarminGPIFormat::read_header()
   rdata->crdate = gbfgetint32(fin);
   if (GPI_DBG) {
     time_t crdate = GPS_Math_Gtime_To_Utime(rdata->crdate);
-    gbLog("crdate = %lld (%s)\n", (long long) rdata->crdate,
+    gbDebug("crdate = %lld (%s)\n", (long long) rdata->crdate,
             CSTR(QDateTime::fromSecsSinceEpoch(crdate, QtUTC).toString(Qt::ISODate)));
   }
 
@@ -209,14 +209,14 @@ GarminGPIFormat::read_header()
   codepage = gbfgetuint16(fin);
   if (GPI_DBG) {
     PP;
-    gbLog("Code Page: %d\n",codepage);
+    gbDebug("Code Page: %d\n",codepage);
   }
   (void) gbfgetint16(fin);     /* typically 0, but  0x11 in
             Garminonline.de files.  */
 
   if (GPI_DBG) {
     PP;
-    gbLog("< leaving header\n");
+    gbDebug("< leaving header\n");
   }
 }
 
@@ -226,7 +226,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
 {
   if (GPI_DBG) {
     PP;
-    gbLog("> reading poi (size %d)\n", sz);
+    gbDebug("> reading poi (size %d)\n", sz);
   }
   PP;
   int len = 0;
@@ -234,7 +234,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
     len = gbfgetint32(fin);  /* sub-header size */
   }
   if (GPI_DBG) {
-  gbLog("poi sublen = %d (0x%x)\n", len, len);
+  gbDebug("poi sublen = %d (0x%x)\n", len, len);
   }
   (void) len;
   int pos = gbftell(fin);
@@ -267,7 +267,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
 
   if (GPI_DBG) {
     PP;
-    gbLog("< leaving poi\n");
+    gbDebug("< leaving poi\n");
   }
 }
 
@@ -278,12 +278,12 @@ GarminGPIFormat::read_poi_list(const int sz)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    gbLog("> reading poi list (-> %x / %d )\n", pos + sz, pos + sz);
+    gbDebug("> reading poi list (-> %x / %d )\n", pos + sz, pos + sz);
   }
   PP;
   int i = gbfgetint32(fin);  /* mostly 23 (0x17) */
   if (GPI_DBG) {
-    gbLog("list sublen = %d (0x%x)\n", i, i);
+    gbDebug("list sublen = %d (0x%x)\n", i, i);
   }
   (void) i;
 
@@ -306,7 +306,7 @@ GarminGPIFormat::read_poi_list(const int sz)
   }
   if (GPI_DBG) {
     PP;
-    gbLog("< leaving poi list\n");
+    gbDebug("< leaving poi list\n");
   }
 }
 
@@ -316,13 +316,13 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    gbLog("> reading poi group (-> %x / %d)\n", pos + sz, pos + sz);
+    gbDebug("> reading poi group (-> %x / %d)\n", pos + sz, pos + sz);
   }
   if (tag == 0x80009) {
     PP;
     int subsz = gbfgetint32(fin);  /* ? offset to category data ? */
     if (GPI_DBG) {
-      gbLog("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
+      gbDebug("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
     }
     (void)subsz;
   }
@@ -337,7 +337,7 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
 
   if (GPI_DBG) {
     PP;
-    gbLog("< leaving poi group\n");
+    gbDebug("< leaving poi group\n");
   }
 }
 
@@ -363,7 +363,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 
   if (GPI_DBG) {
     PP;
-    gbLog("%s: tag = 0x%x (size %d)\n", caller, tag, sz);
+    gbDebug("%s: tag = 0x%x (size %d)\n", caller, tag, sz);
   }
   if ((tag >= 0x80000) && (tag <= 0x800ff)) {
     sz += 4;
@@ -456,7 +456,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
     if (GPI_DBG) {
-      gbLog("GPI Address field mask: %d (0x%02x)\n", mask, mask);
+      gbDebug("GPI Address field mask: %d (0x%02x)\n", mask, mask);
     }
     if ((mask & GPI_ADDR_CITY) && !(str = gpi_read_string("City")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
@@ -509,7 +509,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 
     mask = gbfgetint16(fin); /* phone fields mask */
     if (GPI_DBG) {
-      gbLog("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
+      gbDebug("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
     }
     if ((mask & 1) && !(str = gpi_read_string("Phone")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
@@ -530,17 +530,17 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     if (GPI_DBG) {
       int x;
       std::unique_ptr<unsigned char[]> b(new unsigned char[sz]);
-      gbLog("Tag: %x\n", tag);
+      gbDebug("Tag: %x\n", tag);
       gbfread(b.get(), 1, sz, fin);
-      gbLog("\n");
+      gbDebug("\n");
       for (x = 0; x < sz; x++) {
-        gbLog("%02x ", b[x]);
+        gbDebug("%02x ", b[x]);
       }
-      gbLog("\n");
+      gbDebug("\n");
       for (x = 0; x < sz; x++) {
-        gbLog("%c", isalnum(b[x]) ? b[x] : '.');
+        gbDebug("%c", isalnum(b[x]) ? b[x] : '.');
       }
-      gbLog("\n");
+      gbDebug("\n");
     }
   break;
   default:

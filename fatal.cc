@@ -157,18 +157,8 @@ int gbVLog(QtMsgType type, const char* fmt, va_list args)
   return rc;
 }
 
-int gbLog(const char* fmt, ...)
+void gbFlush(QtMsgType type)
 {
-  va_list args;
-  va_start(args, fmt);
-  int rc = gbVLog(QtDebugMsg, fmt, args);
-  va_end(args);
-  return rc;
-}
-
-int gbFlush(QtMsgType type)
-{
-  int rc = 0;
   QString& logString = getLogString(type);
 
   if (!logString.isEmpty()) {
@@ -176,9 +166,6 @@ int gbFlush(QtMsgType type)
       logString.chop(1);
     }
     sendLogMsg(type, logString);
-    rc += logString.size();
     logString = QString();
   }
-
-  return rc;
 }

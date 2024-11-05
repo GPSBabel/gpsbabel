@@ -118,14 +118,14 @@ Dg100Format::dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned ch
     return;
   }
 
-  gbLog("%s", hdr);
+  gbDebug("%s", hdr);
 
   for (unsigned int i = 0; i < sz; i++)  {
-    gbLog("%02x ", buf[i]);
+    gbDebug("%02x ", buf[i]);
   }
 
   if (include_nl) {
-    gbLog("\n");
+    gbDebug("\n");
   }
 }
 
