@@ -137,24 +137,17 @@ static void sendLogMsg(QtMsgType type, const QString& msg)
   }
 }
 
-int gbVLog(QtMsgType type, const char* fmt, va_list args)
+void gbVLog(QtMsgType type, const char* fmt, va_list args)
 {
-  int rc = 0;
   QString& logString = getLogString(type);
 
   logString.append(QString::vasprintf(fmt, args));
 
   for (auto idx = logString.indexOf('\n'); idx >= 0; idx = logString.indexOf('\n')) {
-    QString msg = logString.sliced(0, idx + 1);
-    if (msg.endsWith('\n')) {
-      msg.chop(1);
-    }
+    QString msg = logString.sliced(0, idx);
     sendLogMsg(type, msg);
-    rc += msg.size();
     logString.remove(0, idx + 1);
   }
-
-  return rc;
 }
 
 void gbFlush(QtMsgType type)
