@@ -82,8 +82,10 @@ waypt_count()
 void
 waypt_status_disp(int total_ct, int myct)
 {
-  fprintf(stdout, "%d/%d/%d\r", myct*100/total_ct, myct, total_ct);
-  fflush(stdout);
+  // If we use logging the first update will have this info trailing the
+  // "id: " output by qFormatLogMessage but subsequent updates will not.
+  fprintf(stderr, "%d/%d/%d\r", myct*100/total_ct, myct, total_ct);
+  fflush(stderr);
 }
 
 void

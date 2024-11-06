@@ -47,10 +47,6 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
 
 [[noreturn]] void gbFatal(QDebug& msginstance)
 {
-  gbFlush(QtDebugMsg);
-  gbFlush(QtInfoMsg);
-  gbFlush(QtWarningMsg);
-
   auto* myinstance = new FatalMsg;
   myinstance->swap(msginstance);
   delete myinstance;
@@ -60,14 +56,9 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
 [[noreturn]] void
 gbFatal(const char* fmt, ...)
 {
-  gbFlush(QtDebugMsg);
-  gbFlush(QtInfoMsg);
-  gbFlush(QtWarningMsg);
-
   va_list args;
   va_start(args, fmt);
   gbVLog(QtCriticalMsg, fmt, args);
-  gbFlush(QtCriticalMsg);
   va_end(args);
   exit(1);
 }
@@ -99,75 +90,31 @@ gbDebug(const char* fmt, ...)
   va_end(args);
 }
 
-static QString gbDebugLogString_;
-static QString gbInfoLogString_;
-static QString gbWarningLogString_;
-static QString gbCriticalLogString_;
-
-static QString& getLogString(QtMsgType type)
-{
-  switch (type)
-  {
-  case QtDebugMsg:
-    return gbDebugLogString_;
-    break;
-  case QtInfoMsg:
-    return gbInfoLogString_;
-    break;
-  case QtWarningMsg:
-    return gbWarningLogString_;
-    break;
-  case QtCriticalMsg:
-  case QtFatalMsg:
-  default:
-    return gbCriticalLogString_;
-    break;
-  }
-}
-
 static void sendLogMsg(QtMsgType type, const QString& msg)
 {
-  switch (type)
-  {
-  case QtDebugMsg:
-    qDebug().noquote() << msg;
-    break;
-  case QtInfoMsg:
-    qInfo().noquote() << msg;
-    break;
-  case QtWarningMsg:
-    qWarning().noquote() << msg;
-    break;
-  case QtCriticalMsg:
-  case QtFatalMsg:
-  default:
-    qCritical().noquote() << msg;
-    break;
+  static bool lineInProgress = false;
+
+  if (lineInProgress) {
+    fprintf(stderr, "%s", qPrintable(msg));
+  } else {
+    QString message = qFormatLogMessage(type, QMessageLogContext(), msg);
+    fprintf(stderr, "%s", qPrintable(message));
   }
+  fflush(stderr);
+  
+  lineInProgress = !msg.endsWith('\n');
 }
 
 void gbVLog(QtMsgType type, const char* fmt, va_list args)
 {
-  QString& logString = getLogString(type);
-
-  logString.append(QString::vasprintf(fmt, args));
+  QString logString(QString::vasprintf(fmt, args));
 
   for (auto idx = logString.indexOf('\n'); idx >= 0; idx = logString.indexOf('\n')) {
-    QString msg = logString.sliced(0, idx);
+    QString msg = logString.sliced(0, idx + 1);
     sendLogMsg(type, msg);
     logString.remove(0, idx + 1);
   }
-}
-
-void gbFlush(QtMsgType type)
-{
-  QString& logString = getLogString(type);
-
   if (!logString.isEmpty()) {
-    if (logString.endsWith('\n')) {
-      logString.chop(1);
-    }
     sendLogMsg(type, logString);
-    logString = QString();
   }
 }

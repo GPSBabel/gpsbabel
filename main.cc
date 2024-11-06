@@ -196,24 +196,11 @@ print_extended_info()
 
 static void setMessagePattern(const QString& id = QString())
 {
-  gbFlush(QtDebugMsg);
-  gbFlush(QtInfoMsg);
-  gbFlush(QtWarningMsg);
-  gbFlush(QtCriticalMsg);
   if (id.isEmpty()) {
     qSetMessagePattern("%{if-category}%{category}: %{endif}main: %{message}");
   } else {
     qSetMessagePattern(QStringLiteral("%{if-category}%{category}: %{endif}%1: %{message}").arg(id));
   }
-}
-
-static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
-{
-  QString message = qFormatLogMessage(type, context, msg);
-  /* flush any buffered standard output */
-  fflush(stdout);
-  fprintf(stderr, "%s\n", qPrintable(message));
-  fflush(stderr);
 }
 
 static void
@@ -823,7 +810,6 @@ main(int argc, char* argv[])
       gbDebug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
-  qInstallMessageHandler(MessageHandler);
   setMessagePattern();
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */

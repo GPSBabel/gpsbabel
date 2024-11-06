@@ -185,7 +185,6 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
     if (cmd_erase && (global_opts.verbose_status || (global_opts.debug_level > 0 && global_opts.debug_level <= 3))) {
       // erase cmd progress wheel -- only for debug level 1-3
       gbDebug("\b%c", LIVE_CHAR[loops%4]);
-      fflush(stderr);
     }
     if (len > 5 && line[0] == '$') {
       if (expect_len > 0 && strncmp(&line[1], expect, expect_len) == 0) {
@@ -928,7 +927,6 @@ int MtkLoggerBase::mtk_parse(unsigned char* data, int dataLen, unsigned int bmas
       gbDebug("%.2x ", data[j]);
     }
     gbDebug("\n");
-    fflush(stderr);
   }
 
   memset(&itm, 0, sizeof(itm));
