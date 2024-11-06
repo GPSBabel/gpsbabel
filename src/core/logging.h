@@ -52,7 +52,7 @@ public:
 class DebugIndent
 {
 public:
-  explicit DebugIndent(int l) : level_(l) {}
+  explicit DebugIndent(int level) : level_(level) {}
   friend QDebug& operator<<(QDebug& debug, const DebugIndent& indent);
 
 private:
