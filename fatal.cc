@@ -19,15 +19,16 @@
 
  */
 
-#include <cstdarg>             // for va_copy, va_end, va_list, va_start
-#include <cstdio>              // for vsnprintf
+#include <cstdarg>             // for va_end, va_list, va_start
+#include <cstdio>              // for fprintf, stderr, fflush
 #include <cstdlib>             // for exit
 
 #include <QDebug>              // for QDebug
+#include <QMessageLogContext>  // for QtMsgType, QMessageLogContext, qFormatLogMessage
 #include <QString>             // for QString
-#include <QtGlobal>            // for qCritical, qDebug, qInfo, qWarning
+#include <QtGlobal>            // for qPrintable
 
-#include "defs.h"              // for DebugLog, gbFatal, gbDebug, gbInfo, gbWarning
+#include "defs.h"              // for gbFatal, gbDebug, gbInfo, gbVLegacyLog, gbWarning
 #include "src/core/logging.h"  // for FatalMsg
 
 #ifdef PIGS_FLY
