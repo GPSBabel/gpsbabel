@@ -70,7 +70,7 @@ SkytraqBase::dbg(int l, const char* msg, ...)
   if (global_opts.debug_level >= l) {
     va_list ap;
     va_start(ap, msg);
-    gbVLog(QtDebugMsg, msg, ap);
+    gbVLegacyLog(QtDebugMsg, msg, ap);
     va_end(ap);
   }
 }

@@ -58,7 +58,7 @@ gbFatal(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  gbVLog(QtCriticalMsg, fmt, args);
+  gbVLegacyLog(QtCriticalMsg, fmt, args);
   va_end(args);
   exit(1);
 }
@@ -68,7 +68,7 @@ gbWarning(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  gbVLog(QtWarningMsg, fmt, args);
+  gbVLegacyLog(QtWarningMsg, fmt, args);
   va_end(args);
 }
 
@@ -77,7 +77,7 @@ gbInfo(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  gbVLog(QtInfoMsg, fmt, args);
+  gbVLegacyLog(QtInfoMsg, fmt, args);
   va_end(args);
 }
 
@@ -86,11 +86,11 @@ gbDebug(const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  gbVLog(QtDebugMsg, fmt, args);
+  gbVLegacyLog(QtDebugMsg, fmt, args);
   va_end(args);
 }
 
-static void sendLogMsg(QtMsgType type, const QString& msg)
+static void LegacyLogMessageHandler(QtMsgType type, const QString& msg)
 {
   static bool lineInProgress = false;
 
@@ -105,16 +105,16 @@ static void sendLogMsg(QtMsgType type, const QString& msg)
   lineInProgress = !msg.endsWith('\n');
 }
 
-void gbVLog(QtMsgType type, const char* fmt, va_list args)
+void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args)
 {
   QString logString(QString::vasprintf(fmt, args));
 
   for (auto idx = logString.indexOf('\n'); idx >= 0; idx = logString.indexOf('\n')) {
     QString msg = logString.sliced(0, idx + 1);
-    sendLogMsg(type, msg);
+    LegacyLogMessageHandler(type, msg);
     logString.remove(0, idx + 1);
   }
   if (!logString.isEmpty()) {
-    sendLogMsg(type, logString);
+    LegacyLogMessageHandler(type, logString);
   }
 }
