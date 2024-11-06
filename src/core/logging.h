@@ -52,18 +52,20 @@ public:
 class DebugIndent
 {
 public:
-  explicit DebugIndent(int l) : level(l) {}
+  explicit DebugIndent(int l) : level_(l) {}
+  friend QDebug& operator<<(QDebug& out, const DebugIndent& indent);
 
-  int level;
+private:
+  int level_;
 };
 
-QDebug operator<< (QDebug debug, const DebugIndent& indent);
+QDebug& operator<< (QDebug& debug, const DebugIndent& indent);
 
 class Debug : public QDebug
 {
 public:
   Debug() : QDebug(QtDebugMsg) {nospace().noquote();}
-  explicit Debug(int l) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(l);}
+  explicit Debug(int level) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(level);}
 };
 
 #endif //  SRC_CORE_LOGGING_H_
