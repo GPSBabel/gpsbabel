@@ -502,21 +502,9 @@ void TpoFormatBase::tpo_process_tracks()
     } else { // Assign a generic style name
       styles[ii].name = QStringLiteral("STYLE %1").arg(ii);
     }
-#ifdef Tracks2012
-    //TBD: Should this be TRACKNAMELENGTH?
-    for (unsigned xx = 0; xx < 3; xx++) {
-      if (styles[ii].name[xx] == ',') {
-        styles[ii].name[xx] = '_';
-      }
-      if (styles[ii].name[xx] == '=') {
-        styles[ii].name[xx] = '_';
-      }
-    }
-#else
     // Should limit be TRACKNAMELENGTH? No! But also should not be '3' like it was.
     styles[ii].name.replace(',', '_');
     styles[ii].name.replace('=', '_');
-#endif
 
     // one byte for line width (value 1-4), one byte for 'dashed' boolean
     styles[ii].wide = (uint8_t) gbfgetc(tpo_file_in);
@@ -701,9 +689,6 @@ void TpoFormatBase::tpo_process_tracks()
     int latscale = 0;
     int lonscale = 0;
 
-#ifdef Tracks2012
-    int llvalid = 0; // boolean has been replaced with multiple modes
-#else
 #define EndScalePoints 0
 #define CheckLonScale  1
 #define CheckLatScale  2
@@ -715,7 +700,6 @@ void TpoFormatBase::tpo_process_tracks()
     int tpmode = GetFullPoint; // prior to 2020 we used "llvalid" (boolean), which did not provide enough flow control
 #define EndScaleTag    0x00
 #define FullPointTag   0x88
-#endif
 
     // Process the track bytes - ugly flow control due to many special cases in file structure
     int cnttp = 0; // just for debug stroking
@@ -723,70 +707,6 @@ void TpoFormatBase::tpo_process_tracks()
     float lastlon = 0.0;
     for (unsigned int jj = 0; jj < track_byte_count;) { // NO INCREMENT - advance "jj" in the loop
       Waypoint* waypoint_temp;
-#ifdef Tracks2012
-      if constexpr(debug > 3) {
-        gbDebug("%02x %02x %02x %02x - byte %u, track %u, llvallid=%d\n",
-               buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], jj, ii+1, llvalid);
-      }
-      // Time to read a new latlong?
-      if (!llvalid) {
-
-        lon = le_read32(&buf[jj]);
-        if constexpr(debug > 3) {
-          gbDebug("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
-        }
-        jj+=4;
-
-        lat = le_read32(&buf[jj]);
-        if constexpr(debug > 3) {
-          gbDebug("%02x %02x %02x %02x - raw lat = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lat,jj);
-        }
-        jj+=4;
-
-//printf("L");
-
-        // Peek to see if next is a lonscale.  Note that it
-        // can begin with 0x88, which is confusing.  Here we
-        // allow up to 16-bits of offset, so two of the
-        // bytes must be 0x00 for us to recognize it.
-        if (jj+3<track_byte_count
-            && !buf[jj+3]
-            && !buf[jj+2]) {
-
-          lonscale = le_read32(&buf[jj]);
-          if constexpr(debug > 3) {
-            gbDebug("%02x %02x %02x %02x - raw lon scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lonscale, jj);
-          }
-//printf(" LONSCALE:");
-//printf("%02x%02x%02x%02x", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3]);
-          jj+=4;
-        }
-        // Peek to see if next is a latscale.  Note that it
-        // can begin with 0x88, which is confusing.  Here we
-        // allow up to 16-bits of offset, so two of the
-        // bytes must be 0x00 for us to recognize it.
-        if (jj+3<track_byte_count
-            && !buf[jj+3]
-            && !buf[jj+2]) {
-
-          latscale = le_read32(&buf[jj]);
-          if constexpr(debug > 3) {
-            gbDebug("%02x %02x %02x %02x - raw lat scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], latscale, jj);
-          }
-//printf(" LATSCALE:");
-//printf("%02x%02x%02x%02x ", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3]);
-          jj+=4;
-        }
-        llvalid = 1;
-
-        waypoint_temp = tpo_convert_ll(lat, lon);
-        track_add_wpt(track_temp, waypoint_temp);
-        cnttp++;
-        if constexpr(debug > 3) {
-          gbDebug("Adding BASIC trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
-        }
-      }
-#else
       if constexpr(debug > 3) {
         gbDebug("%02x %02x %02x %02x = bytes %u-%u (track %u, mode now %s)\n",
                buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], jj, jj+3, ii+1, tpmodeshow[tpmode]);
@@ -863,19 +783,7 @@ void TpoFormatBase::tpo_process_tracks()
         tpmode = Check0x88Tag;
         continue; // for jj
       }
-#endif
 
-#ifdef Tracks2012
-      // Check whether there's a lonlat coming up instead of
-      // offsets.
-      else if (buf[jj] == 0x88) {
-        if constexpr(debug > 3) {
-          gbDebug("%02x should mean full lat/lon comes next (byte %u)\n",buf[jj],jj);
-        }
-        jj++;
-        llvalid = 0;
-      }
-#else
       // Check whether 8 bytes of lon+lat are next, instead of offsets or another scaling spec.
       // 0x88 is a tag that signals a full trackpoint will follow
       if (tpmode == Check0x88Tag) {
@@ -890,56 +798,7 @@ void TpoFormatBase::tpo_process_tracks()
         tpmode = ScaleOneByte; // only if no 0x88 tag
         continue; // for jj
       }
-#endif
 
-#ifdef Tracks2012
-      // Check whether there's a lonlat + lonscale/latscale
-      // combo embedded in this track next.
-      else if (buf[jj] == 0x00) {
-        if constexpr(debug > 3) {
-          gbDebug("%02x should mean full lat/lon or lonscale/latscale comes next (at byte %u)\n",buf[jj],jj);
-        }
-//printf(" ZERO ");
-        jj++;
-        llvalid = 0;
-      }
-
-      // Process the delta
-      else {
-        static const int scarray[] = {0,1,2,3,4,5,6,7,-8,-7,-6,-5,-4,-3,-2,-1};
-        if constexpr(debug) {
-          gbDebug("%02x - lat mult = %d, lon mult=%d, byte %u\n", buf[jj], scarray[buf[jj] & 0xf], scarray[buf[jj] >> 4], jj);
-        }
-
-
-        if (buf[jj] == 0) {
-          gbFatal("Found unexpected ZERO\n");
-        }
-
-        if (latscale == 0 || lonscale == 0) {
-          gbFatal("Found bad scales lonscale=0x%x latscale=0x%x\n", lonscale, latscale);
-        }
-
-
-        if constexpr(debug > 3) {
-          gbDebug("%02x - adjusting prev lat/lon from %i/%i", buf[jj], lat, lon);
-        }
-        lon += lonscale * scarray[buf[jj] >> 4];
-        lat += latscale * scarray[(buf[jj] & 0xf)];
-        if constexpr(debug > 3) {
-          gbDebug(" to %i/%i, byte %u\n", lat, lon, jj);
-        }
-//printf(".");
-        jj++;
-
-        waypoint_temp = tpo_convert_ll(lat, lon);
-        track_add_wpt(track_temp, waypoint_temp);
-        cnttp++;
-        if constexpr(debug > 3) {
-          gbDebug("Adding ADJUSTED trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
-        }
-      }
-#else
       // ScaleOneByte applies lonscale and latscale to a single byte to create an 8-byte lat+lon
       // EndScalePoints (0) is a tag that signals an end to adjusted trackpoints (full point or scale may follow)
       if (tpmode == ScaleOneByte) {
@@ -1003,7 +862,6 @@ void TpoFormatBase::tpo_process_tracks()
         lastlat = waypoint_temp->latitude;
         lastlon = waypoint_temp->longitude;
       } // if ScaleOneByte
-#endif
 
     } // end for jj track_byte_count
   } // end for ii track_count
