@@ -83,8 +83,6 @@
 #include "src/core/datetime.h"  // for DateTime
 
 
-#define MYNAME "mtk_logger"
-
 #define MTK_EVT_BITMASK  (1<<0x02)
 #define MTK_EVT_PERIOD   (1<<0x03)
 #define MTK_EVT_DISTANCE (1<<0x04)
@@ -101,13 +99,12 @@
 
 void MtkLoggerBase::dbg(int l, const char* msg, ...)
 {
-  va_list ap;
-  va_start(ap, msg);
   if (global_opts.debug_level >= l) {
-    vfprintf(stderr,msg, ap);
-    fflush(stderr);
+    va_list ap;
+    va_start(ap, msg);
+    gbVLegacyLog(QtDebugMsg, msg, ap);
+    va_end(ap);
   }
-  va_end(ap);
 }
 
 // Returns a fully qualified pathname to a temporary file that is a copy
@@ -130,7 +127,7 @@ int MtkLoggerBase::do_send_cmd(const char* cmd, int cmdLen)
   dbg(6, "Send %s ", cmd);
   int rc = gbser_print(fd, cmd);
   if (rc != gbser_OK) {
-    fatal(MYNAME ": Write error (%d)\n", rc);
+    gbFatal("Write error (%d)\n", rc);
   }
 
   return cmdLen;
@@ -161,12 +158,12 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
   if (strncmp(cmd, CMD_LOG_ERASE, 12) == 0) {
     cmd_erase = 1;
     if (global_opts.verbose_status || global_opts.debug_level > 0) {
-      fprintf(stderr, "Erasing    ");
+      gbDebug("Erasing    ");
     }
   }
   // dbg(6, "## Send '%s' -- Expect '%s' in %d sec\n", cmd, expect, timeout_sec);
 
-  do_send_cmd(cmd, strlen(cmd)); // success or fatal()...
+  do_send_cmd(cmd, strlen(cmd)); // success or gbFatal()...
 
   int done = 0;
   int loops = 0;
@@ -177,7 +174,7 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
       if (rc == gbser_TIMEOUT && time(nullptr) > tout) {
         dbg(2, "NMEA command '%s' timeout !\n", cmd);
         return -1;
-        // fatal(MYNAME "do_cmd(): Read error (%d)\n", rc);
+        // gbFatal("do_cmd(): Read error (%d)\n", rc);
       }
       len = -1;
     } else {
@@ -187,13 +184,12 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
     dbg(8, "Read %d bytes: '%s'\n", len, line);
     if (cmd_erase && (global_opts.verbose_status || (global_opts.debug_level > 0 && global_opts.debug_level <= 3))) {
       // erase cmd progress wheel -- only for debug level 1-3
-      fprintf(stderr,"\b%c", LIVE_CHAR[loops%4]);
-      fflush(stderr);
+      gbDebug("\b%c", LIVE_CHAR[loops%4]);
     }
     if (len > 5 && line[0] == '$') {
       if (expect_len > 0 && strncmp(&line[1], expect, expect_len) == 0) {
         if (cmd_erase && (global_opts.verbose_status || global_opts.debug_level > 0)) {
-          fprintf(stderr,"\n");
+          gbDebug("\n");
         }
         dbg(6, "NMEA command success !\n");
         if ((len - 4) > expect_len) {  // alloc and copy data segment...
@@ -252,7 +248,7 @@ void MtkLoggerBase::mtk_rd_init(const QString& fname)
   errno = 0;
   dbg(1, "Opening port %s...\n", port);
   if ((fd = gbser_init(port)) == nullptr) {
-    fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", port, strerror(errno));
+    gbFatal("Can't initialise port \"%s\" (%s)\n", port, strerror(errno));
   }
 
   // verify that we have a MTK based logger...
@@ -272,12 +268,12 @@ void MtkLoggerBase::mtk_rd_init(const QString& fname)
   }
   if (rc) {
     dbg(1, "Set baud rate to %d failed (%d)\n", MTK_BAUDRATE, rc);
-    fatal(MYNAME ": Failed to set baudrate !\n");
+    gbFatal("Failed to set baudrate !\n");
   }
 
   rc = do_cmd("$PMTK605*31\r\n", "PMTK705,", &model, 10);
   if (rc != 0) {
-    fatal(MYNAME ": This is not a MTK based GPS ! (or is device turned off ?)\n");
+    gbFatal("This is not a MTK based GPS ! (or is device turned off ?)\n");
   }
 
   // say hello to GR245 to make it display "USB PROCESSING"
@@ -366,19 +362,19 @@ void MtkLoggerBase::mtk_read()
   if (dout == nullptr) {
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      fatal(MYNAME ": Can't create temporary file %s",
-            qPrintable(TEMP_DATA_BIN));
+      gbFatal("Can't create temporary file %s\n",
+            gbLogCStr(TEMP_DATA_BIN));
     }
   }
   fseek(dout, 0L,SEEK_END);
   unsigned long dsize = ftell(dout);
   if (dsize > 1024) {
-    dbg(1, "Temp %s file exists. with size %lu\n", qPrintable(TEMP_DATA_BIN),
+    dbg(1, "Temp %s file exists. with size %lu\n", gbLogCStr(TEMP_DATA_BIN),
         dsize);
     dpos = 0;
     init_scan = 1;
   }
-  dbg(1, "Download %s -> %s\n", port, qPrintable(TEMP_DATA_BIN));
+  dbg(1, "Download %s -> %s\n", port, gbLogCStr(TEMP_DATA_BIN));
 
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &fusage, 2);
@@ -414,15 +410,15 @@ void MtkLoggerBase::mtk_read()
   dbg(1, "Download %dkB from device\n", (addr_max+1) >> 10);
 
   if (dsize > addr_max) {
-    dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", qPrintable(TEMP_DATA_BIN), dsize, addr_max);
+    dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", gbLogCStr(TEMP_DATA_BIN), dsize, addr_max);
     fclose(dout);
     dsize = 0;
     init_scan = 0;
     QFile::rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      fatal(MYNAME ": Can't create temporary file %s",
-            qPrintable(TEMP_DATA_BIN));
+      gbFatal("Can't create temporary file %s\n",
+            gbLogCStr(TEMP_DATA_BIN));
     }
   }
 
@@ -441,10 +437,10 @@ void MtkLoggerBase::mtk_read()
   unsigned int line_size = 2*read_bsize + 32; // logdata as nmea/hex.
   unsigned int data_size = read_bsize + 32;
   if ((line = (char*) xmalloc(line_size)) == nullptr) {
-    fatal(MYNAME ": Can't allocate %u bytes for NMEA buffer\n",  line_size);
+    gbFatal("Can't allocate %u bytes for NMEA buffer\n",  line_size);
   }
   if ((data = (unsigned char*) xmalloc(data_size)) ==  nullptr) {
-    fatal(MYNAME ": Can't allocate %u bytes for data buffer\n",  data_size);
+    gbFatal("Can't allocate %u bytes for data buffer\n",  data_size);
   }
   memset(line, '\0', line_size);
   memset(data, '\0', data_size);
@@ -472,7 +468,7 @@ mtk_retry:
           retry_cnt++;
           goto mtk_retry;
         } // else
-        fatal(MYNAME "mtk_read(): Read error (%d)\n", rc);
+        gbFatal("mtk_read(): Read error (%d)\n", rc);
       }
       int len = strlen(line);
       dbg(8, "Read %d bytes: '%s'\n", len, line);
@@ -510,7 +506,7 @@ mtk_retry:
             }
           } else {
             if (null_len == chunk_size) {  // 0x00 block - bad block....
-              fprintf(stderr, "FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
+              gbWarning("FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
             }
             if (ff_len == chunk_size) {  // 0xff block - read complete...
               len = ff_len;
@@ -539,9 +535,9 @@ mtk_retry:
         fseek(dout, addr, SEEK_SET);
         if (fread(line, 1, rcvd_bsize, dout) == rcvd_bsize && memcmp(line, data, rcvd_bsize) == 0) {
           dpos = addr;
-          dbg(2, "%s same at %d\n", qPrintable(TEMP_DATA_BIN), addr);
+          dbg(2, "%s same at %d\n", gbLogCStr(TEMP_DATA_BIN), addr);
         } else {
-          dbg(2, "%s differs at %d\n", qPrintable(TEMP_DATA_BIN), addr);
+          dbg(2, "%s differs at %d\n", gbLogCStr(TEMP_DATA_BIN), addr);
           init_scan = 0;
           addr = dpos;
           bsize = read_bsize;
@@ -558,7 +554,7 @@ mtk_retry:
     } else {
       fseek(dout, addr, SEEK_SET);
       if (fwrite(data, 1, rcvd_bsize, dout) != rcvd_bsize) {
-        fatal(MYNAME ": Failed to write temp. binary file\n");
+        gbFatal("Failed to write temp. binary file\n");
       }
       addr += rcvd_bsize;
       if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
@@ -566,7 +562,7 @@ mtk_retry:
         if (addr >= addr_max) {
           perc = 100;
         }
-        fprintf(stderr, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
+        gbDebug("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
       }
     }
   }
@@ -579,7 +575,7 @@ mtk_retry:
     fclose(dout);
   }
   if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
-    fprintf(stderr,"\n");
+    gbDebug("\n");
   }
 
   // Fixme - Order or. Enable - parse - erase ??
@@ -733,17 +729,17 @@ void MtkLoggerBase::mtk_csv_init(const QString& csv_fname, unsigned long bitmask
 {
   FILE* cf;
 
-  dbg(1, "Opening csv output file %s...\n", qPrintable(csv_fname));
+  dbg(1, "Opening csv output file %s...\n", gbLogCStr(csv_fname));
 
-  // can't use gbfopen here - it will fatal() if file doesn't exist
+  // can't use gbfopen here - it will gbFatal() if file doesn't exist
   if ((cf = ufopen(csv_fname, "r")) != nullptr) {
     fclose(cf);
-    warning(MYNAME ": CSV file %s already exist ! Cowardly refusing to overwrite.\n", qPrintable(csv_fname));
+    gbWarning("CSV file %s already exist ! Cowardly refusing to overwrite.\n", gbLogCStr(csv_fname));
     return;
   }
 
-  if ((cd = gbfopen(csv_fname, "w", MYNAME)) == nullptr) {
-    fatal(MYNAME ": Can't open csv file '%s'\n", qPrintable(csv_fname));
+  if ((cd = gbfopen(csv_fname, "w")) == nullptr) {
+    gbFatal("Can't open csv file '%s'\n", gbLogCStr(csv_fname));
   }
 
   /* Add the header line */
@@ -926,12 +922,11 @@ int MtkLoggerBase::mtk_parse(unsigned char* data, int dataLen, unsigned int bmas
 
   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n", count, dataLen);
   if (global_opts.debug_level > 5) {
-    fprintf(stderr,"# Data block:");
+    gbDebug("# Data block:");
     for (int j = 0; j<dataLen; j++) {
-      fprintf(stderr,"%.2x ", data[j]);
+      gbDebug("%.2x ", data[j]);
     }
-    fprintf(stderr,"\n");
-    fflush(stderr);
+    gbDebug("\n");
   }
 
   memset(&itm, 0, sizeof(itm));
@@ -1213,11 +1208,11 @@ int MtkLoggerBase::mtk_parse_info(const unsigned char* data, int dataLen)
     }
   } else {
     if (global_opts.debug_level > 0) {
-      fprintf(stderr,"#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
+      gbDebug("#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
       for (bm=0; bm<16; bm++) {
-        fprintf(stderr, "%.2x ", data[bm]);
+        gbDebug("%.2x ", data[bm]);
       }
-      fprintf(stderr,"\n");
+      gbDebug("\n");
     }
     return 0;
   }
@@ -1242,7 +1237,7 @@ int MtkLoggerBase::mtk_log_len(unsigned int bitmask)
   for (int i = 0; i<32; i++) {
     if ((1U<<i) & bitmask) {
       if (i > DISTANCE && global_opts.debug_level > 0) {
-        warning(MYNAME ": Unknown size/meaning of bit %d\n", i);
+        gbWarning("Unknown size/meaning of bit %d\n", i);
       }
       if ((i == SID || i == ELEVATION || i == AZIMUTH || i == SNR) && (1U<<SID) & bitmask) {
         len += log_type[i].size*32;  // worst case, max sat. count..
@@ -1265,9 +1260,9 @@ void MtkLoggerBase::file_init_m241(const QString& fname)
 
 void MtkLoggerBase::file_init(const QString& fname)
 {
-  dbg(4, "Opening file %s...\n", qPrintable(fname));
+  dbg(4, "Opening file %s...\n", gbLogCStr(fname));
   if (fl = ufopen(fname, "rb"), nullptr == fl) {
-    fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
+    gbFatal("Can't open file '%s'\n", gbLogCStr(fname));
   }
   switch (mtk_device) {
   case HOLUX_M241:
@@ -1323,7 +1318,7 @@ void MtkLoggerBase::file_read()
   fseek(fl, 0L, SEEK_END);
   long fsize = ftell(fl);
   if (fsize <= 0) {
-    fatal(MYNAME ": File has size %ld\n", fsize);
+    gbFatal("File has size %ld\n", fsize);
   }
 
   fseek(fl, 0L, SEEK_SET);

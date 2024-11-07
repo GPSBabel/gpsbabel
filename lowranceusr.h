@@ -388,7 +388,7 @@ private:
   /* Member Functions */
 
   static bool same_points(const Waypoint* A, const Waypoint* B);
-  void register_waypt(const Waypoint* wpt) const;
+  void register_waypt(const Waypoint* wpt);
   static const Waypoint* lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high);
   static const Waypoint* lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4);
   QString lowranceusr4_readstr(gbfile* file, int bytes_per_char) const;
@@ -405,32 +405,32 @@ private:
   static double lat_mm_to_deg(double x);
   static long int lon_deg_to_mm(double x);
   static long int lat_deg_to_mm(double x);
-  void lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present) const;
-  void lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const;
-  void lowranceusr_parse_waypts() const;
-  void lowranceusr_parse_route() const;
-  void lowranceusr4_parse_route() const;
+  void lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present);
+  void lowranceusr4_parse_waypt(Waypoint* wpt_tmp);
+  void lowranceusr_parse_waypts();
+  void lowranceusr_parse_route();
+  void lowranceusr4_parse_route();
   void lowranceusr_parse_routes();
-  void lowranceusr_parse_icons() const;
+  void lowranceusr_parse_icons();
   void lowranceusr_parse_trail(int* trail_num);
-  void lowranceusr4_parse_trail(int* trail_num) const;
+  void lowranceusr4_parse_trail(int* trail_num);
   void lowranceusr_parse_trails();
-  void lowranceusr_waypt_disp(const Waypoint* wpt) const;
+  void lowranceusr_waypt_disp(const Waypoint* wpt);
   void lowranceusr4_waypt_disp(const Waypoint* wpt);
   void lowranceusr_waypt_pr(const Waypoint* wpt);
   void lowranceusr4_write_waypoints();
-  void lowranceusr_write_icon(const Waypoint* wpt) const;
+  void lowranceusr_write_icon(const Waypoint* wpt);
   void lowranceusr_trail_hdr(const route_head* trk);
   void lowranceusr_route_hdr(const route_head* rte);
   void lowranceusr4_route_hdr(const route_head* rte);
-  void lowranceusr4_route_leg_disp(const Waypoint* wpt) const;
-  void lowranceusr4_route_trl(const route_head* /*unused*/) const;
+  void lowranceusr4_route_leg_disp(const Waypoint* wpt);
+  void lowranceusr4_route_trl(const route_head* /*unused*/);
   void lowranceusr_trail_disp(const Waypoint* wpt);
   void lowranceusr_merge_trail_hdr(const route_head* trk);
   void lowranceusr_merge_trail_tlr(const route_head* /*unused*/);
   void lowranceusr_merge_trail_hdr_2(const route_head* /*unused*/);
   void lowranceusr4_trail_hdr(const route_head* trail);
-  void lowranceusr4_trail_disp(const Waypoint* wpt) const;
+  void lowranceusr4_trail_disp(const Waypoint* wpt);
 
   /* Data Members */
 

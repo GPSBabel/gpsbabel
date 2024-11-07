@@ -356,7 +356,7 @@ static int32_t GPS_A000(const char* port)
         i = 0;
       }
     }
-    fatal("Failed to find a product inquiry response.\n");
+    gbFatal("Failed to find a product inquiry response.\n");
   }
 
 carry_on:

@@ -44,9 +44,7 @@ public:
 
 private:
   OptionBool opt_debug;
-  bool debug{};
   OptionBool opt_checkempty;
-  bool checkempty{};
   int point_ct{};
   int total_point_ct{};
   int segment_ct{};

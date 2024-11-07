@@ -41,8 +41,6 @@
 #include "xmlgeneric.h"          // for xml_deinit, xml_init, xml_read
 
 
-#define MYNAME "gtc"
-
 const QStringList GtrnctrFormat::gtc_tags_to_ignore = {
   "TrainingCenterDatabase",
   "CourseFolder",
@@ -75,7 +73,7 @@ GtrnctrFormat::rd_deinit()
 void
 GtrnctrFormat::wr_init(const QString& fname)
 {
-  ofd = gbfopen(fname, "w", MYNAME);
+  ofd = gbfopen(fname, "w");
 
   if (opt_sport) {
     for (unsigned int i = 0; i < std::size(gtc_sportlist); i++) {

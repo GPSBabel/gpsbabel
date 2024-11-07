@@ -79,7 +79,7 @@ speed_t mkspeed(unsigned br)
     return B230400;
 #endif
   default:
-    fatal("Unsupported serial speed: %d\n", br);
+    gbFatal("Unsupported serial speed: %d\n", br);
     return 0;   /* keep compiler happy */
   }
 }
@@ -143,17 +143,17 @@ void* gbser_init(const char* port_name)
     h->fd = 0;
     return h;
   } else if (h->fd = open(port_name, O_RDWR | O_NOCTTY), h->fd == -1) {
-    warning("Failed to open port (%s)\n", strerror(errno));
+    gbWarning("Failed to open port (%s)\n", strerror(errno));
     goto failed;
   }
 
   if (!isatty(h->fd)) {
-    warning("%s is not a TTY\n", port_name);
+    gbWarning("%s is not a TTY\n", port_name);
     goto failed;
   }
 
   if (gbser_set_port(h, 4800, 8, 0, 1)) {
-    warning("gbser_set_port() failed\n");
+    gbWarning("gbser_set_port() failed\n");
     goto failed;
   }
 
@@ -191,15 +191,15 @@ int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity,
   };
 
   if (bits < 5 || bits > 8) {
-    fatal("Unsupported bits setting: %d\n", bits);
+    gbFatal("Unsupported bits setting: %d\n", bits);
   }
 
   if (parity > 2) {
-    fatal("Unsupported parity setting: %d\n", parity);
+    gbFatal("Unsupported parity setting: %d\n", parity);
   }
 
   if (stop < 1 || stop > 2) {
-    fatal("Unsupported stop setting: %d\n", stop);
+    gbFatal("Unsupported stop setting: %d\n", stop);
   }
 
   s = mkspeed(speed);

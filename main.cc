@@ -24,6 +24,8 @@
 #include <cstring>                    // for strcmp
 
 #include <QCoreApplication>           // for QCoreApplication
+#include <QDateTime>                  // for QDateTime
+#include <QDebug>                     // for QDebug
 #include <QElapsedTimer>              // for QElapsedTimer
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
@@ -59,7 +61,6 @@
 
 static constexpr bool DEBUG_LOCALE = false;
 
-#define MYNAME "main"
 // be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
 #define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
 
@@ -193,11 +194,13 @@ print_extended_info()
     "\n");
 }
 
-static void MessageHandler(QtMsgType /* type */, const QMessageLogContext& /* context */, const QString& msg)
+static void setMessagePattern(const QString& id = QString())
 {
-  /* flush any buffered standard output */
-  fflush(stdout);
-  fprintf(stderr, "%s\n", qPrintable(msg));
+  if (id.isEmpty()) {
+    qSetMessagePattern("%{if-category}%{category}: %{endif}main: %{message}");
+  } else {
+    qSetMessagePattern(QStringLiteral("%{if-category}%{category}: %{endif}%1: %{message}").arg(id));
+  }
 }
 
 static void
@@ -243,6 +246,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     timer.start();
   }
   start_session(ivecs.fmtname, fname);
+  setMessagePattern(ivecs.fmtname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
     Vecs::init_vec(ivecs.fmt, ivecs.fmtname);
@@ -263,9 +267,10 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     ivecs->read();
     ivecs->rd_deinit();
   }
+  setMessagePattern();
   if (global_opts.debug_level > 0)  {
-    Warning().noquote() << QStringLiteral("%1: reader %2 took %3 seconds.")
-                        .arg(MYNAME, ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+    qDebug().noquote() << QStringLiteral("reader %1 took %2 seconds.")
+                        .arg(ivecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
   }
 }
 
@@ -275,6 +280,7 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
   if (global_opts.debug_level > 0)  {
     timer.start();
   }
+  setMessagePattern(ovecs.fmtname);
   if (ovecs.isDynamic()) {
     ovecs.fmt = ovecs.factory(ofname);
     Vecs::init_vec(ovecs.fmt, ovecs.fmtname);
@@ -295,9 +301,10 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
     ovecs->write();
     ovecs->wr_deinit();
   }
+  setMessagePattern();
   if (global_opts.debug_level > 0)  {
-    Warning().noquote() << QStringLiteral("%1: writer %2 took %3 seconds.")
-                        .arg(MYNAME, ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+    qDebug().noquote() << QStringLiteral("writer %1 took %2 seconds.")
+                        .arg(ovecs.fmtname, QString::number(timer.elapsed()/1000.0, 'f', 3));
   }
 }
 
@@ -368,27 +375,27 @@ run(const char* prog_name)
       argument = FETCH_OPTARG;
       ivecs = Vecs::Instance().find_vec(argument);
       if (!ivecs) {
-        fatal("Input type '%s' not recognized\n", qPrintable(argument));
+        gbFatal("Input type '%s' not recognized\n", gbLogCStr(argument));
       }
       break;
     case 'o':
       if (!ivecs) {
-        warning("-o appeared before -i.   This is probably not what you want to do.\n");
+        gbWarning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
       argument = FETCH_OPTARG;
       ovecs = Vecs::Instance().find_vec(argument);
       if (!ovecs) {
-        fatal("Output type '%s' not recognized\n", qPrintable(argument));
+        gbFatal("Output type '%s' not recognized\n", gbLogCStr(argument));
       }
       break;
     case 'f':
       argument = FETCH_OPTARG;
       fname = argument;
       if (fname.isEmpty()) {
-        fatal("No file or device name specified.\n");
+        gbFatal("No file or device name specified.\n");
       }
       if (!ivecs) {
-        fatal("No valid input type specified\n");
+        gbFatal("No valid input type specified\n");
       }
       if (global_opts.masked_objective & POSNDATAMASK) {
         did_something = true;
@@ -407,7 +414,7 @@ run(const char* prog_name)
       argument = FETCH_OPTARG;
       ofname = argument;
       if (ofname.isEmpty()) {
-        fatal("No output file or device name specified.\n");
+        gbFatal("No output file or device name specified.\n");
       }
       if (ovecs && (!(global_opts.masked_objective & POSNDATAMASK))) {
         /* simulates the default behaviour of waypoints */
@@ -460,6 +467,7 @@ run(const char* prog_name)
         if (global_opts.debug_level > 0)  {
           timer.start();
         }
+        setMessagePattern(filter.fltname);
         if (filter.isDynamic()) {
           filter.flt = filter.factory();
           FilterVecs::init_filter_vec(filter.flt, filter.fltname);
@@ -480,12 +488,13 @@ run(const char* prog_name)
           filter->deinit();
           FilterVecs::free_filter_vec(filter.flt);
         }
+        setMessagePattern();
         if (global_opts.debug_level > 0)  {
-          Warning().noquote() << QStringLiteral("%1: filter %2 took %3 seconds.")
-                              .arg(MYNAME, filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
+          qDebug().noquote() << QStringLiteral("filter %1 took %2 seconds.")
+                              .arg(filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
         }
       }  else {
-        fatal("Unknown filter '%s'\n",qPrintable(argument));
+        gbFatal("Unknown filter '%s'\n",gbLogCStr(argument));
       }
       break;
     case 'D':
@@ -494,33 +503,33 @@ run(const char* prog_name)
         bool ok;
         global_opts.debug_level = argument.toInt(&ok);
         if (!ok) {
-          fatal("the -D option requires an integer value to specify the debug level, i.e. -D level\n");
+          gbFatal("the -D option requires an integer value to specify the debug level, i.e. -D level\n");
         }
       }
       /*
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        warning("GPSBabel Version: %s\n", gpsbabel_version);
+        gbInfo("GPSBabel Version: %s\n", gpsbabel_version);
         if(sizeof(kVersionSHA) > 1) {
-          warning(MYNAME ": Repository SHA: %s\n", kVersionSHA);
+          gbInfo("Repository SHA: %s\n", kVersionSHA);
         }
         if(sizeof(kVersionDate) > 1) {
           QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
           if (date.isValid()) {
-            warning(MYNAME ": Date: %s\n", qPrintable(date.toUTC().toString(Qt::ISODate)));
+            gbInfo("Date: %s\n", gbLogCStr(date.toUTC().toString(Qt::ISODate)));
           }
         }
-        warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
+        gbInfo("Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
-                qPrintable(QSysInfo::buildAbi()));
-        warning(MYNAME ": Running with Qt %s on %s, %s\n", qVersion(),
-                qPrintable(QSysInfo::prettyProductName()),
-                qPrintable(QSysInfo::currentCpuArchitecture()));
-        warning(MYNAME ": QLocale::system() is %s\n", qPrintable(QLocale::system().name()));
-        warning(MYNAME ": QLocale() is %s\n", qPrintable(QLocale().name()));
+                gbLogCStr(QSysInfo::buildAbi()));
+        gbInfo("Running with Qt %s on %s, %s\n", qVersion(),
+                gbLogCStr(QSysInfo::prettyProductName()),
+                gbLogCStr(QSysInfo::currentCpuArchitecture()));
+        gbInfo("QLocale::system() is %s\n", gbLogCStr(QLocale::system().name()));
+        gbInfo("QLocale() is %s\n", gbLogCStr(QLocale().name()));
         QTextCodec* defaultcodec = QTextCodec::codecForLocale();
-        warning(MYNAME ": QTextCodec::codecForLocale() is %s, mib %d\n",
+        gbInfo("QTextCodec::codecForLocale() is %s, mib %d\n",
                 defaultcodec->name().constData(),defaultcodec->mibEnum());
       }
       break;
@@ -568,7 +577,7 @@ run(const char* prog_name)
       if (argument.isEmpty()) {	/* from GUI to preserve inconsistent options */
         global_opts.inifile = nullptr;
       } else {
-        global_opts.inifile = inifile_init(argument, MYNAME);
+        global_opts.inifile = inifile_init(argument);
       }
       break;
     case 'b':
@@ -585,7 +594,7 @@ run(const char* prog_name)
       break;
 
     default:
-      fatal("Unknown option '%s'.\n", qPrintable(qargs.at(argn)));
+      gbFatal("Unknown option '%s'.\n", gbLogCStr(qargs.at(argn)));
       break;
     }
 
@@ -605,7 +614,7 @@ run(const char* prog_name)
     qargs.removeFirst();
   }
   if (qargs.size() > 2) {
-    fatal("Extra arguments on command line\n");
+    gbFatal("Extra arguments on command line\n");
   } else if ((!qargs.isEmpty()) && ivecs) {
     did_something = true;
     /* simulates the default behaviour of waypoints */
@@ -641,48 +650,59 @@ run(const char* prog_name)
   if (global_opts.masked_objective & POSNDATAMASK) {
 
     if (!ivecs) {
-      fatal("Realtime tracking (-T) requires an input type (-t)i such as Garmin or NMEA.\n");
+      gbFatal("Realtime tracking (-T) requires an input type (-t)i such as Garmin or NMEA.\n");
     }
 
     if (fname.isEmpty()) {
-      fatal("An input file (-f) must be specified.\n");
+      gbFatal("An input file (-f) must be specified.\n");
     }
 
     if (ivecs.isDynamic()) {
+      setMessagePattern(ivecs.fmtname);
       ivecs.fmt = ivecs.factory(fname);
       Vecs::init_vec(ivecs.fmt, ivecs.fmtname);
+      setMessagePattern();
     }
     if (ovecs && ovecs.isDynamic()) {
+      setMessagePattern(ovecs.fmtname);
       ovecs.fmt = ovecs.factory(ofname);
       Vecs::init_vec(ovecs.fmt, ovecs.fmtname);
+      setMessagePattern();
     }
 
     start_session(ivecs.fmtname, fname);
+    setMessagePattern(ivecs.fmtname);
     Vecs::prepare_format(ivecs);
     ivecs->rd_position_init(fname);
+    setMessagePattern();
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
-      fatal("Realtime tracking (-T) is exclusive of other modes.\n");
+      gbFatal("Realtime tracking (-T) is exclusive of other modes.\n");
     }
 
     if (signal(SIGINT, signal_handler) == SIG_ERR) {
-      fatal("Couldn't install the exit signal handler.\n");
+      gbFatal("Couldn't install the exit signal handler.\n");
     }
 
     if (ovecs) {
+      setMessagePattern(ovecs.fmtname);
       Vecs::prepare_format(ovecs);
       ovecs->wr_position_init(ofname);
+      setMessagePattern();
     }
 
     tracking_status.request_terminate = 0;
     while (!tracking_status.request_terminate) {
+      setMessagePattern(ivecs.fmtname);
       Waypoint* wpt = ivecs->rd_position(&tracking_status);
+      setMessagePattern();
 
       if (tracking_status.request_terminate) {
         delete wpt;
         break;
       }
       if (wpt) {
+        setMessagePattern(ovecs.fmtname);
         if (ovecs) {
 //          ovecs->wr_position_init(ofname);
           ovecs->wr_position(wpt);
@@ -692,13 +712,18 @@ run(const char* prog_name)
           fbOutput.waypt_disp(wpt);
         }
         delete wpt;
+        setMessagePattern();
       }
     }
+    setMessagePattern(ivecs.fmtname);
     Vecs::prepare_format(ivecs);
     ivecs->rd_position_deinit();
+    setMessagePattern();
     if (ovecs) {
+      setMessagePattern(ovecs.fmtname);
       Vecs::prepare_format(ovecs);
       ovecs->wr_position_deinit();
+      setMessagePattern();
     }
 
     if (ovecs && ovecs.isDynamic()) {
@@ -716,7 +741,7 @@ run(const char* prog_name)
 
 
   if (!did_something) {
-    fatal("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);
+    gbFatal("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);
   }
 
   return 0;
@@ -742,8 +767,10 @@ main(int argc, char* argv[])
 #error Visual Studio 2017 and earlier are not supported. Please use Visual Studio 2019 or 2022.
 #endif
 
+  setMessagePattern();
+
   if constexpr (DEBUG_LOCALE) {
-    printf("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
+    gbDebug("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
   }
 
   // Create a QCoreApplication object to handle application initialization.
@@ -760,7 +787,7 @@ main(int argc, char* argv[])
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
   if constexpr (DEBUG_LOCALE) {
-    printf("Locale after initial setup: %s\n",setlocale(LC_ALL, nullptr));
+    gbDebug("Locale after initial setup: %s\n",setlocale(LC_ALL, nullptr));
   }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
@@ -768,24 +795,23 @@ main(int argc, char* argv[])
   // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
   if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
     if constexpr (DEBUG_LOCALE) {
-      printf("Resetting LC_NUMERIC\n");
+      gbDebug("Resetting LC_NUMERIC\n");
     }
     setlocale(LC_NUMERIC,"C");
     if constexpr (DEBUG_LOCALE) {
-      printf("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
+      gbDebug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
   /* reset LC_TIME for strftime */
   if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
     if constexpr (DEBUG_LOCALE) {
-      printf("Resetting LC_TIME\n");
+      gbDebug("Resetting LC_TIME\n");
     }
     setlocale(LC_TIME,"C");
     if constexpr (DEBUG_LOCALE) {
-      printf("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
+      gbDebug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
-  qInstallMessageHandler(MessageHandler);
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
@@ -796,7 +822,7 @@ main(int argc, char* argv[])
   gpsbabel_time = current_time().toTime_t();			/* frozen in testmode */
 
   if (!gpsbabel_testmode()) {	/* within testo ? */
-    global_opts.inifile = inifile_init(QString(), MYNAME);
+    global_opts.inifile = inifile_init(QString());
   }
 
   assert(GPS_Lookup_Datum_Index("OSGB36") == kDatumOSGB36);

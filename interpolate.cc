@@ -36,12 +36,11 @@
 
 
 #if FILTERS_ENABLED
-#define MYNAME "Interpolate filter"
 
 void InterpolateFilter::process()
 {
   if ((opt_route && (route_count() == 0)) || (!opt_route && (track_count() == 0))) {
-    fatal(FatalMsg() << MYNAME ": Found no routes or tracks to operate on.");
+    gbFatal(FatalMsg() << "Found no routes or tracks to operate on.");
   }
 
   auto process_rte_lambda = [this](const route_head* rte)->void {
@@ -86,7 +85,7 @@ void InterpolateFilter::process_rte(route_head* rte)
       double npts = 0;
       if (opt_time) {
         if (!timespan.has_value()) {
-          fatal(FatalMsg() << MYNAME ": points must have valid times to interpolate by time!");
+          gbFatal(FatalMsg() << "points must have valid times to interpolate by time!");
         }
         // interpolate even if time is running backwards.
         npts = std::abs(*timespan) / max_time_step;
@@ -95,7 +94,7 @@ void InterpolateFilter::process_rte(route_head* rte)
         npts = distspan / max_dist_step;
       }
       if (!std::isfinite(npts) || (npts >= INT_MAX)) {
-        fatal(FatalMsg() << MYNAME ": interpolation interval too small!");
+        gbFatal(FatalMsg() << "interpolation interval too small!");
       }
 
       // Insert the required points
@@ -143,23 +142,23 @@ void InterpolateFilter::process_rte(route_head* rte)
 void InterpolateFilter::init()
 {
   if (opt_time && opt_dist) {
-    fatal(FatalMsg() << MYNAME ": Can't interpolate on both time and distance.");
+    gbFatal(FatalMsg() << "Can't interpolate on both time and distance.");
   } else if (opt_time && opt_route) {
-    fatal(FatalMsg() << MYNAME ": Can't interpolate routes on time.");
+    gbFatal(FatalMsg() << "Can't interpolate routes on time.");
   } else if (opt_time) {
     max_time_step = 1000 * opt_time.get_result(); // milliseconds
     if (max_time_step <= 0) {
-      fatal(FatalMsg() << MYNAME ": interpolation time should be positive!");
+      gbFatal(FatalMsg() << "interpolation time should be positive!");
     }
   } else if (opt_dist) {
-    if (parse_distance(opt_dist, &max_dist_step, kMetersPerMile, MYNAME) == 0) {
-      fatal(FatalMsg() << MYNAME ": no distance specified with distance option!");
+    if (parse_distance(opt_dist, &max_dist_step, kMetersPerMile) == 0) {
+      gbFatal(FatalMsg() << "no distance specified with distance option!");
     }
     if (max_dist_step <= 0) {
-      fatal(FatalMsg() << MYNAME ": interpolation distance should be positive!");
+      gbFatal(FatalMsg() << "interpolation distance should be positive!");
     }
   } else {
-    fatal(FatalMsg() << MYNAME ": No interval specified.");
+    gbFatal(FatalMsg() << "No interval specified.");
   }
 }
 

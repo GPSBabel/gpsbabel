@@ -25,7 +25,6 @@ static constexpr bool TRACKF_DBG = false;
 #include <algorithm>                       // for_each, sort, stable_sort
 #include <cassert>                         // for assert
 #include <cmath>                           // for nan
-#include <cstdio>                          // for printf
 #include <cstdlib>                         // for abs
 #include <ctime>                           // for gmtime, strftime, time_t, tm
 #include <iterator>                        // for next
@@ -55,7 +54,6 @@ static constexpr bool TRACKF_DBG = false;
 
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
-#define MYNAME "trackfilter"
 
 /*******************************************************************************
 * helpers
@@ -86,7 +84,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const QString& arg)
       bool ok;
       qint64 partial = match.captured(idx).toLong(&ok);
       if (!ok) {
-        fatal(MYNAME "-time: invalid quantity in move option \"%s\"!\n", qPrintable(match.captured(idx)));
+        gbFatal("time: invalid quantity in move option \"%s\"!\n", gbLogCStr(match.captured(idx)));
       }
 
       switch (match.captured(idx+1).at(0).toLower().toLatin1()) {
@@ -108,7 +106,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const QString& arg)
       case 'z':
         break;
       default:
-        fatal(MYNAME "-time: invalid unit in move option \"%s\"!\n", qPrintable(match.captured(idx+1)));
+        gbFatal("time: invalid unit in move option \"%s\"!\n", gbLogCStr(match.captured(idx+1)));
       }
 
       result += partial;
@@ -116,10 +114,10 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const QString& arg)
     }
 
     if constexpr(TRACKF_DBG) {
-      qDebug() << MYNAME "-time option: shift =" << result / 1000.0 << "seconds";
+      qDebug() << "time option: shift =" << result / 1000.0 << "seconds";
     }
   } else {
-    fatal(MYNAME "-time: invalid value in move option \"%s\"!\n", qPrintable(arg));
+    gbFatal("time: invalid value in move option \"%s\"!\n", gbLogCStr(arg));
   }
 
   return result;
@@ -160,7 +158,7 @@ fix_type TrackFilter::trackfilter_parse_fix(int* nsats)
     *nsats = 0;
     return fix_none;
   }
-  fatal(MYNAME ": invalid fix type\n");
+  gbFatal("invalid fix type\n");
   return fix_unknown;
 }
 
@@ -194,7 +192,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
     QRegularExpression regex(QRegularExpression::wildcardToRegularExpression(opt_name),
                              QRegularExpression::CaseInsensitiveOption);
     if (!regex.isValid()) {
-      fatal(FatalMsg() << "track: name option is an invalid expression.");
+      gbFatal(FatalMsg() << "track: name option is an invalid expression.");
     }
     if (!regex.match(track->rte_name).hasMatch()) {
       track_del_head(const_cast<route_head*>(track));
@@ -206,7 +204,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
 
   foreach (const Waypoint* wpt, track->waypoint_list) {
     if (!(opt_merge && opt_discard) && need_time && (!wpt->creation_time.isValid())) {
-      fatal(MYNAME "-init: Found track point at %f,%f without time!\n",
+      gbFatal("init: Found track point at %f,%f without time!\n",
             wpt->latitude, wpt->longitude);
     }
 
@@ -214,7 +212,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
       if (!opt_merge) {
         QString t1 = prev->CreationTimeXML();
         QString t2 = wpt->CreationTimeXML();
-        fatal(MYNAME "-init: Track points badly ordered (timestamp %s > %s)!\n", qPrintable(t1), qPrintable(t2));
+        gbFatal("init: Track points badly ordered (timestamp %s > %s)!\n", gbLogCStr(t1), gbLogCStr(t2));
       }
     }
     prev = wpt;
@@ -297,7 +295,7 @@ void TrackFilter::trackfilter_title()
   }
 
   if (opt_title.isEmpty()) {
-    fatal(MYNAME "-title: Missing your title!\n");
+    gbFatal("title: Missing your title!\n");
   }
   for (auto* track : std::as_const(track_list)) {
     trackfilter_pack_init_rte_name(track, QDateTime::fromMSecsSinceEpoch(0, QtUTC));
@@ -318,9 +316,9 @@ void TrackFilter::trackfilter_pack()
       auto prev_last_time = trackfilter_get_last_time(track_list.at(j));
       auto curr_first_time = trackfilter_get_first_time(track_list.at(i));
       if (prev_last_time >= curr_first_time) {
-        fatal(MYNAME "-pack: Tracks overlap in time! %s >= %s at %d\n",
-              qPrintable(prev_last_time.toString()),
-              qPrintable(curr_first_time.toString()), i);
+        gbFatal("pack: Tracks overlap in time! %s >= %s at %d\n",
+              gbLogCStr(prev_last_time.toString()),
+              gbLogCStr(curr_first_time.toString()), i);
       }
     }
 
@@ -407,10 +405,10 @@ void TrackFilter::trackfilter_merge()
     }
 
     if (global_opts.verbose_status > 0) {
-      printf(MYNAME "-merge: %d track point(s) merged, %d dropped.\n", track_waypt_count(), original_waypt_count - track_waypt_count());
+      gbInfo("merge: %d track point(s) merged, %d dropped.\n", track_waypt_count(), original_waypt_count - track_waypt_count());
     }
     if ((original_waypt_count > 0) && (track_waypt_count() == 0)) {
-      warning(MYNAME "-merge: All %d track points have been dropped!\n", original_waypt_count);
+      gbWarning("merge: All %d track points have been dropped!\n", original_waypt_count);
     }
   }
 }
@@ -422,7 +420,7 @@ void TrackFilter::trackfilter_merge()
 void TrackFilter::trackfilter_split()
 {
   if (track_list.size() > 1) {
-    fatal(MYNAME "-split: Cannot split more than one track, please pack (or merge) before!\n");
+    gbFatal("split: Cannot split more than one track, please pack (or merge) before!\n");
   } else if (!track_list.isEmpty()) {
     route_head* master = track_list.first();
     if (master->rte_waypt_ct() <= 1) {
@@ -443,7 +441,7 @@ void TrackFilter::trackfilter_split()
         bool ok;
         interval = match.captured(1).toDouble(&ok);
         if (!ok || interval <= 0.0) {
-          fatal(MYNAME ": invalid time interval specified \"%s\", must be a positive number.\n", qPrintable(match.captured(1)));
+          gbFatal("invalid time interval specified \"%s\", must be a positive number.\n", gbLogCStr(match.captured(1)));
         }
 
         switch (match.captured(2).at(0).toLower().toLatin1()) {
@@ -459,14 +457,14 @@ void TrackFilter::trackfilter_split()
         case 's':
           break;
         default:
-          fatal(MYNAME ": invalid time interval unit specified.\n");
+          gbFatal("invalid time interval unit specified.\n");
         }
 
         if constexpr(TRACKF_DBG) {
-          printf(MYNAME ": interval %f seconds\n", interval);
+          gbDebug("interval %f seconds\n", interval);
         }
       } else {
-        fatal(MYNAME ": invalid timer interval specified \"%s\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", qPrintable(opt_split));
+        gbFatal("invalid timer interval specified \"%s\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", gbLogCStr(opt_split));
       }
     }
 
@@ -479,7 +477,7 @@ void TrackFilter::trackfilter_split()
         bool ok;
         distance = match.captured(1).toDouble(&ok);
         if (!ok || distance <= 0.0) {
-          fatal(MYNAME ": invalid time distance specified \"%s\", must be a positive number.\n", qPrintable(match.captured(1)));
+          gbFatal("invalid time distance specified \"%s\", must be a positive number.\n", gbLogCStr(match.captured(1)));
         }
 
         switch (match.captured(2).at(0).toLower().toLatin1()) {
@@ -490,14 +488,14 @@ void TrackFilter::trackfilter_split()
           distance *= kMetersPerMile;
           break;
         default:
-          fatal(MYNAME ": invalid distance unit specified.\n");
+          gbFatal("invalid distance unit specified.\n");
         }
 
         if constexpr(TRACKF_DBG) {
-          printf(MYNAME ": distance %f meters\n", distance);
+          gbDebug("distance %f meters\n", distance);
         }
       } else {
-        fatal(MYNAME ": invalid distance specified \"%s\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", qPrintable(opt_sdistance.get()));
+        gbFatal("invalid distance specified \"%s\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", gbLogCStr(opt_sdistance.get()));
       }
     }
 
@@ -525,7 +523,7 @@ void TrackFilter::trackfilter_split()
                          wpt->GetCreationTime().toLocalTime().date();
         if constexpr(TRACKF_DBG) {
           if (new_track_flag) {
-            printf(MYNAME ": new day %s\n", qPrintable(wpt->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
+            gbDebug("new day %s\n", gbLogCStr(wpt->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
           }
         }
       } else {
@@ -537,7 +535,7 @@ void TrackFilter::trackfilter_split()
           if (curdist <= distance) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
-            printf(MYNAME ": sdistance, %g > %g\n", curdist, distance);
+            gbDebug("sdistance, %g > %g\n", curdist, distance);
           }
         }
 
@@ -546,14 +544,14 @@ void TrackFilter::trackfilter_split()
           if (tr_interval <= interval) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
-            printf(MYNAME ": split, %g > %g\n", tr_interval, interval);
+            gbDebug("split, %g > %g\n", tr_interval, interval);
           }
         }
 
       }
       if (new_track_flag) {
         if constexpr(TRACKF_DBG) {
-          printf(MYNAME ": splitting new track\n");
+          gbDebug("splitting new track\n");
         }
         curr = new route_head;
         trackfilter_split_init_rte_name(curr, wpt->GetCreationTime());
@@ -589,7 +587,7 @@ void TrackFilter::trackfilter_move()
     }
   }
   if (timeless_points > 0) {
-    warning(MYNAME "-move: %d points out of %d total points didn't have "
+    gbWarning("move: %d points out of %d total points didn't have "
             "time information and could not be moved.\n",
             timeless_points, track_waypt_count());
   }
@@ -683,14 +681,14 @@ QDateTime TrackFilter::trackfilter_range_check(const QString& timestr)
     result.setTimeSpec(Qt::UTC);
 #endif
     if (!result.isValid()) {
-      fatal(MYNAME "-range-check: Invalid timestamp \"%s\"!\n", qPrintable(timestr));
+      gbFatal("range-check: Invalid timestamp \"%s\"!\n", gbLogCStr(timestr));
     }
 
     if constexpr(TRACKF_DBG) {
-      qDebug() << MYNAME "-range-check: " << result;
+      qDebug() << "range-check: " << result;
     }
   } else {
-    fatal(MYNAME "-range-check: Invalid value for option \"%s\"!\n", qPrintable(timestr));
+    gbFatal("range-check: Invalid value for option \"%s\"!\n", gbLogCStr(timestr));
   }
 
   return result;
@@ -743,7 +741,7 @@ void TrackFilter::trackfilter_range()
   }
 
   if ((original_waypt_count > 0) && (track_waypt_count() == 0)) {
-    warning(MYNAME "-range: All %d track points have been dropped!\n", original_waypt_count);
+    gbWarning("range: All %d track points have been dropped!\n", original_waypt_count);
   }
 }
 
@@ -845,24 +843,24 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const QString& t
     result.start.setTimeSpec(Qt::UTC);
 #endif
     if (!result.start.isValid()) {
-      fatal(MYNAME "-faketime-check: Invalid timestamp \"%s\"!\n", qPrintable(start));
+      gbFatal("faketime-check: Invalid timestamp \"%s\"!\n", gbLogCStr(start));
     }
 
     if (match.capturedLength(3) > 0) {
       bool ok;
       result.step = llround(1000.0 * match.captured(3).toDouble(&ok));
       if (!ok) {
-        fatal(MYNAME "-faketime-check: Invalid step \"%s\"!\n", qPrintable(match.captured(3)));
+        gbFatal("faketime-check: Invalid step \"%s\"!\n", gbLogCStr(match.captured(3)));
       }
     } else {
       result.step = 0;
     }
 
     if constexpr(TRACKF_DBG) {
-      qDebug() << MYNAME "-faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
+      qDebug() << "faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
     }
   } else {
-    fatal(MYNAME "-faketime-check: Invalid value for faketime option \"%s\"!\n", qPrintable(timestr));
+    gbFatal("faketime-check: Invalid value for faketime option \"%s\"!\n", gbLogCStr(timestr));
   }
 
   return result;
@@ -1124,7 +1122,7 @@ void TrackFilter::process()
   if (opt_minpoints) {
     minimum_points = opt_minpoints.get_result();
     if (minimum_points <= 0) {
-      fatal(MYNAME "-minimum_points: option value must be a positive integer!\n");
+      gbFatal("minimum_points: option value must be a positive integer!\n");
     }
     track_disp_all(trackfilter_minpoint_list_cb_f, nullptr, nullptr);
   }

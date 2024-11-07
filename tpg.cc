@@ -36,8 +36,6 @@
 #include "mkshort.h"        // for MakeShort
 
 
-#define MYNAME	"TPG"
-
 #define MAXTPGSTRINGSIZE	256
 #define MAXTPGOUTPUTPINS	65535
 
@@ -61,7 +59,7 @@ TpgFormat::tpg_common_init()
 {
   tpg_datum_idx = GPS_Lookup_Datum_Index(tpg_datum_opt);
   if (tpg_datum_idx < 0) {
-    fatal(MYNAME ": Datum '%s' is not recognized.\n", qPrintable(tpg_datum_opt));
+    gbFatal("Datum '%s' is not recognized.\n", gbLogCStr(tpg_datum_opt));
   }
 }
 
@@ -69,7 +67,7 @@ void
 TpgFormat::rd_init(const QString& fname)
 {
   tpg_common_init();
-  tpg_file_in = gbfopen_le(fname, "rb", MYNAME);
+  tpg_file_in = gbfopen_le(fname, "rb");
 }
 
 void
@@ -82,7 +80,7 @@ void
 TpgFormat::wr_init(const QString& fname)
 {
   tpg_common_init();
-  tpg_file_out = gbfopen_le(fname, "wb", MYNAME);
+  tpg_file_out = gbfopen_le(fname, "wb");
   mkshort_handle = new MakeShort;
   waypt_out_count = 0;
 }
@@ -106,7 +104,7 @@ TpgFormat::read()
   gbfread(&buff[0], 19, 1, tpg_file_in);
 
   if (valid_tpg_header(buff, 19) != 0) {
-    fatal(MYNAME ": input file does not appear to be a valid .TPG file.\n");
+    gbFatal("input file does not appear to be a valid .TPG file.\n");
   }
 
 
@@ -287,7 +285,7 @@ TpgFormat::write()
   }
 
   if (s > MAXTPGOUTPUTPINS) {
-    fatal(MYNAME ": attempt to output too many points (%d).  The max is %d.  Sorry.\n", s, MAXTPGOUTPUTPINS);
+    gbFatal("attempt to output too many points (%d).  The max is %d.  Sorry.\n", s, MAXTPGOUTPUTPINS);
   }
 
   /* write the waypoint count */

@@ -31,7 +31,6 @@
 
 
 #if FILTERS_ENABLED
-#define MYNAME "Radius filter"
 
 void RadiusFilter::process()
 {
@@ -97,8 +96,8 @@ void RadiusFilter::init()
   pos_dist = 0;
 
   if (distopt) {
-    if (parse_distance(distopt, &pos_dist, kMetersPerMile, MYNAME) == 0) {
-      fatal(MYNAME ": No distance specified with distance option.\n");
+    if (parse_distance(distopt, &pos_dist, kMetersPerMile) == 0) {
+      gbFatal("No distance specified with distance option.\n");
     }
   }
 

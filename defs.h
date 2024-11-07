@@ -51,6 +51,7 @@
 #include "src/core/datetime.h"       // for DateTime
 
 
+#define gbLogCStr(qstr) qUtf8Printable(qstr)
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
 
@@ -571,7 +572,9 @@ WaypointList::waypt_disp_session(const session_t* se, T cb)
     }
   }
   if (global_opts.verbose_status) {
-    fprintf(stdout, "\r\n");
+    // Terminate the progress line from waypt_status_disp.
+    fprintf(stderr, "\n");
+    fflush(stderr);
   }
 }
 
@@ -907,8 +910,8 @@ enum ff_cap {
 #define FF_CAP_RW_WPT \
 	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
 
-[[noreturn]] void fatal(QDebug& msginstance);
-// cppcheck 2.10.3 fails to assign noreturn attribute to fatal if
+[[noreturn]] void gbFatal(QDebug& msginstance);
+// cppcheck 2.10.3 fails to assign noreturn attribute to gbFatal if
 // the noreturn attribute is listed before the gnu::format attribute.
 // A PR to resolve this is https://github.com/danmar/cppcheck/pull/4971,
 // but cppcheck works if the noreturn attribute follows the gnu::format
@@ -916,8 +919,12 @@ enum ff_cap {
 // This can have a large effect on codacy issues from cppcheck
 // nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
 // negativeIndex, arrayIndexOutOfBoundsCond.
-[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void warning(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void gbFatal(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbWarning(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...);
+
+void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args1);
 
 void printposn(double c, bool is_lat);
 
@@ -927,7 +934,7 @@ void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
 char* xstrdup(const char* s);
 
-FILE* xfopen(const QString& fname, const char* type, const QString& errtxt);
+FILE* xfopen(const QString& fname, const char* type);
 
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);
@@ -1028,11 +1035,11 @@ int xstrtoi(const char* str, char** str_end, int base);
 int parse_integer(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr, int base = 10);
 double parse_double(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr);
 int parse_coordinates(const char* str, int datum, grid_type grid,
-                      double* latitude, double* longitude, const char* module);
+                      double* latitude, double* longitude);
 int parse_coordinates(const QString& str, int datum, grid_type grid,
-                      double* latitude, double* longitude, const char* module);
-int parse_distance(const QString& str, double* val, double scale, const char* module);
-int parse_speed(const QString& str, double* val, double scale, const char* module);
+                      double* latitude, double* longitude);
+int parse_distance(const QString& str, double* val, double scale);
+int parse_speed(const QString& str, double* val, double scale);
 
 /*
  * Color helpers.

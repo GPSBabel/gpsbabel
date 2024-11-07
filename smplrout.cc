@@ -70,7 +70,6 @@
 
 
 #if FILTERS_ENABLED
-#define MYNAME "simplify"
 
 inline bool operator<(const SimplifyRouteFilter::trackerror& lhs, const SimplifyRouteFilter::trackerror& rhs)
 {
@@ -160,7 +159,7 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
     if (metric == metric_t::relative) {
       // check hdop is available for compute_track_error
       if (wpt->hdop == 0) {
-        fatal(MYNAME ": relative needs hdop information.\n");
+        gbFatal("relative needs hdop information.\n");
       }
     }
 
@@ -271,7 +270,7 @@ void SimplifyRouteFilter::init()
   } else if (countopt && !erroropt) {
     limit_basis = limit_basis_t::count;
   } else {
-    fatal(MYNAME ": You must specify either count or error, but not both.\n");
+    gbFatal("You must specify either count or error, but not both.\n");
   }
 
   if (!lenopt && !relopt) {
@@ -281,7 +280,7 @@ void SimplifyRouteFilter::init()
   } else if (!xteopt && !lenopt && relopt) {
     metric = metric_t::relative;
   } else {
-    fatal(MYNAME ": You may specify only one of crosstrack, length, or relative.\n");
+    gbFatal("You may specify only one of crosstrack, length, or relative.\n");
   }
 
   switch (limit_basis) {
@@ -292,8 +291,8 @@ void SimplifyRouteFilter::init()
     if (metric == metric_t::relative) {
       error = erroropt.get_result();
     } else {
-      if (parse_distance(erroropt, &error, kMetersPerMile, MYNAME) == 0) {
-        fatal(MYNAME ": No value specified with error option.\n");
+      if (parse_distance(erroropt, &error, kMetersPerMile) == 0) {
+        gbFatal("No value specified with error option.\n");
       }
     }
   }

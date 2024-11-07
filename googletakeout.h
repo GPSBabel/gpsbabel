@@ -66,7 +66,6 @@ public:
 private:
   /* Constants */
 
-  static constexpr char MYNAME[] = "Google Takeout";
   static constexpr char TIMELINE_OBJECTS[] = "timelineObjects";
   static constexpr char16_t PLACE_VISIT[] = u"placeVisit";
   static constexpr char16_t ACTIVITY_SEGMENT[] = u"activitySegment";
@@ -126,8 +125,8 @@ private:
   static Waypoint* takeout_waypoint(int lat_e7, int lon_e7, const QString* shortname, const QString* description, const QString* start_str);
   static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint);
   static void title_case(QString& title);
-  void add_place_visit(const QJsonObject& placeVisit);
-  int add_activity_segment(const QJsonObject& activitySegment);
+  static void add_place_visit(const QJsonObject& placeVisit);
+  static int add_activity_segment(const QJsonObject& activitySegment);
 
   /* Data Members */
 

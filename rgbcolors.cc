@@ -27,7 +27,7 @@
 #include <QString>             // for QString, QTypeInfo<>::isRelocatable
 #include <QtGlobal>            // for qPrintable
 
-#include "defs.h"              // for fatal, color_to_bbggrr
+#include "defs.h"              // for gbFatal, color_to_bbggrr
 
 /*
  * Colors derived from http://www.w3.org/TR/SVG/types.html#ColorKeywords
@@ -227,6 +227,6 @@ color_to_bbggrr(const QString& cname)
     return (entry.b << 16) + (entry.g << 8) + entry.r;
   }
 
-  fatal("unrecognized color name %s\n", qPrintable(cname));
+  gbFatal("unrecognized color name %s\n", gbLogCStr(cname));
   return -1;
 }

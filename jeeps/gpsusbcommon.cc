@@ -93,7 +93,7 @@ top:
     rv = gusb_llops->llop_get_bulk(ibuf, sz);
     break;
   default:
-    fatal("Unknown receiver state %d\n", receive_state);
+    gbFatal("Unknown receiver state %d\n", receive_state);
   }
 
   pkt_id = le_read16(&ibuf->gusb_pkt.pkt_id);
@@ -236,7 +236,7 @@ gusb_id_unit(garmin_unit_info_t* gu)
       return;
     }
   }
-  fatal("Unable to sync with Garmin USB device in %d attempts.", i);
+  gbFatal("Unable to sync with Garmin USB device in %d attempts.\n", i);
 }
 
 void
@@ -272,5 +272,5 @@ gusb_syncup()
       return;
     }
   }
-  fatal("Unable to establish USB syncup\n");
+  gbFatal("Unable to establish USB syncup\n");
 }

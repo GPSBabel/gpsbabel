@@ -111,7 +111,7 @@ private:
   void nmea_fix_timestamps(route_head* track);
   static bool notalkerid_strmatch(const QByteArray& s1, const char* sentenceFormatterMnemonicCode);
   void nmea_parse_one_line(const QByteArray& ibuf);
-  static void safe_print(int cnt, const char* b);
+  static void safe_print(const QString& b);
   int hunt_sirf();
   void nmea_wayptpr(const Waypoint* wpt) const;
   void nmea_track_init(const route_head* unused);

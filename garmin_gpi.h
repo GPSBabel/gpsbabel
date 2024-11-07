@@ -283,8 +283,8 @@ private:
   /* Member Functions */
 
   static garmin_fs_t* gpi_gmsd_init(Waypoint* wpt);
-  lc_string gpi_read_lc_string() const;
-  QString gpi_read_string(const char* field) const;
+  lc_string gpi_read_lc_string();
+  QString gpi_read_string(const char* field);
   void read_header();
   void read_poi(int sz, int tag);
   void read_poi_list(int sz);

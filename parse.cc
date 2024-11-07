@@ -28,7 +28,7 @@
 #include <QString>                 // for QString
 #include <QtGlobal>                // for qPrintable
 
-#include "defs.h"                  // for case_ignore_strcmp, fatal, grid_type, KPH_TO_MPS, MPH_TO_MPS, warning, FEET_TO_METERS, KNOTS_TO_MPS, kDatumWGS84, FATHOMS_TO_METERS, MILES_TO_METERS, NMILES_TO_METERS, parse_coordinates, CSTR, parse_distance, parse_double, parse_integer, parse_speed
+#include "defs.h"                  // for case_ignore_strcmp, gbFatal, grid_type, KPH_TO_MPS, MPH_TO_MPS, gbWarning, FEET_TO_METERS, KNOTS_TO_MPS, kDatumWGS84, FATHOMS_TO_METERS, MILES_TO_METERS, NMILES_TO_METERS, parse_coordinates, CSTR, parse_distance, parse_double, parse_integer, parse_speed
 #include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UKOSMap_To_WGS84_H, GPS_Math_UTM_EN_To_Known_Datum
 
 
@@ -53,24 +53,24 @@ int parse_integer(const QString& str, const QString& id, bool* ok, QString* end,
     result = stoi(ss, &pos, base);
   } catch (const std::invalid_argument&) {
     if (ok == nullptr) {
-      fatal("%s: conversion to integer failed: invalid argument \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+      gbFatal("%s: conversion to integer failed: invalid argument \"%s\".\n",
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0;
     }
   } catch (const std::out_of_range&) {
     if (ok == nullptr) {
-      fatal("%s: conversion to integer failed: out of range \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+      gbFatal("%s: conversion to integer failed: out of range \"%s\".\n",
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0;
     }
   } catch (...) {
     if (ok == nullptr) {
-      fatal("%s: conversion to integer failed: unknown exception \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+      gbFatal("%s: conversion to integer failed: unknown exception \"%s\".\n",
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0;
@@ -80,8 +80,8 @@ int parse_integer(const QString& str, const QString& id, bool* ok, QString* end,
   QString remainder = QString::fromStdString(ss.erase(0, pos));
   if ((end == nullptr) && !remainder.trimmed().isEmpty()) {
     if (ok == nullptr) {
-      fatal("%s: conversion to integer failed: conversion of \"%s\" failed due to unexpected trailing data \"%s\".\n",
-            qPrintable(id), qPrintable(str), qPrintable(remainder));
+      gbFatal("%s: conversion to integer failed: conversion of \"%s\" failed due to unexpected trailing data \"%s\".\n",
+            gbLogCStr(id), gbLogCStr(str), gbLogCStr(remainder));
     } else {
       *ok = false;
       return 0;
@@ -120,24 +120,24 @@ double parse_double(const QString& str, const QString& id, bool* ok, QString* en
     result = stod(ss, &pos);
   } catch (const std::invalid_argument&) {
     if (ok == nullptr) {
-      fatal("%s: conversion to double failed: invalid argument \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+      gbFatal("%s: conversion to double failed: invalid argument \"%s\".\n",
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0.0;
     }
   } catch (const std::out_of_range&) {
     if (ok == nullptr) {
-      fatal("%s: conversion to double failed: out of range \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+      gbFatal("%s: conversion to double failed: out of range \"%s\".\n",
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0.0;
     }
   } catch (...) {
     if (ok == nullptr) {
-      fatal("%s: conversion to double failed: unknown exception \"%s\".\n",
-            qPrintable(id), qPrintable(str));
+      gbFatal("%s: conversion to double failed: unknown exception \"%s\".\n",
+            gbLogCStr(id), gbLogCStr(str));
     } else {
       *ok = false;
       return 0.0;
@@ -147,8 +147,8 @@ double parse_double(const QString& str, const QString& id, bool* ok, QString* en
   QString remainder = QString::fromStdString(ss.erase(0, pos));
   if ((end == nullptr) && !remainder.trimmed().isEmpty()) {
     if (ok == nullptr) {
-      fatal("%s: conversion to double failed: conversion of \"%s\" failed due to unexpected trailing data \"%s\".\n",
-            qPrintable(id), qPrintable(str), qPrintable(remainder));
+      gbFatal("%s: conversion to double failed: conversion of \"%s\" failed due to unexpected trailing data \"%s\".\n",
+            gbLogCStr(id), gbLogCStr(str), gbLogCStr(remainder));
     } else {
       *ok = false;
       return 0.0;
@@ -171,11 +171,10 @@ double parse_double(const QString& str, const QString& id, bool* ok, QString* en
  *  str:     input string, i.e. "128.2 km" or "22mi"
  *  val:     pointer to resulting value
  *  scale:   scaling parameter for unit-less values
- *  module:  calling module, i.e. "garmin_txt"
  */
 
 int
-parse_distance(const QString& str, double* val, double scale, const char* module)
+parse_distance(const QString& str, double* val, double scale)
 {
   if (str.isEmpty()) {
     return 0;
@@ -183,7 +182,7 @@ parse_distance(const QString& str, double* val, double scale, const char* module
 
   QString unit;
   constexpr bool* dieonfailure = nullptr;
-  *val = parse_double(str, module, dieonfailure, &unit);
+  *val = parse_double(str, "", dieonfailure, &unit);
 
   if (fabs(*val) + 1 >= 1.0e25) {
     return 0; /* not only Garmin uses this as 'unknown value' */
@@ -212,7 +211,7 @@ parse_distance(const QString& str, double* val, double scale, const char* module
   } else if (case_ignore_strcmp(unit, "fa") == 0) {
     *val = FATHOMS_TO_METERS(*val);
   } else {
-    fatal("%s: Unsupported distance unit in item '%s'!\n", module, qPrintable(str));
+    gbFatal("Unsupported distance unit in item '%s'!\n", gbLogCStr(str));
   }
   return 2;
 }
@@ -223,10 +222,9 @@ parse_distance(const QString& str, double* val, double scale, const char* module
  *  str:     input string, i.e. "22.3 km/h" or "40mph"
  *  val:     pointer to resulting value
  *  scale:   scaling parameter for unit-less values
- *  module:  calling module, i.e. "garmin_txt"
  */
 int
-parse_speed(const QString& str, double* val, const double scale, const char* module)
+parse_speed(const QString& str, double* val, const double scale)
 {
 
   if (str.isEmpty()) {
@@ -235,7 +233,7 @@ parse_speed(const QString& str, double* val, const double scale, const char* mod
 
   QString unit;
   constexpr bool* dieonfailure = nullptr;
-  *val = parse_double(str, module, dieonfailure, &unit);
+  *val = parse_double(str, "", dieonfailure, &unit);
 
   unit = unit.trimmed();
 
@@ -263,7 +261,7 @@ parse_speed(const QString& str, double* val, const double scale, const char* mod
   } else if (case_ignore_strcmp(unit, "mih") == 0) {
     *val = MPH_TO_MPS(*val);
   } else {
-    warning("%s: Unsupported speed unit '%s' in item '%s'!\n", module, qPrintable(unit), qPrintable(str));
+    gbWarning("Unsupported speed unit '%s' in item '%s'!\n", gbLogCStr(unit), gbLogCStr(str));
   }
 
   return 2;
@@ -278,7 +276,7 @@ parse_speed(const QString& str, double* val, const double scale, const char* mod
 
 int
 parse_coordinates(const char* str, int datum, const grid_type grid,
-                  double* latitude, double* longitude, const char* module)
+                  double* latitude, double* longitude)
 {
   double lat;
   double lon;
@@ -342,8 +340,8 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     valid = (ct == 3);
     if (valid) {
       if (! GPS_Math_UKOSMap_To_WGS84_H(map, lx, ly, &lat, &lon))
-        fatal("%s: Unable to convert BNG coordinates (%s)!\n",
-              module, str);
+        gbFatal("Unable to convert BNG coordinates (%s)!\n",
+              str);
     }
     lathemi = lonhemi = '\0';
     break;
@@ -356,8 +354,8 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
     valid = (ct == 4);
     if (valid) {
       if (! GPS_Math_UTM_EN_To_Known_Datum(&lat, &lon, utme, utmn, utmz, utmc, datum))
-        fatal("%s: Unable to convert UTM coordinates (%s)!\n",
-              module, str);
+        gbFatal("Unable to convert UTM coordinates (%s)!\n",
+              str);
     }
     lathemi = lonhemi = '\0';
     break;
@@ -376,14 +374,14 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
   }
   default:
     /* this should never happen in a release version */
-    fatal("%s/util: Unknown grid in parse_coordinates (%d)!\n",
-          module, (int)grid);
+    gbFatal("Unknown grid in parse_coordinates (%d)!\n",
+          (int)grid);
   }
 
   if (! valid) {
-    warning("%s: sscanf error using format \"%s\"!\n", module, format);
-    warning("%s: parsing has stopped at parameter number %d.\n", module, ct);
-    fatal("%s: could not convert coordinates \"%s\"!\n", module, str);
+    gbWarning("sscanf error using format \"%s\"!\n", format);
+    gbWarning("parsing has stopped at parameter number %d.\n", ct);
+    gbFatal("could not convert coordinates \"%s\"!\n", str);
   }
 
   if (lathemi == 'S') {
@@ -411,8 +409,8 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
 
 int
 parse_coordinates(const QString& str, int datum, const grid_type grid,
-                  double* latitude, double* longitude, const char* module)
+                  double* latitude, double* longitude)
 {
   return parse_coordinates(CSTR(str), datum, grid,
-                           latitude, longitude, module);
+                           latitude, longitude);
 }

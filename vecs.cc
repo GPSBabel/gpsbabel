@@ -39,7 +39,7 @@
 #include <type_traits>         // for is_base_of
 #include <utility>             // for as_const
 
-#include "defs.h"              // for arglist_t, CSTR, fatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, case_ignore_strcmp, gpsdata_type, warning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
+#include "defs.h"              // for arglist_t, CSTR, gbFatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, case_ignore_strcmp, gpsdata_type, gbWarning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
 #include "exif.h"              // for ExifFormat
 #include "format.h"            // for Format
@@ -566,7 +566,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
 
   if (arg.argval == nullptr) {
-    fatal("%s: Program error - No local variable defined for option.\n", qPrintable(id));
+    gbFatal("%s: Program error - No local variable defined for option.\n", gbLogCStr(id));
   }
 
   arg.argval->reset();
@@ -602,7 +602,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
             rval = '1';
           }
         } else {
-          warning("%s: Invalid logical value \"%s\".\n", qPrintable(id), qPrintable(val));
+          gbWarning("%s: Invalid logical value \"%s\".\n", gbLogCStr(id), gbLogCStr(val));
           rval = '0';
         }
       }
@@ -617,12 +617,12 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
   if (args) {
     for (const auto& arg : *args) {
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
-        printf("options: module/option=value: %s/%s=\"%s\"",
-               qPrintable(vecname), qPrintable(arg.argstring), qPrintable(arg.argval->get()));
+        gbDebug("options: module/option=value: %s/%s=\"%s\"",
+               gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
         if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
-          printf(" (=default)");
+          gbDebug(" (=default)");
         }
-        printf("\n");
+        gbDebug("\n");
       }
     }
   }
@@ -642,7 +642,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
       }
     }
     if (!valid) {
-      warning("'%s' is an unknown option to %s.\n", qPrintable(option_name), qPrintable(name));
+      gbWarning("'%s' is an unknown option to %s.\n", gbLogCStr(option_name), gbLogCStr(name));
     }
   }
 }
@@ -695,7 +695,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
 {
   QStringList options = fmtargstring.split(',');
   if (options.isEmpty()) {
-    fatal("A format name is required.\n");
+    gbFatal("A format name is required.\n");
   }
   const QString fmtname = options.takeFirst();
 
@@ -761,7 +761,7 @@ QVector<Vecs::style_vec_t> Vecs::create_style_vec()
   QString styledir(":/style");
   QDir dir(styledir);
   if (!dir.isReadable()) {
-    fatal(FatalMsg() << "style directory" << QFileInfo(styledir).absoluteFilePath() << "not readable.");
+    gbFatal(FatalMsg() << "style directory" << QFileInfo(styledir).absoluteFilePath() << "not readable.");
   }
 
   dir.setNameFilters(QStringList("*.style"));
@@ -771,7 +771,7 @@ QVector<Vecs::style_vec_t> Vecs::create_style_vec()
   QVector<style_vec_t> slist;
   for (const auto& fileinfo : fileinfolist) {
     if (!fileinfo.isReadable()) {
-      fatal(FatalMsg() << "Cannot open style file" << fileinfo.absoluteFilePath() << ".");
+      gbFatal(FatalMsg() << "Cannot open style file" << fileinfo.absoluteFilePath() << ".");
     }
 
     style_vec_t entry;

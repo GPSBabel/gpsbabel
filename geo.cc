@@ -31,8 +31,6 @@
 #include "src/core/file.h"       // for File
 
 
-#define MYNAME "geo"
-
 void GeoFormat::GeoReadLoc(QXmlStreamReader& reader)
 {
   Waypoint* wpt = nullptr;
@@ -92,9 +90,9 @@ void GeoFormat::read()
 
   GeoReadLoc(reader);
   if (reader.hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
-          qPrintable(reader.errorString()),
-          qPrintable(ifile.fileName()),
+    gbFatal("Read error: %s (%s, line %ld, col %ld)\n",
+          gbLogCStr(reader.errorString()),
+          gbLogCStr(ifile.fileName()),
           (long) reader.lineNumber(),
           (long) reader.columnNumber());
   }

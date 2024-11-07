@@ -35,7 +35,7 @@
 
 #include "arcdist.h"        // for ArcDistanceFilter
 #include "bend.h"           // for BendFilter
-#include "defs.h"           // for arglist_t, CSTR, xfree, ARGTYPE_HIDDEN, fatal, global_options, global_opts, ARGTYPE_REQUIRED
+#include "defs.h"           // for arglist_t, CSTR, xfree, ARGTYPE_HIDDEN, gbFatal, global_options, global_opts, ARGTYPE_REQUIRED
 #include "discard.h"        // for DiscardFilter
 #include "duplicate.h"      // for DuplicateFilter
 #include "filter.h"         // for Filter
@@ -247,7 +247,7 @@ FilterVecs::fltinfo_t FilterVecs::find_filter_vec(const QString& fltargstring)
 {
   QStringList options = fltargstring.split(',');
   if (options.isEmpty()) {
-    fatal("A filter name is required.\n");
+    gbFatal("A filter name is required.\n");
   }
   const QString fltname = options.takeFirst();
 

@@ -18,7 +18,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include "defs.h"              // for fatal, warning
+#include "defs.h"              // for gbFatal, gbWarning
 #include "inifile.h"
 #include "src/core/file.h"     // for File
 #include <QByteArray>          // for QByteArray
@@ -32,7 +32,6 @@
 #include <QtGlobal>            // for qEnvironmentVariable, qPrintable
 #include <utility>
 
-#define MYNAME "inifile"
 
 struct inifile_t {
   QHash<QString, InifileSection> sections;
@@ -77,7 +76,7 @@ open_gpsbabel_inifile()
     if (QFile(envstr).open(QIODevice::ReadOnly)) {
       return envstr;
     }
-    warning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
+    gbWarning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
     return res;
   }
   QString name = find_gpsbabel_inifile("");  // Check in current directory first.
@@ -104,7 +103,7 @@ open_gpsbabel_inifile()
 }
 
 static void
-inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
+inifile_load_file(QTextStream* stream, inifile_t* inifile)
 {
   QString buf;
   InifileSection section;
@@ -125,8 +124,8 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
         section_name = buf.mid(1, buf.indexOf(']') - 1).trimmed();
       }
       if (section_name.isEmpty()) {
-        fatal("%s: invalid section header '%s' in '%s'.\n", myname, qPrintable(section_name),
-              qPrintable(inifile->source));
+        gbFatal("invalid section header '%s' in '%s'.\n", gbLogCStr(section_name),
+              gbLogCStr(inifile->source));
       }
 
       // form lowercase key to implement CaseInsensitive matching.
@@ -135,8 +134,8 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
       section = inifile->sections.value(section_name);
     } else {
       if (section.name.isEmpty()) {
-        fatal("%s: missing section header in '%s'.\n", myname,
-              qPrintable(inifile->source));
+        gbFatal("missing section header in '%s'.\n",
+              gbLogCStr(inifile->source));
       }
 
       // Store key in lower case to implement CaseInsensitive matching.
@@ -170,12 +169,11 @@ inifile_find_value(const inifile_t* inifile, const QString& sec_name, const QStr
 /*
 	inifile_init:
 	  reads inifile filename into memory
-	  myname represents the calling module
 
 	  filename == NULL: try to open global gpsbabel.ini
  */
 inifile_t*
-inifile_init(const QString& filename, const char* myname)
+inifile_init(const QString& filename)
 {
   QString name;
 
@@ -197,7 +195,7 @@ inifile_init(const QString& filename, const char* myname)
   auto* result = new inifile_t;
   QFileInfo fileinfo(file);
   result->source = fileinfo.absoluteFilePath();
-  inifile_load_file(&stream, result, myname);
+  inifile_load_file(&stream, result);
 
   file.close();
   return result;
