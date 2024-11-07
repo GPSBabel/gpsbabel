@@ -572,7 +572,9 @@ WaypointList::waypt_disp_session(const session_t* se, T cb)
     }
   }
   if (global_opts.verbose_status) {
-    fprintf(stdout, "\r\n");
+    // Terminate the progress line from waypt_status_disp.
+    fprintf(stderr, "\n");
+    fflush(stderr);
   }
 }
 
