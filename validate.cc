@@ -60,8 +60,7 @@ void ValidateFilter::process()
 
   point_ct = 0;
   if (opt_debug) {
-    gbDebug("\n");
-    gbDebug("Processing waypts\n");
+    gbDebug("\nProcessing waypts\n");
   }
   waypt_disp_all(validate_point_f);
   if (opt_debug) {
@@ -76,8 +75,7 @@ void ValidateFilter::process()
   total_segment_ct = 0;
   segment_type = "route";
   if (opt_debug) {
-    gbDebug("\n");
-    gbDebug("Processing routes\n");
+    gbDebug("\nProcessing routes\n");
   }
   route_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (opt_debug) {
@@ -96,8 +94,7 @@ void ValidateFilter::process()
   total_segment_ct = 0;
   segment_type = "track";
   if (opt_debug) {
-    gbDebug("\n");
-    gbDebug("Processing tracks\n");
+    gbDebug("\nProcessing tracks\n");
   }
   track_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (opt_debug) {

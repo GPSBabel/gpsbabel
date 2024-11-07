@@ -163,7 +163,7 @@ SkytraqBase::rd_word()
   }
   buffer[1] = c;
   /*	if (rd_buf(buffer, 2) != res_OK) {
-  		db(1, "rd_word(): Read error\n");
+  		dbg(1, "rd_word(): Read error\n");
   		return res_ERROR;
   	}*/
 

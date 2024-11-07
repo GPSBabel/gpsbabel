@@ -725,7 +725,7 @@ void TpoFormatBase::tpo_process_tracks()
       Waypoint* waypoint_temp;
 #ifdef Tracks2012
       if constexpr(debug > 3) {
-        gbLog("%02x %02x %02x %02x - byte %u, track %u, llvallid=%d\n",
+        gbDebug("%02x %02x %02x %02x - byte %u, track %u, llvallid=%d\n",
                buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], jj, ii+1, llvalid);
       }
       // Time to read a new latlong?
@@ -733,13 +733,13 @@ void TpoFormatBase::tpo_process_tracks()
 
         lon = le_read32(&buf[jj]);
         if constexpr(debug > 3) {
-          gbLog("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
+          gbDebug("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
         }
         jj+=4;
 
         lat = le_read32(&buf[jj]);
         if constexpr(debug > 3) {
-          gbLog("%02x %02x %02x %02x - raw lat = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lat,jj);
+          gbDebug("%02x %02x %02x %02x - raw lat = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lat,jj);
         }
         jj+=4;
 
@@ -755,7 +755,7 @@ void TpoFormatBase::tpo_process_tracks()
 
           lonscale = le_read32(&buf[jj]);
           if constexpr(debug > 3) {
-            gbLog("%02x %02x %02x %02x - raw lon scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lonscale, jj);
+            gbDebug("%02x %02x %02x %02x - raw lon scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lonscale, jj);
           }
 //printf(" LONSCALE:");
 //printf("%02x%02x%02x%02x", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3]);
@@ -771,7 +771,7 @@ void TpoFormatBase::tpo_process_tracks()
 
           latscale = le_read32(&buf[jj]);
           if constexpr(debug > 3) {
-            gbLog("%02x %02x %02x %02x - raw lat scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], latscale, jj);
+            gbDebug("%02x %02x %02x %02x - raw lat scale = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], latscale, jj);
           }
 //printf(" LATSCALE:");
 //printf("%02x%02x%02x%02x ", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3]);
@@ -783,7 +783,7 @@ void TpoFormatBase::tpo_process_tracks()
         track_add_wpt(track_temp, waypoint_temp);
         cnttp++;
         if constexpr(debug > 3) {
-          gbLog("Adding BASIC trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
+          gbDebug("Adding BASIC trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
         }
       }
 #else
@@ -870,7 +870,7 @@ void TpoFormatBase::tpo_process_tracks()
       // offsets.
       else if (buf[jj] == 0x88) {
         if constexpr(debug > 3) {
-          gbLog("%02x should mean full lat/lon comes next (byte %u)\n",buf[jj],jj);
+          gbDebug("%02x should mean full lat/lon comes next (byte %u)\n",buf[jj],jj);
         }
         jj++;
         llvalid = 0;
@@ -897,7 +897,7 @@ void TpoFormatBase::tpo_process_tracks()
       // combo embedded in this track next.
       else if (buf[jj] == 0x00) {
         if constexpr(debug > 3) {
-          gbLog("%02x should mean full lat/lon or lonscale/latscale comes next (at byte %u)\n",buf[jj],jj);
+          gbDebug("%02x should mean full lat/lon or lonscale/latscale comes next (at byte %u)\n",buf[jj],jj);
         }
 //printf(" ZERO ");
         jj++;
@@ -908,7 +908,7 @@ void TpoFormatBase::tpo_process_tracks()
       else {
         static const int scarray[] = {0,1,2,3,4,5,6,7,-8,-7,-6,-5,-4,-3,-2,-1};
         if constexpr(debug) {
-          gbLog("%02x - lat mult = %d, lon mult=%d, byte %u\n", buf[jj], scarray[buf[jj] & 0xf], scarray[buf[jj] >> 4], jj);
+          gbDebug("%02x - lat mult = %d, lon mult=%d, byte %u\n", buf[jj], scarray[buf[jj] & 0xf], scarray[buf[jj] >> 4], jj);
         }
 
 
@@ -922,12 +922,12 @@ void TpoFormatBase::tpo_process_tracks()
 
 
         if constexpr(debug > 3) {
-          gbLog("%02x - adjusting prev lat/lon from %i/%i", buf[jj], lat, lon);
+          gbDebug("%02x - adjusting prev lat/lon from %i/%i", buf[jj], lat, lon);
         }
         lon += lonscale * scarray[buf[jj] >> 4];
         lat += latscale * scarray[(buf[jj] & 0xf)];
         if constexpr(debug > 3) {
-          gbLog(" to %i/%i, byte %u\n", lat, lon, jj);
+          gbDebug(" to %i/%i, byte %u\n", lat, lon, jj);
         }
 //printf(".");
         jj++;
@@ -936,7 +936,7 @@ void TpoFormatBase::tpo_process_tracks()
         track_add_wpt(track_temp, waypoint_temp);
         cnttp++;
         if constexpr(debug > 3) {
-          gbLog("Adding ADJUSTED trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
+          gbDebug("Adding ADJUSTED trackpoint #%i: lat=%.5f, lon=%.5f\n", cnttp, waypoint_temp->latitude, waypoint_temp->longitude);
         }
       }
 #else

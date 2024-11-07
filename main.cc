@@ -767,6 +767,8 @@ main(int argc, char* argv[])
 #error Visual Studio 2017 and earlier are not supported. Please use Visual Studio 2019 or 2022.
 #endif
 
+  setMessagePattern();
+
   if constexpr (DEBUG_LOCALE) {
     gbDebug("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
   }
@@ -810,7 +812,6 @@ main(int argc, char* argv[])
       gbDebug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
-  setMessagePattern();
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
