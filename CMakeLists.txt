@@ -39,22 +39,32 @@ endif()
 
 option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
 if (GPSBABEL_ENABLE_PCH)
+  # This list is from defs.h.
   target_precompile_headers(gpsbabel PRIVATE
-    "$<$<COMPILE_LANGUAGE:CXX>:<algorithm$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<cmath$<ANGLE-R>>"
-    "$<$<COMPILE_LANGUAGE:CXX>:<cstdarg$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<cstddef$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<cstdint$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<cstdio$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<ctime$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<numbers$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<optional$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<utility$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QByteArray$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QDate$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QTime$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QDateTime$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QDebug$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QList$<ANGLE-R>>"
-    "$<$<COMPILE_LANGUAGE:CXX>:<QScopedPointer$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QString$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QStringView$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QTextCodec$<ANGLE-R>>"
-    "$<$<COMPILE_LANGUAGE:CXX>:<QVector$<ANGLE-R>>"
+  )
+  if(${Qt6Core_VERSION} VERSION_GREATER_EQUAL 6.5)
+    target_precompile_headers(gpsbabel PRIVATE
+      "$<$<COMPILE_LANGUAGE:CXX>:<QTimeZone$<ANGLE-R>>"
+    )
+  endif()
+  target_precompile_headers(gpsbabel PRIVATE
     "$<$<COMPILE_LANGUAGE:CXX>:<Qt$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QtGlobal$<ANGLE-R>>"
   )
