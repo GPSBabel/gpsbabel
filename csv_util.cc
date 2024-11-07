@@ -35,8 +35,6 @@
 #include "src/core/logging.h"  // for Warning
 
 
-#define MYNAME "CSV_UTIL"
-
 /*********************************************************************/
 /* csv_stringclean() - remove any unwanted characters from string.   */
 /*                     returns copy of string.                       */
@@ -229,7 +227,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
     }
 
     if (enclosed) {
-      Warning() << MYNAME":" <<
+      Warning() <<
               "Warning- Unbalanced Field Enclosures" <<
               enclosed_in <<
               "on line" <<
@@ -528,7 +526,7 @@ dec_to_human(const char* format, const char* dirs, double val)
       case 'x':
       case 'X':
         if (index>2) {
-          fatal(MYNAME ": too many format specifiers\n");
+          gbFatal("too many format specifiers\n");
         }
         buff += QString::asprintf(subformat, intvals[index]);
         index++;
@@ -539,7 +537,7 @@ dec_to_human(const char* format, const char* dirs, double val)
       case 'g':
       case 'G':
         if (index>2) {
-          fatal(MYNAME ": too many format specifiers\n");
+          gbFatal("too many format specifiers\n");
         }
         buff += QString::asprintf(subformat, dblvals[index]);
         index++;
@@ -548,7 +546,7 @@ dec_to_human(const char* format, const char* dirs, double val)
         buff += subformat;
         break;
       default:
-        fatal(MYNAME ": invalid format specifier\n");
+        gbFatal("invalid format specifier\n");
         break;
 
       }

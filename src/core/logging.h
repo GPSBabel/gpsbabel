@@ -33,13 +33,13 @@ public:
 };
 
 /*
- * To use a FatalMsg pass it to fatal(), e.g.
- * fatal(FatalMsg() << "bye bye");
+ * To use a FatalMsg pass it to gbFatal(), e.g.
+ * gbFatal(FatalMsg() << "bye bye");
  *
  * This
- * 1) allows the noreturn attribute on fatal to be use by analysis
+ * 1) allows the noreturn attribute on gbFatal to be use by analysis
  *    tools such as cppcheck.
- * 2) allows fatal to throw an exception instead of calling exit.
+ * 2) allows gbFatal to throw an exception instead of calling exit.
  *    This could be caught by main for a cleaner exit from a fatal error.
  */
 class FatalMsg : public QDebug

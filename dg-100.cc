@@ -32,7 +32,7 @@
 #include <cassert>                     // for assert
 #include <cstdarg>                     // for va_end, va_list, va_start
 #include <cstdint>                     // for uint8_t, uint16_t, int16_t
-#include <cstdio>                      // for fprintf, stderr, size_t, vfprintf
+#include <cstdio>                      // for size_t, va_list
 #include <cstdlib>                     // for abs
 #include <cstring>                     // for memcpy, memcmp, strcmp
 
@@ -51,8 +51,6 @@
 #include "gbfile.h"                    // for gbfread, gbfclose, gbfgetc, gbfopen, gbfile
 #include "gbser.h"                     // for gbser_deinit, gbser_flush, gbser_init, gbser_read_wait, gbser_readc_wait, gbser_set_speed, gbser_write, gbser_ERROR, gbser_OK, gbser_NOTHING
 
-
-#define MYNAME "DG-100"
 
 const Dg100Format::dg100_command Dg100Format::dg100_commands[] = {
   { dg100cmd_getfile,        2, 1024,    2, "getfile" },
@@ -81,7 +79,7 @@ const Dg100Format::dg100_command Dg100Format::dg200_commands[] = {
 
 /* helper functions */
 const Dg100Format::dg100_command*
-Dg100Format::dg100_findcmd(int id) const
+Dg100Format::dg100_findcmd(int id)
 {
   /* linear search should be OK as long as dg100_numcommands is small */
   for (unsigned int i = 0; i < model->numcommands; i++) {
@@ -120,26 +118,26 @@ Dg100Format::dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned ch
     return;
   }
 
-  fprintf(stderr, "%s", hdr);
+  gbDebug("%s", hdr);
 
   for (unsigned int i = 0; i < sz; i++)  {
-    fprintf(stderr, "%02x ", buf[i]);
+    gbDebug("%02x ", buf[i]);
   }
 
   if (include_nl) {
-    fprintf(stderr, "\n");
+    gbDebug("\n");
   }
 }
 
 void
 Dg100Format::dg100_log(const char* fmt, ...)
 {
-  va_list ap;
-  va_start(ap, fmt);
   if (global_opts.debug_level > 0) {
-    vfprintf(stderr, fmt, ap);
+    va_list ap;
+    va_start(ap, fmt);
+    gbVLegacyLog(QtDebugMsg, fmt, ap);
+    va_end(ap);
   }
-  va_end(ap);
 }
 
 
@@ -168,7 +166,7 @@ Dg100Format::bin2deg(int val)
 }
 
 void
-Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
+Dg100Format::process_gpsfile(uint8_t data[], route_head** track)
 {
   const int recordsizes[3] = {8, 20, 32};
 
@@ -176,7 +174,7 @@ Dg100Format::process_gpsfile(uint8_t data[], route_head** track) const
    * determines the format of all subsequent records in the file */
   int style = be_read32(data + 28);
   if (style > 2) {
-    fprintf(stderr, "unknown GPS record style %d", style);
+    gbWarning("unknown GPS record style %d\n", style);
     return;
   }
   int recsize = recordsizes[style];
@@ -258,7 +256,7 @@ Dg100Format::dg100_checksum(const uint8_t buf[], int count)
 
 /* communication functions */
 size_t
-Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len) const
+Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len)
 {
   uint8_t frame[FRAME_MAXLEN];
 
@@ -295,10 +293,10 @@ Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len) cons
   if (isfile) {
     QScopedArrayPointer<uint8_t> buf(new uint8_t[framelen]);
     if (gbfread(buf.data(), 1, framelen, fin) != framelen) {
-      fatal("failed to get data to compare to sent data.\n");
+      gbFatal("failed to get data to compare to sent data.\n");
     }
     if (memcmp(frame, buf.data(), framelen) != 0) {
-      fatal("sent data does not match expected value.\n");
+      gbFatal("sent data does not match expected value.\n");
     }
 
     n = gbser_OK;
@@ -316,19 +314,19 @@ Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len) cons
   }
 
   if (n == gbser_ERROR) {
-    fatal("dg_100_send: write failed\n");
+    gbFatal("dg_100_send: write failed\n");
   }
   return (n);
 }
 
 int
-Dg100Format::dg100_recv_byte() const
+Dg100Format::dg100_recv_byte()
 {
   int result;
   if (isfile) {
     result = gbfgetc(fin);
     if (result < 0) {
-      fatal("dg100_recv_byte(): read error\n");
+      gbFatal("dg100_recv_byte(): read error\n");
     }
   } else {
     /* allow for a delay of 40s;
@@ -337,16 +335,16 @@ Dg100Format::dg100_recv_byte() const
     result = gbser_readc_wait(serial_handle, 40000);
     switch (result) {
     case gbser_ERROR:
-      fatal("dg100_recv_byte(): error reading one byte\n");
+      gbFatal("dg100_recv_byte(): error reading one byte\n");
     case gbser_NOTHING:
-      fatal("dg100_recv_byte(): read timeout\n");
+      gbFatal("dg100_recv_byte(): read timeout\n");
     }
   }
   return result;
 }
 
 int
-Dg100Format::dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms) const
+Dg100Format::dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
 {
   if (isfile) {
     return gbfread(buf, 1, len, fin);
@@ -359,7 +357,7 @@ Dg100Format::dg100_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
  * framing around the data), so the caller must copy the data before calling
  * this function again */
 int
-Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** payload) const
+Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** payload)
 {
   static uint8_t buf[FRAME_MAXLEN];
   uint16_t payload_end_seq;
@@ -399,7 +397,7 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
   /* read Payload Length, Command ID, and two further bytes */
   int i = dg100_read_wait(serial_handle, &buf[2], 5, 1000);
   if (i < 5) {
-    fatal("Expected to read 5 bytes, but got %d\n", i);
+    gbFatal("Expected to read 5 bytes, but got %d\n", i);
   }
   dg100_debug("", 0, 5, &buf[2]);
 
@@ -420,7 +418,7 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
   if (!cmdinfo) {
     /* TODO: consume data until frame end signature,
      * then report failure to the caller? */
-    fatal("unknown answer ID %02x\n", cmd);
+    gbFatal("unknown answer ID %02x\n", cmd);
   }
 
   int param_len = cmdinfo->recvsize;
@@ -445,13 +443,13 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
   int frame_len = 2 + 2 + 1 + param_len + ((model->has_payload_end_seq) ? 2 : 0) + 2 + 2;
 
   if (frame_len > FRAME_MAXLEN) {
-    fatal("frame too large (frame_len=%d, FRAME_MAXLEN=%d)\n",
+    gbFatal("frame too large (frame_len=%d, FRAME_MAXLEN=%d)\n",
           frame_len, FRAME_MAXLEN);
   }
 
   i = dg100_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
   if (i < frame_len - 7) {
-    fatal("Expected to read %d bytes, but got %d\n",
+    gbFatal("Expected to read %d bytes, but got %d\n",
           frame_len - 7, i);
   }
   dg100_debug("", 0, frame_len - 7, &buf[7]);
@@ -472,7 +470,7 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
   /* calculate checksum */
   uint16_t sum = dg100_checksum(buf + 4, frame_len - 8);
   if (sum != payload_checksum) {
-    fatal("checksum mismatch: data sum is 0x%04x, checksum received is 0x%04x\n",
+    gbFatal("checksum mismatch: data sum is 0x%04x, checksum received is 0x%04x\n",
           sum, payload_checksum);
   }
 
@@ -489,7 +487,7 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
 
 /* return value: number of bytes copied into buf, -1 on error */
 int
-Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
+Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 {
   const dg100_command* cmdinfo;
   uint8_t* data;
@@ -498,7 +496,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
 
   /* check whether the received frame matches the expected answer type */
   if (cmdinfo->id != expected_id) {
-    fprintf(stderr, "ERROR: answer type %02x, expecting %02x", cmdinfo->id, expected_id);
+    gbWarning("ERROR: answer type %02x, expecting %02x\n", cmdinfo->id, expected_id);
     return -1;
   }
 
@@ -507,7 +505,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
 
   /* check for buffer overflow */
   if (len < copysize) {
-    fprintf(stderr, "ERROR: buffer too small, size=%u, need=%u", len, copysize);
+    gbWarning("ERROR: buffer too small, size=%u, need=%u\n", len, copysize);
     return -1;
   }
 
@@ -518,7 +516,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const
 /* the number of bytes to be sent is determined by cmd,
  * count is the size of recvbuf */
 int
-Dg100Format::dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count) const
+Dg100Format::dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
 {
   const dg100_command* cmdinfo = dg100_findcmd(cmd);
   assert(cmdinfo != nullptr);
@@ -541,7 +539,7 @@ Dg100Format::dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size
 
 /* higher level communication functions */
 QList<int>
-Dg100Format::dg100_getfileheaders() const
+Dg100Format::dg100_getfileheaders()
 {
   QList<int> headers;
   uint8_t request[2];
@@ -582,7 +580,7 @@ Dg100Format::dg100_getfileheaders() const
 }
 
 void
-Dg100Format::dg100_getconfig() const
+Dg100Format::dg100_getconfig()
 {
   uint8_t answer[45];
 
@@ -590,7 +588,7 @@ Dg100Format::dg100_getconfig() const
 }
 
 void
-Dg100Format::dg100_getfile(int16_t num, route_head** track) const
+Dg100Format::dg100_getfile(int16_t num, route_head** track)
 {
   uint8_t request[2];
   uint8_t answer[2048];
@@ -601,7 +599,7 @@ Dg100Format::dg100_getfile(int16_t num, route_head** track) const
 }
 
 void
-Dg100Format::dg100_getfiles() const
+Dg100Format::dg100_getfiles()
 {
   route_head* track = nullptr;
 
@@ -624,14 +622,14 @@ Dg100Format::dg100_getfiles() const
 }
 
 int
-Dg100Format::dg100_erase() const
+Dg100Format::dg100_erase()
 {
   uint8_t request[2] = { 0xFF, 0xFF };
   uint8_t answer[4];
 
   dg100_request(dg100cmd_erase, request, answer, sizeof(answer));
   if (be_read32(answer) != 1) {
-    fprintf(stderr, "dg100_erase() FAILED\n");
+    gbWarning("dg100_erase() FAILED\n");
     return(-1);
   }
   return(0);
@@ -645,13 +643,13 @@ void
 Dg100Format::common_rd_init(const QString& fname)
 {
   if (isfile) {
-    fin = gbfopen(fname, "rb", MYNAME);
+    fin = gbfopen(fname, "rb");
   } else {
     if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
-      fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
+      gbFatal("Can't open port '%s'\n", gbLogCStr(fname));
     }
     if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
-      fatal(MYNAME ": Can't configure port '%s'\n", qPrintable(fname));
+      gbFatal("Can't configure port '%s'\n", gbLogCStr(fname));
     }
     // Toss anything that came in before our speed was set, particularly
     // for the bluetooth BT-335 product.

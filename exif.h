@@ -174,23 +174,23 @@ private:
   static void exif_examine_app(ExifApp* app);
   static ExifIfd* exif_find_ifd(ExifApp* app, uint16_t ifd_nr);
   static ExifTag* exif_find_tag(ExifApp* app, uint16_t ifd_nr, uint16_t tag_id);
-  QDateTime exif_get_exif_time(ExifApp* app) const;
-  Waypoint* exif_waypt_from_exif_app(ExifApp* app) const;
+  QDateTime exif_get_exif_time(ExifApp* app);
+  Waypoint* exif_waypt_from_exif_app(ExifApp* app);
   static Rational<int> exif_dec2frac(double val, double tolerance);
-  ExifTag* exif_put_value(int ifd_nr, uint16_t tag_id, uint16_t type, int count, int index, const void* data) const;
-  void exif_put_double(int ifd_nr, int tag_id, int index, double val) const;
-  void exif_put_str(int ifd_nr, int tag_id, const char* val) const;
-  void exif_put_coord(int ifd_nr, int tag_id, double val) const;
-  void exif_put_long(int ifd_nr, int tag_id, int index, int32_t val) const;
-  void exif_put_short(int ifd_nr, int tag_id, int index, int16_t val) const;
-  void exif_remove_tag(int ifd_nr, int tag_id) const;
+  ExifTag* exif_put_value(int ifd_nr, uint16_t tag_id, uint16_t type, int count, int index, const void* data);
+  void exif_put_double(int ifd_nr, int tag_id, int index, double val);
+  void exif_put_str(int ifd_nr, int tag_id, const char* val);
+  void exif_put_coord(int ifd_nr, int tag_id, double val);
+  void exif_put_long(int ifd_nr, int tag_id, int index, int32_t val);
+  void exif_put_short(int ifd_nr, int tag_id, int index, int16_t val);
+  void exif_remove_tag(int ifd_nr, int tag_id);
   void exif_find_wpt_by_time(const Waypoint* wpt);
   void exif_find_wpt_by_name(const Waypoint* wpt);
   static bool exif_sort_tags_cb(const ExifTag& A, const ExifTag& B);
   static bool exif_sort_ifds_cb(const ExifIfd& A, const ExifIfd& B);
   static void exif_write_value(ExifTag* tag, gbfile* fout);
   static void exif_write_ifd(ExifIfd* ifd, char next, gbfile* fout);
-  void exif_write_apps() const;
+  void exif_write_apps();
 
   /* Data Members */
 

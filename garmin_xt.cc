@@ -35,7 +35,6 @@
 #include "gbfile.h"  // for gbfread, gbfgetuint16, gbfseek, gbfgetc, gbfgetuint32, gbfclose, gbfeof, gbfopen
 
 
-#define MYNAME "Garmin_XT"
 #define GARMIN_XT_ELE 31500/65536
 #define DATABLOCKSIZE 1
 #define STRK_BLOCK_SIZE 97
@@ -50,7 +49,7 @@
 void
 GarminXTFormat::rd_init(const QString& fname)
 {
-  fin = gbfopen(fname, "rb", MYNAME);
+  fin = gbfopen(fname, "rb");
 }
 
 void

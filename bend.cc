@@ -33,8 +33,6 @@
 #include "grtcirc.h"        // for RAD, heading_true_degrees, gcdist, linepart, radtometers, DEG
 
 
-#define MYNAME "bend"
-
 #if FILTERS_ENABLED
 
 void BendFilter::init()

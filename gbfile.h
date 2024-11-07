@@ -60,7 +60,6 @@ struct gbfile {
 #endif
   } handle{nullptr};
   QString   name;
-  QString   module;
   char*   buff{nullptr};	/* static growing buffer, primary used by gbprintf */
   int    buffsz{0};
   char   mode{0};
@@ -89,11 +88,11 @@ struct gbfile {
 };
 
 
-gbfile* gbfopen(const QString& filename, const char* mode, const QString& module);
-gbfile* gbfopen_be(const QString& filename, const char* mode, const QString& module);
-inline gbfile* gbfopen_le(const QString& filename, const char* mode, const QString& module)
+gbfile* gbfopen(const QString& filename, const char* mode);
+gbfile* gbfopen_be(const QString& filename, const char* mode);
+inline gbfile* gbfopen_le(const QString& filename, const char* mode)
 {
-  return gbfopen(filename, mode, module);
+  return gbfopen(filename, mode);
 }
 void gbfclose(gbfile* file);
 

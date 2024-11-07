@@ -60,7 +60,6 @@
 #include "src/core/xmltag.h"                // for xml_tag, fs_xml, fs_xml_alloc, free_gpx_extras
 
 
-#define MYNAME "GPX"
 #ifndef CREATOR_NAME_URL
 #  define CREATOR_NAME_URL "GPSBabel - https://www.gpsbabel.org"
 #endif
@@ -254,7 +253,7 @@ GpxFormat::tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt)
       // but that feature is so obscure and used in so few outputs that
       // there's no reason to alarm the user.  Just silently disregard
       // category names that don't map cleanly.
-      // warning(MYNAME ": Unable to convert category \"%s\"!\n", CSTR(text));
+      // gbWarning("Unable to convert category \"%s\"!\n", CSTR(text));
     }
     break;
   case tag_type::garmin_wpt_addr:
@@ -1000,7 +999,7 @@ GpxFormat::wr_init(const QString& fname)
   // It's a good thing 0, 0.0, 0.0.0 aren't valid gpx versions,
   // normalization makes them null.
   if (gpx_write_version.isNull() || (gpx_write_version < gpx_1_0)) {
-    fatal(FatalMsg() << MYNAME ": gpx version number"
+    gbFatal(FatalMsg() << "gpx version number"
           << gpx_write_version.toString() << "not valid.");
   }
 
@@ -1173,7 +1172,7 @@ GpxFormat::read()
   }
 
   if (reader->hasError()) {
-    fatal(FatalMsg() << MYNAME << "Read error:" << reader->errorString()
+    gbFatal(FatalMsg() << "Read error:" << reader->errorString()
           << "File:" << iqfile->fileName()
           << "Line:" << reader->lineNumber()
           << "Column:" << reader->columnNumber());

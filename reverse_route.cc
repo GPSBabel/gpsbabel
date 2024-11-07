@@ -27,8 +27,6 @@
 
 #if FILTERS_ENABLED
 
-#define MYNAME "Route reversal filter"
-
 /*
  * reverse_route_wpt fixes up the waypoint flag new_trkseg
  */
@@ -68,8 +66,7 @@ void ReverseRouteFilter::init()
   case trkdata:
     break;
   default:
-    fatal(MYNAME ": This filter only works in track "
-          "or route (-t or -r) mode.\n");
+    gbFatal("This filter only works in track or route (-t or -r) mode.\n");
   }
 }
 

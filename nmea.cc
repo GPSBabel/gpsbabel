@@ -20,7 +20,7 @@
 
  */
 
-#include <cctype>                  // for isprint
+#include <cassert>                 // for assert
 #include <cmath>                   // for fabs
 #include <cstdio>                  // for snprintf, sscanf, fprintf, fputc, stderr
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
@@ -31,12 +31,12 @@
 #include <QDateTime>               // for QDateTime
 #include <QDebug>                  // for QDebug
 #include <QList>                   // for QList
+#include <QRegularExpression>      // for QRegularExpression
 #include <QString>                 // for QString
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for hex
 #include <QThread>                 // for QThread
 #include <QTime>                   // for QTime
-#include <Qt>                      // for UTC
 #include <QtGlobal>                // for qPrintable, foreach
 
 #include "defs.h"
@@ -155,8 +155,6 @@ time I have seen this is when the recording stops suddenly, where the last
 sentence is truncated - and missing part of the line, including the checksum.
 */
 
-#define MYNAME "nmea"
-
 /*
  * Slightly different than the Magellan checksum fn.
  */
@@ -246,7 +244,7 @@ NmeaFormat::rd_init(const QString& fname)
   }
 
   read_mode = rm_file;
-  file_in = gbfopen(fname, "rb", MYNAME);
+  file_in = gbfopen(fname, "rb");
 }
 
 void
@@ -261,7 +259,7 @@ NmeaFormat::rd_deinit()
     file_in = nullptr;
     break;
   default:
-    fatal("nmea_rd_deinit: illegal read_mode.\n");
+    gbFatal("nmea_rd_deinit: illegal read_mode.\n");
     break;
   }
 
@@ -275,7 +273,7 @@ NmeaFormat::rd_deinit()
 void
 NmeaFormat::wr_init(const QString& fname)
 {
-  file_out = gbfopen(fname, opt_append ? "a+" : "w+", MYNAME);
+  file_out = gbfopen(fname, opt_append ? "a+" : "w+");
 
   sleepms = -1;
   if (opt_sleep) {
@@ -816,8 +814,8 @@ NmeaFormat::nmea_fix_timestamps(route_head* track)
 
   if (!prev_datetime.date().isValid()) {
     if (!optdate) {
-      warning(MYNAME ": No date found within track (all points dropped)!\n");
-      warning(MYNAME ": Please use option \"date\" to preset a valid date for those tracks.\n");
+      gbWarning("No date found within track (all points dropped)!\n");
+      gbWarning("Please use option \"date\" to preset a valid date for those tracks.\n");
       track_del_head(track);
       return;
     }
@@ -982,7 +980,7 @@ NmeaFormat::read()
   if (optdate) {
     opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
     if (!opt_tm.isValid()) {
-      fatal(MYNAME ": Invalid date \"%s\"!\n", qPrintable(optdate));
+      gbFatal("Invalid date \"%s\"!\n", gbLogCStr(optdate));
     }
   }
 
@@ -1011,7 +1009,7 @@ NmeaFormat::read()
         }
         datum = GPS_Lookup_Datum_Index(sdatum);
         if (datum < 0) {
-          fatal(MYNAME "/SonyGPS: Unsupported datum \"%s\" in source data!\n", sdatum);
+          gbFatal("/SonyGPS: Unsupported datum \"%s\" in source data!\n", sdatum);
         }
       }
       continue;
@@ -1038,26 +1036,27 @@ NmeaFormat::rd_position_init(const QString& fname)
     read_mode = rm_serial;
     gbser_set_speed(gbser_handle, 4800);
   } else {
-    fatal(MYNAME ": Could not open '%s' for position tracking.\n", qPrintable(fname));
+    gbFatal("Could not open '%s' for position tracking.\n", gbLogCStr(fname));
   }
 
   gbser_flush(gbser_handle);
 
   if (opt_baud) {
     if (!gbser_set_speed(gbser_handle, opt_baud.get_result())) {
-      fatal(MYNAME ": Unable to set baud rate %s\n", qPrintable(opt_baud));
+      gbFatal("Unable to set baud rate %s\n", gbLogCStr(opt_baud));
     }
   }
   posn_fname = fname;
 }
 
 void
-NmeaFormat::safe_print(int cnt, const char* b)
+NmeaFormat::safe_print(const QString& b)
 {
-  for (int i = 0; i < cnt; i++) {
-    char c = isprint(b[i]) ? b[i] : '.';
-    fputc(c, stderr);
-  }
+  static const QRegularExpression re("[^[:print:]]");
+  assert(re.isValid());
+
+  QString str(b);
+  qDebug().noquote() << str.replace(re, ".");
 }
 
 int NmeaFormat::hunt_sirf()
@@ -1069,7 +1068,7 @@ int NmeaFormat::hunt_sirf()
 
   for (brp = br; *brp > 0; brp++) {
     if (global_opts.debug_level > 1) {
-      fprintf(stderr, "Trying %d\n", *brp);
+      gbDebug("Trying %d\n", *brp);
     }
 
     /*
@@ -1118,12 +1117,12 @@ NmeaFormat::rd_position(posn_status* /*unused*/)
     ibuf[0] = 0;
     int rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 2000, 0x0a, 0x0d);
     if (global_opts.debug_level > 1) {
-      safe_print(strlen(ibuf), ibuf);
+      safe_print(ibuf);
     }
     if (rv < 0) {
       if (am_sirf == 0) {
         if (global_opts.debug_level > 1) {
-          warning(MYNAME ": Attempting sirf mode.\n");
+          gbWarning("Attempting sirf mode.\n");
         }
         /* This is tacky, we have to change speed
          * to 9600bps to tell it to speak NMEA at
@@ -1135,7 +1134,7 @@ NmeaFormat::rd_position(posn_status* /*unused*/)
           continue;
         }
       }
-      fatal(MYNAME ": No data received on %s.\n", qPrintable(posn_fname));
+      gbFatal("No data received on %s.\n", gbLogCStr(posn_fname));
     }
     nmea_parse_one_line(ibuf);
     if (lt != last_read_time) {

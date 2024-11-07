@@ -35,8 +35,6 @@
 #include "xmlgeneric.h"                // for xml_deinit, xml_init, xml_read
 
 
-#define MYNAME "osm"
-
 const QStringList OsmFormat::osm_features = {
   "- dummy -",	/*  0 */
   "aeroway",	/*  1 */
@@ -429,7 +427,7 @@ OsmFormat::osm_node(const QString& /*unused*/, const QXmlStreamAttributes* attrv
     QString atstr = attrv->value("id").toString();
     wpt->description =  "osm-id " + atstr;
     if (waypoints.contains(atstr)) {
-      warning(MYNAME ": Duplicate osm-id %s!\n", qPrintable(atstr));
+      gbWarning("Duplicate osm-id %s!\n", gbLogCStr(atstr));
     } else {
       waypoints.insert(atstr, wpt);
       wpt->wpt_flags.fmt_use = 1;
@@ -526,7 +524,7 @@ OsmFormat::osm_way_nd(const QString& /*unused*/, const QXmlStreamAttributes* att
       auto* tmp = new Waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
-      warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", qPrintable(atstr));
+      gbWarning("Way reference id \"%s\" wasn't listed under nodes!\n", gbLogCStr(atstr));
     }
   }
 }

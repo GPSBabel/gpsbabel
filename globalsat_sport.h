@@ -213,7 +213,7 @@ private:
   void serial_init(const char* fname);
   void serial_deinit();
   int serial_recv_byte() const;
-  void serial_write_byte(uint8_t byte) const;
+  void serial_write_byte(uint8_t byte);
   int recv_byte();
   void write_byte(uint8_t byte);
   void globalsat_write_package(uint8_t* payload, uint32_t size);

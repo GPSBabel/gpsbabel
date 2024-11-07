@@ -32,7 +32,6 @@
 #include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED
-#define MYNAME "Position filter"
 
 /* tear through a waypoint queue, processing points by distance */
 void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype)
@@ -113,8 +112,8 @@ void PositionFilter::init()
   check_time = false;
 
   if (distopt) {
-    if (parse_distance(distopt, &pos_dist, kMetersPerFoot, MYNAME) == 0) {
-      fatal(MYNAME ": No distance specified with distance option.\n");
+    if (parse_distance(distopt, &pos_dist, kMetersPerFoot) == 0) {
+      gbFatal("No distance specified with distance option.\n");
     }
   }
 
