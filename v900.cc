@@ -73,16 +73,16 @@ for a little more info, see structures:
 
 #include "v900.h"
 
-#include <cassert>     // for assert
-#include <cstdarg>     // for va_end, va_start
-#include <cstdio>      // for fclose, fgets, fread, va_list
-#include <cstdlib>     // for strtod
-#include <cstring>     // for strncmp, strcat, strcpy, strstr
+#include <cassert>             // for assert
+#include <cstdarg>             // for va_end, va_start
+#include <cstdio>              // for fclose, fgets, fread, va_list
+#include <cstdlib>             // for strtod
+#include <cstring>             // for strncmp, strcat, strcpy, strstr
 
-#include <QByteArray>  // for QByteArray
-#include <QDate>       // for QDate
-#include <QTime>       // for QTime
-#include <QtCore>      // for qPrintable, UTC
+#include <QByteArray>          // for QByteArray
+#include <QDate>               // for QDate
+#include <QMessageLogContext>  // for QtMsgType
+#include <QTime>               // for QTime
 
 #include "defs.h"
 

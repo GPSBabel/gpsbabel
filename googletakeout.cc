@@ -27,14 +27,12 @@
 #include <QDebug>               // for QDebug
 #include <QDir>                 // for QDir
 #include <QFileInfo>            // for QFileInfo
-#include <QFileInfoList>        // for QFileInfoList
 #include <QIODevice>            // for operator|, QIODevice
 #include <QJsonArray>           // for QJsonArray, QJsonArray::const_iterator
 #include <QJsonDocument>        // for QJsonDocument
 #include <QJsonObject>          // for QJsonObject, QJsonObject::const_iterator
 #include <QJsonParseError>      // for QJsonParseError, QJsonParseError::NoError
-#include <QJsonValueRef>        // for QJsonValueRef
-#include <QtCore>               // for ISODate, QIODeviceBase::ReadOnly, QIODeviceBase::Text
+#include <Qt>
 
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/file.h"      // for File

@@ -54,33 +54,34 @@
 
 #include "mtk_logger.h"
 
-#include <algorithm>            // for clamp
-#include <cctype>               // for isdigit
-#include <cstdarg>              // for va_end, va_start
-#include <cstring>              // for memcmp, memset, strncmp, strlen, memmove, strchr, strcpy, strerror, strstr
+#include <algorithm>           // for clamp
+#include <cctype>              // for isdigit
+#include <cerrno>              // for errno
+#include <cmath>               // for fabs
+#include <cstdarg>             // for va_end, va_start
+#include <cstring>             // for memcmp, memset, strncmp, strlen, memmove, strchr, strcpy, strerror, strstr
+#include <cstdlib>             // for strtoul
 #if __WIN32__
-#include <io.h>                 // for _chsize
+#include <io.h>                // for _chsize
 #else
-#include <unistd.h>             // for ftruncate
+#include <unistd.h>            // for ftruncate
 #endif
 
-#include <QByteArray>           // for QByteArray
-#include <QChar>                // for QChar
-#include <QDateTime>            // for QDateTime
-#include <QDir>                 // for QDir
-#include <QFile>                // for QFile
-#include <QLatin1Char>          // for QLatin1Char
-#include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
-#include <QThread>              // for QThread
-#include <QtCore>               // for qPrintable, UTC
-#include <cerrno>               // for errno
-#include <cmath>                // for fabs
-#include <cstdlib>              // for strtoul
+#include <QByteArray>          // for QByteArray
+#include <QChar>               // for QChar
+#include <QDateTime>           // for QDateTime
+#include <QDir>                // for QDir
+#include <QFile>               // for QFile
+#include <QLatin1Char>         // for QLatin1Char
+#include <QMessageLogContext>  // for QtMsgType
+#include <QStringLiteral>      // for qMakeStringPrivate, QStringLiteral
+#include <QThread>             // for QThread
+#include <QtGlobal>            // for qPrintable
 
 #include "defs.h"
-#include "gbfile.h"             // for gbfprintf, gbfputc, gbfputs, gbfclose, gbfopen, gbfile
-#include "gbser.h"              // for gbser_read_line, gbser_set_port, gbser_OK, gbser_deinit, gbser_init, gbser_print, gbser_TIMEOUT
-#include "src/core/datetime.h"  // for DateTime
+#include "gbfile.h"            // for gbfprintf, gbfputc, gbfputs, gbfclose, gbfopen, gbfile
+#include "gbser.h"             // for gbser_read_line, gbser_set_port, gbser_OK, gbser_deinit, gbser_init, gbser_print, gbser_TIMEOUT
+#include "src/core/datetime.h" // for DateTime
 
 
 #define MTK_EVT_BITMASK  (1<<0x02)
