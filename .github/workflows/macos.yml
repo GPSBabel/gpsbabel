@@ -15,7 +15,7 @@ jobs:
     name: macOS Build
     permissions:
       id-token: write
-      contents: read
+      contents: write
       attestations: write
     runs-on: ${{ matrix.os }}
     strategy:
