@@ -404,7 +404,7 @@ UnicsvFormat::unicsv_fondle_header(QString header)
     }
   }
 
-  for (auto value : values) {
+  for (auto value : std::as_const(values)) {
     value = value.trimmed();
 
     unicsv_fields_tab.append(fld_terminator); // default

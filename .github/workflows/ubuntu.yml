@@ -35,7 +35,7 @@ jobs:
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
-          - IMAGE: 'jammy'
+          - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_extra_tests.sh'
     container:

@@ -7,9 +7,15 @@ LABEL maintainer="https://github.com/tsteven4"
 WORKDIR /app
 
 # update environment.
+# software-properties-common, gpg-agent and ppa:tsteven4/clazy-backports
+# are needed to get a backported version of clazy (1.12-2~noble12) that works
+# with Qt6.
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
+    software-properties-common \
+    gpg-agent \
+ && add-apt-repository ppa:tsteven4/clazy-backports \
  && apt-get upgrade -y \
  && rm -rf /var/lib/apt/lists/*
 

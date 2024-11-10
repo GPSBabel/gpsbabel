@@ -22,9 +22,9 @@
 #include <QByteArray>            // for QByteArray
 #include <QIODevice>             // for QIODevice
 #include <QString>               // for QString, operator==, QStringView::to...
+#include <QStringLiteral>        // for qMakeStringPrivate, QStringLiteral
 #include <QStringView>           // for QStringView
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore>                // for qPrintable, QIODeviceBase::ReadOnly
 
 #include "defs.h"
 #include "geocache.h"            // for Geocache, Geocache::container_t, Geo...

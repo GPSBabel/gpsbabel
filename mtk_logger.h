@@ -57,6 +57,7 @@
 #include <cstdio>    // for FILE
 #include <ctime>     // for time_t
 
+#include <QList>     // for QList
 #include <QString>   // for QString
 #include <QVector>   // for QVector
 
