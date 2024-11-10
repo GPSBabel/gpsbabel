@@ -1,72 +1,21 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM ubuntu:noble AS clazy
+FROM ubuntu:noble
 
-# build our own clazy, ubuntu package is compromised (need c++17 to enable some checks, use Qt6)
-
-# update environment.
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    apt-utils \
- && apt-get upgrade -y \
- && rm -rf /var/lib/apt/lists/*
-
-# install packages needed for gpsbabel build
-# split into multiple commands to limit layer size
-
-# basic build and test tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    clang \
-    git \
-    cmake \
-    ninja-build \
-    ca-certificates \
- && rm -rf /var/lib/apt/lists/*
-
-# pkgs with qt used by clazy test
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    qtbase5-dev \
-    qttools5-dev \
-    qtdeclarative5-dev \
-    libqt5svg5-dev \
-    qtmultimedia5-dev \
-    libqt5networkauth5-dev \
- && rm -rf /var/lib/apt/lists/*
-
-# pkgs with qt used by clazy test
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    qt6-base-dev \
-    qt6-tools-dev \
-   	qt6-declarative-dev \
-    qt6-scxml-dev \
-    qt6-networkauth-dev \
-    qt6-svg-dev \
-   	qt6-multimedia-dev \
- && rm -rf /var/lib/apt/lists/*
-
-# some tests fail because qtmochelpers.h is missing, and one just fails
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    llvm-dev libclang-dev clang-tools libclang-cpp-dev \
- && rm -rf /var/lib/apt/lists/* \
- && git clone https://github.com/KDE/clazy.git \
- && cd clazy \
- && git checkout v1.12 \
- && mkdir bld \
- && cd bld \
- && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17  -G Ninja .. \
- && cmake --build . \
- && cmake --build . --target install \
- && ctest -j 8 -E "detaching-temporary|fully-qualified-moc-types|old-style-connect"
-
-FROM ubuntu:noble 
 LABEL maintainer="https://github.com/tsteven4"
 
 WORKDIR /app
 
 # update environment.
+# software-properties-common, gpg-agent and ppa:tsteven4/clazy-backports
+# are needed to get a backported version of clazy (1.12-2~noble12) that works
+# with Qt6.
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
+    software-properties-common \
+    gpg-agent \
+ && add-apt-repository ppa:tsteven4/clazy-backports \
  && apt-get upgrade -y \
  && rm -rf /var/lib/apt/lists/*
 
@@ -84,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     bear \
     cmake \
     ninja-build \
+    clazy \
     clang-tidy \
     jq \
     curl \
@@ -147,6 +97,3 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
  && locale-gen \
  && locale -a
-
-COPY --from=clazy /usr/local/ /usr/local/
-
