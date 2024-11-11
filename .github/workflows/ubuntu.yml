@@ -8,7 +8,13 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   ubuntu:
@@ -111,7 +117,7 @@ jobs:
         ./testo -p /snap/bin/gpsbabel 
 
     - name: Generate artifact attestation
-      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
+      if: ${{ inputs.attestation }}
       uses: actions/attest-build-provenance@v1
       with:
         subject-path: ${{ steps.build-snap.outputs.snap }}
