@@ -8,7 +8,13 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
 
@@ -103,7 +109,7 @@ jobs:
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
     - name: Generate artifact attestation
-      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' ) && matrix.RELEASE
+      if: ${{ inputs.attestation && matrix.RELEASE }}
       uses: actions/attest-build-provenance@v1
       with:
         subject-path: 'bld/gui/GPSBabel-*-Setup.exe'
@@ -124,6 +130,6 @@ jobs:
       with:
         name: Windows_Installer ${{ join(matrix.*) }}
         path: |
-          ./bld/gui/GPSBabel-*-Setup.exe
-          ./bld/gui/GPSBabel-*-Manifest.txt
+          bld/gui/GPSBabel-*-Setup.exe
+          bld/gui/GPSBabel-*-Manifest.txt
         retention-days: 7

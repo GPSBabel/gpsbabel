@@ -8,7 +8,13 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   macos:
@@ -99,7 +105,7 @@ jobs:
         ./tools/ci_script_osx.sh . ${{ matrix.QT_VERSION }} ${{ matrix.GENERATOR }}
 
     - name: Generate artifact attestation
-      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' ) && matrix.RELEASE
+      if: ${{ inputs.attestation && matrix.RELEASE }}
       uses: actions/attest-build-provenance@v1
       with:
         subject-path: 'gui/GPSBabel-*.dmg'
