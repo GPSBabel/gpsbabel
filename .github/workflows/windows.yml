@@ -109,7 +109,7 @@ jobs:
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
     - name: Generate artifact attestation
-      if: ${{ inputs.attestation }}
+      if: ${{ inputs.attestation && matrix.RELEASE }}
       uses: actions/attest-build-provenance@v1
       with:
         subject-path: 'bld/gui/GPSBabel-*-Setup.exe'
