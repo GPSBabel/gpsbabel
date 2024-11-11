@@ -22,6 +22,8 @@ jobs:
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
           - IMAGE: '40'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+          - IMAGE: '41'
+            CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_f${{ matrix.IMAGE }}
       env:
