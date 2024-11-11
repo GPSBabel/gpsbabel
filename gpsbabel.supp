@@ -1,38 +1,20 @@
 {
-   <Fedora 40 vtesto text, qt6-qtbase.x86_64 6.7.2-6.fc40 intermittant>
+   <vtesto text>
+#  Fedora 41 qt6-qtbase.x86_64 6.8.0-4.fc41
+#  Fedora 40 qt6-qtbase.x86_64 6.7.2-6.fc40 intermittant
+#  Ubnutu Jammy libqt6core6/jammy-updates,now 6.2.4+dfsg-2ubuntu1.1 amd64 >
+#  Ubuntu Jammy qtio qhash.cpp 6.2.4
+#  Ubuntu Jammy qtio qhash.cpp 6.7.2 intermittant
    Memcheck:Addr16
-   fun:UnknownInlinedFun
-   fun:aeshash128_lt16
-   fun:_ZL10aeshash128PKhmmm
+   ...
    fun:calculateHash<QStringView>
 }
 {
-   <Ubnutu jammy vtesto text, libqt6core6/jammy-updates,now 6.2.4+dfsg-2ubuntu1.1 amd64 >
-   Memcheck:Addr16
-   fun:UnknownInlinedFun
-   fun:_ZL7aeshashPKhmm
-   fun:calculateHash<QStringView>
-}
-{
-   <Ubuntu noble vtesto text, libqt6core6t64/noble,now 6.4.2+dfsg-21.1build5 amd64>
+   <vesto text 2>
+#  Ubuntu Noble libqt6core6t64/noble,now 6.4.2+dfsg-21.1build5 amd64>
    Memcheck:Addr16
    fun:UnknownInlinedFun
    fun:_ZL15aeshash128_lt16Dv2_xPKhm
-}
-{
-   <Ubuntu Jammy vtesto text, qtio qhash.cpp 6.2.4>
-   Memcheck:Addr16
-   fun:_mm_loadu_si128
-   fun:_ZL7aeshashPKhmm
-   fun:calculateHash<QStringView>
-}
-{
-   <Ubuntu Jammy vtesto text, qtio qhash.cpp 6.7.2 intermittant>
-   Memcheck:Addr16
-   fun:_mm_loadu_si128
-   fun:aeshash128_lt16
-   fun:_ZL10aeshash128PKhmmm
-   fun:calculateHash<QStringView>
 }
 {
    <Fedora18: Qt's use of libuuc leaks.>
@@ -94,4 +76,5 @@
    fun:_ZN16QCoreApplicationC1ERiPPci
    fun:main
 }
+
 
