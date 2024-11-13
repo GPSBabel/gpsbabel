@@ -137,7 +137,6 @@ private slots:
   void visitWebsiteActionX();
   void resetFormatDefaults();
   void upgradeCheckActionX();
-  void slotLanguageChanged(QAction* action);
 
 
 };
