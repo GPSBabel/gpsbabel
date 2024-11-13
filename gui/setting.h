@@ -44,11 +44,11 @@ class IntSetting: public VarSetting
 {
 public:
   IntSetting(const QString& name, int& var):  name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toInt();
@@ -65,11 +65,11 @@ class DoubleSetting: public VarSetting
 {
 public:
   DoubleSetting(const QString& name, double& var):  name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toDouble();
@@ -86,11 +86,11 @@ class StringSetting: public VarSetting
 {
 public:
   StringSetting(const QString& name, QString& var):  name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toString();
@@ -107,11 +107,11 @@ class BoolSetting: public VarSetting
 {
 public:
   BoolSetting(const QString& name, bool& var):  name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toBool();
@@ -128,11 +128,11 @@ class DateTimeSetting: public VarSetting
 {
 public:
   DateTimeSetting(const QString& name, QDateTime& var): name_(name), var_(var) { }
-  void saveSetting(QSettings& st)
+  void saveSetting(QSettings& st) override
   {
     st.setValue(name_, var_);
   }
-  void restoreSetting(QSettings& st)
+  void restoreSetting(QSettings& st) override
   {
     if (st.contains(name_)) {
       var_ = st.value(name_).toDateTime();
