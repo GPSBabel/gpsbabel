@@ -108,8 +108,8 @@ private:
   QString getFormatNameForExtension(const QString& ext);
 
 protected:
-  void closeEvent(QCloseEvent*);
-  void changeEvent(QEvent*);
+  void closeEvent(QCloseEvent*) override;
+  void changeEvent(QEvent*) override;
 
 private slots:
   void aboutActionX();
@@ -118,8 +118,8 @@ private slots:
   void browseOutputFile();
   void closeActionX();
   void donateActionX();
-  void dragEnterEvent(QDragEnterEvent*);
-  void dropEvent(QDropEvent* event);
+  void dragEnterEvent(QDragEnterEvent*) override;
+  void dropEvent(QDropEvent* event) override;
   void filtersClicked();
   void helpActionX();
   void inputDeviceOptBtnClicked();

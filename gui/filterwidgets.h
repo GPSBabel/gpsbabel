@@ -117,11 +117,11 @@ public:
   BoolFilterOption(bool& b, QAbstractButton* ck):  b(b), checkBox(ck)
   {
   }
-  void setWidgetValue()
+  void setWidgetValue() override
   {
     checkBox->setChecked(b);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     b = checkBox->isChecked();
   }
@@ -139,11 +139,11 @@ public:
   {
     sb->setRange(bottom, top);
   }
-  void setWidgetValue()
+  void setWidgetValue() override
   {
     spinBox->setValue(val);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = spinBox->value();
   }
@@ -160,11 +160,11 @@ public:
   StringFilterOption(QString& val, QLineEdit* le):  val(val), lineEdit(le)
   {
   }
-  void setWidgetValue()
+  void setWidgetValue() override
   {
     lineEdit->setText(val);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = lineEdit->text();
   }
@@ -188,11 +188,11 @@ public:
   {
     le->setValidator(new QDoubleValidator(minVal, maxVal, decimals, le));
   }
-  void setWidgetValue()
+  void setWidgetValue() override
   {
     lineEdit->setText(QString("%1").arg(val, 0, format, decimals));
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = lineEdit->text().toDouble();
     val = qMin(val, maxVal);
@@ -214,11 +214,11 @@ public:
   DateTimeFilterOption(QDateTime& val, QDateTimeEdit* w):  val(val), w(w)
   {
   }
-  void setWidgetValue()
+  void setWidgetValue() override
   {
     w->setDateTime(val);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = w->dateTime();
   }
@@ -235,11 +235,11 @@ public:
   ComboFilterOption(int& val, QComboBox* w):  val(val), w(w)
   {
   }
-  void setWidgetValue()
+  void setWidgetValue() override
   {
     w->setCurrentIndex(val);
   }
-  void getWidgetValue()
+  void getWidgetValue() override
   {
     val = w->currentIndex();
   }
@@ -302,7 +302,7 @@ class TrackWidget: public FilterWidget
 public:
   TrackWidget(QWidget* parent, TrackFilterData& tf);
 
-  virtual void checkChecks()
+  void checkChecks() override
   {
     otherCheckX();
     FilterWidget::checkChecks();

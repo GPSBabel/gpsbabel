@@ -79,7 +79,7 @@ public:
     startTime = stopTime.addMonths(-6);
     startTime.setTime(QTime(0, 0, 1));
   }
-  virtual void makeSettingGroup(SettingGroup& sg)
+  void makeSettingGroup(SettingGroup& sg) override
   {
     sg.addVarSetting(new BoolSetting("trks.inUse", inUse_));
     sg.addVarSetting(new BoolSetting("trks.GPSFixes", GPSFixes));
@@ -111,7 +111,7 @@ public:
     sg.addVarSetting(new IntSetting("trks.splitDist", splitDist));
     sg.addVarSetting(new IntSetting("trks.splitDistUnit", splitDistUnit));
   }
-  virtual QStringList makeOptionString();
+  QStringList makeOptionString() override;
 
 public:
   bool title;
@@ -146,8 +146,8 @@ public:
   {
   }
 
-  virtual QStringList makeOptionString();
-  virtual void makeSettingGroup(SettingGroup& sg)
+  QStringList makeOptionString() override;
+  void makeSettingGroup(SettingGroup& sg) override
   {
     sg.addVarSetting(new BoolSetting("wpts.inUse", inUse_));
     sg.addVarSetting(new BoolSetting("wpts.radius", radius));
@@ -183,8 +183,8 @@ public:
   {
   }
 
-  virtual QStringList makeOptionString();
-  virtual void makeSettingGroup(SettingGroup& sg)
+  QStringList makeOptionString() override;
+  void makeSettingGroup(SettingGroup& sg) override
   {
     sg.addVarSetting(new BoolSetting("rttrk.inUse", inUse_));
     sg.addVarSetting(new BoolSetting("rttrk.reverse", reverse_));
@@ -218,8 +218,8 @@ public:
   {
   }
 
-  virtual QStringList makeOptionString();
-  virtual void makeSettingGroup(SettingGroup& sg)
+  QStringList makeOptionString() override;
+  void makeSettingGroup(SettingGroup& sg) override
   {
     sg.addVarSetting(new BoolSetting("mscflt.nukeRoutes", nukeRoutes_));
     sg.addVarSetting(new BoolSetting("mscflt.nukeTracks", nukeTracks_));
