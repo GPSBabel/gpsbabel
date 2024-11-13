@@ -241,16 +241,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   }
 }
 
-//------------------------------------------------------------------------
-// Called every time, when a menu entry of the language menu is called
-void MainWindow::slotLanguageChanged(QAction* action)
-{
-  if (nullptr != action) {
-    // load the language dependant on the action content.
-    loadLanguage(action->data().toString());
-  }
-}
-
 void MainWindow::switchTranslator(QTranslator& translator, const QString& filename)
 {
   // remove the old translator
