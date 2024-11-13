@@ -21,7 +21,6 @@
 //
 //------------------------------------------------------------------------
 #include "format.h"
-#include "mainwindow.h"
 
 QString Format::htmlBase_ = QString();
 

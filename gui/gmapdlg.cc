@@ -21,12 +21,24 @@
 //
 //------------------------------------------------------------------------
 
-#include <QStandardItemModel>
-#include <QMenu>
-#include <QHeaderView>
 #include "gmapdlg.h"
-#include "appname.h"
-#include "gpx.h"
+#include <QAbstractButton>      // for QAbstractButton
+#include <QAbstractItemView>    // for QAbstractItemView
+#include <QDateTime>            // for QDateTime, operator<, operator>
+#include <QFrame>               // for QFrame
+#include <QHBoxLayout>          // for QHBoxLayout
+#include <QHeaderView>          // for QHeaderView
+#include <QItemSelectionModel>  // for QItemSelectionModel
+#include <QMenu>                // for QMenu
+#include <QPushButton>          // for QPushButton
+#include <QStandardItemModel>   // for QStandardItemModel
+#include <QTreeView>            // for QTreeView
+#include <QVariant>             // for QVariant
+#include <Qt>                   // for CheckState, ContextMenuPolicy
+#include <QtGlobal>             // for QForeachContainer, qMakeForeachContainer, foreach
+#include "appname.h"            // for appName
+#include "gpx.h"                // for GpxWaypoint, GpxTrack, GpxRoute, Gpx, GpxItem, GpxTrackPoint, GpxTrackSegment
+#include "latlng.h"             // for LatLn
 
 //------------------------------------------------------------------------
 class StandardItem: public QStandardItem

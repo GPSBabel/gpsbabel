@@ -21,15 +21,22 @@
 //
 //------------------------------------------------------------------------
 
-#include <QVBoxLayout>
-#include <QDoubleValidator>
-#include <QIntValidator>
-#include <QPushButton>
-#include <QFileDialog>
-#include <QIcon>
-#include <QSpinBox>
 #include "optionsdlg.h"
-#include "help.h"
+#include <QAbstractButton>   // for QAbstractButton
+#include <QDoubleValidator>  // for QDoubleValidator
+#include <QFileDialog>       // for QFileDialog
+#include <QHBoxLayout>       // for QHBoxLayout
+#include <QIcon>             // for QIcon
+#include <QIntValidator>     // for QIntValidator
+#include <QPushButton>       // for QPushButton
+#include <QSizePolicy>       // for QSizePolicy
+#include <QSpacerItem>       // for QSpacerItem
+#include <QSpinBox>          // for QSpinBox
+#include <QVBoxLayout>       // for QVBoxLayout
+#include <QVariant>          // for QVariant
+#include <Qt>                // for Orientation
+#include <QtGlobal>          // for qMax, qMin
+#include "help.h"            // for ShowHelp
 
 //------------------------------------------------------------------------
 static void SetSizeStuff(QWidget* w)

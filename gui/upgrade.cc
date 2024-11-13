@@ -29,16 +29,16 @@
 #include <QDomNode>               // for QDomNode
 #include <QDomNodeList>           // for QDomNodeList
 #include <QLocale>                // for QLocale
-#include <QMessageBox>            // for QMessageBox, QMessageBox::Yes, operator|, QMessageBox::No
+#include <QMessageBox>            // for QMessageBox, operator|
 #include <QNetworkAccessManager>  // for QNetworkAccessManager
-#include <QNetworkReply>          // for QNetworkReply, QNetworkReply::NoError
-#include <QNetworkRequest>        // for QNetworkRequest, QNetworkRequest::ContentTypeHeader, QNetworkRequest::HttpReasonPhraseAttribute, QNetworkRequest::HttpStatusCodeAttribute, QNetworkRequest::NoLessSafeRedirectPolicy, QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::RedirectionTar...
+#include <QNetworkReply>          // for QNetworkReply
+#include <QNetworkRequest>        // for QNetworkRequest
 #include <QSysInfo>               // for QSysInfo
 #include <QUrl>                   // for QUrl
 #include <QVariant>               // for QVariant, operator!=
 #include <QVersionNumber>         // for QVersionNumber, operator<, operator==
-#include <Qt>                     // for ISODate, RichText
-#include <QtGlobal>               // for qDebug, qsizetype, QT_VERSION, QT_VERSION_CHECK
+#include <Qt>                     // for DateFormat, TextFormat
+#include <QtGlobal>               // for qDebug, QT_VERSION, QT_VERSION_CHECK, qsizetype
 
 #include "babeldata.h"            // for BabelData
 #include "format.h"               // for Format

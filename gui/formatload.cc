@@ -22,19 +22,18 @@
 //------------------------------------------------------------------------
 
 #include "formatload.h"
-#include <QByteArray>                      // for QByteArray
-#include <QChar>                           // for operator==, QChar
-#include <QCoreApplication>                // for QCoreApplication
-#include <QObject>                         // for QObject
-#include <QProcess>                        // for QProcess
-#include <QRegularExpression>              // for QRegularExpression
-#include <QRegularExpressionMatch>         // for QRegularExpressionMatch
-#include <QString>                         // for QString, operator+
-#include <QTextStream>                     // for QTextStream
-#include <QVariant>                        // for QVariant
-#include <QApplication>                    // for QApplication
-#include <QMessageBox>                     // for QMessageBox
-#include "appname.h"                       // for appName
+#include <QApplication>        // for QApplication
+#include <QByteArray>          // for QByteArray
+#include <QChar>               // for QChar, operator==
+#include <QCoreApplication>    // for QCoreApplication
+#include <QMessageBox>         // for QMessageBox
+#include <QObject>             // for QObject
+#include <QProcess>            // for QProcess
+#include <QRegularExpression>  // for QRegularExpression, QRegularExpressionMatch
+#include <QString>             // for QString, operator+
+#include <QTextStream>         // for QTextStream
+#include <QVariant>            // for QVariant
+#include "appname.h"           // for appNam
 
 
 #ifdef GENERATE_CORE_STRINGS

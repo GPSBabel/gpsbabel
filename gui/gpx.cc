@@ -21,13 +21,12 @@
 //
 //------------------------------------------------------------------------
 
-
-#include <QFile>                 // for QFile
-#include <QIODevice>             // for QIODevice, QIODevice::ReadOnly
-#include <QStringView>           // for QStringView
-#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QXmlStreamReader>      // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
 #include "gpx.h"
+#include <QFile>                 // for QFile
+#include <QIODevice>             // for QIODevice
+#include <QStringView>           // for QStringView, operator==
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QXmlStreamReader>      // for QXmlStreamReader
 
 
 static QDateTime decodeDateTime(const QString& s)

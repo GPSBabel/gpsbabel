@@ -20,11 +20,12 @@
 //  USA.
 //
 //------------------------------------------------------------------------
-#include <QtGlobal>                // for QT_VERSION, QT_VERSION_CHECK
-#include <QIcon>                   // for QIcon
-#include <QApplication>            // for QApplication
+#include <QApplication>  // for QApplication
+#include <QIcon>         // for QIcon
+#include <QString>       // for QString
+#include <QtGlobal>      // for QT_VERSION, QT_VERSION_CHECK
 
-#include "mainwindow.h"             // for MainWindow
+#include "mainwindow.h"  // for MainWindow
 
 //------------------------------------------------------------------------
 int main(int argc, char** argv)
