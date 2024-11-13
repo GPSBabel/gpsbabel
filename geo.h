@@ -19,6 +19,7 @@
 #ifndef GEO_H_INCLUDED_
 #define GEO_H_INCLUDED_
 
+#include <QList>             // for QList
 #include <QString>           // for QString
 #include <QVector>           // for QVector
 #include <QXmlStreamReader>  // for QXmlStreamReader

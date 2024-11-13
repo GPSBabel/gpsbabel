@@ -8,11 +8,21 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   macos:
     name: macOS Build
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -94,6 +104,12 @@ jobs:
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
         ./tools/ci_script_osx.sh . ${{ matrix.QT_VERSION }} ${{ matrix.GENERATOR }}
 
+    - name: Generate artifact attestation
+      if: ${{ inputs.attestation && matrix.RELEASE }}
+      uses: actions/attest-build-provenance@v1
+      with:
+        subject-path: 'gui/GPSBabel-*.dmg'
+
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
       # the 'Upload Artifacts' step.
@@ -102,7 +118,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: Continuous-${{ runner.os }}
       run: |
-        echo GITHUB_REF: $GITHUB_REF
         ./tools/uploadtool/upload_github.sh gui/GPSBabel-*.dmg
 
     - name: 'Upload Artifacts'

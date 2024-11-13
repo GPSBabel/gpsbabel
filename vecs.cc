@@ -767,7 +767,7 @@ QVector<Vecs::style_vec_t> Vecs::create_style_vec()
   dir.setNameFilters(QStringList("*.style"));
   dir.setFilter(QDir::Files);
   dir.setSorting(QDir::Name);
-  QFileInfoList fileinfolist = dir.entryInfoList();
+  const QFileInfoList fileinfolist = dir.entryInfoList();
   QVector<style_vec_t> slist;
   for (const auto& fileinfo : fileinfolist) {
     if (!fileinfo.isReadable()) {
