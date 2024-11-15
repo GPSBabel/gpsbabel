@@ -26,20 +26,19 @@
 #include <QChar>                  // for QChar, operator!=
 #include <QCursor>                // for QCursor
 #include <QFile>                  // for QFile
-#include <QIODevice>              // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Truncate, QIODevice::WriteOnly
+#include <QIODevice>              // for QIODevice
 #include <QLatin1String>          // for QLatin1String
 #include <QMessageBox>            // for QMessageBox
 #include <QNetworkAccessManager>  // for QNetworkAccessManager
-#include <QStringLiteral>         // for QStringLiteral
+#include <QStringLiteral>         // for qMakeStringPrivate, QStringLiteral
 #include <QUrl>                   // for QUrl
 #include <QWebChannel>            // for QWebChannel
 #include <QWebEnginePage>         // for QWebEnginePage
-#include <QWebEngineSettings>     // for QWebEngineSettings, QWebEngineSettings::LocalContentCanAccessRemoteUrls
+#include <QWebEngineSettings>     // for QWebEngineSettings
 #include <QWebEngineView>         // for QWebEngineView
-#include <Qt>                     // for WaitCursor
-#include <QtGlobal>               // for foreach
+#include <Qt>                     // for CursorShape
+#include <QtGlobal>               // for QForeachContainer, qMakeForeachContainer, foreach
 
-#include <algorithm>              // for max
 #include <string>                 // for string
 #include <vector>                 // for vector
 

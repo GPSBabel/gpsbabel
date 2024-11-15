@@ -19,12 +19,12 @@
 
 #include "runmachine.h"
 
-#include <QDebug>       // for operator<<, QDebug
-#include <QEventLoop>   // for QEventLoop
-#include <Qt>           // for QueuedConnection
-#include <QtGlobal>     // for qDebug
+#include <QDebug>      // for QDebug, operator<<
+#include <QEventLoop>  // for QEventLoop
+#include <Qt>          // for ConnectionType
+#include <QtGlobal>    // for qDebug
 
-#include "appname.h"    // for appName
+#include "appname.h"   // for appName
 
 
 QString RunMachine::decodeProcessError(QProcess::ProcessError err)

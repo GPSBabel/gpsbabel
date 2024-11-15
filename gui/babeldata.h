@@ -23,10 +23,15 @@
 #ifndef BABELDATA_H
 #define BABELDATA_H
 
-#include <QSettings>
-#include <QStringList>
-#include <QUuid>
-#include "setting.h"
+#include <QDate>        // for QDate
+#include <QDateTime>    // for QDateTime
+#include <QList>        // for QList
+#include <QSettings>    // for QSettings
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
+#include <QTime>        // for QTime
+#include <QUuid>        // for QUuid
+#include "setting.h"    // for SettingGroup, BoolSetting, StringSetting, IntSetting, DateTimeSetting
 
 
 class BabelData

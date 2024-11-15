@@ -27,13 +27,13 @@
 
 #include <QChar>         // for QChar
 #include <QCheckBox>     // for QCheckBox
-#include <QEvent>        // for QEvent, QEvent::LocaleChange
+#include <QEvent>        // for QEvent
 #include <QLabel>        // for QLabel
 #include <QRadioButton>  // for QRadioButton
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
 #include <QTimeZone>     // for QTimeZone
 #endif
-#include <Qt>            // for LocalTime, UTC
+#include <Qt>            // for TimeSpec
 
 
 //------------------------------------------------------------------------

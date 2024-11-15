@@ -22,6 +22,9 @@
 //------------------------------------------------------------------------
 
 #include "filterdata.h"
+#include <QChar>    // for QChar
+#include <QDate>    // for QDate
+#include <QVector>  // for QVector
 
 QStringList WayPtsFilterData::makeOptionString()
 {

@@ -23,12 +23,20 @@
 #ifndef GMAPDLG_H
 #define GMAPDLG_H
 
-#include <QStackedWidget>
-#include <QStandardItem>
-#include <QModelIndex>
-#include "ui_gmapui.h"
-#include "gpx.h"
-#include "map.h"
+#include <QDialog>             // for QDialog
+#include <QItemSelection>      // for QItemSelection
+#include <QList>               // for QList
+#include <QModelIndex>         // for QModelIndex
+#include <QObject>             // for Q_OBJECT, slots
+#include <QPlainTextEdit>      // for QPlainTextEdit
+#include <QPoint>              // for QPoint
+#include <QStandardItem>       // for QStandardItem
+#include <QStandardItemModel>  // for QStandardItemModel
+#include <QString>             // for QString
+#include <QWidget>             // for QWidget
+#include "gpx.h"               // for Gpx, GpxRoute, GpxTrack, GpxWaypoint
+#include "map.h"               // for Map
+#include "ui_gmapui.h"         // for Ui_GMapDlg
 
 class GMapDialog: public QDialog
 {

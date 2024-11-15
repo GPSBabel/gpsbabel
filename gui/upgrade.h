@@ -19,16 +19,16 @@
 
  */
 
-#include <QDateTime>                        // for QDateTime
-#include <QList>                            // for QList
-#include <QObject>                          // for QObject
-#include <QString>                          // for QString
-#include <QUrl>                             // for QUrl
-#include <QNetworkAccessManager>            // for QNetworkAccessManager
-#include <QNetworkReply>                    // for QNetworkReply
-#include <QWidget>                          // for QWidget
-#include "babeldata.h"                      // for BabelData
-#include "format.h"                         // for Format
+#include <QDateTime>              // for QDateTime
+#include <QList>                  // for QList
+#include <QNetworkAccessManager>  // for QNetworkAccessManager
+#include <QNetworkReply>          // for QNetworkReply
+#include <QObject>                // for QObject, Q_OBJECT, slots
+#include <QString>                // for QString
+#include <QUrl>                   // for QUrl
+#include <QWidget>                // for QWidget
+#include "babeldata.h"            // for BabelData
+#include "format.h"               // for Format
 
 
 class UpgradeCheck : public QObject

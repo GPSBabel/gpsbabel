@@ -18,6 +18,13 @@
 
 
 #include "preferences.h"
+#include <QAbstractButton>   // for QAbstractButton
+#include <QCheckBox>         // for QCheckBox
+#include <QDialogButtonBox>  // for QDialogButtonBox
+#include <QListWidget>       // for QListWidget
+#include <QListWidgetItem>   // for QListWidgetItem
+#include <QPushButton>       // for QPushButton
+#include <Qt>                // for CheckState
 
 class FormatListEntry : public QListWidgetItem
 {

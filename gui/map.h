@@ -25,15 +25,13 @@
 
 #include <QByteArray>             // for QByteArray
 #include <QElapsedTimer>          // for QElapsedTimer
-#include <QFile>                  // for QFile
 #include <QList>                  // for QList
 #include <QNetworkAccessManager>  // for QNetworkAccessManager
-#include <QObject>                // for QObject, Q_OBJECT, emit, signals, slots
+#include <QObject>                // for QObject, emit, Q_OBJECT, signals, slots
 #include <QPlainTextEdit>         // for QPlainTextEdit
 #include <QResizeEvent>           // for QResizeEvent
 #include <QString>                // for QString
 #include <QStringList>            // for QStringList
-#include <QTextStream>            // for QTextStream
 #include <QWebEngineView>         // for QWebEngineView
 #include <QWidget>                // for QWidget
 

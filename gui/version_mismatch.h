@@ -22,9 +22,12 @@
 #ifndef VERSION_MISMATCH_H
 #define VERSION_MISMATCH_H
 
-#include <QDialog>
+#include <QCheckBox>              // for QCheckBox
+#include <QDialog>                // for QDialog
+#include <QString>                // for QString
+#include <QWidget>                // for QWidget
 
-#include "ui_version_mismatch.h"
+#include "ui_version_mismatch.h"  // for Ui_VersionMismatch
 
 class VersionMismatch: public QDialog
 {

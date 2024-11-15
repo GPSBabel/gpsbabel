@@ -19,11 +19,11 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include <QMessageBox>
-#include <QProcess>
-#include <QFileDialog>
-#include <QSettings>
+
 #include "advdlg.h"
+#include <QCheckBox>         // for QCheckBox
+#include <QComboBox>         // for QComboBox
+#include <QDialogButtonBox>  // for QDialogButtonBox
 
 //------------------------------------------------------------------------
 AdvDlg::AdvDlg(QWidget* parent,

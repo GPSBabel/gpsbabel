@@ -23,11 +23,11 @@
 #ifndef GPX_H
 #define GPX_H
 
-#include <QDateTime>             // for QDateTime
-#include <QList>                 // for QList
-#include <QString>               // for QString
-#include <QtGlobal>              // for foreach
-#include "latlng.h"              // for LatLng
+#include <QDateTime>         // for QDateTime
+#include <QList>             // for QList
+#include <QString>           // for QString
+#include <QtGlobal>          // for QForeachContainer, qMakeForeachContainer, foreach
+#include "latlng.h"          // for LatLng
 
 
 //------------------------------------------------------------------------

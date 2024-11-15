@@ -23,8 +23,11 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-#include <QSettings>
-#include <QDate>
+#include <QDateTime>  // for QDateTime
+#include <QList>      // for QList
+#include <QSettings>  // for QSettings
+#include <QString>    // for QAnyStringView::QAnyStringView, QString
+#include <QVariant>   // for QVariant
 
 
 //------------------------------------------------------------------------

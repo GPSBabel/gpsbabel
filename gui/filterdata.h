@@ -23,10 +23,13 @@
 #ifndef FILTERDATA_H
 #define FILTERDATA_H
 
-#include <QDateTime>
-#include <QSettings>
-#include <QStringList>
-#include "setting.h"
+#include <QDateTime>    // for QDateTime
+#include <QList>        // for QList
+#include <QSettings>    // for QSettings
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
+#include <QTime>        // for QTime
+#include "setting.h"    // for BoolSetting, SettingGroup, IntSetting, DoubleSetting, DateTimeSetting, StringSetting
 
 //------------------------------------------------------------------------
 
