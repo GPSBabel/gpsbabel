@@ -216,10 +216,6 @@ GMapDialog::GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEd
   ui_.treeView->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui_.treeView, &QWidget::customContextMenuRequested,
           this, &GMapDialog::showContextMenu);
-
-  connect(ui_.copyButton, &QAbstractButton::clicked, this, &GMapDialog::copyButtonClickedX);
-
-  ui_.copyButton->hide(); // Hide for now, not working
 }
 
 //-------------------------------------------------------------------------
@@ -576,9 +572,4 @@ void GMapDialog::showContextMenu(const QPoint& pt)
     menu.exec(ui_.treeView->mapToGlobal(pt));
   } else {
   }
-}
-//------------------------------------------------------------------------
-void GMapDialog::copyButtonClickedX()
-{
-
 }

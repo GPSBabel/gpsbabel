@@ -70,7 +70,6 @@ private slots:
   void routeClickedX(int i);
   void treeDoubleClicked(const QModelIndex& idx);
   void selectionChangedX(const QItemSelection&,  const QItemSelection&);
-  void copyButtonClickedX();
   void showContextMenu(const QPoint&);
 
 
