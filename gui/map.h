@@ -94,7 +94,7 @@ public slots:
   void hideAllRoutes();
   void setRouteVisibility(int i, bool show);
 
-  void loadFinishedX(bool);
+  void loadFinishedX(bool f);
   void markerClicked(int t, int i);
   void panTo(const LatLng& loc);
   void setWaypointColorRed(int i);
@@ -102,11 +102,11 @@ public slots:
   void frameTrack(int i);
   void frameRoute(int i);
 
-  void logTime(const QString&);
+  void logTime(const QString& s);
 
 private:
-  QByteArray encodeKey(const QByteArray& key);
-  QByteArray decodeKey(const QByteArray& key);
+  static QByteArray encodeKey(const QByteArray& key);
+  static QByteArray decodeKey(const QByteArray& key);
 
 signals:
   void waypointClicked(int i);
@@ -115,15 +115,15 @@ signals:
 
 private:
 #ifdef DEBUG_JS_GENERATION
-  QFile* dbgdata_;
-  QTextStream* dbgout_;
+  QFile* dbgdata_{nullptr};
+  QTextStream* dbgout_{nullptr};
 #endif
-  QNetworkAccessManager* manager_;
+  QNetworkAccessManager* manager_{nullptr};
   const Gpx& gpx_;
-  bool mapPresent_;
-  bool busyCursor_;
+  bool mapPresent_{false};
+  bool busyCursor_{false};
   QElapsedTimer stopWatch_;
-  QPlainTextEdit* textEdit_;
+  QPlainTextEdit* textEdit_{nullptr};
 
   void evaluateJS(const QString& s, bool update = true);
   void evaluateJS(const QStringList& s, bool update = true);

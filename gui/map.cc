@@ -37,7 +37,6 @@
 #include <QWebEngineSettings>     // for QWebEngineSettings
 #include <QWebEngineView>         // for QWebEngineView
 #include <Qt>                     // for CursorShape
-#include <QtGlobal>               // for QForeachContainer, qMakeForeachContainer, foreach
 
 #include <string>                 // for string
 #include <vector>                 // for vector
@@ -53,13 +52,8 @@ using std::vector;
 //------------------------------------------------------------------------
 static QString stripDoubleQuotes(const QString& s)
 {
-  QString out;
-  foreach (QChar c, s) {
-    if (c != QChar('"')) {
-      out += c;
-    }
-  }
-  return out;
+  QString out = s;
+  return out.remove('"');
 }
 
 //------------------------------------------------------------------------
@@ -67,8 +61,6 @@ Map::Map(QWidget* parent,
          const Gpx&  gpx, QPlainTextEdit* te):
   QWebEngineView(parent),
   gpx_(gpx),
-  mapPresent_(false),
-  busyCursor_(false),
   textEdit_(te)
 {
   busyCursor_ = true;
@@ -239,7 +231,7 @@ void Map::showGpxData()
 
   // Waypoints.
   int num=0;
-  foreach (const  GpxWaypoint& pt, gpx_.getWaypoints()) {
+  for (const GpxWaypoint& pt : gpx_.getWaypoints()) {
     scriptStr
         << QString("waypts[%1] = new google.maps.Marker({map: map, position: %2, "
                    "title: \"%3\", icon: blueIcon});")
@@ -258,10 +250,10 @@ void Map::showGpxData()
 
   // Tracks
   num = 0;
-  foreach (const GpxTrack& trk, gpx_.getTracks()) {
+  for (const GpxTrack& trk : gpx_.getTracks()) {
     vector <LatLng> pts;
-    foreach (const GpxTrackSegment seg, trk.getTrackSegments()) {
-      foreach (const GpxTrackPoint pt, seg.getTrackPoints()) {
+    for (const GpxTrackSegment& seg : trk.getTrackSegments()) {
+      for (const GpxTrackPoint& pt : seg.getTrackPoints()) {
         pts.push_back(pt.getLocation());
       }
     }
@@ -287,9 +279,9 @@ void Map::showGpxData()
 
   // Routes
   num = 0;
-  foreach (const GpxRoute& rte, gpx_.getRoutes()) {
+  for (const GpxRoute& rte : gpx_.getRoutes()) {
     vector <LatLng> pts;
-    foreach (const GpxRoutePoint& pt, rte.getRoutePoints()) {
+    for (const GpxRoutePoint& pt : rte.getRoutePoints()) {
       pts.push_back(pt.getLocation());
     }
     QString path = makePath(pts);
@@ -350,7 +342,7 @@ void Map::showTracks(const QList<GpxTrack>& tracks)
 {
   QStringList scriptStr;
   int i=0;
-  foreach (const GpxTrack& trk, tracks) {
+  for (const GpxTrack& trk : tracks) {
     scriptStr << QString("trks[%1].%2();").arg(i).arg(trk.getVisible()?"show":"hide");
     i++;
   }
@@ -375,7 +367,7 @@ void Map::showWaypoints(const QList<GpxWaypoint>& waypoints)
 {
   QStringList scriptStr;
   int i=0;
-  foreach (const GpxWaypoint& pt, waypoints) {
+  for (const GpxWaypoint& pt : waypoints) {
     scriptStr << QString("waypts[%1].setVisible(%2);").arg(i++).arg(pt.getVisible()?"true":"false");
   }
   evaluateJS(scriptStr);
@@ -397,7 +389,7 @@ void Map::showRoutes(const QList<GpxRoute>& routes)
 {
   QStringList scriptStr;
   int i=0;
-  foreach (const GpxRoute& rt, routes) {
+  for (const GpxRoute& rt : routes) {
     scriptStr << QString("rtes[%1].%2();").arg(i).arg(rt.getVisible()?"show":"hide");
     i++;
   }

@@ -48,35 +48,33 @@ private:
   Ui_GMapDlg ui_;
   Map* mapWidget_;
   QStandardItemModel* model_;
-  QStandardItem* wptItem_, *trkItem_, *rteItem_;
-  QList<QStandardItem*> wptList_, trkList_, rteList_;
+  QStandardItem* wptItem_;
+  QStandardItem* trkItem_;
+  QStandardItem* rteItem_;
   Gpx gpx_;
   int menuIndex_;
 
-  void appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt);
-  void appendTrackInfo(QStandardItem* it, const GpxTrack& trk);
-  void appendRouteInfo(QStandardItem* it, const GpxRoute& rte);
+  static void appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt);
+  static void appendTrackInfo(QStandardItem* it, const GpxTrack& trk);
+  static void appendRouteInfo(QStandardItem* it, const GpxRoute& rte);
 
-  int waypointIndex(QStandardItem* it);
-  int trackIndex(QStandardItem* it);
-  int routeIndex(QStandardItem* it);
-  QString formatLength(double l);
+  static QString formatLength(double l);
+
+  void expandCollapseAll(QStandardItem* top, bool exp);
+  static void checkUncheckAll(QStandardItem* top, bool ck);
+  template<typename GpxItemType>
+  void showOnlyThis(QList<GpxItemType>& list, QStandardItem* top);
 
   //
 private slots:
-  void itemChangedX(QStandardItem*);
+  void itemChangedX(QStandardItem* it);
   void waypointClickedX(int i);
   void trackClickedX(int i);
   void routeClickedX(int i);
   void treeDoubleClicked(const QModelIndex& idx);
-  void selectionChangedX(const QItemSelection&,  const QItemSelection&);
-  void showContextMenu(const QPoint&);
+  void selectionChangedX(const QItemSelection& sel,  const QItemSelection& desel);
+  void showContextMenu(const QPoint& pt);
 
-
-  void expandCollapseAll(const QList<QStandardItem*>& li,
-                         QStandardItem* it, bool exp);
-  void checkUncheckAll(const QList<QStandardItem*>& li,
-                       QStandardItem* it, bool exp);
   void expandAllWaypoints();
   void expandAllTracks();
   void expandAllRoutes();
