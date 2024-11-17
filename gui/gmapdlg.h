@@ -44,6 +44,8 @@ public:
   GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te);
 
 private:
+  static constexpr bool debug_ = true;
+
   Ui_GMapDlg ui_;
   Map* mapWidget_;
   QStandardItemModel* model_;

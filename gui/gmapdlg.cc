@@ -24,6 +24,7 @@
 #include "gmapdlg.h"
 #include <QAbstractItemView>    // for QAbstractItemView
 #include <QDateTime>            // for QDateTime, operator<, operator>
+#include <QDebug>               // for QDebug
 #include <QFrame>               // for QFrame
 #include <QHBoxLayout>          // for QHBoxLayout
 #include <QHeaderView>          // for QHeaderView
@@ -34,6 +35,7 @@
 #include <QStandardItemModel>   // for QStandardItemModel
 #include <QTreeView>            // for QTreeView
 #include <Qt>                   // for CheckState, ContextMenuPolicy
+#include <QtGlobal>             // for qDebug
 #include "appname.h"            // for appName
 #include "gpx.h"                // for GpxWaypoint, GpxTrack, GpxRoute, Gpx, GpxItem, GpxTrackPoint, GpxTrackSegment
 #include "latlng.h"             // for LatLn
@@ -234,9 +236,11 @@ void GMapDialog::showHideChildren(const QStandardItem* top)
 //-------------------------------------------------------------------------
 void GMapDialog::itemChangedX(QStandardItem* it)
 {
-  qDebug() << "item X changed parent" <<
-           ((it->parent() == nullptr)? "none" : it->parent()->text()) <<
-           "row" << it->row();
+  if constexpr(debug_) {
+    qDebug() << "item X changed parent" <<
+             ((it->parent() == nullptr)? "none" : it->parent()->text()) <<
+             "row" << it->row();
+  }
   if ((it == wptItem_) || (it == trkItem_) || (it == rteItem_)) {
     showHideChildren(it);
   } else {
@@ -253,7 +257,9 @@ void GMapDialog::treeDoubleClicked(const QModelIndex& idx)
   QStandardItem* it = model_->itemFromIndex(idx);
   QStandardItem* parent = it->parent();
   int row = it->row();
-  qDebug() << "tree dbl click" << ((parent == nullptr)? "none": parent->text()) << "row" << row;
+  if constexpr(debug_) {
+    qDebug() << "tree dbl click" << ((parent == nullptr)? "none": parent->text()) << "row" << row;
+  }
   if (parent == wptItem_) {
     parent->setCheckState(Qt::Checked);
     it->setCheckState(Qt::Checked);
@@ -304,7 +310,9 @@ void GMapDialog::routeClickedX(int i)
 //-------------------------------------------------------------------------
 void GMapDialog::selectionChangedX(const QItemSelection& sel,  const QItemSelection& desel)
 {
-  qDebug() << "selectionChangedX";
+  if constexpr(debug_) {
+    qDebug() << "selectionChangedX";
+  }
   for (const QModelIndexList idxs = desel.indexes(); const auto& idx : idxs) {
     const QStandardItem* it = model_->itemFromIndex(idx);
     const QStandardItem* parent = it->parent();
@@ -435,7 +443,9 @@ void GMapDialog::showOnlyThisRoute()
 //------------------------------------------------------------------------
 void GMapDialog::showContextMenu(const QPoint& pt)
 {
-  qDebug() << "show context menu";
+  if constexpr(debug_) {
+    qDebug() << "show context menu";
+  }
   QModelIndex idx = ui_.treeView->indexAt(pt);
   if (idx.isValid()) {
     const QStandardItem* it = model_->itemFromIndex(idx);
