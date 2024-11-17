@@ -41,7 +41,7 @@ class GMapDialog: public QDialog
 {
   Q_OBJECT
 public:
-  GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEdit* te);
+  GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te);
 
 private:
   Ui_GMapDlg ui_;
@@ -50,7 +50,7 @@ private:
   QStandardItem* wptItem_;
   QStandardItem* trkItem_;
   QStandardItem* rteItem_;
-  Gpx gpx_;
+  const Gpx& gpx_;
   int menuIndex_;
 
   static void appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt);

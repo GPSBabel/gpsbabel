@@ -66,6 +66,7 @@
 #include "formatload.h"        // for FormatLoad
 #include "gbversion.h"         // for VERSION, kVersionDate, kVersionSHA
 #ifndef DISABLE_MAPPREVIEW
+#include "gpx.h"               // for Gpx
 #include "gmapdlg.h"           // for GMapDialog
 #endif
 #include "help.h"              // for ShowHelp
@@ -968,12 +969,25 @@ void MainWindow::applyActionX()
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
 #ifndef DISABLE_MAPPREVIEW
     if (babelData_.previewGmap_) {
-      this->hide();
-      GMapDialog dlg(nullptr, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
-      dlg.show();
-      dlg.exec();
+      Gpx mapData;
+      QString mapStatus = mapData.read(tempName);
       QFile(tempName).remove();
-      this->show();
+      if (!mapStatus.isNull()) {
+        QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
+        QTextCharFormat errorFormat = defaultFormat;
+        errorFormat.setForeground(Qt::red);
+        errorFormat.setFontItalic(true);
+
+        ui_.outputWindow->setCurrentCharFormat(errorFormat);
+        ui_.outputWindow->appendPlainText(tr("Error preparing map: %1\n").arg(mapStatus));
+        ui_.outputWindow->setCurrentCharFormat(defaultFormat);
+      } else {
+        this->hide();
+        GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+        dlg.show();
+        dlg.exec();
+        this->show();
+      }
     }
 #endif
   } else {

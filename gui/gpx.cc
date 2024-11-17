@@ -209,11 +209,11 @@ public:
 
 //------------------------------------------------------------------------
 
-bool Gpx::read(const QString& fileName)
+QString Gpx::read(const QString& fileName)
 {
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly)) {
-    return false;
+    return QStringLiteral("Error opening file %1").arg(fileName);
   }
 
   QXmlStreamReader reader(&file);
@@ -249,8 +249,8 @@ bool Gpx::read(const QString& fileName)
     wayPoints = gpxHandler.wptList;
     tracks = gpxHandler.trkList;
     routes = gpxHandler.rteList;
-    return true;
+    return {};
   }
-  return false;
+  return QStringLiteral("Error parsing map file: %1").arg(reader.errorString());
 
 }

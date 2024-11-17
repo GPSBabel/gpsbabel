@@ -343,7 +343,7 @@ private:
 class Gpx
 {
 public:
-  bool read(const QString& fileName);
+  QString read(const QString& fileName);
 
   QList <GpxWaypoint>& getWaypoints()
   {
