@@ -34,6 +34,7 @@
 #include <QStandardItemModel>  // for QStandardItemModel
 #include <QString>             // for QString
 #include <QWidget>             // for QWidget
+#include <concepts>            // for derived_from
 #include "gpx.h"               // for Gpx, GpxRoute, GpxTrack, GpxWaypoint
 #include "map.h"               // for Map
 #include "ui_gmapui.h"         // for Ui_GMapDlg
@@ -62,7 +63,7 @@ private:
 
   void expandCollapseAll(QStandardItem* top, bool exp);
   static void checkUncheckAll(QStandardItem* top, bool ck);
-  template<typename GpxItemType>
+  template<typename GpxItemType> requires std::derived_from<GpxItemType, GpxItem>
   void showOnlyThis(QList<GpxItemType>& list, QStandardItem* top);
 
   //
