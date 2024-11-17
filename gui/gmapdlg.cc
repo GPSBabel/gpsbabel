@@ -152,7 +152,6 @@ GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te):
   lay->addWidget(mapWidget_);
 
   model_ = new QStandardItemModel(this);
-  menuIndex_ = -1; // Actually set for real in showContextMenu().
 
   wptItem_ = new StandardItem(tr("Waypoints"));
   wptItem_->setCheckable(true);
@@ -342,38 +341,6 @@ void GMapDialog::expandCollapseAll(QStandardItem* top, bool exp)
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::expandAllWaypoints()
-{
-  expandCollapseAll(wptItem_, true);
-}
-//------------------------------------------------------------------------
-void GMapDialog::expandAllTracks()
-{
-  expandCollapseAll(trkItem_, true);
-}
-//------------------------------------------------------------------------
-void GMapDialog::expandAllRoutes()
-{
-  expandCollapseAll(rteItem_, true);
-}
-
-//------------------------------------------------------------------------
-void GMapDialog::collapseAllWaypoints()
-{
-  expandCollapseAll(wptItem_, false);
-}
-//------------------------------------------------------------------------
-void GMapDialog::collapseAllTracks()
-{
-  expandCollapseAll(trkItem_, false);
-}
-//------------------------------------------------------------------------
-void GMapDialog::collapseAllRoutes()
-{
-  expandCollapseAll(rteItem_, false);
-}
-
-//------------------------------------------------------------------------
 void GMapDialog::checkUncheckAll(QStandardItem* top, bool ck)
 {
   top->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
@@ -382,62 +349,44 @@ void GMapDialog::checkUncheckAll(QStandardItem* top, bool ck)
     child->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
   }
 }
-//------------------------------------------------------------------------
-void GMapDialog::showAllWaypoints()
-{
-  checkUncheckAll(wptItem_, true);
-}
-//------------------------------------------------------------------------
-void GMapDialog::showAllTracks()
-{
-  checkUncheckAll(trkItem_, true);
-}
 
 //------------------------------------------------------------------------
-void GMapDialog::showAllRoutes()
-{
-  checkUncheckAll(rteItem_, true);
-}
-
-//------------------------------------------------------------------------
-void GMapDialog::hideAllWaypoints()
-{
-  checkUncheckAll(wptItem_, false);
-}
-//------------------------------------------------------------------------
-void GMapDialog::hideAllTracks()
-{
-  checkUncheckAll(trkItem_, false);
-}
-//------------------------------------------------------------------------
-void GMapDialog::hideAllRoutes()
-{
-  checkUncheckAll(rteItem_, false);
-}
-
-//------------------------------------------------------------------------
-void GMapDialog::showOnlyThis(QStandardItem* top)
+void GMapDialog::showOnlyThis(QStandardItem* top, int menuRow)
 {
   for (int row = 0; row < top->rowCount(); ++row) {
     QStandardItem* child = top->child(row);
-    child->setCheckState(row == menuIndex_? Qt::Checked: Qt::Unchecked);
+    child->setCheckState(row == menuRow? Qt::Checked: Qt::Unchecked);
   }
   top->setCheckState(Qt::Checked);
 }
-//------------------------------------------------------------------------
-void GMapDialog::showOnlyThisWaypoint()
+
+void GMapDialog::showTopContextMenu(const QStringList& text, QStandardItem* top, const QPoint& pt)
 {
-  showOnlyThis(wptItem_);
+  QMenu menu(this);
+  menu.addAction(text.at(0), this, [&top]()->void {
+    checkUncheckAll(top, true);
+  });
+  menu.addAction(text.at(1), this, [&top]()->void {
+    checkUncheckAll(top, false);
+  });
+  menu.addAction(text.at(2), this, [this, &top]()->void {
+    expandCollapseAll(top, true);
+  });
+  menu.addAction(text.at(3), this, [this, &top]()->void {
+    expandCollapseAll(top, false);
+  });
+  menu.exec(ui_.treeView->mapToGlobal(pt));
 }
-//------------------------------------------------------------------------
-void GMapDialog::showOnlyThisTrack()
+
+void GMapDialog::showChildContextMenu(const QString& text, const QStandardItem* child, const QPoint& pt)
 {
-  showOnlyThis(trkItem_);
-}
-//------------------------------------------------------------------------
-void GMapDialog::showOnlyThisRoute()
-{
-  showOnlyThis(rteItem_);
+  QStandardItem* parent = child->parent();
+  int row = child->row();
+  QMenu menu(this);
+  menu.addAction(text, this, [&row, &parent]()->void {
+    showOnlyThis(parent, row);
+  });
+  menu.exec(ui_.treeView->mapToGlobal(pt));
 }
 
 //------------------------------------------------------------------------
@@ -448,46 +397,36 @@ void GMapDialog::showContextMenu(const QPoint& pt)
   }
   QModelIndex idx = ui_.treeView->indexAt(pt);
   if (idx.isValid()) {
-    const QStandardItem* it = model_->itemFromIndex(idx);
+    QStandardItem* it = model_->itemFromIndex(idx);
     if (it == wptItem_) {
-      QMenu menu(this);
-      menu.addAction(tr("Show All Waypoints"), this, &GMapDialog::showAllWaypoints);
-      menu.addAction(tr("Hide All Waypoints"), this, &GMapDialog::hideAllWaypoints);
-      menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllWaypoints);
-      menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllWaypoints);
-      menu.exec(ui_.treeView->mapToGlobal(pt));
+      const QStringList labels = {tr("Show All Waypoints"),
+                                  tr("Hide All Waypoints"),
+                                  tr("Expand All"),
+                                  tr("Collapse All")
+                                 };
+      showTopContextMenu(labels, it, pt);
     } else if (it == rteItem_) {
-      QMenu menu(this);
-      menu.addAction(tr("Show All Routes"), this, &GMapDialog::showAllRoutes);
-      menu.addAction(tr("Hide All Routes"), this, &GMapDialog::hideAllRoutes);
-      menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllRoutes);
-      menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllRoutes);
-      menu.exec(ui_.treeView->mapToGlobal(pt));
+      const QStringList labels = {tr("Show All Routes"),
+                                  tr("Hide All Routes"),
+                                  tr("Expand All"),
+                                  tr("Collapse All")
+                                 };
+      showTopContextMenu(labels, it, pt);
     } else if (it == trkItem_) {
-      QMenu menu(this);
-      menu.addAction(tr("Show All Tracks"), this, &GMapDialog::showAllTracks);
-      menu.addAction(tr("Hide All Tracks"), this, &GMapDialog::hideAllTracks);
-      menu.addAction(tr("Expand All"), this, &GMapDialog::expandAllTracks);
-      menu.addAction(tr("Collapse All"), this, &GMapDialog::collapseAllTracks);
-      menu.exec(ui_.treeView->mapToGlobal(pt));
+      const QStringList labels = {tr("Show All Tracks"),
+                                  tr("Hide All Tracks"),
+                                  tr("Expand All"),
+                                  tr("Collapse All")
+                                 };
+      showTopContextMenu(labels, it, pt);
     } else if (it !=  nullptr) {
-      const QStandardItem* parent = it->parent();
-      int row = it->row();
+      QStandardItem* parent = it->parent();
       if (parent == wptItem_) {
-        QMenu menu(this);
-        menu.addAction(tr("Show Only This Waypoint"), this, &GMapDialog::showOnlyThisWaypoint);
-        menuIndex_ = row;
-        menu.exec(ui_.treeView->mapToGlobal(pt));
+        showChildContextMenu(tr("Show Only This Waypoint"), it, pt);
       } else if (parent == trkItem_) {
-        QMenu menu(this);
-        menu.addAction(tr("Show Only This Track"), this, &GMapDialog::showOnlyThisTrack);
-        menuIndex_ = row;
-        menu.exec(ui_.treeView->mapToGlobal(pt));
+        showChildContextMenu(tr("Show Only This Track"), it, pt);
       } else if (parent == rteItem_) {
-        QMenu menu(this);
-        menu.addAction(tr("Show Only This Route"), this, &GMapDialog::showOnlyThisRoute);
-        menuIndex_ = row;
-        menu.exec(ui_.treeView->mapToGlobal(pt));
+        showChildContextMenu(tr("Show Only This Route"), it, pt);
       }
     }
   }

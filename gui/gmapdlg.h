@@ -53,7 +53,6 @@ private:
   QStandardItem* trkItem_;
   QStandardItem* rteItem_;
   const Gpx& gpx_;
-  int menuIndex_;
 
   static void appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt);
   static void appendTrackInfo(QStandardItem* it, const GpxTrack& trk);
@@ -65,7 +64,9 @@ private:
   static void checkUncheckAll(QStandardItem* top, bool ck);
   void showHideChild(const QStandardItem* child);
   void showHideChildren(const QStandardItem* top);
-  void showOnlyThis(QStandardItem* top);
+  static void showOnlyThis(QStandardItem* top, int menuRow);
+  void showTopContextMenu(const QStringList& text, QStandardItem* top, const QPoint& pt);
+  void showChildContextMenu(const QString& text, const QStandardItem* child, const QPoint& pt);
 
   //
 private slots:
@@ -76,26 +77,6 @@ private slots:
   void treeDoubleClicked(const QModelIndex& idx);
   void selectionChangedX(const QItemSelection& sel,  const QItemSelection& desel);
   void showContextMenu(const QPoint& pt);
-
-  void expandAllWaypoints();
-  void expandAllTracks();
-  void expandAllRoutes();
-
-  void collapseAllWaypoints();
-  void collapseAllTracks();
-  void collapseAllRoutes();
-
-  void hideAllWaypoints();
-  void hideAllTracks();
-  void hideAllRoutes();
-
-  void showAllWaypoints();
-  void showAllTracks();
-  void showAllRoutes();
-
-  void showOnlyThisWaypoint();
-  void showOnlyThisTrack();
-  void showOnlyThisRoute();
 };
 
 #endif
