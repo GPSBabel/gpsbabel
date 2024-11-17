@@ -69,7 +69,6 @@ signals:
 };
 
 
-
 class Map : public QWebEngineView
 {
   Q_OBJECT
@@ -117,11 +116,7 @@ private:
   void evaluateJS(const QString& s, bool update = true);
   void evaluateJS(const QStringList& s, bool update = true);
 
-
 protected:
   void resizeEvent(QResizeEvent* event) override;
-
 };
-
-
 #endif // HEADER_H

@@ -326,7 +326,6 @@ void Map::markerClicked(int t, int i)
   } else if (t == 2) {
     emit routeClicked(i);
   }
-
 }
 
 //------------------------------------------------------------------------
@@ -392,7 +391,6 @@ void Map::frameTrack(int i)
   scriptStr
       << QString("map.setCenter(trks[%1].getBounds().getCenter());").arg(i)
       << QString("map.fitBounds(trks[%1].getBounds());").arg(i)
-
       ;
   evaluateJS(scriptStr);
 }
