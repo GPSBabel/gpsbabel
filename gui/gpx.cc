@@ -47,30 +47,7 @@ static bool trackIsEmpty(const GpxTrack& trk)
 class GpxHandler
 {
 public:
-  GpxHandler()
-
-  {
-    state = e_noop;
-  }
-
-  enum elementState {e_noop, e_wpt, e_trk,
-                     e_trkpt, e_trkseg, e_rte, e_rtept
-                    };
-  QString textChars;
-  GpxWaypoint currentWpt;
-  QList <GpxWaypoint> wptList;
-
-  QList <GpxTrack> trkList;
-  GpxTrack currentTrk;
-  GpxTrackPoint currentTrkPt;
-  GpxTrackSegment currentTrkSeg;
-
-  QList <GpxRoute> rteList;
-  GpxRoute currentRte;
-  GpxRoutePoint currentRtePt;
-
-  elementState state;
-  QList <elementState> stateStack;
+  /* Member Functions */
 
   void startElement(QStringView localName,
                     const QXmlStreamAttributes& atts)
@@ -204,6 +181,34 @@ public:
   {
     textChars = x;
   }
+
+  /* Data Members */
+
+  QList <GpxWaypoint> wptList;
+  QList <GpxTrack> trkList;
+  QList <GpxRoute> rteList;
+
+private:
+  /* Types */
+
+  enum elementState {e_noop, e_wpt, e_trk,
+                     e_trkpt, e_trkseg, e_rte, e_rtept
+                    };
+
+  /* Data Memebers */
+
+  QString textChars;
+  GpxWaypoint currentWpt;
+
+  GpxTrack currentTrk;
+  GpxTrackPoint currentTrkPt;
+  GpxTrackSegment currentTrkSeg;
+
+  GpxRoute currentRte;
+  GpxRoutePoint currentRtePt;
+
+  elementState state{e_noop};
+  QList <elementState> stateStack;
 };
 
 
