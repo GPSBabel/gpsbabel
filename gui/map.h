@@ -25,7 +25,6 @@
 
 #include <QByteArray>             // for QByteArray
 #include <QElapsedTimer>          // for QElapsedTimer
-#include <QList>                  // for QList
 #include <QNetworkAccessManager>  // for QNetworkAccessManager
 #include <QObject>                // for QObject, emit, Q_OBJECT, signals, slots
 #include <QPlainTextEdit>         // for QPlainTextEdit
@@ -79,29 +78,19 @@ public:
       const Gpx&  gpx_, QPlainTextEdit* textEdit_);
   ~Map();
 
-public slots:
   void showGpxData();
-
-  void showTracks(const QList<GpxTrack>& tracks);
-  void hideAllTracks();
   void setTrackVisibility(int i, bool show);
-
-  void showWaypoints(const QList<GpxWaypoint>& waypoints);
-  void hideAllWaypoints();
   void setWaypointVisibility(int i, bool show);
-
-  void showRoutes(const QList<GpxRoute>& routes);
-  void hideAllRoutes();
   void setRouteVisibility(int i, bool show);
-
-  void loadFinishedX(bool f);
-  void markerClicked(int t, int i);
   void panTo(const LatLng& loc);
   void setWaypointColorRed(int i);
   void setWaypointColorBlue(int i);
   void frameTrack(int i);
   void frameRoute(int i);
 
+public slots:
+  void loadFinishedX(bool f);
+  void markerClicked(int t, int i);
   void logTime(const QString& s);
 
 private:

@@ -28,6 +28,7 @@
 #include <QFile>                  // for QFile
 #include <QIODevice>              // for QIODevice
 #include <QLatin1String>          // for QLatin1String
+#include <QList>                  // for QList
 #include <QMessageBox>            // for QMessageBox
 #include <QNetworkAccessManager>  // for QNetworkAccessManager
 #include <QStringLiteral>         // for qMakeStringPrivate, QStringLiteral
@@ -336,75 +337,6 @@ void Map::logTime(const QString& s)
     textEdit_->appendPlainText(QString("%1: %2 ms").arg(s).arg(stopWatch_.elapsed()));
   }
   stopWatch_.start();
-}
-//------------------------------------------------------------------------
-void Map::showTracks(const QList<GpxTrack>& tracks)
-{
-  QStringList scriptStr;
-  int i=0;
-  for (const GpxTrack& trk : tracks) {
-    scriptStr << QString("trks[%1].%2();").arg(i).arg(trk.getVisible()?"show":"hide");
-    i++;
-  }
-  evaluateJS(scriptStr);
-}
-
-//------------------------------------------------------------------------
-void Map::hideAllTracks()
-{
-  QStringList scriptStr;
-  scriptStr
-      << "for (idx = 0; idx < trks.length; idx += 1) {"
-      << "    trks[idx].hide();"
-      << "}"
-      ;
-  evaluateJS(scriptStr);
-}
-
-//------------------------------------------------------------------------
-// TACKY: we assume the waypoints list and JS waypts[] are parallel.
-void Map::showWaypoints(const QList<GpxWaypoint>& waypoints)
-{
-  QStringList scriptStr;
-  int i=0;
-  for (const GpxWaypoint& pt : waypoints) {
-    scriptStr << QString("waypts[%1].setVisible(%2);").arg(i++).arg(pt.getVisible()?"true":"false");
-  }
-  evaluateJS(scriptStr);
-}
-//------------------------------------------------------------------------
-void Map::hideAllWaypoints()
-{
-  QStringList scriptStr;
-  scriptStr
-      << "for (idx = 0; idx < waypts.length; idx += 1) {"
-      << "    waypts[idx].setVisible(false);"
-      << "}"
-      ;
-  evaluateJS(scriptStr);
-}
-
-//------------------------------------------------------------------------
-void Map::showRoutes(const QList<GpxRoute>& routes)
-{
-  QStringList scriptStr;
-  int i=0;
-  for (const GpxRoute& rt : routes) {
-    scriptStr << QString("rtes[%1].%2();").arg(i).arg(rt.getVisible()?"show":"hide");
-    i++;
-  }
-  evaluateJS(scriptStr);
-}
-//------------------------------------------------------------------------
-void Map::hideAllRoutes()
-{
-  QStringList scriptStr;
-  scriptStr
-      << "for (idx = 0; idx < rtes.length; idx += 1) {"
-      << "    rtes[idx].hide();"
-      << "}"
-      ;
-  evaluateJS(scriptStr);
 }
 //------------------------------------------------------------------------
 void Map::setWaypointVisibility(int i, bool show)

@@ -30,28 +30,7 @@
 
 
 //------------------------------------------------------------------------
-class GpxItem
-{
-public:
-  GpxItem(): visible(true) {}
-  GpxItem(bool visible): visible(visible) {}
-
-  void setVisible(bool b)
-  {
-    visible = b;
-  }
-
-  bool getVisible() const
-  {
-    return visible;
-  }
-
-protected:
-  bool visible;
-};
-
-//------------------------------------------------------------------------
-class GpxRoutePoint: public GpxItem
+class GpxRoutePoint
 {
 public:
   void setLocation(const LatLng& pt)
@@ -80,7 +59,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxRoute: public GpxItem
+class GpxRoute
 {
 public:
   double length() const
@@ -136,7 +115,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxTrackPoint: public GpxItem
+class GpxTrackPoint
 {
 public:
   void setLocation(const LatLng& pt)
@@ -176,7 +155,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxTrackSegment: public GpxItem
+class GpxTrackSegment
 {
 public:
   void addPoint(const GpxTrackPoint& pt)
@@ -197,7 +176,7 @@ private:
   QList <GpxTrackPoint> trackPoints;
 };
 //------------------------------------------------------------------------
-class GpxTrack: public GpxItem
+class GpxTrack
 {
 public:
   void setNumber(int n)
@@ -288,7 +267,7 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxWaypoint: public GpxItem
+class GpxWaypoint
 {
 public:
   void setLocation(const LatLng& pt)
