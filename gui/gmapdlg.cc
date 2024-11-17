@@ -34,7 +34,6 @@
 #include <QStandardItemModel>   // for QStandardItemModel
 #include <QTreeView>            // for QTreeView
 #include <Qt>                   // for CheckState, ContextMenuPolicy
-#include <utility>              // for as_const
 #include "appname.h"            // for appName
 #include "gpx.h"                // for GpxWaypoint, GpxTrack, GpxRoute, Gpx, GpxItem, GpxTrackPoint, GpxTrackSegment
 #include "latlng.h"             // for LatLn
@@ -157,7 +156,7 @@ GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te):
   wptItem_->setCheckable(true);
   wptItem_->setCheckState(Qt::Checked);
   model_->appendRow(wptItem_);
-  for (const auto& wpt : std::as_const(gpx_.getWaypoints())) {
+  for (const auto& wpt : gpx_.getWaypoints()) {
     QStandardItem* it = new StandardItem(wpt.getName());
     wptItem_->appendRow(it);
     it->setCheckable(true);
@@ -169,7 +168,7 @@ GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te):
   trkItem_->setCheckable(true);
   trkItem_->setCheckState(Qt::Checked);
   model_->appendRow(trkItem_);
-  for (const auto& trk : std::as_const(gpx_.getTracks())) {
+  for (const auto& trk : gpx_.getTracks()) {
     QStandardItem* it = new StandardItem(trk.getName());
     trkItem_->appendRow(it);
     it->setCheckable(true);
@@ -181,7 +180,7 @@ GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te):
   rteItem_->setCheckable(true);
   rteItem_->setCheckState(Qt::Checked);
   model_->appendRow(rteItem_);
-  for (const auto& rte : std::as_const(gpx_.getRoutes())) {
+  for (const auto& rte : gpx_.getRoutes()) {
     QStandardItem* it = new StandardItem(rte.getName());
     rteItem_->appendRow(it);
     it->setCheckable(true);
