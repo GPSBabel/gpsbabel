@@ -73,8 +73,7 @@ private:
 private slots:
   void itemChangedX(QStandardItem* it);
   void treeDoubleClicked(const QModelIndex& idx);
-  void selectionChangedX(const QItemSelection& sel,  const QItemSelection& desel);
+  void selectionChangedX(const QItemSelection& sel, const QItemSelection& desel);
   void showContextMenu(const QPoint& pt);
 };
-
 #endif

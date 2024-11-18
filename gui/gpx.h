@@ -150,7 +150,7 @@ public:
 
 private:
   LatLng location;
-  double  elevation{0.0};
+  double elevation{0.0};
   QDateTime dateTime;
 };
 
@@ -258,7 +258,7 @@ public:
   }
 
 private:
-  int     number{1};
+  int number{1};
   QString name;
   QString comment;
   QString description;
@@ -332,7 +332,7 @@ public:
 
 private:
   LatLng location_;
-  double  elevation_{-1.0E-100};
+  double elevation_{-1.0E-100};
   QString name_;
   QString comment_;
   QString description_;
@@ -362,9 +362,7 @@ public:
 
 private:
   QList <GpxWaypoint> wayPoints;
-  QList <GpxTrack>    tracks;
-  QList <GpxRoute>    routes;
+  QList <GpxTrack> tracks;
+  QList <GpxRoute> routes;
 };
-
-
 #endif

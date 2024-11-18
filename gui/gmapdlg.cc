@@ -193,7 +193,7 @@ GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te):
   ui_.treeView->setModel(model_);
   ui_.treeView->setExpandsOnDoubleClick(false);
   connect(model_, &QStandardItemModel::itemChanged,
-          this,  &GMapDialog::itemChangedX);
+          this, &GMapDialog::itemChangedX);
   connect(mapWidget_, &Map::waypointClicked, this, [this](int i)->void {
     itemClickedX(wptItem_->child(i));
   });
@@ -222,7 +222,7 @@ void GMapDialog::showHideChild(const QStandardItem* child)
   int row = child->row();
   if (top == wptItem_) {
     mapWidget_->setWaypointVisibility(row, show);
-  } else if (top ==  trkItem_) {
+  } else if (top == trkItem_) {
     mapWidget_->setTrackVisibility(row, show);
   } else if (top == rteItem_) {
     mapWidget_->setRouteVisibility(row, show);
@@ -291,7 +291,7 @@ void GMapDialog::itemClickedX(const QStandardItem* it)
 }
 
 //-------------------------------------------------------------------------
-void GMapDialog::selectionChangedX(const QItemSelection& sel,  const QItemSelection& desel)
+void GMapDialog::selectionChangedX(const QItemSelection& sel, const QItemSelection& desel)
 {
   if constexpr(debug_) {
     qDebug() << "selectionChangedX";
@@ -403,7 +403,7 @@ void GMapDialog::showContextMenu(const QPoint& pt)
                                   tr("Collapse All")
                                  };
       showTopContextMenu(labels, it, pt);
-    } else if (it !=  nullptr) {
+    } else if (it != nullptr) {
       QStandardItem* parent = it->parent();
       if (parent == wptItem_) {
         showChildContextMenu(tr("Show Only This Waypoint"), it, pt);

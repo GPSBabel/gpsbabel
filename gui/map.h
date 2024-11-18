@@ -74,7 +74,7 @@ class Map : public QWebEngineView
   Q_OBJECT
 public:
   Map(QWidget* parent,
-      const Gpx&  gpx_, QPlainTextEdit* textEdit_);
+      const Gpx& gpx_, QPlainTextEdit* textEdit_);
   ~Map();
 
   void showGpxData();

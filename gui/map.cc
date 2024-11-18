@@ -59,7 +59,7 @@ static QString stripDoubleQuotes(const QString& s)
 
 //------------------------------------------------------------------------
 Map::Map(QWidget* parent,
-         const Gpx&  gpx, QPlainTextEdit* te):
+         const Gpx& gpx, QPlainTextEdit* te):
   QWebEngineView(parent),
   gpx_(gpx),
   textEdit_(te)
@@ -83,7 +83,7 @@ Map::Map(QWidget* parent,
   // 1. In the file system in the same directory as the executable.
   // 2. In the Qt resource system.  This is useful if the resource was compiled
   //    into the executable.
-  QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
+  QString baseFile = QApplication::applicationDirPath() + "/gmapbase.html";
   QString fileName;
   QUrl baseUrl;
   if (QFile(baseFile).exists()) {
@@ -186,7 +186,7 @@ void Map::loadFinishedX(bool f)
 //------------------------------------------------------------------------
 static QString fmtLatLng(const LatLng& l)
 {
-  return  QString("{lat: %1, lng: %3}").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
+  return QString("{lat: %1, lng: %3}").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
 }
 
 //------------------------------------------------------------------------

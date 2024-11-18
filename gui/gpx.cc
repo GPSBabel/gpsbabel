@@ -224,7 +224,7 @@ QString Gpx::read(const QString& fileName)
   QXmlStreamReader reader(&file);
   GpxHandler gpxHandler;
 
-  for (bool atEnd = false; !reader.atEnd() && !atEnd;)  {
+  for (bool atEnd = false; !reader.atEnd() && !atEnd;) {
     reader.readNext();
     // do processing
     switch (reader.tokenType()) {
