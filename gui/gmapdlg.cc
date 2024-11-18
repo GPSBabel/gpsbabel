@@ -214,6 +214,27 @@ GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te):
 }
 
 //------------------------------------------------------------------------
+void GMapDialog::trace(const QString& label, const QStandardItem* it)
+{
+  if constexpr(debug_) {
+    QDebug qdb(QtDebugMsg);
+    qdb.nospace().noquote() << label + ": ";
+    qdb.quote();
+    if (it == nullptr) {
+      qdb << "null item";
+    } else {
+      QStandardItem* parent = it->parent();
+      if (parent == nullptr) {
+        qdb << "parent: none";
+      } else {
+        qdb << "parent: " << parent->text();
+      }
+      qdb << " item: " << it->text() << " (row: " << it->row() << ")";
+    }
+  }
+}
+  
+//------------------------------------------------------------------------
 void GMapDialog::showHideChild(const QStandardItem* child)
 {
   const QStandardItem* top = child->parent();
@@ -241,11 +262,7 @@ void GMapDialog::showHideChildren(const QStandardItem* top)
 //-------------------------------------------------------------------------
 void GMapDialog::itemChangedX(QStandardItem* it)
 {
-  if constexpr(debug_) {
-    qDebug() << "item X changed parent" <<
-             ((it->parent() == nullptr)? "none" : it->parent()->text()) <<
-             "row" << it->row();
-  }
+  trace("itemChangedX", it);
   if ((it == wptItem_) || (it == trkItem_) || (it == rteItem_)) {
     showHideChildren(it);
   } else {
@@ -260,11 +277,9 @@ void GMapDialog::itemChangedX(QStandardItem* it)
 void GMapDialog::treeDoubleClicked(const QModelIndex& idx)
 {
   QStandardItem* it = model_->itemFromIndex(idx);
+  trace("treeDoubleClicked", it);
   QStandardItem* parent = it->parent();
   int row = it->row();
-  if constexpr(debug_) {
-    qDebug() << "tree dbl click" << ((parent == nullptr)? "none": parent->text()) << "row" << row;
-  }
   if (parent == wptItem_) {
     parent->setCheckState(Qt::Checked);
     it->setCheckState(Qt::Checked);
@@ -283,6 +298,7 @@ void GMapDialog::treeDoubleClicked(const QModelIndex& idx)
 //-------------------------------------------------------------------------
 void GMapDialog::itemClickedX(const QStandardItem* it)
 {
+  trace("itemXClicked", it);
   if (it != nullptr) {
     QModelIndex idx = model_->indexFromItem(it);
     ui_.treeView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
@@ -377,7 +393,7 @@ void GMapDialog::showChildContextMenu(const QString& text, const QStandardItem* 
 void GMapDialog::showContextMenu(const QPoint& pt)
 {
   if constexpr(debug_) {
-    qDebug() << "show context menu";
+    qDebug() << "showContextMenu";
   }
   QModelIndex idx = ui_.treeView->indexAt(pt);
   if (idx.isValid()) {

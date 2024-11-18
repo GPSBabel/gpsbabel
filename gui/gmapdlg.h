@@ -60,6 +60,7 @@ private:
 
   static QString formatLength(double l);
 
+  static void trace(const QString& label, const QStandardItem* it);
   void expandCollapseAll(QStandardItem* top, bool exp);
   static void checkUncheckAll(QStandardItem* top, bool ck);
   void showHideChild(const QStandardItem* child);
