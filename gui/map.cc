@@ -357,6 +357,15 @@ void Map::setRouteVisibility(int i, bool show)
 }
 
 //------------------------------------------------------------------------
+void Map::resetBounds()
+{
+  evaluateJS(QStringList{
+    "map.setCenter(bounds.getCenter());",
+    "map.fitBounds(bounds);",
+  });
+}
+
+//------------------------------------------------------------------------
 void Map::panTo(const LatLng& loc)
 {
   evaluateJS(QString("map.panTo(new google.maps.LatLng(%1));").arg(fmtLatLng(loc)));
@@ -386,27 +395,20 @@ void Map::setWaypointColorBlue(int i)
 //------------------------------------------------------------------------
 void Map::frameTrack(int i)
 {
-  QStringList scriptStr;
-
-  scriptStr
-      << QString("map.setCenter(trks[%1].getBounds().getCenter());").arg(i)
-      << QString("map.fitBounds(trks[%1].getBounds());").arg(i)
-      ;
-  evaluateJS(scriptStr);
+  evaluateJS(QStringList{
+    QString("map.setCenter(trks[%1].getBounds().getCenter());").arg(i),
+    QString("map.fitBounds(trks[%1].getBounds());").arg(i),
+  });
 }
-
 
 //------------------------------------------------------------------------
 void Map::frameRoute(int i)
 {
-  QStringList scriptStr;
-  scriptStr
-      << QString("map.setCenter(rtes[%1].getBounds().getCenter());").arg(i)
-      << QString("map.fitBounds(rtes[%1].getBounds());").arg(i)
-      ;
-  evaluateJS(scriptStr);
+  evaluateJS(QStringList{
+    QString("map.setCenter(rtes[%1].getBounds().getCenter());").arg(i),
+    QString("map.fitBounds(rtes[%1].getBounds());").arg(i),
+  });
 }
-
 
 //------------------------------------------------------------------------
 void Map::evaluateJS(const QString& s, bool upd)

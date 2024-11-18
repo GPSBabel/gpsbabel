@@ -62,11 +62,11 @@ private:
 
   static void trace(const QString& label, const QStandardItem* it);
   void expandCollapseAll(QStandardItem* top, bool exp);
-  static void checkUncheckAll(QStandardItem* top, bool ck);
+  void showHideAll(QStandardItem* top, bool ck);
   void showHideChild(const QStandardItem* child);
   void showHideChildren(const QStandardItem* top);
   void itemClickedX(const QStandardItem* it);
-  static void showOnlyThis(QStandardItem* top, int menuRow);
+  void showOnlyThis(QStandardItem* top, int menuRow);
   void showTopContextMenu(const QStringList& text, QStandardItem* top, const QPoint& pt);
   void showChildContextMenu(const QString& text, const QStandardItem* child, const QPoint& pt);
 

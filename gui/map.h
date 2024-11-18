@@ -81,6 +81,7 @@ public:
   void setTrackVisibility(int i, bool show);
   void setWaypointVisibility(int i, bool show);
   void setRouteVisibility(int i, bool show);
+  void resetBounds();
   void panTo(const LatLng& loc);
   void setWaypointColorRed(int i);
   void setWaypointColorBlue(int i);

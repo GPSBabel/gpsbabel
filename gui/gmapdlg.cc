@@ -341,8 +341,12 @@ void GMapDialog::expandCollapseAll(QStandardItem* top, bool exp)
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::checkUncheckAll(QStandardItem* top, bool ck)
+void GMapDialog::showHideAll(QStandardItem* top, bool ck)
 {
+  trace("showHideAll", top);
+  if (ck) {
+    mapWidget_->resetBounds();
+  }
   top->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
   for (int row = 0; row < top->rowCount(); ++row) {
     QStandardItem* child = top->child(row);
@@ -353,6 +357,14 @@ void GMapDialog::checkUncheckAll(QStandardItem* top, bool ck)
 //------------------------------------------------------------------------
 void GMapDialog::showOnlyThis(QStandardItem* top, int menuRow)
 {
+  trace("showOnlyThis", top->child(menuRow));
+  if (top == wptItem_) {
+    mapWidget_->panTo(gpx_.getWaypoints().at(menuRow).getLocation());
+  } else if (top == trkItem_) {
+    mapWidget_->frameTrack(menuRow);
+  } else if (top = rteItem_) {
+    mapWidget_->frameRoute(menuRow);
+  }
   for (int row = 0; row < top->rowCount(); ++row) {
     QStandardItem* child = top->child(row);
     child->setCheckState(row == menuRow? Qt::Checked: Qt::Unchecked);
@@ -363,11 +375,11 @@ void GMapDialog::showOnlyThis(QStandardItem* top, int menuRow)
 void GMapDialog::showTopContextMenu(const QStringList& text, QStandardItem* top, const QPoint& pt)
 {
   QMenu menu(this);
-  menu.addAction(text.at(0), this, [&top]()->void {
-    checkUncheckAll(top, true);
+  menu.addAction(text.at(0), this, [this, &top]()->void {
+    showHideAll(top, true);
   });
-  menu.addAction(text.at(1), this, [&top]()->void {
-    checkUncheckAll(top, false);
+  menu.addAction(text.at(1), this, [this, &top]()->void {
+    showHideAll(top, false);
   });
   menu.addAction(text.at(2), this, [this, &top]()->void {
     expandCollapseAll(top, true);
@@ -383,7 +395,7 @@ void GMapDialog::showChildContextMenu(const QString& text, const QStandardItem* 
   QStandardItem* parent = child->parent();
   int row = child->row();
   QMenu menu(this);
-  menu.addAction(text, this, [&row, &parent]()->void {
+  menu.addAction(text, this, [this, &row, &parent]()->void {
     showOnlyThis(parent, row);
   });
   menu.exec(ui_.treeView->mapToGlobal(pt));
