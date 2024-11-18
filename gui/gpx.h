@@ -345,32 +345,17 @@ class Gpx
 public:
   QString read(const QString& fileName);
 
-  QList <GpxWaypoint>& getWaypoints()
-  {
-    return wayPoints;
-  } // nonconst
-
-  QList <GpxTrack>&    getTracks()
-  {
-    return tracks;
-  }
-
-  QList <GpxRoute>&    getRoutes()
-  {
-    return routes;
-  }
-
-  const QList <GpxWaypoint>& getWaypoints() const
+  const QList<GpxWaypoint>& getWaypoints() const
   {
     return wayPoints;
   }
 
-  const QList <GpxTrack>& getTracks()       const
+  const QList<GpxTrack>& getTracks() const
   {
     return tracks;
   }
 
-  const QList <GpxRoute>& getRoutes()       const
+  const QList<GpxRoute>& getRoutes() const
   {
     return routes;
   }
