@@ -194,9 +194,15 @@ GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te):
   ui_.treeView->setExpandsOnDoubleClick(false);
   connect(model_, &QStandardItemModel::itemChanged,
           this,  &GMapDialog::itemChangedX);
-  connect(mapWidget_, &Map::waypointClicked, this, &GMapDialog::waypointClickedX);
-  connect(mapWidget_, &Map::routeClicked, this, &GMapDialog::routeClickedX);
-  connect(mapWidget_, &Map::trackClicked, this, &GMapDialog::trackClickedX);
+  connect(mapWidget_, &Map::waypointClicked, this, [this](int i)->void {
+    itemClickedX(wptItem_->child(i));
+  });
+  connect(mapWidget_, &Map::routeClicked, this, [this](int i)->void {
+    itemClickedX(rteItem_->child(i));
+  });
+  connect(mapWidget_, &Map::trackClicked, this, [this](int i)->void {
+    itemClickedX(trkItem_->child(i));
+  });
   connect(ui_.treeView, &QAbstractItemView::doubleClicked,
           this, &GMapDialog::treeDoubleClicked);
   connect(ui_.treeView->selectionModel(), &QItemSelectionModel::selectionChanged,
@@ -275,30 +281,8 @@ void GMapDialog::treeDoubleClicked(const QModelIndex& idx)
 }
 
 //-------------------------------------------------------------------------
-void GMapDialog::waypointClickedX(int i)
+void GMapDialog::itemClickedX(const QStandardItem* it)
 {
-  const QStandardItem* it = wptItem_->child(i);
-  if (it != nullptr) {
-    QModelIndex idx = model_->indexFromItem(it);
-    ui_.treeView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
-    ui_.treeView->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
-  }
-}
-//-------------------------------------------------------------------------
-void GMapDialog::trackClickedX(int i)
-{
-  const QStandardItem* it = trkItem_->child(i);
-  if (it != nullptr) {
-    QModelIndex idx = model_->indexFromItem(it);
-    ui_.treeView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
-    ui_.treeView->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
-  }
-}
-
-//-------------------------------------------------------------------------
-void GMapDialog::routeClickedX(int i)
-{
-  const QStandardItem* it = rteItem_->child(i);
   if (it != nullptr) {
     QModelIndex idx = model_->indexFromItem(it);
     ui_.treeView->scrollTo(idx, QAbstractItemView::PositionAtCenter);

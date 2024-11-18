@@ -64,6 +64,7 @@ private:
   static void checkUncheckAll(QStandardItem* top, bool ck);
   void showHideChild(const QStandardItem* child);
   void showHideChildren(const QStandardItem* top);
+  void itemClickedX(const QStandardItem* it);
   static void showOnlyThis(QStandardItem* top, int menuRow);
   void showTopContextMenu(const QStringList& text, QStandardItem* top, const QPoint& pt);
   void showChildContextMenu(const QString& text, const QStandardItem* child, const QPoint& pt);
@@ -71,9 +72,6 @@ private:
   //
 private slots:
   void itemChangedX(QStandardItem* it);
-  void waypointClickedX(int i);
-  void trackClickedX(int i);
-  void routeClickedX(int i);
   void treeDoubleClicked(const QModelIndex& idx);
   void selectionChangedX(const QItemSelection& sel,  const QItemSelection& desel);
   void showContextMenu(const QPoint& pt);
