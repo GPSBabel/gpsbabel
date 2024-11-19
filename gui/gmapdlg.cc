@@ -362,7 +362,7 @@ void GMapDialog::showOnlyThis(QStandardItem* top, int menuRow)
     mapWidget_->panTo(gpx_.getWaypoints().at(menuRow).getLocation());
   } else if (top == trkItem_) {
     mapWidget_->frameTrack(menuRow);
-  } else if (top = rteItem_) {
+  } else if (top == rteItem_) {
     mapWidget_->frameRoute(menuRow);
   }
   for (int row = 0; row < top->rowCount(); ++row) {
