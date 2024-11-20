@@ -75,7 +75,7 @@ class TrackFilterData: public FilterData
 public:
   /* Special Member Functions */
 
-  TrackFilterData() : titleString("ACTIVE LOG #%Y%m%d")   
+  TrackFilterData() : titleString("ACTIVE LOG #%Y%m%d")
   {
     QDate today = QDate::currentDate();
     stopTime = today.endOfDay();
