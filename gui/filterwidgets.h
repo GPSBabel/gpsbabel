@@ -36,6 +36,10 @@
 #include <QString>           // for QString
 #include <QWidget>           // for QWidget
 
+#include <memory>            // for unique_ptr
+#include <utility>           // for move
+#include <vector>            // for vector
+
 #include "filterdata.h"      // for MiscFltFilterData, RtTrkFilterData, TrackFilterData, WayPtsFilterData
 #include "ui_miscfltui.h"    // for Ui_MiscFltWidget
 #include "ui_rttrkui.h"      // for Ui_RtTrkWidget
@@ -56,9 +60,8 @@ public:
     fixWhatsThis();
   }
   CheckEnabler(QObject* parent, QAbstractButton* ck, QList<QWidget*>& wl):
-    QObject(parent), checkBox(ck)
+    QObject(parent), checkBox(ck), widgetList(wl)
   {
-    widgetList = wl;
     connect(ck, &QAbstractButton::clicked, this, &CheckEnabler::checkStatusChanged);
     checkStatusChanged();
     fixWhatsThis();
@@ -104,8 +107,14 @@ private:
 class FilterOption
 {
 public:
-  FilterOption() {}
-  virtual ~FilterOption() {}
+  FilterOption() = default;
+  /* Reference data members C.12 */
+  FilterOption(const FilterOption &) = delete;
+  FilterOption &operator=(const FilterOption &) = delete;
+  FilterOption(FilterOption &&) = delete;
+  FilterOption &operator=(FilterOption &&) = delete;
+  virtual ~FilterOption() = default;
+
   virtual void setWidgetValue() = 0;
   virtual void getWidgetValue() = 0;
 };
@@ -255,25 +264,25 @@ class FilterWidget: public QWidget
 {
 public:
   FilterWidget(QWidget* parent) : QWidget(parent) {}
-  ~FilterWidget()
-  {
-    for (int i=0; i<fopts.size(); i++) {
-      delete fopts[i];
-    }
-  }
 
   void getWidgetValues()
   {
-    for (int i=0; i<fopts.size(); i++) {
-      fopts[i]->getWidgetValue();
+    for (const auto& fopt : fopts) {
+      fopt->getWidgetValue();
     }
   }
   void setWidgetValues()
   {
-    for (int i=0; i<fopts.size(); i++) {
-      fopts[i]->setWidgetValue();
+    for (const auto & fopt : fopts) {
+      fopt->setWidgetValue();
     }
   }
+
+  void addFilterOption(std::unique_ptr<FilterOption> fo)
+  {
+    fopts.push_back(std::move(fo));
+  }
+
   void addCheckEnabler(QAbstractButton* ck, QWidget* w)
   {
     enbls << new CheckEnabler(this, ck, w);
@@ -289,19 +298,27 @@ public:
     }
   }
 
-protected:
-  QList <FilterOption*> fopts;
+private:
+  std::vector<std::unique_ptr<FilterOption>> fopts;
   QList <CheckEnabler*> enbls;
 };
 
 //------------------------------------------------------------------------
 
-class TrackWidget: public FilterWidget
+class TrackWidget final: public FilterWidget
 {
   Q_OBJECT
 public:
   TrackWidget(QWidget* parent, TrackFilterData& tf);
 
+  /* Since the TrackWidget ctor calls virtual function checkChecks() we must
+   * not derive a class from TrackWidget. To prevent this possiblity
+   * we mark TrackWidget final.
+   * "warning: Call to virtual method 'TrackWidget::checkChecks' during
+   * construction bypasses virtual dispatch
+   * [clang-analyzer-optin.cplusplus.VirtualCall]"
+   * https://www.artima.com/articles/never-call-virtual-functions-during-construction-or-destruction
+   */
   void checkChecks() override
   {
     otherCheckX();
@@ -314,11 +331,11 @@ private:
 
 private slots:
   void mergeCheckX();
-  void otherCheckX();
+  void otherCheckX() const;
   void splitDateX();
   void splitTimeX();
   void splitDistanceX();
-  void TZX();
+  void TZX() const;
   void packCheckX();
 };
 
@@ -334,8 +351,8 @@ private:
   WayPtsFilterData& wfd;
 
 private slots:
-  void locationsCkX();
-  void shortNamesCkX();
+  void locationsCkX() const;
+  void shortNamesCkX() const;
 };
 
 //------------------------------------------------------------------------
@@ -343,7 +360,7 @@ class RtTrkWidget: public FilterWidget
 {
   Q_OBJECT
 public:
-  RtTrkWidget(QWidget* parent, RtTrkFilterData& wf);
+  RtTrkWidget(QWidget* parent, RtTrkFilterData& rfd);
 
 private:
   Ui_RtTrkWidget ui;
@@ -354,11 +371,10 @@ class MiscFltWidget: public FilterWidget
 {
   Q_OBJECT
 public:
-  MiscFltWidget(QWidget*, MiscFltFilterData&);
+  MiscFltWidget(QWidget* parent, MiscFltFilterData& mfd);
 
 private:
   Ui_MiscFltWidget ui;
   MiscFltFilterData& mfd;
 };
-
 #endif

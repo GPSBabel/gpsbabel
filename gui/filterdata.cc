@@ -24,9 +24,10 @@
 #include "filterdata.h"
 #include <QChar>    // for QChar
 #include <QDate>    // for QDate
+#include <QTime>    // for QTime
 #include <QVector>  // for QVector
 
-QStringList WayPtsFilterData::makeOptionString()
+QStringList WayPtsFilterData::makeOptionString() const
 {
   QStringList args;
   if (!inUse_) {
@@ -77,7 +78,7 @@ static QString optionDate(const QDateTime& dt)
 }
 
 //------------------------------------------------------------------------
-QStringList TrackFilterData::makeOptionString()
+QStringList TrackFilterData::makeOptionString() const
 {
   QStringList args;
   if (!inUse_) {
@@ -150,7 +151,7 @@ QStringList TrackFilterData::makeOptionString()
 }
 
 //------------------------------------------------------------------------
-QStringList RtTrkFilterData::makeOptionString()
+QStringList RtTrkFilterData::makeOptionString() const
 {
   QStringList args;
   if (!inUse_) {
@@ -168,7 +169,7 @@ QStringList RtTrkFilterData::makeOptionString()
 }
 
 //------------------------------------------------------------------------
-QStringList MiscFltFilterData::makeOptionString()
+QStringList MiscFltFilterData::makeOptionString() const
 {
   QStringList args;
   if (!inUse_) {
