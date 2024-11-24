@@ -273,7 +273,7 @@ public:
   }
   void setWidgetValues()
   {
-    for (const auto & fopt : fopts) {
+    for (const auto& fopt : fopts) {
       fopt->setWidgetValue();
     }
   }
