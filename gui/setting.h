@@ -24,18 +24,25 @@
 #define SETTING_H
 
 #include <QDateTime>  // for QDateTime
-#include <QList>      // for QList
 #include <QSettings>  // for QSettings
 #include <QString>    // for QAnyStringView::QAnyStringView, QString
 #include <QVariant>   // for QVariant
+#include <memory>     // for unique_ptr
+#include <utility>    // for move
+#include <vector>     // for vector
 
 
 //------------------------------------------------------------------------
 class VarSetting
 {
 public:
-  VarSetting() {}
-  virtual ~VarSetting() {}
+  VarSetting() = default;
+  /* Reference data members C.12 */
+  VarSetting(const VarSetting &) = delete;
+  VarSetting &operator=(const VarSetting &) = delete;
+  VarSetting(VarSetting &&) = delete;
+  VarSetting &operator=(VarSetting &&) = delete;
+  virtual ~VarSetting() = default;
 
   virtual void saveSetting(QSettings&) = 0;
   virtual void restoreSetting(QSettings&) = 0;
@@ -152,36 +159,33 @@ private:
 class SettingGroup
 {
 public:
-  SettingGroup() {}
-  ~SettingGroup()
-  {
-    for (int i=0; i< settingGroup_.size(); i++) {
-      delete settingGroup_[i];
-    }
-  }
+  SettingGroup() = default;
+  /* Not copyable with unique_ptr */
+  SettingGroup(const SettingGroup &) = delete;
+  SettingGroup &operator=(const SettingGroup &) = delete;
+  SettingGroup(SettingGroup &&) = delete;
+  SettingGroup &operator=(SettingGroup &&) = delete;
+  ~SettingGroup() = default;
 
   void saveSettings(QSettings& st)
   {
-    for (int i=0; i< settingGroup_.size(); i++) {
-      settingGroup_[i]->saveSetting(st);
+    for (const auto& setting : settingGroup_) {
+      setting->saveSetting(st);
     }
   }
   void restoreSettings(QSettings& st)
   {
-    for (int i=0; i< settingGroup_.size(); i++) {
-      settingGroup_[i]->restoreSetting(st);
+    for (const auto& setting : settingGroup_) {
+      setting->restoreSetting(st);
     }
   }
 
-  void addVarSetting(VarSetting* vs)
+  void addVarSetting(std::unique_ptr<VarSetting> vs)
   {
-    settingGroup_ << vs;
+    settingGroup_.push_back(std::move(vs));
   }
 
 private:
-  QList <VarSetting*> settingGroup_;
+  std::vector<std::unique_ptr<VarSetting>> settingGroup_;
 };
-
 #endif
-
-

@@ -29,53 +29,31 @@
 #include <QSettings>    // for QSettings
 #include <QString>      // for QString
 #include <QStringList>  // for QStringList
-#include <QTime>        // for QTime
 #include <QUuid>        // for QUuid
+#include <memory>       // for make_unique, unique_ptr
 #include "setting.h"    // for SettingGroup, BoolSetting, StringSetting, IntSetting, DateTimeSetting
-
 
 class BabelData
 {
 public:
+  /* Constants */
+
+  static constexpr int noType_ = -1;
+  static constexpr int fileType_ = 0;
+  static constexpr int deviceType_ = 1;
+
+  /* Special Member Functions */
+
   BabelData():
     inputType_(fileType_),
-    inputFileFormat_(QString()),
-    inputDeviceFormat_(QString()),
-    inputFileNames_(QStringList()),
-    inputDeviceName_(QString()),
-    inputCharSet_(QString()),
-    xlateWayPts_(true),
-    xlateRoutes_(true),
-    xlateTracks_(true),
     outputType_(fileType_),
-    outputFileFormat_(QString()),
-    outputDeviceFormat_(QString()),
-    outputFileName_(QString()),
-    outputDeviceName_(QString()),
-    outputCharSet_(QString()),
-    synthShortNames_(false),
-    forceGPSTypes_(false),
-    debugLevel_(-1),
-    inputBrowse_(QString()),
-    outputBrowse_(QString()),
-    previewGmap_(false),
-    upgradeCheckMethod_(0),
-    upgradeCheckTime_(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
+    upgradeCheckTime_(QDate(2001, 1, 1).startOfDay()),
     installationUuid_(QUuid::createUuid().toString()),
-    upgradeCallbacks_(0),
-    upgradeAccept_(0),
-    upgradeDeclines_(0),
-    upgradeErrors_(0),
-    upgradeOffers_(0),
-    runCount_(0),
-    startupVersionCheck_(true),
-    reportStatistics_(true),
-    allowBetaUpgrades_(false),
-    ignoreVersionMismatch_(false),
-    disableDonateDialog_(false),
-    donateSplashed_(QDateTime(QDate(2010, 1, 1), QTime(0, 0, 0)))
+    donateSplashed_(QDate(2010, 1, 1).startOfDay())
   {
   }
+
+  /* Member Functions */
 
   void saveSettings(QSettings& st)
   {
@@ -92,52 +70,49 @@ public:
 
   void makeSettingGroup(SettingGroup& sg)
   {
-    sg.addVarSetting(new IntSetting("app.inputType", inputType_));
-    sg.addVarSetting(new StringSetting("app.inputFileFormat", inputFileFormat_));
-    sg.addVarSetting(new StringSetting("app.inputDeviceFormat", inputDeviceFormat_));
-    sg.addVarSetting(new StringSetting("app.inputCharSet", inputCharSet_));
-    sg.addVarSetting(new StringSetting("app.inputDeviceName", inputDeviceName_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.inputType", inputType_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.inputFileFormat", inputFileFormat_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.inputDeviceFormat", inputDeviceFormat_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.inputCharSet", inputCharSet_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.inputDeviceName", inputDeviceName_));
 
-    sg.addVarSetting(new BoolSetting("app.xlateWayPts", xlateWayPts_));
-    sg.addVarSetting(new BoolSetting("app.xlateRoutes", xlateRoutes_));
-    sg.addVarSetting(new BoolSetting("app.xlateTracks", xlateTracks_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.xlateWayPts", xlateWayPts_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.xlateRoutes", xlateRoutes_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.xlateTracks", xlateTracks_));
 
-    sg.addVarSetting(new IntSetting("app.outputType", outputType_));
-    sg.addVarSetting(new StringSetting("app.outputFileFormat", outputFileFormat_));
-    sg.addVarSetting(new StringSetting("app.outputDeviceFormat", outputDeviceFormat_));
-    sg.addVarSetting(new StringSetting("app.outputCharSet", outputCharSet_));
-    sg.addVarSetting(new StringSetting("app.outputDeviceName", outputDeviceName_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.outputType", outputType_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.outputFileFormat", outputFileFormat_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.outputDeviceFormat", outputDeviceFormat_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.outputCharSet", outputCharSet_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.outputDeviceName", outputDeviceName_));
 
-    sg.addVarSetting(new BoolSetting("app.synthShortNames", synthShortNames_));
-    sg.addVarSetting(new BoolSetting("app.forceGPSTypes", forceGPSTypes_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.synthShortNames", synthShortNames_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.forceGPSTypes", forceGPSTypes_));
 
-    sg.addVarSetting(new StringSetting("app.inputBrowse", inputBrowse_));
-    sg.addVarSetting(new StringSetting("app.outputBrowse", outputBrowse_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.inputBrowse", inputBrowse_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.outputBrowse", outputBrowse_));
 
-    sg.addVarSetting(new BoolSetting("app.previewGmap", previewGmap_));
-    sg.addVarSetting(new IntSetting("app.upgradeCheckMethod", upgradeCheckMethod_));
-    sg.addVarSetting(new DateTimeSetting("app.upgradeCheckTime", upgradeCheckTime_));
-    sg.addVarSetting(new DateTimeSetting("app.donateSplashed", donateSplashed_));
-    sg.addVarSetting(new StringSetting("app.installationUuid", installationUuid_));
-    sg.addVarSetting(new IntSetting("app.upgradeCallbacks", upgradeCallbacks_));
-    sg.addVarSetting(new IntSetting("app.upgradeAccept", upgradeAccept_));
-    sg.addVarSetting(new IntSetting("app.upgradeDeclines", upgradeDeclines_));
-    sg.addVarSetting(new IntSetting("app.upgradeErrors", upgradeErrors_));
-    sg.addVarSetting(new IntSetting("app.upgradeOffers", upgradeOffers_));
-    sg.addVarSetting(new IntSetting("app.runCount", runCount_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.previewGmap", previewGmap_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.upgradeCheckMethod", upgradeCheckMethod_));
+    sg.addVarSetting(std::make_unique<DateTimeSetting>("app.upgradeCheckTime", upgradeCheckTime_));
+    sg.addVarSetting(std::make_unique<DateTimeSetting>("app.donateSplashed", donateSplashed_));
+    sg.addVarSetting(std::make_unique<StringSetting>("app.installationUuid", installationUuid_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.upgradeCallbacks", upgradeCallbacks_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.upgradeAccept", upgradeAccept_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.upgradeDeclines", upgradeDeclines_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.upgradeErrors", upgradeErrors_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.upgradeOffers", upgradeOffers_));
+    sg.addVarSetting(std::make_unique<IntSetting>("app.runCount", runCount_));
 
     // Global preferences.
-    sg.addVarSetting(new BoolSetting("app.startupVersionCheck", startupVersionCheck_));
-    sg.addVarSetting(new BoolSetting("app.reportStatistics", reportStatistics_));
-    sg.addVarSetting(new BoolSetting("app.allowBetaUpgrades", allowBetaUpgrades_));
-    sg.addVarSetting(new BoolSetting("app.ignoreVersionMismatch", ignoreVersionMismatch_));
-    sg.addVarSetting(new BoolSetting("app.disableDonateDialog", disableDonateDialog_));
-
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.startupVersionCheck", startupVersionCheck_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.reportStatistics", reportStatistics_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.allowBetaUpgrades", allowBetaUpgrades_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.ignoreVersionMismatch", ignoreVersionMismatch_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.disableDonateDialog", disableDonateDialog_));
   }
 
-  static const int noType_;
-  static const int fileType_;
-  static const int deviceType_;
+  /* Data Members */
 
   int inputType_;
   QString inputFileFormat_;
@@ -146,9 +121,9 @@ public:
   QString inputDeviceName_;
   QString inputCharSet_;
 
-  bool xlateWayPts_;
-  bool xlateRoutes_;
-  bool xlateTracks_;
+  bool xlateWayPts_{true};
+  bool xlateRoutes_{true};
+  bool xlateTracks_{true};
 
   int outputType_;
   QString outputFileFormat_;
@@ -157,31 +132,29 @@ public:
   QString outputDeviceName_;
   QString outputCharSet_;
 
-  bool synthShortNames_;
-  bool forceGPSTypes_;
-  int  debugLevel_;
+  bool synthShortNames_{false};
+  bool forceGPSTypes_{false};
+  int  debugLevel_{-1};
 
   QString inputBrowse_, outputBrowse_;
 
-  bool  previewGmap_;
-  int   upgradeCheckMethod_;
+  bool  previewGmap_{false};
+  int   upgradeCheckMethod_{0};
   QDateTime upgradeCheckTime_;
   QString installationUuid_;
-  int upgradeCallbacks_;
-  int upgradeAccept_;
-  int upgradeDeclines_;
-  int upgradeErrors_;
-  int upgradeOffers_;
-  int runCount_;
+  int upgradeCallbacks_{0};
+  int upgradeAccept_{0};
+  int upgradeDeclines_{0};
+  int upgradeErrors_{0};
+  int upgradeOffers_{0};
+  int runCount_{0};
 
   // Global preferences.
-  bool startupVersionCheck_;
-  bool reportStatistics_;
-  bool allowBetaUpgrades_;
-  bool ignoreVersionMismatch_;
-  bool disableDonateDialog_;
+  bool startupVersionCheck_{true};
+  bool reportStatistics_{true};
+  bool allowBetaUpgrades_{false};
+  bool ignoreVersionMismatch_{false};
+  bool disableDonateDialog_{false};
   QDateTime donateSplashed_;
-
 };
-
 #endif
