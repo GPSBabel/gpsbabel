@@ -1,13 +1,13 @@
 diff --git a/gui/babeldata.h b/gui/babeldata.h
-index 9adb4dcd..00392f64 100644
+index b79cd1dc..c4d82e8c 100644
 --- a/gui/babeldata.h
 +++ b/gui/babeldata.h
-@@ -63,7 +63,7 @@ public:
-     upgradeErrors_(0),
-     upgradeOffers_(0),
-     runCount_(0),
--    startupVersionCheck_(true),
-+    startupVersionCheck_(false),
-     reportStatistics_(true),
-     allowBetaUpgrades_(false),
-     ignoreVersionMismatch_(false),
+@@ -150,7 +150,7 @@ public:
+   int runCount_{0};
+ 
+   // Global preferences.
+-  bool startupVersionCheck_{true};
++  bool startupVersionCheck_{false};
+   bool reportStatistics_{true};
+   bool allowBetaUpgrades_{false};
+   bool ignoreVersionMismatch_{false};
