@@ -1,4 +1,8 @@
-cmake_minimum_required(VERSION 3.16)
+if(APPLE)
+  cmake_minimum_required(VERSION 3.21.1)
+else()
+  cmake_minimum_required(VERSION 3.16)
+endif()
 
 include(CMakeDependentOption)
 include(CheckIncludeFile)

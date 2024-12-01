@@ -54,7 +54,7 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-latest
-          - QT_VERSION: '6.8.0'
+          - QT_VERSION: '6.8.1'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
@@ -78,7 +78,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.12'
 
     - name: Install Qt
       if: steps.cache.outputs.cache-hit != 'true'
