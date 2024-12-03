@@ -695,7 +695,7 @@ gbfread(QString& buf, const gbsize_t size,
         const gbsize_t members, gbfile* file)
 {
   QByteArray tmp;
-  tmp.resize(members * size);
+  tmp.resize(static_cast<qsizetype>(members) * size);
   gbsize_t retval = gbfread(tmp.data(), size, members, file);
   buf = QString(tmp);
   return retval;
