@@ -35,7 +35,7 @@ jobs:
       contents: read
       security-events: write
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_jammy
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_noble
       env:
         CMAKE_GENERATOR: Ninja
 
