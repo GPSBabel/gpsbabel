@@ -88,6 +88,10 @@ jobs:
       run: |
         ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
 
+    - name: Install Inno Setup
+      if: matrix.os == 'windows-2025'
+      run: choco install innosetup 
+
     - name: Build
       shell: powershell
       run: |
