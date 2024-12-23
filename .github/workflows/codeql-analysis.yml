@@ -52,7 +52,7 @@ jobs:
           build-mode: autobuild
           image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_noble
           runs-on: ubuntu-latest
-        - language: action
+        - language: actions
           build-mode: autobuild
           runs-on: ubuntu-latest
         # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
