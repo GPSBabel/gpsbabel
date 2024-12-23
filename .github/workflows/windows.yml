@@ -54,14 +54,14 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-latest
-          - QT_VERSION: '6.8.0'
+          - QT_VERSION: '6.8.1'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
             METHOD: 'aqt'
             RELEASE: false
             GENERATOR: 'Ninja'
-            os: windows-latest
+            os: windows-2025
 
     steps:
     - name: Checkout repository
@@ -78,7 +78,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.12'
 
     - name: Install Qt
       if: steps.cache.outputs.cache-hit != 'true'
@@ -87,6 +87,10 @@ jobs:
       shell: bash
       run: |
         ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
+
+    - name: Install Inno Setup
+      if: matrix.os == 'windows-2025'
+      run: choco install innosetup 
 
     - name: Build
       shell: powershell
