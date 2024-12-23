@@ -61,7 +61,7 @@ jobs:
             METHOD: 'aqt'
             RELEASE: false
             GENERATOR: 'Ninja'
-            os: windows-latest
+            os: windows-2025
 
     steps:
     - name: Checkout repository
