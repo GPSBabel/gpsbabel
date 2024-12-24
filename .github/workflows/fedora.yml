@@ -1,4 +1,6 @@
 name: "fedora"
+permissions:
+  contents: read
 
 on:
   schedule:
