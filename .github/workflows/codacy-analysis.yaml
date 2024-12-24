@@ -1,6 +1,5 @@
 name: Codacy clang-tidy
-permissions:
-  contents: read
+permissions: {}
 
 on:
   push:

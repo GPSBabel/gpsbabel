@@ -1,6 +1,5 @@
 name: "gendocs"
-permissions:
-  contents: read
+permissions: {}
 
 on:
   push:

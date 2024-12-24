@@ -1,6 +1,5 @@
 name: "fedora"
-permissions:
-  contents: read
+permissions: {}
 
 on:
   schedule:

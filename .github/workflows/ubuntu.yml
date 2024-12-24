@@ -1,6 +1,5 @@
 name: "ubuntu"
-permissions:
-  contents: read
+permissions: {}
 
 on:
   push:
