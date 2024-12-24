@@ -1,4 +1,5 @@
 name: "ubuntu"
+permissions: {}
 
 on:
   push:
