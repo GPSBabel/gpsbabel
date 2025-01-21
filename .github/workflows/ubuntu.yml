@@ -89,7 +89,7 @@ jobs:
         git clone https://sourceware.org/git/valgrind.git
         cd valgrind
         ./autogen.sh
-        ./configure --prefix=<installation-directory>
+        ./configure
         make
         make install
 
