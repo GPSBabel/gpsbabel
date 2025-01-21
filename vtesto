@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 
 #
 # Run our testsuite under valgrind.  Mostly it complains about core GNU libc
