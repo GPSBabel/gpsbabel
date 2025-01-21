@@ -90,8 +90,8 @@ jobs:
         cd valgrind
         ./autogen.sh
         ./configure
-        make
-        make install
+        make -j 4
+        sudo make install
 
     - name: Checkout repository
       uses: actions/checkout@v4
