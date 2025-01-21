@@ -60,4 +60,3 @@ else
 # This option avoids those valgrind induced miscompares by using an alternate file descriptor.
   ${BASEPATH}/testo -v "valgrind $OPTS --error-exitcode=125 $QUIET --log-fd=3" -p "$PNAME" $* 3>$LOG
 fi
-cat $LOG
