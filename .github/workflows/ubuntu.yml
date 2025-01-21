@@ -88,6 +88,7 @@ jobs:
         # 3.22.0 has rounding problems with arm64 and igc format
         git clone https://sourceware.org/git/valgrind.git
         cd valgrind
+        git checkout VALGRIND_3_23_0
         ./autogen.sh
         ./configure
         make -j 4
