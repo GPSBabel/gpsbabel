@@ -1,10 +1,5 @@
 #!/usr/bin/env sh
 
-set +x
-which valgrind
-valgrind --version
-
-
 GPSBABEL_FREEZE_TIME=y
 export GPSBABEL_FREEZE_TIME
 
