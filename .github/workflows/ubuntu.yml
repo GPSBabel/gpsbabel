@@ -100,7 +100,11 @@ jobs:
       run: |
         # when using containers manually whitelist the checkout directory to allow git commands to work
         git config --global --add safe.directory "${GITHUB_WORKSPACE}"
-        PATH=/usr/local/bin:$PATH ./tools/build_and_test_cmake.sh
+        PATH=/usr/local/bin:$PATH
+        export PATH
+        which valgrind
+        valgrind --version
+        ./tools/build_and_test_cmake.sh
 
   coverage:
     name: coverage Build
