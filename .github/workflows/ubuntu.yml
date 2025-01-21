@@ -81,10 +81,17 @@ jobs:
     - name: Install
       run: |
         sudo apt-get update
-        sudo apt-get install valgrind libxml2-utils
+        sudo apt-get install expat libxml2-utils
         sudo apt-get install fop xsltproc docbook-xml docbook5-xml docbook-xsl docbook-xsl-ns libavalon-framework-java jing
         sudo apt-get install libusb-1.0-0-dev libudev-dev
         sudo apt-get install qt6-base-dev qt6-5compat-dev qt6-serialport-dev libx11-xcb-dev libxkbcommon-dev qt6-tools-dev qt6-translations-l10n qt6-webengine-dev qt6-wayland
+        # 3.22.0 has rounding problems with arm64 and igc format
+        git clone https://sourceware.org/git/valgrind.git
+        cd valgrind
+        ./autogen.sh
+        ./configure --prefix=<installation-directory>
+        make
+        make install
 
     - name: Checkout repository
       uses: actions/checkout@v4
