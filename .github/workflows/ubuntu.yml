@@ -73,6 +73,27 @@ jobs:
         fi
         "${JOB_SCRIPT}"
 
+  ubuntu-arm:
+    name: ubuntu Build
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+    - name: Install
+      run: |
+        sudo apt-get update
+        sudo apt-get install fop xsltproc docbook-xml docbook5-xml docbook-xsl docbook-xsl-ns libavalon-framework-java jing
+        sudo apt-get install libusb-1.0-0-dev libudev-dev
+        sudo apt-get install qt6-base-dev qt6-5compat-dev qt6-serialport-dev libx11-xcb-dev libxkbcommon-dev qt6-tools-dev qt6-translations-l10n qt6-webengine-dev qt6-wayland
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: build_and_test
+      run: |
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+        ./tools/build_and_test_cmake.sh
+
   coverage:
     name: coverage Build
     runs-on: ubuntu-latest
