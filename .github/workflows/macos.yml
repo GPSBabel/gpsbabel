@@ -92,9 +92,8 @@ jobs:
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         # brew install is taking forever on macos-11, skip jing-trang and all it's dependencies.
-        if [ "${{ matrix.os }}" != "macos-11" ]; then
-          brew install jing-trang
-        fi
+        # jing 20241231 is failing with "Unknown XPath version 0", https://github.com/relaxng/jing-trang/issues/284
+        #brew install jing-trang
 
     - name: Script
       env:
