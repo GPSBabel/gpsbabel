@@ -30,29 +30,30 @@ You can grab a release from the <link xmlns:xlink="http://www.w3.org/1999/xlink"
     <variablelist>
       <varlistentry>
         <term>
-          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://qt-project.org">Qt</link>
+          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://contribute.qt-project.org/">Qt</link>
         </term>
         <listitem>
           <para>
-Qt version 5.12 or newer is required for all builds.  MacOS and Windows users can download
-binaries from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://qt-project.org/downloads">Qt Downloads</link>
-Fedora or CentOS users may need to 'dnf install qt5-qtbase-devel'.  When in doubt, 'dnf search qt' or 'dnf search qt5' may help you find the correct package name. Ubuntu users may need to 'apt-get install qt5-default'. Package names
+Qt version 6.2 or newer is required for all builds.
+You may download directly from Qt using the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://doc.qt.io/qt-6/get-and-install-qt.html">Qt supplied directions</link>.
+MacOS users can download binaries from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://formulae.brew.sh/formula/qt">Homebrew</link>.
+Fedora or CentOS users may need to 'dnf install qt6-qtbase-devel qt6-qt5compat-devel'.  When in doubt, 'dnf search qt' or 'dnf search qt6' may help you find the correct package name. Ubuntu users may need to 'apt-get install qt6-base-dev qt6-5compat-dev'. Additional qt6 packages are required to build the GUI.  Package names
 and versions in Linux frequently change, so you may need to ask your Linux vendor
-for help or look in tools/Docker* for inspiration for our automated builds that
+for help or look in our <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://github.com/GPSBabel/gpsbabel/tree/master/tools">Docker files</link> for inspiration for our automated builds that
 use Docker.
   </para>
         </listitem>
       </varlistentry>
       <varlistentry>
         <term>
-          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://libusb.info">libusb 1.0</link>
+          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://libusb.info/">libusb 1.0</link>
         </term>
         <listitem>
           <para>
 is needed to communicate with use with older USB Garmins.
 For macOS, we use an included copy.
-Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
-need to 'apt install libusb-dev' or look in tools/Docker* for inspiration
+Fedora users may need to 'dnf install libusb1-devel'.  Ubuntu users may
+need to 'apt-get install libusb-1.0-0-dev' or look in tools/Docker* for inspiration
 from our automated Docker builds.</para>
         </listitem>
       </varlistentry>
