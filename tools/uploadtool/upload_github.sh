@@ -79,7 +79,7 @@ echo "release_url: $release_url"
 target_commit_sha=$(echo "$release_infos" | grep '"target_commitish":' | head -n 1 | cut -d '"' -f 4 | cut -d '{' -f 1)
 echo "target_commit_sha: $target_commit_sha"
 
-if [ "{$GITHUB_SHA}" != "$target_commit_sha" ] ; then
+if [ "${GITHUB_SHA}" != "$target_commit_sha" ] ; then
 
   echo "GITHUB_SHA != target_commit_sha, hence deleting $RELEASE_NAME..."
 
