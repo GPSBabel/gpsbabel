@@ -36,7 +36,7 @@ You can grab a release from the <link xmlns:xlink="http://www.w3.org/1999/xlink"
           <para>
 Qt version 6.2 or newer is required for all builds.
 You may download directly from Qt using the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://doc.qt.io/qt-6/get-and-install-qt.html">Qt supplied directions</link>.
-MacOS users can download binaries from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://formulae.brew.sh/formula/qt">Homebrew</link>.
+Alternatively, MacOS users can download binaries from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://formulae.brew.sh/formula/qt">Homebrew</link>.
 Fedora or CentOS users may need to 'dnf install qt6-qtbase-devel qt6-qt5compat-devel'.  When in doubt, 'dnf search qt' or 'dnf search qt6' may help you find the correct package name. Ubuntu users may need to 'apt-get install qt6-base-dev qt6-5compat-dev'. Additional qt6 packages are required to build the GUI.  Package names
 and versions in Linux frequently change, so you may need to ask your Linux vendor
 for help or look in our <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://github.com/GPSBabel/gpsbabel/tree/master/tools">Docker files</link> for inspiration from our automated builds that
