@@ -112,7 +112,7 @@ private:
 
   /* Data Members */
 
-  const char* portname{};
+  QString portname;
   MakeShort* mkshort_handle{};
   GPS_PWay* tx_waylist{};
   GPS_PWay* tx_routelist{};
