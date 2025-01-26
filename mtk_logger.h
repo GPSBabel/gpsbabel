@@ -217,7 +217,7 @@ protected:
 
   void* fd{};  /* serial fd */
   FILE* fl{};  /* bin.file fd */
-  char* port{}; /* serial port name */
+  QString port{}; /* serial port name */
   OptionBool OPT_erase;  /* erase ? command option */
   OptionBool OPT_erase_only;  /* erase_only ? command option */
   OptionBool OPT_log_enable;  /* enable ? command option */
