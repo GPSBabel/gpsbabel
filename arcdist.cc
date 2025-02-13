@@ -132,7 +132,7 @@ void ArcDistanceFilter::process()
       arcpt2->latitude = arcpt2->longitude = BADVAL;
       int argsfound = sscanf(CSTR(line), "%lf %lf", &arcpt2->latitude, &arcpt2->longitude);
 
-      if ((argsfound != 2) && (line.trimmed().size() > 0)) {
+      if ((argsfound != 2) && (!line.trimmed().isEmpty())) {
         gbWarning("Warning: Arc file contains unusable vertex on line %d.\n", fileline);
       } else {
         Waypoint* arcpttmp = arcpt1;

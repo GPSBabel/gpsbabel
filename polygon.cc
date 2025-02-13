@@ -247,7 +247,7 @@ void PolygonFilter::process()
     lat2 = lon2 = BADVAL;
     int argsfound = sscanf(CSTR(line), "%lf %lf", &lat2, &lon2);
 
-    if ((argsfound != 2) && (line.trimmed().size() > 0)) {
+    if ((argsfound != 2) && (!line.trimmed().isEmpty())) {
       gbWarning("Warning: Polygon file contains unusable vertex on line %d.\n",
               fileline);
     } else if (lat1 != BADVAL && lon1 != BADVAL &&

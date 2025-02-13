@@ -323,7 +323,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     }
   }
 
-  if (response.length() != 0) {
+  if (!response.isEmpty()) {
     QMessageBox information;
     information.setWindowTitle(tr("Upgrade"));
 

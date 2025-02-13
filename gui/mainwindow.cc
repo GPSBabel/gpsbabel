@@ -142,7 +142,7 @@ static QString MakeOptions(const QList<FormatOption>& options)
 static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 {
   QString str = MakeOptions(options);
-  return (str.length()) != 0 ? str.mid(1) : str;
+  return !str.isEmpty() ? str.mid(1) : str;
 
 }
 
@@ -461,7 +461,7 @@ QString MainWindow::filterForFormat(int idx)
 QString MainWindow::ensureExtensionPresent(const QString& name, int idx)
 {
   QString outname = name;
-  if (QFileInfo(name).suffix().length() == 0) {
+  if (QFileInfo(name).suffix().isEmpty()) {
     QStringList extensions = formatList_[idx].getExtensions();
     if (!extensions.empty() && !extensions[0].isEmpty()) {
       outname += "." + extensions[0];
@@ -524,7 +524,7 @@ void MainWindow::browseInputFile()
 void MainWindow::browseOutputFile()
 {
   int idx = currentComboFormatIndex(ui_.outputFormatCombo);
-  QString startFile = babelData_.outputFileName_.length() == 0 ? babelData_.outputBrowse_ : babelData_.outputFileName_;
+  QString startFile = babelData_.outputFileName_.isEmpty() ? babelData_.outputBrowse_ : babelData_.outputFileName_;
   QFileInfo finfo(startFile);
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
     startFile = finfo.dir().absolutePath();
@@ -534,7 +534,7 @@ void MainWindow::browseOutputFile()
     QFileDialog::getSaveFileName(nullptr, tr("Output File Name"),
                                  startFile,
                                  filterForFormat(idx));
-  if (str.length() != 0) {
+  if (!str.isEmpty()) {
     str = ensureExtensionPresent(str, idx);
     babelData_.outputBrowse_ = str;
     babelData_.outputFileName_ = str;
@@ -805,7 +805,7 @@ bool MainWindow::isOkToGo()
     babelData_.inputFileNames_ << ui_.inputFileNameText->text();
   }
   if ((babelData_.outputType_ == BabelData::fileType_) &&
-      (babelData_.outputFileName_.size() == 0) &&
+      (babelData_.outputFileName_.isEmpty()) &&
       (!ui_.outputFileNameText->text().isEmpty())) {
     babelData_.outputFileName_ = ui_.outputFileNameText->text();
   }
@@ -825,7 +825,7 @@ bool MainWindow::isOkToGo()
     return false;
   }
   if (babelData_.outputType_ == BabelData::fileType_ &&
-      babelData_.outputFileName_.length() == 0) {
+      babelData_.outputFileName_.isEmpty()) {
     QMessageBox::information(nullptr, QString(appName), tr("No output file specified"));
     return false;
   }
@@ -920,7 +920,7 @@ void MainWindow::applyActionX()
 
     // output file or device option
     if (outIsFile) {
-      if (babelData_.outputFileName_ != "") {
+      if (!babelData_.outputFileName_.isEmpty()) {
         args << "-F" << babelData_.outputFileName_;
       }
     } else if (babelData_.outputType_ == BabelData::deviceType_) {
