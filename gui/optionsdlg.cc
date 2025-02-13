@@ -60,7 +60,7 @@ FileDlgManager::FileDlgManager(QObject* parent,
 //------------------------------------------------------------------------
 QVariant getOptionValue(QList<FormatOption> opts, int k)
 {
-  if (opts[k].getValue().toString() != "") {
+  if (!opts[k].getValue().toString().isEmpty()) {
     return opts[k].getValue();
   }
   return opts[k].getDefaultValue();
@@ -80,7 +80,7 @@ void FileDlgManager::buttonClicked()
                                        le->text(),
                                        "All Files (*.*)");
   }
-  if (str != "") {
+  if (!str.isEmpty()) {
     le->setText(str);
   }
 }

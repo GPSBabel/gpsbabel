@@ -82,10 +82,10 @@ void GMapDialog::appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt)
 {
   it->appendRow(new StandardItem(tr("Lat: %1").arg(wpt.getLocation().lat(), 0, 'f', 7)));
   it->appendRow(new StandardItem(tr("Lng: %1").arg(wpt.getLocation().lng(), 0, 'f', 7)));
-  if (wpt.getDescription() != QString()) {
+  if (!wpt.getDescription().isEmpty()) {
     it->appendRow(new StandardItem(tr("Desc: %1").arg(wpt.getDescription())));
   }
-  if (wpt.getComment() != QString() && wpt.getComment() != wpt.getDescription()) {
+  if (!wpt.getComment().isEmpty() && wpt.getComment() != wpt.getDescription()) {
     it->appendRow(new StandardItem(tr("Cmt: %1").arg(wpt.getComment())));
   }
   if (wpt.getElevation() > -50000) {

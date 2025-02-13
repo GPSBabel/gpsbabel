@@ -340,7 +340,7 @@ run(const char* prog_name)
 
 //  we must check the length for afl input fuzzing to work.
 //    if (qargs.at(argn).at(0).toLatin1() != '-') {
-    if (qargs.at(argn).size() > 0 && qargs.at(argn).at(0).toLatin1() != '-') {
+    if (!qargs.at(argn).isEmpty() && qargs.at(argn).at(0).toLatin1() != '-') {
       break;
     }
     if (qargs.at(argn).size() > 1 && qargs.at(argn).at(1).toLatin1() == '-') {

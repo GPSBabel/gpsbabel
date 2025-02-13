@@ -191,7 +191,7 @@ UnicsvFormat::unicsv_parse_gc_code(const QString& str)
   //
   int base;
   const QString kBase31 = "0123456789ABCDEFGHJKMNPQRTVWXYZ"; //  ILOSU are omitted.
-  if (s.size() >= 1 && s.size() <= 3) {
+  if (!s.isEmpty() && s.size() <= 3) {
     base = 16;
   } else if (s.size() == 4) {
     if (kBase31.indexOf(s[0]) < 16) {
