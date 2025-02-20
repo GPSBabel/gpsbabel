@@ -1,0 +1,3 @@
+<para>This module reads .txt files created by 70mai Dash Cams like the A810. The file is
+located in the root directory of the SD card. It may be named GPSData000001.txt.  It may be
+hidden in Windows.</para>
