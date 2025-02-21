@@ -22,28 +22,27 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QEvent>                 // for QEvent
-#include <QList>                  // for QList
-#include <QObject>                // for QObject (& Q_OBJECT, slots)
-#include <QString>                // for QString
-#include <QStringList>            // for QStringList
-#include <QTranslator>            // for QTranslator
-#include <QCloseEvent>            // for QCloseEvent
-#include <QDragEnterEvent>        // for QDragEnterEvent
-#include <QDropEvent>             // for QDropEvent
-#include <QPixmap>                // for QPixmap
-#include <QAction>                // for QAction
-#include <QComboBox>              // for QComboBox
-#include <QLabel>                 // for QLabel
-#include <QLineEdit>              // for QLineEdit
-#include <QMainWindow>            // for QMainWindow
-#include <QWidget>                // for QWidget
+#include <QCloseEvent>      // for QCloseEvent
+#include <QComboBox>        // for QComboBox
+#include <QDragEnterEvent>  // for QDragEnterEvent
+#include <QDropEvent>       // for QDropEvent
+#include <QEvent>           // for QEvent
+#include <QLabel>           // for QLabel
+#include <QLineEdit>        // for QLineEdit
+#include <QList>            // for QList
+#include <QMainWindow>      // for QMainWindow
+#include <QObject>          // for Q_OBJECT, slots
+#include <QPixmap>          // for QPixmap
+#include <QString>          // for QString
+#include <QStringList>      // for QStringList
+#include <QTranslator>      // for QTranslator
+#include <QWidget>          // for QWidget
 
-#include "babeldata.h"            // for BabelData
-#include "filterdata.h"           // for AllFiltersData
-#include "format.h"               // for Format
-#include "ui_mainwinui.h"         // for Ui_MainWindow
-#include "upgrade.h"              // for UpgradeCheck
+#include "babeldata.h"      // for BabelData
+#include "filterdata.h"     // for AllFiltersData
+#include "format.h"         // for Format
+#include "ui_mainwinui.h"   // for Ui_MainWindow
+#include "upgrade.h"        // for UpgradeCheck
 
 
 class MainWindow: public QMainWindow
@@ -108,8 +107,8 @@ private:
   QString getFormatNameForExtension(const QString& ext);
 
 protected:
-  void closeEvent(QCloseEvent*);
-  void changeEvent(QEvent*);
+  void closeEvent(QCloseEvent*) override;
+  void changeEvent(QEvent*) override;
 
 private slots:
   void aboutActionX();
@@ -118,8 +117,8 @@ private slots:
   void browseOutputFile();
   void closeActionX();
   void donateActionX();
-  void dragEnterEvent(QDragEnterEvent*);
-  void dropEvent(QDropEvent* event);
+  void dragEnterEvent(QDragEnterEvent*) override;
+  void dropEvent(QDropEvent* event) override;
   void filtersClicked();
   void helpActionX();
   void inputDeviceOptBtnClicked();
@@ -137,7 +136,6 @@ private slots:
   void visitWebsiteActionX();
   void resetFormatDefaults();
   void upgradeCheckActionX();
-  void slotLanguageChanged(QAction* action);
 
 
 };

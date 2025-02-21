@@ -23,10 +23,11 @@
 #ifndef FORMAT_H
 #define FORMAT_H
 
-#include <QString>
-#include <QVariant>
-#include <QStringList>
-#include <QSettings>
+#include <QList>        // for QList
+#include <QSettings>    // for QSettings
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
+#include <QVariant>     // for QVariant
 
 class FormatOption
 {

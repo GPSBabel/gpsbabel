@@ -21,18 +21,17 @@
 //
 //------------------------------------------------------------------------
 
-
-#include <QFile>                 // for QFile
-#include <QIODevice>             // for QIODevice, QIODevice::ReadOnly
-#include <QStringView>           // for QStringView
-#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QXmlStreamReader>      // for QXmlStreamReader, QXmlStreamReader::Characters, QXmlStreamReader::EndDocument, QXmlStreamReader::EndElement, QXmlStreamReader::Invalid, QXmlStreamReader::StartElement
 #include "gpx.h"
+#include <QFile>                 // for QFile
+#include <QIODevice>             // for QIODevice
+#include <QStringView>           // for QStringView, operator==
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QXmlStreamReader>      // for QXmlStreamReader
 
 
 static QDateTime decodeDateTime(const QString& s)
 {
-  QDateTime utc = QDateTime::fromString(s, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+  QDateTime utc = QDateTime::fromString(s, u"yyyy-MM-dd'T'HH:mm:ss'Z'");
   return utc;
 }
 
@@ -48,30 +47,7 @@ static bool trackIsEmpty(const GpxTrack& trk)
 class GpxHandler
 {
 public:
-  GpxHandler()
-
-  {
-    state = e_noop;
-  }
-
-  enum elementState {e_noop, e_wpt, e_trk,
-                     e_trkpt, e_trkseg, e_rte, e_rtept
-                    };
-  QString textChars;
-  GpxWaypoint currentWpt;
-  QList <GpxWaypoint> wptList;
-
-  QList <GpxTrack> trkList;
-  GpxTrack currentTrk;
-  GpxTrackPoint currentTrkPt;
-  GpxTrackSegment currentTrkSeg;
-
-  QList <GpxRoute> rteList;
-  GpxRoute currentRte;
-  GpxRoutePoint currentRtePt;
-
-  elementState state;
-  QList <elementState> stateStack;
+  /* Member Functions */
 
   void startElement(QStringView localName,
                     const QXmlStreamAttributes& atts)
@@ -205,22 +181,50 @@ public:
   {
     textChars = x;
   }
+
+  /* Data Members */
+
+  QList <GpxWaypoint> wptList;
+  QList <GpxTrack> trkList;
+  QList <GpxRoute> rteList;
+
+private:
+  /* Types */
+
+  enum elementState {e_noop, e_wpt, e_trk,
+                     e_trkpt, e_trkseg, e_rte, e_rtept
+                    };
+
+  /* Data Memebers */
+
+  QString textChars;
+  GpxWaypoint currentWpt;
+
+  GpxTrack currentTrk;
+  GpxTrackPoint currentTrkPt;
+  GpxTrackSegment currentTrkSeg;
+
+  GpxRoute currentRte;
+  GpxRoutePoint currentRtePt;
+
+  elementState state{e_noop};
+  QList <elementState> stateStack;
 };
 
 
 //------------------------------------------------------------------------
 
-bool Gpx::read(const QString& fileName)
+QString Gpx::read(const QString& fileName)
 {
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly)) {
-    return false;
+    return QStringLiteral("Error opening file %1").arg(fileName);
   }
 
   QXmlStreamReader reader(&file);
   GpxHandler gpxHandler;
 
-  for (bool atEnd = false; !reader.atEnd() && !atEnd;)  {
+  for (bool atEnd = false; !reader.atEnd() && !atEnd;) {
     reader.readNext();
     // do processing
     switch (reader.tokenType()) {
@@ -250,8 +254,8 @@ bool Gpx::read(const QString& fileName)
     wayPoints = gpxHandler.wptList;
     tracks = gpxHandler.trkList;
     routes = gpxHandler.rteList;
-    return true;
+    return {};
   }
-  return false;
+  return QStringLiteral("Error parsing map file: %1").arg(reader.errorString());
 
 }

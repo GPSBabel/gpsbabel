@@ -28,20 +28,22 @@
 #ifndef IGC_H_INCLUDED_
 #define IGC_H_INCLUDED_
 
-#include <optional>              // for optional
-#include <QByteArray>            // for QByteArray
-#include <QDateTime>             // for QDateTime
-#include <QList>                 // for QList<>::const_iterator
-#include <QString>               // for QString, operator+, QStringLiteral
-#include <QVector>               // for QVector
-#include <QHash>                 // for QHash
+#include <optional>             // for optional
+
+#include <QByteArray>           // for QByteArray
+#include <QDateTime>            // for QDateTime
+#include <QList>                // for QList<>::const_iterator
+#include <QString>              // for QString, operator+, QStringLiteral
+#include <QVector>              // for QVector
+#include <QHash>                // for QHash
 
 #include "defs.h"
-#include "format.h"              // for Format
-#include "formspec.h"            // for FormatSpecificData, kFsIGC
-#include "gbfile.h"              // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
-#include "src/core/datetime.h"   // for DateTime
-#include "kml.h"                 // for wp_field
+#include "format.h"             // for Format
+#include "formspec.h"           // for FormatSpecificData, kFsIGC
+#include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfputs, gbfgetstr, gbfile
+#include "kml.h"                // for wp_field
+#include "option.h"             // for OptionBool, OptionString
+#include "src/core/datetime.h"  // for DateTime
 
 /*
  * Notes on IGC extensions:
@@ -85,7 +87,7 @@ public:
   // Qt6 falls back to std::hash, but it may not use the seed.
   friend size_t qHash(const igc_ext_type_t& key, size_t seed = 0) noexcept
   {
-    return qHash(static_cast<std::underlying_type<igc_ext_type_t>::type>(key), seed);
+    return qHash(static_cast<std::underlying_type_t<igc_ext_type_t>>(key), seed);
   }
 
   QVector<arglist_t>* get_args() override
@@ -138,18 +140,18 @@ private:
     rec_bad = 1,		// Bad record
   };
 
-  char* opt_enl{nullptr};
-  char* opt_tas{nullptr};
-  char* opt_vat{nullptr};
-  char* opt_oat{nullptr};
-  char* opt_trt{nullptr};
-  char* opt_gsp{nullptr};
-  char* opt_fxa{nullptr};
-  char* opt_siu{nullptr};
-  char* opt_acz{nullptr};
-  char* opt_gfo{nullptr};
+  OptionBool opt_enl;
+  OptionBool opt_tas;
+  OptionBool opt_vat;
+  OptionBool opt_oat;
+  OptionBool opt_trt;
+  OptionBool opt_gsp;
+  OptionBool opt_fxa;
+  OptionBool opt_siu;
+  OptionBool opt_acz;
+  OptionBool opt_gfo;
 
-  const QHash<igc_ext_type_t, char**> ext_option_map = {
+  const QHash<igc_ext_type_t, OptionBool*> ext_option_map = {
     {igc_ext_type_t::ext_rec_enl, &opt_enl},
     {igc_ext_type_t::ext_rec_tas, &opt_tas},
     {igc_ext_type_t::ext_rec_vat, &opt_vat},
@@ -227,7 +229,7 @@ private:
       ret = 1;
       break;
     default:
-      warning("igc.h: IgcFormat::get_ext_factor(): unknown extension (%i), returning factor of zero.\n",int(type));
+      gbWarning("igc.h: IgcFormat::get_ext_factor(): unknown extension (%i), returning factor of zero.\n",int(type));
       break;
     }
     return ret;
@@ -292,7 +294,7 @@ private:
   gbfile* file_out{};
   char manufacturer[4] {};
   const route_head* head{};
-  char* timeadj = nullptr;
+  OptionString timeadj;
 
   QVector<arglist_t> igc_args = {
     {
@@ -452,7 +454,7 @@ struct igc_fsdata : public FormatSpecificData {
       ret = gfo;
       break;
     default:
-      fatal("igc.h: igc_fsdata::get_value(IgcFormat::igc_ext_type_t defn_type): Invalid igc_ext_type\n");
+      gbFatal("igc.h: igc_fsdata::get_value(IgcFormat::igc_ext_type_t defn_type): Invalid igc_ext_type\n");
       break;
     }
     return ret;
@@ -492,7 +494,7 @@ struct igc_fsdata : public FormatSpecificData {
       ret = gfo;
       break;
     default:
-      fatal("igc.h: igc_fsdata::get_value(KmlFormat::wp_field defn_type): Invalid wp_field\n");
+      gbFatal("igc.h: igc_fsdata::get_value(KmlFormat::wp_field defn_type): Invalid wp_field\n");
       break;
     }
     return ret;

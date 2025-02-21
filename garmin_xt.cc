@@ -35,7 +35,6 @@
 #include "gbfile.h"  // for gbfread, gbfgetuint16, gbfseek, gbfgetc, gbfgetuint32, gbfclose, gbfeof, gbfopen
 
 
-#define MYNAME "Garmin_XT"
 #define GARMIN_XT_ELE 31500/65536
 #define DATABLOCKSIZE 1
 #define STRK_BLOCK_SIZE 97
@@ -50,7 +49,7 @@
 void
 GarminXTFormat::rd_init(const QString& fname)
 {
-  fin = gbfopen(fname, "rb", MYNAME);
+  fin = gbfopen(fname, "rb");
 }
 
 void
@@ -74,7 +73,7 @@ GarminXTFormat::format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_
 
   // get the option for the processing the track name
   if (opt_trk_header) {
-    method = xstrtoi(opt_trk_header, nullptr, 10);
+    method = opt_trk_header.get_result();
     // if method is out of range set to default
     if ((method < 0) || (method > 1)) {
       method = 0;
@@ -315,7 +314,7 @@ GarminXTFormat::format_garmin_xt_proc_atrk()
 
   // get the option for the processing the track name
   if (opt_trk_header) {
-    method = xstrtoi(opt_trk_header, nullptr, 10);
+    method = opt_trk_header.get_result();
   }
 
   if (! track) {
@@ -373,7 +372,7 @@ void
 GarminXTFormat::read()
 {
   // Saved Tracks file
-  if (strcmp(opt_xt_ftype, "STRK") == 0) {
+  if (opt_xt_ftype.get() == "STRK") {
     format_garmin_xt_proc_strk();
   } else { // Active Track file
     format_garmin_xt_proc_atrk();

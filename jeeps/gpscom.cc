@@ -44,8 +44,6 @@ int32_t GPS_Command_Off(const char* port)
   GPS_Packet tra;
   GPS_Packet rec;
 
-  GPS_Util_Little();
-
   if (!GPS_Device_On(port, &fd)) {
     return gps_errno;
   }
@@ -95,7 +93,7 @@ int32_t GPS_Command_Get_Waypoint(const char* port, GPS_PWay** way, pcb_fn cb)
   if (gps_category_transfer) {
     ret = GPS_A101_Get(port);
     if (!ret) {
-      fatal("blah");
+      gbFatal("blah\n");
       return PROTOCOL_ERROR;
     }
 
@@ -1256,7 +1254,7 @@ int32_t GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int3
         continue;
       }
       if (wpt[i] == nullptr || ctk[j] == nullptr) {
-        fatal("Internal error in GPS_Command_Send_Track_As_Course");
+        gbFatal("Internal error in GPS_Command_Send_Track_As_Course\n");
       }
       dist = gcgeodist(wpt[i]->lat, wpt[i]->lon, ctk[j]->lat, ctk[j]->lon);
       if (dist < min_dist) {
@@ -1267,7 +1265,7 @@ int32_t GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int3
     }
 
     if (wpt[i] == nullptr) {
-      fatal("Internal error in GPS_Command_Send_Track_As_Course: no wpt");
+      gbFatal("Internal error in GPS_Command_Send_Track_As_Course: no wpt\n");
     }
     cpt[i+n_cpt] = GPS_Course_Point_New();
     strncpy(cpt[i+n_cpt]->name, wpt[i]->cmnt,

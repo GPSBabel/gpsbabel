@@ -21,6 +21,7 @@
 
 #include "xmlgeneric.h"
 
+#include <algorithm>             // for for_each
 #include <utility>               // for as_const
 
 #include <QByteArray>            // for QByteArray
@@ -34,11 +35,9 @@
 //#include <QtCore>                // for QHash, QIODeviceBase::ReadOnly
 #include <QtGlobal>              // for qPrintable
 
-#include "defs.h"                // for fatal
+#include "defs.h"                // for gbFatal
 #include "src/core/file.h"       // for File
 
-
-#define MYNAME "XML Reader"
 
 /***********************************************************************
  * These implement a simple interface for "generic" XML that
@@ -66,30 +65,27 @@ XmlGenericReader::xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 
 void
 XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
-         const char* const* ignorelist, const char* const* skiplist)
+         const QStringList& ignorelist, const QStringList& skiplist)
 {
   rd_fname = fname;
 
   if (encoding != nullptr) {
     codec = QTextCodec::codecForName(encoding);
     if (codec == nullptr) {
-      fatal(MYNAME " : codec \"%s\" is not available.\n", encoding);
+      gbFatal("codec \"%s\" is not available.\n", encoding);
     }
   } else {
     codec = QTextCodec::codecForName("UTF-8");
   }
 
   xg_shortcut_taglist.clear();
-  if (ignorelist != nullptr) {
-    for (; ignorelist && *ignorelist; ++ignorelist) {
-      xg_shortcut_taglist.insert(QString::fromUtf8(*ignorelist), xg_shortcut::sc_ignore);
-    }
-  }
-  if (skiplist != nullptr) {
-    for (; skiplist && *skiplist; ++skiplist) {
-      xg_shortcut_taglist.insert(QString::fromUtf8(*skiplist), xg_shortcut::sc_skip);
-    }
-  }
+  std::for_each(ignorelist.cbegin(), ignorelist.cend(), [this](const QString& tag)->void {
+    xg_shortcut_taglist.insert(tag, xg_shortcut::sc_ignore);
+  });
+
+  std::for_each(skiplist.cbegin(), skiplist.cend(), [this](const QString& tag)->void {
+    xg_shortcut_taglist.insert(tag, xg_shortcut::sc_skip);
+  });
 }
 
 XmlGenericReader::xg_shortcut
@@ -192,9 +188,9 @@ void XmlGenericReader::xml_read()
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    fatal(MYNAME " :Read error: %s (%s, line %lld, col %lld)\n",
-          qPrintable(reader.errorString()),
-          qPrintable(file.fileName()),
+    gbFatal("Read error: %s (%s, line %lld, col %lld)\n",
+          gbLogCStr(reader.errorString()),
+          gbLogCStr(file.fileName()),
           reader.lineNumber(),
           reader.columnNumber());
   }
@@ -217,8 +213,8 @@ void XmlGenericReader::xml_readstring(const char* str)
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    fatal(MYNAME " :Read error: %s (%s, line %lld, col %lld)\n",
-          qPrintable(reader.errorString()),
+    gbFatal("Read error: %s (%s, line %lld, col %lld)\n",
+          gbLogCStr(reader.errorString()),
           "unknown",
           reader.lineNumber(),
           reader.columnNumber());

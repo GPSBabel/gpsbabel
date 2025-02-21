@@ -29,7 +29,7 @@
 
 #include <optional>          // for optional
 
-#include "defs.h"            // for fatal, list_codecs
+#include "defs.h"            // for gbFatal, list_codecs
 #include "src/core/textstream.h"
 #include "src/core/file.h"   // for File
 
@@ -37,7 +37,7 @@
 namespace gpsbabel
 {
 
-void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char* module, const char* codec_name)
+void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char* codec_name)
 {
   std::optional<QStringConverter::Encoding> encoding = QStringConverter::encodingForName(codec_name);
   bool use_stringconverter = encoding.has_value();
@@ -77,10 +77,10 @@ void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char
       }
     }
   } else {
-    device_ = new gpsbabel::CodecDevice(fname, module, codec_name);
+    device_ = new gpsbabel::CodecDevice(fname, codec_name);
     bool status = device_->open(mode);
     if (!status) {
-      fatal("%s: device not open %d\n", module, status);
+      gbFatal("device not open %d\n", status);
     }
     setDevice(device_);
     setEncoding(QStringConverter::Utf16);

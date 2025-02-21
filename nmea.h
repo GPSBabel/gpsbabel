@@ -22,18 +22,19 @@
 #ifndef NMEA_H_INCLUDED_
 #define NMEA_H_INCLUDED_
 
-#include <QByteArray>         // for QByteArray
-#include <QDate>              // for QDate
-#include <QDateTime>          // for QDateTime
-#include <QList>              // for QList
-#include <QString>            // for QString
-#include <QTime>              // for QTime
-#include <QVector>            // for QVector
+#include <QByteArray>  // for QByteArray
+#include <QDate>       // for QDate
+#include <QDateTime>   // for QDateTime
+#include <QList>       // for QList
+#include <QString>     // for QString
+#include <QTime>       // for QTime
+#include <QVector>     // for QVector
 
 #include "defs.h"
-#include "format.h"           // for Format
-#include "gbfile.h"           // for gbfile
-#include "mkshort.h"          // for MakeShort
+#include "format.h"    // for Format
+#include "gbfile.h"    // for gbfile
+#include "mkshort.h"   // for MakeShort
+#include "option.h"    // for OptionBool, OptionString
 
 
 class NmeaFormat : public Format
@@ -110,7 +111,7 @@ private:
   void nmea_fix_timestamps(route_head* track);
   static bool notalkerid_strmatch(const QByteArray& s1, const char* sentenceFormatterMnemonicCode);
   void nmea_parse_one_line(const QByteArray& ibuf);
-  static void safe_print(int cnt, const char* b);
+  static void safe_print(const QString& b);
   int hunt_sirf();
   void nmea_wayptpr(const Waypoint* wpt) const;
   void nmea_track_init(const route_head* unused);
@@ -135,22 +136,21 @@ private:
   int without_date{};	/* number of created trackpoints without a valid date */
   QDate opt_tm;	/* converted "date" parameter */
 
-  char* opt_gprmc{};
-  char* opt_gpgga{};
-  char* opt_gpvtg{};
-  char* opt_gpgsa{};
-  char* snlenopt{};
-  char* optdate{};
-  char* getposnarg{};
-  char* opt_sleep{};
-  char* opt_baud{};
-  char* opt_append{};
-  char* opt_gisteq{};
-  char* opt_ignorefix{};
+  OptionBool opt_gprmc;
+  OptionBool opt_gpgga;
+  OptionBool opt_gpvtg;
+  OptionBool opt_gpgsa;
+  OptionInt snlenopt;
+  OptionInt optdate;
+  OptionBool getposnarg;
+  OptionInt opt_sleep;
+  OptionInt opt_baud;
+  OptionBool opt_append;
+  OptionBool opt_gisteq;
+  OptionBool opt_ignorefix;
 
-  long sleepms{};
+  int sleepms{};
   int getposn{};
-  int append_output{};
   bool amod_waypoint{};
 
   QDateTime last_write_time;

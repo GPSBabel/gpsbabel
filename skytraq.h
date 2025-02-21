@@ -25,6 +25,7 @@
 #ifndef SKYTRAQ_H_INCLUDED_
 #define SKYTRAQ_H_INCLUDED_
 
+#include <QList>      // for QList
 #include <QDateTime>  // for QDateTime
 #include <QString>    // for QString
 #include <QVector>    // for QVector
@@ -34,6 +35,7 @@
 #include "defs.h"
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
+#include "option.h"   // for OptionString, OptionBool
 
 
 class SkytraqBase
@@ -110,38 +112,38 @@ protected:
 
   /* Member Functions */
 
-  [[gnu::format(printf, 2, 3)]] static void db(int l, const char* msg, ...);
-  void rd_drain() const;
-  int rd_char(int* errors) const;
-  int rd_buf(uint8_t* buf, int len) const;
-  int rd_word() const;
-  void wr_char(int c) const;
-  void wr_buf(const unsigned char* str, int len) const;
+  [[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...);
+  void rd_drain();
+  int rd_char(int* errors);
+  int rd_buf(uint8_t* buf, int len);
+  int rd_word();
+  void wr_char(int c);
+  void wr_buf(const unsigned char* str, int len);
   static int skytraq_calc_checksum(const unsigned char* buf, int len);
-  int skytraq_rd_msg(void* payload, unsigned int len) const;
-  void skytraq_wr_msg(const uint8_t* payload, int len) const;
-  int skytraq_expect_ack(uint8_t id) const;
-  int skytraq_expect_msg(uint8_t id, uint8_t* payload, int len) const;
-  int skytraq_wr_msg_verify(const uint8_t* payload, int len) const;
-  int skytraq_system_restart() const;
-  int skytraq_set_baud(int baud) const;
-  int skytraq_configure_logging() const;
-  int skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total) const;
+  int skytraq_rd_msg(void* payload, unsigned int len);
+  void skytraq_wr_msg(const uint8_t* payload, int len);
+  int skytraq_expect_ack(uint8_t id);
+  int skytraq_expect_msg(uint8_t id, uint8_t* payload, int len);
+  int skytraq_wr_msg_verify(const uint8_t* payload, int len);
+  int skytraq_system_restart();
+  int skytraq_set_baud(int baud);
+  int skytraq_configure_logging();
+  int skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint16_t* sectors_total);
   static unsigned int me_read32(const unsigned char* p);
-  QDateTime gpstime_to_qdatetime(int week, int sec) const;
+  QDateTime gpstime_to_qdatetime(int week, int sec);
   static void ECEF_to_LLA(double x, double y, long int z, double* lat, double* lon, double* alt);
   static void state_init(read_state* pst);
-  Waypoint* make_trackpoint(read_state* st, double lat, double lon, double alt) const;
-  int process_data_item(read_state* pst, const item_frame* pitem, int len) const;
-  int process_data_sector(read_state* pst, const uint8_t* buf, int len) const;
-  int skytraq_read_single_sector(unsigned int sector, uint8_t* buf) const;
-  int skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf) const;
-  void skytraq_read_tracks() const;
-  int skytraq_probe() const;
-  int skytraq_erase() const;
-  void skytraq_set_location() const;
+  Waypoint* make_trackpoint(read_state* st, double lat, double lon, double alt);
+  int process_data_item(read_state* pst, const item_frame* pitem, int len);
+  int process_data_sector(read_state* pst, const uint8_t* buf, int len);
+  int skytraq_read_single_sector(unsigned int sector, uint8_t* buf);
+  int skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf);
+  void skytraq_read_tracks();
+  int skytraq_probe();
+  int skytraq_erase();
+  void skytraq_set_location();
   void skytraq_rd_init(const QString& fname);
-  void skytraq_read() const;
+  void skytraq_read();
   void skytraq_rd_deinit();
 
   /* Data Members */
@@ -149,18 +151,18 @@ protected:
   void* serial_handle = nullptr;		/* IO file descriptor */
   int skytraq_baud = 0;		/* detected baud rate */
 
-  char* opt_erase = nullptr;		/* erase after read? (0/1) */
-  char* opt_initbaud = nullptr;		/* baud rate used to init device */
-  char* opt_dlbaud = nullptr;		/* baud rate used for downloading tracks */
-  char* opt_read_at_once = nullptr;	/* number of sectors to read at once (Venus6 only) */
-  char* opt_first_sector = nullptr;	/* first sector to be read from the device (default: 0) */
-  char* opt_last_sector = nullptr;	/* last sector to be read from the device (default: smart read everything) */
-  char* opt_dump_file = nullptr;		/* dump raw data to this file (optional) */
-  char* opt_no_output = nullptr;		/* disable output? (0/1) */
-  char* opt_set_location = nullptr;	/* set if the "targetlocation" options was used */
-  char* opt_configure_logging = nullptr;
-  char* opt_gps_utc_offset = nullptr;
-  char* opt_gps_week_rollover = nullptr;
+  OptionBool    opt_erase;		/* erase after read? (0/1) */
+  OptionInt opt_initbaud;		/* baud rate used to init device */
+  OptionInt opt_dlbaud;		/* baud rate used for downloading tracks */
+  OptionInt opt_read_at_once;	/* number of sectors to read at once (Venus6 only) */
+  OptionInt opt_first_sector;	/* first sector to be read from the device (default: 0) */
+  OptionInt opt_last_sector;	/* last sector to be read from the device (default: smart read everything) */
+  OptionString opt_dump_file;		/* dump raw data to this file (optional) */
+  OptionBool    opt_no_output;		/* disable output? (0/1) */
+  OptionString opt_set_location;	/* set if the "targetlocation" options was used */
+  OptionString opt_configure_logging;
+  OptionInt opt_gps_utc_offset;
+  OptionInt opt_gps_week_rollover;
 };
 
 class SkytraqFormat : public Format, private SkytraqBase
@@ -334,16 +336,16 @@ private:
   /* Member Functions */
 
   static void lla2ecef(double lat, double lng, double alt, double* ecef_x, double* ecef_y, double* ecef_z);
-  void miniHomer_get_poi() const;
-  int miniHomer_set_poi(uint16_t poinum, const char* opt_poi) const;
+  void miniHomer_get_poi();
+  int miniHomer_set_poi(uint16_t poinum, const QString& opt_poi);
 
   /* Data Members */
 
-  char* opt_set_poi_home = nullptr;	/* set if a "poi" option was used */
-  char* opt_set_poi_car = nullptr;	/* set if a "poi" option was used */
-  char* opt_set_poi_boat = nullptr;	/* set if a "poi" option was used */
-  char* opt_set_poi_heart = nullptr;	/* set if a "poi" option was used */
-  char* opt_set_poi_bar = nullptr;	/* set if a "poi" option was used */
+  OptionString opt_set_poi_home;	/* set if a "poi" option was used */
+  OptionString opt_set_poi_car;	/* set if a "poi" option was used */
+  OptionString opt_set_poi_boat;	/* set if a "poi" option was used */
+  OptionString opt_set_poi_heart;	/* set if a "poi" option was used */
+  OptionString opt_set_poi_bar;	/* set if a "poi" option was used */
 
   QVector<arglist_t> miniHomer_args = {
     { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200", nullptr },

@@ -21,12 +21,14 @@
 #ifndef TEXT_H_INCLUDED_
 #define TEXT_H_INCLUDED_
 
+#include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"               // for Format
 #include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionBool, OptionString
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -63,12 +65,14 @@ private:
   gpsbabel::TextStream* file_out{nullptr};
   MakeShort* mkshort_handle{};
 
-  char* suppresssep = nullptr;
-  char* txt_encrypt = nullptr;
-  char* includelogs = nullptr;
-  char* degformat = nullptr;
-  char* altunits = nullptr;
-  char* split_output = nullptr;
+  OptionBool suppresssep;
+  OptionBool txt_encrypt;
+  OptionBool includelogs;
+  OptionString opt_degformat;
+  OptionString opt_altunits;
+  OptionBool split_output;
+  char degformat{};
+  char altunits{};
   int waypoint_count{};
   QString output_name;
 
@@ -87,11 +91,11 @@ private:
       "Include groundspeak logs if present", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "degformat", &degformat,
+      "degformat", &opt_degformat,
       "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
-      "altunits", &altunits,
+      "altunits", &opt_altunits,
       "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {

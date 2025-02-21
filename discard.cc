@@ -24,9 +24,7 @@
 #include <QDebug>              // for QDebug
 #include <QRegularExpression>  // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpressionMatch
 
-#include <cstdlib>             // for strtod
-
-#include "defs.h"              // for Waypoint, fatal, route_head (ptr only), xstrtoi, del_marked_wpts, route_del_marked_wpts, route_disp_all, track_del_marked_wpts, track_disp_all, waypt_disp_all, fix_none, fix_unknown
+#include "defs.h"              // for Waypoint, gbFatal, route_head (ptr only), del_marked_wpts, route_del_marked_wpts, route_disp_all, track_del_marked_wpts, track_disp_all, waypt_disp_all, fix_none, fix_unknown
 #include "src/core/logging.h"  // for FatalMsg
 
 
@@ -131,53 +129,53 @@ QRegularExpression DiscardFilter::generateRegExp(const QString& glob_pattern)
 void DiscardFilter::init()
 {
   if (hdopopt) {
-    hdopf = strtod(hdopopt, nullptr);
+    hdopf = hdopopt.get_result();
   } else {
     hdopf = -1.0;
   }
 
   if (vdopopt) {
-    vdopf = strtod(vdopopt, nullptr);
+    vdopf = vdopopt.get_result();
   } else {
     vdopf = -1.0;
   }
 
   if (satopt) {
-    satpf = xstrtoi(satopt, nullptr, 10);
+    satpf = satopt.get_result();
   } else {
     satpf = -1;
   }
 
   if (eleminopt) {
-    eleminpf = xstrtoi(eleminopt, nullptr, 10);
+    eleminpf = eleminopt.get_result();
   }
 
   if (elemaxopt) {
-    elemaxpf = xstrtoi(elemaxopt, nullptr, 10);
+    elemaxpf = elemaxopt.get_result();
   }
 
   if (nameopt) {
     name_regex = generateRegExp(nameopt);
     if (!name_regex.isValid()) {
-      fatal(FatalMsg() << "discard: matchname option is an invalid expression.");
+      gbFatal(FatalMsg() << "discard: matchname option is an invalid expression.");
     }
   }
   if (descopt) {
     desc_regex = generateRegExp(descopt);
     if (!desc_regex.isValid()) {
-      fatal(FatalMsg() << "discard: matchdesc option is an invalid expression.");
+      gbFatal(FatalMsg() << "discard: matchdesc option is an invalid expression.");
     }
   }
   if (cmtopt) {
     cmt_regex = generateRegExp(cmtopt);
     if (!cmt_regex.isValid()) {
-      fatal(FatalMsg() << "discard: matchcmt option is an invalid expression.");
+      gbFatal(FatalMsg() << "discard: matchcmt option is an invalid expression.");
     }
   }
   if (iconopt) {
     icon_regex = generateRegExp(iconopt);
     if (!icon_regex.isValid()) {
-      fatal(FatalMsg() << "discard: matchicon option is an invalid expression.");
+      gbFatal(FatalMsg() << "discard: matchicon option is an invalid expression.");
     }
   }
 }

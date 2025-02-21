@@ -1,4 +1,8 @@
-cmake_minimum_required(VERSION 3.16)
+if(APPLE)
+  cmake_minimum_required(VERSION 3.21.1)
+else()
+  cmake_minimum_required(VERSION 3.16)
+endif()
 
 include(CMakeDependentOption)
 include(CheckIncludeFile)
@@ -6,7 +10,7 @@ include(CheckIncludeFile)
 include(gbversion.cmake)
 project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Do this after we set up common variables but before creating other
@@ -33,25 +37,38 @@ if(${Qt6Core_VERSION} VERSION_LESS 6.2)
 else()
   message(STATUS "Using Qt6 version ${Qt6Core_VERSION}")
 endif()
+if(${Qt6Core_VERSION} VERSION_GREATER_EQUAL 6.5)
+  target_compile_definitions(gpsbabel PRIVATE LIGHTWEIGHT_TIMEZONES_SUPPORTED)
+endif()
 
 option(GPSBABEL_ENABLE_PCH "enable precompiled headers." ON)
 if (GPSBABEL_ENABLE_PCH)
+  # This list is from defs.h.
   target_precompile_headers(gpsbabel PRIVATE
-    "$<$<COMPILE_LANGUAGE:CXX>:<algorithm$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<cmath$<ANGLE-R>>"
-    "$<$<COMPILE_LANGUAGE:CXX>:<cstdarg$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<cstddef$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<cstdint$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<cstdio$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<ctime$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<numbers$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<optional$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<utility$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QByteArray$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QDate$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QTime$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QDateTime$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QDebug$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QList$<ANGLE-R>>"
-    "$<$<COMPILE_LANGUAGE:CXX>:<QScopedPointer$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QString$<ANGLE-R>>"
+    "$<$<COMPILE_LANGUAGE:CXX>:<QStringView$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QTextCodec$<ANGLE-R>>"
-    "$<$<COMPILE_LANGUAGE:CXX>:<QVector$<ANGLE-R>>"
+  )
+  if(${Qt6Core_VERSION} VERSION_GREATER_EQUAL 6.5)
+    target_precompile_headers(gpsbabel PRIVATE
+      "$<$<COMPILE_LANGUAGE:CXX>:<QTimeZone$<ANGLE-R>>"
+    )
+  endif()
+  target_precompile_headers(gpsbabel PRIVATE
     "$<$<COMPILE_LANGUAGE:CXX>:<Qt$<ANGLE-R>>"
     "$<$<COMPILE_LANGUAGE:CXX>:<QtGlobal$<ANGLE-R>>"
   )
@@ -165,6 +182,7 @@ set(SUPPORT
   inifile.cc
   main.cc
   mkshort.cc
+  option.cc
   parse.cc
   rgbcolors.cc
   route.cc
@@ -338,9 +356,7 @@ list(SORT HEADERS)
 target_sources(gpsbabel PRIVATE ${SOURCES} ${HEADERS})
 
 # We don't care about stripping things out of the build.  Full monty, baby.
-target_compile_definitions(gpsbabel PRIVATE MAXIMAL_ENABLED)
 target_compile_definitions(gpsbabel PRIVATE FILTERS_ENABLED)
-target_compile_definitions(gpsbabel PRIVATE CSVFMTS_ENABLED)
 
 target_link_libraries(gpsbabel PRIVATE ${QT_LIBRARIES} ${LIBS})
 
@@ -429,6 +445,7 @@ set(TESTS
   validate_formats
   validate
   vcard
+  vecs
   xcsv
 )
 

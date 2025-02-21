@@ -20,7 +20,7 @@
  */
 
 #include <algorithm>                    // for sort
-#include <cctype>                       // for isspace, isalpha, ispunct, tolower, toupper
+#include <cassert>                      // for assert
 #include <cerrno>                       // for errno
 #include <climits>                      // for INT_MAX, INT_MIN
 #include <cmath>                        // for fabs, floor
@@ -35,6 +35,9 @@
 #include <QDateTime>                    // for QDateTime
 #include <QFileInfo>                    // for QFileInfo
 #include <QList>                        // for QList
+#include <QRegularExpression>               // for QRegularExpression
+#include <QRegularExpressionMatch>          // for QRegularExpressionMatch
+#include <QRegularExpressionMatchIterator>  // for QRegularExpressionMatchIterator
 #include <QString>                      // for QString
 #include <QTextBoundaryFinder>          // for QTextBoundaryFinder, QTextBoundaryFinder::Grapheme
 #include <QTextCodec>                   // for QTextCodec
@@ -63,7 +66,7 @@ xmalloc(size_t size)
   void* obj = malloc(size);
 
   if (!obj) {
-    fatal("gpsbabel: Unable to allocate %zu bytes of memory.\n", size);
+    gbFatal("gpsbabel: Unable to allocate %zu bytes of memory.\n", size);
   }
 
   return obj;
@@ -75,7 +78,7 @@ xcalloc(size_t nmemb, size_t size)
   void* obj = calloc(nmemb, size);
 
   if (!obj) {
-    fatal("gpsbabel: Unable to allocate %zu units of %zu bytes of memory.\n", nmemb, size);
+    gbFatal("gpsbabel: Unable to allocate %zu units of %zu bytes of memory.\n", nmemb, size);
   }
 
   return obj;
@@ -93,36 +96,10 @@ xstrdup(const char* s)
   char* o = s ? strdup(s) : strdup("");
 
   if (!o) {
-    fatal("gpsbabel: Unable to allocate %zu bytes of memory.\n", strlen(s));
+    gbFatal("gpsbabel: Unable to allocate %zu bytes of memory.\n", strlen(s));
   }
 
   return o;
-}
-
-char* xstrdup(const QString& s)
-{
-  return xstrdup(CSTR(s));
-}
-
-/*
- * Duplicate at most sz bytes in str.
- */
-char*
-xstrndup(const char* str, size_t sz)
-{
-  size_t newlen = 0;
-  const char* cin = str;
-
-  while ((newlen < sz) && (*cin != '\0')) {
-    newlen++;
-    cin++;
-  }
-
-  char* newstr = (char*) xmalloc(newlen + 1);
-  memcpy(newstr, str, newlen);
-  newstr[newlen] = 0;
-
-  return newstr;
 }
 
 void*
@@ -131,7 +108,7 @@ xrealloc(void* p, size_t s)
   char* o = (char*) realloc(p, s);
 
   if (!o) {
-    fatal("gpsbabel: Unable to realloc %zu bytes of memory.\n", s);
+    gbFatal("gpsbabel: Unable to realloc %zu bytes of memory.\n", s);
   }
 
   return o;
@@ -141,26 +118,26 @@ xrealloc(void* p, size_t s)
  * Wrapper for open that honours - for stdin, stdout, unifies error text.
  */
 FILE*
-xfopen(const char* fname, const char* type, const char* errtxt)
+xfopen(const QString& fname, const char* type)
 {
   bool am_writing = strchr(type, 'w') != nullptr;
 
-  if (fname == nullptr) {
-    fatal("%s must have a filename specified for %s.\n",
-          errtxt, am_writing ? "write" : "read");
+  if (fname.isEmpty()) {
+    gbFatal("must have a filename specified for %s.\n",
+          am_writing ? "write" : "read");
   }
 
-  if (0 == strcmp(fname, "-")) {
+  if (fname == "-") {
     return am_writing ? stdout : stdin;
   }
-  FILE* f = ufopen(QString::fromUtf8(fname), type);
+  FILE* f = ufopen(fname, type);
   if (nullptr == f) {
     // There are some possible vagaries of using Qt for the full pathname
     // vs. the STD C library used for the actual file I/O. It's worth it
     // to get a better error message.
     QFileInfo info(fname);
-    fatal("%s cannot open '%s' for %s.  Error was '%s'.\n",
-          errtxt, qPrintable(info.absoluteFilePath()),
+    gbFatal("cannot open '%s' for %s.  Error was '%s'.\n",
+          gbLogCStr(info.absoluteFilePath()),
           am_writing ? "write" : "read",
           strerror(errno));
   }
@@ -317,6 +294,31 @@ QDateTime
 make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset)
 {
   QDateTime result;
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+  QTimeZone timezone;
+
+  if (is_localtime) {
+    if (force_utc) { // override with passed option value
+      timezone = QTimeZone::fromSecondsAheadOfUtc(utc_offset);
+    } else {
+      timezone = QTimeZone::LocalTime;
+    }
+  } else {
+    timezone = QTimeZone::UTC;
+  }
+
+  if (date.isValid() && time.isValid()) {
+    result = QDateTime(date, time, timezone);
+  } else if (time.isValid()) {
+    // TODO: Wouldn't it be better to return an invalid QDateTime
+    // that contained an invalid QDate, a valid QTime and a valid
+    // Qt::TimeSpec?
+    result = QDateTime(QDate(1970, 1, 1), time, timezone);
+  } else if (date.isValid()) {
+    //  no time, use start of day in the given Qt::TimeSpec.
+    result = date.startOfDay(timezone);
+  }
+#else
   Qt::TimeSpec timespec;
   int offset = 0;
 
@@ -349,6 +351,7 @@ make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc
     result = date.startOfDay(timespec, offset);
   }
 
+#endif
   return result;
 }
 
@@ -370,7 +373,7 @@ gpsbabel::DateTime
 current_time()
 {
   if (gpsbabel_testmode()) {
-    return QDateTime::fromMSecsSinceEpoch(0, Qt::UTC);
+    return QDateTime::fromMSecsSinceEpoch(0, QtUTC);
   }
 
   return QDateTime::currentDateTimeUtc();
@@ -384,14 +387,14 @@ current_time()
  */
 QDateTime dotnet_time_to_qdatetime(long long dotnet)
 {
-  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QtUTC);
   qint64 millisecs = (dotnet + 5000)/ 10000;
   return epoch.addMSecs(millisecs);
 }
 
 long long qdatetime_to_dotnet_time(const QDateTime& dt)
 {
-  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), Qt::UTC);
+  QDateTime epoch = QDateTime(QDate(1, 1, 1), QTime(0, 0, 0), QtUTC);
   qint64 millisecs = epoch.msecsTo(dt);
   return millisecs * 10000;
 }
@@ -570,66 +573,60 @@ rot13(const QString& s)
  */
 
 QString
-convert_human_date_format(const char* human_datef)
+convert_human_date_format(const QString& human_datef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  QString result;
+  QChar prev = '\0';
   int ylen = 0;
 
-  for (const char* cin = human_datef; *cin; cin++) {
-    char okay = 1;
+  for (const QChar cin : human_datef) {
+    bool okay = true;
 
-    if (toupper(*cin) != 'Y') {
+    if (cin.toUpper() != 'Y') {
       ylen = 0;
     }
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'y':
       case 'Y':
         if (prev != 'Y') {
-          strcat(cout, "%y");
-          cout += 2;
+          result.append("%y");
           prev = 'Y';
         }
         ylen++;
         if (ylen > 2) {
-          *(cout-1) = 'Y';
+          result.back() = 'Y';
         }
         break;
       case 'm':
       case 'M':
         if (prev != 'M') {
-          strcat(cout, "%m");
-          cout += 2;
+          result.append("%m");
           prev = 'M';
         }
         break;
       case 'd':
       case 'D':
         if (prev != 'D') {
-          strcat(cout, "%d");
-          cout += 2;
+          result.append("%d");
           prev = 'D';
         }
         break;
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin)) {
-      *cout++ = *cin;
+    } else if (cin.isPunct()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in date format \"%s\"!\n", *cin, human_datef);
+    if (!okay) {
+      gbFatal(FatalMsg().nospace() << "Invalid character " << cin << " in date format " << human_datef << "!");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return result;
 }
 
 /*
@@ -638,22 +635,20 @@ convert_human_date_format(const char* human_datef)
  */
 
 QString
-convert_human_time_format(const char* human_timef)
+convert_human_time_format(const QString& human_timef)
 {
-  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  char* cout = result;
-  char prev = '\0';
+  QString result;
+  QChar prev = '\0';
 
-  for (const char* cin = human_timef; *cin; cin++) {
-    int okay = 1;
+  for (const QChar cin : human_timef) {
+    bool okay = true;
 
-    if (isalpha(*cin)) {
-      switch (*cin) {
+    if (cin.isLetter()) {
+      switch (cin.unicode()) {
       case 'S':
       case 's':
         if (prev != 'S') {
-          strcat(cout, "%S");
-          cout += 2;
+          result.append("%S");
           prev = 'S';
         }
         break;
@@ -661,69 +656,62 @@ convert_human_time_format(const char* human_timef)
       case 'M':
       case 'm':
         if (prev != 'M') {
-          strcat(cout, "%M");
-          cout += 2;
+          result.append("%M");
           prev = 'M';
         }
         break;
 
       case 'h':				/* 12-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%l");	/* 1 .. 12 */
-          cout += 2;
+          result.append("%l");	/* 1 .. 12 */
           prev = 'H';
         } else {
-          *(cout-1) = 'I';  /* 01 .. 12 */
+          result.back() = 'I';  /* 01 .. 12 */
         }
         break;
 
       case 'H':				/* 24-hour-clock */
         if (prev != 'H') {
-          strcat(cout, "%k");
-          cout += 2;
+          result.append("%k");
           prev = 'H';
         } else {
-          *(cout-1) = 'H';
+          result.back() = 'H';
         }
         break;
 
       case 'x':
         if (prev != 'X') {
-          strcat(cout, "%P");
-          cout += 2;
+          result.append("%P");
           prev = 'X';
         } else {
-          *(cout-1) = 'P';
+          result.back() = 'P';
         }
         break;
 
       case 'X':
         if (prev != 'X') {
-          strcat(cout, "%p");
-          cout += 2;
+          result.append("%p");
           prev = 'X';
         } else {
-          *(cout-1) = 'p';
+          result.back() = 'p';
         }
         break;
 
       default:
-        okay = 0;
+        okay = false;
       }
-    } else if (ispunct(*cin) || isspace(*cin)) {
-      *cout++ = *cin;
+    } else if (cin.isPunct() || cin.isSpace()) {
+      result.append(cin);
       prev = '\0';
     } else {
-      okay = 0;
+      okay = false;
     }
 
-    if (okay == 0) {
-      fatal("Invalid character \"%c\" in time format \"%s\"!\n", *cin, human_timef);
+    if (!okay) {
+      gbFatal(FatalMsg().nospace() << "Invalid character " << cin << " in time format " << human_timef << "!");
     }
   }
-  QString rv(result);
-  xfree(result);
-  return rv;
+  return result;
 }
 
 
@@ -770,92 +758,29 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
 /*
  * Get rid of potentially nasty HTML that would influence another record
  * that includes;
- * <body> - to stop backgrounds/background colours from being loaded
+ * <body> - to stop backgrounds/background colors from being loaded
  * </body> and </html>- stop processing altogether
  * <style> </style> - stop overriding styles for everything
  */
 QString
 strip_nastyhtml(const QString& in)
 {
-  char* returnstr = xstrdup(in);
-  char* lcstr = xstrdup(in.toLower());
+  static const QRegularExpression htmlre("<html.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(htmlre.isValid());
+  static const QRegularExpression bodyre("<body.*?>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(bodyre.isValid());
+  static const QRegularExpression stylere("<style.*?>.*?</style>", QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption);
+  assert(stylere.isValid());
+  QString out(in);
 
-  while (char* lcp = strstr(lcstr, "<body>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
-    sp++;
-    *sp++ = '!';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<body")) {   /* becomes <!--        --> */
-    char* sp = returnstr + (lcp - lcstr) ;
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    while ((*sp) && (*sp != '>')) {
-      sp++;
-    }
-    *--sp = '-';
-    *--sp = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</body>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</html>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<style")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
-    sp++;
-    *sp++ = '!';
-    *sp++ = '-';
-    *sp++ = '-';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp = ' ';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "</style>")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *sp++ = '-';
-    *sp++ = '-';
-    *lcp = '*';         /* so we wont find it again */
-  }
-  while (char* lcp = strstr(lcstr, "<image")) {
-    char* sp = returnstr + (lcp - lcstr) ; /* becomes <img */
-    sp+=3;
-    *sp++ = 'g';
-    *sp++ = ' ';
-    *sp++ = ' ';
-    *lcp = '*';
-  }
-  xfree(lcstr);
-  QString rv(returnstr);
-  xfree(returnstr);
-  return rv;
+  out.replace(bodyre, "");
+  out.replace("</body>", "", Qt::CaseInsensitive);
+  out.replace(htmlre, "");
+  out.replace("</html>", "", Qt::CaseInsensitive);
+  out.replace(stylere, "");
+  out.replace("<image", "<img", Qt::CaseInsensitive);
+
+  return out;
 }
 
 /*
@@ -874,82 +799,55 @@ QString strip_html(const QString& utfstring)
   doc.setHtml(utfstring);
   return doc.toPlainText().simplified();
 #else
-  char* out;
-  char* instr;
-  char tag[8];
-  unsigned short int taglen = 0;
+  static const QRegularExpression re("(?:<(?<tag>[^ >]*).*?>)|(?:&(?<entity>.*?);)|(?<other>[^<&]+)|(?<fragment>.+)",
+                                     QRegularExpression::DotMatchesEverythingOption);
+  assert(re.isValid());
+  static const QRegularExpression newlinespace_re(R"(\s*\n\s*)");
+  assert(newlinespace_re.isValid());
+  QString out;
 
-  char* incopy = instr = xstrdup(utfstring);
-  /*
-   * We only shorten, so just dupe the input buf for space.
-   */
-  char* outstring = out = xstrdup(utfstring);
-
-  tag[0] = 0;
-  while (*instr) {
-    if ((*instr == '<') || (*instr == '&')) {
-      tag[0] = *instr;
-      taglen = 0;
+  QRegularExpressionMatchIterator it = re.globalMatch(utfstring);
+  while (it.hasNext()) {
+    auto match = it.next();
+    //qDebug() << match.capturedTexts();
+    // TODO: Qt >= 6.3 use match.hasCaptured(...) instead of !match.captured(...).isNull()
+    if (!match.captured(u"tag").isNull()) {
+      QString tag = match.captured(u"tag");
+      //qDebug() << "tag match:" << tag;
+      if ((tag.compare("p", Qt::CaseInsensitive) == 0) ||
+          (tag.compare("br", Qt::CaseInsensitive) == 0) ||
+          (tag.compare("/tr", Qt::CaseInsensitive) == 0)) {
+        out.append('\n');
+      } else if (tag.compare("/td", Qt::CaseInsensitive) == 0) {
+        out.append(' ');
+      } else if (tag.startsWith("img", Qt::CaseInsensitive)) {
+        out.append("[IMG]");
+      } // else eat the tag
+    } else if (!match.captured(u"entity").isNull()) {
+      QString entity = match.captured(u"entity");
+      //qDebug() << "entity match:" << entity;
+      if (entity == "amp") {
+        out.append('&');
+      } else if (entity == "lt") {
+        out.append('<');
+      } else if (entity == "gt") {
+        out.append('>');
+      } else if (entity == "quot") {
+        out.append('"');
+      } else if (entity == "nbsp") {
+        out.append(' ');
+      } else if (entity == "deg") {
+        out.append("deg");
+      } // else eat the entity
+    } else if (!match.captured(u"other").isNull()) {
+      //qDebug() << "other match:" << match.capturedTexts();
+      out.append(match.captured(u"other").replace(newlinespace_re, " "));
+    //} else {
+    //  qDebug() << "unexpected fragment:" << match.capturedTexts();
     }
-
-    if (! tag[0]) {
-      if (*instr == '\n') {
-        *out++ = ' ';
-        do {
-          instr++;
-        } while (isspace(*instr));
-        continue;
-      } else {
-        *out++ = *instr;
-      }
-    } else {
-      if (taglen < (sizeof(tag)-1)) {
-        tag[taglen++] = tolower(*instr);
-        tag[taglen] = 0;
-      }
-    }
-
-    if (((tag[0] == '<') && (*instr == '>')) ||
-        ((tag[0] == '&') && (*instr == ';'))) {
-      if (! strcmp(tag, "&amp;")) {
-        *out++ = '&';
-      } else if (! strcmp(tag, "&lt;")) {
-        *out++ = '<';
-      } else if (! strcmp(tag, "&gt;")) {
-        *out++ = '>';
-      } else if (! strcmp(tag, "&quot;")) {
-        *out++ = '"';
-      } else if (! strcmp(tag, "&nbsp;")) {
-        *out++ = ' ';
-      } else if (! strcmp(tag, "&deg;")) {
-        *out++ = 'd';
-        *out++ = 'e';
-        *out++ = 'g';
-      } else if ((tag[0]=='<') && (tag[1]=='p')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='b') && (tag[2]=='r')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='/') && (tag[2]=='t') && (tag[3]=='r')) {
-        *out++ = '\n';
-      } else if ((tag[0]=='<') && (tag[1]=='/') && (tag[2]=='t') && (tag[3]=='d')) {
-        *out++ = ' ';
-      } else if ((tag[0]=='<') && (tag[1]=='i') && (tag[2]=='m') && (tag[3]=='g')) {
-        *out++ = '[';
-        *out++ = 'I';
-        *out++ = 'M';
-        *out++ = 'G';
-        *out++ = ']';
-      }
-
-      tag[0] = 0;
-    }
-    instr++;
   }
-  *out++ = 0;
-  xfree(incopy);
-  QString rv(outstring);
-  xfree(outstring);
-  return rv;
+
+  return out;
 #endif
 }
 
@@ -958,38 +856,11 @@ QString get_filename(const QString& fname)
   return QFileInfo(fname).fileName();
 }
 
-/*
- * gb_int2ptr: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
- */
-void* gb_int2ptr(const int i)
-{
-  union {
-    void* p;
-    int i;
-  } x = { nullptr };
-
-  x.i = i;
-  return x.p;
-}
-
-/*
- * gb_ptr2int: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
- */
-int gb_ptr2int(const void* p)
-{
-  union {
-    const void* p;
-    int i;
-  } x = { p };
-
-  return x.i;
-}
-
 QTextCodec* get_codec(const QByteArray& cs_name)
 {
   QTextCodec* codec = QTextCodec::codecForName(cs_name);
   if (codec == nullptr) {
-    fatal(FatalMsg().nospace() << "Unsupported character set " << cs_name << ".");
+    gbFatal(FatalMsg().nospace() << "Unsupported character set " << cs_name << ".");
   }
   return codec;
 }

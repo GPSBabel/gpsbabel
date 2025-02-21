@@ -24,11 +24,13 @@
 
 #include <tuple>               // for tuple
 
+#include <QList>               // for QList
 #include <QString>             // for QString
 #include <QVector>             // for QVector
 
 #include "defs.h"              // for arglist_t, ARGTYPE_INT, Waypoint, route_head
 #include "filter.h"            // for Filter
+#include "option.h"            // for OptionString
 #include "src/core/nvector.h"  // for NVector
 
 
@@ -67,9 +69,9 @@ private:
   int decimate_count{0};
   int interpolate_count{0};
 
-  char* decimateopt{nullptr};
-  char* interpolateopt{nullptr};
-  char* averageopt{nullptr};
+  OptionInt decimateopt;
+  OptionInt interpolateopt;
+  OptionInt averageopt;
 
   QVector<arglist_t> args = {
     {

@@ -59,12 +59,13 @@
 #ifndef SMPLROUT_H_INCLUDED_
 #define SMPLROUT_H_INCLUDED_
 
+#include <QList>     // for QList
 #include <QString>               // for QString
-#include <QStringView>           // for QStringView
 #include <QVector>               // for QVector
 
 #include "defs.h"
-#include "filter.h"              // for Filter
+#include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool, OptionString
 
 
 #if FILTERS_ENABLED
@@ -118,20 +119,20 @@ private:
   limit_basis_t limit_basis{limit_basis_t::error};
   metric_t metric{metric_t::crosstrack};
 
-  char* countopt = nullptr;
-  char* erroropt = nullptr;
-  char* xteopt = nullptr;
-  char* lenopt = nullptr;
-  char* relopt = nullptr;
+  OptionInt countopt;
+  OptionDouble erroropt{true};
+  OptionBool xteopt;
+  OptionBool lenopt;
+  OptionBool relopt;
 
   QVector<arglist_t> args = {
     {
-      "count", &countopt,  "Maximum number of points in route",
+      "count", &countopt, "Maximum number of points in route",
       nullptr, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", nullptr, nullptr
     },
     {
       "error", &erroropt, "Maximum error", nullptr,
-      ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
+       ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
     },
     {
       "crosstrack", &xteopt, "Use cross-track error (default)", nullptr,

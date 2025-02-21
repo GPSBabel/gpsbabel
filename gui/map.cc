@@ -26,20 +26,19 @@
 #include <QChar>                  // for QChar, operator!=
 #include <QCursor>                // for QCursor
 #include <QFile>                  // for QFile
-#include <QIODevice>              // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Truncate, QIODevice::WriteOnly
+#include <QIODevice>              // for QIODevice
 #include <QLatin1String>          // for QLatin1String
+#include <QList>                  // for QList
 #include <QMessageBox>            // for QMessageBox
 #include <QNetworkAccessManager>  // for QNetworkAccessManager
-#include <QStringLiteral>         // for QStringLiteral
+#include <QStringLiteral>         // for qMakeStringPrivate, QStringLiteral
 #include <QUrl>                   // for QUrl
 #include <QWebChannel>            // for QWebChannel
 #include <QWebEnginePage>         // for QWebEnginePage
-#include <QWebEngineSettings>     // for QWebEngineSettings, QWebEngineSettings::LocalContentCanAccessRemoteUrls
+#include <QWebEngineSettings>     // for QWebEngineSettings
 #include <QWebEngineView>         // for QWebEngineView
-#include <Qt>                     // for WaitCursor
-#include <QtGlobal>               // for foreach
+#include <Qt>                     // for CursorShape
 
-#include <algorithm>              // for max
 #include <string>                 // for string
 #include <vector>                 // for vector
 
@@ -54,22 +53,15 @@ using std::vector;
 //------------------------------------------------------------------------
 static QString stripDoubleQuotes(const QString& s)
 {
-  QString out;
-  foreach (QChar c, s) {
-    if (c != QChar('"')) {
-      out += c;
-    }
-  }
-  return out;
+  QString out = s;
+  return out.remove('"');
 }
 
 //------------------------------------------------------------------------
 Map::Map(QWidget* parent,
-         const Gpx&  gpx, QPlainTextEdit* te):
+         const Gpx& gpx, QPlainTextEdit* te):
   QWebEngineView(parent),
   gpx_(gpx),
-  mapPresent_(false),
-  busyCursor_(false),
   textEdit_(te)
 {
   busyCursor_ = true;
@@ -91,7 +83,7 @@ Map::Map(QWidget* parent,
   // 1. In the file system in the same directory as the executable.
   // 2. In the Qt resource system.  This is useful if the resource was compiled
   //    into the executable.
-  QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
+  QString baseFile = QApplication::applicationDirPath() + "/gmapbase.html";
   QString fileName;
   QUrl baseUrl;
   if (QFile(baseFile).exists()) {
@@ -194,7 +186,7 @@ void Map::loadFinishedX(bool f)
 //------------------------------------------------------------------------
 static QString fmtLatLng(const LatLng& l)
 {
-  return  QString("{lat: %1, lng: %3}").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
+  return QString("{lat: %1, lng: %3}").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
 }
 
 //------------------------------------------------------------------------
@@ -240,7 +232,7 @@ void Map::showGpxData()
 
   // Waypoints.
   int num=0;
-  foreach (const  GpxWaypoint& pt, gpx_.getWaypoints()) {
+  for (const GpxWaypoint& pt : gpx_.getWaypoints()) {
     scriptStr
         << QString("waypts[%1] = new google.maps.Marker({map: map, position: %2, "
                    "title: \"%3\", icon: blueIcon});")
@@ -259,10 +251,10 @@ void Map::showGpxData()
 
   // Tracks
   num = 0;
-  foreach (const GpxTrack& trk, gpx_.getTracks()) {
+  for (const GpxTrack& trk : gpx_.getTracks()) {
     vector <LatLng> pts;
-    foreach (const GpxTrackSegment seg, trk.getTrackSegments()) {
-      foreach (const GpxTrackPoint pt, seg.getTrackPoints()) {
+    for (const GpxTrackSegment& seg : trk.getTrackSegments()) {
+      for (const GpxTrackPoint& pt : seg.getTrackPoints()) {
         pts.push_back(pt.getLocation());
       }
     }
@@ -288,9 +280,9 @@ void Map::showGpxData()
 
   // Routes
   num = 0;
-  foreach (const GpxRoute& rte, gpx_.getRoutes()) {
+  for (const GpxRoute& rte : gpx_.getRoutes()) {
     vector <LatLng> pts;
-    foreach (const GpxRoutePoint& pt, rte.getRoutePoints()) {
+    for (const GpxRoutePoint& pt : rte.getRoutePoints()) {
       pts.push_back(pt.getLocation());
     }
     QString path = makePath(pts);
@@ -334,7 +326,6 @@ void Map::markerClicked(int t, int i)
   } else if (t == 2) {
     emit routeClicked(i);
   }
-
 }
 
 //------------------------------------------------------------------------
@@ -345,75 +336,6 @@ void Map::logTime(const QString& s)
     textEdit_->appendPlainText(QString("%1: %2 ms").arg(s).arg(stopWatch_.elapsed()));
   }
   stopWatch_.start();
-}
-//------------------------------------------------------------------------
-void Map::showTracks(const QList<GpxTrack>& tracks)
-{
-  QStringList scriptStr;
-  int i=0;
-  foreach (const GpxTrack& trk, tracks) {
-    scriptStr << QString("trks[%1].%2();").arg(i).arg(trk.getVisible()?"show":"hide");
-    i++;
-  }
-  evaluateJS(scriptStr);
-}
-
-//------------------------------------------------------------------------
-void Map::hideAllTracks()
-{
-  QStringList scriptStr;
-  scriptStr
-      << "for (idx = 0; idx < trks.length; idx += 1) {"
-      << "    trks[idx].hide();"
-      << "}"
-      ;
-  evaluateJS(scriptStr);
-}
-
-//------------------------------------------------------------------------
-// TACKY: we assume the waypoints list and JS waypts[] are parallel.
-void Map::showWaypoints(const QList<GpxWaypoint>& waypoints)
-{
-  QStringList scriptStr;
-  int i=0;
-  foreach (const GpxWaypoint& pt, waypoints) {
-    scriptStr << QString("waypts[%1].setVisible(%2);").arg(i++).arg(pt.getVisible()?"true":"false");
-  }
-  evaluateJS(scriptStr);
-}
-//------------------------------------------------------------------------
-void Map::hideAllWaypoints()
-{
-  QStringList scriptStr;
-  scriptStr
-      << "for (idx = 0; idx < waypts.length; idx += 1) {"
-      << "    waypts[idx].setVisible(false);"
-      << "}"
-      ;
-  evaluateJS(scriptStr);
-}
-
-//------------------------------------------------------------------------
-void Map::showRoutes(const QList<GpxRoute>& routes)
-{
-  QStringList scriptStr;
-  int i=0;
-  foreach (const GpxRoute& rt, routes) {
-    scriptStr << QString("rtes[%1].%2();").arg(i).arg(rt.getVisible()?"show":"hide");
-    i++;
-  }
-  evaluateJS(scriptStr);
-}
-//------------------------------------------------------------------------
-void Map::hideAllRoutes()
-{
-  QStringList scriptStr;
-  scriptStr
-      << "for (idx = 0; idx < rtes.length; idx += 1) {"
-      << "    rtes[idx].hide();"
-      << "}"
-      ;
-  evaluateJS(scriptStr);
 }
 //------------------------------------------------------------------------
 void Map::setWaypointVisibility(int i, bool show)
@@ -432,6 +354,15 @@ void Map::setTrackVisibility(int i, bool show)
 void Map::setRouteVisibility(int i, bool show)
 {
   evaluateJS(QString("rtes[%1].%2();").arg(i).arg(show?"show": "hide"));
+}
+
+//------------------------------------------------------------------------
+void Map::resetBounds()
+{
+  evaluateJS(QStringList{
+    "map.setCenter(bounds.getCenter());",
+    "map.fitBounds(bounds);",
+  });
 }
 
 //------------------------------------------------------------------------
@@ -464,28 +395,20 @@ void Map::setWaypointColorBlue(int i)
 //------------------------------------------------------------------------
 void Map::frameTrack(int i)
 {
-  QStringList scriptStr;
-
-  scriptStr
-      << QString("map.setCenter(trks[%1].getBounds().getCenter());").arg(i)
-      << QString("map.fitBounds(trks[%1].getBounds());").arg(i)
-
-      ;
-  evaluateJS(scriptStr);
+  evaluateJS(QStringList{
+    QString("map.setCenter(trks[%1].getBounds().getCenter());").arg(i),
+    QString("map.fitBounds(trks[%1].getBounds());").arg(i),
+  });
 }
-
 
 //------------------------------------------------------------------------
 void Map::frameRoute(int i)
 {
-  QStringList scriptStr;
-  scriptStr
-      << QString("map.setCenter(rtes[%1].getBounds().getCenter());").arg(i)
-      << QString("map.fitBounds(rtes[%1].getBounds());").arg(i)
-      ;
-  evaluateJS(scriptStr);
+  evaluateJS(QStringList{
+    QString("map.setCenter(rtes[%1].getBounds().getCenter());").arg(i),
+    QString("map.fitBounds(rtes[%1].getBounds());").arg(i),
+  });
 }
-
 
 //------------------------------------------------------------------------
 void Map::evaluateJS(const QString& s, bool upd)

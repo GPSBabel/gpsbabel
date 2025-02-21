@@ -27,14 +27,12 @@
 #include <QDebug>               // for QDebug
 #include <QDir>                 // for QDir
 #include <QFileInfo>            // for QFileInfo
-#include <QFileInfoList>        // for QFileInfoList
 #include <QIODevice>            // for operator|, QIODevice
 #include <QJsonArray>           // for QJsonArray, QJsonArray::const_iterator
 #include <QJsonDocument>        // for QJsonDocument
 #include <QJsonObject>          // for QJsonObject, QJsonObject::const_iterator
 #include <QJsonParseError>      // for QJsonParseError, QJsonParseError::NoError
-#include <QJsonValueRef>        // for QJsonValueRef
-#include <QtCore>               // for ISODate, QIODeviceBase::ReadOnly, QIODeviceBase::Text
+#include <Qt>
 
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/file.h"      // for File
@@ -42,11 +40,11 @@
 
 
 void GoogleTakeoutFormat::takeout_fatal(const QString& message) {
-  fatal(FatalMsg() << MYNAME << ": " << message);
+  gbFatal(FatalMsg() << message);
 }
 
 void GoogleTakeoutFormat::takeout_warning(const QString& message) {
-  Warning() << MYNAME << ": " << message;
+  Warning() << message;
 }
 
 /* create a waypoint from late7/lone7 and optional metadata */
@@ -61,13 +59,13 @@ Waypoint* GoogleTakeoutFormat::takeout_waypoint(
   auto* waypoint = new Waypoint();
   waypoint->latitude = lat_e7 / 1e7;
   waypoint->longitude = lon_e7 / 1e7;
-  if (shortname && shortname->length() > 0) {
+  if (shortname && !shortname->isEmpty()) {
     waypoint->shortname = *shortname;
   }
-  if (description && description->length() > 0) {
+  if (description && !description->isEmpty()) {
     waypoint->description = *description;
   }
-  if (start_str && start_str->length() > 0) {
+  if (start_str && !start_str->isEmpty()) {
     gpsbabel::DateTime start = QDateTime::fromString(*start_str, Qt::ISODate);
     waypoint->SetCreationTime(start);
   }
@@ -264,7 +262,7 @@ GoogleTakeoutFormat::read()
     }
   }
   if (global_opts.debug_level >= 1) {
-    Debug(1) << MYNAME << ": Processed " << items << " items: " <<
+    Debug(1) << "Processed " << items << " items: " <<
       place_visits << " " << PLACE_VISIT << ", " << activity_segments <<
       " " << ACTIVITY_SEGMENT << " (" << points << " points total)";
   }
@@ -288,12 +286,12 @@ GoogleTakeoutFormat::add_place_visit(const QJsonObject& placeVisit)
   const QString timestamp = placeVisit[DURATION][START_TIMESTAMP].toString();
   Waypoint* waypoint;
 
-  if (loc.contains(NAME) && loc[NAME].toString().length() > 0) {
+  if (loc.contains(NAME) && !loc[NAME].toString().isEmpty()) {
     QString name = loc[NAME].toString();
     waypoint = takeout_waypoint(
       loc[LOCATION_LATE7].toInt(),
       loc[LOCATION_LONE7].toInt(),
-      name.length() > 0 ? &name : nullptr,
+      !name.isEmpty() ? &name : nullptr,
       &address,
       &timestamp
     );

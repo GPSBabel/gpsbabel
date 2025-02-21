@@ -22,11 +22,13 @@
 #ifndef INTERPOLATE_H_INCLUDED_
 #define INTERPOLATE_H_INCLUDED_
 
-#include <QString>              // for QString
-#include <QVector>              // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
-#include "defs.h"               // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
-#include "filter.h"             // for Filter
+#include "defs.h"    // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
+#include "filter.h"  // for Filter
+#include "option.h"  // for OptionString, OptionBool
 
 #if FILTERS_ENABLED
 
@@ -47,11 +49,11 @@ private:
 
   /* Data Members */
 
-  char* opt_time{nullptr};
+  OptionDouble opt_time;
   double max_time_step{0};
-  char* opt_dist{nullptr};
+  OptionDouble opt_dist{true};
   double max_dist_step{0};
-  char* opt_route{nullptr};
+  OptionBool opt_route;
 
   QVector<arglist_t> args = {
     {
@@ -60,7 +62,7 @@ private:
       "0", nullptr, nullptr
     },
     {
-      "distance", &opt_dist, "Distance interval in miles or kilometers",
+      "distance", &opt_dist, "Distance interval",
       nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
       ARG_NOMINMAX, nullptr
     },

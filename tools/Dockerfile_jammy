@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     make \
-    autoconf \
     git \
     valgrind \
     expat \
@@ -32,6 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     clang-tidy \
     jq \
     curl \
+    ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
 # alternative compiler
@@ -88,6 +88,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qt6-webengine-dev-tools \
     qt6-wayland \
  && rm -rf /var/lib/apt/lists/*
+
+# dbgsyms for "libqt6core6/jammy-updates,now 6.2.4+dfsg-2ubuntu1.1 amd64" needed for gpsbabel.supp
+# these aren't on the debuginfod server, or on http://ddebs.ubuntu.com
+RUN curl -L http://launchpadlibrarian.net/638061995/libqt6core6-dbgsym_6.2.4+dfsg-2ubuntu1.1_amd64.ddeb -o libqt6core6-dbgsym_6.2.4+dfsg-2ubuntu1.1_amd64.ddeb \
+ && apt-get install ./libqt6core6-dbgsym_6.2.4+dfsg-2ubuntu1.1_amd64.ddeb \
+ && rm -f ./libqt6core6-dbgsym_6.2.4+dfsg-2ubuntu1.1_amd64
 
 # pkgs needed to generate coverage report:
 RUN apt-get update && apt-get install -y --no-install-recommends \

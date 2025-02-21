@@ -82,6 +82,9 @@ should be disposed of with SHPDestroyObject().<p>
     double	dfYMax;
     double	dfZMax;
     double	dfMMax;
+
+    int bMeasureIsUsed;
+    int bFastModeReadObject;
   } SHPObject;
 </pre>
 
@@ -113,7 +116,7 @@ SHPHandle SHPOpen( const char * pszShapeFile, const char * pszAccess );
 <h2>SHPGetInfo()</h2>
 
 <pre>
-void SHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType,
+void SHPGetInfo( const SHPHandle hSHP, int * pnEntities, int * pnShapeType,
                  double * padfMinBound, double * padfMaxBound );
 
   hSHP:			The handle previously returned by SHPOpen()
@@ -143,7 +146,7 @@ void SHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType,
 <h2>SHPReadObject()</h2>
 
 <pre>
-SHPObject *SHPReadObject( SHPHandle hSHP, int iShape );
+SHPObject *SHPReadObject( const SHPHandle hSHP, int iShape );
 
   hSHP:			The handle previously returned by SHPOpen()
 			or SHPCreate().
@@ -210,7 +213,8 @@ SHPHandle SHPCreate( const char * pszShapeFile, int nShapeType );
 <pre>
 SHPObject *
      SHPCreateSimpleObject( int nSHPType, int nVertices,
-			    double *padfX, double * padfY, double *padfZ, );
+			    const double *padfX, const double * padfY,
+			    const double *padfZ );
 
   nSHPType:		The SHPT_ type of the object to be created, such
                         as SHPT_POINT, or SHPT_POLYGON.
@@ -250,9 +254,10 @@ SHPObject *
 <pre>
 SHPObject *
      SHPCreateObject( int nSHPType, int iShape,
-                      int nParts, int * panPartStart, int * panPartType,
-                      int nVertices, double *padfX, double * padfY,
-                      double *padfZ, double *padfM );
+                      int nParts, const int * panPartStart,
+                      const int * panPartType,
+                      int nVertices, const double *padfX, const double * padfY,
+                      const double *padfZ, const double *padfM );
 
   nSHPType:		The SHPT_ type of the object to be created, such
                         as SHPT_POINT, or SHPT_POLYGON.
@@ -321,7 +326,7 @@ void SHPComputeExtents( SHPObject * psObject );
 <h2>SHPWriteObject()</h2>
 
 <pre>
-int SHPWriteObject( SHPHandle hSHP, int iShape, SHPObject *psObject );
+int SHPWriteObject( SHPHandle hSHP, int iShape, const SHPObject *psObject );
 
   hSHP:			The handle previously returned by SHPOpen("r+")
 			or SHPCreate().

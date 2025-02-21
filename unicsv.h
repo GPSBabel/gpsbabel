@@ -26,6 +26,7 @@
 
 #include <QDate>                  // for QDate
 #include <QDateTime>              // for QDateTime
+#include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QTime>                  // for QTime
 #include <QVector>                // for QVector
@@ -33,6 +34,7 @@
 #include "defs.h"
 #include "format.h"               // for Format
 #include "geocache.h"             // for Geocache, Geocache::status_t
+#include "option.h"               // for OptionString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -169,8 +171,8 @@ private:
   static QTime unicsv_parse_time(const char* str, QDate& date);
   static QTime unicsv_parse_time(const QString& str, QDate& date);
   static Geocache::status_t unicsv_parse_status(const QString& str);
-  QDateTime unicsv_adjust_time(const QDate date, const QTime time, bool is_localtime) const;
-  static bool unicsv_compare_fields(const QString& s, const field_t* f);
+  QDateTime unicsv_adjust_time(QDate date, QTime time, bool is_localtime) const;
+  static bool unicsv_compare_fields(const QString& s, const field_t& f);
   void unicsv_fondle_header(QString header);
   void unicsv_parse_one_line(const QString& ibuf);
   [[noreturn]] void unicsv_fatal_outside(const Waypoint* wpt) const;
@@ -182,7 +184,7 @@ private:
 
   /* Data Members */
 
-  static const field_t fields_def[];
+  static const QVector<field_t> fields_def;
 
   QVector<field_e> unicsv_fields_tab;
   double unicsv_altscale{};
@@ -198,14 +200,14 @@ private:
   std::bitset<fld_terminator> unicsv_outp_flags;
   grid_type unicsv_grid_idx{grid_unknown};
   int unicsv_datum_idx{};
-  char* opt_datum{nullptr};
-  char* opt_grid{nullptr};
-  char* opt_utc{nullptr};
-  char* opt_filename{nullptr};
-  char* opt_format{nullptr};
-  char* opt_prec{nullptr};
-  char* opt_fields{nullptr};
-  char* opt_codec{nullptr};
+  OptionString opt_datum;
+  OptionString opt_grid;
+  OptionInt opt_utc;
+  OptionBool opt_filename;
+  OptionBool opt_format;
+  OptionInt opt_prec;
+  OptionString opt_fields;
+  OptionString opt_codec;
   int unicsv_waypt_ct{};
   char unicsv_detect{};
   int llprec{};

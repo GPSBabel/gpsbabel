@@ -22,16 +22,14 @@
 #include <QByteArray>            // for QByteArray
 #include <QIODevice>             // for QIODevice
 #include <QString>               // for QString, operator==, QStringView::to...
+#include <QStringLiteral>        // for qMakeStringPrivate, QStringLiteral
 #include <QStringView>           // for QStringView
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
-#include <QtCore>                // for qPrintable, QIODeviceBase::ReadOnly
 
 #include "defs.h"
 #include "geocache.h"            // for Geocache, Geocache::container_t, Geo...
 #include "src/core/file.h"       // for File
 
-
-#define MYNAME "geo"
 
 void GeoFormat::GeoReadLoc(QXmlStreamReader& reader)
 {
@@ -92,9 +90,9 @@ void GeoFormat::read()
 
   GeoReadLoc(reader);
   if (reader.hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
-          qPrintable(reader.errorString()),
-          qPrintable(ifile.fileName()),
+    gbFatal("Read error: %s (%s, line %ld, col %ld)\n",
+          gbLogCStr(reader.errorString()),
+          gbLogCStr(ifile.fileName()),
           (long) reader.lineNumber(),
           (long) reader.columnNumber());
   }
@@ -154,7 +152,7 @@ void GeoFormat::geo_waypt_pr(const Waypoint* waypointp, QXmlStreamWriter& writer
   if (waypointp->HasUrlLink()) {
     writer.writeStartElement(QStringLiteral("link"));
     writer.writeAttribute(QStringLiteral("text "), QStringLiteral("Cache Details"));
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     writer.writeCharacters(link.url_);
     writer.writeEndElement();
   }

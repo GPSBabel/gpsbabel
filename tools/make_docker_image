@@ -7,9 +7,11 @@ TMPDIR=$(mktemp -d)
 
 cp Dockerfile${versuffix} $TMPDIR
 
-docker build --pull --file Dockerfile${versuffix} \
+docker buildx build \
+             --pull --file Dockerfile${versuffix} \
              --tag tsteven4/gpsbabel_build_environment${versuffix}:latest \
              --tag tsteven4/gpsbabel_build_environment${versuffix}:$tag \
+             --progress=plain \
              $TMPDIR
 /bin/rm -fr $TMPDIR
 docker push tsteven4/gpsbabel_build_environment${versuffix}:$tag

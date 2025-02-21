@@ -22,11 +22,13 @@
 #ifndef SHAPE_H_INCLUDED_
 #define SHAPE_H_INCLUDED_
 
+#include <QList>               // for QList
 #include <QString>              // for QString
 #include <QVector>              // for QVector
 
 #include "defs.h"               // for arglist_t, ARGTYPE_STRING, Waypoint, route_head, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"             // for Format
+#include "option.h"            // for OptionString
 #if SHAPELIB_ENABLED
 #if HAVE_LIBSHAPE
 #  include <shapefil.h>
@@ -86,8 +88,8 @@ private:
   QString ofname;
   int nameFieldIdx{};	// the field index of the field with fieldName "name" in the output DBF.
 
-  char* opt_name = nullptr;
-  char* opt_url = nullptr;
+  OptionString opt_name;
+  OptionString opt_url;
 
   QVector<arglist_t> shp_args = {
     {

@@ -20,8 +20,11 @@
 //
 
 #include "donate.h"
-#include <QUrl>
-#include <QDesktopServices>
+#include <QAbstractButton>   // for QAbstractButton
+#include <QDesktopServices>  // for QDesktopServices
+#include <QPushButton>       // for QPushButton
+#include <QString>           // for QString
+#include <QUrl>              // for QUrl
 
 // A completely simple QDialog, in a class of its own for layout.
 Donate::Donate(QWidget* parent) : QDialog(parent)

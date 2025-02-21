@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" creator="Groundspeak, Inc. All Rights Reserved. http://www.groundspeak.com" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd http://www.groundspeak.com/cache/1/0/1 http://www.groundspeak.com/cache/1/0/1/cache.xsd" xmlns="http://www.topografix.com/GPX/1/0">
+  <name>Cache Listing Generated from Geocaching.com</name>
+  <desc>This is an individual cache generated from Geocaching.com</desc>
+  <author>Account "robertlipe" From Geocaching.com</author>
+  <email>contact@geocaching.com</email>
+  <url>https://www.geocaching.com</url>
+  <urlname>Geocaching - High Tech Treasure Hunting</urlname>
+  <time>2023-10-25T00:44:53.7176739Z</time>
+  <keywords>cache, geocache</keywords>
+  <bounds minlat="35.921667" minlon="-86.861667" maxlat="35.921667" maxlon="-86.861667" />
+  <wpt lat="35.921667" lon="-86.861667">
+    <time>2003-06-29T00:00:00</time>
+    <name>GCGCA8</name>
+    <desc>Oozy rat in a sanitary zoo by robertlipe, Unknown Cache (3/2)</desc>
+    <url>https://www.geocaching.com/geocache/GCGCA8</url>
+    <urlname>Oozy rat in a sanitary zoo</urlname>
+    <sym>Geocache</sym>
+    <type>Geocache|Unknown Cache</type>
+    <groundspeak:cache id="77386" available="False" archived="True" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1">
+      <groundspeak:name>Oozy rat in a sanitary zoo</groundspeak:name>
+      <groundspeak:placed_by>robertlipe</groundspeak:placed_by>
+      <groundspeak:owner id="32733">robertlipe</groundspeak:owner>
+      <groundspeak:type>Unknown Cache</groundspeak:type>
+      <groundspeak:container>Not chosen</groundspeak:container>
+      <groundspeak:attributes>
+        <groundspeak:attribute id="24" inc="0">Wheelchair accessible</groundspeak:attribute>
+        <groundspeak:attribute id="19" inc="1">Ticks</groundspeak:attribute>
+        <groundspeak:attribute id="18" inc="1">Dangerous animals</groundspeak:attribute>
+        <groundspeak:attribute id="17" inc="1">Poisonous plants</groundspeak:attribute>
+        <groundspeak:attribute id="39" inc="1">Thorns</groundspeak:attribute>
+        <groundspeak:attribute id="30" inc="1">Picnic tables nearby</groundspeak:attribute>
+        <groundspeak:attribute id="28" inc="1">Public restrooms nearby</groundspeak:attribute>
+        <groundspeak:attribute id="1" inc="1">Dogs</groundspeak:attribute>
+      </groundspeak:attributes>
+      <groundspeak:difficulty>3</groundspeak:difficulty>
+      <groundspeak:terrain>2</groundspeak:terrain>
+      <groundspeak:country>United States</groundspeak:country>
+      <groundspeak:state>Tennessee</groundspeak:state>
+      <groundspeak:short_description html="True">&lt;body&gt;The cache is &lt;style&gt;
+not&lt;/style&gt; at the coordinates above. These coords will get
+you to the correct park and within 1/2 mile of the cache. The cache
+is within 35 feet of the trail. It is not handicapped accessible.
+It is a nice walk in the woods that is practical for all ages.
+There is no space in the container for trading items. You should
+bring a writing stick and bug spray is recommended.&lt;/body&gt;
+</groundspeak:short_description>
+      <groundspeak:long_description html="True">&lt;html&gt;&lt;body text="color"&gt;So if the cache isn't at the above coordinates, where is it? 
+&lt;ul&gt;
+&lt;li&gt;Too bad I hid a boot&lt;/li&gt;
+&lt;li&gt;Too hot to hoot&lt;/li&gt;
+&lt;li&gt;Never odd or even&lt;/li&gt;
+&lt;li&gt;Do geese see God?&lt;/li&gt;
+&lt;li&gt;"Do nine men interpret?" "Nine men," I nod&lt;/li&gt;
+&lt;li&gt;Rats live on no evil star&lt;/li&gt;
+&lt;li&gt;Go hang a salami, I'm a lasagna hog&lt;/li&gt;&lt;/ul&gt;
+Now that it's intuitively obvious to even the most casual observer
+where the cache is, turn on your geo-mojo and go find it. &lt;br&gt;
+&lt;image src="http://www.mtgc.org/mtgc_member-banner.gif" width="500"
+height="40" alt=
+"Member of Middle Tennessee GeoCachers Club [www.mtgc.org]"
+     border="0"&gt;&lt;br&gt;
+&lt;br&gt;&lt;/body&gt;&lt;/html&gt;
+</groundspeak:long_description>
+      <groundspeak:encoded_hints>
+      </groundspeak:encoded_hints>
+      <groundspeak:logs>
+        <groundspeak:log id="732879189">
+          <groundspeak:date>2017-11-11T01:44:14Z</groundspeak:date>
+          <groundspeak:type>Archive</groundspeak:type>
+          <groundspeak:finder id="32733">robertlipe</groundspeak:finder>
+          <groundspeak:text encoded="False">Removed the container from the final location. Enough construction has occurred since this was placed to make it much less of an adventure than is used to be, so I'm archiving.
+
+Thanx to all that hunted it.</groundspeak:text>
+        </groundspeak:log>
+      </groundspeak:logs>
+      <groundspeak:travelbugs />
+    </groundspeak:cache>
+  </wpt>
+</gpx>

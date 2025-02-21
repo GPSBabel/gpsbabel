@@ -23,8 +23,6 @@
 #ifndef GARMIN_TXT_H_INCLUDED_
 #define GARMIN_TXT_H_INCLUDED_
 
-#if CSVFMTS_ENABLED
-
 #include <array>                  // for array
 #include <cstdint>                // for uint16_t
 #include <ctime>                  // for time_t
@@ -38,6 +36,7 @@
 
 #include "defs.h"
 #include "format.h"               // for Format
+#include "option.h"               // for OptionString
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -70,8 +69,6 @@ private:
   /* Constants */
 
   static constexpr double kGarminUnknownAlt = 1.0e25;
-  static constexpr char kDefaultDateFormat[] = "dd/mm/yyyy";
-  static constexpr char kDefaultTimeFormat[] = "HH:mm:ss";
 
   static const QVector<QString> headers;
 
@@ -112,7 +109,6 @@ private:
   /* Member Functions */
 
   static bool is_valid_alt(double alt);
-  static const char* get_option_val(const char* option, const char* def);
   void init_date_and_time_format();
   void convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon) const;
   void enum_waypt_cb(const Waypoint* wpt);
@@ -164,7 +160,6 @@ private:
   int wpt_a_ct{};
   grid_type grid_index{};
   int datum_index{};
-  const char* datum_str{};
   int current_line{};
   QString date_time_format;
   int precision = 3;
@@ -174,23 +169,23 @@ private:
   std::array<QList<std::pair<QString, int>>, unknown_header> header_mapping_info;
   QStringList header_column_names;
 
-  char* opt_datum = nullptr;
-  char* opt_dist = nullptr;
-  char* opt_temp = nullptr;
-  char* opt_date_format = nullptr;
-  char* opt_time_format = nullptr;
-  char* opt_precision = nullptr;
-  char* opt_utc = nullptr;
-  char* opt_grid = nullptr;
+  OptionString opt_datum;
+  OptionString opt_dist;
+  OptionString opt_temp;
+  OptionString opt_date_format;
+  OptionString opt_time_format;
+  OptionInt opt_precision;
+  OptionInt opt_utc;
+  OptionString opt_grid;
 
   QVector<arglist_t> garmin_txt_args = {
-    {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+    {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", "dd/mm/yyyy", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"dist",  &opt_dist,        "Distance unit [m=metric, s=statute]", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"grid",  &opt_grid,        "Write position using this grid.", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"prec",  &opt_precision,   "Precision of coordinates", "3", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
     {"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-    {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+    {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", "HH:mm:ss", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
     {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
   };
 
@@ -199,5 +194,4 @@ private:
   PathInfo* cur_info{};
 };
 
-#endif // CSVFMTS_ENABLED
 #endif // GARMIN_TXT_H_INCLUDED_

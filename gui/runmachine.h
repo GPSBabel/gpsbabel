@@ -22,7 +22,7 @@
 
 #include <QList>          // for QList
 #include <QObject>        // for Q_ENUM, Q_OBJECT, Q_SIGNALS
-#include <QProcess>       // for QProcess, QProcess::ProcessError, QProcess::ExitStatus
+#include <QProcess>       // for QProcess
 #include <QString>        // for QString
 #include <QStringList>    // for QStringList
 #include <QWidget>        // for QWidget

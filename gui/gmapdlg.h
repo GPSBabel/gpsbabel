@@ -23,72 +23,58 @@
 #ifndef GMAPDLG_H
 #define GMAPDLG_H
 
-#include <QStackedWidget>
-#include <QStandardItem>
-#include <QModelIndex>
-#include "ui_gmapui.h"
-#include "gpx.h"
-#include "map.h"
+#include <QDialog>             // for QDialog
+#include <QItemSelection>      // for QItemSelection
+#include <QModelIndex>         // for QModelIndex
+#include <QObject>             // for Q_OBJECT, slots
+#include <QPlainTextEdit>      // for QPlainTextEdit
+#include <QPoint>              // for QPoint
+#include <QStandardItem>       // for QStandardItem
+#include <QStandardItemModel>  // for QStandardItemModel
+#include <QString>             // for QString
+#include <QWidget>             // for QWidget
+#include "gpx.h"               // for Gpx, GpxRoute, GpxTrack, GpxWaypoint
+#include "map.h"               // for Map
+#include "ui_gmapui.h"         // for Ui_GMapDlg
 
 class GMapDialog: public QDialog
 {
   Q_OBJECT
 public:
-  GMapDialog(QWidget* parent, const QString& gpxFileName, QPlainTextEdit* te);
+  GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te);
 
 private:
+  static constexpr bool debug_ = false;
+
   Ui_GMapDlg ui_;
   Map* mapWidget_;
   QStandardItemModel* model_;
-  QStandardItem* wptItem_, *trkItem_, *rteItem_;
-  QList<QStandardItem*> wptList_, trkList_, rteList_;
-  Gpx gpx_;
-  int menuIndex_;
+  QStandardItem* wptItem_;
+  QStandardItem* trkItem_;
+  QStandardItem* rteItem_;
+  const Gpx& gpx_;
 
-  void appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt);
-  void appendTrackInfo(QStandardItem* it, const GpxTrack& trk);
-  void appendRouteInfo(QStandardItem* it, const GpxRoute& rte);
+  static void appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt);
+  static void appendTrackInfo(QStandardItem* it, const GpxTrack& trk);
+  static void appendRouteInfo(QStandardItem* it, const GpxRoute& rte);
 
-  int waypointIndex(QStandardItem* it);
-  int trackIndex(QStandardItem* it);
-  int routeIndex(QStandardItem* it);
-  QString formatLength(double l);
+  static QString formatLength(double l);
+
+  static void trace(const QString& label, const QStandardItem* it);
+  void expandCollapseAll(QStandardItem* top, bool exp);
+  void showHideAll(QStandardItem* top, bool ck);
+  void showHideChild(const QStandardItem* child);
+  void showHideChildren(const QStandardItem* top);
+  void itemClickedX(const QStandardItem* it);
+  void showOnlyThis(QStandardItem* top, int menuRow);
+  void showTopContextMenu(const QStringList& text, QStandardItem* top, const QPoint& pt);
+  void showChildContextMenu(const QString& text, const QStandardItem* child, const QPoint& pt);
 
   //
 private slots:
-  void itemChangedX(QStandardItem*);
-  void waypointClickedX(int i);
-  void trackClickedX(int i);
-  void routeClickedX(int i);
+  void itemChangedX(QStandardItem* it);
   void treeDoubleClicked(const QModelIndex& idx);
-  void selectionChangedX(const QItemSelection&,  const QItemSelection&);
-  void copyButtonClickedX();
-  void showContextMenu(const QPoint&);
-
-
-  void expandCollapseAll(const QList<QStandardItem*>& li,
-                         QStandardItem* it, bool exp);
-  void checkUncheckAll(const QList<QStandardItem*>& li,
-                       QStandardItem* it, bool exp);
-  void expandAllWaypoints();
-  void expandAllTracks();
-  void expandAllRoutes();
-
-  void collapseAllWaypoints();
-  void collapseAllTracks();
-  void collapseAllRoutes();
-
-  void hideAllWaypoints();
-  void hideAllTracks();
-  void hideAllRoutes();
-
-  void showAllWaypoints();
-  void showAllTracks();
-  void showAllRoutes();
-
-  void showOnlyThisWaypoint();
-  void showOnlyThisTrack();
-  void showOnlyThisRoute();
+  void selectionChangedX(const QItemSelection& sel, const QItemSelection& desel);
+  void showContextMenu(const QPoint& pt);
 };
-
 #endif

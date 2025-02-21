@@ -1,5 +1,5 @@
 <para>
-This option specifies the maximum allowable time interval between points in the
+This option specifies the maximum allowable time interval between adjacent points in the
 track.  If two points in the track are further apart than this value, new
 points will be inserted between them.
 </para>

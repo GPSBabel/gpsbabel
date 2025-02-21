@@ -35,7 +35,7 @@ namespace gpsbabel
 class TextStream : public QTextStream
 {
 public:
-  void open(const QString& fname, QIODevice::OpenMode mode, const char* module, const char* codec = "UTF-8");
+  void open(const QString& fname, QIODevice::OpenMode mode, const char* codec = "UTF-8");
   void close();
 
 private:

@@ -31,8 +31,6 @@
 #if FILTERS_ENABLED
 
 
-#define MYNAME "transform"
-
 void TransformFilter::transform_waypoints()
 {
   auto* rte = new route_head;
@@ -131,72 +129,63 @@ void TransformFilter::transform_tracks()
 
 void TransformFilter::process()
 {
-  timeless = opt_timeless && (*opt_timeless == '1');
+  timeless = opt_timeless;
 
-  bool delete_after = opt_delete && (*opt_delete == '1');
+  bool delete_after = opt_delete;
 
-  use_src_name = opt_rpt_name && (*opt_rpt_name == '1');
+  use_src_name = opt_rpt_name;
 
   name_digits = 3;
-  if (rpt_name_digits && *rpt_name_digits) {
-    name_digits = xstrtoi(rpt_name_digits, nullptr, 10);
+  if (!rpt_name_digits.isEmpty()) {
+    name_digits = rpt_name_digits.get_result();
   }
 
-  if (opt_waypts != nullptr) {
+  if (opt_waypts) {
     current_target = 'W';
-    switch (toupper(*opt_waypts)) {
-    case 'R':
+    if (opt_waypts.get().startsWith('R', Qt::CaseInsensitive)) {
       transform_routes();
       if (delete_after) {
         route_flush_all_routes();
       }
-      break;
-    case 'T':
+    } else if (opt_waypts.get().startsWith('T', Qt::CaseInsensitive)) {
       transform_tracks();
       if (delete_after) {
         route_flush_all_tracks();
       }
-      break;
-    default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_waypts);
+    } else {
+      gbFatal("Invalid option value (%s)!\n", gbLogCStr(opt_waypts));
     }
   }
-  if (opt_routes != nullptr) {
+  if (opt_routes) {
     current_target = 'R';
-    switch (toupper(*opt_routes)) {
-    case 'W':
+    if (opt_routes.get().startsWith('W', Qt::CaseInsensitive)) {
       transform_waypoints();
       if (delete_after) {
         waypt_flush_all();
       }
-      break;
-    case 'T':
+    } else if (opt_routes.get().startsWith('T', Qt::CaseInsensitive)) {
       transform_tracks();
       if (delete_after) {
         route_flush_all_tracks();
       }
-      break;
-    default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_routes);
+    } else {
+      gbFatal("Invalid option value (%s)!\n", gbLogCStr(opt_routes));
     }
   }
-  if (opt_tracks != nullptr) {
+  if (opt_tracks) {
     current_target = 'T';
-    switch (toupper(*opt_tracks)) {
-    case 'W':
+    if (opt_tracks.get().startsWith('W', Qt::CaseInsensitive)) {
       transform_waypoints();
       if (delete_after) {
         waypt_flush_all();
       }
-      break;
-    case 'R':
+    } else if (opt_tracks.get().startsWith('R', Qt::CaseInsensitive)) {
       transform_routes();
       if (delete_after) {
         route_flush_all_routes();
       }
-      break;
-    default:
-      fatal(MYNAME ": Invalid option value (%s)!\n", opt_tracks);
+    } else {
+      gbFatal("Invalid option value (%s)!\n", gbLogCStr(opt_tracks));
     }
   }
 }

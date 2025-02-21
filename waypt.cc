@@ -73,7 +73,7 @@ del_marked_wpts()
   global_waypoint_list->del_marked_wpts();
 }
 
-unsigned int
+int
 waypt_count()
 {
   return global_waypoint_list->count();
@@ -82,8 +82,10 @@ waypt_count()
 void
 waypt_status_disp(int total_ct, int myct)
 {
-  fprintf(stdout, "%d/%d/%d\r", myct*100/total_ct, myct, total_ct);
-  fflush(stdout);
+  // If we use logging the first update will have this info trailing the
+  // "id: " output by qFormatLogMessage but subsequent updates will not.
+  fprintf(stderr, "%d/%d/%d\r", myct*100/total_ct, myct, total_ct);
+  fflush(stderr);
 }
 
 void
@@ -200,11 +202,12 @@ waypt_add_url(Waypoint* wpt, const QString& link, const QString& url_link_text, 
   wpt->AddUrlLink(UrlLink(link, url_link_text, url_link_type));
 }
 
+// TODO: change inputs to PositionDeg?
 double
 gcgeodist(const double lat1, const double lon1,
           const double lat2, const double lon2)
 {
- return radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
+ return radtometers(gcdist(PositionDeg(lat1, lon1), PositionDeg(lat2, lon2)));
 }
 
 /*
@@ -355,7 +358,7 @@ double
 waypt_course(const Waypoint* A, const Waypoint* B)
 {
   if (A && B) {
-    return heading_true_degrees(RAD(A->latitude), RAD(A->longitude), RAD(B->latitude), RAD(B->longitude));
+    return heading_true_degrees(A->position(), B->position());
   } else {
     return 0;
   }
@@ -518,12 +521,11 @@ Waypoint::CreationTimeXML() const
 
   QDateTime dt = GetCreationTime().toUTC();
 
-  const char* format = "yyyy-MM-ddTHH:mm:ssZ";
   if (dt.time().msec()) {
-    format = "yyyy-MM-ddTHH:mm:ss.zzzZ";
+    return dt.toString(u"yyyy-MM-ddTHH:mm:ss.zzzZ");
+  } else {
+    return dt.toString(u"yyyy-MM-ddTHH:mm:ssZ");
   }
-
-  return dt.toString(format);
 }
 
 gpsbabel::DateTime
@@ -559,31 +561,53 @@ Waypoint::EmptyGCData() const
   return (gc_data == &Waypoint::empty_gc_data);
 }
 
+void Waypoint::NormalizePosition()
+{
+  double lat_orig = this->latitude;
+  double lon_orig = this->longitude;
+
+  if (this->latitude < -90.0 || this->latitude > 90.0) {
+    bool fliplon = false;
+    this->latitude = remainder(this->latitude, 360.0); // -180 <= this->latitude <= 180
+    if (this->latitude < -90.0) {
+      this->latitude = -180.0 - this->latitude;
+      fliplon = true;
+    } else if (this->latitude > 90.0) {
+      this->latitude = 180.0 - this->latitude;
+      fliplon = true;
+    }
+
+    if (fliplon) {
+      if (this->longitude < 0.0) {
+        this->longitude += 180.0;
+      } else {
+        this->longitude -= 180.0;
+      }
+    }
+  }
+
+  if (this->longitude < -180.0 || this->longitude >= 180.0) {
+    this->longitude = remainder(this->longitude, 360.0); // -180 <= this->longitude <= 180
+    if (this->longitude == 180.0) {
+      this->longitude = -180.0;
+    }
+  }
+
+  if ((this->latitude < -90) || (this->latitude > 90.0))
+    gbFatal(FatalMsg() << this->session->name
+          << "Invalid latitude" << lat_orig << "in waypoint"
+          << this->shortname);
+  if ((this->longitude < -180) || (this->longitude > 180.0))
+    gbFatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
+          << this->shortname);
+}
+
 void
 WaypointList::waypt_add(Waypoint* wpt)
 {
-  double lat_orig = wpt->latitude;
-  double lon_orig = wpt->longitude;
   append(wpt);
 
-  if (wpt->latitude < -90) {
-    wpt->latitude += 180;
-  } else if (wpt->latitude > +90) {
-    wpt->latitude -= 180;
-  }
-  if (wpt->longitude < -180) {
-    wpt->longitude += 360;
-  } else if (wpt->longitude > +180) {
-    wpt->longitude -= 360;
-  }
-
-  if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    fatal(FatalMsg() << wpt->session->name
-          << "Invalid latitude" << lat_orig << "in waypoint"
-          << wpt->shortname);
-  if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    fatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
-          << wpt->shortname);
+  wpt->NormalizePosition();
 
   /*
    * Some input may not have one or more of these types so we
@@ -619,6 +643,8 @@ void
 WaypointList::add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, QStringView namepart, int number_digits)
 {
   append(wpt);
+
+  wpt->NormalizePosition();
 
   if (synth && wpt->shortname.isEmpty()) {
     wpt->shortname = QStringLiteral("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));

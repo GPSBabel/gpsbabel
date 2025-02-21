@@ -24,6 +24,7 @@
 #include <QChar>               // for QChar, operator==, operator!=
 #include <QDebug>              // for QDebug
 #include <QString>             // for QString
+#include <Qt>                  // for CaseInsensitive
 #include <QtGlobal>            // for qPrintable
 
 #include <cassert>             // for assert
@@ -45,8 +46,7 @@
 #  define SET_BINARY_MODE(file)
 #endif
 
-#define MYNAME "gbfile"
-#define NO_ZLIB MYNAME ": No zlib support.\n"
+#define NO_ZLIB "No zlib support.\n"
 
 /* About the ZLIB_INHIBITED stuff:
  *
@@ -93,20 +93,18 @@ gzapi_open(gbfile* self, const char* mode)
     self->handle.gz = gzdopen(fileno(fd), openmode);
   } else {
 #if __WIN32__
-    // On Windows, convert UTF-8 to wchar_t[] and use gzopen_w().
-    QString name(self->name);
-    self->handle.gz = gzopen_w((const wchar_t*) name.utf16(), openmode);
+    // On Windows, convert to wchar_t[] and use gzopen_w().
+    self->handle.gz = gzopen_w((const wchar_t*) self->name.utf16(), openmode);
 #else
     // On other platforms, convert to native locale (UTF-8 or other 8-bit).
-    self->handle.gz = gzopen(qPrintable(QString(self->name)), openmode);
+    self->handle.gz = gzopen(qPrintable(self->name), openmode);
 #endif
   }
 
   if (self->handle.gz == nullptr) {
-    fatal("%s: Cannot %s file '%s'!\n",
-          self->module,
+    gbFatal("Cannot %s file '%s'!\n",
           (self->mode == 'r') ? "open" : "create",
-          self->name);
+          gbLogCStr(self->name));
   }
 
   return self;
@@ -131,9 +129,9 @@ gzapi_seek(gbfile* self, int32_t offset, int whence)
 
   if (result < 0) {
     if (self->is_pipe) {
-      fatal("%s: This format cannot be used in piped commands!\n", self->module);
+      gbFatal("This format cannot be used in piped commands!\n");
     }
-    fatal("%s: online compression not yet supported for this format!", self->module);
+    gbFatal("online compression not yet supported for this format!\n");
   }
   return 0;
 }
@@ -155,7 +153,7 @@ gzapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 
   /* Check for an incomplete READ */
   if ((members == 1) && (size > 1) && (result > 0) && (result < (int)size)) {
-    fatal("%s: Unexpected end of file (EOF)!\n", self->module);
+    gbFatal("Unexpected end of file (EOF)!\n");
   }
 
   result /= size;
@@ -170,8 +168,8 @@ gzapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
       return (gbsize_t) 0;
     }
     if ((errnum != Z_STREAM_END) && (errnum != 0))
-      fatal("%s: zlib returned error %d ('%s')!\n",
-            self->module, errnum, errtxt);
+      gbFatal("zlib returned error %d ('%s')!\n",
+            errnum, errtxt);
   }
   return (gbsize_t) result;
 }
@@ -220,7 +218,7 @@ gzapi_eof(gbfile* self)
       if (global_opts.debug_level > 0) {
         /* now gzeof() should return 1 */
         if (!gzeof(self->handle.gz)) {
-          fatal("zlib gzeof error!\n");
+          gbFatal("zlib gzeof error!\n");
         }
       }
       res = 1;
@@ -235,7 +233,7 @@ gzapi_ungetc(const int c, gbfile* self)
   if (self->back == -1) {
     self->back = c;
   } else {
-    fatal(MYNAME ": Cannot store more than one byte back!\n");
+    gbFatal("Cannot store more than one byte back!\n");
   }
   return c;
 }
@@ -265,7 +263,7 @@ gzapi_error(gbfile* self)
 static gbfile*
 stdapi_open(gbfile* self, const char* mode)
 {
-  self->handle.std = xfopen(self->name, mode, self->module);
+  self->handle.std = xfopen(self->name, mode);
   return self;
 }
 
@@ -295,11 +293,11 @@ stdapi_seek(gbfile* self, int32_t offset, int whence)
       pos = offset;
       break;
     default:
-      fatal("%s: Unknown seek operation (%d) for file %s!\n",
-            self->module, whence, self->name);
+      gbFatal("Unknown seek operation (%d) for file %s!\n",
+            whence, gbLogCStr(self->name));
     }
-    fatal("%s: Unable to set file (%s) to position (%llu)!\n",
-          self->module, self->name, (long long unsigned) pos);
+    gbFatal("Unable to set file (%s) to position (%llu)!\n",
+          gbLogCStr(self->name), (long long unsigned) pos);
   }
   return 0;
 }
@@ -311,8 +309,8 @@ stdapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self
   gbsize_t result = fread(buf, size, members, self->handle.std);
 
   if ((result < members) && (error_number = ferror(self->handle.std))) {
-    fatal("%s: Error %d occurred during read of file '%s'!\n",
-          self->module, error_number, self->name);
+    gbFatal("Error %d occurred during read of file '%s'!\n",
+          error_number, gbLogCStr(self->name));
   }
   return result;
 }
@@ -497,19 +495,18 @@ memapi_error(gbfile* self)
 /* GPSBabel 'file' standard calls */
 
 /*
- * gbfopen: (as xfopen) plus the name of the calling GPSBabel module (MYNAME)
+ * gbfopen: (as xfopen)
  */
 
 gbfile*
-gbfopen(const QString& filename, const char* mode, const char* module)
+gbfopen(const QString& filename, const char* mode)
 {
-  auto* file = (gbfile*) xcalloc(1, sizeof(gbfile));
+  auto* file = new gbfile;
 
-  file->module = xstrdup(module);
   file->mode = 'r'; // default
   file->binary = (strchr(mode, 'b') != nullptr);
   file->back = -1;
-  file->memapi = (filename == nullptr);
+  file->memapi = filename.isNull();
 
   for (const char* m = mode; *m; m++) {
     switch (tolower(*m)) {
@@ -527,7 +524,7 @@ gbfopen(const QString& filename, const char* mode, const char* module)
 
   if (file->memapi) {
     file->gzapi = 0;
-    file->name = xstrdup("(Memory stream)");
+    file->name = "(Memory stream)";
 
     file->fileclearerr = memapi_clearerr;
     file->fileclose = memapi_close;
@@ -541,17 +538,16 @@ gbfopen(const QString& filename, const char* mode, const char* module)
     file->fileungetc = memapi_ungetc;
     file->filewrite = memapi_write;
   } else {
-    file->name = xstrdup(filename);
+    file->name = filename;
     file->is_pipe = (filename == '-');
 
     /* Do we have a '.gz' extension in the filename ? */
-    int len = strlen(file->name);
-    if ((len > 3) && (case_ignore_strcmp(&file->name[len-3], ".gz") == 0)) {
+    if ((file->name.size() > 3) && (file->name.endsWith(".gz", Qt::CaseInsensitive))) {
 #if !ZLIB_INHIBITED
       /* force gzipped files on output */
       file->gzapi = 1;
 #else
-      fatal(NO_ZLIB);
+      gbFatal(NO_ZLIB);
 #endif
     }
 
@@ -571,7 +567,7 @@ gbfopen(const QString& filename, const char* mode, const char* module)
       file->filewrite = gzapi_write;
 #else
       /* This is the only runtime test we make */
-      fatal("%s: Zlib was not included in this build.\n", file->module);
+      gbFatal("Zlib was not included in this build.\n");
 #endif
     } else {
       file->fileclearerr = stdapi_clearerr;
@@ -601,9 +597,9 @@ gbfopen(const QString& filename, const char* mode, const char* module)
  */
 
 gbfile*
-gbfopen_be(const QString& filename, const char* mode, const char* module)
+gbfopen_be(const QString& filename, const char* mode)
 {
-  gbfile* result = gbfopen(filename, mode, module);
+  gbfile* result = gbfopen(filename, mode);
   result->big_endian = 1;
 
   return result;
@@ -622,10 +618,8 @@ gbfclose(gbfile* file)
 
   file->fileclose(file);
 
-  xfree(file->name);
-  xfree(file->module);
   xfree(file->buff);
-  xfree(file);
+  delete file;
 }
 
 /*
@@ -713,7 +707,7 @@ QByteArray gbfreadbuf(gbsize_t size, gbfile* file) {
   gbsize_t nbytes = gbfread(tmp.data(), 1, size, file);
 
   if (nbytes != size) {
-    fatal(FatalMsg() << file->module << "Attempted to read " << size <<
+    gbFatal(FatalMsg() << "Attempted to read " << size <<
     "bytes, but only " << nbytes << "were available.");
   }
   return tmp;
@@ -814,10 +808,9 @@ gbfwrite(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* f
 {
   unsigned int result = file->filewrite(buf, size, members, file);
   if (result != members) {
-    fatal("%s: Could not write %lld bytes to %s (result %d)!\n",
-          file->module,
+    gbFatal("Could not write %lld bytes to %s (result %d)!\n",
           (long long int)(members - result) * size,
-          file->name,
+          gbLogCStr(file->name),
           result);
   }
 
@@ -884,8 +877,8 @@ gbftell(gbfile* file)
 {
   gbsize_t result = file->filetell(file);
   if ((signed) result == -1)
-    fatal("%s: Could not determine position of file '%s'!\n",
-          file->module, file->name);
+    gbFatal("Could not determine position of file '%s'!\n",
+          gbLogCStr(file->name));
   return result;
 }
 
@@ -921,7 +914,7 @@ gbfgetint32(gbfile* file)
   char buf[4];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   if (file->big_endian) {
@@ -941,7 +934,7 @@ gbfgetint16(gbfile* file)
   char buf[2];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   if (file->big_endian) {
@@ -961,7 +954,7 @@ gbfgetdbl(gbfile* file)
   char buf[8];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   return endian_read_double(buf, ! file->big_endian);
@@ -977,7 +970,7 @@ gbfgetflt(gbfile* file)
   char buf[4];
 
   if (gbfread(&buf, 1, sizeof(buf), file) != sizeof(buf)) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   return endian_read_float(buf, ! file->big_endian);
@@ -1002,7 +995,7 @@ gbfgetcstr_old(gbfile* file)
     }
 
     if (c == EOF) {
-      fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+      gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
     }
 
     if (len == file->buffsz) {
@@ -1049,12 +1042,12 @@ gbfgetpstr(gbfile* file)
 {
   int len = gbfgetc(file);
   if (len == EOF) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
   QByteArray ba;
   ba.resize(len);
   if (gbfread(ba.data(), 1, len, file) != (gbsize_t) len) {
-    fatal("%s: Unexpected end of file (%s)!\n", file->module, file->name);
+    gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
   return QString(ba);
@@ -1071,8 +1064,7 @@ gbfgetutf16char(gbfile* file)
     int c1 = gbfgetc(file);
 
     if (c1 == EOF) {
-        fatal("%s: Incomplete unicode (UTF-16%cE) character at EOF!\n",
-              file->module,
+        gbFatal("Incomplete unicode (UTF-16%cE) character at EOF!\n",
               file->big_endian ? 'B' : 'L');
     }
 
@@ -1120,8 +1112,7 @@ gbfgetutf16str(gbfile* file)
       QChar qch2 = gbfgetutf16char(file);
       if (qch2 != u'\n') {  // including qch2.isNull()
         // Putting back two chars may not be supported, e.g. with gzapi_ungetc.
-        fatal("%s: Invalid unicode (UTF-16%cE) line break!\n",
-              file->module,
+        gbFatal("Invalid unicode (UTF-16%cE) line break!\n",
               file->big_endian ? 'B' : 'L');
       }
       break;
@@ -1130,8 +1121,7 @@ gbfgetutf16str(gbfile* file)
     }
 
     if (qch.isLowSurrogate()) {
-      fatal("%s: Leading unicode (UTF-16%cE) low surrogate!\n",
-            file->module,
+      gbFatal("Leading unicode (UTF-16%cE) low surrogate!\n",
             file->big_endian ? 'B' : 'L');
     }
 
@@ -1139,8 +1129,7 @@ gbfgetutf16str(gbfile* file)
     if (qch.isHighSurrogate()) {
       QChar qch2 = gbfgetutf16char(file);
       if (!qch2.isLowSurrogate()) { // including qch2.isNull()
-        fatal("%s: Missing unicode (UTF-16%cE) low surrogate!\n",
-              file->module,
+        gbFatal("Missing unicode (UTF-16%cE) low surrogate!\n",
               file->big_endian ? 'B' : 'L');
       }
       str.append(qch2);

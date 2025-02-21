@@ -22,8 +22,8 @@
 #include "arcdist.h"
 
 #include <cmath>                  // for round
-#include <cstdio>                 // for printf, sscanf
-#include <cstdlib>                // for strtod
+#include <cstdio>                 // for sscanf
+#include <tuple>                  // for tie, tuple
 
 #include <QByteArray>             // for QByteArray
 #include <QString>                // for QString
@@ -37,15 +37,13 @@
 
 
 #if FILTERS_ENABLED
-#define MYNAME "Arc filter"
 
 #define BADVAL 999999
 
 void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 {
   static const Waypoint* arcpt1 = nullptr;
-  double prjlat;
-  double prjlon;
+  PositionDeg prjpos;
   double frac;
 
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
@@ -62,38 +60,29 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
       if (ed->distance == BADVAL || projectopt || ed->distance >= pos_dist) {
         double dist;
         if (ptsopt) {
-          dist = gcdist(RAD(arcpt2->latitude),
-                        RAD(arcpt2->longitude),
-                        RAD(waypointp->latitude),
-                        RAD(waypointp->longitude));
-          prjlat = arcpt2->latitude;
-          prjlon = arcpt2->longitude;
+          dist = gcdist(arcpt2->position(), waypointp->position());
+          prjpos = arcpt2->position();
           frac = 1.0;
         } else {
           if (waypointp == nullptr) {
-            fatal(FatalMsg() << "Internal error. Attempt to project through a waypoint that doesn't exist");
+            gbFatal(FatalMsg() << "Internal error. Attempt to project through a waypoint that doesn't exist");
           }
           if (arcpt1 == nullptr) {
-            fatal(FatalMsg() << "Internal error: Attempt to project waypoint without predecessor");
+            gbFatal(FatalMsg() << "Internal error: Attempt to project waypoint without predecessor");
           }
 
-          dist = linedistprj(arcpt1->latitude,
-                             arcpt1->longitude,
-                             arcpt2->latitude,
-                             arcpt2->longitude,
-                             waypointp->latitude,
-                             waypointp->longitude,
-                             &prjlat, &prjlon, &frac);
+          std::tie(dist, prjpos, frac) = linedistprj(arcpt1->position(),
+                                                     arcpt2->position(),
+                                                     waypointp->position());
         }
 
-        /* convert radians to float point statute miles */
-        dist = radtomiles(dist);
+        /* convert radians to meters */
+        dist = radtometers(dist);
 
         if (ed->distance > dist) {
           ed->distance = dist;
           if (projectopt) {
-            ed->prjlatitude = prjlat;
-            ed->prjlongitude = prjlon;
+            ed->prjpos = prjpos;
             ed->frac = frac;
             ed->arcpt1 = arcpt1;
             ed->arcpt2 = arcpt2;
@@ -122,7 +111,7 @@ void ArcDistanceFilter::process()
     QString line;
 
     gpsbabel::TextStream stream;
-    stream.open(arcfileopt, QIODevice::ReadOnly, MYNAME);
+    stream.open(arcfileopt, QIODevice::ReadOnly);
 
     auto* arcpt1 = new Waypoint;
     auto* arcpt2 = new Waypoint;
@@ -143,8 +132,8 @@ void ArcDistanceFilter::process()
       arcpt2->latitude = arcpt2->longitude = BADVAL;
       int argsfound = sscanf(CSTR(line), "%lf %lf", &arcpt2->latitude, &arcpt2->longitude);
 
-      if ((argsfound != 2) && (line.trimmed().size() > 0)) {
-        warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline);
+      if ((argsfound != 2) && (!line.trimmed().isEmpty())) {
+        gbWarning("Warning: Arc file contains unusable vertex on line %d.\n", fileline);
       } else {
         Waypoint* arcpttmp = arcpt1;
         arcdist_arc_disp_wpt_cb(arcpt2);
@@ -167,12 +156,11 @@ void ArcDistanceFilter::process()
     if (wp->extra_data) {
       auto* ed = (extra_data*) wp->extra_data;
       wp->extra_data = nullptr;
-      if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
+      if ((ed->distance >= pos_dist) == !exclopt) {
         wp->wpt_flags.marked_for_deletion = 1;
         removed++;
       } else if (projectopt) {
-        wp->longitude = ed->prjlongitude;
-        wp->latitude = ed->prjlatitude;
+        wp->SetPosition(ed->prjpos);
         if (!arcfileopt &&
             (ed->arcpt2->altitude != unknown_alt) &&
             (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {
@@ -201,8 +189,8 @@ void ArcDistanceFilter::process()
           }
         }
         if (global_opts.debug_level >= 1) {
-          warning("Including waypoint %s at dist:%f lat:%f lon:%f\n",
-                  qPrintable(wp->shortname), ed->distance, wp->latitude, wp->longitude);
+          gbWarning("Including waypoint %s at dist:%f lat:%f lon:%f\n",
+                  gbLogCStr(wp->shortname), ed->distance, wp->latitude, wp->longitude);
         }
       }
       delete ed;
@@ -210,28 +198,23 @@ void ArcDistanceFilter::process()
   }
   del_marked_wpts();
   if (global_opts.verbose_status > 0) {
-    printf(MYNAME "-arc: %u waypoint(s) removed.\n", removed);
+    gbInfo("%u waypoint(s) removed.\n", removed);
   }
 }
 
 void ArcDistanceFilter::init()
 {
-  char* fm;
-
   if ((!arcfileopt && !rteopt && !trkopt) ||
       (arcfileopt && (rteopt || trkopt)) ||
       (rteopt && trkopt)) {
-    fatal(MYNAME ": Incompatible or incomplete option values!\n");
+    gbFatal("Incompatible or incomplete option values!\n");
   }
 
-  pos_dist = 0;
+  pos_dist = 0.0;
 
   if (distopt) {
-    pos_dist = strtod(distopt, &fm);
-
-    if ((*fm == 'k') || (*fm == 'K')) {
-      /* distance is kilometers, convert to mile */
-      pos_dist *= kMilesPerKilometer;
+    if (parse_distance(distopt, &pos_dist, kMetersPerMile) == 0) {
+      gbFatal("No distance specified with distance option.\n");
     }
   }
 }

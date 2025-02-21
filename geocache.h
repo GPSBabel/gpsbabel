@@ -79,22 +79,6 @@ public:
     QString utf_string;
   };
 
-  /* Special Member Functions */
-
-  Geocache() :
-    id(0),
-    type(type_t::gt_unknown),
-    container(container_t::gc_unknown),
-    diff(0),
-    terr(0),
-    is_archived(status_t::gs_unknown),
-    is_available(status_t::gs_unknown),
-    is_memberonly(status_t::gs_unknown),
-    has_customcoords(status_t::gs_unknown),
-    placer_id(0),
-    favorite_points(0)
-  {}
-
   /* Member Functions */
 
   void set_type(const QString& type_name);
@@ -105,22 +89,22 @@ public:
 
   /* Data Members */
 
-  long long id; /* The decimal cache number */
-  type_t type:5;
-  container_t container:4;
-  unsigned int diff:6; /* (multiplied by ten internally) */
-  unsigned int terr:6; /* (likewise) */
-  status_t is_archived:2;
-  status_t is_available:2;
-  status_t is_memberonly:2;
-  status_t has_customcoords:2;
+  long long id{0}; /* The decimal cache number */
+  type_t type:5{type_t::gt_unknown};
+  container_t container:4{container_t::gc_unknown};
+  unsigned int diff:6{0}; /* (multiplied by ten internally) */
+  unsigned int terr:6{0}; /* (likewise) */
+  status_t is_archived:2{status_t::gs_unknown};
+  status_t is_available:2{status_t::gs_unknown};
+  status_t is_memberonly:2{status_t::gs_unknown};
+  status_t has_customcoords:2{status_t::gs_unknown};
   gpsbabel::DateTime last_found;
   QString placer; /* Placer name */
-  int placer_id; /* Placer id */
+  int placer_id{0}; /* Placer id */
   QString hint; /* all these UTF8, XML entities removed, May be not HTML. */
   UtfString desc_short;
   UtfString desc_long;
-  int favorite_points;
+  int favorite_points{0};
   QString personal_note;
 
 private:

@@ -8,12 +8,22 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
 
   windows:
     name: windows Build
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -44,6 +54,14 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-latest
+          - QT_VERSION: '6.8.2'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2022_64'
+            METHOD: 'aqt'
+            RELEASE: false
+            GENERATOR: 'Ninja'
+            os: windows-2025
 
     steps:
     - name: Checkout repository
@@ -60,7 +78,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       uses: actions/setup-python@v5
       with:
-        python-version: '3.9'
+        python-version: '3.12'
 
     - name: Install Qt
       if: steps.cache.outputs.cache-hit != 'true'
@@ -69,6 +87,10 @@ jobs:
       shell: bash
       run: |
         ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
+
+    - name: Install Inno Setup
+      if: matrix.os == 'windows-2025'
+      run: choco install innosetup 
 
     - name: Build
       shell: powershell
@@ -90,6 +112,12 @@ jobs:
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
+    - name: Generate artifact attestation
+      if: ${{ inputs.attestation && matrix.RELEASE }}
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: 'bld/gui/GPSBabel-*-Setup.exe'
+
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
       # the 'Upload Artifacts' step.
@@ -106,6 +134,6 @@ jobs:
       with:
         name: Windows_Installer ${{ join(matrix.*) }}
         path: |
-          ./bld/gui/GPSBabel-*-Setup.exe
-          ./bld/gui/GPSBabel-*-Manifest.txt
+          bld/gui/GPSBabel-*-Setup.exe
+          bld/gui/GPSBabel-*-Manifest.txt
         retention-days: 7

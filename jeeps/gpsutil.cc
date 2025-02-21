@@ -22,46 +22,20 @@
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
 #include "jeeps/gps.h"
+#include <bit>
 #include <cstdarg>
 #include <cstdlib>
 
-static int32_t gps_endian_called = 0;
-static int32_t GPS_Little = 0;
+static_assert((std::endian::native == std::endian::little) !=
+              (std::endian::native == std::endian::big),
+              "Only big or little endian platforms are supported.");
+static constexpr bool GPS_Little = std::endian::native == std::endian::little;
 
 int32_t gps_warning = 0;
 int32_t gps_error = 0;
 int32_t gps_user = 0;
 int32_t gps_show_bytes = 0;
 int32_t gps_errno = 0;
-
-/* @func GPS_Util_Little ***********************************************
-**
-** Determine endian nature of host
-**
-** @return [int32] true if little-endian
-************************************************************************/
-
-int32_t GPS_Util_Little()
-{
-  static union lb {
-    char chars[sizeof(int32_t)];
-    int32_t i;
-  }
-  data;
-
-  if (!gps_endian_called) {
-    gps_endian_called = 1;
-    data.i = 0;
-    *data.chars = '\1';
-    if (data.i == 1) {
-      GPS_Little = 1;
-    } else {
-      GPS_Little = 0;
-    }
-  }
-
-  return GPS_Little;
-}
 
 
 /* @func GPS_Util_Get_Short ********************************************
@@ -78,7 +52,7 @@ US GPS_Util_Get_Short(const UC* s)
 
   p = (UC*)&ret;
 
-  if (!GPS_Little) {
+  if constexpr(!GPS_Little) {
     *p++ = *(s+1);
     *p = *s;
   } else {
@@ -105,7 +79,7 @@ void GPS_Util_Put_Short(UC* s, const US v)
 {
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little) {
+  if constexpr(!GPS_Little) {
     *s++ = *(p+1);
     *s = *p;
   } else {
@@ -134,7 +108,7 @@ double GPS_Util_Get_Double(const UC* s)
   p = (UC*)&ret;
 
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(double)-1; i>-1; --i) {
       *p++ = s[i];
     }
@@ -164,7 +138,7 @@ void GPS_Util_Put_Double(UC* s, const double v)
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(double)-1; i>-1; --i) {
       s[i] = *p++;
     }
@@ -195,7 +169,7 @@ int32_t GPS_Util_Get_Int(const UC* s)
   p = (UC*)&ret;
 
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(int32_t)-1; i>-1; --i) {
       *p++ = s[i];
     }
@@ -225,7 +199,7 @@ void GPS_Util_Put_Int(UC* s, const int32_t v)
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(int32_t)-1; i>-1; --i) {
       s[i] = *p++;
     }
@@ -255,7 +229,7 @@ uint32_t GPS_Util_Get_Uint(const UC* s)
   p = (UC*)&ret;
 
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(uint32_t)-1; i>-1; --i) {
       *p++ = s[i];
     }
@@ -285,7 +259,7 @@ void GPS_Util_Put_Uint(UC* s, const uint32_t v)
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(uint32_t)-1; i>-1; --i) {
       s[i] = *p++;
     }
@@ -315,7 +289,7 @@ float GPS_Util_Get_Float(const UC* s)
   p = (UC*)&ret;
 
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(float)-1; i>-1; --i) {
       *p++ = s[i];
     }
@@ -345,7 +319,7 @@ void GPS_Util_Put_Float(UC* s, const float v)
 
   const auto* p = reinterpret_cast<const UC*>(&v);
 
-  if (!GPS_Little)
+  if constexpr(!GPS_Little)
     for (i=sizeof(float)-1; i>-1; --i) {
       s[i] = *p++;
     }

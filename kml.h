@@ -22,22 +22,24 @@
 #ifndef KML_H_INCLUDED_
 #define KML_H_INCLUDED_
 
-#include <bitset>                       // for bitset
-#include <tuple>                        // for tuple, make_tuple, tie
+#include <bitset>                      // for bitset
+#include <tuple>                       // for tuple, make_tuple, tie
 
-#include <QHash>                        // for QHash
-#include <QList>                        // for QList
-#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
-#include <QVector>                      // for QVector
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
+#include <QHash>                       // for QHash
+#include <QList>                       // for QList
+#include <QString>                     // for QString, QStringLiteral, operator+, operator!=
+#include <QStringList>                 // for QStringList
+#include <QVector>                     // for QVector
+#include <QXmlStreamAttributes>        // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "format.h"
-#include "src/core/datetime.h"          // for DateTime
-#include "src/core/file.h"              // for File
-#include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
-#include "units.h"                      // for UnitsFormatter
-#include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
+#include "option.h"                    // for OptionBool, OptionString
+#include "src/core/datetime.h"         // for DateTime
+#include "src/core/file.h"             // for File
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "units.h"                     // for UnitsFormatter
+#include "xmlgeneric.h"                // for cb_cdata, cb_end, cb_start, xg_callback, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
 
 class KmlFormat : public Format
@@ -115,24 +117,9 @@ private:
   static constexpr const char* default_precision = "6";
   static constexpr int kml_color_limit = 204;	/* allowed range [0,255] */
 
-  static constexpr const char* kml_tags_to_ignore[] = {
-    "kml",
-    "Document",
-    "Folder",
-    nullptr
-  };
-
-  static constexpr const char* kml_tags_to_skip[] = {
-    "Camera",
-    "LookAt",
-    "styleUrl",
-    "snippet",
-    nullptr
-  };
-
   /* Member Functions */
 
-  void kml_init_color_sequencer(unsigned int steps_per_rev);
+  void kml_init_color_sequencer(int steps_per_rev);
   static constexpr int kml_bgr_to_color(int blue, int green, int red)
   {
     return (blue)<<16 | (green)<<8 | (red);
@@ -152,7 +139,7 @@ private:
   void gx_trk_e(const QString& args, const QXmlStreamAttributes* attrs);
   void gx_trk_when(const QString& args, const QXmlStreamAttributes* attrs);
   void gx_trk_coord(const QString& args, const QXmlStreamAttributes* attrs);
-  void kml_output_linestyle(char* color, int width) const;
+  void kml_output_linestyle(const QString& color, int width) const;
   void kml_write_bitmap_style_(const QString& style, const QString& bitmap, bool highlighted, bool force_heading) const;
   void kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap, const QString& customstyle) const;
   void kml_output_timestamp(const Waypoint* waypointp) const;
@@ -200,26 +187,28 @@ private:
 
   /* Data Members */
 
+  static const QStringList kml_tags_to_ignore;
+  static const QStringList kml_tags_to_skip;
   static const QVector<mt_field_t> mt_fields_def;
   track_trait_t kml_track_traits;
   QHash<const route_head*, track_trait_t> kml_track_traits_hash;
 
   // options
-  char* opt_deficon{nullptr};
-  char* opt_export_lines{nullptr};
-  char* opt_export_points{nullptr};
-  char* opt_export_track{nullptr};
-  char* opt_line_width{nullptr};
-  char* opt_line_color{nullptr};
-  char* opt_floating{nullptr};
-  char* opt_extrude{nullptr};
-  char* opt_trackdata{nullptr};
-  char* opt_trackdirection{nullptr};
-  char* opt_units{nullptr};
-  char* opt_labels{nullptr};
-  char* opt_max_position_points{nullptr};
-  char* opt_rotate_colors{nullptr};
-  char* opt_precision{nullptr};
+  OptionString opt_deficon;
+  OptionBool opt_export_lines;
+  OptionBool opt_export_points;
+  OptionBool opt_export_track;
+  OptionInt opt_line_width;
+  OptionString opt_line_color;
+  OptionBool opt_floating;
+  OptionBool opt_extrude;
+  OptionBool opt_trackdata;
+  OptionBool opt_trackdirection;
+  OptionString opt_units;
+  OptionBool opt_labels;
+  OptionInt opt_max_position_points;
+  OptionDouble opt_rotate_colors;
+  OptionInt opt_precision;
 
   bool export_lines{};
   bool export_points{};
@@ -229,7 +218,6 @@ private:
   bool trackdata{};
   bool trackdirection{};
   int max_position_points{};
-  bool rotate_colors{};
   int line_width{};
   int precision{};
 

@@ -30,17 +30,18 @@
 #ifndef DG100_H_INCLUDED_
 #define DG100_H_INCLUDED_
 
-#include <cstdint>           // for uint8_t, int16_t, uint16_t
-#include <cstdio>            // for size_t
+#include <cstdint>    // for uint8_t, int16_t, uint16_t
+#include <cstdio>     // for size_t
 
-#include <QDateTime>         // for QDateTime
-#include <QList>             // for QList
-#include <QString>           // for QString
-#include <QVector>           // for QVector
+#include <QDateTime>  // for QDateTime
+#include <QList>      // for QList
+#include <QString>    // for QString
+#include <QVector>    // for QVector
 
 #include "defs.h"
-#include "format.h"          // for Format
-#include "gbfile.h"          // for gbfile
+#include "format.h"   // for Format
+#include "gbfile.h"   // for gbfile
+#include "option.h"   // for OptionBool
 
 
 class Dg100Format : public Format
@@ -107,24 +108,24 @@ protected:
 
   /* Member Functions */
 
-  const dg100_command* dg100_findcmd(int id) const;
+  const dg100_command* dg100_findcmd(int id);
   static QDateTime bintime2utc(int date, int time);
   static void dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf);
   [[gnu::format(printf, 1, 2)]] static void dg100_log(const char* fmt, ...);
   static float bin2deg(int val);
-  void process_gpsfile(uint8_t* data, route_head** track) const;
+  void process_gpsfile(uint8_t* data, route_head** track);
   static uint16_t dg100_checksum(const uint8_t* buf, int count);
-  size_t dg100_send(uint8_t cmd, const void* payload, size_t param_len) const;
-  int dg100_recv_byte() const;
-  int dg100_read_wait(void* handle, void* buf, unsigned int len, unsigned int ms) const;
-  int dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** payload) const;
-  int dg100_recv(uint8_t expected_id, void* buf, unsigned int len) const;
-  int dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count) const;
-  QList<int> dg100_getfileheaders() const;
-  void dg100_getconfig() const;
-  void dg100_getfile(int16_t num, route_head** track) const;
-  void dg100_getfiles() const;
-  int dg100_erase() const;
+  size_t dg100_send(uint8_t cmd, const void* payload, size_t param_len);
+  int dg100_recv_byte();
+  int dg100_read_wait(void* handle, void* buf, unsigned int len, unsigned int ms);
+  int dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** payload);
+  int dg100_recv(uint8_t expected_id, void* buf, unsigned int len);
+  int dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count);
+  QList<int> dg100_getfileheaders();
+  void dg100_getconfig();
+  void dg100_getfile(int16_t num, route_head** track);
+  void dg100_getfiles();
+  int dg100_erase();
   void common_rd_init(const QString& fname);
   void dg100_rd_init(const QString& fname, bool is_file);
   void dg200_rd_init(const QString& fname, bool is_file);
@@ -141,8 +142,8 @@ protected:
 
   /* GPSBabel integration */
 
-  char* erase{nullptr};
-  char* erase_only{nullptr};
+  OptionBool erase;
+  OptionBool erase_only;
 
   QVector<arglist_t> dg100_args = {
     {

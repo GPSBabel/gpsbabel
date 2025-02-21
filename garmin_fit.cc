@@ -25,7 +25,6 @@
 #include <cstdint>             // for uint8_t, uint16_t, uint32_t, int32_t, int8_t, uint64_t
 #include <cstdio>              // for EOF, SEEK_SET, snprintf
 #include <deque>               // for deque, _Deque_iterator, operator!=
-#include <memory>              // for allocator_traits<>::value_type
 #include <string>              // for operator+, to_string, char_traits
 #include <utility>             // for pair
 #include <vector>              // for vector
@@ -45,8 +44,6 @@
 #include "src/core/logging.h"  // for Warning, Fatal
 
 
-#define MYNAME "fit"
-
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
@@ -54,7 +51,7 @@
 void
 GarminFitFormat::rd_init(const QString& fname)
 {
-  fin = gbfopen_le(fname, "rb", MYNAME);
+  fin = gbfopen_le(fname, "rb");
 }
 
 void
@@ -68,7 +65,7 @@ GarminFitFormat::rd_deinit()
 void
 GarminFitFormat::wr_init(const QString& fname)
 {
-  fout = gbfopen_le(fname, "w+b", MYNAME);
+  fout = gbfopen_le(fname, "w+b");
 }
 
 void
@@ -87,18 +84,18 @@ GarminFitFormat::fit_parse_header()
 
   int len = gbfgetc(fin);
   if (len == EOF || len < 12) {
-    fatal(MYNAME ": Bad header\n");
+    gbFatal("Bad header\n");
   }
   if (global_opts.debug_level >= 1) {
-    Debug(1) << MYNAME ": header len=" << len;
+    Debug(1) << "header len=" << len;
   }
 
   int ver = gbfgetc(fin);
   if (ver == EOF || (ver >> 4) > 2)
-    fatal(MYNAME ": Unsupported protocol version %d.%d\n",
+    gbFatal("Unsupported protocol version %d.%d\n",
           ver >> 4, ver & 0xf);
   if (global_opts.debug_level >= 1) {
-    Debug(1) << MYNAME ": protocol version=" << ver;
+    Debug(1) << "protocol version=" << ver;
   }
 
   // profile version
@@ -107,15 +104,15 @@ GarminFitFormat::fit_parse_header()
   fit_data.len = gbfgetuint32(fin);
   // File signature
   if (gbfread(sig, 4, 1, fin) != 1) {
-    fatal(MYNAME ": Unexpected end of file\n");
+    gbFatal("Unexpected end of file\n");
   }
   if (sig[0] != '.' || sig[1] != 'F' || sig[2] != 'I' || sig[3] != 'T') {
-    fatal(MYNAME ": .FIT signature missing\n");
+    gbFatal(".FIT signature missing\n");
   }
 
   if (global_opts.debug_level >= 1) {
-    Debug(1) << MYNAME ": profile version=" << ver;
-    Debug(1) << MYNAME ": fit_data.len=" << fit_data.len;
+    Debug(1) << "profile version=" << ver;
+    Debug(1) << "fit_data.len=" << fit_data.len;
   }
 
   // Header CRC may be omitted entirely
@@ -129,17 +126,17 @@ GarminFitFormat::fit_parse_header()
       for (unsigned int i = 0; i < kReadHeaderCrcLen; ++i) {
         int data = gbfgetc(fin);
         if (data == EOF) {
-          fatal(MYNAME ": File %s truncated\n", fin->name);
+          gbFatal("File %s truncated\n", gbLogCStr(fin->name));
         }
         crc = fit_crc16(data, crc);
       }
       if (crc != 0) {
-        Warning().nospace() << MYNAME ": Header CRC mismatch in file " <<  fin->name << ".";
+        Warning().nospace() << "Header CRC mismatch in file " <<  fin->name << ".";
         if (!opt_recoverymode) {
-          fatal(FatalMsg().nospace() << MYNAME ": File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
+          gbFatal(FatalMsg().nospace() << "File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
         }
       } else if (global_opts.debug_level >= 1) {
-        Debug(1) << MYNAME ": Header CRC verified.";
+        Debug(1) << "Header CRC verified.";
       }
     }
   }
@@ -147,9 +144,9 @@ GarminFitFormat::fit_parse_header()
   QFileInfo fi(fin->name);
   qint64 size = fi.size();
   if ((len + fit_data.len + 2) != size) {
-    Warning().nospace() << MYNAME ": File size " << size << " is not expected given header len " << len << ", data length " << fit_data.len << " and a 2 byte file CRC.";
+    Warning().nospace() << "File size " << size << " is not expected given header len " << len << ", data length " << fit_data.len << " and a 2 byte file CRC.";
   } else if (global_opts.debug_level >= 1) {
-    Debug(1) << MYNAME ": File size matches expectations from information in the header.";
+    Debug(1) << "File size matches expectations from information in the header.";
   }
 
   gbfseek(fin, len, SEEK_SET);
@@ -249,7 +246,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
   // byte 5 has the number of records in the remainder of the definition message
   int num_fields = fit_getuint8();
   if (global_opts.debug_level >= 8) {
-    Debug(8) << MYNAME ": definition message contains " << num_fields << " records";
+    Debug(8) << "definition message contains " << num_fields << " records";
   }
 
   // remainder of the definition message is data at one byte per field * 3 fields
@@ -259,7 +256,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
     int type = fit_getuint8();
     fit_field_t field = {id, size, type};
     if (global_opts.debug_level >= 8) {
-      Debug(8) << MYNAME ": record " << i << "  ID: " << field.id << "  SIZE: "
+      Debug(8) << "record " << i << "  ID: " << field.id << "  SIZE: "
                << field.size << "  TYPE: " << field.type << "  fit_data.len="
                << fit_data.len;
     }
@@ -291,7 +288,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
   if (hasDevFields) {
     int numOfDevFields = fit_getuint8();
     if (global_opts.debug_level >= 8) {
-      Debug(8) << MYNAME ": definition message contains " << numOfDevFields << " developer records";
+      Debug(8) << "definition message contains " << numOfDevFields << " developer records";
     }
     if (numOfDevFields > 0) {
       int numOfFields = num_fields + numOfDevFields;
@@ -301,7 +298,7 @@ GarminFitFormat::fit_parse_definition_message(uint8_t header)
         int type = fit_getuint8();
         fit_field_t field = {id, size, type};
         if (global_opts.debug_level >= 8) {
-          Debug(8) << MYNAME ": developer record " << i - num_fields <<
+          Debug(8) << "developer record " << i - num_fields <<
                    "  ID: " << field.id << "  SIZE: " << field.size <<
                    "  TYPE: " << field.type << "  fit_data.len=" << fit_data.len;
         }
@@ -330,7 +327,7 @@ GarminFitFormat::fit_read_field(const fit_field_t& f)
   // otherwise we just skip over the data.
 
   if (global_opts.debug_level >= 8) {
-    Debug(8) << MYNAME ": fit_read_field: read data field with f.type=0x" <<
+    Debug(8) << "fit_read_field: read data field with f.type=0x" <<
              Qt::hex << f.type << " and f.size=" <<
              Qt::dec << f.size << " fit_data.len=" << fit_data.len;
   }
@@ -345,7 +342,7 @@ GarminFitFormat::fit_read_field(const fit_field_t& f)
         fit_getuint8();
       }
       if (global_opts.debug_level >= 8) {
-        Debug(8) << MYNAME ": fit_read_field: skipping 1-byte array data";
+        Debug(8) << "fit_read_field: skipping 1-byte array data";
       }
       return -1;
     }
@@ -361,7 +358,7 @@ GarminFitFormat::fit_read_field(const fit_field_t& f)
         fit_getuint8();
       }
       if (global_opts.debug_level >= 8) {
-        Debug(8) << MYNAME ": fit_read_field: skipping 2-byte array data";
+        Debug(8) << "fit_read_field: skipping 2-byte array data";
       }
       return -1;
     }
@@ -374,7 +371,7 @@ GarminFitFormat::fit_read_field(const fit_field_t& f)
         fit_getuint8();
       }
       if (global_opts.debug_level >= 8) {
-        Debug(8) << MYNAME ": fit_read_field: skipping 4-byte array data";
+        Debug(8) << "fit_read_field: skipping 4-byte array data";
       }
       return -1;
     }
@@ -383,7 +380,7 @@ GarminFitFormat::fit_read_field(const fit_field_t& f)
       fit_getuint8();
     }
     if (global_opts.debug_level >= 8) {
-      Debug(8) << MYNAME ": fit_read_field: skipping unrecognized data type";
+      Debug(8) << "fit_read_field: skipping unrecognized data type";
     }
     return -1;
   }
@@ -412,11 +409,11 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
   QString description;
 
   if (global_opts.debug_level >= 7) {
-    Debug(7) << MYNAME ": parsing fit data ID " << def.global_id << " with num_fields=" << def.fields.size();
+    Debug(7) << "parsing fit data ID " << def.global_id << " with num_fields=" << def.fields.size();
   }
   for (int i = 0; i < def.fields.size(); ++i) {
     if (global_opts.debug_level >= 7) {
-      Debug(7) << MYNAME ": parsing field " << i;
+      Debug(7) << "parsing field " << i;
     }
     const fit_field_t& f = def.fields.at(i);
     QVariant field = fit_read_field(f);
@@ -426,7 +423,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     }
     if (f.id == kFieldTimestamp) {
       if (global_opts.debug_level >= 7) {
-        Debug(7) << MYNAME ": parsing fit data: timestamp=" << static_cast<int32_t>(val);
+        Debug(7) << "parsing fit data: timestamp=" << static_cast<int32_t>(val);
       }
       timestamp = val;
       // if the timestamp is < 0x10000000, this value represents
@@ -441,13 +438,13 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         switch (f.id) {
         case kFieldGlobalUtcOffset:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: global utc_offset=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: global utc_offset=" << static_cast<int32_t>(val);
           }
           fit_data.global_utc_offset = val;
           break;
         default:
           if (global_opts.debug_level >= 1) {
-            Debug(1) << MYNAME ": unrecognized data type in GARMIN FIT device settings: f.id=" << f.id;
+            Debug(1) << "unrecognized data type in GARMIN FIT device settings: f.id=" << f.id;
           }
           break;
         } // switch (f.id)
@@ -458,19 +455,19 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         switch (f.id) {
         case kFieldLatitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: lat=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: lat=" << static_cast<int32_t>(val);
           }
           lat = val;
           break;
         case kFieldLongitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: lon=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: lon=" << static_cast<int32_t>(val);
           }
           lon = val;
           break;
         case kFieldAltitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: alt=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: alt=" << static_cast<int32_t>(val);
           }
           if (val != 0xffff) {
             alt = val;
@@ -478,25 +475,25 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
           break;
         case kFieldHeartRate:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: heartrate=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: heartrate=" << static_cast<int32_t>(val);
           }
           heartrate = val;
           break;
         case kFieldCadence:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: cadence=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: cadence=" << static_cast<int32_t>(val);
           }
           cadence = val;
           break;
         case kFieldDistance:
           // NOTE: 5 is DISTANCE in cm ... unused.
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": unrecognized data type in GARMIN FIT record: f.id=" << f.id;
+            Debug(7) << "unrecognized data type in GARMIN FIT record: f.id=" << f.id;
           }
           break;
         case kFieldSpeed:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: speed=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: speed=" << static_cast<int32_t>(val);
           }
           if (val != 0xffff) {
             speed = val;
@@ -504,19 +501,19 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
           break;
         case kFieldPower:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: power=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: power=" << static_cast<int32_t>(val);
           }
           power = val;
           break;
         case kFieldTemperature:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: temperature=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: temperature=" << static_cast<int32_t>(val);
           }
           temperature = val;
           break;
         case kFieldEnhancedSpeed:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: enhanced_speed=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: enhanced_speed=" << static_cast<int32_t>(val);
           }
           if (val != 0xffff) {
             speed = val;
@@ -524,7 +521,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
           break;
         case kFieldEnhancedAltitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: enhanced_altitude=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: enhanced_altitude=" << static_cast<int32_t>(val);
           }
           if (val != 0xffff) {
             alt = val;
@@ -532,7 +529,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
           break;
         default:
           if (global_opts.debug_level >= 1) {
-            Debug(1) << MYNAME ": unrecognized data type in GARMIN FIT record: f.id=" << f.id;
+            Debug(1) << "unrecognized data type in GARMIN FIT record: f.id=" << f.id;
           }
           break;
         } // switch (f.id)
@@ -543,49 +540,49 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         switch (f.id) {
         case kFieldStartTime:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: starttime=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: starttime=" << static_cast<int32_t>(val);
           }
           //starttime = val;
           break;
         case kFieldStartLatitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: startlat=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: startlat=" << static_cast<int32_t>(val);
           }
           //startlat = val;
           break;
         case kFieldStartLongitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: startlon=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: startlon=" << static_cast<int32_t>(val);
           }
           //startlon = val;
           break;
         case kFieldEndLatitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: endlat=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: endlat=" << static_cast<int32_t>(val);
           }
           endlat = val;
           break;
         case kFieldEndLongitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: endlon=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: endlon=" << static_cast<int32_t>(val);
           }
           endlon = val;
           break;
         case kFieldElapsedTime:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: elapsedtime=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: elapsedtime=" << static_cast<int32_t>(val);
           }
           //elapsedtime = val;
           break;
         case kFieldTotalDistance:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: totaldistance=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: totaldistance=" << static_cast<int32_t>(val);
           }
           //totaldistance = val;
           break;
         default:
           if (global_opts.debug_level >= 1) {
-            Debug(1) << MYNAME ": unrecognized data type in GARMIN FIT lap: f.id=" << f.id;
+            Debug(1) << "unrecognized data type in GARMIN FIT lap: f.id=" << f.id;
           }
           break;
         } // switch (f.id)
@@ -596,13 +593,13 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         switch (f.id) {
         case kFieldEvent:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: event=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: event=" << static_cast<int32_t>(val);
           }
           event = val;
           break;
         case kFieldEventType:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: eventtype=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: eventtype=" << static_cast<int32_t>(val);
           }
           eventtype = val;
           break;
@@ -614,19 +611,19 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         switch (f.id) {
         case kFieldLocLatitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: lat=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: lat=" << static_cast<int32_t>(val);
           }
           lat = val;
           break;
         case kFieldLocLongitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: lon=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: lon=" << static_cast<int32_t>(val);
           }
           lon = val;
           break;
         case kFieldLocAltitude:
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: alt=" << static_cast<int32_t>(val);
+            Debug(7) << "parsing fit data: alt=" << static_cast<int32_t>(val);
           }
           if (val != 0xffff) {
             alt = val;
@@ -635,18 +632,18 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         case kFieldLocationName:
           name = field.toString();
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: location name=" << name;
+            Debug(7) << "parsing fit data: location name=" << name;
           }
           break;
         case kFieldLocationDescription:
           description = field.toString();
           if (global_opts.debug_level >= 7) {
-            Debug(7) << MYNAME ": parsing fit data: location description=" << description;
+            Debug(7) << "parsing fit data: location description=" << description;
           }
           break;
         default:
           if (global_opts.debug_level >= 1) {
-            Debug(1) << MYNAME ": unrecognized data type in GARMIN FIT locations: f.id=" << f.id;
+            Debug(1) << "unrecognized data type in GARMIN FIT locations: f.id=" << f.id;
           }
           break;
         } // switch (f.id)
@@ -654,7 +651,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         break;
       default:
         if (global_opts.debug_level >= 1) {
-          Debug(1) << MYNAME ": unrecognized/unhandled global ID for GARMIN FIT: " << def.global_id;
+          Debug(1) << "unrecognized/unhandled global ID for GARMIN FIT: " << def.global_id;
         }
         break;
       } // switch (def.global_id)
@@ -662,7 +659,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
   }
 
   if (global_opts.debug_level >= 7) {
-    Debug(7) << MYNAME ": storing fit data with num_fields=" << def.fields.size();
+    Debug(7) << "storing fit data with num_fields=" << def.fields.size();
   }
   switch (def.global_id) {
   case kIdLap: { // lap message
@@ -670,7 +667,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
       break;
     }
     if (global_opts.debug_level >= 7) {
-      Debug(7) << MYNAME ": storing fit data LAP " << def.global_id;
+      Debug(7) << "storing fit data LAP " << def.global_id;
     }
     auto* lappt = new Waypoint;
     lappt->latitude = GPS_Math_Semi_To_Deg(endlat);
@@ -731,7 +728,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
       break;
     }
     if (global_opts.debug_level >= 7) {
-      Debug(7) << MYNAME ": storing fit data location " << def.global_id;
+      Debug(7) << "storing fit data location " << def.global_id;
     }
     auto* locpt = new Waypoint;
     locpt->latitude = GPS_Math_Semi_To_Deg(lat);
@@ -791,21 +788,21 @@ GarminFitFormat::fit_parse_record()
   // bits 3..0 -> local message type
   if (header & 0x80) {
     if (global_opts.debug_level >= 6) {
-      Debug(6) << MYNAME ": got compressed message at file position 0x" <<
+      Debug(6) << "got compressed message at file position 0x" <<
                Qt::hex << position << ", fit_data.len=" << Qt::dec << fit_data.len
                << " ...local message type 0x" << Qt::hex << (header & 0x0f);
     }
     fit_parse_compressed_message(header);
   } else if (header & 0x40) {
     if (global_opts.debug_level >= 6) {
-      Debug(6) << MYNAME ": got definition message at file position 0x" <<
+      Debug(6) << "got definition message at file position 0x" <<
                Qt::hex << position << ", fit_data.len=" << Qt::dec << fit_data.len
                << " ...local message type 0x" << Qt::hex << (header & 0x0f);
     }
     fit_parse_definition_message(header);
   } else {
     if (global_opts.debug_level >= 6) {
-      Debug(6) << MYNAME ": got data message at file position 0x" <<
+      Debug(6) << "got data message at file position 0x" <<
                Qt::hex << position << ", fit_data.len=" << Qt::dec << fit_data.len
                << " ...local message type 0x" << Qt::hex << (header & 0x0f);
     }
@@ -830,12 +827,12 @@ GarminFitFormat::fit_check_file_crc() const
     crc = fit_crc16(data, crc);
   }
   if (crc != 0) {
-    Warning().nospace() << MYNAME ": File CRC mismatch in file " <<  fin->name << ".";
+    Warning().nospace() << "File CRC mismatch in file " <<  fin->name << ".";
     if (!opt_recoverymode) {
-      fatal(FatalMsg().nospace() << MYNAME ": File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
+      gbFatal(FatalMsg().nospace() << "File " << fin->name << " is corrupt.  Use recoverymode option at your risk.");
     }
   } else if (global_opts.debug_level >= 1) {
-    Debug(1) << MYNAME ": File CRC verified.";
+    Debug(1) << "File CRC verified.";
   }
 
   gbfseek(fin, position, SEEK_SET);
@@ -856,7 +853,7 @@ GarminFitFormat::read()
   fit_data.track = new route_head;
   track_add_head(fit_data.track);
   if (global_opts.debug_level >= 1) {
-    Debug(1) << MYNAME ": starting to read data with fit_data.len=" << fit_data.len;
+    Debug(1) << "starting to read data with fit_data.len=" << fit_data.len;
   }
   try {
     while (fit_data.len) {
@@ -864,10 +861,10 @@ GarminFitFormat::read()
     }
   } catch (ReaderException& e) {
     if (opt_recoverymode) {
-      warning(MYNAME ": %s\n",e.what());
-      warning(MYNAME ": Aborting read and continuing processing.\n");
+      gbWarning("%s\n",e.what());
+      gbWarning("Aborting read and continuing processing.\n");
     } else {
-      fatal(MYNAME ": %s  Use recoverymode option at your risk.\n",e.what());
+      gbFatal("%s  Use recoverymode option at your risk.\n",e.what());
     }
   }
 }
@@ -1096,7 +1093,7 @@ GarminFitFormat::fit_write_file_finish() const
   // Update data records size in file header
   gbsize_t file_size = gbftell(fout);
   if (file_size < kWriteHeaderCrcLen) {
-    fatal(MYNAME ": File %s truncated\n", fout->name);
+    gbFatal("File %s truncated\n", gbLogCStr(fout->name));
   }
   gbfseek(fout, 0, SEEK_SET);
   fit_write_file_header(file_size - kWriteHeaderCrcLen, 0);
@@ -1107,7 +1104,7 @@ GarminFitFormat::fit_write_file_finish() const
   for (unsigned int i = 0; i < kWriteHeaderLen; ++i) {
     int data = gbfgetc(fout);
     if (data == EOF) {
-      fatal(MYNAME ": File %s truncated\n", fout->name);
+      gbFatal("File %s truncated\n", gbLogCStr(fout->name));
     }
     crc = fit_crc16(data, crc);
   }

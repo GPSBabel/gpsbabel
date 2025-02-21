@@ -31,10 +31,11 @@
 #include <algorithm>        // for sort
 #include <cassert>          // for assert
 #include <cstdio>           // for printf
+#include <type_traits>      // for is_base_of
 
 #include "arcdist.h"        // for ArcDistanceFilter
 #include "bend.h"           // for BendFilter
-#include "defs.h"           // for arglist_t, CSTR, xfree, ARGTYPE_HIDDEN, fatal, global_options, global_opts, ARGTYPE_REQUIRED
+#include "defs.h"           // for arglist_t, CSTR, xfree, ARGTYPE_HIDDEN, gbFatal, global_options, global_opts, ARGTYPE_REQUIRED
 #include "discard.h"        // for DiscardFilter
 #include "duplicate.h"      // for DuplicateFilter
 #include "filter.h"         // for Filter
@@ -60,7 +61,7 @@
 template <typename T>
 Filter* fltfactory()
 {
-  static_assert(std::is_base_of<Filter, T>::value, "T must be derived from Filter");
+  static_assert(std::is_base_of_v<Filter, T>, "T must be derived from Filter");
   return new T();
 }
 
@@ -216,9 +217,9 @@ void FilterVecs::prepare_filter(const fltinfo_t& fltdata)
         qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", arg.argstring);
       }
       if (qtemp.isNull()) {
-        Vecs::assign_option(fltdata.fltname, &arg, arg.defaultvalue);
+        Vecs::assign_option(fltdata.fltname, arg, arg.defaultvalue);
       } else {
-        Vecs::assign_option(fltdata.fltname, &arg, qtemp);
+        Vecs::assign_option(fltdata.fltname, arg, qtemp);
       }
     }
   }
@@ -230,7 +231,7 @@ void FilterVecs::prepare_filter(const fltinfo_t& fltdata)
       for (auto& arg : *args) {
         const QString opt = Vecs::get_option(fltdata.options, arg.argstring);
         if (!opt.isNull()) {
-          Vecs::assign_option(fltdata.fltname, &arg, opt);
+          Vecs::assign_option(fltdata.fltname, arg, opt);
         }
       }
     }
@@ -246,7 +247,7 @@ FilterVecs::fltinfo_t FilterVecs::find_filter_vec(const QString& fltargstring)
 {
   QStringList options = fltargstring.split(',');
   if (options.isEmpty()) {
-    fatal("A filter name is required.\n");
+    gbFatal("A filter name is required.\n");
   }
   const QString fltname = options.takeFirst();
 
@@ -269,13 +270,17 @@ void FilterVecs::free_filter_vec(Filter* flt)
   Vecs::free_options(flt->get_args());
 }
 
-void FilterVecs::init_filter_vec(Filter* flt)
+void FilterVecs::init_filter_vec(Filter* flt, const QString& fltname)
 {
   QVector<arglist_t>* args = flt->get_args();
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
-      arg.argvalptr = nullptr;
+      if (arg.argval != nullptr) {
+        arg.argval->reset();
+        QString id = QStringLiteral("%1(%2)").arg(fltname, arg.argstring);
+        arg.argval->init(id);
+      }
     }
   }
 }
@@ -284,7 +289,7 @@ void FilterVecs::init_filter_vecs()
 {
   for (const auto& vec : d_ptr_->filter_vec_list) {
     if (vec.vec != nullptr) {
-      init_filter_vec(vec.vec);
+      init_filter_vec(vec.vec, vec.name);
     }
   }
 }

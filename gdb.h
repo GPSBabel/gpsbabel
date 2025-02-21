@@ -26,6 +26,7 @@
 #ifndef GDB_H_INCLUDED_
 #define GDB_H_INCLUDED_
 
+#include <QList>            // for QList
 #include <QHash>            // for QHash<>::const_iterator, QHash<>::key_iterator, qHash, qHashMulti, QHash
 #include <QString>          // for QString
 #include <QStringView>      // for QStringView
@@ -37,6 +38,7 @@
 #include "garmin_tables.h"  // for gt_waypt_classes_e
 #include "gbfile.h"         // for gbfile
 #include "mkshort.h"        // for MakeShort
+#include "option.h"         // for OptionBool, OptionString
 
 
 class GdbFormat : public Format
@@ -160,12 +162,12 @@ private:
   WptNamePosnHash waypt_nameposn_out_hash;
   MakeShort* short_h{};
 
-  char* gdb_opt_category{};
-  char* gdb_opt_ver{};
-  char* gdb_opt_via{};
-  char* gdb_opt_roadbook{};
-  char* gdb_opt_bitcategory{};
-  char* gdb_opt_drop_hidden_wpt{};
+  OptionInt gdb_opt_category;
+  OptionInt gdb_opt_ver;
+  OptionBool gdb_opt_via;
+  OptionBool gdb_opt_roadbook;
+  OptionInt gdb_opt_bitcategory{false, 0};
+  OptionBool gdb_opt_drop_hidden_wpt;
 
   int waypt_flag{};
   int route_flag{};

@@ -20,10 +20,9 @@
 
  */
 
-#include <cctype>                  // for isprint
+#include <cassert>                 // for assert
 #include <cmath>                   // for fabs
 #include <cstdio>                  // for snprintf, sscanf, fprintf, fputc, stderr
-#include <cstdlib>                 // for strtod
 #include <cstring>                 // for strncmp, strchr, strlen, strstr, memset, strrchr
 #include <iterator>                // for operator!=, reverse_iterator
 
@@ -32,12 +31,12 @@
 #include <QDateTime>               // for QDateTime
 #include <QDebug>                  // for QDebug
 #include <QList>                   // for QList
+#include <QRegularExpression>      // for QRegularExpression
 #include <QString>                 // for QString
 #include <QStringList>             // for QStringList
 #include <QTextStream>             // for hex
 #include <QThread>                 // for QThread
 #include <QTime>                   // for QTime
-#include <Qt>                      // for UTC
 #include <QtGlobal>                // for qPrintable, foreach
 
 #include "defs.h"
@@ -156,9 +155,6 @@ time I have seen this is when the recording stops suddenly, where the last
 sentence is truncated - and missing part of the line, including the checksum.
 */
 
-#define MYNAME "nmea"
-#define CHECK_BOOL(a) if ((a) && (*(a) == '0')) (a) = NULL
-
 /*
  * Slightly different than the Magellan checksum fn.
  */
@@ -191,7 +187,7 @@ NmeaFormat::nmea_add_wpt(Waypoint* wpt, route_head* trk) const
   // This also indicates to nmea_release_wpt that ownership has been
   // transferred to either the global_waypoint_list or global_track_list.
   wpt->extra_data = nullptr;
-  if (datum != kDautmWGS84) {
+  if (datum != kDatumWGS84) {
     double lat;
     double lon;
     double alt;
@@ -223,14 +219,8 @@ NmeaFormat::rd_init(const QString& fname)
 {
   curr_waypt = nullptr;
   last_waypt = nullptr;
-  datum = kDautmWGS84;
+  datum = kDatumWGS84;
   had_checksum = false;
-
-  CHECK_BOOL(opt_gprmc);
-  CHECK_BOOL(opt_gpgga);
-  CHECK_BOOL(opt_gpvtg);
-  CHECK_BOOL(opt_gpgsa);
-  CHECK_BOOL(opt_gisteq);
 
   pcmpt_head.clear();
 
@@ -254,7 +244,7 @@ NmeaFormat::rd_init(const QString& fname)
   }
 
   read_mode = rm_file;
-  file_in = gbfopen(fname, "rb", MYNAME);
+  file_in = gbfopen(fname, "rb");
 }
 
 void
@@ -269,7 +259,7 @@ NmeaFormat::rd_deinit()
     file_in = nullptr;
     break;
   default:
-    fatal("nmea_rd_deinit: illegal read_mode.\n");
+    gbFatal("nmea_rd_deinit: illegal read_mode.\n");
     break;
   }
 
@@ -283,32 +273,24 @@ NmeaFormat::rd_deinit()
 void
 NmeaFormat::wr_init(const QString& fname)
 {
-  CHECK_BOOL(opt_gprmc);
-  CHECK_BOOL(opt_gpgga);
-  CHECK_BOOL(opt_gpvtg);
-  CHECK_BOOL(opt_gpgsa);
-  CHECK_BOOL(opt_gisteq);
-
-  append_output = strtod(opt_append, nullptr);
-
-  file_out = gbfopen(fname, append_output ? "a+" : "w+", MYNAME);
+  file_out = gbfopen(fname, opt_append ? "a+" : "w+");
 
   sleepms = -1;
   if (opt_sleep) {
-    if (*opt_sleep) {
-      sleepms = 1e3 * strtod(opt_sleep, nullptr);
+    if (!opt_sleep.isEmpty()) {
+      sleepms = 1e3 * opt_sleep.get_result();
     } else {
       sleepms = -1;
     }
   }
 
   mkshort_handle = new MakeShort;
-  mkshort_handle->set_length(xstrtoi(snlenopt, nullptr, 10));
+  mkshort_handle->set_length(snlenopt.get_result());
 
   if (opt_gisteq) {
-    opt_gpgga = nullptr;
-    opt_gpvtg = nullptr;
-    opt_gpgsa = nullptr;
+    opt_gpgga.reset();
+    opt_gpvtg.reset();
+    opt_gpgsa.reset();
   }
 }
 
@@ -324,14 +306,14 @@ void
 NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& date, const QTime& time)
 {
   if (date.isValid()) {
-    wpt->SetCreationTime(QDateTime(date, time, Qt::UTC));
+    wpt->SetCreationTime(QDateTime(date, time, QtUTC));
     if (wpt->wpt_flags.fmt_use != 0) {
       wpt->wpt_flags.fmt_use = 0;
       without_date--;
     }
     *prev = wpt->GetCreationTime();
   } else if (prev->date().isValid()) {
-    wpt->SetCreationTime(QDateTime(prev->date(), time, Qt::UTC));
+    wpt->SetCreationTime(QDateTime(prev->date(), time, QtUTC));
     if (*prev > wpt->creation_time) {
       /* go over midnight ? */
       wpt->creation_time = wpt->creation_time.addDays(1);
@@ -342,7 +324,7 @@ NmeaFormat::nmea_set_waypoint_time(Waypoint* wpt, QDateTime* prev, const QDate& 
     }
     *prev = wpt->GetCreationTime();
   } else {
-    wpt->SetCreationTime(QDateTime(QDate(), time, Qt::UTC));
+    wpt->SetCreationTime(QDateTime(QDate(), time, QtUTC));
     if (wpt->wpt_flags.fmt_use == 0) {
       wpt->wpt_flags.fmt_use = 1;
       without_date++;
@@ -358,7 +340,7 @@ QTime NmeaFormat::nmea_parse_hms(const QString& str)
   QTime retval; /* invalid time */
   const QStringList parts = str.trimmed().split('.');
   if ((parts.size() == 1) || (parts.size() == 2)) {
-    retval = QTime::fromString(parts.at(0), "hhmmss");
+    retval = QTime::fromString(parts.at(0), u"hhmmss");
     if (retval.isValid() && parts.size() == 2) {
       bool ok;
       // prepend "0.".  prepending "." won't work if there are no trailing digits.
@@ -386,11 +368,11 @@ NmeaFormat::gpgll_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
   QChar latdir = 'N';
-  if (fields.size() > 2) latdir = fields[2][0];
+  if ((fields.size() > 2) && (!fields[2].isEmpty())) latdir = fields[2][0];
   double lngdeg = 0;
   if (fields.size() > 3) lngdeg = fields[3].toDouble();
   QChar lngdir = 'E';
-  if (fields.size() > 4) lngdir = fields[4][0];
+  if ((fields.size() > 4) && (!fields[4].isEmpty())) lngdir = fields[4][0];
   QTime hms;
   if (fields.size() > 5) hms = nmea_parse_hms(fields[5]);
   bool valid = false;
@@ -434,11 +416,11 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 2) latdeg = fields[2].toDouble();
   QChar latdir = 'N';
-  if (fields.size() > 3) latdir = fields[3][0];
+  if ((fields.size() > 3) && (!fields[3].isEmpty())) latdir = fields[3][0];
   double lngdeg = 0;
   if (fields.size() > 4) lngdeg = fields[4].toDouble();
-  QChar lngdir = 'W';
-  if (fields.size() > 5) lngdir = fields[5][0];
+  QChar lngdir = 'E';
+  if ((fields.size() > 5) && (!fields[5].isEmpty())) lngdir = fields[5][0];
   int fix = fix_unknown;
   if (fields.size() > 6) fix = fields[6].toInt();
   int nsats = 0;
@@ -448,11 +430,11 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
   double alt = unknown_alt;
   if (fields.size() > 9) alt = fields[9].toDouble();
   QChar altunits ='M';
-  if (fields.size() > 10) altunits = fields[10][0];
+  if ((fields.size() > 10) && (!fields[10].isEmpty())) altunits = fields[10][0];
   double geoidheight = unknown_alt;
   if (fields.size() > 11) geoidheight = fields[11].toDouble();
   QChar geoidheightunits = 'M';
-  if (fields.size() > 12) geoidheightunits = fields[12][0];
+  if ((fields.size() > 12) && (!fields[12].isEmpty())) geoidheightunits = fields[12][0];
 
   /*
    * In serial mode, allow the fix with an invalid position through
@@ -460,7 +442,6 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
    * as serial units will often spit a remembered position up and
    * that is more comfortable than nothing at all...
    */
-  CHECK_BOOL(opt_ignorefix);
   if ((fix <= 0) && (read_mode != rm_serial || (latdeg == 0.0 && lngdeg == 0.0)) && (!opt_ignorefix)) {
     return;
   }
@@ -522,15 +503,15 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   QTime hms;
   if (fields.size() > 1) hms = nmea_parse_hms(fields[1]);
   QChar fix = 'V'; // V == "Invalid"
-  if (fields.size() > 2) fix = fields[2][0];
+  if ((fields.size() > 2) && (!fields[2].isEmpty())) fix = fields[2][0];
   double latdeg = 0;
   if (fields.size() > 3) latdeg = fields[3].toDouble();
   QChar latdir = 'N';
-  if (fields.size() > 4) latdir = fields[4][0];
+  if ((fields.size() > 4) && (!fields[4].isEmpty())) latdir = fields[4][0];
   double lngdeg = 0;
   if (fields.size() > 5) lngdeg = fields[5].toDouble();
-  QChar lngdir = 'W';
-  if (fields.size() > 6) lngdir = fields[6][0];
+  QChar lngdir = 'E';
+  if ((fields.size() > 6) && (!fields[6].isEmpty())) lngdir = fields[6][0];
   double speed = 0;
   if (fields.size() > 7) speed = fields[7].toDouble();
   double course = 0;
@@ -539,7 +520,7 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   if (fields.size() > 9) {
     QString datestr(fields[9]);
     datestr.insert(4, "20");
-    dmy = QDate::fromString(datestr, "ddMMyyyy");
+    dmy = QDate::fromString(datestr, u"ddMMyyyy");
   }
   if (fix != 'A') {
     /* ignore this fix - it is invalid */
@@ -604,11 +585,11 @@ NmeaFormat::gpwpl_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
   QChar latdir = 'N';
-  if (fields.size() > 2) latdir = fields[2][0];
+  if ((fields.size() > 2) && (!fields[2].isEmpty())) latdir = fields[2][0];
   double lngdeg = 0;
   if (fields.size() > 3) lngdeg = fields[3].toDouble();
   QChar lngdir = 'E';
-  if (fields.size() > 4) lngdir = fields[4][0];
+  if ((fields.size() > 4) && (!fields[4].isEmpty())) lngdir = fields[4][0];
   QString sname;
   if (fields.size() > 5) sname = fields[5];
 
@@ -635,11 +616,11 @@ NmeaFormat::gpzda_parse(const QString& ibuf)
   if (fields.size() > 4) {
     QTime time = nmea_parse_hms(fields[1]);
     QString datestr = QStringLiteral("%1%2%3").arg(fields[2], fields[3], fields[4]);
-    QDate date = QDate::fromString(datestr, "ddMMyyyy");
+    QDate date = QDate::fromString(datestr, u"ddMMyyyy");
 
     // The prev_datetime data member might be used by
     // nmea_fix_timestamps and nmea_set_waypoint_time.
-    prev_datetime = QDateTime(date, time, Qt::UTC);
+    prev_datetime = QDateTime(date, time, QtUTC);
   }
 }
 
@@ -662,7 +643,7 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
   // 0 = "GPGSA"
   // 1 = Mode. Ignored
   QChar fix;
-  if (nfields > 2) {
+  if ((nfields > 2) && (!fields[2].isEmpty())) {
     fix = fields[2][0];
   }
 
@@ -832,14 +813,14 @@ NmeaFormat::nmea_fix_timestamps(route_head* track)
   }
 
   if (!prev_datetime.date().isValid()) {
-    if (optdate == nullptr) {
-      warning(MYNAME ": No date found within track (all points dropped)!\n");
-      warning(MYNAME ": Please use option \"date\" to preset a valid date for those tracks.\n");
+    if (!optdate) {
+      gbWarning("No date found within track (all points dropped)!\n");
+      gbWarning("Please use option \"date\" to preset a valid date for those tracks.\n");
       track_del_head(track);
       return;
     }
 
-    QDateTime prev = QDateTime(opt_tm, QTime(0, 0), Qt::UTC);
+    QDateTime prev = QDateTime(opt_tm, QTime(0, 0), QtUTC);
 
     foreach (Waypoint* wpt, track->waypoint_list) {
 
@@ -943,7 +924,9 @@ NmeaFormat::nmea_parse_one_line(const QByteArray& ibuf)
      for that field.  Rather than change all the parse routines, we first
      substitute a default value of zero for any missing field.
   */
-  tbuf.replace(",,", ",0,");
+  while (tbuf.contains(",,")) {
+    tbuf.replace(",,", ",0,");
+  }
 
   if (notalkerid_strmatch(tbuf, "WPL")) {
     gpwpl_parse(tbuf);
@@ -995,9 +978,9 @@ NmeaFormat::read()
   }
 
   if (optdate) {
-    opt_tm = QDate::fromString(optdate, "yyyyMMdd");
+    opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
     if (!opt_tm.isValid()) {
-      fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
+      gbFatal("Invalid date \"%s\"!\n", gbLogCStr(optdate));
     }
   }
 
@@ -1026,7 +1009,7 @@ NmeaFormat::read()
         }
         datum = GPS_Lookup_Datum_Index(sdatum);
         if (datum < 0) {
-          fatal(MYNAME "/SonyGPS: Unsupported datum \"%s\" in source data!\n", sdatum);
+          gbFatal("/SonyGPS: Unsupported datum \"%s\" in source data!\n", sdatum);
         }
       }
       continue;
@@ -1053,26 +1036,27 @@ NmeaFormat::rd_position_init(const QString& fname)
     read_mode = rm_serial;
     gbser_set_speed(gbser_handle, 4800);
   } else {
-    fatal(MYNAME ": Could not open '%s' for position tracking.\n", qPrintable(fname));
+    gbFatal("Could not open '%s' for position tracking.\n", gbLogCStr(fname));
   }
 
   gbser_flush(gbser_handle);
 
   if (opt_baud) {
-    if (!gbser_set_speed(gbser_handle, xstrtoi(opt_baud, nullptr, 10))) {
-      fatal(MYNAME ": Unable to set baud rate %s\n", opt_baud);
+    if (!gbser_set_speed(gbser_handle, opt_baud.get_result())) {
+      gbFatal("Unable to set baud rate %s\n", gbLogCStr(opt_baud));
     }
   }
   posn_fname = fname;
 }
 
 void
-NmeaFormat::safe_print(int cnt, const char* b)
+NmeaFormat::safe_print(const QString& b)
 {
-  for (int i = 0; i < cnt; i++) {
-    char c = isprint(b[i]) ? b[i] : '.';
-    fputc(c, stderr);
-  }
+  static const QRegularExpression re("[^[:print:]]");
+  assert(re.isValid());
+
+  QString str(b);
+  qDebug().noquote() << str.replace(re, ".");
 }
 
 int NmeaFormat::hunt_sirf()
@@ -1084,7 +1068,7 @@ int NmeaFormat::hunt_sirf()
 
   for (brp = br; *brp > 0; brp++) {
     if (global_opts.debug_level > 1) {
-      fprintf(stderr, "Trying %d\n", *brp);
+      gbDebug("Trying %d\n", *brp);
     }
 
     /*
@@ -1133,12 +1117,12 @@ NmeaFormat::rd_position(posn_status* /*unused*/)
     ibuf[0] = 0;
     int rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 2000, 0x0a, 0x0d);
     if (global_opts.debug_level > 1) {
-      safe_print(strlen(ibuf), ibuf);
+      safe_print(ibuf);
     }
     if (rv < 0) {
       if (am_sirf == 0) {
         if (global_opts.debug_level > 1) {
-          warning(MYNAME ": Attempting sirf mode.\n");
+          gbWarning("Attempting sirf mode.\n");
         }
         /* This is tacky, we have to change speed
          * to 9600bps to tell it to speak NMEA at
@@ -1150,7 +1134,7 @@ NmeaFormat::rd_position(posn_status* /*unused*/)
           continue;
         }
       }
-      fatal(MYNAME ": No data received on %s.\n", qPrintable(posn_fname));
+      gbFatal("No data received on %s.\n", gbLogCStr(posn_fname));
     }
     nmea_parse_one_line(ibuf);
     if (lt != last_read_time) {

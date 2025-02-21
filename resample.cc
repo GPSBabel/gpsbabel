@@ -32,7 +32,7 @@
 #include <QTextStream>          // for qSetRealNumberPrecision
 #include <QtGlobal>             // for qDebug, qint64
 
-#include "defs.h"               // for Waypoint, route_head, fatal, WaypointList, track_add_wpt, track_disp_all, RouteList, track_add_head, track_del_wpt, track_swap, UrlList, gb_color, global_options, global_opts
+#include "defs.h"               // for Waypoint, route_head, gbFatal, WaypointList, track_add_wpt, track_disp_all, RouteList, track_add_head, track_del_wpt, track_swap, UrlList, gb_color, global_options, global_opts
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for FatalMsg
 #include "src/core/nvector.h"   // for NVector
@@ -40,8 +40,6 @@
 
 
 #if FILTERS_ENABLED
-#define MYNAME "resample"
-
 
 void ResampleFilter::average_waypoint(Waypoint* wpt, bool zero_stuffed)
 {
@@ -194,7 +192,7 @@ void ResampleFilter::process()
 {
   if (interpolateopt) {
     if (track_count() == 0) {
-      fatal(FatalMsg() << MYNAME ": Found no tracks to operate on.");
+      gbFatal(FatalMsg() << "Found no tracks to operate on.");
     }
 
     auto interpolate_rte_lambda = [this](const route_head* rte)->void {
@@ -229,7 +227,7 @@ void ResampleFilter::process()
 
   if (decimateopt) {
     if (track_count() == 0) {
-      fatal(FatalMsg() << MYNAME ": Found no tracks to operate on.");
+      gbFatal(FatalMsg() << "Found no tracks to operate on.");
     }
 
     auto decimate_rte_lambda = [this](const route_head* rte)->void {
@@ -243,29 +241,26 @@ void ResampleFilter::init()
 {
 
   if (averageopt) {
-    bool ok;
-    average_count = QString(averageopt).toInt(&ok);
-    if (!ok || average_count < 2) {
-      fatal(FatalMsg() << MYNAME ": the average count must be greater than one.");
+    average_count = averageopt.get_result();
+    if (average_count < 2) {
+      gbFatal(FatalMsg() << "the average count must be greater than one.");
     }
   }
 
   if (decimateopt) {
-    bool ok;
-    decimate_count = QString(decimateopt).toInt(&ok);
-    if (!ok || decimate_count < 2) {
-      fatal(FatalMsg() << MYNAME ": the decimate count must be greater than one.");
+    decimate_count = decimateopt.get_result();
+    if (decimate_count < 2) {
+      gbFatal(FatalMsg() << "the decimate count must be greater than one.");
     }
   }
 
   if (interpolateopt) {
-    bool ok;
-    interpolate_count = QString(interpolateopt).toInt(&ok);
-    if (!ok || interpolate_count < 2) {
-      fatal(FatalMsg() << MYNAME ": the interpolate count must be greater than one.");
+    interpolate_count = interpolateopt.get_result();
+    if (interpolate_count < 2) {
+      gbFatal(FatalMsg() << "the interpolate count must be greater than one.");
     }
     if (!averageopt || average_count < interpolate_count) {
-      fatal(FatalMsg() << MYNAME ": the average option must be used with interpolation, and the average count must be greater than or equal to the interpolation count.");
+      gbFatal(FatalMsg() << "the average option must be used with interpolation, and the average count must be greater than or equal to the interpolation count.");
     }
   }
 }

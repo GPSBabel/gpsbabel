@@ -60,6 +60,7 @@
 #include "garmin_fs.h"  // for garmin_fs_t
 #include "gbfile.h"     // for gbfile
 #include "mkshort.h"    // for MakeShort
+#include "option.h"     // for OptionString, OptionBool
 
 
 class GarminGPIFormat : public Format
@@ -282,8 +283,8 @@ private:
   /* Member Functions */
 
   static garmin_fs_t* gpi_gmsd_init(Waypoint* wpt);
-  lc_string gpi_read_lc_string() const;
-  QString gpi_read_string(const char* field) const;
+  lc_string gpi_read_lc_string();
+  QString gpi_read_string(const char* field);
   void read_header();
   void read_poi(int sz, int tag);
   void read_poi_list(int sz);
@@ -298,19 +299,30 @@ private:
   void wdata_check(writer_data_t* data) const;
   int wdata_compute_size(writer_data_t* data) const;
   void wdata_write(const writer_data_t* data) const;
-  void write_category(const char* unused, const unsigned char* image, int image_sz) const;
+  void write_category(const QString& unused, const unsigned char* image, int image_sz) const;
   void write_header() const;
   void enum_waypt_cb(const Waypoint* ref) const;
-  static void load_bitmap_from_file(const char* fname, const unsigned char** data, int* data_sz);
+  static void load_bitmap_from_file(const QString& fname, const unsigned char** data, int* data_sz);
+  static char parse_units(const QString& str);
   QByteArray str_from_unicode(const QString& qstr) const {return codec->fromUnicode(qstr);}
   QString str_to_unicode(const QByteArray& cstr) const {return codec->toUnicode(cstr);}
 
   /* Data Members */
 
-  char* opt_cat{}, *opt_pos{}, *opt_notes{}, *opt_hide_bitmap{}, *opt_descr{}, *opt_bitmap{};
-  char* opt_unique{}, *opt_alerts{}, *opt_units{}, *opt_speed{}, *opt_proximity{}, *opt_sleep{};
-  char* opt_lang{};
-  char* opt_writecodec{};
+  OptionString opt_cat;
+  OptionBool opt_pos;
+  OptionBool opt_notes;
+  OptionBool opt_hide_bitmap;
+  OptionBool opt_descr;
+  OptionString opt_bitmap;
+  OptionBool opt_unique;
+  OptionBool opt_alerts;
+  OptionString opt_units;
+  OptionDouble opt_speed{true};
+  OptionDouble opt_proximity{true};
+  OptionInt opt_sleep;
+  OptionString opt_lang;
+  OptionString opt_writecodec;
   double defspeed{}, defproximity{};
   int alerts{};
 

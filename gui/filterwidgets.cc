@@ -27,10 +27,13 @@
 
 #include <QChar>         // for QChar
 #include <QCheckBox>     // for QCheckBox
-#include <QEvent>        // for QEvent, QEvent::LocaleChange
+#include <QEvent>        // for QEvent
 #include <QLabel>        // for QLabel
 #include <QRadioButton>  // for QRadioButton
-#include <Qt>            // for LocalTime, UTC
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+#include <QTimeZone>     // for QTimeZone
+#endif
+#include <Qt>            // for TimeSpec
 
 
 //------------------------------------------------------------------------
@@ -75,56 +78,66 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   ui.startEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
 
-  assert(tfd.startTime.timeSpec() == tfd.stopTime.timeSpec());
-  assert((tfd.startTime.timeSpec() == Qt::UTC) || (tfd.startTime.timeSpec() == Qt::LocalTime));
   // Qt5 QDateTimeEdit::setDateTime ignored the passed QDateTime::timeSpec.
   // Qt6 QDateTimeEdit::setDateTime will convert the passed QDateTime if the passed
   // QDateTime::timeSpec doesn't match QDateTimeEdit::timeSpec.
   // If the two timeSpecs match Qt5 and Qt6 behave the same.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+  assert(tfd.startTime.timeZone() == tfd.stopTime.timeZone());
+  assert((tfd.startTime.timeZone() == QTimeZone::UTC) || (tfd.startTime.timeZone() == QTimeZone::LocalTime));
+  ui.startEdit->setTimeZone(tfd.startTime.timeZone());
+  ui.stopEdit->setTimeZone(tfd.stopTime.timeZone());
+  // Make sure the initial state of the localTime and utc radio buttons
+  // is in agreement with the startTime::timeSpec and stopTime::timeSpec.
+  tfd.localTime = tfd.startTime.timeZone() == QTimeZone::LocalTime;
+#else
+  assert(tfd.startTime.timeSpec() == tfd.stopTime.timeSpec());
+  assert((tfd.startTime.timeSpec() == Qt::UTC) || (tfd.startTime.timeSpec() == Qt::LocalTime));
   ui.startEdit->setTimeSpec(tfd.startTime.timeSpec());
   ui.stopEdit->setTimeSpec(tfd.stopTime.timeSpec());
   // Make sure the initial state of the localTime and utc radio buttons
   // is in agreement with the startTime::timeSpec and stopTime::timeSpec.
   tfd.localTime = tfd.startTime.timeSpec() == Qt::LocalTime;
+#endif
   tfd.utc = !tfd.localTime;
 
   // Collect the data fields.
-  fopts << new BoolFilterOption(tfd.title,  ui.titleCheck);
-  fopts << new BoolFilterOption(tfd.move,   ui.moveCheck);
-  fopts << new BoolFilterOption(tfd.localTime,     ui.localTime);
-  fopts << new BoolFilterOption(tfd.utc,     ui.utc);
-  fopts << new BoolFilterOption(tfd.start,  ui.startCheck);
-  fopts << new BoolFilterOption(tfd.stop,   ui.stopCheck);
-  fopts << new BoolFilterOption(tfd.pack,   ui.packCheck);
-  fopts << new BoolFilterOption(tfd.merge,  ui.mergeCheck);
-  fopts << new BoolFilterOption(tfd.splitByDate,  ui.splitDateCheck);
-  fopts << new BoolFilterOption(tfd.splitByTime,  ui.splitTimeCheck);
-  fopts << new BoolFilterOption(tfd.splitByDistance,  ui.splitDistanceCheck);
-  fopts << new BoolFilterOption(tfd.GPSFixes,  ui.GPSFixesCheck);
-  fopts << new BoolFilterOption(tfd.course, ui.courseCheck);
-  fopts << new BoolFilterOption(tfd.speed,  ui.speedCheck);
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.title,  ui.titleCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.move,   ui.moveCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.localTime,     ui.localTime));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.utc,     ui.utc));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.start,  ui.startCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.stop,   ui.stopCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.pack,   ui.packCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.merge,  ui.mergeCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.splitByDate,  ui.splitDateCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.splitByTime,  ui.splitTimeCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.splitByDistance,  ui.splitDistanceCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.GPSFixes,  ui.GPSFixesCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.course, ui.courseCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(tfd.speed,  ui.speedCheck));
 
-  fopts << new IntSpinFilterOption(tfd.weeks,  ui.weeksSpin, ui.weeksSpin->minimum(), ui.weeksSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.days,  ui.daysSpin, ui.daysSpin->minimum(), ui.daysSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.hours, ui.hoursSpin, ui.hoursSpin->minimum(), ui.hoursSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.mins,  ui.minsSpin, ui.minsSpin->minimum(), ui.minsSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.secs,  ui.secsSpin, ui.secsSpin->minimum(), ui.secsSpin->maximum());
-  fopts << new IntSpinFilterOption(tfd.splitTime,  ui.splitTimeSpin, 0, 1000);
-  fopts << new IntSpinFilterOption(tfd.splitDist,  ui.splitDistSpin, 0, 5280);
+  addFilterOption(std::make_unique<IntSpinFilterOption>(tfd.weeks,  ui.weeksSpin, ui.weeksSpin->minimum(), ui.weeksSpin->maximum()));
+  addFilterOption(std::make_unique<IntSpinFilterOption>(tfd.days,  ui.daysSpin, ui.daysSpin->minimum(), ui.daysSpin->maximum()));
+  addFilterOption(std::make_unique<IntSpinFilterOption>(tfd.hours, ui.hoursSpin, ui.hoursSpin->minimum(), ui.hoursSpin->maximum()));
+  addFilterOption(std::make_unique<IntSpinFilterOption>(tfd.mins,  ui.minsSpin, ui.minsSpin->minimum(), ui.minsSpin->maximum()));
+  addFilterOption(std::make_unique<IntSpinFilterOption>(tfd.secs,  ui.secsSpin, ui.secsSpin->minimum(), ui.secsSpin->maximum()));
+  addFilterOption(std::make_unique<IntSpinFilterOption>(tfd.splitTime,  ui.splitTimeSpin, 0, 1000));
+  addFilterOption(std::make_unique<IntSpinFilterOption>(tfd.splitDist,  ui.splitDistSpin, 0, 5280));
 
-  fopts << new DateTimeFilterOption(tfd.startTime, ui.startEdit);
-  fopts << new DateTimeFilterOption(tfd.stopTime,  ui.stopEdit);
+  addFilterOption(std::make_unique<DateTimeFilterOption>(tfd.startTime, ui.startEdit));
+  addFilterOption(std::make_unique<DateTimeFilterOption>(tfd.stopTime,  ui.stopEdit));
 
-  fopts << new StringFilterOption(tfd.titleString, ui.titleText);
-  fopts << new ComboFilterOption(tfd.GPSFixesVal,  ui.GPSFixesCombo);
-  fopts << new ComboFilterOption(tfd.splitTimeUnit,  ui.splitTimeCombo);
-  fopts << new ComboFilterOption(tfd.splitDistUnit,  ui.splitDistCombo);
+  addFilterOption(std::make_unique<StringFilterOption>(tfd.titleString, ui.titleText));
+  addFilterOption(std::make_unique<ComboFilterOption>(tfd.GPSFixesVal,  ui.GPSFixesCombo));
+  addFilterOption(std::make_unique<ComboFilterOption>(tfd.splitTimeUnit,  ui.splitTimeCombo));
+  addFilterOption(std::make_unique<ComboFilterOption>(tfd.splitDistUnit,  ui.splitDistCombo));
   setWidgetValues();
   checkChecks();
 }
 
 //------------------------------------------------------------------------
-void TrackWidget::otherCheckX()
+void TrackWidget::otherCheckX() const
 {
   ui.localTime->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
   ui.utc->setEnabled(ui.stopCheck->isChecked() || ui.startCheck->isChecked());
@@ -185,14 +198,24 @@ void TrackWidget::splitDistanceX()
   otherCheckX();
 }
 //------------------------------------------------------------------------
-void TrackWidget::TZX()
+void TrackWidget::TZX() const
 {
   if (ui.localTime->isChecked()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    ui.startEdit->setTimeZone(QTimeZone::LocalTime);
+    ui.stopEdit->setTimeZone(QTimeZone::LocalTime);
+#else
     ui.startEdit->setTimeSpec(Qt::LocalTime);
     ui.stopEdit->setTimeSpec(Qt::LocalTime);
+#endif
   } else {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    ui.startEdit->setTimeZone(QTimeZone::UTC);
+    ui.stopEdit->setTimeZone(QTimeZone::UTC);
+#else
     ui.startEdit->setTimeSpec(Qt::UTC);
     ui.stopEdit->setTimeSpec(Qt::UTC);
+#endif
   }
   // Force update of Edit displays, so the displayed
   // datetimes are in sync with the specified time spec.
@@ -215,17 +238,17 @@ WayPtsWidget::WayPtsWidget(QWidget* parent, WayPtsFilterData& wfd): FilterWidget
                   QList<QWidget*>() << ui.latLabel << ui.latText << ui.longLabel <<
                   ui.longText << ui.radiusUnitCombo << ui.radiusText);
 
-  fopts << new BoolFilterOption(wfd.duplicates, ui.duplicatesCheck);
-  fopts << new BoolFilterOption(wfd.shortNames, ui.shortNamesCheck);
-  fopts << new BoolFilterOption(wfd.locations, ui.locationsCheck);
-  fopts << new BoolFilterOption(wfd.position, ui.positionCheck);
-  fopts << new BoolFilterOption(wfd.radius, ui.radiusCheck);
-  fopts << new DoubleFilterOption(wfd.positionVal, ui.positionText, 0.0, 1.0E308);
-  fopts << new DoubleFilterOption(wfd.radiusVal, ui.radiusText, 0.0, 1.0E308);
-  fopts << new DoubleFilterOption(wfd.longVal, ui.longText, -180, 180, 7, 'f');
-  fopts << new DoubleFilterOption(wfd.latVal, ui.latText,  -90, 90, 7, 'f');
-  fopts << new ComboFilterOption(wfd.positionUnit, ui.positionUnitCombo);
-  fopts << new ComboFilterOption(wfd.radiusUnit, ui.radiusUnitCombo);
+  addFilterOption(std::make_unique<BoolFilterOption>(wfd.duplicates, ui.duplicatesCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(wfd.shortNames, ui.shortNamesCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(wfd.locations, ui.locationsCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(wfd.position, ui.positionCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(wfd.radius, ui.radiusCheck));
+  addFilterOption(std::make_unique<DoubleFilterOption>(wfd.positionVal, ui.positionText, 0.0, 1.0E308));
+  addFilterOption(std::make_unique<DoubleFilterOption>(wfd.radiusVal, ui.radiusText, 0.0, 1.0E308));
+  addFilterOption(std::make_unique<DoubleFilterOption>(wfd.longVal, ui.longText, -180, 180, 7, 'f'));
+  addFilterOption(std::make_unique<DoubleFilterOption>(wfd.latVal, ui.latText,  -90, 90, 7, 'f'));
+  addFilterOption(std::make_unique<ComboFilterOption>(wfd.positionUnit, ui.positionUnitCombo));
+  addFilterOption(std::make_unique<ComboFilterOption>(wfd.radiusUnit, ui.radiusUnitCombo));
 
   connect(ui.shortNamesCheck, &QAbstractButton::clicked, this, &WayPtsWidget::shortNamesCkX);
   connect(ui.locationsCheck, &QAbstractButton::clicked, this, &WayPtsWidget::locationsCkX);
@@ -233,14 +256,14 @@ WayPtsWidget::WayPtsWidget(QWidget* parent, WayPtsFilterData& wfd): FilterWidget
   checkChecks();
 }
 //------------------------------------------------------------------------
-void WayPtsWidget::shortNamesCkX()
+void WayPtsWidget::shortNamesCkX() const
 {
   if (!ui.shortNamesCheck->isChecked()) {
     ui.locationsCheck->setChecked(true);
   }
 }
 //------------------------------------------------------------------------
-void WayPtsWidget::locationsCkX()
+void WayPtsWidget::locationsCkX() const
 {
   if (!ui.locationsCheck->isChecked()) {
     ui.shortNamesCheck->setChecked(true);
@@ -255,9 +278,9 @@ RtTrkWidget::RtTrkWidget(QWidget* parent, RtTrkFilterData& rfd): FilterWidget(pa
   addCheckEnabler(ui.simplifyCheck,
                   QList<QWidget*>() << ui.limitToLabel << ui.limitToSpin << ui.pointLabel);
 
-  fopts << new BoolFilterOption(rfd.simplify_, ui.simplifyCheck);
-  fopts << new BoolFilterOption(rfd.reverse_, ui.reverseCheck);
-  fopts << new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, std::numeric_limits<int>::max());
+  addFilterOption(std::make_unique<BoolFilterOption>(rfd.simplify_, ui.simplifyCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(rfd.reverse_, ui.reverseCheck));
+  addFilterOption(std::make_unique<IntSpinFilterOption>(rfd.limitTo_, ui.limitToSpin, 1, std::numeric_limits<int>::max()));
   setWidgetValues();
   checkChecks();
 }
@@ -279,19 +302,19 @@ MiscFltWidget::MiscFltWidget(QWidget* parent, MiscFltFilterData& mfd): FilterWid
   addCheckEnabler(ui.sortRteCheck, ui.sortRteBy);
   addCheckEnabler(ui.sortTrkCheck, ui.sortTrkBy);
 
-  fopts << new BoolFilterOption(mfd.transform_, ui.transformCheck);
-  fopts << new BoolFilterOption(mfd.swap_, ui.swapCheck);
-  fopts << new BoolFilterOption(mfd.del_, ui.deleteCheck);
-  fopts << new BoolFilterOption(mfd.nukeTracks_, ui.nukeTracks);
-  fopts << new BoolFilterOption(mfd.nukeRoutes_, ui.nukeRoutes);
-  fopts << new BoolFilterOption(mfd.nukeWaypoints_, ui.nukeWaypoints);
-  fopts << new BoolFilterOption(mfd.sortWpt_, ui.sortWptCheck);
-  fopts << new BoolFilterOption(mfd.sortRte_, ui.sortRteCheck);
-  fopts << new BoolFilterOption(mfd.sortTrk_, ui.sortTrkCheck);
-  fopts << new ComboFilterOption(mfd.transformVal_,  ui.transformCombo);
-  fopts << new ComboFilterOption(mfd.sortWptBy_, ui.sortWptBy);
-  fopts << new ComboFilterOption(mfd.sortRteBy_, ui.sortRteBy);
-  fopts << new ComboFilterOption(mfd.sortTrkBy_, ui.sortTrkBy);
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.transform_, ui.transformCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.swap_, ui.swapCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.del_, ui.deleteCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.nukeTracks_, ui.nukeTracks));
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.nukeRoutes_, ui.nukeRoutes));
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.nukeWaypoints_, ui.nukeWaypoints));
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.sortWpt_, ui.sortWptCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.sortRte_, ui.sortRteCheck));
+  addFilterOption(std::make_unique<BoolFilterOption>(mfd.sortTrk_, ui.sortTrkCheck));
+  addFilterOption(std::make_unique<ComboFilterOption>(mfd.transformVal_,  ui.transformCombo));
+  addFilterOption(std::make_unique<ComboFilterOption>(mfd.sortWptBy_, ui.sortWptBy));
+  addFilterOption(std::make_unique<ComboFilterOption>(mfd.sortRteBy_, ui.sortRteBy));
+  addFilterOption(std::make_unique<ComboFilterOption>(mfd.sortTrkBy_, ui.sortTrkBy));
 
   setWidgetValues();
   checkChecks();

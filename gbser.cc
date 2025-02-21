@@ -29,12 +29,12 @@
 
 void gbser_db(int l, const char* msg, ...)
 {
-  va_list ap;
-  va_start(ap, msg);
   if (global_opts.debug_level >= l) {
+    va_list ap;
+    va_start(ap, msg);
     vprintf(msg, ap);
+    va_end(ap);
   }
-  va_end(ap);
 }
 
 /* Set the serial port speed.

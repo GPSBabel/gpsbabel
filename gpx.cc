@@ -25,7 +25,7 @@
 #include <cmath>                            // for lround
 #include <cstdio>                           // for sscanf
 #include <cstdint>                          // for uint16_t
-#include <cstring>                          // for strchr, strncpy
+#include <cstring>                          // for strchr
 #include <optional>                         // for optional
 #include <utility>                          // for as_const
 
@@ -60,7 +60,6 @@
 #include "src/core/xmltag.h"                // for xml_tag, fs_xml, fs_xml_alloc, free_gpx_extras
 
 
-#define MYNAME "GPX"
 #ifndef CREATOR_NAME_URL
 #  define CREATOR_NAME_URL "GPSBabel - https://www.gpsbabel.org"
 #endif
@@ -102,7 +101,7 @@ GpxFormat::gpx_reset_short_handle()
     mkshort_handle->set_whitespace_ok(false);
   }
 
-  mkshort_handle->set_length(xstrtoi(snlen, nullptr, 10));
+  mkshort_handle->set_length(snlen.get_result());
 }
 
 void
@@ -254,7 +253,7 @@ GpxFormat::tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt)
       // but that feature is so obscure and used in so few outputs that
       // there's no reason to alarm the user.  Just silently disregard
       // category names that don't map cleanly.
-      // warning(MYNAME ": Unable to convert category \"%s\"!\n", CSTR(text));
+      // gbWarning("Unable to convert category \"%s\"!\n", CSTR(text));
     }
     break;
   case tag_type::garmin_wpt_addr:
@@ -517,7 +516,7 @@ xml_parse_time(const QString& dateTimeString)
   if (res > 0) {
     QDate date(year, mon, mday);
     QTime time(hour, min, sec);
-    dt = QDateTime(date, time, Qt::UTC);
+    dt = QDateTime(date, time, QtUTC);
 
     // Fractional part of time.
     if (fsec) {
@@ -985,8 +984,8 @@ GpxFormat::wr_init(const QString& fname)
   * available use it, otherwise use the default.
   */
 
-  if (opt_gpxver != nullptr) {
-    gpx_write_version = QVersionNumber::fromString(opt_gpxver).normalized();
+  if (opt_gpxver) {
+    gpx_write_version = QVersionNumber::fromString(opt_gpxver.get()).normalized();
   } else if (!gpx_highest_version_read.isNull()) {
     gpx_write_version = gpx_highest_version_read;
   } else {
@@ -1000,8 +999,8 @@ GpxFormat::wr_init(const QString& fname)
   // It's a good thing 0, 0.0, 0.0.0 aren't valid gpx versions,
   // normalization makes them null.
   if (gpx_write_version.isNull() || (gpx_write_version < gpx_1_0)) {
-    fatal(FatalMsg() << MYNAME ": gpx version number"
-          << gpx_write_version << "not valid.");
+    gbFatal(FatalMsg() << "gpx version number"
+          << gpx_write_version.toString() << "not valid.");
   }
 
   writer->setAutoFormatting(true);
@@ -1173,7 +1172,7 @@ GpxFormat::read()
   }
 
   if (reader->hasError()) {
-    fatal(FatalMsg() << MYNAME << "Read error:" << reader->errorString()
+    gbFatal(FatalMsg() << "Read error:" << reader->errorString()
           << "File:" << iqfile->fileName()
           << "Line:" << reader->lineNumber()
           << "Column:" << reader->columnNumber());
@@ -1232,7 +1231,7 @@ GpxFormat::write_gpx_url(const UrlList& urls) const
       }
     }
   } else {
-    UrlLink l = urls.GetUrlLink();
+    const UrlLink& l = urls.GetUrlLink();
     if (!l.url_.isEmpty()) {
       writer->writeTextElement(QStringLiteral("url"), QString(urlbase) + l.url_);
       writer->writeOptionalTextElement(QStringLiteral("urlname"), l.url_link_text_);
@@ -1532,8 +1531,7 @@ GpxFormat::gpx_track_hdr(const route_head* rte)
       if (ci > 0) {
         writer->writeStartElement(QStringLiteral("extensions"));
         writer->writeStartElement(QStringLiteral("gpxx:TrackExtension"));
-        writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QStringLiteral("%1")
-                                 .arg(gt_color_name(ci)));
+        writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), gt_color_name(ci));
         writer->writeEndElement(); // Close gpxx:TrackExtension tag
         writer->writeEndElement(); // Close extensions tag
       }
@@ -1622,8 +1620,7 @@ GpxFormat::gpx_route_hdr(const route_head* rte) const
         writer->writeStartElement(QStringLiteral("gpxx:RouteExtension"));
         // FIXME: the value to use for IsAutoNamed is questionable.
         writer->writeTextElement(QStringLiteral("gpxx:IsAutoNamed"), rte->rte_name.isEmpty()? QStringLiteral("true") : QStringLiteral("false")); // Required element
-        writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QStringLiteral("%1")
-                                 .arg(gt_color_name(ci)));
+        writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), gt_color_name(ci));
         writer->writeEndElement(); // Close gpxx:RouteExtension tag
         writer->writeEndElement(); // Close extensions tag
       }
@@ -1705,7 +1702,7 @@ void
 GpxFormat::write()
 {
 
-  elevation_precision = xstrtoi(opt_elevation_precision, nullptr, 10);
+  elevation_precision = opt_elevation_precision.get_result();
 
   gpx_reset_short_handle();
   auto gpx_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {

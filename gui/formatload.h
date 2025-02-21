@@ -25,10 +25,10 @@
 #ifndef FORMATLOAD_H
 #define FORMATLOAD_H
 
-#include <QList>               // for QList
-#include <QStringList>         // for QStringList
+#include <QList>        // for QList
+#include <QStringList>  // for QStringList
 
-#include "format.h"            // for Format
+#include "format.h"     // for Format
 
 class FormatLoad
 {

@@ -24,6 +24,7 @@
 #ifndef TPG_H_INCLUDED_
 #define TPG_H_INCLUDED_
 
+#include <QList>      // for QList
 #include <QString>    // for QString
 #include <QVector>    // for QVector
 
@@ -31,6 +32,7 @@
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
 #include "mkshort.h"  // for MakeShort
+#include "option.h"   // for OptionString
 
 
 class TpgFormat : public Format
@@ -72,10 +74,10 @@ private:
   gbfile* tpg_file_in{};
   gbfile* tpg_file_out{};
   MakeShort* mkshort_handle{};
-  char* tpg_datum_opt{};
+  OptionString tpg_datum_opt;
   int tpg_datum_idx{};
 
-  unsigned int waypt_out_count{};
+  int waypt_out_count{};
 
   QVector<arglist_t> tpg_args = {
     {"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},

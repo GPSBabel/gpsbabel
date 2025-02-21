@@ -22,13 +22,14 @@
 #ifndef POSITION_H_INCLUDED_
 #define POSITION_H_INCLUDED_
 
+#include <QList>     // for QList
 #include <QString>    // for QString
 #include <QVector>    // for QVector
 #include <QtGlobal>   // for qint64
 
 #include "defs.h"     // for arglist_t, route_head (ptr only), ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED, ARGTYPE_BOOL, Waypoint, WaypointList (ptr only)
 #include "filter.h"   // for Filter
-#include "grtcirc.h"  // for RAD, gcdist, radtometers
+#include "option.h"  // for OptionString, OptionBool
 
 
 #if FILTERS_ENABLED
@@ -57,25 +58,21 @@ private:
 
   /* Member Functions */
 
-  static double gc_distance(double lat1, double lon1, double lat2, double lon2)
-  {
-    return radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
-  }
   void position_runqueue(const WaypointList& waypt_list, int qtype);
 
   /* Data Members */
 
   double pos_dist{};
   qint64 max_diff_time{};
-  char* distopt = nullptr;
-  char* timeopt = nullptr;
-  char* purge_duplicates = nullptr;
+  OptionDouble distopt{true};
+  OptionDouble timeopt;
+  OptionBool purge_duplicates;
   bool check_time{};
 
   QVector<arglist_t> args = {
     {
       "distance", &distopt, "Maximum positional distance",
-      nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr, ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "all", &purge_duplicates,

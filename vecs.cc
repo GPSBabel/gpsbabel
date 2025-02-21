@@ -39,7 +39,7 @@
 #include <type_traits>         // for is_base_of
 #include <utility>             // for as_const
 
-#include "defs.h"              // for arglist_t, ff_vecs_t, ff_cap, fatal, CSTR, ARGTYPE_TYPEMASK, case_ignore_strcmp, global_options, global_opts, warning, xfree, ARGTYPE_BOOL, ff_cap_read, ff_cap_write, ARGTYPE_HIDDEN, ff_type_internal, xstrdup, ARGTYPE_INT, ARGTYPE_REQUIRED, ARGTYPE_FLOAT
+#include "defs.h"              // for arglist_t, CSTR, gbFatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, case_ignore_strcmp, gpsdata_type, gbWarning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
 #include "exif.h"              // for ExifFormat
 #include "format.h"            // for Format
@@ -64,6 +64,7 @@
 #include "lowranceusr.h"       // for LowranceusrFormat
 #include "mtk_logger.h"        // for MtkFormat, MtkM241Format, MtkFileFormat, MtkM241FileFormat
 #include "nmea.h"              // for NmeaFormat
+#include "option.h"            // for Option, OptionBool
 #include "osm.h"               // for OsmFormat
 #include "ozi.h"               // for OziFormat
 #include "qstarz_bl_1000.h"    // for QstarzBL1000Format
@@ -82,12 +83,10 @@
 #include "googletakeout.h"     // for GoogleTakeoutFormat
 
 
-#define MYNAME "vecs"
-
 template <typename T>
 Format* fmtfactory(const QString& filename)
 {
-  static_assert(std::is_base_of<Format, T>::value, "T must be derived from Format");
+  static_assert(std::is_base_of_v<Format, T>, "T must be derived from Format");
   return new T(filename);
 }
 
@@ -105,7 +104,6 @@ struct Vecs::Impl {
   NmeaFormat nmea_fmt;
   OziFormat ozi_fmt;
   KmlFormat kml_fmt;
-#if MAXIMAL_ENABLED
   LowranceusrFormat lowranceusr_fmt;
   Tpo2Format tpo2_fmt;
   Tpo3Format tpo3_fmt;
@@ -119,13 +117,9 @@ struct Vecs::Impl {
   MtkFileFormat mtk_ffmt;
   MtkM241Format mtk_m241_fmt;
   MtkM241FileFormat mtk_m241_ffmt;
-#endif // MAXIMAL_ENABLED
-#if MAXIMAL_ENABLED
   UnicsvFormat unicsv_fmt;
   GtmFormat gtm_fmt;
-#if CSVFMTS_ENABLED
   GarminTxtFormat garmin_txt_fmt;
-#endif // CSVFMTS_ENABLED
   GtrnctrFormat gtc_fmt;
   GarminGPIFormat garmin_gpi_fmt;
   RandomFormat random_fmt;
@@ -145,10 +139,8 @@ struct Vecs::Impl {
   GarminFitFormat format_fit_fmt;
   GeoJsonFormat geojson_fmt;
   GlobalsatSportFormat globalsat_sport_fmt;
-#endif // MAXIMAL_ENABLED
 
   const QVector<vecs_t> vec_list {
-#if CSVFMTS_ENABLED
     /* XCSV must be the first entry in this table. */
     {
       nullptr,
@@ -158,7 +150,6 @@ struct Vecs::Impl {
       nullptr,
       &fmtfactory<XcsvFormat>
     },
-#endif
     {
       nullptr,
       "geo",
@@ -209,7 +200,6 @@ struct Vecs::Impl {
       "kml",
       nullptr,
     },
-#if MAXIMAL_ENABLED
     {
       &lowranceusr_fmt,
       "lowranceusr",
@@ -297,8 +287,6 @@ struct Vecs::Impl {
       "bin",
       nullptr,
     },
-#endif // MAXIMAL_ENABLED
-#if MAXIMAL_ENABLED
     {
       nullptr,
       "vcard",
@@ -321,7 +309,6 @@ struct Vecs::Impl {
       "gtm",
       nullptr,
     },
-#if CSVFMTS_ENABLED
     {
       &garmin_txt_fmt,
       "garmin_txt",
@@ -329,7 +316,6 @@ struct Vecs::Impl {
       "txt",
       nullptr,
     },
-#endif // CSVFMTS_ENABLED
     {
       &gtc_fmt,
       "gtrnctr",
@@ -487,7 +473,6 @@ struct Vecs::Impl {
       nullptr,
       &fmtfactory<GoogleTakeoutFormat>
     }
-#endif // MAXIMAL_ENABLED
   };
 };
 
@@ -503,7 +488,7 @@ Vecs& Vecs::Instance()
  * that we are not modifying a Qt COW copy.
  * Qt has an undocumented but public member function isDetached().
  * If the list is detached it implies it is not shared, then functions
- * then might detach, like the iterator begin which is implicitly used
+ * that might detach, like the iterator begin which is implicitly used
  * in the range based for loop, won't cause a copy to be created.
  * We can make sure this is true for at least our regression cases
  * with assertions.
@@ -511,19 +496,20 @@ Vecs& Vecs::Instance()
  * so we have to exclude this from the check.
  * The possibility of detachment is also why the type of element
  * on the list must be default constructable. This is why we have
- * to supply a default for any const members of arglist_t.  Without
- * the default the default constructor would be implicitly deleted.
+ * to supply a default for any const members of arglist_t.  Without the
+ * default initializer the default constructor would be implicitly deleted.
  */
 
-void Vecs::init_vec(Format* fmt)
+void Vecs::init_vec(Format* fmt, const QString& fmtname)
 {
   QVector<arglist_t>* args = fmt->get_args();
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
-      arg.argvalptr = nullptr;
-      if (arg.argval) {
-        *arg.argval = nullptr;
+      if (arg.argval != nullptr) {
+        arg.argval->reset();
+        QString id = QStringLiteral("%1(%2)").arg(fmtname, arg.argstring);
+        arg.argval->init(id);
       }
     }
   }
@@ -533,63 +519,10 @@ void Vecs::init_vecs()
 {
   for (const auto& vec : d_ptr_->vec_list) {
     if (vec.vec != nullptr) {
-      init_vec(vec.vec);
+      init_vec(vec.vec, vec.name);
     }
   }
   style_list = create_style_vec();
-}
-
-bool Vecs::is_integer(const QString& val)
-{
-#if 1
-  /* FIXME: Using scanf to validate input is not recommened.
-   * Users may have taken advantage of this flexibilty
-   * when interpreting ARGTYPE_INT.
-   * INT05-C. Do not use input functions to convert character
-   * data if they cannot handle all possible inputs
-   */
-  // note sscanf doesn't do range checking
-  // note some users allow hex input.
-  // note some users may interpret trailing data after
-  // conversion, typically to denote a unit.
-  int test;
-  return 1 == sscanf(CSTR(val), "%d", &test);
-#else
-  try {
-    (void) std::stoi(val.toStdString(), nullptr, 10);
-  } catch (const std::invalid_argument&) {
-    return false;
-  } catch (const std::out_of_range&) {
-    return false;
-  }
-  return true;
-#endif
-}
-
-bool Vecs::is_float(const QString& val)
-{
-#if 1
-  /* FIXME: Using scanf to validate input is not recommened.
-   * Users may have taken advantage of this flexibilty
-   * when interpreting ARGTYPE_FLOAT.
-   * INT05-C. Do not use input functions to convert character
-   * data if they cannot handle all possible inputs
-   */
-  // note sscanf doesn't do range checking
-  // note some users may interpret trailing data after
-  // conversion, typically to denote a unit.
-  double test;
-  return 1 == sscanf(CSTR(val), "%lf", &test);
-#else
-  try {
-    (void) std::stod(val.toStdString(), nullptr);
-  } catch (const std::invalid_argument&) {
-    return false;
-  } catch (const std::out_of_range&) {
-    return false;
-  }
-  return true;
-#endif
 }
 
 bool Vecs::is_bool(const QString& val)
@@ -604,9 +537,8 @@ void Vecs::free_options(QVector<arglist_t>* args)
   if (args && !args->isEmpty()) {
     assert(args->isDetached());
     for (auto& arg : *args) {
-      if (arg.argvalptr) {
-        xfree(arg.argvalptr);
-        *arg.argval = arg.argvalptr = nullptr;
+      if (arg.argval != nullptr) {
+        arg.argval->reset();
       }
     }
   }
@@ -629,19 +561,15 @@ void Vecs::exit_vecs()
   style_list.squeeze();
 }
 
-void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& val)
+void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& val)
 {
-  if (arg->argval == nullptr) {
-    fatal("%s: No local variable defined for option \"%s\"!\n", qPrintable(module), qPrintable(arg->argstring));
+  QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
+
+  if (arg.argval == nullptr) {
+    gbFatal("%s: Program error - No local variable defined for option.\n", gbLogCStr(id));
   }
 
-  if (arg->argvalptr != nullptr) {
-    xfree(arg->argvalptr);
-    arg->argvalptr = nullptr;
-  }
-  if (arg->argval) {
-    *arg->argval = nullptr;
-  }
+  arg.argval->reset();
 
   if (val.isNull()) {
     return;
@@ -649,26 +577,15 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
 
   QString rval(val);
 
-  switch (arg->argtype & ARGTYPE_TYPEMASK) {
-  case ARGTYPE_INT:
+  if (auto* int_option = dynamic_cast<OptionInt*>(arg.argval); int_option != nullptr) {
     if (val.isEmpty()) {
       rval = '0';
-    } else {
-      if (!is_integer(val)) {
-        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
-      }
     }
-    break;
-  case ARGTYPE_FLOAT:
+  } else if (auto* double_option = dynamic_cast<OptionDouble*>(arg.argval); double_option != nullptr) {
     if (val.isEmpty()) {
       rval = '0';
-    } else {
-      if (!is_float(val)) {
-        fatal("%s: Invalid parameter value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
-      }
     }
-    break;
-  case ARGTYPE_BOOL:
+  } else if (auto* bool_option = dynamic_cast<OptionBool*>(arg.argval); bool_option != nullptr) {
     if (val.isEmpty()) {
       rval = '1';
     } else {
@@ -685,34 +602,27 @@ void Vecs::assign_option(const QString& module, arglist_t* arg, const QString& v
             rval = '1';
           }
         } else {
-          warning("%s :Invalid logical value \"%s\" for option %s!\n", qPrintable(module), qPrintable(val), qPrintable(arg->argstring));
+          gbWarning("%s: Invalid logical value \"%s\".\n", gbLogCStr(id), gbLogCStr(val));
           rval = '0';
         }
       }
     }
-    break;
   }
 
-  /* for bool options without default: don't set argval if "FALSE" */
-
-  if (((arg->argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) &&
-      rval.startsWith('0') && (arg->defaultvalue == nullptr)) {
-    return;
-  }
-  *arg->argval = arg->argvalptr = xstrdup(rval);
+  arg.argval->set(rval);
 }
 
 void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* args)
 {
   if (args) {
     for (const auto& arg : *args) {
-      if (arg.argval && *arg.argval) {
-        printf("options: module/option=value: %s/%s=\"%s\"",
-               qPrintable(vecname), qPrintable(arg.argstring), *arg.argval);
-        if (case_ignore_strcmp(arg.defaultvalue, *arg.argval) == 0) {
-          printf(" (=default)");
+      if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
+        gbDebug("options: module/option=value: %s/%s=\"%s\"",
+               gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
+        if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
+          gbDebug(" (=default)");
         }
-        printf("\n");
+        gbDebug("\n");
       }
     }
   }
@@ -732,7 +642,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
       }
     }
     if (!valid) {
-      warning("'%s' is an unknown option to %s.\n", qPrintable(option_name), qPrintable(name));
+      gbWarning("'%s' is an unknown option to %s.\n", gbLogCStr(option_name), gbLogCStr(name));
     }
   }
 }
@@ -749,7 +659,7 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
       if (!fmtdata.options.isEmpty()) {
         const QString opt = get_option(fmtdata.options, arg.argstring);
         if (!opt.isNull()) {
-          assign_option(fmtdata.fmtname, &arg, opt);
+          assign_option(fmtdata.fmtname, arg, opt);
           continue;
         }
       }
@@ -758,9 +668,9 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
         qopt = inifile_readstr(global_opts.inifile, "Common format settings", arg.argstring);
       }
       if (qopt.isNull()) {
-        assign_option(fmtdata.fmtname, &arg, arg.defaultvalue);
+        assign_option(fmtdata.fmtname, arg, arg.defaultvalue);
       } else {
-        assign_option(fmtdata.fmtname, &arg, qopt);
+        assign_option(fmtdata.fmtname, arg, qopt);
       }
     }
   }
@@ -769,25 +679,23 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
     disp_vec_options(fmtdata.fmtname, args);
   }
 
-#if CSVFMTS_ENABLED
   /*
-   * For style based formats let xcsv know the style file.  Otherwise
+   * For style based formats let xcsv know the style file.  Otherwise,
    * make sure xcsv knows no style file is in use. This covers the case
-   * that we are processing xcsv,style= and it was preceeded by an xcsv
+   * that we are processing xcsv,style= and it was preceded by a xcsv
    * format that utilized an internal style file.
    */
   auto* xcsvfmt = dynamic_cast<XcsvFormat*>(fmtdata.fmt);
   if (xcsvfmt != nullptr) {
     xcsvfmt->xcsv_setup_internal_style(fmtdata.style_filename);
   }
-#endif // CSVFMTS_ENABLED
 }
 
 Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
 {
   QStringList options = fmtargstring.split(',');
   if (options.isEmpty()) {
-    fatal("A format name is required.\n");
+    gbFatal("A format name is required.\n");
   }
   const QString fmtname = options.takeFirst();
 
@@ -826,7 +734,7 @@ QString Vecs::get_option(const QStringList& options, const QString& argname)
   QString rval; // null
 
   for (const auto& option : options) {
-    int split = option.indexOf('=');
+    auto split = option.indexOf('=');
     const QString option_name = option.left(split);
     if (option_name.compare(argname, Qt::CaseInsensitive) == 0) {
       /*
@@ -853,17 +761,17 @@ QVector<Vecs::style_vec_t> Vecs::create_style_vec()
   QString styledir(":/style");
   QDir dir(styledir);
   if (!dir.isReadable()) {
-    fatal(FatalMsg() << "style directory" << QFileInfo(styledir).absoluteFilePath() << "not readable.");
+    gbFatal(FatalMsg() << "style directory" << QFileInfo(styledir).absoluteFilePath() << "not readable.");
   }
 
   dir.setNameFilters(QStringList("*.style"));
   dir.setFilter(QDir::Files);
   dir.setSorting(QDir::Name);
-  QFileInfoList fileinfolist = dir.entryInfoList();
+  const QFileInfoList fileinfolist = dir.entryInfoList();
   QVector<style_vec_t> slist;
   for (const auto& fileinfo : fileinfolist) {
     if (!fileinfo.isReadable()) {
-      fatal(FatalMsg() << "Cannot open style file" << fileinfo.absoluteFilePath() << ".");
+      gbFatal(FatalMsg() << "Cannot open style file" << fileinfo.absoluteFilePath() << ".");
     }
 
     style_vec_t entry;
@@ -909,7 +817,6 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
     }
   }
 
-#if CSVFMTS_ENABLED
   /* The style formats are based on the xcsv format,
    * Make sure we know which entry in the vector list that is.
    */
@@ -967,7 +874,6 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
   if (d_ptr_->vec_list.at(0).factory != nullptr) {
     delete xcsvfmt;
   }
-#endif // CSVFMTS_ENABLED
 
   /*
    *  Display the available formats in a format that's easy for humans to
@@ -1155,33 +1061,68 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
     }
 #endif
     for (const auto& arg : *args) {
-      if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_INT) {
-        if (!arg.defaultvalue.isNull() && !is_integer(arg.defaultvalue)) {
+      if (arg.argval == nullptr) {
+        Warning() << name << "option" << arg.argstring << "does not point to an Option instance.";
+        ok = false;
+      }
+      if (const auto* int_option = dynamic_cast<const OptionInt*>(arg.argval); int_option != nullptr) {
+        if (int_option->trailing_data_allowed()) {
+          // GUI QIntValidator will reject input with trailing data.
+          if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
+            Warning() << name << "OptionInt with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
+            ok = false;
+          }
+        } else {
+          if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_INT) {
+            Warning() << name << "OptionInt option without trailing data" << arg.argstring << "is not of ARGTYPE_INT.";
+            ok = false;
+          }
+        }
+
+        if (!arg.defaultvalue.isNull() && !int_option->isValid(arg.defaultvalue)) {
           Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
           ok = false;
         }
-        if (!arg.minvalue.isNull() && !is_integer(arg.minvalue)) {
+        if (!arg.minvalue.isNull() && !int_option->isValid(arg.minvalue)) {
           Warning() << name << "Int option" << arg.argstring << "minimum value" << arg.minvalue << "is not an integer.";
           ok = false;
         }
-        if (!arg.maxvalue.isNull() && !is_integer(arg.maxvalue)) {
+        if (!arg.maxvalue.isNull() && !int_option->isValid(arg.maxvalue)) {
           Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
           ok = false;
         }
-      } else if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_FLOAT) {
-        if (!arg.defaultvalue.isNull() && !is_float(arg.defaultvalue)) {
+      } else if (const auto* double_option = dynamic_cast<const OptionDouble*>(arg.argval); double_option != nullptr) {
+        if (double_option->trailing_data_allowed()) {
+          // GUI QDoubleValidator will reject input with trailing data.
+          if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
+            Warning() << name << "OptionDouble with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
+            ok = false;
+          }
+        } else {
+          if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_FLOAT) {
+            Warning() << name << "OptionDouble without trailing data" << arg.argstring << "is not of ARGTYPE_FLOAT.";
+            ok = false;
+          }
+        }
+
+        if (!arg.defaultvalue.isNull() && !double_option->isValid(arg.defaultvalue)) {
           Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
           ok = false;
         }
-        if (!arg.minvalue.isNull() && !is_float(arg.minvalue)) {
+        if (!arg.minvalue.isNull() && !double_option->isValid(arg.minvalue)) {
           Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
           ok = false;
         }
-        if (!arg.maxvalue.isNull() && !is_float(arg.maxvalue)) {
+        if (!arg.maxvalue.isNull() && !double_option->isValid(arg.maxvalue)) {
           Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
           ok = false;
         }
-      } else if ((arg.argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) {
+      } else if (const auto* bool_option = dynamic_cast<const OptionBool*>(arg.argval); bool_option != nullptr) {
+        if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_BOOL) {
+          Warning() << name << "OptionBool" << arg.argstring << "is not of ARGTYPE_BOOL.";
+          ok = false;
+        }
+
         if (!arg.defaultvalue.isNull() && !is_bool(arg.defaultvalue)) {
           Warning() << name << "Bool option" << arg.argstring << "default value" << arg.defaultvalue << "is not an bool.";
           ok = false;
@@ -1194,6 +1135,32 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
           Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an bool.";
           ok = false;
         }
+      } else if (const auto* str_option = dynamic_cast<const OptionString*>(arg.argval); str_option != nullptr) {
+        if (((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) &&
+            ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_FILE) &&
+            ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_OUTFILE) &&
+            ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_UNKNOWN)) {
+          Warning() << name << "OptionString" << arg.argstring << "is not of ARGTYPE STRING, FILE, OUTFILE or UNKNOWN.";
+          ok = false;
+        }
+      } else {
+        Warning() << name << "Unexpected Option type" << arg.argstring << ".";
+        ok = false;
+      }
+
+      switch (arg.argtype & ARGTYPE_TYPEMASK) {
+      case ARGTYPE_INT:
+      case ARGTYPE_FLOAT:
+      case ARGTYPE_BOOL:
+      case ARGTYPE_STRING:
+      case ARGTYPE_FILE:
+      case ARGTYPE_OUTFILE:
+        break;
+      case ARGTYPE_UNKNOWN:
+      default:
+        Warning() << name << "Unknown ARGTYPE for << arg.argstring.";
+        ok = false;
+        break;
       }
     }
   }

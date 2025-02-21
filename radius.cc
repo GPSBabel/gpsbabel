@@ -21,13 +21,13 @@
 
 #include "radius.h"
 
-#include <cstdlib>          // for strtod
 #include <utility>          // for as_const
 
 #include <QString>          // for QString
 #include <QtGlobal>         // QAddConst<>::Type, foreach
 
-#include "defs.h"           // for Waypoint, del_marked_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, xstrtoi, route_head, WaypointList, kMilesPerKilometer
+#include "defs.h"           // for Waypoint, del_marked_wpts, route_add_head, route_add_wpt, waypt_add, waypt_sort, waypt_swap, route_head, WaypointList, kMilesPerKilometer
+#include "grtcirc.h"         // for gcdist, radtomiles
 
 
 #if FILTERS_ENABLED
@@ -35,10 +35,10 @@
 void RadiusFilter::process()
 {
   foreach (Waypoint* waypointp, *global_waypoint_list) {
-    double dist = gc_distance(waypointp->latitude, waypointp->longitude,
-                              home_pos->latitude, home_pos->longitude);
+    double dist = radtometers(gcdist(waypointp->position(),
+                                    home_pos->position()));
 
-    if ((dist >= pos_dist) == (exclopt == nullptr)) {
+    if ((dist >= pos_dist) == !exclopt) {
       waypointp->wpt_flags.marked_for_deletion = 1;
     } else {
       auto* ed = new extra_data;
@@ -48,7 +48,7 @@ void RadiusFilter::process()
   }
   del_marked_wpts();
 
-  if (nosort == nullptr) {
+  if (!nosort) {
     auto dist_comp_lambda = [](const Waypoint* a, const Waypoint* b)->bool {
       const auto* aed = static_cast<const extra_data*>(a->extra_data);
       const auto* bed = static_cast<const extra_data*>(b->extra_data);
@@ -58,7 +58,7 @@ void RadiusFilter::process()
   }
 
   route_head* rte_head = nullptr;
-  if (routename != nullptr) {
+  if (routename) {
     rte_head = new route_head;
     rte_head->rte_name = routename;
     route_add_head(rte_head);
@@ -78,10 +78,10 @@ void RadiusFilter::process()
     delete static_cast<extra_data*>(wp->extra_data);
     wp->extra_data = nullptr;
 
-    if ((maxctarg != nullptr) && (i >= maxct)) {
+    if (maxctarg && (i >= maxct)) {
       delete wp;
     } else {
-      if (routename != nullptr) {
+      if (routename) {
         route_add_wpt(rte_head, wp);
       } else {
         waypt_add(wp);
@@ -95,29 +95,25 @@ void RadiusFilter::init()
 {
   pos_dist = 0;
 
-  if (distopt != nullptr) {
-    char* fm;
-    pos_dist = strtod(distopt, &fm);
-
-    if ((*fm == 'k') || (*fm == 'K')) {
-      /* distance is kilometers, convert to miles */
-      pos_dist *= kMilesPerKilometer;
+  if (distopt) {
+    if (parse_distance(distopt, &pos_dist, kMetersPerMile) == 0) {
+      gbFatal("No distance specified with distance option.\n");
     }
   }
 
-  if (maxctarg != nullptr) {
-    maxct = xstrtoi(maxctarg, nullptr, 10);
+  if (maxctarg) {
+    maxct = maxctarg.get_result();
   } else {
     maxct = 0;
   }
 
   home_pos = new Waypoint;
 
-  if (latopt != nullptr) {
-    home_pos->latitude = strtod(latopt, nullptr);
+  if (latopt) {
+    home_pos->latitude = latopt.get_result();
   }
-  if (lonopt != nullptr) {
-    home_pos->longitude = strtod(lonopt, nullptr);
+  if (lonopt) {
+    home_pos->longitude = lonopt.get_result();
   }
 }
 

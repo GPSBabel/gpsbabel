@@ -73,16 +73,16 @@ for a little more info, see structures:
 
 #include "v900.h"
 
-#include <cassert>     // for assert
-#include <cstdarg>     // for va_end, va_start
-#include <cstdio>      // for fclose, fgets, fread, vfprintf, stderr, va_list
-#include <cstdlib>     // for strtod
-#include <cstring>     // for strncmp, strcat, strcpy, strstr
+#include <cassert>             // for assert
+#include <cstdarg>             // for va_end, va_start
+#include <cstdio>              // for fclose, fgets, fread, va_list
+#include <cstdlib>             // for strtod
+#include <cstring>             // for strncmp, strcat, strcpy, strstr
 
-#include <QByteArray>  // for QByteArray
-#include <QDate>       // for QDate
-#include <QTime>       // for QTime
-#include <QtCore>      // for qPrintable, UTC
+#include <QByteArray>          // for QByteArray
+#include <QDate>               // for QDate
+#include <QMessageLogContext>  // for QtMsgType
+#include <QTime>               // for QTime
 
 #include "defs.h"
 
@@ -91,28 +91,25 @@ for a little more info, see structures:
 void
 V900Format::v900_log(const char* fmt, ...)
 {
-  va_list ap;
-
-  if (global_opts.debug_level < 1) {
-    return;
+  if (global_opts.debug_level >= 1) {
+    va_list ap;
+    va_start(ap, fmt);
+    gbVLegacyLog(QtDebugMsg, fmt, ap);
+    va_end(ap);
   }
-
-  va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
-  va_end(ap);
 }
 
 void
 V900Format::rd_init(const QString& fname)
 {
-  v900_log("%s(%s)\n",__func__,qPrintable(fname));
+  v900_log("%s(%s)\n",__func__,gbLogCStr(fname));
   /* note: file is opened in binary mode, since lines end with \r\n, and in windows text mode
      that will be translated to a single \n, making the line len one character shorter than
      on linux machines.
    */
   fin = ufopen(fname, "rb");
   if (!fin) {
-    fatal("v900: could not open '%s'.\n", qPrintable(fname));
+    gbFatal("v900: could not open '%s'.\n", gbLogCStr(fname));
   }
 }
 
@@ -143,7 +140,7 @@ V900Format::bintime2utc(int date, int time) {
   // What's left in 'date' is year.
   QDate dt(date + 2000, month, day);
 
-  return QDateTime(dt, tm, Qt::UTC);
+  return QDateTime(dt, tm, QtUTC);
 }
 
 void
@@ -166,7 +163,7 @@ V900Format::read()
   /* first, determine if this is advanced mode by reading the first line.
            since the first line does not contain any nulls, it can be safely read by fgets(). */
   if (!fgets(line.text, sizeof(line), fin)) {
-    fatal("v900: error reading header (first) line from input file\n");
+    gbFatal("v900: error reading header (first) line from input file\n");
   }
   int is_advanced_mode = (nullptr != strstr(line.text,"PDOP")); /* PDOP field appears only in advanced mode */
 
@@ -200,7 +197,7 @@ V900Format::read()
     bad |= (line.bas.common.comma9 != ',');
 
     if (bad) {
-      warning("v900: skipping malformed record at line %d\n", lc);
+      gbWarning("v900: skipping malformed record at line %d\n", lc);
     }
 
     line.bas.common.comma1 = 0;
@@ -216,7 +213,7 @@ V900Format::read()
       /* change all "," characters to NULLs.
                so every field is null terminated.
              */
-      assert(line.adv.comma10==','); // TODO: abort with fatal()
+      assert(line.adv.comma10==','); // TODO: abort with gbFatal()
       assert(line.adv.comma11==',');
       assert(line.adv.comma12==',');
       assert(line.adv.comma13==',');

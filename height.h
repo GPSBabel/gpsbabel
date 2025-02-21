@@ -24,12 +24,15 @@
 #ifndef HEIGHT_H_INCLUDED_
 #define HEIGHT_H_INCLUDED_
 
-#include <cstdint>         // for int8_t in heightgrid.h
+#include <cstdint>   // for int8_t in heightgrid.h
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
-#include "defs.h"          // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_BOOL, ARGTYPE_END_REQ, ARGTYPE_FLOAT, Waypoint
-#include "filter.h"        // for Filter
+#include "defs.h"    // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_BOOL, ARGTYPE_END_REQ, ARGTYPE_FLOAT, Waypoint
+#include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool, OptionString
 
 #if FILTERS_ENABLED
 
@@ -44,16 +47,16 @@ public:
   void process() override;
 
 private:
-  char* addopt        = nullptr;
-  char* wgs84tomslopt = nullptr;
+  OptionDouble addopt{true};
+  OptionBool wgs84tomslopt;
   double addf{};
   // include static constexpr data member definitions with intializers for grid as private members.
   #include "heightgrid.h"
 
   QVector<arglist_t> args = {
     {
-      "add", &addopt, "Adds a constant value to every altitude (meter, append \"f\" (x.xxf) for feet)",
-      nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
+      "add", &addopt, "Adds a constant value to every altitude",
+      nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
       "wgs84tomsl", &wgs84tomslopt, "Converts WGS84 ellipsoidal height to orthometric height (MSL)",

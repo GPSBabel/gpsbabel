@@ -41,13 +41,20 @@
 #include "xmlgeneric.h"          // for xml_deinit, xml_init, xml_read
 
 
-#define MYNAME "gtc"
+const QStringList GtrnctrFormat::gtc_tags_to_ignore = {
+  "TrainingCenterDatabase",
+  "CourseFolder",
+  "Running",
+  "Biking",
+  "Other",
+  "Multisport"
+};
 
 void
 GtrnctrFormat::rd_init(const QString& fname)
 {
   xml_reader = new XmlGenericReader;
-  xml_reader->xml_init(fname, this, gtc_map, nullptr, gtc_tags_to_ignore, nullptr);
+  xml_reader->xml_init(fname, this, gtc_map, nullptr, gtc_tags_to_ignore);
 }
 
 void
@@ -66,7 +73,7 @@ GtrnctrFormat::rd_deinit()
 void
 GtrnctrFormat::wr_init(const QString& fname)
 {
-  ofd = gbfopen(fname, "w", MYNAME);
+  ofd = gbfopen(fname, "w");
 
   if (opt_sport) {
     for (unsigned int i = 0; i < std::size(gtc_sportlist); i++) {
@@ -76,7 +83,7 @@ GtrnctrFormat::wr_init(const QString& fname)
       }
     }
   }
-  gtc_course_flag = xstrtoi(opt_course, nullptr, 10);
+  gtc_course_flag = opt_course;
 }
 
 void

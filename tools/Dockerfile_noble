@@ -7,9 +7,15 @@ LABEL maintainer="https://github.com/tsteven4"
 WORKDIR /app
 
 # update environment.
+# software-properties-common, gpg-agent and ppa:tsteven4/clazy-backports
+# are needed to get a backported version of clazy (1.12-2~noble12) that works
+# with Qt6.
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
+    software-properties-common \
+    gpg-agent \
+ && add-apt-repository ppa:tsteven4/clazy-backports \
  && apt-get upgrade -y \
  && rm -rf /var/lib/apt/lists/*
 
@@ -20,7 +26,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     make \
-    autoconf \
     git \
     valgrind \
     expat \
@@ -32,6 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     clang-tidy \
     jq \
     curl \
+    ca-certificates \
  && rm -rf /var/lib/apt/lists/*
 
 # alternative compiler
@@ -69,6 +75,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qt6-translations-l10n \
     qt6-webengine-dev \
     qt6-wayland \
+ && rm -rf /var/lib/apt/lists/*
+
+# dbgsyms for "libqt6core6t64/noble,now 6.4.2+dfsg-21.1build5 amd64" needed for gpsbabel.supp
+RUN apt-get update && apt-get install -y --no-install-recommends ubuntu-dbgsym-keyring \
+ && echo "deb http://ddebs.ubuntu.com noble main restricted universe multiverse" >> /etc/apt/sources.list.d/ddebs.list \
+ && echo "deb http://ddebs.ubuntu.com noble-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/ddebs.list \
+ && echo "deb http://ddebs.ubuntu.com noble-proposed main restricted universe multiverse" >> /etc/apt/sources.list.d/ddebs.list \
+ && apt-get update && apt-get install -y --no-install-recommends libqt6core6t64-dbgsym \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs needed to generate coverage report:

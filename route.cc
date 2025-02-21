@@ -46,27 +46,27 @@ route_init()
   global_track_list = new RouteList;
 }
 
-unsigned int
+int
 route_waypt_count()
 {
   /* total waypoint count -- all routes */
   return global_route_list->waypt_count();
 }
 
-unsigned int
+int
 route_count()
 {
   return global_route_list->count();	/* total # of routes */
 }
 
-unsigned int
+int
 track_waypt_count()
 {
   /* total waypoint count -- all tracks */
   return global_track_list->waypt_count();
 }
 
-unsigned int
+int
 track_count()
 {
   return global_track_list->count();	/* total # of tracks */
@@ -278,16 +278,12 @@ computed_trkdata track_recompute(const route_head* trk)
       /*
        * gcdist and heading want radians, not degrees.
        */
-      double tlat = RAD(thisw->latitude);
-      double tlon = RAD(thisw->longitude);
-      double plat = RAD(prev->latitude);
-      double plon = RAD(prev->longitude);
       if (!thisw->course_has_value()) {
         // Only recompute course if the waypoint
         // didn't already have a course.
-        thisw->set_course(heading_true_degrees(plat, plon, tlat, tlon));
+        thisw->set_course(heading_true_degrees(prev->position(), thisw->position()));
       }
-      double dist = radtometers(gcdist(plat, plon, tlat, tlon));
+      double dist = radtometers(gcdist(prev->position(), thisw->position()));
       tdata.distance_meters += dist;
 
       /*

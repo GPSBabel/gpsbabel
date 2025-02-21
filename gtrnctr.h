@@ -28,12 +28,14 @@
 
 #include <QList>                 // for QList
 #include <QString>               // for QString
+#include <QStringList>           // for QStringList
 #include <QVector>               // for QVector
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 
 #include "defs.h"                // for arglist_t, ff_cap, route_head, Waypoint, computed_trkdata, ARG_NOMINMAX, ff_cap_read, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ff_cap_write, ff_type, ff_type_file
 #include "format.h"              // for Format
 #include "gbfile.h"              // for gbfile
+#include "option.h"              // for OptionBool, OptionString
 #include "src/core/datetime.h"   // for DateTime
 #include "xmlgeneric.h"          // for cb_cdata, xg_functor_map_entry, cb_start, cb_end
 
@@ -72,16 +74,6 @@ private:
 
   static constexpr int kGtcMaxNameLen = 15;
   static constexpr const char* gtc_sportlist[] = { "Biking", "Running", "MultiSport", "Other" };
-
-  static constexpr const char* gtc_tags_to_ignore[] = {
-    "TrainingCenterDatabase",
-    "CourseFolder",
-    "Running",
-    "Biking",
-    "Other",
-    "Multisport",
-    nullptr,
-  };
 
   /* Member Functions */
 
@@ -124,6 +116,7 @@ private:
 
   /* Data Members */
 
+  static const QStringList gtc_tags_to_ignore;
   gbfile* ofd{};
   int lap_ct = 0;
   int lap_s = 0;
@@ -140,8 +133,8 @@ private:
   double gtc_end_lat{};
   double gtc_end_long{};
 
-  char* opt_sport{};
-  char* opt_course{};
+  OptionString opt_sport;
+  OptionBool opt_course;
 
   QVector<arglist_t> gtc_args = {
     {

@@ -17,7 +17,10 @@ if [ $# -ge 3 ]; then
     GENERATOR[1]=$3
   fi
 fi
-if version_ge "${QTVER}" 6.5.0; then
+if version_ge "${QTVER}" 6.8.0; then
+  DEPLOY_TARGET="12.0"
+  ARCHS="x86_64;arm64"
+elif version_ge "${QTVER}" 6.5.0; then
   DEPLOY_TARGET="11.0"
   ARCHS="x86_64;arm64"
 elif version_ge "${QTVER}" 6.0.0; then
@@ -41,13 +44,13 @@ case "${GENERATOR[1]}" in
 Xcode | "Ninja Multi-Config")
   cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} "${GENERATOR[@]}"
   cmake --build . --config Release
-  ctest -C Release
+  ctest -C Release --output-on-failure
   cmake --build . --config Release --target package_app
   ;;
 *)
   cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} -DCMAKE_BUILD_TYPE=Release "${GENERATOR[@]}"
   cmake --build .
-  ctest
+  ctest --output-on-failure
   cmake --build . --target package_app
   cmake --build . --target gpsbabel.html
   cmake --build . --target gpsbabel.pdf

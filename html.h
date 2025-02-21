@@ -21,12 +21,14 @@
 #ifndef HTML_H_INCLUDED_
 #define HTML_H_INCLUDED_
 
+#include <QList>                  // for QList
 #include <QString>                // for QString
 #include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"               // for Format
 #include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -67,15 +69,17 @@ private:
 
   int waypoint_number{};
 
-  char* stylesheet = nullptr;
-  char* html_encrypt = nullptr;
-  char* includelogs = nullptr;
-  char* degformat = nullptr;
-  char* altunits = nullptr;
+  OptionString opt_stylesheet;
+  OptionBool html_encrypt;
+  OptionBool includelogs;
+  OptionString opt_degformat;
+  OptionString opt_altunits;
+  char degformat{};
+  char altunits {};
 
   QVector<arglist_t> html_args = {
     {
-      "stylesheet", &stylesheet,
+      "stylesheet", &opt_stylesheet,
       "Path to HTML style sheet", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
@@ -87,11 +91,11 @@ private:
       "Include groundspeak logs if present", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "degformat", &degformat,
+      "degformat", &opt_degformat,
       "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
-      "altunits", &altunits,
+      "altunits", &opt_altunits,
       "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
   };

@@ -21,11 +21,11 @@
 //
 
 #include "aboutdlg.h"
-#include <QTextCursor>                // for QTextCursor
-#include <QTextDocument>              // for QTextDocument
-#include <QTextEdit>                  // for QTextEdit
-#include "appname.h"                  // for appName
-#include "upgrade.h"                  // for UpgradeCheck
+#include <QTextCursor>    // for QTextCursor
+#include <QTextDocument>  // for QTextDocument
+#include <QTextEdit>      // for QTextEdit
+#include "appname.h"      // for appName
+#include "upgrade.h"      // for UpgradeCheck
 
 
 AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,

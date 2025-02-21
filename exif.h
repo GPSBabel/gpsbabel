@@ -36,19 +36,21 @@
 #ifndef EXIF_H_INCLUDED_
 #define EXIF_H_INCLUDED_
 
-#include <QDate>      // for QDate
-#include <QDateTime>  // for QDateTime
-#include <QList>      // for QList
-#include <QString>    // for QString
-#include <QTime>      // for QTime
-#include <QVariant>   // for QVariant
-#include <QVector>    // for QVector
+#include <QByteArray>  // for QByteArray
+#include <QDate>       // for QDate
+#include <QDateTime>   // for QDateTime
+#include <QList>       // for QList
+#include <QString>     // for QString
+#include <QTime>       // for QTime
+#include <QVariant>    // for QVariant
+#include <QVector>     // for QVector
 
-#include <cstdint>    // for uint32_t, uint16_t, uint8_t, int16_t, int32_t
+#include <cstdint>     // for uint32_t, uint16_t, uint8_t, int16_t, int32_t
 
-#include "defs.h"     // for arglist_t, ff_cap, Waypoint, ARG_NOMINMAX, ARGTYPE_BOOL, ff_cap_none, ARGTYPE_INT, ARGTYPE_STRING, ff_cap_read, ff_cap_write, ff_type, ff_type_file
-#include "format.h"   // for Format
-#include "gbfile.h"   // for gbfile, gbsize_t
+#include "defs.h"      // for arglist_t, ff_cap, Waypoint, ARG_NOMINMAX, ARGTYPE_BOOL, ff_cap_none, ARGTYPE_INT, ARGTYPE_STRING, ff_cap_read, ff_cap_write, ff_type, ff_type_file
+#include "format.h"    // for Format
+#include "gbfile.h"    // for gbfile, gbsize_t
+#include "option.h"    // for OptionString, OptionBool
 
 
 class ExifFormat : public Format
@@ -172,23 +174,23 @@ private:
   static void exif_examine_app(ExifApp* app);
   static ExifIfd* exif_find_ifd(ExifApp* app, uint16_t ifd_nr);
   static ExifTag* exif_find_tag(ExifApp* app, uint16_t ifd_nr, uint16_t tag_id);
-  QDateTime exif_get_exif_time(ExifApp* app) const;
-  Waypoint* exif_waypt_from_exif_app(ExifApp* app) const;
+  QDateTime exif_get_exif_time(ExifApp* app);
+  Waypoint* exif_waypt_from_exif_app(ExifApp* app);
   static Rational<int> exif_dec2frac(double val, double tolerance);
-  ExifTag* exif_put_value(int ifd_nr, uint16_t tag_id, uint16_t type, int count, int index, const void* data) const;
-  void exif_put_double(int ifd_nr, int tag_id, int index, double val) const;
-  void exif_put_str(int ifd_nr, int tag_id, const char* val) const;
-  void exif_put_coord(int ifd_nr, int tag_id, double val) const;
-  void exif_put_long(int ifd_nr, int tag_id, int index, int32_t val) const;
-  void exif_put_short(int ifd_nr, int tag_id, int index, int16_t val) const;
-  void exif_remove_tag(int ifd_nr, int tag_id) const;
+  ExifTag* exif_put_value(int ifd_nr, uint16_t tag_id, uint16_t type, int count, int index, const void* data);
+  void exif_put_double(int ifd_nr, int tag_id, int index, double val);
+  void exif_put_str(int ifd_nr, int tag_id, const char* val);
+  void exif_put_coord(int ifd_nr, int tag_id, double val);
+  void exif_put_long(int ifd_nr, int tag_id, int index, int32_t val);
+  void exif_put_short(int ifd_nr, int tag_id, int index, int16_t val);
+  void exif_remove_tag(int ifd_nr, int tag_id);
   void exif_find_wpt_by_time(const Waypoint* wpt);
   void exif_find_wpt_by_name(const Waypoint* wpt);
   static bool exif_sort_tags_cb(const ExifTag& A, const ExifTag& B);
   static bool exif_sort_ifds_cb(const ExifIfd& A, const ExifIfd& B);
   static void exif_write_value(ExifTag* tag, gbfile* fout);
   static void exif_write_ifd(ExifIfd* ifd, char next, gbfile* fout);
-  void exif_write_apps() const;
+  void exif_write_apps();
 
   /* Data Members */
 
@@ -201,11 +203,11 @@ private:
   char exif_success{};
   QString exif_fout_name;
 
-  char* opt_filename{};
-  char* opt_overwrite{};
-  char* opt_frame{};
-  char* opt_name{};
-  char* opt_offsettime{};
+  OptionBool opt_filename;
+  OptionBool opt_overwrite;
+  OptionInt opt_frame;
+  OptionString opt_name;
+  OptionString opt_offsettime;
 
   QVector<arglist_t> exif_args = {
     { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },

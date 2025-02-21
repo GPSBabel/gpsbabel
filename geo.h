@@ -19,6 +19,7 @@
 #ifndef GEO_H_INCLUDED_
 #define GEO_H_INCLUDED_
 
+#include <QList>             // for QList
 #include <QString>           // for QString
 #include <QVector>           // for QVector
 #include <QXmlStreamReader>  // for QXmlStreamReader
@@ -27,6 +28,7 @@
 #include "defs.h"
 #include "format.h"          // for Format
 #include "geocache.h"        // for Geocache, Geocache::container_t
+#include "option.h"          // for OptionBool, OptionString
 
 
 class GeoFormat : public Format
@@ -66,12 +68,10 @@ private:
 
   /* Data Members */
 
-  char* deficon = nullptr;
-  char* nuke_placer{};
+  OptionString deficon;
 
   QVector<arglist_t> geo_args = {
     {"deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-    {"nuke_placer", &nuke_placer, "Omit Placer name", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   };
 };
 #endif // GEO_H_INCLUDED_

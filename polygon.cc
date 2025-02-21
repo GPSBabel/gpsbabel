@@ -31,7 +31,6 @@
 
 
 #if FILTERS_ENABLED
-#define MYNAME "Polygon filter"
 
 /*
  * This test for insideness is essentially an odd/even test.  The
@@ -229,7 +228,7 @@ void PolygonFilter::process()
   QString line;
 
   gpsbabel::TextStream stream;
-  stream.open(polyfileopt, QIODevice::ReadOnly, MYNAME);
+  stream.open(polyfileopt, QIODevice::ReadOnly);
 
   double olat = BADVAL;
   double olon = BADVAL;
@@ -248,9 +247,8 @@ void PolygonFilter::process()
     lat2 = lon2 = BADVAL;
     int argsfound = sscanf(CSTR(line), "%lf %lf", &lat2, &lon2);
 
-    if ((argsfound != 2) && (line.trimmed().size() > 0)) {
-      warning(MYNAME
-              ": Warning: Polygon file contains unusable vertex on line %d.\n",
+    if ((argsfound != 2) && (!line.trimmed().isEmpty())) {
+      gbWarning("Warning: Polygon file contains unusable vertex on line %d.\n",
               fileline);
     } else if (lat1 != BADVAL && lon1 != BADVAL &&
                lat2 != BADVAL && lon2 != BADVAL) {
@@ -305,7 +303,7 @@ void PolygonFilter::process()
       if (ed->override) {
         ed->state = INSIDE;
       }
-      if (((ed->state & INSIDE) == OUTSIDE) == (exclopt == nullptr)) {
+      if (((ed->state & INSIDE) == OUTSIDE) == !exclopt) {
         wp->wpt_flags.marked_for_deletion = 1;
       }
       delete ed;

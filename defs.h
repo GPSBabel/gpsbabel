@@ -19,11 +19,12 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <cmath>                     // for M_PI
+#include <cmath>                     // for nan
 #include <cstddef>                   // for NULL, nullptr_t, size_t
 #include <cstdint>                   // for int32_t, uint32_t
 #include <cstdio>                    // for NULL, fprintf, FILE, stdout
 #include <ctime>                     // for time_t
+#include <numbers>                   // for inv_pi, pi
 #include <optional>                  // for optional
 #include <utility>                   // for move
 
@@ -36,26 +37,24 @@
 #include <QString>                   // for QString
 #include <QStringView>               // for QStringView
 #include <QTextCodec>                // for QTextCodec
-#include <QVector>                   // for QVector
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+#include <QTimeZone>                 // for QTimeZone
+#endif
 #include <Qt>                        // for CaseInsensitive
 #include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
 #include "geocache.h"                // for Geocache
 #include "formspec.h"                // for FormatSpecificData
 #include "inifile.h"                 // for inifile_t
+#include "option.h"
 #include "session.h"                 // for session_t
 #include "src/core/datetime.h"       // for DateTime
 
 
+#define gbLogCStr(qstr) qUtf8Printable(qstr)
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
 
-/*
- * Amazingly, this constant is not specified in the standard...
- */
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
 
 /*
  * The constants marked "exact in decimal notation" may be more accurately
@@ -115,8 +114,16 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
+/* Degrees to radians */
+constexpr double kDegreesPerRadian = 180.0 * std::numbers::inv_pi;
+constexpr double DEG(double x) { return x * kDegreesPerRadian; }
+
+/* Radians to degrees */
+constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
+constexpr double RAD(double x) { return x * kRadiansPerDegree; }
+
 constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
-constexpr int kDautmWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
+constexpr int kDatumWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
 
 /*
@@ -235,17 +242,11 @@ public:
 class wp_flags
 {
 public:
-  wp_flags() :
-    shortname_is_synthetic(0),
-    fmt_use(0),
-    is_split(0),
-    new_trkseg(0),
-    marked_for_deletion(0) {}
-  unsigned int shortname_is_synthetic:1;
-  unsigned int fmt_use:2;			/* lightweight "extra data" */
-  unsigned int is_split:1;		/* the waypoint represents a split */
-  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-  unsigned int marked_for_deletion:1;		/* True if schedulded for deletion. */
+  unsigned int shortname_is_synthetic:1{0};
+  unsigned int fmt_use:2{0};                /* lightweight "extra data" */
+  unsigned int is_split:1{0};               /* the waypoint represents a split */
+  unsigned int new_trkseg:1{0};             /* True if first in new trkseg. */
+  unsigned int marked_for_deletion:1{0};    /* True if schedulded for deletion. */
 };
 
 /*
@@ -259,6 +260,35 @@ struct bounds {
   double min_lon;
   double min_alt;	/* -unknown_alt => invalid */
 };
+
+struct PositionRad; // forward declare
+struct PositionDeg
+{
+  PositionDeg() = default;
+  explicit(false) inline PositionDeg(const PositionRad& posr); /* converting ctor */
+  PositionDeg(double latd, double lond) : latD(latd), lonD(lond) {}
+
+  double latD{std::nan("")};
+  double lonD{std::nan("")};
+};
+
+struct PositionRad
+{
+  PositionRad() = default;
+  explicit(false) inline PositionRad(const PositionDeg& posd); /* converting ctor */
+  PositionRad(double latr, double lonr) : latR(latr), lonR(lonr) {}
+
+  double latR{std::nan("")};
+  double lonR{std::nan("")};
+};
+
+inline PositionDeg::PositionDeg(const PositionRad& posr) :
+  latD(posr.latR * kDegreesPerRadian),
+  lonD(posr.lonR * kDegreesPerRadian) {}
+
+inline PositionRad::PositionRad(const PositionDeg& posd) :
+  latR(posd.latD * kRadiansPerDegree),
+  lonR(posd.lonD * kRadiansPerDegree) {}
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
@@ -275,21 +305,14 @@ private:
   class op_flags
   {
   public:
-    op_flags() :
-      temperature(false),
-      proximity(false),
-      course(false),
-      speed(false),
-      geoidheight(false),
-      depth(false) {}
-    bool temperature:1;		/* temperature field is set */
-    bool proximity:1;		/* proximity field is set */
-    bool course:1;			/* course field is set */
-    bool speed:1;			/* speed field is set */
-    bool geoidheight:1;	/* geoidheight field is set */
-    bool depth:1;			/* depth field is set */
+    bool temperature:1{false}; /* temperature field is set */
+    bool proximity:1{false};   /* proximity field is set */
+    bool course:1{false};      /* course field is set */
+    bool speed:1{false};       /* speed field is set */
+    bool geoidheight:1{false}; /* geoidheight field is set */
+    bool depth:1{false};       /* depth field is set */
     /* !ToDo!
-    unsigned int altitude:1;		/+ altitude field is set +/
+    unsigned int altitude:1{false}; /+ altitude field is set +/
     ... and hdop,pdop,vdop,fix,sat,heartrate,cadence,power,
     odometer_distance
     */
@@ -339,6 +362,13 @@ public:
   void SetCreationTime(qint64 t, qint64 ms = 0);
   Geocache* AllocGCData();
   int EmptyGCData() const;
+  void NormalizePosition();
+  PositionDeg position() const {return PositionDeg(latitude, longitude);}
+  void SetPosition(const PositionDeg& pos)
+  {
+    latitude = pos.latD;
+    longitude = pos.lonD;
+  }
 
 // mimic std::optional interface, but use our more space
 // efficient wp_flags.
@@ -490,7 +520,7 @@ void waypt_init();
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
 void del_marked_wpts();
-unsigned int waypt_count();
+int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
@@ -542,7 +572,9 @@ WaypointList::waypt_disp_session(const session_t* se, T cb)
     }
   }
   if (global_opts.verbose_status) {
-    fprintf(stdout, "\r\n");
+    // Terminate the progress line from waypt_status_disp.
+    fprintf(stderr, "\n");
+    fflush(stderr);
   }
 }
 
@@ -674,10 +706,10 @@ private:
 };
 
 void route_init();
-unsigned int route_waypt_count();
-unsigned int route_count();
-unsigned int track_waypt_count();
-unsigned int track_count();
+int route_waypt_count();
+int route_count();
+int track_waypt_count();
+int track_count();
 route_head* route_head_alloc();
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
@@ -845,13 +877,13 @@ extern posn_status tracking_status;
 
 struct arglist_t {
   const QString argstring;
-  char** const argval{nullptr};
+  Option* const argval{nullptr};
   const QString helpstring;
   const QString defaultvalue;
   const uint32_t argtype{ARGTYPE_UNKNOWN};
   const QString minvalue;    /* minimum value for numeric options */
   const QString maxvalue;    /* maximum value for numeric options */
-  char* argvalptr{nullptr};         /* !!! internal helper. Not used in definitions !!! */
+  char* unused{nullptr};     /* TODO: delete from initialization lists */
 };
 
 enum ff_type {
@@ -878,8 +910,8 @@ enum ff_cap {
 #define FF_CAP_RW_WPT \
 	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
 
-[[noreturn]] void fatal(QDebug& msginstance);
-// cppcheck 2.10.3 fails to assign noreturn attribute to fatal if
+[[noreturn]] void gbFatal(QDebug& msginstance);
+// cppcheck 2.10.3 fails to assign noreturn attribute to gbFatal if
 // the noreturn attribute is listed before the gnu::format attribute.
 // A PR to resolve this is https://github.com/danmar/cppcheck/pull/4971,
 // but cppcheck works if the noreturn attribute follows the gnu::format
@@ -887,8 +919,12 @@ enum ff_cap {
 // This can have a large effect on codacy issues from cppcheck
 // nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
 // negativeIndex, arrayIndexOutOfBoundsCond.
-[[gnu::format(printf, 1, 2)]] [[noreturn]] void fatal(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void warning(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void gbFatal(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbWarning(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...);
+
+void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args1);
 
 void printposn(double c, bool is_lat);
 
@@ -896,11 +932,9 @@ void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
-char* xstrdup(const QString& s);
-char* xstrndup(const char* str, size_t sz);
 char* xstrdup(const char* s);
 
-FILE* xfopen(const char* fname, const char* type, const char* errtxt);
+FILE* xfopen(const QString& fname, const char* type);
 
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);
@@ -926,8 +960,8 @@ QDateTime dotnet_time_to_qdatetime(long long dotnet);
 long long qdatetime_to_dotnet_time(const QDateTime& dt);
 QString strip_html(const QString& utfstring);
 QString strip_nastyhtml(const QString& in);
-QString convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
-QString convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
+QString convert_human_date_format(const QString& human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
+QString convert_human_time_format(const QString& human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 QString get_filename(const QString& fname);			/* extract the filename portion */
@@ -989,9 +1023,6 @@ enum grid_type {
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
 
-void* gb_int2ptr(int i);
-int gb_ptr2int(const void* p);
-
 QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();
 void list_timezones();
@@ -1001,19 +1032,19 @@ int xstrtoi(const char* str, char** str_end, int base);
 /*
  *  From parse.c
  */
+int parse_integer(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr, int base = 10);
+double parse_double(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr);
 int parse_coordinates(const char* str, int datum, grid_type grid,
-                      double* latitude, double* longitude, const char* module);
+                      double* latitude, double* longitude);
 int parse_coordinates(const QString& str, int datum, grid_type grid,
-                      double* latitude, double* longitude, const char* module);
-int parse_distance(const char* str, double* val, double scale, const char* module);
-int parse_distance(const QString& str, double* val, double scale, const char* module);
-int parse_speed(const char* str, double* val, double scale, const char* module);
-int parse_speed(const QString& str, double* val, double scale, const char* module);
+                      double* latitude, double* longitude);
+int parse_distance(const QString& str, double* val, double scale);
+int parse_speed(const QString& str, double* val, double scale);
 
 /*
  * Color helpers.
  */
-int color_to_bbggrr(const char* cname);
+int color_to_bbggrr(const QString& cname);
 
 /*
  * A constant for unknown altitude.   It's tempting to just use zero
@@ -1021,5 +1052,13 @@ int color_to_bbggrr(const char* cname);
  */
 constexpr double unknown_alt = -99999999.0;
 constexpr int unknown_color = -1;
+
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+constexpr QTimeZone::Initialization QtLocalTime = QTimeZone::LocalTime;
+constexpr QTimeZone::Initialization QtUTC = QTimeZone::UTC;
+#else
+constexpr Qt::TimeSpec QtLocalTime = Qt::LocalTime;
+constexpr Qt::TimeSpec QtUTC = Qt::UTC;
+#endif
 
 #endif // DEFS_H_INCLUDED_

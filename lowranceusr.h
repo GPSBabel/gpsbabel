@@ -87,8 +87,9 @@
 #ifndef LOWRANCEUSR_H_INCLUDED_
 #define LOWRANCEUSR_H_INCLUDED_
 
-#include <cmath>                // for M_PI, round, atan, exp, log, tan
+#include <cmath>                // for round, atan, exp, log, tan
 #include <cstdint>              // for int64_t
+#include <numbers>              // for pi
 
 #include <QList>                // for QList
 #include <QString>              // for QString
@@ -99,10 +100,11 @@
 
 #include "defs.h"
 #include "format.h"
-#include "formspec.h"             // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
-#include "gbfile.h"               // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
-#include "mkshort.h"              // for MakeShort
-#include "src/core/datetime.h"    // for DateTime
+#include "formspec.h"           // for FsChainFind, FsChainAdd, kFsLowranceusr4, FormatSpecificData
+#include "gbfile.h"             // for gbfgetint32, gbfputint32, gbfputint16, gbfgetc, gbfgetint16, gbfwrite, gbfputc, gbfeof, gbfgetflt, gbfclose, gbfgetdbl, gbfopen_le, gbfputdbl, gbfputs, gbfile, gbfputflt, gbfread, gbfseek
+#include "mkshort.h"            // for MakeShort
+#include "option.h"             // for OptionBool, OptionString
+#include "src/core/datetime.h"  // for DateTime
 
 
 class LowranceusrFormat : public Format
@@ -378,7 +380,7 @@ private:
 
   static constexpr int MAXUSRSTRINGSIZE = 256;
   static constexpr double SEMIMINOR = 6356752.3142;
-  static constexpr double DEGREESTORADIANS = M_PI/180.0;
+  static constexpr double DEGREESTORADIANS = std::numbers::pi/180.0;
   static constexpr int MAX_TRAIL_POINTS = 9999;
   static constexpr double UNKNOWN_USR_ALTITUDE = METERS_TO_FEET(-10000); /* -10000ft is how the unit stores unknown */
   static constexpr int64_t base_time_secs = 946706400; /* Jan 1, 2000 00:00:00 */
@@ -386,7 +388,7 @@ private:
   /* Member Functions */
 
   static bool same_points(const Waypoint* A, const Waypoint* B);
-  void register_waypt(const Waypoint* wpt) const;
+  void register_waypt(const Waypoint* wpt);
   static const Waypoint* lowranceusr4_find_waypt(uint uid_unit, int uid_seq_low, int uid_seq_high);
   static const Waypoint* lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4);
   QString lowranceusr4_readstr(gbfile* file, int bytes_per_char) const;
@@ -403,32 +405,32 @@ private:
   static double lat_mm_to_deg(double x);
   static long int lon_deg_to_mm(double x);
   static long int lat_deg_to_mm(double x);
-  void lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present) const;
-  void lowranceusr4_parse_waypt(Waypoint* wpt_tmp) const;
-  void lowranceusr_parse_waypts() const;
-  void lowranceusr_parse_route() const;
-  void lowranceusr4_parse_route() const;
+  void lowranceusr_parse_waypt(Waypoint* wpt_tmp, int object_num_present);
+  void lowranceusr4_parse_waypt(Waypoint* wpt_tmp);
+  void lowranceusr_parse_waypts();
+  void lowranceusr_parse_route();
+  void lowranceusr4_parse_route();
   void lowranceusr_parse_routes();
-  void lowranceusr_parse_icons() const;
+  void lowranceusr_parse_icons();
   void lowranceusr_parse_trail(int* trail_num);
-  void lowranceusr4_parse_trail(int* trail_num) const;
+  void lowranceusr4_parse_trail(int* trail_num);
   void lowranceusr_parse_trails();
-  void lowranceusr_waypt_disp(const Waypoint* wpt) const;
+  void lowranceusr_waypt_disp(const Waypoint* wpt);
   void lowranceusr4_waypt_disp(const Waypoint* wpt);
   void lowranceusr_waypt_pr(const Waypoint* wpt);
   void lowranceusr4_write_waypoints();
-  void lowranceusr_write_icon(const Waypoint* wpt) const;
+  void lowranceusr_write_icon(const Waypoint* wpt);
   void lowranceusr_trail_hdr(const route_head* trk);
   void lowranceusr_route_hdr(const route_head* rte);
   void lowranceusr4_route_hdr(const route_head* rte);
-  void lowranceusr4_route_leg_disp(const Waypoint* wpt) const;
-  void lowranceusr4_route_trl(const route_head* /*unused*/) const;
+  void lowranceusr4_route_leg_disp(const Waypoint* wpt);
+  void lowranceusr4_route_trl(const route_head* /*unused*/);
   void lowranceusr_trail_disp(const Waypoint* wpt);
   void lowranceusr_merge_trail_hdr(const route_head* trk);
   void lowranceusr_merge_trail_tlr(const route_head* /*unused*/);
   void lowranceusr_merge_trail_hdr_2(const route_head* /*unused*/);
   void lowranceusr4_trail_hdr(const route_head* trail);
-  void lowranceusr4_trail_disp(const Waypoint* wpt) const;
+  void lowranceusr4_trail_disp(const Waypoint* wpt);
 
   /* Data Members */
 
@@ -443,13 +445,13 @@ private:
   int            route_uid{};
   int            trail_uid{};
 
-  char*          opt_ignoreicons{};
-  char*          opt_writeasicons{};
-  char*          opt_seg_break{};
-  char*          opt_wversion{};
-  char*          opt_title{};
-  char*          opt_content_descr{};
-  char*          opt_serialnum{};
+  OptionBool  opt_ignoreicons;
+  OptionBool  opt_writeasicons;
+  OptionBool  opt_seg_break;
+  OptionInt  opt_wversion;
+  OptionString  opt_title;
+  OptionString  opt_content_descr;
+  OptionInt  opt_serialnum;
   int            opt_serialnum_i{};
 
   QList<const Waypoint*>* waypt_table{nullptr};
@@ -457,9 +459,9 @@ private:
   unsigned short waypt_out_count{};
   int            trail_count{}, lowrance_route_count{};
   int            trail_point_count{};
-  char           continuous = 1;
+  bool           merge_new_track{false};
   short          num_section_points{};
-  char*          merge{};
+  OptionBool  merge;
   int            reading_version{};
   int            rstream_version{};
   int            writing_version{};

@@ -71,12 +71,12 @@ public:
 
   /* Member Functions */
 
-  static void init_vec(Format* fmt);
+  static void init_vec(Format* fmt, const QString& fmtname);
   void init_vecs();
   static void free_options(QVector<arglist_t>* args);
   static void exit_vec(Format* fmt);
   void exit_vecs();
-  static void assign_option(const QString& module, arglist_t* arg, const QString& val);
+  static void assign_option(const QString& module, arglist_t& arg, const QString& val);
   static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
   static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
   static QString get_option(const QStringList& options, const QString& argname);
@@ -143,8 +143,6 @@ private:
 
   /* Member Functions */
 
-  static bool is_integer(const QString& val);
-  static bool is_float(const QString& val);
   static bool is_bool(const QString& val);
   static QVector<style_vec_t> create_style_vec();
   QVector<vecinfo_t> sort_and_unify_vecs() const;

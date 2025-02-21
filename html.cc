@@ -23,6 +23,8 @@
 
 #include <QChar>                   // for QChar
 #include <QIODevice>               // for QIODevice, QIODevice::WriteOnly
+#include <QRegularExpression>      // for QRegularExpression
+#include <QRegularExpressionMatch> // for QRegularExpressionMatch
 #include <QString>                 // for QString, operator!=
 #include <QTextStream>             // for QTextStream
 #include <Qt>                      // for CaseInsensitive
@@ -39,14 +41,29 @@
 #include "src/core/xmltag.h"       // for xml_findfirst, xml_tag, xml_attribute, fs_xml, xml_findnext
 
 
-#define MYNAME "HTML"
-
 void
 HtmlFormat::wr_init(const QString& fname)
 {
   file_out = new gpsbabel::TextStream;
-  file_out->open(fname, QIODevice::WriteOnly, MYNAME);
+  file_out->open(fname, QIODevice::WriteOnly);
   mkshort_handle = new MakeShort;
+
+  static const QRegularExpression re("^(?:ddd|dmm|dms)$");
+  assert(re.isValid());
+  if (re.match(opt_degformat).hasMatch()) {
+    degformat = opt_degformat.get().at(2).toLatin1();
+  } else {
+    gbFatal("Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", gbLogCStr(opt_degformat));
+  }
+
+  if (opt_altunits.get().startsWith('f')) {
+    altunits = 'f';
+  } else if (opt_altunits.get().startsWith('m')) {
+    altunits = 'm';
+  } else {
+    gbFatal("Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", gbLogCStr(opt_altunits));
+  }
+
 }
 
 void
@@ -85,14 +102,14 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
   *file_out << "        <td>\n";
   *file_out << "          <p class=\"gpsbabelwaypoint\">" << sn << " - ";
   *file_out << QStringLiteral("%1 (%2%3 %4 %5)")
-            .arg(pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", true))
+            .arg(pretty_deg_format(wpt->latitude, wpt->longitude, degformat, " ", true))
             .arg(utmz)
             .arg(utmzc)
             .arg(utme, 6, 'f', 0)
             .arg(utmn, 7, 'f', 0);
   if (wpt->altitude != unknown_alt) {
     *file_out << QStringLiteral(" alt:%1")
-              .arg((int)((altunits[0]=='f') ? METERS_TO_FEET(wpt->altitude) : wpt->altitude));
+              .arg((int)((altunits == 'f') ? METERS_TO_FEET(wpt->altitude) : wpt->altitude));
   }
   *file_out << "<br>\n";
   if (wpt->description != wpt->shortname) {
@@ -178,7 +195,7 @@ HtmlFormat::html_disp(const Waypoint* wpt) const
           double lat = logpart->xml_attribute("lat").toDouble();
           double lon = logpart->xml_attribute("lon").toDouble();
           *file_out << "<span class=\"gpsbabellogcoords\">"
-                    << pretty_deg_format(lat, lon, degformat[2], " ", true) << "</span><br>\n";
+                    << pretty_deg_format(lat, lon, degformat, " ", true) << "</span><br>\n";
         }
 
         logpart = curlog->xml_findfirst(u"groundspeak:text");
@@ -228,13 +245,13 @@ HtmlFormat::write()
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
   if (!gpsbabel_testmode()) {
-    *file_out << "  <meta name=\"Generator\" content=\"GPSBabel "
+    *file_out << R"(  <meta name="Generator" content="GPSBabel )"
               << gpsbabel_version << "\">\n";
   }
   *file_out << "  <title>GPSBabel HTML Output</title>\n";
-  if (stylesheet) {
-    *file_out << "  <link rel=\"stylesheet\" type=\"text/css\" href=\""
-              << stylesheet << "\">\n";
+  if (opt_stylesheet) {
+    *file_out << R"(  <link rel="stylesheet" type="text/css" href=")"
+              << opt_stylesheet.get() << "\">\n";
   } else {
     *file_out << "  <style>\n";
     *file_out << "    p.gpsbabelwaypoint { font-size: 120%; font-weight: bold }\n";

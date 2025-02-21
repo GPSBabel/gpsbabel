@@ -22,12 +22,13 @@
 #include "position.h"
 
 #include <cmath>                // for abs
-#include <cstdlib>              // for strtod, abs
+#include <cstdlib>              // for abs
 
 #include <QList>                // for QList
 #include <QtGlobal>             // for qRound64, qint64
 
 #include "defs.h"
+#include "grtcirc.h"            // for gcdist, radtometers
 #include "src/core/datetime.h"  // for DateTime
 
 #if FILTERS_ENABLED
@@ -49,10 +50,8 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
 
         for (int j = i + 1 ; j < nelems ; ++j) {
           if (!qlist.at(j).deleted) {
-            double dist = gc_distance(qlist.at(j).wpt->latitude,
-                                      qlist.at(j).wpt->longitude,
-                                      qlist.at(i).wpt->latitude,
-                                      qlist.at(i).wpt->longitude);
+            double dist = radtometers(gcdist(qlist.at(j).wpt->position(),
+                                             qlist.at(i).wpt->position()));
 
             if (dist <= pos_dist) {
               if (check_time) {
@@ -76,7 +75,7 @@ void PositionFilter::position_runqueue(const WaypointList& waypt_list, int qtype
           }
         }
 
-        if (something_deleted && (purge_duplicates != nullptr)) {
+        if (something_deleted && purge_duplicates) {
           qlist.at(i).wpt->wpt_flags.marked_for_deletion = 1;
         }
       }
@@ -112,19 +111,15 @@ void PositionFilter::init()
   max_diff_time = 0;
   check_time = false;
 
-  if (distopt != nullptr) {
-    char* fm;
-    pos_dist = strtod(distopt, &fm);
-
-    if (!((*fm == 'm') || (*fm == 'M'))) {
-      /* distance is feet */
-      pos_dist = FEET_TO_METERS(pos_dist);
+  if (distopt) {
+    if (parse_distance(distopt, &pos_dist, kMetersPerFoot) == 0) {
+      gbFatal("No distance specified with distance option.\n");
     }
   }
 
-  if (timeopt != nullptr) {
+  if (timeopt) {
     check_time = true;
-    max_diff_time = qRound64(strtod(timeopt, nullptr) * 1000.0);
+    max_diff_time = qRound64(timeopt.get_result() * 1000.0);
   }
 }
 

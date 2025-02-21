@@ -23,17 +23,17 @@
 #ifndef PROCESSWAIT_H
 #define PROCESSWAIT_H
 
-#include <QByteArray>                  // for QByteArray
-#include <QObject>                     // for QObject
-#include <QProcess>                    // for QProcess, QProcess::ExitStatus, QProcess::ProcessError
-#include <QString>                     // for QString
-#include <QTimer>                      // for QTimer
-#include <QCloseEvent>                 // for QCloseEvent
-#include <QDialog>                     // for QDialog
-#include <QDialogButtonBox>            // for QDialogButtonBox
-#include <QPlainTextEdit>              // for QPlainTextEdit
-#include <QProgressBar>                // for QProgressBar
-#include <QWidget>                     // for QWidget
+#include <QByteArray>        // for QByteArray
+#include <QCloseEvent>       // for QCloseEvent
+#include <QDialog>           // for QDialog
+#include <QDialogButtonBox>  // for QDialogButtonBox
+#include <QObject>           // for Q_OBJECT, slots
+#include <QPlainTextEdit>    // for QPlainTextEdit
+#include <QProcess>          // for QProcess
+#include <QProgressBar>      // for QProgressBar
+#include <QString>           // for QString
+#include <QTimer>            // for QTimer
+#include <QWidget>           // for QWidget
 
 
 //------------------------------------------------------------------------

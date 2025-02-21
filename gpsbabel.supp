@@ -1,4 +1,22 @@
 {
+   <vtesto text>
+#  Fedora 41 qt6-qtbase.x86_64 6.8.0-4.fc41
+#  Fedora 40 qt6-qtbase.x86_64 6.7.2-6.fc40 intermittant
+#  Ubnutu Jammy libqt6core6/jammy-updates,now 6.2.4+dfsg-2ubuntu1.1 amd64 >
+#  Ubuntu Jammy qtio qhash.cpp 6.2.4
+#  Ubuntu Jammy qtio qhash.cpp 6.7.2 intermittant
+   Memcheck:Addr16
+   ...
+   fun:calculateHash<QStringView>
+}
+{
+   <vesto text 2>
+#  Ubuntu Noble libqt6core6t64/noble,now 6.4.2+dfsg-21.1build5 amd64>
+   Memcheck:Addr16
+   fun:UnknownInlinedFun
+   fun:_ZL15aeshash128_lt16Dv2_xPKhm
+}
+{
    <Fedora18: Qt's use of libuuc leaks.>
    Memcheck:Leak
    ...

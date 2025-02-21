@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>GPS device</name>
+    <snippet>Created Mon Aug 12 01:46:31 2024 GMT</snippet>
+    <LookAt>
+      <longitude>186.496407</longitude>
+      <latitude>40.977841</latitude>
+      <range>9571750.976741</range>
+    </LookAt>
+    <!-- Normal route style -->
+    <Style id="route_n">
+      <IconStyle>
+        <Icon>
+          <href>https://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <!-- Highlighted route style -->
+    <Style id="route_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>https://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="route">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#route_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#route_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>https://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>https://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="lineStyle">
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <Folder>
+      <name>Routes</name>
+      <Folder>
+        <Folder>
+          <name>Points</name>
+          <Placemark>
+            <name>RPT001</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: 140.615728</td></tr>
+<tr><td>Latitude: 35.752604</td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>140.615728</longitude>
+              <latitude>35.752604</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#route</styleUrl>
+            <Point>
+              <coordinates>140.615728,35.752604</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT002</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: 166.492918</td></tr>
+<tr><td>Latitude: 42.992831</td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>166.492918</longitude>
+              <latitude>42.992831</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#route</styleUrl>
+            <Point>
+              <coordinates>166.492918,42.992831</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT003</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -157.876012</td></tr>
+<tr><td>Latitude: 46.203079</td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-157.876012</longitude>
+              <latitude>46.203079</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#route</styleUrl>
+            <Point>
+              <coordinates>-157.876012,46.203079</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT004</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -127.622914</td></tr>
+<tr><td>Latitude: 42.925678</td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-127.622914</longitude>
+              <latitude>42.925678</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#route</styleUrl>
+            <Point>
+              <coordinates>-127.622914,42.925678</coordinates>
+            </Point>
+          </Placemark>
+        </Folder>
+        <Placemark>
+          <name>Path</name>
+          <styleUrl>#lineStyle</styleUrl>
+          <LineString>
+            <tessellate>1</tessellate>
+            <coordinates>
+140.615728,35.752604
+166.492918,42.992831
+-157.876012,46.203079
+-127.622914,42.925678
+</coordinates>
+          </LineString>
+        </Placemark>
+      </Folder>
+    </Folder>
+  </Document>
+</kml>

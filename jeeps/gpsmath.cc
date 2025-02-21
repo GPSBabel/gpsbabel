@@ -4,6 +4,7 @@
 ** @author Copyright (C) 1999 Alan Bleasby
 ** @version 1.0
 ** @modified Dec 28 1999 Alan Bleasby. First version
+** @modified Copyright (C) 2024 Robert Lipe
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -23,7 +24,6 @@
 ********************************************************************/
 #include "jeeps/gpsmath.h"
 
-#include <cassert>           // for assert
 #include <cmath>             // for sin, tan, cos, pow, log, sqrt, asin, atan, exp, fabs, round
 #include <cstdint>           // for int32_t
 #include <cstdlib>           // for abs
@@ -32,9 +32,10 @@
 
 #include <QString>           // for QString
 
-#include "defs.h"            // for case_ignore_strcmp, fatal, CSTR
+#include "defs.h"            // for case_ignore_strcmp, gbFatal, CSTR
 #include "jeeps/gpsdatum.h"  // for GPS_ODatum, GPS_OEllipse, GPS_Datums, GPS_Ellipses, UKNG, GPS_SDatum_Alias, GPS_SDatum, GPS_DatumAliases, GPS_PDatum, GPS_PDatum_Alias
 
+static constexpr bool use_exact_helmert_inverse = false;
 
 static int32_t GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32_t* zone,
                                             char* zc, double* Mc, double* E0,
@@ -429,8 +430,8 @@ void GPS_Math_XYZ_To_LatLonH(double* phi, double* lambda, double* H,
 void GPS_Math_Airy1830LatLonH_To_XYZ(double phi, double lambda, double H,
                                      double* x, double* y, double* z)
 {
-  double a = 6377563.396;
-  double b = 6356256.910;
+  constexpr double a = Airy1830_Ellipse.a;
+  constexpr double b = Airy1830_Ellipse.b();
 
   GPS_Math_LatLonH_To_XYZ(phi,lambda,H,x,y,z,a,b);
 
@@ -456,8 +457,8 @@ void GPS_Math_Airy1830LatLonH_To_XYZ(double phi, double lambda, double H,
 void GPS_Math_WGS84LatLonH_To_XYZ(double phi, double lambda, double H,
                                   double* x, double* y, double* z)
 {
-  double a = 6378137.000;
-  double b = 6356752.3141;
+  constexpr double a = WGS84_Ellipse.a;
+  constexpr double b = WGS84_Ellipse.b();
 
   GPS_Math_LatLonH_To_XYZ(phi,lambda,H,x,y,z,a,b);
 
@@ -483,8 +484,8 @@ void GPS_Math_WGS84LatLonH_To_XYZ(double phi, double lambda, double H,
 void GPS_Math_XYZ_To_Airy1830LatLonH(double* phi, double* lambda, double* H,
                                      double x, double y, double z)
 {
-  double a = 6377563.396;
-  double b = 6356256.910;
+  constexpr double a = Airy1830_Ellipse.a;
+  constexpr double b = Airy1830_Ellipse.b();
 
   GPS_Math_XYZ_To_LatLonH(phi,lambda,H,x,y,z,a,b);
 
@@ -509,8 +510,8 @@ void GPS_Math_XYZ_To_Airy1830LatLonH(double* phi, double* lambda, double* H,
 void GPS_Math_XYZ_To_WGS84LatLonH(double* phi, double* lambda, double* H,
                                   double x, double y, double z)
 {
-  double a = 6378137.000;
-  double b = 66356752.3141;
+  constexpr double a = WGS84_Ellipse.a;
+  constexpr double b = WGS84_Ellipse.b();
 
   GPS_Math_XYZ_To_LatLonH(phi,lambda,H,x,y,z,a,b);
 
@@ -638,13 +639,13 @@ void GPS_Math_LatLon_To_EN(double* E, double* N, double phi,
 void GPS_Math_Airy1830M_LatLonToINGEN(double phi, double lambda, double* E,
                                       double* N)
 {
-  double N0      =  250000;
-  double E0      =  200000;
-  double F0      = 1.000035;
-  double phi0    = 53.5;
-  double lambda0 = -8.;
-  double a       = 6377340.189;
-  double b       = 6356034.447;
+  constexpr double N0      =  250000;
+  constexpr double E0      =  200000;
+  constexpr double F0      = 1.000035;
+  constexpr double phi0    = 53.5;
+  constexpr double lambda0 = -8.;
+  constexpr double a       = Airy1830Modified_Ellipse.a;
+  constexpr double b       = Airy1830Modified_Ellipse.b();
 
   GPS_Math_LatLon_To_EN(E,N,phi,lambda,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -669,13 +670,13 @@ void GPS_Math_Airy1830M_LatLonToINGEN(double phi, double lambda, double* E,
 void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double* E,
                                    double* N)
 {
-  double N0      = -100000;
-  double E0      =  400000;
-  double F0      = 0.9996012717;
-  double phi0    = 49.;
-  double lambda0 = -2.;
-  double a       = 6377563.396;
-  double b       = 6356256.910;
+  constexpr double N0      = -100000;
+  constexpr double E0      =  400000;
+  constexpr double F0      = 0.9996012717;
+  constexpr double phi0    = 49.;
+  constexpr double lambda0 = -2.;
+  constexpr double a       = Airy1830_Ellipse.a;
+  constexpr double b       = Airy1830_Ellipse.b();
 
   GPS_Math_LatLon_To_EN(E,N,phi,lambda,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -700,11 +701,11 @@ void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double* E,
 int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E,
                                    double* N)
 {
-  const double phi0 = 46.95240556;
-  const double lambda0 = 7.43958333;
-  const double E0 = 600000.0;
-  const double N0 = 200000.0;
-  double phi, lambda, alt, a, b;
+  constexpr double phi0 = 46.95240556;
+  constexpr double lambda0 = 7.43958333;
+  constexpr double E0 = 600000.0;
+  constexpr double N0 = 200000.0;
+  double phi, lambda, alt;
 
   if (lat < 44.89022757) {
     return 0;
@@ -713,9 +714,8 @@ int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E,
     return 0;
   }
 
-  assert(strcmp(GPS_Ellipses[4].name, "Bessel 1841") == 0);
-  a = GPS_Ellipses[4].a;
-  b = a - (a / GPS_Ellipses[4].invf);
+  constexpr double a = Bessel1841_Ellipse.a;
+  constexpr double b = Bessel1841_Ellipse.b();
 
   GPS_Math_WGS84_To_Known_Datum_M(lat, lon, 0, &phi, &lambda, &alt, 123);
   GPS_Math_Swiss_LatLon_To_EN(phi, lambda, E, N, phi0, lambda0, E0, N0, a, b);
@@ -738,15 +738,14 @@ int32_t GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E,
 ************************************************************************/
 void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double* lat, double* lon)
 {
-  const double phi0 = 46.95240556;
-  const double lambda0 = 7.43958333;
-  const double E0 = 600000.0;
-  const double N0 = 200000.0;
-  double phi, lambda, alt, a, b;
+  constexpr double phi0 = 46.95240556;
+  constexpr double lambda0 = 7.43958333;
+  constexpr double E0 = 600000.0;
+  constexpr double N0 = 200000.0;
+  double phi, lambda, alt;
 
-  assert(strcmp(GPS_Ellipses[4].name, "Bessel 1841") == 0);
-  a = GPS_Ellipses[4].a;
-  b = a - (a / GPS_Ellipses[4].invf);
+  constexpr double a = Bessel1841_Ellipse.a;
+  constexpr double b = Bessel1841_Ellipse.b();
 
   GPS_Math_Swiss_EN_To_LatLon(E, N, &phi, &lambda, phi0, lambda0, E0, N0, a, b);
   GPS_Math_Known_Datum_To_WGS84_M(phi, lambda, 0, lat, lon, &alt, 123);
@@ -1099,20 +1098,20 @@ void GPS_Math_Cassini_EN_To_LatLon(double E, double N, double* phi,
 int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
                                  double* N)
 {
-  double const phi0    = 31.73409694444; // 31 44 2.749
-  double const lambda0 = 35.21208055556; // 35 12 43.49
-  double const E0      = 170251.555;
-  double const N0      = 1126867.909;
+  constexpr double phi0    = 31.73409694444; // 31 44 2.749
+  constexpr double lambda0 = 35.21208055556; // 35 12 43.49
+  constexpr double E0      = 170251.555;
+  constexpr double N0      = 1126867.909;
   double phi, lambda, alt, a, b;
 
   int32_t datum = GPS_Lookup_Datum_Index("Palestine 1923");
   if (datum < 0) {
-    fatal("Unable to find Palestine 1923 in internal tables");
+    gbFatal("Unable to find Palestine 1923 in internal tables\n");
   }
   int32_t ellipse = GPS_Datums[datum].ellipse;
 
   a = GPS_Ellipses[ellipse].a;
-  b = a - (a / GPS_Ellipses[ellipse].invf);
+  b = GPS_Ellipses[ellipse].b();
 
   GPS_Math_WGS84_To_Known_Datum_M(lat, lon, 0, &phi, &lambda, &alt, datum);
   GPS_Math_Cassini_LatLon_To_EN(phi, lambda, E, N,
@@ -1136,19 +1135,19 @@ int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
 ************************************************************************/
 void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon)
 {
-  double const phi0    = 31.73409694444; // 31 44 2.749
-  double const lambda0 = 35.21208055556; // 35 12 43.49
-  double const E0      = 170251.555;
-  double const N0      = 1126867.909;
+  constexpr double phi0    = 31.73409694444; // 31 44 2.749
+  constexpr double lambda0 = 35.21208055556; // 35 12 43.49
+  constexpr double E0      = 170251.555;
+  constexpr double N0      = 1126867.909;
   double phi, lambda, alt, a, b;
   int32_t datum = GPS_Lookup_Datum_Index("Palestine 1923");
   if (datum < 0) {
-    fatal("Unable to find Palestine 1923 in internal tables");
+    gbFatal("Unable to find Palestine 1923 in internal tables\n");
   }
   int32_t ellipse = GPS_Datums[datum].ellipse;
 
   a = GPS_Ellipses[ellipse].a;
-  b = a - (a / GPS_Ellipses[ellipse].invf);
+  b = GPS_Ellipses[ellipse].b();
 
   GPS_Math_Cassini_EN_To_LatLon(E, N, &phi, &lambda, phi0, lambda0,
                                 E0, N0, a, b);
@@ -1302,13 +1301,13 @@ void GPS_Math_EN_To_LatLon(double E, double N, double* phi,
 void GPS_Math_NGENToAiry1830LatLon(double E, double N, double* phi,
                                    double* lambda)
 {
-  double N0      = -100000;
-  double E0      =  400000;
-  double F0      = 0.9996012717;
-  double phi0    = 49.;
-  double lambda0 = -2.;
-  double a       = 6377563.396;
-  double b       = 6356256.910;
+  constexpr double N0      = -100000;
+  constexpr double E0      =  400000;
+  constexpr double F0      = 0.9996012717;
+  constexpr double phi0    = 49.;
+  constexpr double lambda0 = -2.;
+  constexpr double a = Airy1830_Ellipse.a;
+  constexpr double b = Airy1830_Ellipse.b();
 
   GPS_Math_EN_To_LatLon(E,N,phi,lambda,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -1332,13 +1331,13 @@ void GPS_Math_NGENToAiry1830LatLon(double E, double N, double* phi,
 void GPS_Math_INGENToAiry1830MLatLon(double E, double N, double* phi,
                                      double* lambda)
 {
-  double N0      =  250000;
-  double E0      =  200000;
-  double F0      = 1.000035;
-  double phi0    = 53.5;
-  double lambda0 = -8.;
-  double a       = 6377340.189;
-  double b       = 6356034.447;
+  constexpr double N0      =  250000;
+  constexpr double E0      =  200000;
+  constexpr double F0      = 1.000035;
+  constexpr double phi0    = 53.5;
+  constexpr double lambda0 = -8.;
+  constexpr double a = Airy1830Modified_Ellipse.a;
+  constexpr double b = Airy1830Modified_Ellipse.b();
 
   GPS_Math_EN_To_LatLon(E,N,phi,lambda,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -1518,6 +1517,96 @@ void GPS_Math_Molodensky(double Sphi, double Slam, double SH, double Sa,
 }
 
 
+/* @func GPS_Math_Helmert *******************************************
+**
+** Transform one datum to another
+**
+** @param [r] Sx [double] source X
+** @param [r] Sy [double] source Y
+** @param [r] Sz [double] source Z
+** @param [w] Dx [double*] converted X
+** @param [w] Dy [double*] converted Y
+** @param [w] Dz [double*] converted Z
+** @param [r] tX   [double] translation along x axis (meters)
+** @param [r] tY   [double] translation along y axis (meters)
+** @param [r] tZ   [double] translation along z axis (meters)
+** @param [r] sppm [double] scale factor - 1 (ppm)
+** @param [r] rXs  [double] rotation about x axis (seconds)
+** @param [r] rYs  [double] rotation about y axis (seconds)
+** @param [r] rZs  [double] rotation about z axis (seconds)
+**
+** @return [void]
+************************************************************************/
+void GPS_Math_Helmert(double Sx, double Sy, double Sz,
+                      double* Dx, double* Dy, double* Dz,
+                      double tX, double tY, double tZ,
+                      double sppm,
+                      double rXs, double rYs, double rZs)
+{
+  double s = sppm * 1e-6;
+  constexpr double radians_per_second = (1.0/(60.0*60.0)) * GPS_PI/180.0;
+  double rX = rXs * radians_per_second; /* radians */
+  double rY = rYs * radians_per_second; /* radians */
+  double rZ = rZs * radians_per_second; /* radians */
+
+  // rotation/scaling matrix = [1+s -rz ry;rz 1+s -rx;-ry rx 1+s];
+  *Dx = tX + (1 + s)*Sx + -rZ*Sy + rY*Sz;
+  *Dy = tY + rZ*Sx + (1 + s)*Sy + -rX*Sz;
+  *Dz = tZ + -rY*Sx + rX*Sy + (1 + s)*Sz;
+}
+
+/* @func GPS_Math_Inverse_Helmert ***********************************
+**
+** Transform from source to coverted datum.
+** translation, scale and rotation parameters are the Helmert parameters
+** to traslate from the converted to source datum!
+**
+** @param [r] Sx [double] source X
+** @param [r] Sy [double] source Y
+** @param [r] Sz [double] source Z
+** @param [w] Dx [double*] converted X
+** @param [w] Dy [double*] converted Y
+** @param [w] Dz [double*] converted Z
+** @param [r] tX   [double] translation along x axis (meters)
+** @param [r] tY   [double] translation along y axis (meters)
+** @param [r] tZ   [double] translation along z axis (meters)
+** @param [r] sppm [double] scale factor - 1 (ppm)
+** @param [r] rXs  [double] rotation about x axis (seconds)
+** @param [r] rYs  [double] rotation about y axis (seconds)
+** @param [r] rZs  [double] rotation about z axis (seconds)
+**
+** @return [void]
+************************************************************************/
+void GPS_Math_Inverse_Helmert(double Sx, double Sy, double Sz,
+                              double* Dx, double* Dy, double* Dz,
+                              double tX, double tY, double tZ,
+                              double sppm,
+                              double rXs, double rYs, double rZs)
+{
+  double s = sppm * 1e-6;
+  constexpr double radians_per_second = (1.0/(60.0*60.0)) * GPS_PI/180.0;
+  double rX = rXs * radians_per_second; /* radians */
+  double rY = rYs * radians_per_second; /* radians */
+  double rZ = rZs * radians_per_second; /* radians */
+
+  // forward rotation/scaling matrix is [1+s -rz ry;rz 1+s -rx;-ry rx 1+s]
+  // compute inverse of forward Helmert rotation/scaling matrix
+  // https://www.wolframalpha.com/input?i2d=true&i=Power%5B%7B%7B1%2Bs%2C-Subscript%5Br%2Cz%5D%2CSubscript%5Br%2Cy%5D%7D%2C%7BSubscript%5Br%2Cz%5D%2C1%2Bs%2C-Subscript%5Br%2Cx%5D%7D%2C%7B-Subscript%5Br%2Cy%5D%2CSubscript%5Br%2Cx%5D%2C1%2Bs%7D%7D%2C-1%5D
+  double gain = 1/((s + 1) * (rX*rX + rY*rY + rZ*rZ + s*s + 2*s + 1));
+  double r11 = rX*rX + s*s + 2*s + 1;
+  double r12 = s*rZ + rX*rY + rZ;
+  double r13 = -s*rY + rX*rZ - rY;
+  double r21 = -s*rZ + rX*rY - rZ;
+  double r22 = rY*rY + s*s + 2*s + 1;
+  double r23 = s*rX + rX + rY*rZ;
+  double r31 = s*rY + rX*rZ + rY;
+  double r32 = -s*rX - rX + rY*rZ;
+  double r33 = rZ*rZ + s*s + 2*s + 1;
+
+  *Dx = gain * ((r11 * (Sx-tX)) + (r12 * (Sy-tY)) + (r13 * (Sz-tZ)));
+  *Dy = gain * ((r21 * (Sx-tX)) + (r22 * (Sy-tY)) + (r23 * (Sz-tZ)));
+  *Dz = gain * ((r31 * (Sx-tX)) + (r32 * (Sy-tY)) + (r33 * (Sz-tZ)));
+}
 
 /* @func GPS_Math_Known_Datum_To_WGS84_M **********************************
 **
@@ -1539,15 +1628,13 @@ void GPS_Math_Known_Datum_To_WGS84_M(double Sphi, double Slam, double SH,
 {
   double Sa;
   double Sif;
-  double Da;
-  double Dif;
   double x;
   double y;
   double z;
   int32_t idx;
 
-  Da  = 6378137.0;
-  Dif = 298.257223563;
+  constexpr double Da  = WGS84_Ellipse.a;
+  constexpr double Dif = WGS84_Ellipse.invf;
 
   idx  = GPS_Datums[n].ellipse;
   Sa   = GPS_Ellipses[idx].a;
@@ -1581,8 +1668,6 @@ void GPS_Math_WGS84_To_Known_Datum_M(double Sphi, double Slam, double SH,
                                      double* Dphi, double* Dlam, double* DH,
                                      int32_t n)
 {
-  double Sa;
-  double Sif;
   double Da;
   double Dif;
   double x;
@@ -1590,8 +1675,8 @@ void GPS_Math_WGS84_To_Known_Datum_M(double Sphi, double Slam, double SH,
   double z;
   int32_t idx;
 
-  Sa  = 6378137.0;
-  Sif = 298.257223563;
+  constexpr double Sa  = WGS84_Ellipse.a;
+  constexpr double Sif = WGS84_Ellipse.invf;
 
   idx  = GPS_Datums[n].ellipse;
   Da   = GPS_Ellipses[idx].a;
@@ -1628,9 +1713,6 @@ void GPS_Math_Known_Datum_To_WGS84_C(double Sphi, double Slam, double SH,
   double Sa;
   double Sif;
   double Sb;
-  double Da;
-  double Dif;
-  double Db;
   double x;
   double y;
   double z;
@@ -1639,9 +1721,8 @@ void GPS_Math_Known_Datum_To_WGS84_C(double Sphi, double Slam, double SH,
   double sy;
   double sz;
 
-  Da  = 6378137.0;
-  Dif = 298.257223563;
-  Db  = Da - (Da / Dif);
+  constexpr double Da  = WGS84_Ellipse.a;
+  constexpr double Db  = WGS84_Ellipse.b();
 
   idx  = GPS_Datums[n].ellipse;
   Sa   = GPS_Ellipses[idx].a;
@@ -1682,23 +1763,19 @@ void GPS_Math_WGS84_To_Known_Datum_C(double Sphi, double Slam, double SH,
                                      double* Dphi, double* Dlam, double* DH,
                                      int32_t n)
 {
-  double Sa;
-  double Sif;
   double Da;
   double Dif;
   double x;
   double y;
   double z;
   int32_t idx;
-  double Sb;
   double Db;
   double dx;
   double dy;
   double dz;
 
-  Sa  = 6378137.0;
-  Sif = 298.257223563;
-  Sb   = Sa - (Sa / Sif);
+  constexpr double Sa  = WGS84_Ellipse.a;
+  constexpr double Sb  = WGS84_Ellipse.b();
 
   idx  = GPS_Datums[n].ellipse;
   Da   = GPS_Ellipses[idx].a;
@@ -1803,9 +1880,7 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
     double* DH, int32_t n1, int32_t n2)
 {
   double Sa;
-  double Sif;
   double Da;
-  double Dif;
   double x1;
   double y1;
   double z1;
@@ -1824,8 +1899,7 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
 
   idx1  = GPS_Datums[n1].ellipse;
   Sa    = GPS_Ellipses[idx1].a;
-  Sif   = GPS_Ellipses[idx1].invf;
-  Sb    = Sa - (Sa / Sif);
+  Sb    = GPS_Ellipses[idx1].b();
 
   x1    = GPS_Datums[n1].dx;
   y1    = GPS_Datums[n1].dy;
@@ -1833,8 +1907,7 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
 
   idx2  = GPS_Datums[n2].ellipse;
   Da    = GPS_Ellipses[idx2].a;
-  Dif   = GPS_Ellipses[idx2].invf;
-  Db    = Da - (Da / Dif);
+  Db    = GPS_Ellipses[idx2].b();
 
   x2    = GPS_Datums[n2].dx;
   y2    = GPS_Datums[n2].dy;
@@ -1921,6 +1994,150 @@ int32_t GPS_Math_UKOSMap_To_WGS84_M(const char* map, double mE, double mN,
   return 1;
 }
 
+
+/* @func GPS_Math_WGS84_To_UKOSMap_H ***********************************
+**
+** Convert WGS84 lat/lon to Ordnance survey map code and easting and
+** northing. Uses Helmert.
+**
+** @param [r] lat  [double] WGS84 latitude (deg)
+** @param [r] lon  [double] WGS84 longitude (deg)
+** @param [w] mE   [double *] map easting (metres)
+** @param [w] mN   [double *] map northing (metres)
+** @param [w] map  [char *] map two letter code
+**
+** @return [int32] success
+************************************************************************/
+int32_t GPS_Math_WGS84_To_UKOSMap_H(double lat, double lon, double* mE,
+                                    double* mN, char* map)
+{
+  double x;
+  double y;
+  double z;
+  double ax;
+  double ay;
+  double az;
+  double alat;
+  double alon;
+  double ah;
+  double aE;
+  double aN;
+
+
+  GPS_Math_WGS84LatLonH_To_XYZ(lat, lon, 0,
+                               &x, &y, &z);
+
+  /* Helmert transformation
+   * https://www.ordnancesurvey.co.uk/documents/resources/guide-coordinate-systems-great-britain.pdf
+   * 6.2 Helmert datum transformations
+   * 6.6 Approximate WGS84 to OSGB36/ODN transformation
+   */
+  // WGS84 -> OSGB36
+  constexpr double tX = -446.448; /* meters */
+  constexpr double tY = +125.157; /* meters */
+  constexpr double tZ = -542.060; /* meters */
+  constexpr double s = +20.4894; /* ppm */
+  constexpr double rX = -0.1502; /* seconds */
+  constexpr double rY = -0.2470; /* seconds */
+  constexpr double rZ = -0.8421; /* seconds */
+
+  GPS_Math_Helmert(x, y, z,
+                   &ax, &ay, &az,
+                   tX, tY, tZ,
+                   s,
+                   rX, rY, rZ);
+
+  GPS_Math_XYZ_To_Airy1830LatLonH(&alat, &alon, &ah,
+                                  ax, ay, az);
+  GPS_Math_Airy1830LatLonToNGEN(alat, alon,
+                                &aE, &aN);
+  if (!GPS_Math_EN_To_UKOSNG_Map(aE,aN,mE,mN,map)) {
+    return 0;
+  }
+
+  return 1;
+}
+
+
+/* @func GPS_Math_UKOSMap_To_WGS84_H ***********************************
+**
+** Transform UK Ordnance survey map position to WGS84 lat/lon
+** Uses Helmert transformation
+**
+** @param [r] map  [const char *] map two letter code
+** @param [r] mE   [double] map easting (metres)
+** @param [r] mN   [double] map northing (metres)
+** @param [w] lat  [double *] WGS84 latitude (deg)
+** @param [w] lon  [double *] WGS84 longitude (deg)
+**
+** @return [int32] success
+************************************************************************/
+int32_t GPS_Math_UKOSMap_To_WGS84_H(const char* map, double mE, double mN,
+                                    double* lat, double* lon)
+{
+  double E;
+  double N;
+  double alat;
+  double alon;
+  double ht;
+  double ax;
+  double ay;
+  double az;
+  double x;
+  double y;
+  double z;
+
+  if (!GPS_Math_UKOSNG_Map_To_EN(map,mE,mN,&E,&N)) {
+    return 0;
+  }
+
+  GPS_Math_NGENToAiry1830LatLon(E,N,&alat,&alon);
+  GPS_Math_Airy1830LatLonH_To_XYZ(alat, alon, 0.0, &ax, &ay, &az);
+
+  /* Helmert transformation
+   * https://www.ordnancesurvey.co.uk/documents/resources/guide-coordinate-systems-great-britain.pdf
+   * 6.2 Helmert datum transformations
+   * 6.6 Approximate WGS84 to OSGB36/ODN transformation
+   */
+  if constexpr(use_exact_helmert_inverse) {
+    // Actually invert the Helmert transform from WGS84 to OSGB36.
+    // WGS84 -> OSGB36
+    constexpr double tX = -446.448; /* meters */
+    constexpr double tY = +125.157; /* meters */
+    constexpr double tZ = -542.060; /* meters */
+    constexpr double s = +20.4894; /* ppm */
+    constexpr double rX = -0.1502; /* seconds */
+    constexpr double rY = -0.2470; /* seconds */
+    constexpr double rZ = -0.8421; /* seconds */
+
+    GPS_Math_Inverse_Helmert(ax, ay, az,
+                             &x, &y, &z,
+                             tX, tY, tZ,
+                             s,
+                             rX, rY, rZ);
+  } else {
+    // Approximate the transform from OSGB36 to WGS84 by using the standard
+    // helmert transform with parameters that all have the opposite signs of
+    // those used to transform from WGS84 to OSGB36.
+    constexpr double tX = +446.448; /* meters */
+    constexpr double tY = -125.157; /* meters */
+    constexpr double tZ = +542.060; /* meters */
+    constexpr double s = -20.4894; /* ppm */
+    constexpr double rX = +0.1502; /* seconds */
+    constexpr double rY = +0.2470; /* seconds */
+    constexpr double rZ = +0.8421; /* seconds */
+
+    GPS_Math_Helmert(ax, ay, az,
+                     &x, &y, &z,
+                     tX, tY, tZ,
+                     s,
+                     rX, rY, rZ);
+  }
+
+  GPS_Math_XYZ_To_WGS84LatLonH(lat, lon, &ht, x, y, z);
+
+  return 1;
+}
 
 
 /* @func GPS_Math_WGS84_To_UKOSMap_C ***********************************
@@ -2116,8 +2333,6 @@ int32_t GPS_Math_NAD83_To_UTM_EN(double lat, double lon, double* E,
   double N0;
   double E0;
   double F0;
-  double a;
-  double b;
 
   if (!GPS_Math_LatLon_To_UTM_Param(lat,lon,zone,zc,&lambda0,&E0,
                                     &N0,&F0)) {
@@ -2126,9 +2341,8 @@ int32_t GPS_Math_NAD83_To_UTM_EN(double lat, double lon, double* E,
 
   phi0 = 0.0;
 
-  assert(strcmp(GPS_Ellipses[21].name, "GRS80") == 0);
-  a = GPS_Ellipses[21].a;
-  b = a - (a / GPS_Ellipses[21].invf);
+  constexpr double a = GRS80_Ellipse.a;
+  constexpr double b = GRS80_Ellipse.b();
 
   GPS_Math_LatLon_To_EN(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -2294,7 +2508,7 @@ int32_t GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double* E,
 
   idx  = GPS_Datums[n].ellipse;
   a = GPS_Ellipses[idx].a;
-  b = a - (a / GPS_Ellipses[idx].invf);
+  b = GPS_Ellipses[idx].b();
 
   GPS_Math_LatLon_To_EN(E,N,lat,lon,N0,E0,phi0,lambda0,F0,a,b);
 
@@ -2516,8 +2730,8 @@ void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
 //based on code written by Chuck Gantz- chuck.gantz@globalstar.com
 //found at http://www.gpsy.com/gpsinfo/geotoutm/index.html
 
-  double k0 = 0.9996;
-  double a, b;
+  constexpr double k0 = 0.9996;
+  double a, f;
   double eccSquared;
   double eccPrimeSquared;
   double e1;
@@ -2526,8 +2740,8 @@ void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
   double x, y;
 
   a = GPS_Ellipses[ReferenceEllipsoid].a;
-  b = 1 / GPS_Ellipses[ReferenceEllipsoid].invf;
-  eccSquared = b * (2.0 - b);
+  f = 1 / GPS_Ellipses[ReferenceEllipsoid].invf;
+  eccSquared = f * (2.0 - f);
   e1 = (1-sqrt(1-eccSquared))/(1+sqrt(1-eccSquared));
 
   x = UTMEasting - E0; //remove false easting

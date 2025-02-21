@@ -6,7 +6,7 @@
     <message>
         <location filename="aboutui.ui" line="14"/>
         <source>About GPSBabel</source>
-        <translation>О GPSBabel</translation>
+        <translation>О программе GPSBabel</translation>
     </message>
     <message>
         <location filename="aboutui.ui" line="80"/>
@@ -16,7 +16,7 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2023 Robert Lipe&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2024 Robert Lipe&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GUI designed and contributed by S. Khai Mong&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -38,7 +38,7 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2022 Robert Lipe&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2023 Robert Lipe&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GUI designed and contributed by S. Khai Mong&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -60,12 +60,13 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Авторское право (C) Robert Lipe, 2009-2022&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Авторское право (C) Robert Lipe, 2009-2023&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Графический интерфейс пользователя разработан и предоставлен S. Khai Mong&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Кристальные значки LGPL авторства Elvarado Coehlo&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Используется модуль $babelversion$)&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$hash$&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$date$&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$upgradetestmode$&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Идентификатор установки: $installationId$&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -282,12 +283,12 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FileDlgManager</name>
     <message>
-        <location filename="optionsdlg.cc" line="68"/>
+        <location filename="optionsdlg.cc" line="75"/>
         <source>Select input file</source>
         <translation>Выберите входной файл</translation>
     </message>
     <message>
-        <location filename="optionsdlg.cc" line="72"/>
+        <location filename="optionsdlg.cc" line="79"/>
         <source>Select output file</source>
         <translation>Выберите выходной файл</translation>
     </message>
@@ -295,27 +296,27 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cc" line="41"/>
+        <location filename="filterdlg.cc" line="47"/>
         <source>Tracks</source>
         <translation>Треки</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="44"/>
+        <location filename="filterdlg.cc" line="50"/>
         <source>Waypoints</source>
         <translation>Маршрутные точки</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="47"/>
+        <location filename="filterdlg.cc" line="53"/>
         <source>Routes &amp; Tracks</source>
         <translation>Маршруты и Треки</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="50"/>
+        <location filename="filterdlg.cc" line="56"/>
         <source>Miscellaneous</source>
         <translation>Прочие</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="105"/>
+        <location filename="filterdlg.cc" line="111"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation>Cбросить все настройки фильтра в значения по умолчанию?</translation>
     </message>
@@ -335,7 +336,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="filterui.ui" line="72"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <location filename="filterui.ui" line="83"/>
@@ -346,138 +347,138 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>GMapDialog</name>
     <message>
-        <location filename="gmapdlg.cc" line="45"/>
+        <location filename="gmapdlg.cc" line="57"/>
         <source>meters</source>
         <translation>метров</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="54"/>
+        <location filename="gmapdlg.cc" line="66"/>
         <source>feet</source>
         <translation>футов</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="58"/>
+        <location filename="gmapdlg.cc" line="70"/>
         <source>miles</source>
         <translation>миль</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="61"/>
+        <location filename="gmapdlg.cc" line="73"/>
         <source>Length: %1 %2
   %3 %4</source>
         <translation>Протяженность: %1 %2
   %3 %4</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="71"/>
+        <location filename="gmapdlg.cc" line="83"/>
         <source>Lat: %1</source>
         <translation>Широта: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="72"/>
+        <location filename="gmapdlg.cc" line="84"/>
         <source>Lng: %1</source>
         <translation>Долгота: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="74"/>
+        <location filename="gmapdlg.cc" line="86"/>
         <source>Desc: %1</source>
         <translation>Описание: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="77"/>
+        <location filename="gmapdlg.cc" line="89"/>
         <source>Cmt: %1</source>
         <translation>Комментарий: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="80"/>
+        <location filename="gmapdlg.cc" line="92"/>
         <source>Ele: %1</source>
         <translation>Высота: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="114"/>
+        <location filename="gmapdlg.cc" line="126"/>
         <source>Start: %1</source>
         <translation>Начало: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="116"/>
+        <location filename="gmapdlg.cc" line="128"/>
         <source>Stop: %1</source>
         <translation>Конец: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="119"/>
+        <location filename="gmapdlg.cc" line="131"/>
         <source>Points: %1</source>
         <translation>Точек: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="146"/>
+        <location filename="gmapdlg.cc" line="156"/>
         <source>Waypoints</source>
         <translation>Маршрутные точки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="161"/>
+        <location filename="gmapdlg.cc" line="168"/>
         <source>Tracks</source>
         <translation>Треки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="176"/>
+        <location filename="gmapdlg.cc" line="180"/>
         <source>Routes</source>
         <translation>Маршруты</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="531"/>
+        <location filename="gmapdlg.cc" line="414"/>
         <source>Show All Waypoints</source>
         <translation>Показать все маршрутные точки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="532"/>
+        <location filename="gmapdlg.cc" line="415"/>
         <source>Hide All Waypoints</source>
         <translation>Скрыть все маршрутные точки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="533"/>
-        <location filename="gmapdlg.cc" line="540"/>
-        <location filename="gmapdlg.cc" line="547"/>
+        <location filename="gmapdlg.cc" line="416"/>
+        <location filename="gmapdlg.cc" line="423"/>
+        <location filename="gmapdlg.cc" line="430"/>
         <source>Expand All</source>
         <translation>Развернуть все</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="534"/>
-        <location filename="gmapdlg.cc" line="541"/>
-        <location filename="gmapdlg.cc" line="548"/>
+        <location filename="gmapdlg.cc" line="417"/>
+        <location filename="gmapdlg.cc" line="424"/>
+        <location filename="gmapdlg.cc" line="431"/>
         <source>Collapse All</source>
         <translation>Свернуть все</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="538"/>
+        <location filename="gmapdlg.cc" line="421"/>
         <source>Show All Routes</source>
         <translation>Показать все маршруты</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="539"/>
+        <location filename="gmapdlg.cc" line="422"/>
         <source>Hide All Routes</source>
         <translation>Скрыть все маршруты</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="545"/>
+        <location filename="gmapdlg.cc" line="428"/>
         <source>Show All Tracks</source>
         <translation>Показать все треки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="546"/>
+        <location filename="gmapdlg.cc" line="429"/>
         <source>Hide All Tracks</source>
         <translation>Скрыть все треки</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="552"/>
+        <location filename="gmapdlg.cc" line="437"/>
         <source>Show Only This Waypoint</source>
         <translation>Показать только эту маршрутную точку</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="557"/>
+        <location filename="gmapdlg.cc" line="439"/>
         <source>Show Only This Track</source>
         <translation>Показать только этот трек</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cc" line="562"/>
+        <location filename="gmapdlg.cc" line="441"/>
         <source>Show Only This Route</source>
         <translation>Показать только этот маршрут</translation>
     </message>
@@ -490,14 +491,12 @@ Higher number provides more detailed diagnostics.</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="gmapui.ui" line="47"/>
         <source>Copy to Clipboard</source>
-        <translation>Копировать в буфер</translation>
+        <translation type="vanished">Копировать в буфер</translation>
     </message>
     <message>
-        <location filename="gmapui.ui" line="50"/>
         <source>Copy</source>
-        <translation>Копировать</translation>
+        <translation type="vanished">Копировать</translation>
     </message>
 </context>
 <context>
@@ -693,7 +692,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="mainwinui.ui" line="689"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="705"/>
@@ -735,17 +734,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="obsolete">по умолчанию</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="529"/>
+        <location filename="mainwindow.cc" line="506"/>
         <source>Select one or more input files</source>
         <translation>Выберите один или несколько файлов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="557"/>
+        <location filename="mainwindow.cc" line="534"/>
         <source>Output File Name</source>
         <translation>Имя выходного файла</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="621"/>
+        <location filename="mainwindow.cc" line="598"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -754,7 +753,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="632"/>
+        <location filename="mainwindow.cc" line="609"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -763,7 +762,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="653"/>
+        <location filename="mainwindow.cc" line="630"/>
         <source>Input and output formats do not support %1</source>
         <translation>Входной и выходной форматы не поддерживают %1</translation>
     </message>
@@ -776,68 +775,68 @@ This program cannot continue.</source>
         <translation type="vanished">Входной формат поддерживает %1; выходной формат не поддерживаетt %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="633"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation>Входной формат не поддерживает %1; выходной формат поддерживает %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="636"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation>Входной формат поддерживает %1; выходной формат не поддерживаетt %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="639"/>
         <source>Both input and output formats support %1</source>
         <translation>Входной и выходной формат поддерживают %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="683"/>
+        <location filename="mainwindow.cc" line="660"/>
         <source>waypoints</source>
         <translation>маршрутные точки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="684"/>
+        <location filename="mainwindow.cc" line="661"/>
         <source>tracks</source>
         <translation>треки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="685"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>routes</source>
         <translation>маршруты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="780"/>
+        <location filename="mainwindow.cc" line="757"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Нет входных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="786"/>
-        <location filename="mainwindow.cc" line="805"/>
+        <location filename="mainwindow.cc" line="763"/>
+        <location filename="mainwindow.cc" line="782"/>
         <source>Options for %1</source>
         <translation>Параметры %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="799"/>
+        <location filename="mainwindow.cc" line="776"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Нет выходных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="819"/>
+        <location filename="mainwindow.cc" line="796"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Не выбрано преобразование маршрутных точек/маршрутов/треков</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="838"/>
+        <location filename="mainwindow.cc" line="815"/>
         <source>No input file specified</source>
         <translation>Не выбран входной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="847"/>
+        <location filename="mainwindow.cc" line="824"/>
         <source>No valid output specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="852"/>
+        <location filename="mainwindow.cc" line="829"/>
         <source>No output file specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
@@ -850,33 +849,39 @@ This program cannot continue.</source>
         <translation type="vanished">Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="987"/>
+        <location filename="mainwindow.cc" line="964"/>
         <source>Translation successful</source>
         <translation>Конвертация выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1005"/>
+        <location filename="mainwindow.cc" line="977"/>
+        <source>Error preparing map: %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cc" line="995"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Ошибка запуска gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1128"/>
+        <location filename="mainwindow.cc" line="1118"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Вы действительно желаете сбросить все параметры формата в значения по умолчанию?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1157"/>
+        <location filename="mainwindow.cc" line="1147"/>
         <source>About %1</source>
         <translation>О %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1200"/>
+        <location filename="mainwindow.cc" line="1190"/>
         <source>One or more data filters are active</source>
         <translation>Один или более фильтров данных активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1202"/>
+        <location filename="mainwindow.cc" line="1192"/>
         <source>No data filters are active</source>
         <translation>Фильтры данных не активны</translation>
     </message>
@@ -884,17 +889,17 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="127"/>
+        <location filename="map.cc" line="118"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation>Ошибка открытия файла &quot;gmapbase.html&quot;.  Попробуйте переустановить программу</translation>
     </message>
     <message>
-        <location filename="map.cc" line="131"/>
+        <location filename="map.cc" line="122"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation>Отсутствует файл &quot;gmapbase.html&quot;. Попробуйте переустановить программу</translation>
     </message>
     <message>
-        <location filename="map.cc" line="186"/>
+        <location filename="map.cc" line="177"/>
         <source>Failed to load Google maps base page</source>
         <translation>Не удалось загрузить базовую страницу Google Maps</translation>
     </message>
@@ -918,28 +923,28 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="271"/>
-        <location filename="filterwidgets.cc" line="272"/>
-        <location filename="filterwidgets.cc" line="273"/>
-        <location filename="filterwidgets.cc" line="274"/>
+        <location filename="filterwidgets.cc" line="294"/>
+        <location filename="filterwidgets.cc" line="295"/>
+        <location filename="filterwidgets.cc" line="296"/>
+        <location filename="filterwidgets.cc" line="297"/>
         <source>Routes</source>
         <translation>Маршруты</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="270"/>
-        <location filename="filterwidgets.cc" line="271"/>
-        <location filename="filterwidgets.cc" line="274"/>
-        <location filename="filterwidgets.cc" line="275"/>
+        <location filename="filterwidgets.cc" line="293"/>
+        <location filename="filterwidgets.cc" line="294"/>
+        <location filename="filterwidgets.cc" line="297"/>
+        <location filename="filterwidgets.cc" line="298"/>
         <source>Tracks</source>
         <translation>Треки</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="270"/>
-        <location filename="filterwidgets.cc" line="272"/>
-        <location filename="filterwidgets.cc" line="273"/>
-        <location filename="filterwidgets.cc" line="275"/>
+        <location filename="filterwidgets.cc" line="293"/>
+        <location filename="filterwidgets.cc" line="295"/>
+        <location filename="filterwidgets.cc" line="296"/>
+        <location filename="filterwidgets.cc" line="298"/>
         <source>Waypoints</source>
         <translation>Маршрутные точки</translation>
     </message>
@@ -1048,10 +1053,10 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>OptionsDlg</name>
     <message>
-        <location filename="optionsdlg.cc" line="187"/>
-        <location filename="optionsdlg.cc" line="198"/>
+        <location filename="optionsdlg.cc" line="194"/>
+        <location filename="optionsdlg.cc" line="205"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation>Справка</translation>
     </message>
 </context>
 <context>
@@ -1150,7 +1155,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>QObject</name>
     <message>
-        <location filename="formatload.cc" line="182"/>
+        <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
         <translation>Ошибка обработки форматов при запуске процесса &quot;gpsbabel -^3&quot; в строке %1</translation>
     </message>
@@ -1250,48 +1255,48 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
 <context>
     <name>RunMachine</name>
     <message>
-        <location filename="runmachine.cc" line="35"/>
+        <location filename="runmachine.cc" line="34"/>
         <source>Process failed to start</source>
         <translation>Неудача при запуске процесса</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="37"/>
+        <location filename="runmachine.cc" line="36"/>
         <source>Process crashed</source>
         <translation>Аварийное завершение процесса</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="39"/>
+        <location filename="runmachine.cc" line="38"/>
         <source>Process timedout</source>
         <translation>Истекло время ожидания процесса</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="41"/>
+        <location filename="runmachine.cc" line="40"/>
         <source>Error while trying to write to process</source>
         <translation>Ошибка записи процесса</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="43"/>
+        <location filename="runmachine.cc" line="42"/>
         <source>Error while trying to read from process</source>
         <translation>Ошибка чтения процесса</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="46"/>
+        <location filename="runmachine.cc" line="45"/>
         <source>Unknown process error</source>
         <translation>Неизвестная ошибка процесса</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="145"/>
+        <location filename="runmachine.cc" line="143"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>Процесс &quot;%1&quot; не запустился</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="177"/>
+        <location filename="runmachine.cc" line="175"/>
         <source>Process exited unsuccessfully with code %1</source>
         <translation>Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>
-        <location filename="runmachine.cc" line="181"/>
-        <location filename="runmachine.cc" line="192"/>
+        <location filename="runmachine.cc" line="179"/>
+        <location filename="runmachine.cc" line="190"/>
         <source>Process crashed while running</source>
         <translation>Аварийное завершение процесса во время исполнения</translation>
     </message>
@@ -1311,7 +1316,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
     <message>
         <location filename="trackui.ui" line="35"/>
         <source>Track Filters</source>
-        <translation>Фильтр Треков</translation>
+        <translation>Фильтр треков</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="42"/>
@@ -1598,18 +1603,18 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
         <location filename="trackui.ui" line="473"/>
         <location filename="trackui.ui" line="476"/>
         <source>If checked, times specified here are based on this computer&apos;s current time zone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если флажок установлен, указанное здесь время соответствует текущему часовому поясу этого компьютера.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="489"/>
         <location filename="trackui.ui" line="492"/>
         <source>If checked, times specified here are UTC.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если флажок установлен, указанное здесь время соответствует UTC.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="495"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>UTC</translation>
     </message>
 </context>
 <context>
@@ -1645,27 +1650,27 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
         <translation>Загрузка завершилась неудачей: %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="269"/>
+        <location filename="upgrade.cc" line="275"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="270"/>
+        <location filename="upgrade.cc" line="276"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Некорректные данные возвращены в строке %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="312"/>
+        <location filename="upgrade.cc" line="318"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>Доступна новая версия GPSBabel.&lt;br /&gt;Используемая версия %1 &lt;br /&gt;Последняя доступная версия %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="322"/>
+        <location filename="upgrade.cc" line="328"/>
         <source>Upgrade</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="329"/>
+        <location filename="upgrade.cc" line="335"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>Загрузить обновление?</translation>
     </message>

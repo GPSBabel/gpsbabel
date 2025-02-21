@@ -23,10 +23,13 @@
 #ifndef VALIDATE_H_INCLUDED_
 #define VALIDATE_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
 #include "defs.h"    // for route_head (ptr only), ARGTYPE_BOOL, ARG_NOMINMAX
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool
 
 #if FILTERS_ENABLED
 
@@ -40,13 +43,13 @@ public:
   void process() override;
 
 private:
-  char* opt_debug{};
-  bool debug{};
-  char* opt_checkempty{};
-  bool checkempty{};
-  unsigned int point_ct{};
-  unsigned int head_ct{};
-  unsigned int segment_ct_start{};
+  OptionBool opt_debug;
+  OptionBool opt_checkempty;
+  int point_ct{};
+  int total_point_ct{};
+  int segment_ct{};
+  int total_segment_ct{};
+  int head_ct{};
   const char* segment_type{};
   QVector<arglist_t> args = {
     {

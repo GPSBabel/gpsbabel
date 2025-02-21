@@ -19,68 +19,63 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include <QByteArray>                  // for QByteArray
-#include <QDate>                       // for QDate
-#include <QDateTime>                   // for QDateTime
-#include <QDir>                        // for QDir
-#include <QEvent>                      // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
-#include <QFile>                       // for QFile
-#include <QFileInfo>                   // for QFileInfo
-#include <QLibraryInfo>                // for QLibraryInfo, QLibraryInfo::TranslationsPath
-#include <QLocale>                     // for QLocale
-#include <QMimeData>                   // for QMimeData
-#include <QProcess>                    // for QProcess, QProcess::NotRunning
-#include <QSettings>                   // for QSettings
-#include <QString>                     // for QString
-#include <QStringList>                 // for QStringList
-#include <QTemporaryFile>              // for QTemporaryFile
-#include <QTime>                       // for QTime
-#include <QUrl>                        // for QUrl
-#include <QVariant>                    // for QVariant
-#include <Qt>                          // for SmoothTransformation, WaitCursor
-#include <QtGlobal>                    // for foreach
-#include <QCursor>                     // for QCursor
-#include <QDesktopServices>            // for QDesktopServices
-#include <QIcon>                       // for QIcon
-#include <QImage>                      // for QImage
-#include <QTextCharFormat>             // for QTextCharFormat
-#include <QAbstractButton>             // for QAbstractButton
-#include <QApplication>                // for QApplication, qApp
-#include <QCheckBox>                   // for QCheckBox
-#include <QDialogButtonBox>            // for QDialogButtonBox
-#include <QFileDialog>                 // for QFileDialog
-#include <QMessageBox>                 // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
-#include <QPlainTextEdit>              // for QPlainTextEdit
-#include <QPushButton>                 // for QPushButton
-#include <QRadioButton>                // for QRadioButton
-#include <QStackedWidget>              // for QStackedWidget
-
-#include <cstdlib>                     // for exit
-
 #include "mainwindow.h"
-#include "gbversion.h"                 // for VERSION
-#include "aboutdlg.h"                  // for AboutDlg
-#include "advdlg.h"                    // for AdvDlg
-#include "appname.h"                   // for appName
-#include "babeldata.h"                 // for BabelData
-#include "donate.h"                    // for Donate
-#include "filterdlg.h"                 // for FilterDialog
-#include "formatload.h"                // for FormatLoad
+#include <QAbstractButton>     // for QAbstractButton
+#include <QAction>             // for QAction
+#include <QApplication>        // for QApplication, qApp
+#include <QByteArray>          // for QByteArray
+#include <QCheckBox>           // for QCheckBox
+#include <QCursor>             // for QCursor
+#include <QDate>               // for QDate
+#include <QDateTime>           // for QDateTime
+#include <QDesktopServices>    // for QDesktopServices
+#include <QDialogButtonBox>    // for QDialogButtonBox
+#include <QDir>                // for QDir
+#include <QEvent>              // for QEvent
+#include <QFile>               // for QFile
+#include <QFileDialog>         // for QFileDialog
+#include <QFileInfo>           // for QFileInfo
+#include <QGradientStop>       // for QBrush
+#include <QImage>              // for QImage
+#include <QLibraryInfo>        // for QLibraryInfo
+#include <QLocale>             // for QLocale
+#include <QMessageBox>         // for QMessageBox, operator|
+#include <QMimeData>           // for QMimeData
+#include <QPlainTextEdit>      // for QPlainTextEdit
+#include <QProcess>            // for QProcess
+#include <QPushButton>         // for QPushButton
+#include <QRadioButton>        // for QRadioButton
+#include <QSettings>           // for QSettings
+#include <QStackedWidget>      // for QStackedWidget
+#include <QString>             // for QString, operator+, operator==, operator!=
+#include <QStringList>         // for QStringList
+#include <QTemporaryFile>      // for QTemporaryFile
+#include <QTextCharFormat>     // for QTextCharFormat
+#include <QTime>               // for QTime, operator==
+#include <QUrl>                // for QUrl
+#include <QVariant>            // for QVariant, operator!=
+#include <Qt>                  // for TransformationMode, DateFormat, CursorShape, GlobalColor
+#include <QtGlobal>            // for QForeachContainer, qMakeForeachContainer, foreach
+#include <cstdlib>             // for exit
+#include "aboutdlg.h"          // for AboutDlg
+#include "advdlg.h"            // for AdvDlg
+#include "appname.h"           // for appName
+#include "babeldata.h"         // for BabelData
+#include "donate.h"            // for Donate
+#include "filterdlg.h"         // for FilterDialog
+#include "formatload.h"        // for FormatLoad
+#include "gbversion.h"         // for VERSION, kVersionDate, kVersionSHA
 #ifndef DISABLE_MAPPREVIEW
-#include "gmapdlg.h"                   // for GMapDialog
+#include "gpx.h"               // for Gpx
+#include "gmapdlg.h"           // for GMapDialog
 #endif
-#include "help.h"                      // for ShowHelp
-#include "optionsdlg.h"                // for OptionsDlg
-#include "preferences.h"               // for Preferences
-#include "runmachine.h"                // for RunMachine
-#include "upgrade.h"                   // for UpgradeCheck
-#include "version_mismatch.h"          // for VersionMismatch
+#include "help.h"              // for ShowHelp
+#include "optionsdlg.h"        // for OptionsDlg
+#include "preferences.h"       // for Preferences
+#include "runmachine.h"        // for RunMachine
+#include "upgrade.h"           // for UpgradeCheck
+#include "version_mismatch.h"  // for VersionMismatch
 
-
-
-const int BabelData::noType_ = -1;
-const int BabelData::fileType_ = 0;
-const int BabelData::deviceType_ = 1;
 
 //------------------------------------------------------------------------
 QString MainWindow::findBabelVersion()
@@ -147,7 +142,7 @@ static QString MakeOptions(const QList<FormatOption>& options)
 static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 {
   QString str = MakeOptions(options);
-  return (str.length()) != 0 ? str.mid(1) : str;
+  return !str.isEmpty() ? str.mid(1) : str;
 
 }
 
@@ -238,16 +233,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
-  }
-}
-
-//------------------------------------------------------------------------
-// Called every time, when a menu entry of the language menu is called
-void MainWindow::slotLanguageChanged(QAction* action)
-{
-  if (nullptr != action) {
-    // load the language dependant on the action content.
-    loadLanguage(action->data().toString());
   }
 }
 
@@ -476,7 +461,7 @@ QString MainWindow::filterForFormat(int idx)
 QString MainWindow::ensureExtensionPresent(const QString& name, int idx)
 {
   QString outname = name;
-  if (QFileInfo(name).suffix().length() == 0) {
+  if (QFileInfo(name).suffix().isEmpty()) {
     QStringList extensions = formatList_[idx].getExtensions();
     if (!extensions.empty() && !extensions[0].isEmpty()) {
       outname += "." + extensions[0];
@@ -539,7 +524,7 @@ void MainWindow::browseInputFile()
 void MainWindow::browseOutputFile()
 {
   int idx = currentComboFormatIndex(ui_.outputFormatCombo);
-  QString startFile = babelData_.outputFileName_.length() == 0 ? babelData_.outputBrowse_ : babelData_.outputFileName_;
+  QString startFile = babelData_.outputFileName_.isEmpty() ? babelData_.outputBrowse_ : babelData_.outputFileName_;
   QFileInfo finfo(startFile);
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
     startFile = finfo.dir().absolutePath();
@@ -549,7 +534,7 @@ void MainWindow::browseOutputFile()
     QFileDialog::getSaveFileName(nullptr, tr("Output File Name"),
                                  startFile,
                                  filterForFormat(idx));
-  if (str.length() != 0) {
+  if (!str.isEmpty()) {
     str = ensureExtensionPresent(str, idx);
     babelData_.outputBrowse_ = str;
     babelData_.outputFileName_ = str;
@@ -820,7 +805,7 @@ bool MainWindow::isOkToGo()
     babelData_.inputFileNames_ << ui_.inputFileNameText->text();
   }
   if ((babelData_.outputType_ == BabelData::fileType_) &&
-      (babelData_.outputFileName_.size() == 0) &&
+      (babelData_.outputFileName_.isEmpty()) &&
       (!ui_.outputFileNameText->text().isEmpty())) {
     babelData_.outputFileName_ = ui_.outputFileNameText->text();
   }
@@ -840,7 +825,7 @@ bool MainWindow::isOkToGo()
     return false;
   }
   if (babelData_.outputType_ == BabelData::fileType_ &&
-      babelData_.outputFileName_.length() == 0) {
+      babelData_.outputFileName_.isEmpty()) {
     QMessageBox::information(nullptr, QString(appName), tr("No output file specified"));
     return false;
   }
@@ -935,7 +920,7 @@ void MainWindow::applyActionX()
 
     // output file or device option
     if (outIsFile) {
-      if (babelData_.outputFileName_ != "") {
+      if (!babelData_.outputFileName_.isEmpty()) {
         args << "-F" << babelData_.outputFileName_;
       }
     } else if (babelData_.outputType_ == BabelData::deviceType_) {
@@ -979,12 +964,25 @@ void MainWindow::applyActionX()
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
 #ifndef DISABLE_MAPPREVIEW
     if (babelData_.previewGmap_) {
-      this->hide();
-      GMapDialog dlg(nullptr, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
-      dlg.show();
-      dlg.exec();
+      Gpx mapData;
+      QString mapStatus = mapData.read(tempName);
       QFile(tempName).remove();
-      this->show();
+      if (!mapStatus.isNull()) {
+        QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
+        QTextCharFormat errorFormat = defaultFormat;
+        errorFormat.setForeground(Qt::red);
+        errorFormat.setFontItalic(true);
+
+        ui_.outputWindow->setCurrentCharFormat(errorFormat);
+        ui_.outputWindow->appendPlainText(tr("Error preparing map: %1\n").arg(mapStatus));
+        ui_.outputWindow->setCurrentCharFormat(defaultFormat);
+      } else {
+        this->hide();
+        GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+        dlg.show();
+        dlg.exec();
+        this->show();
+      }
     }
 #endif
   } else {

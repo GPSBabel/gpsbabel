@@ -8,21 +8,26 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   macos:
     name: macOS Build
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '13.4.1'
-            GENERATOR: 'Ninja'
-            RELEASE: false
-            os: macos-12
           - QT_VERSION: '6.2.4'
             XCODE_VERSION: '14.3.1'
             GENERATOR: 'Ninja'
@@ -38,6 +43,11 @@ jobs:
             GENERATOR: 'Ninja'
             RELEASE: true
             os: macos-14
+          - QT_VERSION: '6.8.2'
+            XCODE_VERSION: '16.2'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-15
 
     steps:
     - name: Checkout repository
@@ -82,9 +92,8 @@ jobs:
         brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         # brew install is taking forever on macos-11, skip jing-trang and all it's dependencies.
-        if [ "${{ matrix.os }}" != "macos-11" ]; then
-          brew install jing-trang
-        fi
+        # jing 20241231 is failing with "Unknown XPath version 0", https://github.com/relaxng/jing-trang/issues/284
+        #brew install jing-trang
 
     - name: Script
       env:
@@ -94,6 +103,12 @@ jobs:
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
         ./tools/ci_script_osx.sh . ${{ matrix.QT_VERSION }} ${{ matrix.GENERATOR }}
 
+    - name: Generate artifact attestation
+      if: ${{ inputs.attestation && matrix.RELEASE }}
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: 'gui/GPSBabel-*.dmg'
+
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
       # the 'Upload Artifacts' step.
@@ -102,7 +117,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: Continuous-${{ runner.os }}
       run: |
-        echo GITHUB_REF: $GITHUB_REF
         ./tools/uploadtool/upload_github.sh gui/GPSBabel-*.dmg
 
     - name: 'Upload Artifacts'

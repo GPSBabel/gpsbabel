@@ -22,17 +22,17 @@
 //------------------------------------------------------------------------
 #include "processwait.h"
 
-#include <QByteArray>                 // for QByteArray
-#include <Qt>                         // for Horizontal, WindowContextHelpButtonHint
-#include <QTextCursor>                // for QTextCursor, QTextCursor::End
-#include <QAbstractButton>            // for QAbstractButton
-#include <QPushButton>                // for QPushButton
-#include <QVBoxLayout>                // for QVBoxLayout
+#include <QAbstractButton>  // for QAbstractButton
+#include <QByteArray>       // for QByteArray
+#include <QPushButton>      // for QPushButton
+#include <QTextCursor>      // for QTextCursor
+#include <QVBoxLayout>      // for QVBoxLayout
+#include <Qt>               // for Orientation, WindowType
 
-#include <cstdlib>                    // for abs
-#include <string>                     // for string
+#include <cstdlib>          // for abs
+#include <string>           // for string
 
-#include "appname.h"                  // for appName
+#include "appname.h"        // for appName
 
 
 //------------------------------------------------------------------------

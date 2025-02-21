@@ -1,11 +1,21 @@
 <para>
-This option specifies the maximum allowable distance between points in the
+This option specifies the maximum allowable distance between adjacent points in the
 track.  If two points in the track are further apart than this value, new
 points will be inserted between them.
 </para>
 <para>
-This value may be specified in units of miles (3M, 3.5M) or kilometers (5K, 5.7K).  If
-no units are specified, the units are assumed to be miles.
+The units may be specified by appending a suffix to the supplied number:
+</para>
+<simplelist type="vert">
+<member>'m' for meters, e.g. 3500.0m</member>
+<member>'ft' or 'feet' for feet, e.g. 11483ft</member>
+<member>'k' or 'km' for kilometers, e.g 3.5000km</member>
+<member>'nm' for nautical miles, e.g. 1.8898nm</member>
+<member>'mi' for miles, e.g. 2.1748mi</member>
+<member>'fa' for fathoms, e.g. 1913.82fa</member>
+</simplelist>
+<para>
+If no units are specified, the units are assumed to be miles.
 </para>
 <para>
 Either this option or the <option>time</option> must be specified.
