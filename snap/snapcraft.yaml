@@ -44,6 +44,11 @@ plugs:
     interface: content
     target: $SNAP/graphics
     default-provider: mesa-core22
+# avoid FATAL:credentials.cc(122)] Check failed: . : Permission denied (13) with map preview
+# requires manual connection
+  browser-sandbox: # gpsbabelfe
+    interface: browser-support
+    allow-sandbox: true
 
 # remap the ubuntu qt6 install directories to the snap.
 layout:
