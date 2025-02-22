@@ -26,12 +26,17 @@ apps:
     command: usr/bin/gpsbabel
   gpsbabelfe:
 #   avoid issues with fonts replaced by empty squares
+#   avoid issue: pxbackend-WARNING **: 08:18:06.724: GNOME desktop detected but no schemes installed, aborting.
     extensions: [gnome]
     plugs:
+      - desktop
+      - desktop-legacy
+      - network-status
       - home
       - removable-media
       - network
       - opengl
+      - unity7
       - wayland
       - x11
     command-chain:
