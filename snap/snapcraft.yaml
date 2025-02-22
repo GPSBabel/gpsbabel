@@ -153,3 +153,16 @@ parts:
       ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
     prime:
       - bin/gpu-2404-wrapper
+
+lint:
+  ignore:
+    - library:
+#       these are all required by libqt6webenginecore6
+      - usr/lib/x86_64-linux-gnu/libexslt.so.*
+      - usr/lib/x86_64-linux-gnu/libfreebl3.so
+      - usr/lib/x86_64-linux-gnu/libfreeblpriv3.so
+      - usr/lib/x86_64-linux-gnu/libnssckbi.so
+      - usr/lib/x86_64-linux-gnu/libnssdbm3.so
+      - usr/lib/x86_64-linux-gnu/libsmime3.so
+      - usr/lib/x86_64-linux-gnu/libsoftokn3.so
+      - usr/lib/x86_64-linux-gnu/libssl3.so
