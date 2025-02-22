@@ -68,10 +68,6 @@ layout:
     symlink: $SNAP/usr/lib/qt6
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6:
     symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6
-  /usr/share/libdrm:
-    bind: $SNAP/graphics/libdrm
-  /usr/share/drirc.d:
-    symlink: $SNAP/graphics/drirc.d
 # per https://mir-server.io/docs/the-gpu-2404-snap-interface
   /usr/share/X11/XErrorDB:
     symlink: $SNAP/gpu-2404/X11/XErrorDB
