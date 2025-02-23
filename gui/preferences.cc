@@ -52,7 +52,6 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
 #ifdef DISABLE_UPGRADE_CHECK
   ui_.startupCheck->hide();
   ui_.reportStatisticsCheck->hide();
-  ui_.layoutWidget->adjustSize();
 #endif
   ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
 
