@@ -73,7 +73,9 @@
 #include "optionsdlg.h"        // for OptionsDlg
 #include "preferences.h"       // for Preferences
 #include "runmachine.h"        // for RunMachine
+#ifndef DISABLE_UPGRADE_CHECK
 #include "upgrade.h"           // for UpgradeCheck
+#endif
 #include "version_mismatch.h"  // for VersionMismatch
 
 
@@ -98,6 +100,7 @@ QString MainWindow::findBabelVersion()
   return str;
 }
 
+#ifndef DISABLE_UPGRADE_CHECK
 //------------------------------------------------------------------------
 // Decides whether available beta upgrades are suggested to user for download.
 bool MainWindow::allowBetaUpgrades()
@@ -107,6 +110,7 @@ bool MainWindow::allowBetaUpgrades()
   // 'suggest beta upgrade' box, allow betas to be suggested for installation.
   return isBeta_ || babelData_.allowBetaUpgrades_;
 }
+#endif
 
 //------------------------------------------------------------------------
 static QString MakeOptions(const QList<FormatOption>& options)
@@ -170,7 +174,11 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui_.actionAbout, &QAction::triggered, this, &MainWindow::aboutActionX);
   connect(ui_.actionVisit_Website, &QAction::triggered, this, &MainWindow::visitWebsiteActionX);
   connect(ui_.actionMake_a_Donation, &QAction::triggered, this, &MainWindow::donateActionX);
+#ifndef DISABLE_UPGRADE_CHECK
   connect(ui_.actionUpgradeCheck, &QAction::triggered, this, &MainWindow::upgradeCheckActionX);
+#else
+  ui_.menuHelp->removeAction(ui_.actionUpgradeCheck);
+#endif
   connect(ui_.actionPreferences, &QAction::triggered, this, &MainWindow::preferencesActionX);
 
   connect(ui_.inputFormatCombo, &QComboBox::currentIndexChanged,
@@ -222,11 +230,13 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
+#ifndef DISABLE_UPGRADE_CHECK
   upgrade = new UpgradeCheck(this, formatList_, babelData_);
   if (babelData_.startupVersionCheck_) {
     upgrade->checkForUpgrade(babelVersion_, babelData_.upgradeCheckTime_,
                              allowBetaUpgrades());
   }
+#endif
 
   if (!babelData_.ignoreVersionMismatch_ && babelVersion_ != VERSION) {
     VersionMismatch vm(nullptr, babelVersion_, QString(VERSION));
@@ -1000,10 +1010,12 @@ void MainWindow::applyActionX()
 //------------------------------------------------------------------------
 void MainWindow::closeActionX()
 {
+#ifndef DISABLE_UPGRADE_CHECK
   QDateTime wt= upgrade->getUpgradeWarningTime();
   if (wt.isValid()) {
     babelData_.upgradeCheckTime_ = wt;
   }
+#endif
   babelData_.runCount_++;
 
   QDateTime now = QDateTime::currentDateTime();
@@ -1148,6 +1160,7 @@ void MainWindow::aboutActionX()
   aboutDlg.exec();
 }
 
+#ifndef DISABLE_UPGRADE_CHECK
 //------------------------------------------------------------------------
 void MainWindow::upgradeCheckActionX()
 {
@@ -1155,6 +1168,7 @@ void MainWindow::upgradeCheckActionX()
                            QDateTime(QDate(2000, 1, 1), QTime(0, 0)),
                            allowBetaUpgrades());
 }
+#endif
 
 //------------------------------------------------------------------------
 void MainWindow::preferencesActionX()

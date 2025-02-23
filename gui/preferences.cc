@@ -49,6 +49,11 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
 
   ui_.startupCheck->setChecked(babelData_.startupVersionCheck_);
   ui_.reportStatisticsCheck->setChecked(babelData_.reportStatistics_);
+#ifdef DISABLE_UPGRADE_CHECK
+  ui_.startupCheck->hide();
+  ui_.reportStatisticsCheck->hide();
+  ui_.layoutWidget->adjustSize();
+#endif
   ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
 
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &Preferences::acceptClicked);
