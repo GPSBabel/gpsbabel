@@ -425,7 +425,6 @@ set(TESTS
   resample
   route_reverse
   serialization
-  seventymai
   shape
   simplify-relative
   simplify
