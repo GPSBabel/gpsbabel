@@ -1,6 +1,6 @@
          <para> The input track will be split into several tracks
          depending on date of track points. If there is more than one
-         track, use the pack option before before using this.  To
+         track, use the pack option before using this.  To
          split a single tracks into separate tracks for each day and
          name them, use this:
       </para>
@@ -17,7 +17,7 @@ splitting them back apart per day thusly: </para>
          or seconds, expressed as one of the character "d", "h", "m",
          or "s".
 </para>
-         <para> For example, to split a track based on an four hour
+         <para> For example, to split a track based on a four hour
          interval, use this:</para>
          <para><userinput>
 gpsbabel -t

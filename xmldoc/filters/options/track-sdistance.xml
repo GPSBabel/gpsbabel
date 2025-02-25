@@ -6,7 +6,7 @@
 	If sdistance is given no parameters, this option has the same
 	effect as the split option without parameters. If there is more
 	than one track,
-         use the pack option before before using this.</para>
+         use the pack option before using this.</para>
 
          <para> For example, to split the track if the distance between
          points is greater than 100 meters, use this:</para>

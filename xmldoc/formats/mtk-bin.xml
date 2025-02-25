@@ -9,7 +9,7 @@ work as well (Qstarz BT-Q1000, iTrek Z1, ...)
 All position items (including button push) will be listed as trackpoints in the output.
 Log items due to button push are presented as waypoints.
 In theory we would not add waypoints to the list of trackpoints. But as the MTK logger restart the
-log session from the button press we would loose a trackpoint unless we include/duplicate it.
+log session from the button press we would lose a trackpoint unless we include/duplicate it.
 
 </para>
 <para>

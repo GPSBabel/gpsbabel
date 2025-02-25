@@ -16,7 +16,7 @@
   internally it uses a Prolific PL-2303 chip to do this.  So you must have
   drivers installed on your computer to recognize the PL-2303 and provide
   that data as a serial port to software like GPSBabel.   Such software
-  comes with the unit for Windows.  Prolific provides software for Mac OS/X,
+  comes with the unit for Windows.  Prolific provides software for macOS/X,
   but unfortunately their driver has a defect which makes it unstable with
   GPSBabel.
 </para>

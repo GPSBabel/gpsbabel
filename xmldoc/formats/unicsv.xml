@@ -107,7 +107,7 @@
    </screen>
 </para>
 <para>
-   If processing data from the UK, GPSBabel can process coordinates using X,Y values (often referred to as Eastings/Northings) as shown in <xref linkend="uk_unicsv_1"/> or the full 12 figure alpha numeric, as shown in <xref linkend="uk_unicsv_2"/>.
+   If processing data from the UK, GPSBabel can process coordinates using X,Y values (often referred to as Eastings/Northings) as shown in <xref linkend="uk_unicsv_1"/> or the full 12 figure alphanumeric, as shown in <xref linkend="uk_unicsv_2"/>.
    Note in <xref linkend="uk_unicsv_2"/> you need to split your original X,Y values into the 100Km 2 character code,
    eastings and northing values.
    <example xml:id="uk_unicsv_1">

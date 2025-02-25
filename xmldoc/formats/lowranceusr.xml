@@ -2,12 +2,12 @@
 Many <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.lowrance.com">Lowrance</link> systems have the ability
 to output their data to an external storage device.
 Early models (such as iFinder Hunt) supported an MMC card.
-Newer models (HDS, Hook, Hook2, etc) support either an SD card or a microSD card.
+Newer models (HDS, Hook, Hook2, etc.) support either an SD card or a microSD card.
 When exported the data is saved to the card as a
 file.  Some models have the ability to export data in GPX format but the
 format native to <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.lowrance.com">Lowrance</link> units is called USR.
 Typically the file created by the export operation will have a ".usr" suffix if is a
-native format or a ".gpx" suffix if is is a GPX format file.
+native format or a ".gpx" suffix if it is a GPX format file.
 </para>
 
 <para>
@@ -40,7 +40,7 @@ The following provides a high-level description of the multiple USR formats that
 <para>
           <emphasis>User Data File version 4</emphasis> -
             Seems to be the best option for transferring data from older Lowrance units.
-            Many of the counts (Number of Waypoints, Number of Routes, etc) were expanded from
+            Many of the counts (Number of Waypoints, Number of Routes, etc.) were expanded from
             16-bit integer values (maximum value of 65,535) to 32-bit (maximum value 2,147,483,647)
             USRv4 and above support a maximum of 20,000 trail-points (actually 24K and change).
             USRv4 and above and GPX support trails with trail-segments.
