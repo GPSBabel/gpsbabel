@@ -448,7 +448,7 @@ merged data to multiple destinations.
       <option>-b</option> Process batch file. In addition to reading arguments from the command line, we can read them from files containing lists of commands as described in
       <xref linkend="batchfile"/></para>
     <para>
-      <option>-x</option> <parameter class="command">filter</parameter> Run filter. This option invokes of our many data filters. Position of this in the command line does matter - remember, we process left to right.</para>
+      <option>-x</option> <parameter class="command">filter</parameter> Run filter. This option invokes one of our many data filters. Position of this in the command line does matter - remember, we process left to right.</para>
     <para>
       <option>-D</option> Enable debugging.   Not all formats support this.  It's typically better supported by the various protocol modules because they just plain need more debugging.   This option may be followed by a number.   Zero means no debugging.  Larger numbers mean more debugging.</para>
     <para>
