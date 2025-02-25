@@ -1,5 +1,5 @@
 /*
-    seventymai - 70 mai Dash Cam files
+    seventymai - 70mai Dash Cam files
 
     Copyright (C) 2025 Robert Lipe, robertlipe+source@gpsbabel.org
 
@@ -55,7 +55,7 @@ void SeventymaiFormat::read()
     line_no++;
 
     // new track indicator?
-    if (buff.startsWith("$V02", Qt::CaseInsensitive)) {
+    if (buff.startsWith(QLatin1String("$V02"), Qt::CaseInsensitive)) {
       // save or delete existing track
       add_track_head(trk, trk_num);
       // allocate new track
@@ -142,7 +142,10 @@ void SeventymaiFormat::read()
         break;
       }
       case kColVideo:
-        wpt->notes = value;
+        // A500 uses 0 instead of video file name
+        if (value != QLatin1String("0")) {
+          wpt->notes = value;
+        }
         break;
       default:
         break;
