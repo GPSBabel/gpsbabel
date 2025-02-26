@@ -62,7 +62,7 @@ from our automated Docker builds.</para>
       <title>Brief history of internals</title>
       <para>
     Parts of GPSBabel have been public since 2002, with some of the original
-    design and original code came from 2001. It was originally in C89, not C++
+    design and original code came from 2001. It was originally in C89, not C++,
     and while we strongly encourage modern C++ code where we can use it, we've
     not gone back to those older formats - some of which we don't have
     the hardware to test and have fallen out of touch with original authors - and
