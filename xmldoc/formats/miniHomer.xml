@@ -1,7 +1,7 @@
 <para>
 Serial download protocol for GPS data loggers called "miniHomer".
 These loggers are based on Skytraq Venus 5 and Venus 6 chipsets, but with modified firmware.
-The miniHomer logger has five POI (or better: Point-to-Return, PTR?), which can be set programatically. The miniHomer module in gpsbabel is an extension of the skytraq module.
+The miniHomer logger has five POI (or better: Point-to-Return, PTR?), which can be set programmatically. The miniHomer module in gpsbabel is an extension of the skytraq module.
 </para>
 
 <para>
