@@ -1,7 +1,7 @@
 <para>
  This option is closely related to the 'category' option.  While category
  allows you to choose a single category that waypoints should appear in,
- this options allows you to specify a bitmask to be used for the category.
+ this option allows you to specify a bitmask to be used for the category.
  Options may be specified in either decimal or hex.
 </para>
 <example xml:id="gdb_bitscategory">

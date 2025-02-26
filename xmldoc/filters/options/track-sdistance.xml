@@ -18,11 +18,11 @@ gpsbabel -t
 </userinput></para>
         <para> The sdistance option can be combined with the split option.
         The track then will be split only if both time and distance
-        interval exceeds the supplied values. This technique can be used to
+        interval exceed the supplied values. This technique can be used to
 	filter out gaps from
         the tracklog.  The gap is kept only if the gps device is without
-        signal for longer time than that given and during that time it moves
-	a distance over that given.
+        signal for a longer time than the given time and during that time it moves
+	a distance over the given distance.
         This example splits the track
         if the device is without signal for at least 5 minutes
         and during this time moves more than 300 meters:</para>

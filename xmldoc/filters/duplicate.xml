@@ -1,7 +1,7 @@
 <para>
 The duplicate filter is designed to remove duplicate points based on their
 short name (traditionally a waypoint's name on the GPS receiver), and/or
-their location (to a  precision of 6 decimals).  This filter supports two
+their location (to a precision of 6 decimals).  This filter supports two
 options that specify how duplicates will be recognized,
 <option>shortname</option> and <option>location</option>.
 At least one of these options is required.

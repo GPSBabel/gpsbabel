@@ -84,7 +84,7 @@
    not visible in <trademark>MapSource</trademark> (6.12.4), but are NOT dropped
    when working with GDB (version 3) or GPX files.
    <screen/>
-   Please note, that these do NOT provide a geocoding service; don't expect
+   Please note that these do NOT provide a geocoding service; don't expect
 	to "convert" a street address to a latitude and longitude.
    <screen>
       addr =     Street address

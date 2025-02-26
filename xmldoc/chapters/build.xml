@@ -103,7 +103,7 @@ To create a buildsystem using Ninja:
 <userinput>cmake -G Ninja -DCMAKE_BUILD_TYPE=Release .</userinput>
 </member>
         <member>
-To create a visual studio project that can be built with msbuild:
+To create a Visual Studio project that can be built with msbuild:
 <userinput>cmake -G "Visual Studio 17 2022" .</userinput>
 </member>
         <member>
@@ -139,8 +139,8 @@ customize your build of GPSBabel.
                 <term>system</term>
                 <listitem>
                   <para>
-build with libusb-1.0 found on system library path and under
-libusb-1.0 on system include path (default, linux, openbsd).
+build with libusb-1.0 found on the system library path and under
+libusb-1.0 on the system include path (default, linux, openbsd).
 	  </para>
                 </listitem>
               </varlistentry>

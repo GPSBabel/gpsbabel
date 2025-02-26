@@ -428,7 +428,7 @@ merged data to multiple destinations.
     <para>
       <option>-p</option> Read preferences file.   On startup, GPSBabel will look for a file named
       <filename>gpsbabel.ini</filename>
-      containing preferences you have provided.  This option lets you pick a different files.  See
+      containing preferences you have provided.  This option lets you pick a different file.  See
       <xref linkend="inifile"/>
       for more info.</para>
     <para>

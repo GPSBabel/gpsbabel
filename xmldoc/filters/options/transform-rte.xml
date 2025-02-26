@@ -1,5 +1,5 @@
 <para>
-This option selects the destination type of this filter to be routes.  Choose this when you want to convert tracks into waypoints routes.  A single route will be created in the sequence they appear in the input.
+This option selects the destination type of this filter to be routes.  Choose this when you want to convert tracks or waypoints into routes.  A single route will be created in the sequence they appear in the input.
 </para>
 <example xml:id="transform_to_rte">
 <title>Converting a pile of waypoints to a GPX route</title>

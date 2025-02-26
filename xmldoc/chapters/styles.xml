@@ -21,7 +21,7 @@ are not good fits for this scheme.  It should have:
       <para>Once you have created a style file that describes the file format you have
 or want, you must tell GPSBabel to use the xcsv format and have the xcsv
 format use that file.  If you created a new style file called
-"mystyle.style" and you want to write the  waypoints from
+"mystyle.style" and you want to write the waypoints from
 a GPX file named "mine.gpx" to it, you would issue a command like:
 </para>
       <para>
@@ -369,7 +369,7 @@ processing functions of GPSBabel.
       <title>Defining Fields Within the File</title>
       <para>A field defines data.  There are two different classifications of FIELDS,
 IFIELD (file input) and OFIELD (file output).  In the absence of any OFIELDS,
-IFIELDS are use as both input and output.  The existence of OFIELDS is
+IFIELDS are used as both input and output.  The existence of OFIELDS is
 primarily to allow more flexible mapping of GPSBabel data to output data
 (say, for instance, to map the internal GPSBabel "description" variable to
 two or more fields on output).  For all practical purposes, IFIELDS and
@@ -638,8 +638,8 @@ parsed from input and written to output.
       <section xml:id="style_def_latddmmdir">
          <title>LAT_DDMMDIR</title>
          <para>Derived from the LAT_NMEA latitude format, with degrees * 100 plus decimal
-minutes, but using an additional specifier to position the  'N' or 'S' instead of a leading minus sign (or
-absence thereof) to give direction from zero.
+minutes, but using an additional specifier to position the 'N' or 'S' instead of a leading minus sign (or
+absence thereof) to give the direction from zero.
 </para>
          <para>
             <screen>IFIELD LAT_DDMMDIR, "%f", "%08.3f%c" # (writes "5334.192S" giving -53.56987 degrees latitude)
@@ -659,7 +659,7 @@ absence thereof) to give direction from zero.
       <section xml:id="style_def_londdmmdir">
          <title>LON_DDMMDIR</title>
          <para>Derived from the LON_NMEA longitude format, with degrees * 100 plus decimal minutes, but using an additional character format character to position the
-'E' or 'W' instead of a leading minus sign (or absence thereof) to give direction from zero.
+'E' or 'W' instead of a leading minus sign (or absence thereof) to give the direction from zero.
 </para>
          <para>Example:
 </para>
