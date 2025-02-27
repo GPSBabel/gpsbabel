@@ -1,7 +1,6 @@
 name: gpsbabel # you probably want to 'snapcraft register <name>'
 base: core24 # the base snap is the execution environment for this snap
-version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
-summary: "Convert, manipulate and transfer GPS data"
+summary: "Convert, manipulate and transfer GPS data."
 description: |
   Convert, manipulate and transfer data from GPS programs or GPS
   recievers.  Open source and supported on macOS, Windows and Linux.
@@ -97,7 +96,7 @@ parts:
       sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake
       # set snap version
       # ensure version has at most 32 characters
-      craftctl set version=$(git log -1 --format='LinuxInstaller-%ad-%h' --date=format:%Y%m%d)
+      craftctl set version="$(git describe --dirty | sed -e 's/gpsbabel_//' -e 's/_/./g')"
     build-packages:
       - git
       - vim
