@@ -96,7 +96,7 @@ parts:
       sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake
       # set snap version
       # ensure version has at most 32 characters
-      craftctl set version="$(git describe --dirty | sed -e 's/gpsbabel_//' -e 's/_/./g')"
+      craftctl set version="$(git describe | sed -e 's/gpsbabel_//' -e 's/_/./g')"
     build-packages:
       - git
       - vim
