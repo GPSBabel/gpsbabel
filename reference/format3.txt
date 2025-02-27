@@ -1,3 +1,5 @@
+file	--r---	70mai	txt	70mai Dash Cam	70mai
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_70mai.html
 internal	rw----	xcsv		? Character Separated Values	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html
 option	xcsv	style	Full path to XCSV style file	file				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_style
