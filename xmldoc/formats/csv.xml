@@ -2,7 +2,7 @@
       <para> There are a billion variants of Comma Separated Value
 data.  This is the one specifically that makes <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.delorme.com">DeLorme</link> <trademark>S&amp;A Deluxe 9</trademark> happy. It's
 also a very simple program and useful for many other programs like
-spreadsheets, but contains only a very minimal information. For general
+spreadsheets, but contains only very minimal information. For general
 purpose use, you'll probably be more happy with our
 <link linkend="fmt_unicsv">universal csv (unicsv)</link> format.</para>
       <para> CSV is also the correct format for
@@ -12,7 +12,7 @@ manager) for iFinder which is available at <link xmlns:xlink="http://www.w3.org/
          </para>
     <para>
 	On write, this format writes simple "latitude, longitude, name" lines, but
-on read it  will read anything supported by our <link linkend="style_def_lathuman">human readable</link> definition.
+on read it will read anything supported by our <link linkend="style_def_lathuman">human readable</link> definition.
     </para>
     <para>
        For something-separated data that has headers identifying the various

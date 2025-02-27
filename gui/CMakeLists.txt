@@ -172,7 +172,7 @@ message(STATUS "Defines are: \"${DirDefs}\"")
 get_target_property(LnkLibs gpsbabelfe LINK_LIBRARIES)
 message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabelfe INCLUDE_DIRECTORIES)
-message(STATUS "Include Directores are: \"${IncDirs}\"")
+message(STATUS "Include Directories are: \"${IncDirs}\"")
 
 find_package(Qt6 QUIET COMPONENTS LinguistTools)
 if (NOT Qt6LinguistTools_FOUND)

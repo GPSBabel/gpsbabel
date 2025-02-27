@@ -69,6 +69,7 @@
 #include "ozi.h"               // for OziFormat
 #include "qstarz_bl_1000.h"    // for QstarzBL1000Format
 #include "random.h"            // for RandomFormat
+#include "seventymai.h"        // for SeventymaiFormat
 #include "shape.h"             // for ShapeFormat
 #include "skytraq.h"           // for MinihomerFormat, SkytraqFormat, SkytraqfileFormat
 #include "src/core/logging.h"  // for Warning, FatalMsg
@@ -472,7 +473,15 @@ struct Vecs::Impl {
       "json",
       nullptr,
       &fmtfactory<GoogleTakeoutFormat>
-    }
+    },
+    {
+      nullptr,
+      "70mai",
+      "70mai Dash Cam",
+      "txt",
+      nullptr,
+      &fmtfactory<SeventymaiFormat>
+    },
   };
 };
 
