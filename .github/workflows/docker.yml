@@ -3,11 +3,8 @@ permissions: {}
 
 on:
   push:
-    branches: [ '**']
-  pull_request:
-    # The branches below must be a subset of the branches above
     branches: [ master ]
-  workflow_dispatch:
+  workflow_dispatch: ~
 
 jobs:
   docker:
@@ -36,9 +33,10 @@ jobs:
         docker exec "${container}" setup_user.sh "$(id -u)" "$(id -g)"
         docker exec -u "$(id -u):$(id -g)" -w /home/gpsbabel/gpsbabel-build "${container}" ./testo -p /usr/local/bin/gpsbabel
     - name: Build and push
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
       uses: docker/build-push-action@v6
       with:
         context: "{{defaultContext}}:tools/archive_images"
         file: Dockerfile_gpsbabel_dev
-        push: false
+        push: true
         tags: tsteven4/gpsbabel:dev
