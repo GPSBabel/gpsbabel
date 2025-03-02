@@ -25,6 +25,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: "{{defaultContext}}:tools/archive_images"
-        file: "{{defaultContext}}:tools/archive_images/Dockerfile_gpsbabel_dev"
+        file: ./tools/archive_images/Dockerfile_gpsbabel_dev
         push: false
         tags: tsteven4/gpsbabel:dev
