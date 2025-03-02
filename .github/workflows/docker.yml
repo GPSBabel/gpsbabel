@@ -28,17 +28,17 @@ jobs:
         file: Dockerfile_gpsbabel_dev
         load: true
         tags: tsteven4/gpsbabel:test_dev
-   - name: Test
-        run: |
-          container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "tsteven4/gpsbabel:test_dev")
-          trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
-          docker start "${container}" >/dev/null
-          docker exec -i -t "${container}" setup_user.sh "$(id -u)" "$(id -g)"
-          docker exec -i -t -u "$(id -u):$(id -g)" -w /home/gpsbabel/gpsbabel-build "${container}" ./testo -p /usr/local/bin/gpsbabel
-   - name: Build and push
-     uses: docker/build-push-action@v6
-     with:
-       context: "{{defaultContext}}:tools/archive_images"
-       file: Dockerfile_gpsbabel_dev
-       push: false
-       tags: tsteven4/gpsbabel:dev
+    - name: Test
+      run: |
+        container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "tsteven4/gpsbabel:test_dev")
+        trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
+        docker start "${container}" >/dev/null
+        docker exec -i -t "${container}" setup_user.sh "$(id -u)" "$(id -g)"
+        docker exec -i -t -u "$(id -u):$(id -g)" -w /home/gpsbabel/gpsbabel-build "${container}" ./testo -p /usr/local/bin/gpsbabel
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: "{{defaultContext}}:tools/archive_images"
+        file: Dockerfile_gpsbabel_dev
+        push: false
+        tags: tsteven4/gpsbabel:dev
