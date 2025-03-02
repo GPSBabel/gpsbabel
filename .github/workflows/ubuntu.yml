@@ -134,6 +134,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-tags: true
 
     - name: Build
       uses: snapcore/action-build@v1
