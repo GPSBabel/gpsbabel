@@ -5,6 +5,14 @@ on:
   push:
     branches: [ master ]
   workflow_dispatch: ~
+    inputs:
+      tag:
+        required: false
+        type: string
+        default: 'dev'
+
+env:
+  TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || 'dev' }}
 
 jobs:
   docker:
@@ -22,12 +30,12 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: "{{defaultContext}}:tools/archive_images"
-        file: Dockerfile_gpsbabel_dev
+        file: Dockerfile_gpsbabel_${{ env.TAG }}
         load: true
-        tags: tsteven4/gpsbabel:test_dev
+        tags: tsteven4/gpsbabel:test_${{ env.TAG }}
     - name: Test
       run: |
-        container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "tsteven4/gpsbabel:test_dev")
+        container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "tsteven4/gpsbabel:test_${TAG}")
         trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
         docker start "${container}" >/dev/null
         docker exec "${container}" setup_user.sh "$(id -u)" "$(id -g)"
@@ -37,6 +45,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: "{{defaultContext}}:tools/archive_images"
-        file: Dockerfile_gpsbabel_dev
+        file: Dockerfile_gpsbabel_${{ env.TAG }}
         push: true
-        tags: tsteven4/gpsbabel:dev
+        tags: tsteven4/gpsbabel:${{ env.TAG }}
