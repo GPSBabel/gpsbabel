@@ -24,6 +24,13 @@ jobs:
       with:
         username: tsteven4
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - id: docker_meta
+      uses: docker/metadata-action@v5.7.0
+      with:
+        images: ghcr.io/tsteven4/test
+        tags: |
+          type=sha,format=long
+          type=raw,value=${{ env.TAG }}
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
     - name: Build and export to Docker
@@ -32,19 +39,28 @@ jobs:
         context: "{{defaultContext}}:tools/archive_images"
         file: Dockerfile_gpsbabel_${{ env.TAG }}
         load: true
-        tags: tsteven4/gpsbabel:test_${{ env.TAG }}
+        tags: tsteven4/test:test_${{ env.TAG }}
     - name: Test
       run: |
-        container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "tsteven4/gpsbabel:test_${TAG}")
+        container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "tsteven4/test:test_${TAG}")
         trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
         docker start "${container}" >/dev/null
         docker exec "${container}" setup_user.sh "$(id -u)" "$(id -g)"
         docker exec -u "$(id -u):$(id -g)" -w /home/gpsbabel/gpsbabel-build "${container}" ./testo -p /usr/local/bin/gpsbabel
     - name: Build and push
-      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
       uses: docker/build-push-action@v6
       with:
         context: "{{defaultContext}}:tools/archive_images"
         file: Dockerfile_gpsbabel_${{ env.TAG }}
         push: true
-        tags: tsteven4/gpsbabel:${{ env.TAG }}
+        tags: ${{ steps.docker_meta.outputs.tags }}
+    - name: Sign the images with GitHub OIDC Token
+      env:
+        DIGEST: ${{ steps.build-and-push.outputs.digest }}
+        TAGS: ${{ steps.docker_meta.outputs.tags }}
+      run: |
+        images=""
+        for tag in ${TAGS}; do
+          images+="${tag}@${DIGEST} "
+        done
+        cosign sign --yes ${images}
