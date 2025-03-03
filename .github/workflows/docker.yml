@@ -26,8 +26,9 @@ jobs:
       with:
         username: tsteven4
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - id: docker_meta
+    - name: docker metadata
       uses: docker/metadata-action@v5.7.0
+      id: docker_meta
       with:
         images: tsteven4/test
         tags: |
@@ -51,6 +52,7 @@ jobs:
         docker exec -u "$(id -u):$(id -g)" -w /home/gpsbabel/gpsbabel-build "${container}" ./testo -p /usr/local/bin/gpsbabel
     - name: Build and push
       uses: docker/build-push-action@v6
+      id: build-and-push
       with:
         context: "{{defaultContext}}:tools/archive_images"
         file: Dockerfile_gpsbabel_${{ env.TAG }}
