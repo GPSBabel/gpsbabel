@@ -66,7 +66,7 @@
    <item>
     <widget class="QLabel" name="textLine2">
      <property name="text">
-      <string>&lt;p&gt;Of course, if you've already contributed  to the project or you just can't help the project, please check the box below to never see this message again.&lt;/p&gt;</string>
+      <string>&lt;p&gt;Of course, if you've already contributed to the project or you just can't help the project, please check the box below to never see this message again.&lt;/p&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

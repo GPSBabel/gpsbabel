@@ -7,7 +7,7 @@ unicsv file without this option.
 </para>
 
 <example xml:id="unicsv_fields">
-  <title>Example for unicsv fields option to describe input file.</title>
+  <title>Example for unicsv fields option to describe the input file.</title>
   <para>
     For example ...
     <userinput>

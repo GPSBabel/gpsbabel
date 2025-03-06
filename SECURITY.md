@@ -18,7 +18,7 @@ only.
 We are inherently reading untrusted input and often from untrusted
 sources, so running a file converter as root on your server is bad. Don't
 do that. If you insist on doing it, please run ulimit to minimize the
-time and CPU load that can be used. An adversary can hand craft (or just
+time and CPU load that can be used. An adversary can handcraft (or just
 plain have) a corrupt or malformed file and sending it to you might make
 GPSBabel loop forever. We try for that to not happen, but it's a necessary
 reality of our job. Our goal is a desktop user converting files that they
