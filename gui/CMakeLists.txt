@@ -63,7 +63,6 @@ list(APPEND FORMS miscfltui.ui)
 list(APPEND FORMS preferences.ui)
 list(APPEND FORMS rttrkui.ui)
 list(APPEND FORMS trackui.ui)
-list(APPEND FORMS upgrade.ui)
 list(APPEND FORMS version_mismatch.ui)
 list(APPEND FORMS wayptsui.ui)
 
