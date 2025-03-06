@@ -1,0 +1,18 @@
+Privacy
+
+The command line interface program, gpsbabel.exe, will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+
+The graphical user interface program, GPSBabelFE.exe, may transfer information to other networked systems.
+  - If enabled, the automatic upgrade check transmits information about your installation and computer environment, such as the Installation ID, GPSBabel GUI and CLI versions, CPU architecture, operating system name and version, and language, to gpsbabel.org.
+  - If enabled, anonymous usage data is sent to gpsbabel.org. This helps us understand what features of the program are being used.
+  - If enabled and selected, the "Check for Upgrade" item in the "Help" menu sends the same information as the automatic upgrade check to gpsbabel.org.
+  - If enabled and selected, the "Preview in Google Maps" item in the "More Options" dialog uses the Google Maps API(s) per Google's Terms of Service (http://www.google.com/intl/en/policies/terms) and the Google Privacy Policy (http://www.google.com/policies/privacy).
+All of these items can be controlled through the Privacy tab reached through the Preferences item of the File menu.
+
+Third Party Content
+
+GPSBabel uses:
+  - libusb (https://libusb.info/)
+  - Qt (https://www.qt.io/download-open-source).
+  - Shapelib (http://shapelib.maptools.org/).
+  - zlib (https://zlib.net/)
