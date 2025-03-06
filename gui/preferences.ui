@@ -31,20 +31,6 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QCheckBox" name="startupCheck">
-         <property name="text">
-          <string>Check for newer version on start.</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="reportStatisticsCheck">
-         <property name="text">
-          <string>Anonymously report usage data.</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QCheckBox" name="ignoreVersionMismatchCheck">
          <property name="text">
           <string>Ignore mismatch between command line and GUI version.</string>
@@ -53,6 +39,66 @@
        </item>
        <item>
         <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="privacy_tab">
+      <attribute name="title">
+       <string>Privacy</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QCheckBox" name="startupCheck">
+         <property name="toolTip">
+          <string>&lt;html&gt;The check transmits information about your installation and computer environment, such as the Installation ID, GPSBabel GUI and CLI versions, CPU architecture, operating system name and version, and language, to gpsbabel.org.&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Check for newer version on start.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="reportStatisticsCheck">
+         <property name="toolTip">
+          <string>&lt;html&gt;Anonymous usage data is sent to gpsbabel.org. This helps us understand what features of the program are being used.&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Anonymously report usage data.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="upgradeMenuCheck">
+         <property name="toolTip">
+          <string>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Enable upgrade check menu item.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="mapPreviewCheck">
+         <property name="toolTip">
+          <string>&lt;html&gt;When selected, this feature uses the Google Maps API(s) per &lt;a href=&quot;http://www.google.com/intl/en/policies/terms&quot;&gt;Google’s Terms of Service&lt;/a&gt; and the &lt;a href=&quot;http://www.google.com/policies/privacy&quot;&gt;Google Privacy Policy&lt;/a&gt;.&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Enable map preview feature.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
