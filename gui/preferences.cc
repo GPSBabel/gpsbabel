@@ -53,6 +53,10 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   ui_.mapPreviewCheck->setChecked(babelData_.mapPreviewEnabled_);
   ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
 
+#ifdef DISABLE_MAPPREVIEW
+  ui_.mapPreviewCheck->hide();
+#endif
+
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &Preferences::acceptClicked);
   connect(ui_.buttonBox, &QDialogButtonBox::rejected, this, &Preferences::rejectClicked);
 
