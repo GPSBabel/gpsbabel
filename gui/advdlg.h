@@ -34,9 +34,10 @@ class AdvDlg: public QDialog
 
 public:
   AdvDlg(QWidget* parent,
-         bool& synthShortNames_,
-         bool& previewGmap_,
-         int&   debugLevel_);
+         bool& synthShortNames,
+         bool mapPreviewEnabled,
+         bool& previewGmap,
+         int&   debugLevel);
   QPushButton* formatButton()
   {
     return ui_.formatButton;

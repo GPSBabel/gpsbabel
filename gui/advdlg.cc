@@ -28,6 +28,7 @@
 //------------------------------------------------------------------------
 AdvDlg::AdvDlg(QWidget* parent,
                bool& synthShortNames,
+               bool mapPreviewEnabled,
                bool& previewGmap,
                int&  debugLevel):
   QDialog(parent),
@@ -37,6 +38,10 @@ AdvDlg::AdvDlg(QWidget* parent,
 {
   ui_.setupUi(this);
   ui_.synthShortNames->setChecked(synthShortNames);
+  ui_.previewGmap->setEnabled(mapPreviewEnabled);
+  if (!mapPreviewEnabled) {
+    previewGmap = false;
+  }
   ui_.previewGmap->setChecked(previewGmap);
   ui_.debugCombo->setCurrentIndex(debugLevel+1);
 #if defined (Q_OS_WIN)
