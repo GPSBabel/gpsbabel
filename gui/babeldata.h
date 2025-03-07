@@ -107,6 +107,8 @@ public:
     // Global preferences.
     sg.addVarSetting(std::make_unique<BoolSetting>("app.startupVersionCheck", startupVersionCheck_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.reportStatistics", reportStatistics_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.upgradeMenuEnabled", upgradeMenuEnabled_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewEnabled", mapPreviewEnabled_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.allowBetaUpgrades", allowBetaUpgrades_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.ignoreVersionMismatch", ignoreVersionMismatch_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.disableDonateDialog", disableDonateDialog_));
@@ -152,6 +154,8 @@ public:
   // Global preferences.
   bool startupVersionCheck_{true};
   bool reportStatistics_{true};
+  bool upgradeMenuEnabled_{true};
+  bool mapPreviewEnabled_{true};
   bool allowBetaUpgrades_{false};
   bool ignoreVersionMismatch_{false};
   bool disableDonateDialog_{false};
