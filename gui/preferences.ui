@@ -60,7 +60,7 @@
        <item>
         <widget class="QCheckBox" name="startupCheck">
          <property name="toolTip">
-          <string>&lt;html&gt;The check transmits information about your installation and computer environment, such as the Installation ID, GPSBabel GUI and CLI versions, CPU architecture, operating system name and version, and language, to gpsbabel.org.&lt;/html&gt;</string>
+          <string>&lt;html&gt;The check transmits information about your installation and computer environment, such as the Installation ID, GPSBabel GUI and CLI versions, CPU architecture, operating system name and version, and language, to gpsbabel.org. This never includes any data from user files or devices.&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>Check for newer version on start.</string>
@@ -70,7 +70,7 @@
        <item>
         <widget class="QCheckBox" name="reportStatisticsCheck">
          <property name="toolTip">
-          <string>&lt;html&gt;Anonymous usage data is sent to gpsbabel.org. This helps us understand what features of the program are being used.&lt;/html&gt;</string>
+          <string>&lt;html&gt;Anonymous usage data is sent to gpsbabel.org. This helps the developers at gpsbabel.org understand what features of the program are being used. This never includes any data from user files or devices.&lt;/html&gt;</string>
          </property>
          <property name="text">
           <string>Anonymously report usage data.</string>
