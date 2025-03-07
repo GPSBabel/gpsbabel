@@ -1,10 +1,7 @@
-diff --git a/a/.git/index b/b/.git/index
-index ebfef17..34c8fc3 100644
-Binary files a/a/.git/index and b/b/.git/index differ
-diff --git a/a/gui/babeldata.h b/b/gui/babeldata.h
-index 50d6d1e..4a7a573 100644
---- a/a/gui/babeldata.h
-+++ b/b/gui/babeldata.h
+diff --git a/gui/babeldata.h b/gui/babeldata.h
+index 50d6d1e3..4a7a5736 100644
+--- a/gui/babeldata.h
++++ b/gui/babeldata.h
 @@ -152,7 +152,7 @@ public:
    int runCount_{0};
  
