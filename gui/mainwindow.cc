@@ -1142,7 +1142,7 @@ void MainWindow::resetFormatDefaults()
 void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(nullptr, babelData_.synthShortNames_,
-                babelData_.previewGmap_, babelData_.debugLevel_);
+                babelData_.mapPreviewEnabled_, babelData_.previewGmap_, babelData_.debugLevel_);
   connect(advDlg.formatButton(), &QAbstractButton::clicked,
           this, &MainWindow::resetFormatDefaults);
   advDlg.exec();
@@ -1176,7 +1176,10 @@ void MainWindow::preferencesActionX()
   Preferences preferences(nullptr, formatList_, babelData_);
   preferences.exec();
 
-  // We may have changed the list of displayed formats.  Resynchronize.
+  // The user may have changed the list of displayed formats, and/or
+  // enabled or disabled the upgrade menu item.
+  // Resynchronize.
+
   setWidgetValues();
 }
 
@@ -1209,6 +1212,7 @@ void MainWindow::updateFilterStatus()
 //------------------------------------------------------------------------
 void MainWindow::setWidgetValues()
 {
+  ui_.actionUpgradeCheck->setEnabled(babelData_.upgradeMenuEnabled_);
   if (babelData_.inputType_ == BabelData::fileType_) {
     ui_.inputFileOptBtn->setChecked(true);
     inputFileOptBtnClicked();

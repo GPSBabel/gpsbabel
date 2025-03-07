@@ -49,11 +49,17 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
 
   ui_.startupCheck->setChecked(babelData_.startupVersionCheck_);
   ui_.reportStatisticsCheck->setChecked(babelData_.reportStatistics_);
+  ui_.upgradeMenuCheck->setChecked(babelData_.upgradeMenuEnabled_);
+  ui_.mapPreviewCheck->setChecked(babelData_.mapPreviewEnabled_);
+  ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
+
 #ifdef DISABLE_UPGRADE_CHECK
   ui_.startupCheck->hide();
   ui_.reportStatisticsCheck->hide();
 #endif
-  ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
+#ifdef DISABLE_MAPPREVIEW
+  ui_.mapPreviewCheck->hide();
+#endif
 
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &Preferences::acceptClicked);
   connect(ui_.buttonBox, &QDialogButtonBox::rejected, this, &Preferences::rejectClicked);
@@ -93,6 +99,8 @@ void Preferences::acceptClicked()
 
   babelData_.startupVersionCheck_ = ui_.startupCheck->isChecked();
   babelData_.reportStatistics_ = ui_.reportStatisticsCheck->isChecked();
+  babelData_.upgradeMenuEnabled_ = ui_.upgradeMenuCheck->isChecked();
+  babelData_.mapPreviewEnabled_ = ui_.mapPreviewCheck->isChecked();
   babelData_.ignoreVersionMismatch_ = ui_.ignoreVersionMismatchCheck->isChecked();
   accept();
 }

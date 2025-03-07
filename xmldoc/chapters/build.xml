@@ -36,7 +36,7 @@ You can grab a release from the <link xmlns:xlink="http://www.w3.org/1999/xlink"
           <para>
 Qt version 6.2 or newer is required for all builds.
 You may download directly from Qt using the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://doc.qt.io/qt-6/get-and-install-qt.html">Qt supplied directions</link>.
-Alternatively, MacOS users can download binaries from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://formulae.brew.sh/formula/qt">Homebrew</link>.
+Alternatively, macOS users can download binaries from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://formulae.brew.sh/formula/qt">Homebrew</link>.
 Fedora or CentOS users may need to 'dnf install qt6-qtbase-devel qt6-qt5compat-devel'.  When in doubt, 'dnf search qt' or 'dnf search qt6' may help you find the correct package name. Ubuntu users may need to 'apt-get install qt6-base-dev qt6-5compat-dev'. Additional qt6 packages are required to build the GUI.  Package names
 and versions in Linux frequently change, so you may need to ask your Linux vendor
 for help or look in our <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://github.com/GPSBabel/gpsbabel/tree/master/tools">Docker files</link> for inspiration from our automated builds that
@@ -62,12 +62,12 @@ from our automated Docker builds.</para>
       <title>Brief history of internals</title>
       <para>
     Parts of GPSBabel have been public since 2002, with some of the original
-    design and original code came from 2001. It was originally in C89, not C++
+    design and original code came from 2001. It was originally in C89, not C++,
     and while we strongly encourage modern C++ code where we can use it, we've
     not gone back to those older formats - some of which we don't have
     the hardware to test and have fallen out of touch with original authors - and
     rewritten them in Modern C++ style. There are this void*'s everywhere, C String
-    use, gross buffer abuse, and other things that look more like a C program from the 80's than a C++ program of modern date.  Code that's earned it's own wings can
+    use, gross buffer abuse, and other things that look more like a C program from the 80's than a C++ program of modern date.  Code that's earned its own wings can
     continue to fly with us as long as it passes the tests we have. We've additionally
     not enforced style rules as strongly across modules as we could have. Fixing
     both of these is a goal for us in 2020.
@@ -103,11 +103,11 @@ To create a buildsystem using Ninja:
 <userinput>cmake -G Ninja -DCMAKE_BUILD_TYPE=Release .</userinput>
 </member>
         <member>
-To create a visual studio project that can be built with msbuild:
+To create a Visual Studio project that can be built with msbuild:
 <userinput>cmake -G "Visual Studio 17 2022" .</userinput>
 </member>
         <member>
-To create a Xcode project:
+To create an Xcode project:
 <userinput>cmake -G Xcode .</userinput>
 </member>
       </simplelist>
@@ -139,8 +139,8 @@ customize your build of GPSBabel.
                 <term>system</term>
                 <listitem>
                   <para>
-build with libusb-1.0 found on system library path and under
-libusb-1.0 on system include path (default, linux, openbsd).
+build with libusb-1.0 found on the system library path and under
+libusb-1.0 on the system include path (default, linux, openbsd).
 	  </para>
                 </listitem>
               </varlistentry>
@@ -235,8 +235,8 @@ GPSBABEL_EXTRA_INCLUDE_DIRECTORIES.</para>
           <listitem>
             <para>
 This options enables the map preview feature.  With the feature disabled
-QtWebEngine and QtWebEngineWdigets are not used. Note that QtWebKit and
-QtWebKitWidgets are not longer supported.
+QtWebEngine and QtWebEngineWidgets are not used. Note that QtWebKit and
+QtWebKitWidgets are no longer supported.
 	</para>
           </listitem>
         </varlistentry>

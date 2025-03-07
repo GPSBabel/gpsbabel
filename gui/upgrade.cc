@@ -124,9 +124,10 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   args += QStringLiteral("&ugacc=%1").arg(babelData_.upgradeAccept_);
   args += QStringLiteral("&ugoff=%1").arg(babelData_.upgradeOffers_);
   args += QStringLiteral("&ugerr=%1").arg(babelData_.upgradeErrors_);
-  args += QStringLiteral("&rc=%1").arg(babelData_.runCount_);
 
   if (babelData_.reportStatistics_) {
+    args += QStringLiteral("&rc=%1").arg(babelData_.runCount_);
+
     int j = 0;
 
     for (int i = 0; i < formatList_.size(); i++) {

@@ -3,5 +3,5 @@
 </para>
 
 <para>
-  Notice that the iBlue 747 logs the sum of "height above sealevel" and "height of geoid above WGS84".   If precise altitude matters to you, check out the <link linkend="filter_height">height filter</link> which allows you to compensate for this.
+  Notice that the iBlue 747 logs the sum of "height above sea level" and "height of geoid above WGS84".   If precise altitude matters to you, check out the <link linkend="filter_height">height filter</link> which allows you to compensate for this.
 </para>

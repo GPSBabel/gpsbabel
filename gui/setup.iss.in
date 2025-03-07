@@ -37,6 +37,7 @@ Compression=lzma
 SolidCompression=yes
 SourceDir="{#source_dir}"
 LicenseFile=COPYING.txt
+InfoAfterFile=notices.txt
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

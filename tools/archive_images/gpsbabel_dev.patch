@@ -1,13 +1,13 @@
 diff --git a/gui/babeldata.h b/gui/babeldata.h
-index b79cd1dc..c4d82e8c 100644
+index 50d6d1e3..4a7a5736 100644
 --- a/gui/babeldata.h
 +++ b/gui/babeldata.h
-@@ -150,7 +150,7 @@ public:
+@@ -152,7 +152,7 @@ public:
    int runCount_{0};
  
    // Global preferences.
 -  bool startupVersionCheck_{true};
 +  bool startupVersionCheck_{false};
    bool reportStatistics_{true};
-   bool allowBetaUpgrades_{false};
-   bool ignoreVersionMismatch_{false};
+   bool upgradeMenuEnabled_{true};
+   bool mapPreviewEnabled_{true};
