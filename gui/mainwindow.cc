@@ -1212,7 +1212,9 @@ void MainWindow::updateFilterStatus()
 //------------------------------------------------------------------------
 void MainWindow::setWidgetValues()
 {
+#ifndef DISABLE_UPGRADE_CHECK
   ui_.actionUpgradeCheck->setEnabled(babelData_.upgradeMenuEnabled_);
+#endif
   if (babelData_.inputType_ == BabelData::fileType_) {
     ui_.inputFileOptBtn->setChecked(true);
     inputFileOptBtnClicked();
