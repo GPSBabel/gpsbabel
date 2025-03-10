@@ -312,7 +312,11 @@ option	geo	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_
 
 file	rwrwrw	geojson	json	GeoJson	geojson
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html
-option	geojson	compact	Compact Output. Default is off.	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_compact
+option	geojson	compact	Compact Output. Default is off	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_compact
+
+option	geojson	name	Property key to use for name	string	name			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_name
+
+option	geojson	desc	Property key to use for description	string	description			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_desc
 
 internal	r-r---	dg-100-bin		GlobalSat DG-100/BT-335 Binary File	dg-100-bin
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-100-bin.html
