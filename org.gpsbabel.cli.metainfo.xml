@@ -21,6 +21,7 @@
     <p>GPSBabel supports the following formats:</p>
 
     <ul>
+      <li>70mai: 70mai Dash Cam</li>
       <li>arc: GPSBabel arc filter file</li>
       <li>csv: Comma separated values</li>
       <li>cup: See You flight analysis data</li>
