@@ -1,0 +1,3 @@
+<para>
+This option specifies the property key to associate with a waypoint, route or track description. It is case sensitive.  The default is "description".
+</para>
