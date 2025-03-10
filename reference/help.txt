@@ -162,6 +162,8 @@ File Types (-i and -o options):
 	  deficon               Default icon name
 	geojson               GeoJson
 	  compact               (0/1) Compact Output. Default is off.
+	  name                  Property key to use for name.
+	  desc                  Property key to use for description.
 	dg-100                GlobalSat DG-100/BT-335 Download
 	  erase                 (0/1) Erase device data after download
 	  erase_only            (0/1) Only erase device data, do not download anything
