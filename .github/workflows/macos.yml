@@ -43,7 +43,7 @@ jobs:
             GENERATOR: 'Ninja'
             RELEASE: true
             os: macos-14
-          - QT_VERSION: '6.8.2'
+          - QT_VERSION: '6.8.3'
             XCODE_VERSION: '16.2'
             GENERATOR: 'Ninja'
             RELEASE: false
