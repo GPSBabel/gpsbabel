@@ -54,7 +54,7 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-latest
-          - QT_VERSION: '6.8.2'
+          - QT_VERSION: '6.8.3'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
