@@ -335,10 +335,12 @@ enum libusb_descriptor_type {
 #define LIBUSB_DT_SS_ENDPOINT_COMPANION_SIZE	6
 #define LIBUSB_DT_BOS_SIZE			5
 #define LIBUSB_DT_DEVICE_CAPABILITY_SIZE	3
+#define LIBUSB_DT_INTERFACE_ASSOCIATION_SIZE	8
 
 /* BOS descriptor sizes */
 #define LIBUSB_BT_USB_2_0_EXTENSION_SIZE	7
 #define LIBUSB_BT_SS_USB_DEVICE_CAPABILITY_SIZE	10
+#define LIBUSB_BT_SSPLUS_USB_DEVICE_CAPABILITY_SIZE	12
 #define LIBUSB_BT_CONTAINER_ID_SIZE		20
 #define LIBUSB_BT_PLATFORM_DESCRIPTOR_MIN_SIZE		20
 
@@ -562,7 +564,10 @@ enum libusb_bos_type {
 	LIBUSB_BT_CONTAINER_ID = 0x04,
 
 	/** Platform descriptor */
-	LIBUSB_BT_PLATFORM_DESCRIPTOR = 0x05
+	LIBUSB_BT_PLATFORM_DESCRIPTOR = 0x05,
+
+	/** SuperSpeedPlus device capability */
+	LIBUSB_BT_SUPERSPEED_PLUS_CAPABILITY = 0x0A,
 };
 
 /** \ingroup libusb_desc
@@ -927,7 +932,7 @@ struct libusb_usb_2_0_extension_descriptor {
 	uint8_t  bDescriptorType;
 
 	/** Capability type. Will have value
-	 * \ref libusb_capability_type::LIBUSB_BT_USB_2_0_EXTENSION
+	 * \ref libusb_bos_type::LIBUSB_BT_USB_2_0_EXTENSION
 	 * LIBUSB_BT_USB_2_0_EXTENSION in this context. */
 	uint8_t  bDevCapabilityType;
 
@@ -953,7 +958,7 @@ struct libusb_ss_usb_device_capability_descriptor {
 	uint8_t  bDescriptorType;
 
 	/** Capability type. Will have value
-	 * \ref libusb_capability_type::LIBUSB_BT_SS_USB_DEVICE_CAPABILITY
+	 * \ref libusb_bos_type::LIBUSB_BT_SS_USB_DEVICE_CAPABILITY
 	 * LIBUSB_BT_SS_USB_DEVICE_CAPABILITY in this context. */
 	uint8_t  bDevCapabilityType;
 
@@ -981,6 +986,100 @@ struct libusb_ss_usb_device_capability_descriptor {
 };
 
 /** \ingroup libusb_desc
+ *  enum used in \ref libusb_ssplus_sublink_attribute
+ */
+enum libusb_superspeedplus_sublink_attribute_sublink_type {
+	LIBUSB_SSPLUS_ATTR_TYPE_SYM = 0,
+	LIBUSB_SSPLUS_ATTR_TYPE_ASYM = 1,
+};
+
+/** \ingroup libusb_desc
+ *  enum used in \ref libusb_ssplus_sublink_attribute
+ */
+enum libusb_superspeedplus_sublink_attribute_sublink_direction {
+	LIBUSB_SSPLUS_ATTR_DIR_RX = 0,
+	LIBUSB_SSPLUS_ATTR_DIR_TX = 1,
+};
+
+/** \ingroup libusb_desc
+ *  enum used in \ref libusb_ssplus_sublink_attribute
+ *   Bit   = Bits per second
+ *   Kb = Kbps
+ *   Mb = Mbps
+ *   Gb = Gbps
+ */
+enum libusb_superspeedplus_sublink_attribute_exponent {
+	LIBUSB_SSPLUS_ATTR_EXP_BPS = 0,
+	LIBUSB_SSPLUS_ATTR_EXP_KBS = 1,
+	LIBUSB_SSPLUS_ATTR_EXP_MBS = 2,
+	LIBUSB_SSPLUS_ATTR_EXP_GBS = 3,
+};
+
+/** \ingroup libusb_desc
+ *  enum used in \ref libusb_ssplus_sublink_attribute
+ */
+enum libusb_superspeedplus_sublink_attribute_link_protocol {
+	LIBUSB_SSPLUS_ATTR_PROT_SS = 0,
+	LIBUSB_SSPLUS_ATTR_PROT_SSPLUS = 1,
+};
+
+/** \ingroup libusb_desc
+ * Expose \ref libusb_ssplus_usb_device_capability_descriptor.sublinkSpeedAttributes
+ */
+struct libusb_ssplus_sublink_attribute {
+	/** Sublink Speed Attribute ID (SSID).
+	 This field is an ID that uniquely identifies the speed of this sublink */
+	uint8_t ssid;
+
+	/** This field defines the
+	 base 10 exponent times 3, that shall be applied to the
+     mantissa. */
+	enum libusb_superspeedplus_sublink_attribute_exponent exponent;
+
+	/** This field identifies whether the
+	 Sublink Speed Attribute defines a symmetric or
+     asymmetric bit rate.*/
+	enum libusb_superspeedplus_sublink_attribute_sublink_type type;
+
+	/** This field  indicates if this
+	 Sublink Speed Attribute defines the receive or
+     transmit bit rate. */
+	enum libusb_superspeedplus_sublink_attribute_sublink_direction direction;
+
+	/** This field identifies the protocol
+	 supported by the link. */
+	enum libusb_superspeedplus_sublink_attribute_link_protocol protocol;
+
+	/** This field defines the mantissa that shall be applied to the exponent when
+     calculating the maximum bit rate. */
+	uint16_t mantissa;
+};
+
+/** \ingroup libusb_desc
+ * A structure representing the SuperSpeedPlus descriptor
+ * This descriptor is documented in section 9.6.2.5 of the USB 3.1 specification.
+ */
+struct libusb_ssplus_usb_device_capability_descriptor {
+	/** Sublink Speed Attribute Count */
+	uint8_t  numSublinkSpeedAttributes;
+
+	/** Sublink Speed ID Count */
+	uint8_t  numSublinkSpeedIDs;
+
+	/** Unique ID to indicates the minimum lane speed */
+	uint8_t ssid;
+
+	/** This field indicates the minimum receive lane count.*/
+	uint8_t minRxLaneCount;
+
+	/** This field indicates the minimum transmit lane count*/
+	uint8_t minTxLaneCount;
+
+	/** Array size is \ref libusb_ssplus_usb_device_capability_descriptor.numSublinkSpeedAttributes */
+	struct libusb_ssplus_sublink_attribute sublinkSpeedAttributes[];
+};
+
+/** \ingroup libusb_desc
  * A structure representing the Container ID descriptor.
  * This descriptor is documented in section 9.6.2.3 of the USB 3.0 specification.
  * All multiple-byte fields, except UUIDs, are represented in host-endian format.
@@ -995,7 +1094,7 @@ struct libusb_container_id_descriptor {
 	uint8_t  bDescriptorType;
 
 	/** Capability type. Will have value
-	 * \ref libusb_capability_type::LIBUSB_BT_CONTAINER_ID
+	 * \ref libusb_bos_type::LIBUSB_BT_CONTAINER_ID
 	 * LIBUSB_BT_CONTAINER_ID in this context. */
 	uint8_t  bDevCapabilityType;
 
@@ -1020,7 +1119,7 @@ struct libusb_platform_descriptor {
 	uint8_t  bDescriptorType;
 
 	/** Capability type. Will have value
-	 * \ref libusb_capability_type::LIBUSB_BT_PLATFORM_DESCRIPTOR
+	 * \ref libusb_bos_type::LIBUSB_BT_PLATFORM_DESCRIPTOR
 	 * LIBUSB_BT_CONTAINER_ID in this context. */
 	uint8_t  bDevCapabilityType;
 
@@ -1167,7 +1266,10 @@ enum libusb_speed {
 	LIBUSB_SPEED_SUPER = 4,
 
 	/** The device is operating at super speed plus (10000MBit/s). */
-	LIBUSB_SPEED_SUPER_PLUS = 5
+	LIBUSB_SPEED_SUPER_PLUS = 5,
+
+	/** The device is operating at super speed plus x2 (20000MBit/s). */
+	LIBUSB_SPEED_SUPER_PLUS_X2 = 6,
 };
 
 /** \ingroup libusb_misc
@@ -1581,7 +1683,7 @@ void LIBUSB_CALL libusb_set_debug(libusb_context *ctx, int level);
 void LIBUSB_CALL libusb_set_log_cb(libusb_context *ctx, libusb_log_cb cb, int mode);
 const struct libusb_version * LIBUSB_CALL libusb_get_version(void);
 int LIBUSB_CALL libusb_has_capability(uint32_t capability);
-const char * LIBUSB_CALL libusb_error_name(int errcode);
+const char * LIBUSB_CALL libusb_error_name(int error_code);
 int LIBUSB_CALL libusb_setlocale(const char *locale);
 const char * LIBUSB_CALL libusb_strerror(int errcode);
 
@@ -1625,6 +1727,12 @@ int LIBUSB_CALL libusb_get_ss_usb_device_capability_descriptor(
 	struct libusb_ss_usb_device_capability_descriptor **ss_usb_device_cap);
 void LIBUSB_CALL libusb_free_ss_usb_device_capability_descriptor(
 	struct libusb_ss_usb_device_capability_descriptor *ss_usb_device_cap);
+int LIBUSB_CALL libusb_get_ssplus_usb_device_capability_descriptor(
+	libusb_context *ctx,
+	struct libusb_bos_dev_capability_descriptor *dev_cap,
+	struct libusb_ssplus_usb_device_capability_descriptor **ssplus_usb_device_cap);
+void LIBUSB_CALL libusb_free_ssplus_usb_device_capability_descriptor(
+	struct libusb_ssplus_usb_device_capability_descriptor *ssplus_usb_device_cap);
 int LIBUSB_CALL libusb_get_container_id_descriptor(libusb_context *ctx,
 	struct libusb_bos_dev_capability_descriptor *dev_cap,
 	struct libusb_container_id_descriptor **container_id);
@@ -2035,16 +2143,16 @@ static inline unsigned char *libusb_get_iso_packet_buffer_simple(
 /* sync I/O */
 
 int LIBUSB_CALL libusb_control_transfer(libusb_device_handle *dev_handle,
-	uint8_t request_type, uint8_t bRequest, uint16_t wValue, uint16_t wIndex,
+	uint8_t bmRequestType, uint8_t bRequest, uint16_t wValue, uint16_t wIndex,
 	unsigned char *data, uint16_t wLength, unsigned int timeout);
 
 int LIBUSB_CALL libusb_bulk_transfer(libusb_device_handle *dev_handle,
 	unsigned char endpoint, unsigned char *data, int length,
-	int *actual_length, unsigned int timeout);
+	int *transferred, unsigned int timeout);
 
 int LIBUSB_CALL libusb_interrupt_transfer(libusb_device_handle *dev_handle,
 	unsigned char endpoint, unsigned char *data, int length,
-	int *actual_length, unsigned int timeout);
+	int *transferred, unsigned int timeout);
 
 /** \ingroup libusb_desc
  * Retrieve a descriptor from the default control pipe.
