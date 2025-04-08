@@ -203,6 +203,18 @@ static void setMessagePattern(const QString& id = QString())
   }
 }
 
+/* The GUI counts on messages going to standard error or standard output, so
+ * they can be displayed in the output window.
+ * The Qt supplied default messageHandler might send them to the debugger on windows. */
+static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+  QString message = qFormatLogMessage(type, context, msg);
+  /* flush any buffered standard output */
+  fflush(stdout);
+  fprintf(stderr, "%s\n", qPrintable(message));
+  fflush(stderr);
+}
+
 static void
 signal_handler(int sig)
 {
@@ -246,6 +258,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     timer.start();
   }
   start_session(ivecs.fmtname, fname);
+  qInstallMessageHandler(MessageHandler);
   setMessagePattern(ivecs.fmtname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
