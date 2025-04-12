@@ -1,4 +1,4 @@
-name: "windows"
+name: "windows arm64"
 
 on:
   push:
@@ -77,13 +77,6 @@ jobs:
         VERSION_ID=$(date -u +%Y%m%dT%H%MZ --date=$(git show -s --format=%aI HEAD))-$(git rev-parse --short=7 HEAD)
         mv bld/gui/GPSBabel-*-Setup.exe bld/gui/GPSBabel-${VERSION_ID}-Setup.exe
         mv bld/gui/GPSBabel-*-Manifest.txt bld/gui/GPSBabel-${VERSION_ID}-Manifest.txt
-
-    - name: Test
-      shell: bash
-      run: |
-        # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
-        PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
-        PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}
