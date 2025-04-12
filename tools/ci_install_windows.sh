@@ -19,8 +19,9 @@ function validate() {
 }
 
 QT_VERSION=${1:-6.5.3}
-COMPILER=${2:-msvc2019_64}
+COMPILER=${2:-msvc2022_64}
 METHOD=${3:-default}
+PACKAGE_SUFFIX_CROSS=${4}
 
 if [ "${COMPILER}" = "msvc2017_64" ]; then
   PACKAGE_SUFFIX=win64_msvc2017_64
@@ -49,6 +50,9 @@ else
   if [ "${METHOD}" = "aqt" ]; then
     pip3 install 'aqtinstall>=3.1.20'
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" windows "${QT_VERSION}" "${PACKAGE_SUFFIX}" "${CACHEDIR}/Qt"
+    if [ -n "${PACAKGE_SUFFIX_CROSS}" ]; then
+      "${CI_BUILD_DIR}/tools/ci_install_qt.sh" windows "${QT_VERSION}" "${PACKAGE_SUFFIX_CROSS}" "${CACHEDIR}/Qt"
+    fi
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt.env"
   else
     echo "ERROR: unknown installation method ${METHOD}." >&2

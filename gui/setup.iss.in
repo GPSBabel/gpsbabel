@@ -13,6 +13,9 @@
 #ifndef source_dir
   #define source_dir "."
 #endif
+#ifndef arch
+  #define arch "x64compatible"
+#endif
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -25,9 +28,9 @@ AppPublisher=GPSBabel
 AppPublisherURL=https://www.gpsbabel.org
 AppSupportURL=https://www.gpsbabel.org
 AppUpdatesURL=https://www.gpsbabel.org
-ArchitecturesAllowed=x64
-ArchitecturesInstallIn64BitMode=x64
-DefaultDirName={pf}\GPSBabel
+ArchitecturesAllowed={#arch}
+ArchitecturesInstallIn64BitMode={#arch}
+DefaultDirName={commonpf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir="{#output_dir}"
 OutputBaseFilename=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Setup

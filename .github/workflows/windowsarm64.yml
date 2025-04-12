@@ -1,0 +1,112 @@
+name: "windows"
+
+on:
+  push:
+    branches: [ '**']
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+    - cron: '27 4 * * 2'
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+
+  windows:
+    name: windows arm64 Build
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - QT_VERSION: '6.8.3'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2022_64'
+            METHOD: 'aqt'
+            RELEASE: false
+            os: windows-2025
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Cache Qt
+      uses: actions/cache@v4
+      id: cache
+      with:
+        path: ~/Cache
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-ARM64-${{ secrets.CACHE_VERSION }}
+
+    - name: Install Qt setup(aqt)
+      if: steps.cache.outputs.cache-hit != 'true'
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Qt
+      if: steps.cache.outputs.cache-hit != 'true'
+      env:
+        CI_BUILD_DIR: ${{ github.workspace }}
+      shell: bash
+      run: |
+        ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}" win64_msvc2022_arm64_cross_compiled
+
+    - name: Install Inno Setup
+      if: matrix.os == 'windows-2025'
+      run: choco install innosetup 
+
+    - name: Build
+      shell: powershell
+      run: |
+        .\tools\ci_arm64_cross.ps1 -qt_root_dir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
+
+    - name: Rename
+      shell: bash
+      run: |
+        VERSION_ID=$(date -u +%Y%m%dT%H%MZ --date=$(git show -s --format=%aI HEAD))-$(git rev-parse --short=7 HEAD)
+        mv bld/gui/GPSBabel-*-Setup.exe bld/gui/GPSBabel-${VERSION_ID}-Setup.exe
+        mv bld/gui/GPSBabel-*-Manifest.txt bld/gui/GPSBabel-${VERSION_ID}-Manifest.txt
+
+    - name: Test
+      shell: bash
+      run: |
+        # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
+        PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+
+    - name: Generate artifact attestation
+      if: ${{ inputs.attestation && matrix.RELEASE }}
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-path: 'bld/gui/GPSBabel-*-Setup.exe'
+
+    - name: Deploy
+      # This only handles continous releases now, for other events artifacts may be saved in
+      # the 'Upload Artifacts' step.
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' ) && matrix.RELEASE
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: Continuous-${{ runner.os }}
+      run: |
+        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup.exe
+
+    - name: 'Upload Artifacts'
+      uses: actions/upload-artifact@v4
+      with:
+        name: Windows_Installer ${{ join(matrix.*) }}
+        path: |
+          bld/gui/GPSBabel-*-Setup.exe
+          bld/gui/GPSBabel-*-Manifest.txt
+        retention-days: 7
