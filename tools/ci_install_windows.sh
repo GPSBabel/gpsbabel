@@ -50,7 +50,7 @@ else
   if [ "${METHOD}" = "aqt" ]; then
     pip3 install 'aqtinstall>=3.1.20'
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" windows "${QT_VERSION}" "${PACKAGE_SUFFIX}" "${CACHEDIR}/Qt"
-    if [ -n "${PACAKGE_SUFFIX_CROSS}" ]; then
+    if [ -n "${PACKAGE_SUFFIX_CROSS}" ]; then
       "${CI_BUILD_DIR}/tools/ci_install_qt.sh" windows "${QT_VERSION}" "${PACKAGE_SUFFIX_CROSS}" "${CACHEDIR}/Qt"
     fi
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt.env"
