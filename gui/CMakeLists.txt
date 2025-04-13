@@ -218,7 +218,7 @@ else()
     if (INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND")
       message(WARNING "Inno compiler iscc not found, application cannot be packaged.")
     endif()
-    
+
     # in 5.12.12 cmake doesn't know about windeployqt, look in directory that has qmake.
     get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
