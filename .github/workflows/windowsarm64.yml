@@ -69,7 +69,7 @@ jobs:
             CROSS_COMPILED: 'win64_msvc2022_arm64_cross_compiled'
             CROSS_COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
-            RELEASE: false
+            RELEASE: true
             os: windows-2025
 
     steps:
@@ -128,8 +128,10 @@ jobs:
       shell: bash
       run: |
         VERSION_ID=$(date -u +%Y%m%dT%H%MZ --date=$(git show -s --format=%aI HEAD))-$(git rev-parse --short=7 HEAD)
-        mv bld/gui/GPSBabel-*-Setup.exe bld/gui/GPSBabel-${VERSION_ID}-Setup.exe
-        mv bld/gui/GPSBabel-*-Manifest.txt bld/gui/GPSBabel-${VERSION_ID}-Manifest.txt
+        SETUP=$(ls bld/gui/GPSBabel-*-Setup-*.exe | sed "s/\([^-]*\)-\([^-]*\)-\(.*\)/\1-${VERSION_ID}-\3/")
+        mv bld/gui/GPSBabel-*-Setup-*.exe ${SETUP}
+        MANIFEST=$(ls bld/gui/GPSBabel-*-Manifest-*.txt | sed "s/\([^-]*\)-\([^-]*\)-\(.*\)/\1-${VERSION_ID}-\3/")
+        mv bld/gui/GPSBabel-*-Manifest-*.txt ${MANIFEST}
 
     - name: Test
       shell: bash
@@ -143,7 +145,7 @@ jobs:
       if: ${{ inputs.attestation && matrix.RELEASE }}
       uses: actions/attest-build-provenance@v2
       with:
-        subject-path: 'bld/gui/GPSBabel-*-Setup.exe'
+        subject-path: 'bld/gui/GPSBabel-*-Setup-*.exe'
 
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
@@ -154,13 +156,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: Continuous-${{ runner.os }}
       run: |
-        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup.exe
+        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup-*.exe
 
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v4
       with:
         name: Windows_Installer ${{ join(matrix.*) }}
         path: |
-          bld/gui/GPSBabel-*-Setup.exe
-          bld/gui/GPSBabel-*-Manifest.txt
+          bld/gui/GPSBabel-*-Setup-*.exe
+          bld/gui/GPSBabel-*-Manifest-*.txt
         retention-days: 7
