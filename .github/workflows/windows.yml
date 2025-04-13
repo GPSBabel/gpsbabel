@@ -62,6 +62,15 @@ jobs:
             RELEASE: false
             GENERATOR: 'Ninja'
             os: windows-2025
+          - QT_VERSION: '6.8.3'
+            TARGET_ARCH: 'arm64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2022_64'
+            CROSS_COMPILED: 'win64_msvc2022_arm64_cross_compiled'
+            CROSS_COMPILER: 'msvc2022_arm64'
+            METHOD: 'aqt'
+            RELEASE: true
+            os: windows-2025
 
     steps:
     - name: Checkout repository
@@ -72,7 +81,7 @@ jobs:
       id: cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILED }}-${{ secrets.CACHE_VERSION }}
 
     - name: Install Qt setup(aqt)
       if: steps.cache.outputs.cache-hit != 'true'
@@ -86,7 +95,11 @@ jobs:
         CI_BUILD_DIR: ${{ github.workspace }}
       shell: bash
       run: |
-        ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
+        if [ -n "${{ matrix.CROSS_COMPILED }}" ]; then
+          ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}" "${{ matrix.CROSS_COMPILED }}"
+        else
+          ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
+        fi
 
     - name: Install Inno Setup
       if: matrix.os == 'windows-2025'
@@ -94,19 +107,35 @@ jobs:
 
     - name: Build
       shell: powershell
+      if: matrix.CROSS_COMPILED == ''
       run: |
         .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
         .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
+
+    - name: Build Cross Compiled
+      shell: powershell
+      if: matrix.CROSS_COMPILED != ''
+      run: |
+        $hash = @{}
+        $hash["qt_root_dir"] = "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
+        $hash["host_arch"] = "${{ matrix.HOST_ARCH }}"
+        $hash["target_arch"] = "${{ matrix.TARGET_ARCH }}"
+        $hash["compiler"] = "${{ matrix.COMPILER }}"
+        $hash["cross_compiler"] = "${{ matrix.CROSS_COMPILER }}"
+        .\tools\ci_arm64_cross.ps1 @hash
 
     - name: Rename
       shell: bash
       run: |
         VERSION_ID=$(date -u +%Y%m%dT%H%MZ --date=$(git show -s --format=%aI HEAD))-$(git rev-parse --short=7 HEAD)
-        mv bld/gui/GPSBabel-*-Setup.exe bld/gui/GPSBabel-${VERSION_ID}-Setup.exe
-        mv bld/gui/GPSBabel-*-Manifest.txt bld/gui/GPSBabel-${VERSION_ID}-Manifest.txt
+        SETUP=$(ls bld/gui/GPSBabel-*-Setup-*.exe | sed "s/\([^-]*\)-\([^-]*\)-\(.*\)/\1-${VERSION_ID}-\3/")
+        mv bld/gui/GPSBabel-*-Setup-*.exe ${SETUP}
+        MANIFEST=$(ls bld/gui/GPSBabel-*-Manifest-*.txt | sed "s/\([^-]*\)-\([^-]*\)-\(.*\)/\1-${VERSION_ID}-\3/")
+        mv bld/gui/GPSBabel-*-Manifest-*.txt ${MANIFEST}
 
     - name: Test
       shell: bash
+      if: matrix.CROSS_COMPILED == ''
       run: |
         # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
@@ -116,7 +145,7 @@ jobs:
       if: ${{ inputs.attestation && matrix.RELEASE }}
       uses: actions/attest-build-provenance@v2
       with:
-        subject-path: 'bld/gui/GPSBabel-*-Setup.exe'
+        subject-path: 'bld/gui/GPSBabel-*-Setup-*.exe'
 
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
@@ -127,13 +156,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: Continuous-${{ runner.os }}
       run: |
-        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup.exe
+        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup-*.exe
 
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v4
       with:
         name: Windows_Installer ${{ join(matrix.*) }}
         path: |
-          bld/gui/GPSBabel-*-Setup.exe
-          bld/gui/GPSBabel-*-Manifest.txt
+          bld/gui/GPSBabel-*-Setup-*.exe
+          bld/gui/GPSBabel-*-Manifest-*.txt
         retention-days: 7
