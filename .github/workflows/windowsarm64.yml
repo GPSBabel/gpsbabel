@@ -63,7 +63,7 @@ jobs:
             GENERATOR: 'Ninja'
             os: windows-2025
           - QT_VERSION: '6.8.3'
-            TARGET_ARCH: 'amd64'
+            TARGET_ARCH: 'arm64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
             CROSS_COMPILED: 'win64_msvc2022_arm64_cross_compiled'
