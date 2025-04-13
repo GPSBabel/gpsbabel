@@ -106,19 +106,22 @@ jobs:
 
     - name: Build
       shell: powershell
+      if: matrix.CROSS_COMPILED == ''
       run: |
-        if ([String]::IsNullOrEmpty(${{ matrix.CROSS_COMPILED}} )) {
-          .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
-          .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
-        } else {
-          $hash = @{}
-          $hash["qt_root_dir"] = "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
-          $hash["host_arch"] = ${{ matrix.HOST_ARCH }}
-          $hash["target_arch"] = ${{ matrix.TARGET_ARCH }}
-          $hash["compiler"] = ${{ matrix.COMPILER }}
-          $hash["cross_compiled"] = ${{ matrix.CROSS_COMPILED }}
+        .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
+        .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
+
+    - name: Build Cross Compiled
+      shell: powershell
+      if: matrix.CROSS_COMPILED != ''
+      run: |
+        $hash = @{}
+        $hash["qt_root_dir"] = "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
+        $hash["host_arch"] = ${{ matrix.HOST_ARCH }}
+        $hash["target_arch"] = ${{ matrix.TARGET_ARCH }}
+        $hash["compiler"] = ${{ matrix.COMPILER }}
+        $hash["cross_compiled"] = ${{ matrix.CROSS_COMPILED }}
         .\tools\ci_arm64_cross.ps1 @hash
-        }
 
     - name: Rename
       shell: bash
@@ -129,7 +132,7 @@ jobs:
 
     - name: Test
       shell: bash
-      if: matrix.CROSS_COMPILED != ''
+      if: matrix.CROSS_COMPILED == ''
       run: |
         # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
