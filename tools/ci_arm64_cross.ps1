@@ -4,7 +4,7 @@ Param(
     $host_arch = "amd64",
     $target_arch = "arm64",
     $compiler = "msvc2022_64",
-    $cross_compiled = "msvc2022_arm64"
+    $cross_compiler = "msvc2022_arm64"
 )
 
 $ErrorActionPreference = "Stop"
@@ -22,7 +22,7 @@ Remove-Item $build_dir -Recurse -ErrorAction Ignore
 New-Item $build_dir -type directory -Force | Out-Null
 Set-Location $build_dir
 
-$toolchain_file = "$qt_root_dir/$cross_compiled/lib/cmake/Qt6/qt.toolchain.cmake"
+$toolchain_file = "$qt_root_dir/$cross_compiler/lib/cmake/Qt6/qt.toolchain.cmake"
 $qt_host_path = "$qt_root_dir/$compiler"
 cmake -G Ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_TOOLCHAIN_FILE:FILEPATH="$toolchain_file" -DQT_HOST_PATH:PATH="$qt_host_path" "$src_dir"
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }

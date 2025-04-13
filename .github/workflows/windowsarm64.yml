@@ -67,6 +67,7 @@ jobs:
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
             CROSS_COMPILED: 'win64_msvc2022_arm64_cross_compiled'
+            CROSS_COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
             RELEASE: false
             os: windows-2025
@@ -120,7 +121,7 @@ jobs:
         $hash["host_arch"] = "${{ matrix.HOST_ARCH }}"
         $hash["target_arch"] = "${{ matrix.TARGET_ARCH }}"
         $hash["compiler"] = "${{ matrix.COMPILER }}"
-        $hash["cross_compiled"] = "${{ matrix.CROSS_COMPILED }}"
+        $hash["cross_compiler"] = "${{ matrix.CROSS_COMPILER }}"
         .\tools\ci_arm64_cross.ps1 @hash
 
     - name: Rename
