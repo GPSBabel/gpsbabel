@@ -122,7 +122,7 @@ jobs:
         $hash["target_arch"] = "${{ matrix.TARGET_ARCH }}"
         $hash["compiler"] = "${{ matrix.COMPILER }}"
         $hash["cross_compiler"] = "${{ matrix.CROSS_COMPILER }}"
-        .\tools\ci_arm64_cross.ps1 @hash
+        .\tools\ci_windows_cross_compile @hash
 
     - name: Rename
       shell: bash
