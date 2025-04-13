@@ -117,10 +117,10 @@ jobs:
       run: |
         $hash = @{}
         $hash["qt_root_dir"] = "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
-        $hash["host_arch"] = ${{ matrix.HOST_ARCH }}
-        $hash["target_arch"] = ${{ matrix.TARGET_ARCH }}
-        $hash["compiler"] = ${{ matrix.COMPILER }}
-        $hash["cross_compiled"] = ${{ matrix.CROSS_COMPILED }}
+        $hash["host_arch"] = "${{ matrix.HOST_ARCH }}"
+        $hash["target_arch"] = "${{ matrix.TARGET_ARCH }}"
+        $hash["compiler"] = "${{ matrix.COMPILER }}"
+        $hash["cross_compiled"] = "${{ matrix.CROSS_COMPILED }}"
         .\tools\ci_arm64_cross.ps1 @hash
 
     - name: Rename
