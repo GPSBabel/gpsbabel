@@ -45,21 +45,21 @@ jobs:
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
-            os: windows-latest
+            os: windows-2022
           - QT_VERSION: '6.5.3'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
-            RELEASE: true
+            RELEASE: false
             GENERATOR: 'Ninja'
-            os: windows-latest
+            os: windows-2022
           - QT_VERSION: '6.8.3'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
             METHOD: 'aqt'
-            RELEASE: false
+            RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-2025
           - QT_VERSION: '6.8.3'
