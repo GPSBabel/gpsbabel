@@ -244,7 +244,7 @@ else()
       else()
         set(_installer_arch x64compatible)
       endif()
-      message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${sys_arch}\".  Building installer for architecture identifier \"${_installer_arch}\".")
+      message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\".  Building installer for architecture identifier \"${_installer_arch}\".")
       add_custom_target(package_app
                         # deploy to a clean directory as different build systems create differently named debris in release.
                         COMMAND ${CMAKE_COMMAND} -E remove_directory package
