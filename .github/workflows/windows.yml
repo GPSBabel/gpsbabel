@@ -106,22 +106,19 @@ jobs:
 
     - name: Build
       shell: powershell
-      if: matrix.CROSS_COMPILER == ''
       run: |
-        .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
-        .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
-
-    - name: Build Cross Compiled
-      shell: powershell
-      if: matrix.CROSS_COMPILER != ''
-      run: |
-        $hash = @{}
-        $hash["qt_root_dir"] = "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
-        $hash["host_arch"] = "${{ matrix.HOST_ARCH }}"
-        $hash["target_arch"] = "${{ matrix.TARGET_ARCH }}"
-        $hash["compiler"] = "${{ matrix.COMPILER }}"
-        $hash["cross_compiler"] = "${{ matrix.CROSS_COMPILER }}"
-        .\tools\ci_windows_cross_compile @hash
+        if ([string]::IsNullOrEmpty("${{  matrix.CROSS_COMPILER }}")) {
+          .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
+          .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
+        } else {
+          $hash = @{}
+          $hash["qt_root_dir"] = "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
+          $hash["host_arch"] = "${{ matrix.HOST_ARCH }}"
+          $hash["target_arch"] = "${{ matrix.TARGET_ARCH }}"
+          $hash["compiler"] = "${{ matrix.COMPILER }}"
+          $hash["cross_compiler"] = "${{ matrix.CROSS_COMPILER }}"
+          .\tools\ci_windows_cross_compile @hash
+        }
 
     - name: Rename
       shell: bash
