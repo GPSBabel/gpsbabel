@@ -66,7 +66,6 @@ jobs:
             TARGET_ARCH: 'arm64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
-            CROSS_COMPILED: 'win64_msvc2022_arm64_cross_compiled'
             CROSS_COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
             RELEASE: true
@@ -81,7 +80,7 @@ jobs:
       id: cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILED }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILER }}-${{ secrets.CACHE_VERSION }}
 
     - name: Install Qt setup(aqt)
       if: steps.cache.outputs.cache-hit != 'true'
@@ -95,8 +94,8 @@ jobs:
         CI_BUILD_DIR: ${{ github.workspace }}
       shell: bash
       run: |
-        if [ -n "${{ matrix.CROSS_COMPILED }}" ]; then
-          ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}" "${{ matrix.CROSS_COMPILED }}"
+        if [ -n "${{ matrix.CROSS_COMPILER }}" ]; then
+          ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}" "${{ matrix.CROSS_COMPILER }}"
         else
           ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
         fi
@@ -107,14 +106,14 @@ jobs:
 
     - name: Build
       shell: powershell
-      if: matrix.CROSS_COMPILED == ''
+      if: matrix.CROSS_COMPILER == ''
       run: |
         .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
         .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
 
     - name: Build Cross Compiled
       shell: powershell
-      if: matrix.CROSS_COMPILED != ''
+      if: matrix.CROSS_COMPILER != ''
       run: |
         $hash = @{}
         $hash["qt_root_dir"] = "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
@@ -135,7 +134,7 @@ jobs:
 
     - name: Test
       shell: bash
-      if: matrix.CROSS_COMPILED == ''
+      if: matrix.CROSS_COMPILER == ''
       run: |
         # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1

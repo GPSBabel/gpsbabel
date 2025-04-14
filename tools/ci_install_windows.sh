@@ -21,7 +21,7 @@ function validate() {
 QT_VERSION=${1:-6.5.3}
 COMPILER=${2:-msvc2022_64}
 METHOD=${3:-default}
-PACKAGE_SUFFIX_CROSS=${4}
+CROSS_COMPILER=${4}
 
 if [ "${COMPILER}" = "msvc2017_64" ]; then
   PACKAGE_SUFFIX=win64_msvc2017_64
@@ -36,6 +36,15 @@ elif [ "${COMPILER}" = "msvc2022_64" ]; then
 else
   echo "ERROR: unrecognized Qt compiler ${COMPILER}." >&2
   exit 1
+fi
+
+if [ -n "${CROSS_COMPILER}" ]; then
+  if [ "${CROSS_COMPILER}" = "msvc2022_arm64" ]; then
+    PACKAGE_SUFFIX_CROSS=win64_msvc2022_arm64_cross_compiled
+  else
+    echo "ERROR: unrecognized Qt cross compiler ${CROSS_COMPILER}." >&2
+    exit 1
+  fi
 fi
 
 CACHEDIR=${HOME}/Cache
