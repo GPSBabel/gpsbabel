@@ -230,6 +230,21 @@ else()
     if((NOT WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND") AND (NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND"))
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" _win_binary_path)
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" _win_source_path)
+      # for cross compiles we need to tell windeployqt about the target qt paths.
+      if(CMAKE_TOOLCHAIN_FILE)
+        get_filename_component(_qt_toolchain_dir ${CMAKE_TOOLCHAIN_FILE} DIRECTORY)
+        get_filename_component(_qt_target_bin_dir ${_qt_toolchain_dir}/../../../bin ABSOLUTE)
+        file(TO_NATIVE_PATH "${_qt_target_bin_dir}/qtpaths.bat" _qtpaths_file)
+        set(_qtpaths_option --qtpaths "${_qtpaths_file}")
+        message(STATUS "Deploying with target qtpaths \"${_qtpaths_file}\".")
+      endif()
+      # generate architecture for inno setup
+      if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
+        set(_installer_arch arm64)
+      else()
+        set(_installer_arch x64compatible)
+      endif()
+      message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\".  Building installer for architecture identifier \"${_installer_arch}\".")
       add_custom_target(package_app
                         # deploy to a clean directory as different build systems create differently named debris in release.
                         COMMAND ${CMAKE_COMMAND} -E remove_directory package
@@ -237,9 +252,9 @@ else()
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabelfe> package
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> package
                         # use --plugindir option to locate the plugins.
-                        COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe
+                        COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe ${_qtpaths_option}
                         # set location to location of generated setup.iss file.
-                        COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} setup.iss
+                        COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} /Darch=${_installer_arch} setup.iss
                         DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                         VERBATIM
                         USES_TERMINAL)
