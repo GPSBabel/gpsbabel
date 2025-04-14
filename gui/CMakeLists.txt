@@ -236,16 +236,15 @@ else()
         get_filename_component(_qt_target_bin_dir ${_qt_toolchain_dir}/../../../bin ABSOLUTE)
         file(TO_NATIVE_PATH "${_qt_target_bin_dir}/qtpaths.bat" _qtpaths_file)
         set(_qtpaths_option --qtpaths "${_qtpaths_file}")
-        message(STATUS "_qtpaths_option: \"${_qtpaths_option}\"")
+        message(STATUS "Deploying with target qtpaths \"${_qtpaths_file}\".")
       endif()
-      message(STATUS "sys arch ${CMAKE_SYSTEM_PROCESSOR}")
       # generate architecture for inno setup
       if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
         set(_installer_arch arm64)
       else()
         set(_installer_arch x64compatible)
       endif()
-      message(STATUS "installer arch ${_installer_arch}")
+      message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${sys_arch}\".  Building installer for architecture identifier \"${_installer_arch}\".")
       add_custom_target(package_app
                         # deploy to a clean directory as different build systems create differently named debris in release.
                         COMMAND ${CMAKE_COMMAND} -E remove_directory package
