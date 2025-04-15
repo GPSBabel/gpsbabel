@@ -162,3 +162,32 @@ jobs:
           bld/gui/GPSBabel-*-Setup-*.exe
           bld/gui/GPSBabel-*-Manifest-*.txt
         retention-days: 7
+
+  test_installer:
+    name: 'Test Installer'
+    needs: windows
+    runs-on: windows-11-arm64
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: 'Download Artifacts'
+      uses: actions/download-artifact@v3
+      with:
+        name: Windows_Installer 6.8.3,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
+
+   - name: 'Install Artifact'
+     shell: bash
+     run: |
+       ls
+       mkdir bld
+       installer=$(ls "GPSBabel-*-*-Setup-arm64.exe")
+       ./${installer} /SILENT /DIR=bld
+
+   - name: 'Test Artifact'
+      shell: bash
+      run: |
+        PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+
