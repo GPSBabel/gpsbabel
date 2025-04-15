@@ -174,14 +174,18 @@ jobs:
 
     - name: 'Download Artifacts'
       uses: actions/download-artifact@v4
+      with:
+        path: bld
+        pattern: GPSBabel-*-*-Setup-arm64.exe
+        merge-multiple: true
 
     - name: 'Install Artifact'
       shell: bash
       run: |
         ls
-        mkdir bld
-        installer=$(ls "GPSBabel-*-*-Setup-arm64.exe")
-        ./${installer} /SILENT /DIR=bld
+        ls bld
+        installer=$(ls "bld/GPSBabel-*-*-Setup-arm64.exe")
+        "./${installer}" /SILENT /DIR=bld
 
     - name: 'Test Artifact'
       shell: bash
