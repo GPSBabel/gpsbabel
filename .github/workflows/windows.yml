@@ -183,16 +183,16 @@ jobs:
       shell: powershell
       run: |
         $install_path=Join-Path $(Get-Location) bld
-        .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /DIR="${install_path}" /LOG=bld\log.txt
-        Start-Sleep -Seconds 30
-        dir bld
+        .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=bld\log.txt
+        Start-Sleep -Seconds 60
+        Get-ChildItem bld
 
     - name: 'Test Artifact'
       shell: bash
       run: |
         PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
-        ls bld
+        ls -l bld
 
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v4
