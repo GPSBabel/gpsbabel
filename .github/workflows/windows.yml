@@ -157,7 +157,7 @@ jobs:
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v4
       with:
-        name: Windows_Installer ${{ join(matrix.*) }}
+        name: Windows_Installer-${{ join(matrix.*) }}
         path: |
           bld/gui/GPSBabel-*-Setup-*.exe
           bld/gui/GPSBabel-*-Manifest-*.txt
@@ -176,7 +176,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         path: bld
-        pattern: GPSBabel-*-*-Setup-arm64.exe
+        pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
         merge-multiple: true
 
     - name: 'Install Artifact'
