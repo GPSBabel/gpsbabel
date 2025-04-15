@@ -184,7 +184,7 @@ jobs:
       run: |
         ls
         ls bld
-        installer=$(ls "bld/GPSBabel-*-*-Setup-arm64.exe")
+        installer=$(ls bld/GPSBabel-*-*-Setup-arm64.exe)
         "./${installer}" /SILENT /DIR=bld
 
     - name: 'Test Artifact'
