@@ -177,15 +177,15 @@ jobs:
       with:
         name: Windows_Installer 6.8.3,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
 
-   - name: 'Install Artifact'
-     shell: bash
-     run: |
-       ls
-       mkdir bld
-       installer=$(ls "GPSBabel-*-*-Setup-arm64.exe")
-       ./${installer} /SILENT /DIR=bld
+    - name: 'Install Artifact'
+      shell: bash
+      run: |
+        ls
+        mkdir bld
+        installer=$(ls "GPSBabel-*-*-Setup-arm64.exe")
+        ./${installer} /SILENT /DIR=bld
 
-   - name: 'Test Artifact'
+    - name: 'Test Artifact'
       shell: bash
       run: |
         PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
