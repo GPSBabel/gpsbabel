@@ -166,7 +166,7 @@ jobs:
   test_installer:
     name: 'Test Installer'
     needs: windows
-    runs-on: windows-11-arm64
+    runs-on: windows-11-arm
 
     steps:
     - name: Checkout repository
