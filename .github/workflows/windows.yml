@@ -183,7 +183,7 @@ jobs:
       shell: powershell
       run: |
         $install_path=Join-Path $(Get-Location) bld
-        .\bld\GPSBabel-*-Setup-arm64.exe /SILENT /DIR="${install_path}"
+        .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /DIR="${install_path}"
 
     - name: 'Test Artifact'
       shell: bash
