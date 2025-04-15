@@ -182,8 +182,8 @@ jobs:
     - name: 'Install Artifact'
       shell: powershell
       run: |
-        $install_path=Join-Path $PWD bld
-        .\bld\GPSBabel-*-Setup-arm64.exe /SILENT /DIR=$install_path
+        $install_path=Join-Path $(Get-Location) bld
+        .\bld\GPSBabel-*-Setup-arm64.exe /SILENT /DIR="${install_path}"
 
     - name: 'Test Artifact'
       shell: bash
