@@ -184,6 +184,8 @@ jobs:
       run: |
         $install_path=Join-Path $(Get-Location) bld
         .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /DIR="${install_path}"
+        Start-Sleep -Seconds 30
+        dir bld
 
     - name: 'Test Artifact'
       shell: bash
