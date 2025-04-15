@@ -55,6 +55,7 @@ Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 Source: "{#output_dir}\package\*"; Excludes: "vc_redist.*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#output_dir}\package\vc_redist.x86.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
 Source: "{#output_dir}\package\vc_redist.x64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
+Source: "{#output_dir}\package\vc_redist.arm64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
 Source: "{#output_dir}\package\gpsbabel.exe";   	DestDir: "{app}"; Flags: ignoreversion
 ; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
@@ -83,6 +84,7 @@ Name: "{commondesktop}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"; Tasks: deskt
 [Run]
 Filename: "{app}\vc_redist.x86.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
 Filename: "{app}\vc_redist.x64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
+Filename: "{app}\vc_redist.arm64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
 Filename: "{app}\gpsbabelfe.exe"; Description: "{cm:LaunchProgram,GPSBabelFE}"; Flags: nowait postinstall skipifsilent
 
 [Registry]
