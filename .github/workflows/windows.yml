@@ -180,12 +180,10 @@ jobs:
         merge-multiple: true
 
     - name: 'Install Artifact'
-      shell: bash
+      shell: powershell
       run: |
-        ls
-        ls bld
-        installer=$(ls bld/GPSBabel-*-*-Setup-arm64.exe)
-        "./${installer}" /SILENT /DIR=bld
+        $install_path=Join-Path $PWD bld
+        .\bld\GPSBabel-*-Setup-arm64.exe /SILENT /DIR=$install_path
 
     - name: 'Test Artifact'
       shell: bash
