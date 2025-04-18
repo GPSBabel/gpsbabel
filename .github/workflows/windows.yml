@@ -106,7 +106,7 @@ jobs:
       run: choco install innosetup 
 
     - name: Build
-      shell: powershell
+      shell: pwsh
       run: |
         if ([string]::IsNullOrEmpty("${{  matrix.CROSS_COMPILER }}")) {
           .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
@@ -118,7 +118,7 @@ jobs:
           $hash["target_arch"] = "${{ matrix.TARGET_ARCH }}"
           $hash["compiler"] = "${{ matrix.COMPILER }}"
           $hash["cross_compiler"] = "${{ matrix.CROSS_COMPILER }}"
-          .\tools\ci_windows_cross_compile @hash
+          .\tools\ci_windows_cross_compile.ps1 @hash
         }
 
     - name: Rename
@@ -181,7 +181,7 @@ jobs:
         merge-multiple: true
 
     - name: 'Install Artifact'
-      shell: powershell
+      shell: pwsh
       run: |
         $install_path=Join-Path $(Get-Location) bld
         .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=bld\log.txt
