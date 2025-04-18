@@ -134,7 +134,6 @@ jobs:
       shell: bash
       if: matrix.CROSS_COMPILER == ''
       run: |
-        # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
