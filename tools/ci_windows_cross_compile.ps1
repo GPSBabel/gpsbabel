@@ -1,4 +1,4 @@
-Param(
+param(
     $build_dir_name = "bld",
     $qt_root_dir = "C:/Qt/6.8.3",
     $host_arch = "amd64",
