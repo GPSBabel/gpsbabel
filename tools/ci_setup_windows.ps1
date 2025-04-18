@@ -6,7 +6,7 @@
 # see https://github.com/actions/virtual-environments/issues/294
 # and https://github.com/microsoft/vswhere/wiki/Start-Developer-Command-Prompt
 
-Param(
+param(
     [string] $qtdir = "C:\Qt\6.5.3\msvc2019_64",
     [ValidateSet("x86", "amd64")][string] $arch = "amd64",
     [ValidateSet("x86", "amd64")][string] $host_arch = "amd64",
