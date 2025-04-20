@@ -147,83 +147,88 @@ Questo programma &amp;egrave; software libero; è possibile distribuirlo e/o mod
     </message>
     <message>
         <location filename="advui.ui" line="30"/>
+        <source>Enable this is the File Menu, Preferences Item, Privacy tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="advui.ui" line="33"/>
         <source>Preview in Google Maps</source>
         <translation>Anteprima in Google Maps</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="39"/>
+        <location filename="advui.ui" line="42"/>
         <source>Debugging diagnostics.  
 Higher number provides more detailed diagnostics.</source>
         <translation>Diagnosi di debug.  
 Un numero più alto fornisce un livello di diagnosi più dettagliato.</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="44"/>
+        <location filename="advui.ui" line="47"/>
         <source>None</source>
         <translation>Nessuno</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="49"/>
+        <location filename="advui.ui" line="52"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="54"/>
+        <location filename="advui.ui" line="57"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="59"/>
+        <location filename="advui.ui" line="62"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="64"/>
+        <location filename="advui.ui" line="67"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="69"/>
+        <location filename="advui.ui" line="72"/>
         <source>4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="74"/>
+        <location filename="advui.ui" line="77"/>
         <source>5</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="79"/>
+        <location filename="advui.ui" line="82"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="84"/>
+        <location filename="advui.ui" line="87"/>
         <source>7</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="89"/>
+        <location filename="advui.ui" line="92"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="94"/>
+        <location filename="advui.ui" line="97"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="102"/>
+        <location filename="advui.ui" line="105"/>
         <source>Debugging Diagnostics</source>
         <translation>Diagnosi di debug</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="126"/>
+        <location filename="advui.ui" line="129"/>
         <source>Set all format input/output options to default values</source>
         <translation>Imposta tutte le opzioni di origine/destinazione ai valori predefiniti</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="129"/>
+        <location filename="advui.ui" line="132"/>
         <source>Default Format Options</source>
         <translation>Opzioni predefinite dei formati</translation>
     </message>
@@ -236,27 +241,27 @@ Un numero più alto fornisce un livello di diagnosi più dettagliato.</translati
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="52"/>
+        <location filename="donate.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;https://www.gpsbabel.org/contribute.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="78"/>
-        <source>&lt;p&gt;Of course, if you&apos;ve already contributed  to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
+        <location filename="donate.ui" line="69"/>
+        <source>&lt;p&gt;Of course, if you&apos;ve already contributed to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="88"/>
+        <location filename="donate.ui" line="79"/>
         <source>Never show this message again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="123"/>
+        <location filename="donate.ui" line="114"/>
         <source>No, Thanks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="donate.ui" line="130"/>
+        <location filename="donate.ui" line="121"/>
         <source>Contribute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -680,37 +685,42 @@ Un numero più alto fornisce un livello di diagnosi più dettagliato.</translati
         <translation>Aiuto</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="705"/>
+        <location filename="mainwinui.ui" line="708"/>
         <source>GPSBabel Help</source>
         <translation>Aiuto di GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="710"/>
+        <location filename="mainwinui.ui" line="713"/>
         <source>About GPSBabel</source>
         <translation>Informazioni su GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="715"/>
+        <location filename="mainwinui.ui" line="718"/>
         <source>Quit</source>
         <translation>Esci</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="720"/>
+        <location filename="mainwinui.ui" line="723"/>
         <source>Preferences...</source>
         <translation>Preferenze...</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="725"/>
+        <location filename="mainwinui.ui" line="728"/>
         <source>Check for Upgrade</source>
         <translation>Controlla aggiornamenti</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="730"/>
+        <location filename="mainwinui.ui" line="731"/>
+        <source>Enable this is the File Menu, Preferences Item, Privacy tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwinui.ui" line="736"/>
         <source>Visit Website...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="735"/>
+        <location filename="mainwinui.ui" line="741"/>
         <source>Make a Donation...</source>
         <translation></translation>
     </message>
@@ -862,12 +872,12 @@ Questo programma non può proseguire.</translation>
         <translation>Informazioni su %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1190"/>
+        <location filename="mainwindow.cc" line="1193"/>
         <source>One or more data filters are active</source>
         <translation>È attivo uno o più filtri di dati</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1192"/>
+        <location filename="mainwindow.cc" line="1195"/>
         <source>No data filters are active</source>
         <translation>Nessun filtro di dati è attivo</translation>
     </message>
@@ -1058,37 +1068,72 @@ Qualche formato di dati del GPS supporta solo un sottoinsieme di punti di intere
         <translation>Generali</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="45"/>
+        <location filename="preferences.ui" line="66"/>
         <source>Check for newer version on start.</source>
         <translation>Verifica nuove versioni all&apos;avvio.</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="52"/>
+        <location filename="preferences.ui" line="76"/>
         <source>Anonymously report usage data.</source>
         <translation>Trasmetti informazioni anonime sull&apos;utilizzo.</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="59"/>
+        <location filename="preferences.ui" line="36"/>
         <source>Ignore mismatch between command line and GUI version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="68"/>
+        <location filename="preferences.ui" line="57"/>
+        <source>Privacy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="63"/>
+        <source>&lt;html&gt;The check transmits information about your installation and computer environment, such as the Installation ID, GPSBabel GUI and CLI versions, CPU architecture, operating system name and version, and language, to gpsbabel.org. This never includes any data from user files or devices.&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="73"/>
+        <source>&lt;html&gt;Anonymous usage data is sent to gpsbabel.org. This helps the developers at gpsbabel.org understand what features of the program are being used. This never includes any data from user files or devices.&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="83"/>
+        <source>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="86"/>
+        <source>Enable upgrade check menu item.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="93"/>
+        <source>&lt;html&gt;When selected, this feature uses the Google Maps API(s) per &lt;a href=&quot;http://www.google.com/intl/en/policies/terms&quot;&gt;Google’s Terms of Service&lt;/a&gt; and the &lt;a href=&quot;http://www.google.com/policies/privacy&quot;&gt;Google Privacy Policy&lt;/a&gt;.&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="96"/>
+        <source>Enable map preview feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="117"/>
         <source>Formats</source>
         <translation>Formati</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="76"/>
+        <location filename="preferences.ui" line="125"/>
         <source>Enabled Formats</source>
         <translation>Formati abilitati</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="100"/>
+        <location filename="preferences.ui" line="149"/>
         <source>Enable All</source>
         <translation>Abilita tutti</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="107"/>
+        <location filename="preferences.ui" line="156"/>
         <source>Disable All</source>
         <translation>Disabilita tutti</translation>
     </message>
@@ -1189,12 +1234,17 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="rttrkui.ui" line="52"/>
-        <source> The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
+        <source>The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
 
 The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
 
-The quality of the results will vary depending on the density of points in the original route and the length of the original route. </source>
-        <translation> Il filtro di semplificazione viene usato per semplificare rotte e tracce per l&apos;uso con formati che supportano un limitato numero di punti o semplicemente per ridurre la complessità di una rotta.
+The quality of the results will vary depending on the density of points in the original route and the length of the original route.</source>
+        <oldsource> The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
+
+The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
+
+The quality of the results will vary depending on the density of points in the original route and the length of the original route. </oldsource>
+        <translation type="unfinished"> Il filtro di semplificazione viene usato per semplificare rotte e tracce per l&apos;uso con formati che supportano un limitato numero di punti o semplicemente per ridurre la complessità di una rotta.
 
 Il filtro prova a rimuovere i punti da ogni rotta finché il numero di punti o l&apos;errore ricade entro i limiti forniti, cercando nel contempo di mantenere per quanto possibile la forma della rotta originale.
 
@@ -1227,9 +1277,11 @@ La qualità dei risultati dipenderà dalla densità dei punti e dalla lunghezza 
     </message>
     <message>
         <location filename="rttrkui.ui" line="124"/>
-        <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
-Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </source>
-        <translation>L&apos;inversione è effettuata nel modo più pigro possibile. Date ed ore sono mantenute con i punti di interesse originali in modo che la traccia o rotta risultante avrà la caratteristica interessante che il tempo scorre all&apos;indietro. Questo comporta, in particolare, che Magellan MapSend si comporti in modo strano e inserisca ogni punti di interesse in un giorno diverso.
+        <source>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints, so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day.
+Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for an unpleasant ride. Applications care about timestamps.</source>
+        <oldsource>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
+Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </oldsource>
+        <translation type="unfinished">L&apos;inversione è effettuata nel modo più pigro possibile. Date ed ore sono mantenute con i punti di interesse originali in modo che la traccia o rotta risultante avrà la caratteristica interessante che il tempo scorre all&apos;indietro. Questo comporta, in particolare, che Magellan MapSend si comporti in modo strano e inserisca ogni punti di interesse in un giorno diverso.
 Inoltre, se stai usando questa operazione per invertire una rotta che percorre, ad esempio, una rampa di uscita o una strada a senso unico, potrai incappare in un giro poco piacevoli. L&apos;applicazione si preoccupa di data e ora</translation>
     </message>
     <message>
@@ -1606,57 +1658,56 @@ Questa opzione calcola (o ricalcola) un valore per la direzione del GPS in ogni 
 <context>
     <name>Upgrade</name>
     <message>
-        <location filename="upgrade.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialogo</translation>
+        <translation type="vanished">Dialogo</translation>
     </message>
 </context>
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cc" line="214"/>
-        <location filename="upgrade.cc" line="218"/>
-        <location filename="upgrade.cc" line="252"/>
+        <location filename="upgrade.cc" line="213"/>
+        <location filename="upgrade.cc" line="217"/>
+        <location filename="upgrade.cc" line="233"/>
         <source>HTTP</source>
         <translation>HTTP</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="215"/>
+        <location filename="upgrade.cc" line="214"/>
         <source>Unexpected reply.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="219"/>
+        <location filename="upgrade.cc" line="218"/>
         <source>Download failed: %1.</source>
         <translation>Scaricamento non riuscito: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="253"/>
+        <location filename="upgrade.cc" line="234"/>
         <source>Download failed: %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="275"/>
+        <location filename="upgrade.cc" line="256"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="276"/>
+        <location filename="upgrade.cc" line="257"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Dati ricevuti non validi alla linea %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="318"/>
+        <location filename="upgrade.cc" line="299"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>È disponibile una nuova versione di GPSBabel.&lt;br /&gt;Versione corrente: %1 &lt;br /&gt;Nuova versione: %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="328"/>
+        <location filename="upgrade.cc" line="309"/>
         <source>Upgrade</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="335"/>
+        <location filename="upgrade.cc" line="316"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>Si desidera scaricare un aggiornamento?</translation>
     </message>
