@@ -11,7 +11,7 @@ param(
     $build_dir_name = "bld",
     $generator = "Ninja",
     $toolset = "",
-    [ValidateSet("x86", "amd64", "amd64_x86", "x86_amd64")] $arch = "amd64"
+    [ValidateSet("x86", "amd64", "amd64_x86", "x86_amd64", "arm64")] $arch = "amd64"
 )
 # the arch parameter values correspond to:
 # vcvarsall arch parameter x86 => host x86, target x86.
@@ -33,6 +33,7 @@ switch ($arch) {
     "amd64" { $platform = "x64" }
     "amd64_x86" { $platform = "Win32" }
     "x86_amd64" { $platform = "x64" }
+    "arm64" { $platform = "ARM64" }
 }
 # make sure we are staring with a clean build directory
 Remove-Item $build_dir -Recurse -ErrorAction Ignore

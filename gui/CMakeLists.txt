@@ -239,12 +239,16 @@ else()
         message(STATUS "Deploying with target qtpaths \"${_qtpaths_file}\".")
       endif()
       # generate architecture for inno setup
-      if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "ARM64")
+      # don't trust CMAKE_SYSTEM_PROCESSOR https://gitlab.kitware.com/cmake/cmake/-/issues/15170#note_891234
+      if(CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "arm64" OR CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64")
         set(_installer_arch arm64)
       else()
         set(_installer_arch x64compatible)
       endif()
-      message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\".  Building installer for architecture identifier \"${_installer_arch}\".")
+      message(STATUS "PROCESSOR_ARCHITECTURE is \"$ENV{PROCESSOR_ARCHITECTURE}\".")
+      message(STATUS "CMAKE_HOST_SYSTEM_PROCESSOR is \"${CMAKE_HOST_SYSTEM_PROCESSOR}\".")
+      message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\".")
+      message(STATUS "CMAKE_CXX_COMPILER_ARCHITECTURE_ID is \"${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}\".  Building installer for architecture identifier \"${_installer_arch}\".")
       add_custom_target(package_app
                         # deploy to a clean directory as different build systems create differently named debris in release.
                         COMMAND ${CMAKE_COMMAND} -E remove_directory package

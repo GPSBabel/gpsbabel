@@ -71,6 +71,14 @@ jobs:
             METHOD: 'aqt'
             RELEASE: true
             os: windows-2025
+          - QT_VERSION: '6.8.3'
+            ARCH: 'arm64'
+            HOST_ARCH: 'arm64'
+            COMPILER: 'msvc2022_arm64'
+            METHOD: 'aqt'
+            RELEASE: false
+            GENERATOR: 'Ninja'
+            os: windows-11-arm
 
     steps:
     - name: Checkout repository
@@ -84,10 +92,13 @@ jobs:
         key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILER }}-${{ secrets.CACHE_VERSION }}
 
     - name: Install Qt setup(aqt)
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: ( steps.cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
       uses: actions/setup-python@v5
+      # aqt depends on pyppmd, which isn't supported on WoA as of pyppmd 1.1.1
+      # force x64 python, which will run under emulation of WoA.
       with:
         python-version: '3.12'
+        architecture: x64
 
     - name: Install Qt
       if: steps.cache.outputs.cache-hit != 'true'
