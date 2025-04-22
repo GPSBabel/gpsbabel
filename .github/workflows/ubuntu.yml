@@ -81,6 +81,7 @@ jobs:
           export CXX
         fi
         "${JOB_SCRIPT}"
+        readelf -h gpsbabel
 
   coverage:
     name: coverage Build
