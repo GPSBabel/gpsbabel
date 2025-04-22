@@ -51,7 +51,7 @@ jobs:
             SCRIPT: './tools/build_extra_tests.sh'
             os: ubuntu-latest
           - IMAGE: 'noble'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            CMAKE_PREFIX_PATH: '/usr/lib/aarch64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             os: ubuntu-24.04-arm
     container:
