@@ -6,10 +6,10 @@
 # see https://github.com/actions/virtual-environments/issues/294
 # and https://github.com/microsoft/vswhere/wiki/Start-Developer-Command-Prompt
 
-Param(
+param(
     [string] $qtdir = "C:\Qt\6.5.3\msvc2019_64",
-    [ValidateSet("x86", "amd64")][string] $arch = "amd64",
-    [ValidateSet("x86", "amd64")][string] $host_arch = "amd64",
+    [ValidateSet("x86", "amd64", "arm64")][string] $arch = "amd64",
+    [ValidateSet("x86", "amd64", "arm64")][string] $host_arch = "amd64",
     [string] $vcversion
 )
 
@@ -46,7 +46,9 @@ function Invoke-VSDevEnvironment($arch, $host_arch, $vcversion) {
 
 $ErrorActionPreference = "Stop"
 
-Invoke-QtEnvironment $qtdir
+# qtenv2.bat is not created with aqt 3.2.0 on WoA -  https://github.com/miurahr/aqtinstall/pull/914
+#Invoke-QtEnvironment $qtdir
+[System.Environment]::SetEnvironmentVariable("Path", $(Join-Path "$qtdir" bin -Resolve) + ";" + $([System.Environment]::GetEnvironmentVariable("Path")))
 # verify qmake can be found.
 Get-Command qmake.exe | Format-Table -AutoSize -Wrap
 

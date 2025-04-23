@@ -72,6 +72,8 @@ private:
   gpsbabel::File* ifd{nullptr};
   gpsbabel::File* ofd{nullptr};
   OptionBool compact_opt;
+  OptionString name_opt;
+  OptionString desc_opt;
   QJsonObject* track_object = nullptr;
   QJsonArray* track_coords = nullptr;
 
@@ -88,15 +90,21 @@ private:
   const QString COORDINATES = QStringLiteral("coordinates");
   const QString GEOMETRY = QStringLiteral("geometry");
   const QString PROPERTIES = QStringLiteral("properties");
-  const QString NAME = QStringLiteral("name");
-  const QString DESCRIPTION = QStringLiteral("description");
   const QString URL = QStringLiteral("url");
   const QString URLNAME = QStringLiteral("urlname");
 
   QVector<arglist_t> geojson_args = {
     {
-      "compact", &compact_opt, "Compact Output. Default is off.",
+      "compact", &compact_opt, "Compact Output. Default is off",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "name", &name_opt, "Property key to use for name",
+      "name", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
+    {
+      "desc", &desc_opt, "Property key to use for description",
+      "description", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
   };
 
