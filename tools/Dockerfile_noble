@@ -90,7 +90,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends ubuntu-dbgsym-k
 
 # pkgs needed to generate coverage report:
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcovr \
+    lcov \
  && rm -rf /var/lib/apt/lists/*
 
 # install environment for locale test
