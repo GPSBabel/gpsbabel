@@ -36,9 +36,9 @@ jobs:
             COMPILER: 'msvc2019_64'
             TOOLSET: 'v142,version=14.29.30133'
             METHOD: 'aqt'
-            GENERATOR: 'Visual Studio 16 2019'
+            GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
-            os: windows-2019
+            os: windows-2022
           - QT_VERSION: '6.2.4'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
@@ -115,6 +115,10 @@ jobs:
     - name: Install Inno Setup
       if: matrix.os == 'windows-2025'
       run: choco install innosetup 
+
+    - name: Install legacy microsoft compiler
+      if: matrix.TOOLSET == 'v142,version=14.29.30133'
+      run: choco install visualstudio2022buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.14.29.16.11.CLI.Support"
 
     - name: Build
       shell: pwsh
