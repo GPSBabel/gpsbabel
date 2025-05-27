@@ -20,8 +20,6 @@ apps:
       - raw-usb
       - removable-media
       - serial-port
-    command-chain:
-      - bin/gpu-2404-wrapper
     command: usr/bin/gpsbabel
   gpsbabelfe:
 #   avoid issues with fonts replaced by empty squares
@@ -40,19 +38,14 @@ apps:
       - x11
     command-chain:
       - usr/bin/gpsbabelfe.sh
-      - bin/gpu-2404-wrapper
     command: usr/bin/gpsbabelfe
     environment:
 #      QT_DEBUG_PLUGINS: 1
 #     bug https://forum.snapcraft.io/t/libpxbackend-1-0-so-cannot-open-shared-object-file-no-such-file-or-directory/44263
 #     error while loading shared libraries: libpxbackend-1.0.so: cannot open shared object file: No such file or directory
-      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy
 
 plugs:
-  gpu-2404:
-    interface: content
-    target: $SNAP/gpu-2404
-    default-provider: mesa-2404
 # avoid FATAL:credentials.cc(122)] Check failed: . : Permission denied (13) with map preview
 # requires manual connection
   browser-sandbox: # gpsbabelfe
@@ -67,14 +60,12 @@ layout:
     symlink: $SNAP/usr/lib/qt6
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6:
     symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6
-# per https://mir-server.io/docs/the-gpu-2404-snap-interface
-  /usr/share/X11/XErrorDB:
-    symlink: $SNAP/gpu-2404/X11/XErrorDB
 # XKB_CONFIG_ROOT, QT_XKB_CONFIG_ROOT not enough to prevent "xkbcommon: ERROR: Couldn't find file "rules/evdev" in include paths"
 # to overcome this symlink /usr/share/X11/xkb
 # see https://bugreports.qt.io/browse/QTBUG-105124
+# supposedly fixed in Qt 6.5.
   /usr/share/X11/xkb:
-    symlink: $SNAP/usr/share/X11/xkb
+    symlink: $SNAP/gnome-platform/usr/share/X11/xkb
 
 adopt-info: gpsbabel
 parts:
@@ -134,10 +125,6 @@ parts:
       - qt6-translations-l10n
       - qt6-qpa-plugins
       - qt6-wayland
-#       XKB_CONFIG_ROOT, QT_XKB_CONFIG_ROOT not enough to prevent "xkbcommon: ERROR: Couldn't find file "rules/evdev" in include paths"
-#       we did a layout above, but we still have to supply the rules/evdev in the snap
-#       see https://bugreports.qt.io/browse/QTBUG-105124
-      - xkb-data
 
   gpu-2404:
     after: [gpsbabel]
@@ -149,15 +136,17 @@ parts:
     prime:
       - bin/gpu-2404-wrapper
 
-lint:
-  ignore:
-    - library:
-#       these are all required by libqt6webenginecore6
-      - usr/lib/x86_64-linux-gnu/libexslt.so.*
-      - usr/lib/x86_64-linux-gnu/libfreebl3.so
-      - usr/lib/x86_64-linux-gnu/libfreeblpriv3.so
-      - usr/lib/x86_64-linux-gnu/libnssckbi.so
-      - usr/lib/x86_64-linux-gnu/libnssdbm3.so
-      - usr/lib/x86_64-linux-gnu/libsmime3.so
-      - usr/lib/x86_64-linux-gnu/libsoftokn3.so
-      - usr/lib/x86_64-linux-gnu/libssl3.so
+  cleanup:
+    after:
+      - gpsbabel
+      - gpu-2404
+    plugin: nil
+    build-snaps:  # List all content-snaps and base snaps you're using here
+      - core24
+      - gnome-46-2404 
+      - mesa-2404 
+    override-prime: |
+      set -eux
+      for snap in "core24" "gnome-46-2404" "mesa-2404"; do  # List all content-snaps and base snaps you're using here
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
+      done

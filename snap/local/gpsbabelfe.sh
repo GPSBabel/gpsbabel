@@ -2,6 +2,9 @@
 
 # avoid warning message:
 # Qt: Session management error: Could not open network socket
+# also can be fixed with viruscamp's wslg-runtime-dir.service.
+# Supposedly fixed in WSL 2.5.1.
+
 export -n SESSION_MANAGER
 
 if [ -n "$XDG_RUNTIME_DIR" ]; then
