@@ -156,6 +156,6 @@ lint:
   ignore:
     - library:
 #     these are all required by libQt6WebEngineCore.so.6.4.2
-      - usr/lib/x86_64-linux-gnu/libharfbuzz-subset.so.0.*
-      - usr/lib/x86_64-linux-gnu/libharfbuzz.so.0.*
-      - usr/lib/x86_64-linux-gnu/libpsl.so.5.*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz-subset.so.0.*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz.so.0.*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libpsl.so.5.*
