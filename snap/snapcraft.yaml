@@ -15,6 +15,7 @@ confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
   gpsbabel:
+    extensions: [gnome]
     plugs:
       - home
       - raw-usb
