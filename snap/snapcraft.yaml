@@ -151,3 +151,11 @@ parts:
       for snap in "core24" "gnome-46-2404" "mesa-2404"; do  # List all content-snaps and base snaps you're using here
           cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
+
+lint:
+  ignore:
+    - library:
+#     these are all required by libQt6WebEngineCore.so.6.4.2
+      - usr/lib/x86_64-linux-gnu/libharfbuzz-subset.so.0.*
+      - usr/lib/x86_64-linux-gnu/libharfbuzz.so.0.*
+      - usr/lib/x86_64-linux-gnu/libpsl.so.5.*
