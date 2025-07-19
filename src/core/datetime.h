@@ -94,7 +94,7 @@ public:
     if ((secs_since_epoch < 0) || (secs_since_epoch >= UINT32_MAX)) {
       return UINT32_MAX;
     }
-    return secs_since_epoch;
+    return (uint32_t)secs_since_epoch;
   }
 };
 
