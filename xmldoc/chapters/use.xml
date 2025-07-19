@@ -1,12 +1,15 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Usage">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="Usage">
   <title>Usage</title>
   <section xml:id="Invocation">
     <title>Invocation</title>
-  <para>If you're using GPSBabel, you will need to know how to do
+   <para>
+        If you're using GPSBabel, you will need to know how to do
         at least two things: read data from a file, and write it
         to another file.  There are four basic options you need
         to know to do those things:
    </para>
+
    <note>
       <para>
         <emphasis role="strong">For Most Users:</emphasis> If you prefer
@@ -20,6 +23,7 @@
         GPSBabel.
       </para>
     </note>
+
     <segmentedlist>
       <?dbhtml list-presentation="table"?>
       <segtitle>Command</segtitle>
@@ -444,8 +448,8 @@ merged data to multiple destinations.
       <filename>gpsbabel.ini</filename>
       containing preferences you have provided.  This option lets you pick a different file.  See
       <xref linkend="inifile"/>
-      for more info.</para>
-    <para>
+      for more info.
+    </para>
     <para>
       <option>-s</option> Write "smart" names. This option influences
       some - but not all - of our writers to try to build "smart"
@@ -467,7 +471,7 @@ merged data to multiple destinations.
           behavior breaking internal linkages.
         </para>
       </note>
-    <para>
+
       <option>-r</option> Work on routes. This option primarily tells
       GPSBabel to process routes. In most modern file-to-file
       conversions, GPSBabel attempts to process all available data
@@ -480,11 +484,14 @@ merged data to multiple destinations.
       formats that require these flags (such as
       <link linkend="fmt_garmin">garmin</link> for tracks/routes).
     </para>
-      <option>-t</option> Work on tracks.  See
-      <option>-r</option> for usage.</para>
     <para>
-      <option>-w</option> Work on waypoints. This is the default. See
-      <option>-r</option> for usage.
+      <option>-t</option> Work on tracks.  See <option>-r</option>
+              for usage.
+    </para>
+    <para>
+      <option>-w</option> Work on waypoints. This is the default.
+              See <option>-r</option> for usage.
+    </para>
     <para>
       <option>-T</option> Enable Realtime tracking. This option isn't supported by the majority of our file formats, but repeatedly reads location from a GPS and writes it to a file as described in
       <xref linkend="tracking"/></para>
@@ -499,6 +506,7 @@ merged data to multiple destinations.
       <option>-h</option>,
       <option>-?</option> Print help. </para>
     <para>
-      <option>-V</option> Print version number. </para>
+      <option>-V</option> Print version number.
+    </para>
   </section>
 </chapter>
