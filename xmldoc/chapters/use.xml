@@ -2,10 +2,24 @@
   <title>Usage</title>
   <section xml:id="Invocation">
     <title>Invocation</title>
-    <para>If you're using GPSBabel, you will need to know how to do at least two things:
-read data from a file, and write it to another file.  There are four basic
-options you need to know to do those things:
-</para>
+  <para>If you're using GPSBabel, you will need to know how to do
+        at least two things: read data from a file, and write it
+        to another file.  There are four basic options you need
+        to know to do those things:
+   </para>
+   <note>
+      <para>
+        <emphasis role="strong">For Most Users:</emphasis> If you prefer
+        a visual interface over command-line arguments, GPSBabel also
+        provides a user-friendly
+        <link xlink:href="https://www.gpsbabel.org/gui/">Graphical User
+        Interface (GUI)</link> for Windows, macOS, and Linux. The GUI
+        simplifies common tasks like converting file formats and
+        applying basic filters without needing to memorize commands.
+        Most users find the GUI the easiest way to get started with
+        GPSBabel.
+      </para>
+    </note>
     <segmentedlist>
       <?dbhtml list-presentation="table"?>
       <segtitle>Command</segtitle>
@@ -432,15 +446,45 @@ merged data to multiple destinations.
       <xref linkend="inifile"/>
       for more info.</para>
     <para>
-      <option>-s</option> Write "smart" names.  This option influences some - but not all - of our writers to try to build "smart" waypoint names.   For example, in modules that know about geocaching, it may replace "GC1234" with the actual name of the geocache.</para>
     <para>
-      <option>-r</option> Work on routes.  This option has a subtly different meaning in different cases.  As the very first formats in GPSBabel were for serial GPSes and routes and tracks were large and thus time-consuming to transfer, the default was waypoints only with this option to turn on the extra data.   Some of our file formats use this option to mean "work only on routes, even if you have tracks/waypoints", but we're trying to discourage that behavior and in most cases, consider it a bug. </para>
+      <option>-s</option> Write "smart" names. This option influences
+      some - but not all - of our writers to try to build "smart"
+      waypoint names. For example, in modules that know about
+      geocaching, it may replace "GC1234" with the actual name of
+      the geocache.
+      <note>
+        <para>
+          <emphasis role="strong">Important Note:</emphasis> The use
+          of <option>-s</option> is generally not recommended for
+          modern file-to-file conversions, especially when dealing
+          with tracks or routes. It was primarily useful for older
+          serial GPS devices with very limited display capabilities
+          that needed short, synthesized names. For preserving rich
+          waypoint data or when working with tracks and routes,
+          avoid using this option. As noted in
+          <xref linkend="Route_And_Track_Modes"/>, <option>-s</option>
+          can create havoc on tracks and routes due to its renaming
+          behavior breaking internal linkages.
+        </para>
+      </note>
     <para>
+      <option>-r</option> Work on routes. This option primarily tells
+      GPSBabel to process routes. In most modern file-to-file
+      conversions, GPSBabel attempts to process all available data
+      types (waypoints, tracks, and routes) by default. Therefore,
+      specifying <option>-r</option>, <option>-t</option>, or
+      <option>-w</option> is generally only necessary if you
+      explicitly wish to <emphasis>restrict</emphasis> the data being
+      processed to *only* routes, tracks, or waypoints respectively,
+      or when interacting with older serial devices or specific
+      formats that require these flags (such as
+      <link linkend="fmt_garmin">garmin</link> for tracks/routes).
+    </para>
       <option>-t</option> Work on tracks.  See
-      <option>-r</option>
-      for usage.</para>
+      <option>-r</option> for usage.</para>
     <para>
-      <option>-w</option> Work on waypoints.  This is the default. </para>
+      <option>-w</option> Work on waypoints. This is the default. See
+      <option>-r</option> for usage.
     <para>
       <option>-T</option> Enable Realtime tracking. This option isn't supported by the majority of our file formats, but repeatedly reads location from a GPS and writes it to a file as described in
       <xref linkend="tracking"/></para>
