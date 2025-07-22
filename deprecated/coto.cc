@@ -1,10 +1,10 @@
 /*
     Read and write cotoGPS files.
 
-    Copyright (C) 2005 Tobias Minich,
+    Copyright (C) 2005 Tobias Minich
 
     Based on the Cetus I/O Filter,
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

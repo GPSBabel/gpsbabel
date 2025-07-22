@@ -2,8 +2,8 @@
 
     Reader for Honda/Acura (Alpine) Navigation System VP Log (VPL) files
 
-	Copyright (C) 2009	Chris Tracy, gpsbabel@adiemus.org
-    Copyright (C) 2005  Robert Lipe, robertlipe+source@gpsbabel.org
+	Copyright (C) 2009	Chris Tracy
+    Copyright (C) 2005  Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

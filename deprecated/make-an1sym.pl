@@ -13,7 +13,7 @@
 
       perl make-an1sym.pl <DeLormeStockSymbols.dim >an1sym.h
 
-    Copyright (C) 2005 Ronald L. Parker (babelan1perl@parkrrrr.com) 
+    Copyright (C) 2005 Ronald L. Parker
                    and Robert Lipe
 
     This program is free software; you can redistribute it and/or modify

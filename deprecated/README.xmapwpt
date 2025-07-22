@@ -3,7 +3,7 @@ NOTE: THIS README PERTAINS TO THE "XMAPWPT" FORMAT, NOT THE XMAP/TOPO USA
       4.0 CONDUIT "XMAP" FORMAT.
 
 
-Delorme XMap Handheld .WPT for PocketPC is a bit of a kludge.  This 
+Delorme XMap Handheld .WPT for PocketPC is a bit of a kludge.  This
 document covers XMap Handheld Street Atlas USA edition.
 
 XMap on the PocketPC stores it's waypoints in individual .wpt files.
@@ -13,9 +13,9 @@ by default in the "My Documents" folder using the sequential names
 efficient.
 
 As writing multiple waypoint files is outside of the scope of gpsbabel,
-gpsbabel chooses to write one big file, one waypoint per line.  
-Extracting lines from this file is left as an exercise for the end user.  
-A simple perl script to handle this conversion is included at the end 
+gpsbabel chooses to write one big file, one waypoint per line.
+Extracting lines from this file is left as an exercise for the end user.
+A simple perl script to handle this conversion is included at the end
 of this README.
 
 It should also be noted that READING multiple files is indeed possible,
@@ -29,12 +29,12 @@ for folks like me who have 100+ waypoints loaded into XMap.  For *nix
 folks, something as simple as:
 
 cat *.wpt > /tmp/foo.wpt
-gpsbabel -i xmapwpt -f foo.wpt -o mapsend -F mapsend.wpt 
+gpsbabel -i xmapwpt -f foo.wpt -o mapsend -F mapsend.wpt
 
-will do the trick just fine.  
+will do the trick just fine.
 
 
-############ BEGIN SCRIPT 
+############ BEGIN SCRIPT
 #!/full/path/to/perl
 $INPUTFILE = @ARGV[0];
 $TARGETDIR = @ARGV[1];
