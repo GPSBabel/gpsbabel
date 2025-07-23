@@ -82,9 +82,9 @@ Name: "{group}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"
 Name: "{commondesktop}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\vc_redist.x86.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
-Filename: "{app}\vc_redist.x64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
-Filename: "{app}\vc_redist.arm64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
+Filename: "{app}\vc_redist.x86.exe"; Parameters: "/quiet /norestart"; Flags: skipifdoesntexist
+Filename: "{app}\vc_redist.x64.exe"; Parameters: "/quiet /norestart"; Flags: skipifdoesntexist
+Filename: "{app}\vc_redist.arm64.exe"; Parameters: "/quiet /norestart"; Flags: skipifdoesntexist
 Filename: "{app}\gpsbabelfe.exe"; Description: "{cm:LaunchProgram,GPSBabelFE}"; Flags: nowait postinstall skipifsilent
 
 [Registry]
