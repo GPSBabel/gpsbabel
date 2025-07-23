@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="csv_guide">
+  <title>Choosing the Right CSV Format in GPSBabel</title>
+
+  <note>
+    <para>
+      GPSBabel offers three distinct CSV formats to handle the wide
+      variety of CSV structures you might encounter:
+      <link linkend="fmt_csv">csv</link>,
+      <link linkend="fmt_unicsv">unicsv</link> (Universal CSV), and
+      <link linkend="fmt_xcsv">xcsv</link> (Extended CSV).
+      Understanding their differences and choosing the correct format
+      is crucial for ensuring your GPS data is read and written
+      accurately. This guide will help you make the best selection
+      for your needs.
+    </para>
+  </note>
+
+  <para>
+    CSV (Comma Separated Values) files are one of the most common
+    ways to store tabular data, and they are widely used for GPS
+    waypoints, tracks, and routes.
+  </para>
+
+  <section id="csv_guide_overview_table">
+    <title>Quick Comparison: Which CSV Format to Use?</title>
+    <para>
+      Use the table below to quickly identify the most appropriate
+      CSV format based on the structure of your file:
+    </para>
+    <informaltable frame="all">
+      <tgroup cols="3">
+        <thead>
+          <row>
+            <entry>Your CSV File Characteristics</entry>
+            <entry>Recommended GPSBabel Format</entry>
+            <entry>Key Characteristics &amp; Best Use</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>Has NO header row, and contains exactly three
+            fields per line in the order: Latitude, Longitude, Name.</entry>
+            <entry><link linkend="fmt_csv"><code>csv</code></link></entry>
+            <entry>
+              <para>This is the simplest CSV format, designed for
+              legacy files with a very specific, fixed structure. It
+              does not support additional fields or header rows.</para>
+              <para>Example: <code>40.7128,-74.0060,NYC</code></para>
+            </entry>
+          </row>
+          <row>
+            <entry>Has a HEADER row (e.g., "Latitude,Longitude,Name",
+            "lat,lon", "Waypoint Name,Lat,Lon"), and contains common
+            GPS field names.</entry>
+            <entry><link linkend="fmt_unicsv"><code>unicsv</code></link></entry>
+            <entry>
+              <para>
+                **Recommended for most users.** <code>unicsv</code>
+                intelligently examines the header row to automatically
+                determine field order and data types. It can read many
+                common GPS fields and preserves additional data during
+                write operations.
+              </para>
+              <para>
+                Use this format when you want GPSBabel to automatically
+                figure out the CSV structure for you.
+              </para>
+              <para>Example: <code>Name,Lat,Lon,Description<br/>
+                Home,34.000,-118.000,My House</code></para>
+            </entry>
+          </row>
+          <row>
+            <entry>
+              Has a custom or unusual structure (e.g., no headers,
+              non-standard field names, unique separators,
+              prologue/epilogue lines, many custom data fields).
+            </entry>
+            <entry><link linkend="fmt_xcsv"><code>xcsv</code></link></entry>
+            <entry>
+              <para>
+                For advanced users. <code>xcsv</code> requires you to
+                define a specific "style file" that precisely
+                describes your CSV's structure and how its fields map
+                to GPSBabel's internal data model. This provides
+                ultimate control but requires upfront definition.
+              </para>
+              <para>
+                <code>xcsv</code> is internally used by GPSBabel for
+                many other formats where a structured, custom
+                text-based output is needed (see the
+                <filename>style</filename> directory in the GPSBabel
+                source code for examples).
+              </para>
+            </entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </section>
+
+  <section id="csv_guide_detailed_unicsv">
+    <title>Understanding Universal CSV (<link linkend="fmt_unicsv">
+      <code>unicsv</code></link>)</title>
+    <para>
+      Since <code>unicsv</code> is the most commonly recommended CSV
+      format for general use, it's worth understanding its capabilities
+      a bit more.
+    </para>
+    <para>
+      When reading, <code>unicsv</code> attempts to identify common
+      field names (e.g., "latitude", "lat", "lon", "longitude",
+      "name", "desc", "elevation", "time") in the first row. It also
+      tries to determine the field separator (comma, semicolon, tab,
+      etc.) automatically. Any fields it doesn't recognize are generally
+      preserved as additional attributes when writing to another format
+      that supports them (like GPX).
+    </para>
+    <para>
+      When writing, <code>unicsv</code> will generate a CSV file with
+      a header row containing all the fields it can output from the
+      GPSBabel data model, including any extended attributes.
+    </para>
+    <para>
+      For more detailed information, refer to the full documentation
+      for <link linkend="fmt_unicsv"><code>unicsv</code></link>.
+    </para>
+  </section>
+
+  <section id="csv_guide_detailed_xcsv">
+    <title>When to Use Extended CSV (<link linkend="fmt_xcsv">
+      <code>xcsv</code></link>)</title>
+    <para>
+      While <code>unicsv</code> handles many scenarios, <code>xcsv</code>
+      is your tool for highly specific or unusual CSV files. If your CSV:
+      <itemizedlist>
+        <listitem><para>Does not have a header row, but isn't the simple
+          Lat,Lon,Name format.</para></listitem>
+        <listitem><para>Uses non-standard or abbreviated column names
+          that <code>unicsv</code> might not recognize.</para></listitem>
+        <listitem><para>Requires skipping lines at the beginning or end
+          of the file.</para></listitem>
+        <listitem><para>Needs precise control over data types or custom
+          transformations.</para></listitem>
+      </itemizedlist>
+      Then defining an <code>xcsv</code> style file allows you to specify
+      every detail of the CSV's structure and how its fields map to
+      GPSBabel's internal data model. Many of GPSBabel's other obscure
+      or unique text-based formats are, in fact, implemented using
+      <code>xcsv</code> style files internally (see the
+      <filename>style</filename> directory in the GPSBabel source code
+      for examples).
+    </para>
+    <para>For comprehensive details on creating style files, see the
+      full documentation for <link linkend="fmt_xcsv"><code>xcsv</code>
+      </link>.</para>
+  </section>
+
+  <section id="csv_guide_detailed_csv">
+    <title>Legacy CSV (<link linkend="fmt_csv"><code>csv</code></link>)
+    </title>
+    <para>
+      The <code>csv</code> format is the simplest and oldest CSV format
+      supported by GPSBabel. It has a very rigid structure, expecting
+      exactly three fields in the order: latitude, longitude, and name.
+      It does not support header rows or additional data fields.
+    </para>
+    <para>
+      Unless you are working with very old data files that strictly
+      adhere to this format (such as those from some early DeLorme
+      Street Atlas &amp; USA applications), you will almost certainly
+      achieve better results and greater flexibility using the
+      <link linkend="fmt_unicsv"><code>unicsv</code></link> format.
+    </para>
+    <para>For more information, refer to the full documentation for
+      <link linkend="fmt_csv"><code>csv</code></link>.</para>
+  </section>
+
+</chapter>
