@@ -198,7 +198,7 @@ jobs:
       shell: pwsh
       run: |
         $install_path=Join-Path $(Get-Location) bld
-        .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=bld\log.txt
+        .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=bld\log.txt /MERGETASKS="!vcredist"
         Start-Sleep -Seconds 60
         Get-ChildItem bld
 
