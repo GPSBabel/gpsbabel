@@ -47,7 +47,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "vcredist"; Description: "Install Visual C++ Redistributable";
+Name: "vcredist"; Description: "Install Microsoft Visual C++ Redistributable (An appropriate Visual C++ Resdistributable is required.)";
 
 [Files]
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
