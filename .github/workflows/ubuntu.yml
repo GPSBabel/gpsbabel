@@ -123,7 +123,9 @@ jobs:
     # Make sure the snap is installable
     - name: Test
       run: |
+        sudo snap install --channel edge/pr64 mesa-2404
         sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
+        snap list
         export GBTEMP=$(pwd)/gbtemp
         mkdir -p "$GBTEMP"
         /snap/bin/gpsbabel -D3 || true
