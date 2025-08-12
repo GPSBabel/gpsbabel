@@ -1,6 +1,6 @@
 /*
-    Copyright (C) 2008 Andreas Grimme, andreas.grimme(at)gmx.net
-    Copyright (C) 2005  Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2008 Andreas Grimme
+    Copyright (C) 2005 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -735,8 +735,6 @@ gprmc_parse(char* ibuf)
 	TODO: this function should rather call code from
 	nmea.c instead of using a local copy of
 	gprmc_parse
-
-	andreas.grimme@gmx.net
 */
 static Waypoint*
 itracku_rt_position(posn_status*)

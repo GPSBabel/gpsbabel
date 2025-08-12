@@ -2,7 +2,7 @@
 
 	Support for "MagicMaps" project files (.ikt)
 
-	Copyright (C) 2008 Olaf Klein, o.b.klein@gpsbabel.org
+	Copyright (C) 2008 Olaf Klein
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

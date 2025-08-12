@@ -2,7 +2,7 @@
     Access to PsiTrex text files.
     Based on information provided by Ian Cowley.
 
-    Copyright (C) 2003 Mark Bradley, mrcb.gpsb@osps.net
+    Copyright (C) 2003 Mark Bradley
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

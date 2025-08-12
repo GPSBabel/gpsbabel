@@ -5,8 +5,8 @@
     Provides "alanwpr" and "alantrl" formats for gpsbabel.
     Currently supports OS 2.xx only.
 
-    Copyright (C) 2007  Gunar Megger, 0xff@quantentunnel.de
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2007  Gunar Megger
+    Copyright (C) 2002-2014 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

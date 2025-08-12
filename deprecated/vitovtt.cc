@@ -1,7 +1,7 @@
 /*
     Read Vito SmartMap .vtt tracks
 
-    Copyright (C) 2007 Jeremy Ehrhardt, jeremye@caltech.edu
+    Copyright (C) 2007 Jeremy Ehrhardt
 
 based on vitostc.c, which is
 Copyright (C) 2005 Etienne TASSE
