@@ -954,7 +954,7 @@ int API_EXPORTED libusb_get_port_numbers(libusb_device *dev,
 	if (port_numbers_len <= 0)
 		return LIBUSB_ERROR_INVALID_PARAM;
 
-	// HCDs can be listed as devices with port #0
+	/* HCDs can be listed as devices with port #0 */
 	while((dev) && (dev->port_number != 0)) {
 		if (--i < 0) {
 			usbi_warn(ctx, "port numbers array is too small");
@@ -964,7 +964,7 @@ int API_EXPORTED libusb_get_port_numbers(libusb_device *dev,
 		dev = dev->parent_dev;
 	}
 	if (i < port_numbers_len)
-		memmove(port_numbers, &port_numbers[i], port_numbers_len - i);
+		memmove(port_numbers, &port_numbers[i], (size_t)(port_numbers_len - i));
 	return port_numbers_len - i;
 }
 
@@ -1014,7 +1014,7 @@ uint8_t API_EXPORTED libusb_get_device_address(libusb_device *dev)
  */
 int API_EXPORTED libusb_get_device_speed(libusb_device *dev)
 {
-	return dev->speed;
+	return (int)(dev->speed);
 }
 
 static const struct libusb_endpoint_descriptor *find_endpoint(
@@ -2380,14 +2380,12 @@ int API_EXPORTEDV libusb_set_option(libusb_context *ctx,
  */
 static enum libusb_log_level get_env_debug_level(void)
 {
+	enum libusb_log_level level = LIBUSB_LOG_LEVEL_NONE;
 	const char *dbg = getenv("LIBUSB_DEBUG");
-	enum libusb_log_level level;
 	if (dbg) {
-		int dbg_level = atoi(dbg);
+		long dbg_level = strtol(dbg, NULL, 10);
 		dbg_level = CLAMP(dbg_level, LIBUSB_LOG_LEVEL_NONE, LIBUSB_LOG_LEVEL_DEBUG);
 		level = (enum libusb_log_level)dbg_level;
-	} else {
-		level = LIBUSB_LOG_LEVEL_NONE;
 	}
 	return level;
 }
@@ -2456,7 +2454,7 @@ int API_EXPORTED libusb_init_context(libusb_context **ctx, const struct libusb_i
 		_ctx->debug = get_env_debug_level();
 		_ctx->debug_fixed = 1;
 	} else if (default_context_options[LIBUSB_OPTION_LOG_LEVEL].is_set) {
-		_ctx->debug = default_context_options[LIBUSB_OPTION_LOG_LEVEL].arg.ival;
+		_ctx->debug = (enum libusb_log_level)default_context_options[LIBUSB_OPTION_LOG_LEVEL].arg.ival;
 	}
 #endif
 
@@ -2809,7 +2807,7 @@ static void log_v(struct libusb_context *ctx, enum libusb_log_level level,
 		TIMESPEC_SUB(&timestamp, &timestamp_origin, &timestamp);
 
 		header_len = snprintf(buf, sizeof(buf),
-			"[%2ld.%06ld] [%08x] libusb: %s [%s] ",
+			"[%2ld.%06ld] [%08lx] libusb: %s [%s] ",
 			(long)timestamp.tv_sec, (long)(timestamp.tv_nsec / 1000L), usbi_get_tid(), prefix, function);
 	} else {
 		header_len = snprintf(buf, sizeof(buf),

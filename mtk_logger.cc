@@ -82,6 +82,7 @@
 #include "gbfile.h"            // for gbfprintf, gbfputc, gbfputs, gbfclose, gbfopen, gbfile
 #include "gbser.h"             // for gbser_read_line, gbser_set_port, gbser_OK, gbser_deinit, gbser_init, gbser_print, gbser_TIMEOUT
 #include "src/core/datetime.h" // for DateTime
+#include "src/core/logging.h"  // for Fatal, Warning
 
 
 #define MTK_EVT_BITMASK  (1<<0x02)
@@ -97,7 +98,7 @@
 
 #define HOLUX245_MASK (1 << 27)
 
-
+// TODO: These should become Debug() from src/core/logging.
 void MtkLoggerBase::dbg(int l, const char* msg, ...)
 {
   if (global_opts.debug_level >= l) {
@@ -244,12 +245,12 @@ void MtkLoggerBase::mtk_rd_init(const QString& fname)
   int rc;
   char* model;
 
-  port = xstrdup(qPrintable(fname));
+  port = fname;
 
   errno = 0;
-  dbg(1, "Opening port %s...\n", port);
-  if ((fd = gbser_init(port)) == nullptr) {
-    gbFatal("Can't initialise port \"%s\" (%s)\n", port, strerror(errno));
+  dbg(1, "Opening port %s...\n", qPrintable(port));
+  if ((fd = gbser_init(qPrintable(port))) == nullptr) {
+    gbFatal(FatalMsg() << "Can't initialise port" << port << strerror(errno));
   }
 
   // verify that we have a MTK based logger...
@@ -301,7 +302,7 @@ void MtkLoggerBase::mtk_rd_deinit()
   dbg(3, "Closing port...\n");
   gbser_deinit(fd);
   fd = nullptr;
-  xfree(port);
+  port = nullptr;
 }
 
 int MtkLoggerBase::mtk_erase()
@@ -363,8 +364,7 @@ void MtkLoggerBase::mtk_read()
   if (dout == nullptr) {
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      gbFatal("Can't create temporary file %s\n",
-            gbLogCStr(TEMP_DATA_BIN));
+      gbFatal(FatalMsg() << "Can't create temporary file" << TEMP_DATA_BIN);
     }
   }
   fseek(dout, 0L,SEEK_END);
@@ -375,7 +375,7 @@ void MtkLoggerBase::mtk_read()
     dpos = 0;
     init_scan = 1;
   }
-  dbg(1, "Download %s -> %s\n", port, gbLogCStr(TEMP_DATA_BIN));
+  dbg(1, "Download %s -> %s\n", qPrintable(port), gbLogCStr(TEMP_DATA_BIN));
 
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &fusage, 2);
@@ -418,8 +418,7 @@ void MtkLoggerBase::mtk_read()
     QFile::rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      gbFatal("Can't create temporary file %s\n",
-            gbLogCStr(TEMP_DATA_BIN));
+      gbFatal(FatalMsg() << "Can't create temporary file " << TEMP_DATA_BIN);
     }
   }
 
@@ -735,12 +734,13 @@ void MtkLoggerBase::mtk_csv_init(const QString& csv_fname, unsigned long bitmask
   // can't use gbfopen here - it will gbFatal() if file doesn't exist
   if ((cf = ufopen(csv_fname, "r")) != nullptr) {
     fclose(cf);
-    gbWarning("CSV file %s already exist ! Cowardly refusing to overwrite.\n", gbLogCStr(csv_fname));
+    Warning() << "CSV file " << gbLogCStr(csv_fname) << 
+                 "already exists ! Cowardly refusing to overwrite";
     return;
   }
 
   if ((cd = gbfopen(csv_fname, "w")) == nullptr) {
-    gbFatal("Can't open csv file '%s'\n", gbLogCStr(csv_fname));
+    gbFatal(FatalMsg() << "Can't open csv file " <<  csv_fname);
   }
 
   /* Add the header line */
@@ -1263,7 +1263,7 @@ void MtkLoggerBase::file_init(const QString& fname)
 {
   dbg(4, "Opening file %s...\n", gbLogCStr(fname));
   if (fl = ufopen(fname, "rb"), nullptr == fl) {
-    gbFatal("Can't open file '%s'\n", gbLogCStr(fname));
+    gbFatal(FatalMsg() << "Can't open file" <<  fname);
   }
   switch (mtk_device) {
   case HOLUX_M241:
@@ -1319,7 +1319,7 @@ void MtkLoggerBase::file_read()
   fseek(fl, 0L, SEEK_END);
   long fsize = ftell(fl);
   if (fsize <= 0) {
-    gbFatal("File has size %ld\n", fsize);
+    gbFatal(FatalMsg() << "File has size" <<  fsize);
   }
 
   fseek(fl, 0L, SEEK_SET);

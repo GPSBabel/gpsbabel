@@ -10,11 +10,11 @@ We have a [GPSBabel contributor guide](https://github.com/gpsbabel/gpsbabel/blob
 
 Current status of the master branch build is:
 
-- [![CodeQL](https://github.com/GPSBabel/gpsbabel/workflows/CodeQL/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3ACodeQL)
-- [![Fedora](https://github.com/GPSBabel/gpsbabel/workflows/fedora/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Afedora)
-- [![macOS](https://github.com/GPSBabel/gpsbabel/workflows/macos/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Amacos)
-- [![ubuntu](https://github.com/GPSBabel/gpsbabel/workflows/ubuntu/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Aubuntu)
-- [![windows](https://github.com/GPSBabel/gpsbabel/workflows/windows/badge.svg?branch=master)](https://github.com/GPSBabel/gpsbabel/actions?query=workflow%3Awindows)
+- ![CodeQL](https://github.com/GPSBabel/gpsbabel/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)
+- ![Fedora](https://github.com/GPSBabel/gpsbabel/actions/workflows/fedora.yml/badge.svg?branch=master)
+- ![macOS](https://github.com/GPSBabel/gpsbabel/actions/workflows/macos.yml/badge.svg?branch=master)
+- ![ubuntu](https://github.com/GPSBabel/gpsbabel/actions/workflows/ubuntu.yml/badge.svg?branch=master)
+- ![windows](https://github.com/GPSBabel/gpsbabel/actions/workflows/windows.yml/badge.svg?branch=master)
 
 Passing is good. We like passing.
 

@@ -1,4 +1,5 @@
 name: Codacy clang-tidy
+permissions: {}
 
 on:
   push:
@@ -29,7 +30,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: build_and_test
       run: |

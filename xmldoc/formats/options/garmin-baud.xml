@@ -1,5 +1,5 @@
 <para>
-Sets baud rate on some Garmin serial unit to the specified baud rate. Garmin protocol uses 9600 bps by default, but there is a rarely documented feature in Garmin binary protocol for switching baud rate. Highest option is 115200.
+Sets baud rate on some Garmin serial unit to the specified baud rate. Garmin protocol uses 9600 bps by default, but there is a rarely documented feature in Garmin binary protocol for switching baud rate. The maximum value is 115200.
 </para>
 
 <para>

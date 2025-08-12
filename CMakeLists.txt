@@ -1,4 +1,8 @@
-cmake_minimum_required(VERSION 3.16)
+if(APPLE)
+  cmake_minimum_required(VERSION 3.21.1)
+else()
+  cmake_minimum_required(VERSION 3.16)
+endif()
 
 include(CMakeDependentOption)
 include(CheckIncludeFile)
@@ -107,6 +111,7 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   ozi.cc
   qstarz_bl_1000.cc
   random.cc
+  seventymai.cc
   shape.cc
   skytraq.cc
   subrip.cc
@@ -244,6 +249,7 @@ set(HEADERS
   qstarz_bl_1000.h
   random.h
   session.h
+  seventymai.h
   shape.h
   skytraq.h
   subrip.h
@@ -419,6 +425,7 @@ set(TESTS
   resample
   route_reverse
   serialization
+  seventymai
   shape
   simplify-relative
   simplify

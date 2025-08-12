@@ -1,8 +1,8 @@
 /*
     NaviGPS serial protocol.
 
-    Copyright (C) 2007 Tom Hughes, tom@compton.nu
-    Copyright (C) 2008 Rodney Lorrimar, rodney@rodney.id.au
+    Copyright (C) 2007 Tom Hughes
+    Copyright (C) 2008 Rodney Lorrimar
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

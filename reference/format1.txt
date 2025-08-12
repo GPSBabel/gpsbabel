@@ -1,3 +1,4 @@
+file	70mai	txt	70mai Dash Cam
 internal	xcsv		? Character Separated Values
 internal	tabsep		All database fields on one tab-separated line
 file	v900		Columbus/Visiontac V900 files (.csv)

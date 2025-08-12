@@ -368,11 +368,11 @@ NmeaFormat::gpgll_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
   QChar latdir = 'N';
-  if ((fields.size() > 2) && (fields[2].size() > 0)) latdir = fields[2][0];
+  if ((fields.size() > 2) && (!fields[2].isEmpty())) latdir = fields[2][0];
   double lngdeg = 0;
   if (fields.size() > 3) lngdeg = fields[3].toDouble();
   QChar lngdir = 'E';
-  if ((fields.size() > 4) && (fields[4].size() > 0)) lngdir = fields[4][0];
+  if ((fields.size() > 4) && (!fields[4].isEmpty())) lngdir = fields[4][0];
   QTime hms;
   if (fields.size() > 5) hms = nmea_parse_hms(fields[5]);
   bool valid = false;
@@ -416,11 +416,11 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 2) latdeg = fields[2].toDouble();
   QChar latdir = 'N';
-  if ((fields.size() > 3) && (fields[3].size() > 0)) latdir = fields[3][0];
+  if ((fields.size() > 3) && (!fields[3].isEmpty())) latdir = fields[3][0];
   double lngdeg = 0;
   if (fields.size() > 4) lngdeg = fields[4].toDouble();
   QChar lngdir = 'E';
-  if ((fields.size() > 5) && (fields[5].size() > 0)) lngdir = fields[5][0];
+  if ((fields.size() > 5) && (!fields[5].isEmpty())) lngdir = fields[5][0];
   int fix = fix_unknown;
   if (fields.size() > 6) fix = fields[6].toInt();
   int nsats = 0;
@@ -430,11 +430,11 @@ NmeaFormat::gpgga_parse(const QString& ibuf)
   double alt = unknown_alt;
   if (fields.size() > 9) alt = fields[9].toDouble();
   QChar altunits ='M';
-  if ((fields.size() > 10) && (fields[10].size() > 0)) altunits = fields[10][0];
+  if ((fields.size() > 10) && (!fields[10].isEmpty())) altunits = fields[10][0];
   double geoidheight = unknown_alt;
   if (fields.size() > 11) geoidheight = fields[11].toDouble();
   QChar geoidheightunits = 'M';
-  if ((fields.size() > 12) && (fields[12].size() > 0)) geoidheightunits = fields[12][0];
+  if ((fields.size() > 12) && (!fields[12].isEmpty())) geoidheightunits = fields[12][0];
 
   /*
    * In serial mode, allow the fix with an invalid position through
@@ -503,15 +503,15 @@ NmeaFormat::gprmc_parse(const QString& ibuf)
   QTime hms;
   if (fields.size() > 1) hms = nmea_parse_hms(fields[1]);
   QChar fix = 'V'; // V == "Invalid"
-  if ((fields.size() > 2) && (fields[2].size() > 0)) fix = fields[2][0];
+  if ((fields.size() > 2) && (!fields[2].isEmpty())) fix = fields[2][0];
   double latdeg = 0;
   if (fields.size() > 3) latdeg = fields[3].toDouble();
   QChar latdir = 'N';
-  if ((fields.size() > 4) && (fields[4].size() > 0)) latdir = fields[4][0];
+  if ((fields.size() > 4) && (!fields[4].isEmpty())) latdir = fields[4][0];
   double lngdeg = 0;
   if (fields.size() > 5) lngdeg = fields[5].toDouble();
   QChar lngdir = 'E';
-  if ((fields.size() > 6) && (fields[6].size() > 0)) lngdir = fields[6][0];
+  if ((fields.size() > 6) && (!fields[6].isEmpty())) lngdir = fields[6][0];
   double speed = 0;
   if (fields.size() > 7) speed = fields[7].toDouble();
   double course = 0;
@@ -585,11 +585,11 @@ NmeaFormat::gpwpl_parse(const QString& ibuf)
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
   QChar latdir = 'N';
-  if ((fields.size() > 2) && (fields[2].size() > 0)) latdir = fields[2][0];
+  if ((fields.size() > 2) && (!fields[2].isEmpty())) latdir = fields[2][0];
   double lngdeg = 0;
   if (fields.size() > 3) lngdeg = fields[3].toDouble();
   QChar lngdir = 'E';
-  if ((fields.size() > 4) && (fields[4].size() > 0)) lngdir = fields[4][0];
+  if ((fields.size() > 4) && (!fields[4].isEmpty())) lngdir = fields[4][0];
   QString sname;
   if (fields.size() > 5) sname = fields[5];
 
@@ -643,7 +643,7 @@ NmeaFormat::gpgsa_parse(const QString& ibuf) const
   // 0 = "GPGSA"
   // 1 = Mode. Ignored
   QChar fix;
-  if ((nfields > 2) && (fields[2].size() > 0)) {
+  if ((nfields > 2) && (!fields[2].isEmpty())) {
     fix = fields[2][0];
   }
 

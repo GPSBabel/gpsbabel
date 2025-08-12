@@ -2,10 +2,10 @@
 	Support for XML based "TourExchangeFormat",
 	found in Map & Guide Motorrad-Tourenplaner 2005/06
 
-	Copyright (C) 2005 Olaf Klein, o.b.klein@gpsbabel.org
+	Copyright (C) 2005 Olaf Klein
 
 	Based on kml.c, Keyhole "kml" format.
-	Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+	Copyright (C) 2002-2014 Robert Lipe
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

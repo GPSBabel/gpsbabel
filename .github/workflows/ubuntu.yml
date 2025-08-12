@@ -1,4 +1,5 @@
 name: "ubuntu"
+permissions: {}
 
 on:
   push:
@@ -19,7 +20,7 @@ on:
 jobs:
   ubuntu:
     name: ubuntu Build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -30,20 +31,33 @@ jobs:
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
+            os: ubuntu-latest
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
+            os: ubuntu-latest
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
+            os: ubuntu-latest
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
+            os: ubuntu-latest
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_extra_tests.sh'
+            os: ubuntu-latest
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/aarch64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            os: ubuntu-24.04-arm
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/travis_script_linux_coverage'
+            os: ubuntu-latest
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
       env:
@@ -54,7 +68,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: build_and_test
       run: |
@@ -72,23 +86,13 @@ jobs:
         fi
         "${JOB_SCRIPT}"
 
-  coverage:
-    name: coverage Build
-    runs-on: ubuntu-latest
-    steps:
-    - name: install
-      run: |
-        sudo apt-get update
-        sudo apt-get install gcovr lcov libusb-1.0-0-dev libgl-dev qt6-base-dev libqt6core5compat6-dev libqt6serialport6-dev qt6-webengine-dev qt6-webengine-dev-tools ninja-build
-
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: script
-      env:
-        CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      run: |
-        ./tools/travis_script_linux_coverage
+    - name: upload_coverage 
+      if: contains(matrix.script, 'coverage') && ( github.secret_source == 'Actions' )
+      uses: codacy/codacy-coverage-reporter-action@v1.3.0
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: lcov.info
+        language: CPP
 
   snap:
     name: snap Build
@@ -96,12 +100,21 @@ jobs:
       id-token: write
       contents: write
       attestations: write
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: ubuntu-24.04-arm
     outputs:
       snap-file: ${{ steps.build-snap.outputs.snap }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+        fetch-tags: true
 
     - name: Build
       uses: snapcore/action-build@v1
@@ -114,11 +127,11 @@ jobs:
         export GBTEMP=$(pwd)/gbtemp
         mkdir -p "$GBTEMP"
         /snap/bin/gpsbabel -D3 || true
-        ./testo -p /snap/bin/gpsbabel 
+        ./testo -p /snap/bin/gpsbabel
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation }}
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       with:
         subject-path: ${{ steps.build-snap.outputs.snap }}
 

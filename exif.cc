@@ -215,7 +215,7 @@ ExifFormat::exif_read_str(ExifTag* tag)
   if (auto idx = buf.indexOf('\0'); idx >= 0) {
     buf = buf.left(idx);
   }
-  while ((buf.size() > 0) && isspace(buf.back())) {
+  while ((!buf.isEmpty()) && isspace(buf.back())) {
     buf.chop(1);
   }
   return buf;

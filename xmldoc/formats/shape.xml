@@ -2,7 +2,7 @@
 When reading a shapefile Point, PointZ and PointM shapes are
 mapped to waypoints.  PolyLine(Arc), PolyLineZ(ArcZ) and PolyLineM(ArcM) shapes are mapped to routes.
 When writing a shapefile waypoints are mapped to Point shapes and routes or tracks
-are mapped to PolyLine(Arc) shapes depending on the the objective given by the -w, -r or -t option.
+are mapped to PolyLine(Arc) shapes depending on the objective given by the -w, -r or -t option.
 Because shapefiles can only contain one type of shape these options are mutually exclusive.
 </para>
 <para>

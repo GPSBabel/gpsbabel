@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- reference: https://freedesktop.org/software/appstream/docs/index.html -->
+<component type="console-application">
+  <id>org.gpsbabel.cli</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>gpsbabel</name>
+  <summary>GPS file conversion plus transfer to/from GPS units</summary>
+  <description>
+    <p>GPSBabel converts waypoints, tracks, and routes from one common
+    mapping format to another or a serial upload or download to a GPS
+    unit such as those from Garmin.</p>
+
+    <p>GPSBabel supports several data formats and will be useful for
+    tasks such as geocaching, mapping, and converting from one GPS
+    unit to another.  Among the interesting formats it supports are
+    the GPS Exchange Format (GPX), Keyhole Markup Language (KML), several
+    GPS devices via a serial link, and various Geocaching data formats.
+    GPSBabel also supports various filters to manipulate the data.</p>
+
+    <p>GPSBabel supports the following formats:</p>
+
+    <ul>
+      <li>70mai: 70mai Dash Cam</li>
+      <li>arc: GPSBabel arc filter file</li>
+      <li>csv: Comma separated values</li>
+      <li>cup: See You flight analysis data</li>
+      <li>dg-100: GlobalSat DG-100/BT-335 Download</li>
+      <li>dg-200: GlobalSat DG-200 Download</li>
+      <li>exif: Embedded Exif-GPS data (.jpg)</li>
+      <li>garmin301: Garmin 301 Custom position and heartrate</li>
+      <li>garmin: Garmin serial/USB protocol</li>
+      <li>garmin_fit: Flexible and Interoperable Data Transfer (FIT) Activity file</li>
+      <li>garmin_g1000: Garmin G1000 datalog input filter file</li>
+      <li>garmin_gpi: Garmin Points of Interest (.gpi)</li>
+      <li>garmin_poi: Garmin POI database</li>
+      <li>garmin_txt: Garmin MapSource - txt (tab delimited)</li>
+      <li>garmin_xt: Mobile Garmin XT Track files</li>
+      <li>gdb: Garmin MapSource - gdb</li>
+      <li>geo: Geocaching.com .loc</li>
+      <li>geojson: GeoJson</li>
+      <li>globalsat: GlobalSat GH625XT GPS training watch</li>
+      <li>googletakeout: Google Takeout Location History</li>
+      <li>gpsdrive: GpsDrive Format</li>
+      <li>gpsdrivetrack: GpsDrive Format for Tracks</li>
+      <li>gpx: GPX XML</li>
+      <li>gtm: GPS TrackMaker</li>
+      <li>gtrnctr: Garmin Training Center (.tcx/.crs/.hst/.xml)</li>
+      <li>html: HTML Output</li>
+      <li>humminbird: Humminbird waypoints and routes (.hwr)</li>
+      <li>humminbird_ht: Humminbird tracks (.ht)</li>
+      <li>iblue747: Data Logger iBlue747 csv</li>
+      <li>iblue757: Data Logger iBlue757 csv</li>
+      <li>igc: FAI/IGC Flight Recorder Data Format</li>
+      <li>kml: Google Earth (Keyhole) Markup Language</li>
+      <li>land_air_sea: GPS Tracking Key Pro text</li>
+      <li>lowranceusr: Lowrance USR</li>
+      <li>m241-bin: Holux M-241 (MTK based) Binary File Format</li>
+      <li>m241: Holux M-241 (MTK based) download</li>
+      <li>miniHomer: MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)</li>
+      <li>mtk-bin: MTK Logger (iBlue 747,...) Binary File Format</li>
+      <li>mtk: MTK Logger (iBlue 747,Qstarz BT-1000,...) download</li>
+      <li>nmea: NMEA 0183 sentences</li>
+      <li>openoffice: Tab delimited fields useful for OpenOffice</li>
+      <li>osm: OpenStreetMap data files</li>
+      <li>ozi: OziExplorer</li>
+      <li>qstarz_bl-1000: Qstarz BL-1000</li>
+      <li>shape: ESRI shapefile</li>
+      <li>skytraq-bin: SkyTraq Venus based loggers Binary File Format</li>
+      <li>skytraq: SkyTraq Venus based loggers (download)</li>
+      <li>subrip: SubRip subtitles for video mapping (.srt)</li>
+      <li>text: Textual Output</li>
+      <li>tpg: National Geographic Topo .tpg (waypoints)</li>
+      <li>tpo2: National Geographic Topo 2.x .tpo</li>
+      <li>tpo3: National Geographic Topo 3.x/4.x .tpo</li>
+      <li>unicsv: Universal csv with field structure in first line</li>
+      <li>v900: Columbus/Visiontac V900 files (.csv)</li>
+      <li>vcard: Vcard Output (for iPod)</li>
+    </ul>
+
+    <p>GPSBabel supports the following filters:</p>
+    <ul>
+      <li>arc: Include Only Points Within Distance of Arc</li>
+      <li>bend: Add points before and after bends in routes</li>
+      <li>discard: Remove unreliable points with high hdop or vdop</li>
+      <li>duplicate: Remove Duplicates</li>
+      <li>height: Manipulate altitudes</li>
+      <li>interpolate: Interpolate between trackpoints</li>
+      <li>nuketypes: Remove all waypoints, tracks, or routes</li>
+      <li>polygon: Include Only Points Inside Polygon</li>
+      <li>position: Remove Points Within Distance</li>
+      <li>radius: Include Only Points Within Radius</li>
+      <li>resample: Resample Track</li>
+      <li>reverse: Reverse stops within routes</li>
+      <li>simplify: Simplify routes</li>
+      <li>sort: Rearrange waypoints, routes and/or tracks by resorting</li>
+      <li>stack: Save and restore waypoint lists</li>
+      <li>swap: Swap latitude and longitude of all loaded points</li>
+      <li>track: Manipulate track lists</li>
+      <li>transform: Transform waypoints into a route, tracks into routes, ...</li>
+      <li>validate: Validate internal data structures</li>
+    </ul>
+  </description>
+  <url type="homepage">https://www.gpsbabel.org</url>
+  <url type="vcs-browser">https://github.com/GPSBabel/gpsbabel</url>
+  <provides>
+    <binary>gpsbabel</binary>
+    <modalias>usb:v091Ep0003d*</modalias>
+  </provides>
+</component>

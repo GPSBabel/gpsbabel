@@ -102,7 +102,7 @@ QString
 csv_enquote(const QString& str, const QString& enclosure)
 {
   QString retval = str;
-  if (enclosure.size() > 0) {
+  if (!enclosure.isEmpty()) {
     retval = enclosure + retval.replace(enclosure, enclosure + enclosure) + enclosure;
   }
   return retval;
