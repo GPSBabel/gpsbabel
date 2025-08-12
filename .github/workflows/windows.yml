@@ -188,7 +188,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: 'Download Artifacts'
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         path: bld
         pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
