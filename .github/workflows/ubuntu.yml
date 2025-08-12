@@ -68,7 +68,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: build_and_test
       run: |
@@ -111,7 +111,7 @@ jobs:
       snap-file: ${{ steps.build-snap.outputs.snap }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
         fetch-tags: true
