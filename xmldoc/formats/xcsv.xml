@@ -4,6 +4,22 @@ nearly any plain-text record-based waypoint file.  This flexibility is
 achieved by combining this format with "style" files that describe the
 format of the waypoint files.
 </para>
+<note>
+  <para>
+    <emphasis role="strong">Advanced Use:</emphasis> <code>xcsv</code>
+    (Extended CSV) provides powerful, highly customizable CSV import
+    and export, requiring the definition of a "style file." It is
+    intended for advanced users working with unique or complex CSV
+    structures that cannot be handled by other formats.
+  </para>
+  <para>
+    If your CSV file has a header row and a standard structure, the
+    <link linkend="fmt_unicsv">Universal CSV (<code>unicsv</code>)</link>
+    format is typically easier to use and recommended. For an overview
+    of all CSV formats and guidance on which to choose, refer to the
+    <link linkend="csv_guide">Choosing the Right CSV Format</link> guide.
+  </para>
+</note>
 <para>
 There are several formats built in to GPSBabel that use the underlying xcsv
 machinery.  Each of those formats takes the same options as the xcsv format,
