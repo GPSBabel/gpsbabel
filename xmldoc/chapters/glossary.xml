@@ -1,18 +1,67 @@
-<glossary xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Glossary">
+<?xml version="1.0" encoding="UTF-8"?>
+<glossary xmlns="http://docbook.org/ns/docbook" version="5.0"
+          xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="Glossary">
   <title>Glossary</title>
   <para>Terms that are used in conjunction with GPSBabel.</para>
-  <glossdiv xml:id="G">
-    <title>G</title>
-    <glossentry xml:id="gl_xml">
-      <glossterm>Geocaching</glossterm>
-      <glossdef>
-        <para>GPS based "paper chase", see
 
-          <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://en.wikipedia.org/wiki/Geocaching">https://en.wikipedia.org/wiki/Geocaching</uri></para>
+  <glossdiv xml:id="C">
+    <title>C</title>
+    <glossentry xml:id="gl_csv_format">
+      <glossterm>CSV (Comma Separated Values)</glossterm>
+      <glossdef>
+        <para>A ubiquitous text-based file format for tabular data.
+          GPSBabel includes multiple CSV <emphasis>modules</emphasis>
+          (<link linkend="gl_unicsv">unicsv</link>,
+          <link linkend="gl_xcsv">xcsv</link>, and a legacy
+          <link linkend="gl_csv_legacy">csv</link> module). See
+          <link linkend="csv_guide">Choosing the Right CSV Format</link>
+          for details.
+        </para>
+      </glossdef>
+    </glossentry>
+    <glossentry xml:id="gl_csv_legacy">
+      <glossterm>csv (legacy module)</glossterm>
+      <glossdef>
+        <para>GPSBabel's simplest CSV module, typically for files with
+          only Latitude, Longitude, and Name, and no header.
+          Generally not recommended for modern use. See
+          <link linkend="csv_guide">Choosing the Right CSV Format</link>.
+        </para>
       </glossdef>
     </glossentry>
   </glossdiv>
-  <glossdiv>
+
+  <glossdiv xml:id="F">
+    <title>F</title>
+    <glossentry xml:id="gl_filter">
+      <glossterm>Filter</glossterm>
+      <glossdef>
+        <para>A GPSBabel operation (<option>-x</option>) that
+          modifies or selects data as it flows through the program.
+          Examples include simplifying tracks, nuking certain data
+          types, or adding timestamps. For more details, see the
+          <link linkend="Advanced_Usage">Advanced Usage section</link>
+          and the <link linkend="Filters">Filters chapter</link>.
+        </para>
+      </glossdef>
+    </glossentry>
+  </glossdiv>
+
+  <glossdiv xml:id="G">
+    <title>G</title>
+    <glossentry xml:id="gl_geocaching">
+      <glossterm>Geocaching</glossterm>
+      <glossdef>
+        <para>GPS based "paper chase", see
+          <uri xlink:href="https://en.wikipedia.org/wiki/Geocaching">
+            https://en.wikipedia.org/wiki/Geocaching
+          </uri>
+        </para>
+      </glossdef>
+    </glossentry>
+  </glossdiv>
+
+  <glossdiv xml:id="I">
     <title>I</title>
     <glossentry xml:id="gl_itinerary">
       <glossterm>Itinerary</glossterm>
@@ -21,6 +70,34 @@
       </glossdef>
     </glossentry>
   </glossdiv>
+
+  <glossdiv xml:id="O">
+    <title>O</title>
+    <glossentry xml:id="gl_option">
+      <glossterm>Option</glossterm>
+      <glossdef>
+        <para>A command-line argument that controls GPSBabel's
+          behavior (e.g., <option>-i</option>, <option>-o</option>).
+          Options are processed strictly from left to right. See the
+          <link linkend="Invocation">Invocation section</link> for
+          basic options and the
+          <link linkend="all_options">full options list</link>.
+        </para>
+      </glossdef>
+    </glossentry>
+    <glossentry xml:id="gl_suboption">
+      <glossterm>Suboption</glossterm>
+      <glossdef>
+        <para>Additional parameters that modify the behavior of a
+          specific format or filter module. They are typically
+          comma-separated and follow the main option (e.g.,
+          <option>-o kml,lines=0</option>). For more details, see the
+          <link linkend="Suboptions">Suboptions section</link>.
+        </para>
+      </glossdef>
+    </glossentry>
+  </glossdiv>
+
   <glossdiv xml:id="P">
     <title>P</title>
     <glossentry xml:id="gl_poi">
@@ -31,6 +108,7 @@
       </glossdef>
     </glossentry>
   </glossdiv>
+
   <glossdiv xml:id="R">
     <title>R</title>
     <glossentry xml:id="gl_route">
@@ -41,10 +119,12 @@
           defining the route you want to pass while traveling,
           created by PC software, or generated inside a GPS device.
           They can be composed of existing waypoints, or new
-          "routepoints" might be generated.</para>
+          "routepoints" might be generated.
+        </para>
       </glossdef>
     </glossentry>
   </glossdiv>
+
   <glossdiv xml:id="T">
     <title>T</title>
     <glossentry xml:id="gl_track">
@@ -55,10 +135,26 @@
           of trackpoints within the track is important. Usually a
           trackpoint doesn't have a name or comment, but a
           timestamp. This distinguishes a trackpoint from a
-          waypoint.</para>
+          waypoint.
+        </para>
       </glossdef>
     </glossentry>
   </glossdiv>
+
+  <glossdiv xml:id="U">
+    <title>U</title>
+    <glossentry xml:id="gl_unicsv">
+      <glossterm>unicsv (Universal CSV module)</glossterm>
+      <glossdef>
+        <para>GPSBabel's recommended CSV module for most modern files,
+          especially those with a header row. It intelligently detects
+          fields and preserves additional data. See
+          <link linkend="csv_guide">Choosing the Right CSV Format</link>.
+        </para>
+      </glossdef>
+    </glossentry>
+  </glossdiv>
+
   <glossdiv xml:id="W">
     <title>W</title>
     <glossentry xml:id="gl_waypoint">
@@ -69,8 +165,24 @@
           entered before, while or after you actually visit the
           place and might have tags like name, comment and the
           like. Usually used to mark special locations as your
-          home, a hotel or a geocache.</para>
+          home, a hotel or a geocache.
+        </para>
       </glossdef>
     </glossentry>
   </glossdiv>
+
+  <glossdiv xml:id="X">
+    <title>X</title>
+    <glossentry xml:id="gl_xcsv">
+      <glossterm>xcsv (Extended CSV module)</glossterm>
+      <glossdef>
+        <para>An advanced, highly customizable CSV module that
+          requires a separate "style file" to define its structure.
+          Useful for complex or non-standard CSV layouts. See
+          <link linkend="csv_guide">Choosing the Right CSV Format</link>.
+        </para>
+      </glossdef>
+    </glossentry>
+  </glossdiv>
+
 </glossary>
