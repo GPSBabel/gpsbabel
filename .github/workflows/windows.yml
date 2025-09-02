@@ -151,7 +151,7 @@ jobs:
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       with:
         subject-path: 'bld/gui/GPSBabel-*-Setup-*.exe'
 
