@@ -1,4 +1,5 @@
 name: "windows"
+permissions: {}
 
 on:
   push:
@@ -35,9 +36,9 @@ jobs:
             COMPILER: 'msvc2019_64'
             TOOLSET: 'v142,version=14.29.30133'
             METHOD: 'aqt'
-            GENERATOR: 'Visual Studio 16 2019'
+            GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
-            os: windows-2019
+            os: windows-2022
           - QT_VERSION: '6.2.4'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
@@ -45,40 +46,56 @@ jobs:
             METHOD: 'aqt'
             GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
-            os: windows-latest
+            os: windows-2022
           - QT_VERSION: '6.5.3'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
             METHOD: 'aqt'
-            RELEASE: true
+            RELEASE: false
             GENERATOR: 'Ninja'
-            os: windows-latest
-          - QT_VERSION: '6.8.2'
+            os: windows-2022
+          - QT_VERSION: '6.8.3'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
             METHOD: 'aqt'
-            RELEASE: false
+            RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-2025
+          - QT_VERSION: '6.8.3'
+            TARGET_ARCH: 'arm64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2022_64'
+            CROSS_COMPILER: 'msvc2022_arm64'
+            METHOD: 'aqt'
+            RELEASE: true
+            os: windows-2025
+          - QT_VERSION: '6.8.3'
+            ARCH: 'arm64'
+            HOST_ARCH: 'arm64'
+            COMPILER: 'msvc2022_arm64'
+            METHOD: 'aqt'
+            RELEASE: false
+            GENERATOR: 'Ninja'
+            os: windows-11-arm
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Cache Qt
       uses: actions/cache@v4
       id: cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILER }}-${{ secrets.CACHE_VERSION }}
 
     - name: Install Qt setup(aqt)
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: ( steps.cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
 
     - name: Install Qt
       if: steps.cache.outputs.cache-hit != 'true'
@@ -86,29 +103,49 @@ jobs:
         CI_BUILD_DIR: ${{ github.workspace }}
       shell: bash
       run: |
-        ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
+        if [ -n "${{ matrix.CROSS_COMPILER }}" ]; then
+          ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}" "${{ matrix.CROSS_COMPILER }}"
+        else
+          ./tools/ci_install_windows.sh "${{ matrix.QT_VERSION }}" "${{ matrix.COMPILER }}" "${{ matrix.METHOD }}"
+        fi
 
     - name: Install Inno Setup
       if: matrix.os == 'windows-2025'
       run: choco install innosetup 
 
+    - name: Install legacy microsoft compiler
+      if: matrix.TOOLSET == 'v142,version=14.29.30133'
+      run: choco install visualstudio2022buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.14.29.16.11.CLI.Support"
+
     - name: Build
-      shell: powershell
+      shell: pwsh
       run: |
-        .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
-        .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
+        if ([string]::IsNullOrEmpty("${{  matrix.CROSS_COMPILER }}")) {
+          .\tools\ci_setup_windows.ps1 -qtdir "$Home\Cache\Qt\${{ matrix.QT_VERSION }}\${{ matrix.COMPILER }}" -arch "${{ matrix.ARCH }}" -host_arch "${{ matrix.HOST_ARCH }}" -vcversion "${{ matrix.VCVERSION }}"
+          .\tools\ci_script_windows.ps1 -generator "${{ matrix.GENERATOR }}" -arch "${{ matrix.ARCH }}" -toolset "${{ matrix.TOOLSET }}"
+        } else {
+          $hash = @{}
+          $hash["qt_root_dir"] = "$Home\Cache\Qt\${{ matrix.QT_VERSION }}"
+          $hash["host_arch"] = "${{ matrix.HOST_ARCH }}"
+          $hash["target_arch"] = "${{ matrix.TARGET_ARCH }}"
+          $hash["compiler"] = "${{ matrix.COMPILER }}"
+          $hash["cross_compiler"] = "${{ matrix.CROSS_COMPILER }}"
+          .\tools\ci_windows_cross_compile.ps1 @hash
+        }
 
     - name: Rename
       shell: bash
       run: |
         VERSION_ID=$(date -u +%Y%m%dT%H%MZ --date=$(git show -s --format=%aI HEAD))-$(git rev-parse --short=7 HEAD)
-        mv bld/gui/GPSBabel-*-Setup.exe bld/gui/GPSBabel-${VERSION_ID}-Setup.exe
-        mv bld/gui/GPSBabel-*-Manifest.txt bld/gui/GPSBabel-${VERSION_ID}-Manifest.txt
+        SETUP=$(ls bld/gui/GPSBabel-*-Setup-*.exe | sed "s/\([^-]*\)-\([^-]*\)-\(.*\)/\1-${VERSION_ID}-\3/")
+        mv bld/gui/GPSBabel-*-Setup-*.exe ${SETUP}
+        MANIFEST=$(ls bld/gui/GPSBabel-*-Manifest-*.txt | sed "s/\([^-]*\)-\([^-]*\)-\(.*\)/\1-${VERSION_ID}-\3/")
+        mv bld/gui/GPSBabel-*-Manifest-*.txt ${MANIFEST}
 
     - name: Test
       shell: bash
+      if: matrix.CROSS_COMPILER == ''
       run: |
-        # PATH="${HOME}/Cache/Qt/${{ matrix.QT_VERSION }}/${{ matrix.COMPILER }}/bin:${PATH}"
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
@@ -116,7 +153,7 @@ jobs:
       if: ${{ inputs.attestation && matrix.RELEASE }}
       uses: actions/attest-build-provenance@v2
       with:
-        subject-path: 'bld/gui/GPSBabel-*-Setup.exe'
+        subject-path: 'bld/gui/GPSBabel-*-Setup-*.exe'
 
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
@@ -127,13 +164,53 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: Continuous-${{ runner.os }}
       run: |
-        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup.exe
+        ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup-*.exe
 
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v4
       with:
-        name: Windows_Installer ${{ join(matrix.*) }}
+        name: Windows_Installer-${{ join(matrix.*) }}
         path: |
-          bld/gui/GPSBabel-*-Setup.exe
-          bld/gui/GPSBabel-*-Manifest.txt
+          bld/gui/GPSBabel-*-Setup-*.exe
+          bld/gui/GPSBabel-*-Manifest-*.txt
         retention-days: 7
+
+  test_installer:
+    name: 'Test Installer'
+    needs: windows
+    runs-on: windows-11-arm
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+
+    - name: 'Download Artifacts'
+      uses: actions/download-artifact@v5
+      with:
+        path: bld
+        pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
+        merge-multiple: true
+
+    - name: 'Install Artifact'
+      shell: pwsh
+      run: |
+        $install_path=Join-Path $(Get-Location) bld
+        .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=bld\log.txt /MERGETASKS="!vcredist"
+        Start-Sleep -Seconds 60
+        Get-ChildItem bld
+
+    - name: 'Test Artifact'
+      shell: bash
+      run: |
+        PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+        ls -l bld
+
+    - name: 'Upload Artifacts'
+      uses: actions/upload-artifact@v4
+      with:
+        name: Test_Installer
+        path: |
+          bld/log.txt
+        retention-days: 7
+

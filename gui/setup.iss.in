@@ -13,6 +13,9 @@
 #ifndef source_dir
   #define source_dir "."
 #endif
+#ifndef arch
+  #define arch "x64compatible"
+#endif
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -25,13 +28,13 @@ AppPublisher=GPSBabel
 AppPublisherURL=https://www.gpsbabel.org
 AppSupportURL=https://www.gpsbabel.org
 AppUpdatesURL=https://www.gpsbabel.org
-ArchitecturesAllowed=x64
-ArchitecturesInstallIn64BitMode=x64
-DefaultDirName={pf}\GPSBabel
+ArchitecturesAllowed={#arch}
+ArchitecturesInstallIn64BitMode={#arch}
+DefaultDirName={commonpf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir="{#output_dir}"
-OutputBaseFilename=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Setup
-OutputManifestFile=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Manifest.txt
+OutputBaseFilename=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Setup-{#arch}
+OutputManifestFile=GPSBabel-@GB.VERSION@@GB.PACKAGE_RELEASE@-Manifest-{#arch}.txt
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
@@ -44,6 +47,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "vcredist"; Description: "Install Microsoft Visual C++ Redistributable (An appropriate Visual C++ Resdistributable is required.)";
 
 [Files]
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
@@ -52,6 +56,7 @@ Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 Source: "{#output_dir}\package\*"; Excludes: "vc_redist.*.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#output_dir}\package\vc_redist.x86.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
 Source: "{#output_dir}\package\vc_redist.x64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
+Source: "{#output_dir}\package\vc_redist.arm64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
 Source: "{#output_dir}\package\gpsbabel.exe";   	DestDir: "{app}"; Flags: ignoreversion
 ; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
@@ -78,8 +83,9 @@ Name: "{group}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"
 Name: "{commondesktop}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\vc_redist.x86.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
-Filename: "{app}\vc_redist.x64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
+Filename: "{app}\vc_redist.x86.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist; Tasks: vcredist
+Filename: "{app}\vc_redist.x64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist; Tasks: vcredist
+Filename: "{app}\vc_redist.arm64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist; Tasks: vcredist
 Filename: "{app}\gpsbabelfe.exe"; Description: "{cm:LaunchProgram,GPSBabelFE}"; Flags: nowait postinstall skipifsilent
 
 [Registry]

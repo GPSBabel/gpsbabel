@@ -30,7 +30,7 @@
 #include <QFile>                      // for QFile
 #include <QIODevice>                  // for QIODevice::ReadOnly
 #include <QLocale>                    // for QLocale
-#include <QMessageLogContext>         // for QMessageLogContext
+#include <QMessageLogContext>         // for qSetMessagePattern, qFormatLogMessage, qInstallMessageHandler, QMessageLogContext, QtMsgType
 #include <QStack>                     // for QStack
 #include <QString>                    // for QString
 #include <QStringList>                // for QStringList
@@ -203,6 +203,22 @@ static void setMessagePattern(const QString& id = QString())
   }
 }
 
+/* The GUI captures standard error and standard output for
+ * display in the output window.
+ * On windows the Qt supplied default message handler might send messages
+ * to the debugger instead.
+ * We override the default message handler to ensure that messages go to
+ * standard error.  Alternatively, the GUI could set the undocumented
+ * environmental variable QT_FORCE_STDERR_LOGGING. */
+static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+  QString message = qFormatLogMessage(type, context, msg);
+  /* flush any buffered standard output */
+  fflush(stdout);
+  fprintf(stderr, "%s\n", qPrintable(message));
+  fflush(stderr);
+}
+
 static void
 signal_handler(int sig)
 {
@@ -246,6 +262,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     timer.start();
   }
   start_session(ivecs.fmtname, fname);
+  qInstallMessageHandler(MessageHandler);
   setMessagePattern(ivecs.fmtname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);

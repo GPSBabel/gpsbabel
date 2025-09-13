@@ -109,7 +109,7 @@ V900Format::rd_init(const QString& fname)
    */
   fin = ufopen(fname, "rb");
   if (!fin) {
-    gbFatal("v900: could not open '%s'.\n", gbLogCStr(fname));
+    gbFatal("could not open '%s'.\n", gbLogCStr(fname));
   }
 }
 
@@ -163,7 +163,7 @@ V900Format::read()
   /* first, determine if this is advanced mode by reading the first line.
            since the first line does not contain any nulls, it can be safely read by fgets(). */
   if (!fgets(line.text, sizeof(line), fin)) {
-    gbFatal("v900: error reading header (first) line from input file\n");
+    gbFatal("error reading header (first) line from input file\n");
   }
   int is_advanced_mode = (nullptr != strstr(line.text,"PDOP")); /* PDOP field appears only in advanced mode */
 
@@ -197,7 +197,7 @@ V900Format::read()
     bad |= (line.bas.common.comma9 != ',');
 
     if (bad) {
-      gbWarning("v900: skipping malformed record at line %d\n", lc);
+      gbWarning("skipping malformed record at line %d\n", lc);
     }
 
     line.bas.common.comma1 = 0;

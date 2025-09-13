@@ -1,7 +1,7 @@
 /*
     IGO8 Track Format
 
-    Copyright (C) 2008 Dustin Johnson, Dustin@Dustinj.us
+    Copyright (C) 2008 Dustin Johnson
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
