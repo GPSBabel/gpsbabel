@@ -127,12 +127,14 @@ jobs:
       run: |
         sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
         # workaround https://github.com/canonical/mesa-2404/issues/63
+        set -x
         if [ "$JOB_OS" = "ubuntu-24.04-arm" ]; then
           mesaver=$(snap info mesa-2404 | grep installed: | tr -s ' ' '\t' | cut -f2,2 | cut -d . -f1,1)
           if [ "$mesaver" -lt 25 ]; then
             sudo snap refresh --revision 1033
           fi
         fi
+        set +x
         snap list
         export GBTEMP=$(pwd)/gbtemp
         mkdir -p "$GBTEMP"
