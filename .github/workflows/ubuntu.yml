@@ -130,6 +130,7 @@ jobs:
           if [ "$mesaver" -lt 25 ]; then
             echo "Forcing installation of temporary mesa-2404 snap!"
             sudo snap refresh --channel=beta mesa-2404
+            sudo systemctl restart snapd
           fi
         fi
         snap list
