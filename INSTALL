@@ -59,6 +59,9 @@ GPSBABEL_EMBED_TRANSLATIONS:BOOL:ON|OFF
 GPSBABEL_ENABLE_PCH:BOOL 
   Enable precompiled headers when building the target gpsbabel.
 
+GPSBABEL_UPGRADE_CHECK:BOOL
+  Enable the graphical user interface upgrade check and usage statistic reporting.
+
 GPSBABEL_EXTRA_COMPILE_OPTIONS:STRING
   Extra compile options when building the target gpsbabel.
 

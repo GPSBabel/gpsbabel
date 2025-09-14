@@ -25,7 +25,9 @@
 #include <QTextDocument>  // for QTextDocument
 #include <QTextEdit>      // for QTextEdit
 #include "appname.h"      // for appName
+#ifndef DISABLE_UPGRADE_CHECK
 #include "upgrade.h"      // for UpgradeCheck
+#endif
 
 
 AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
@@ -53,8 +55,12 @@ AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
   tt.replace("$installationId$", installationId);
 
   // Not localized as it should never be seen.
+#ifndef DISABLE_UPGRADE_CHECK
   tt.replace("$upgradetestmode$",
              UpgradeCheck::isTestMode() ? "**Upgrade test mode**" : "");
+#else
+  tt.remove("$upgradetestmode$");
+#endif
 
   doc->setHtml(tt);
   QTextCursor cur(doc);
