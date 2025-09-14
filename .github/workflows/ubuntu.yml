@@ -123,16 +123,17 @@ jobs:
     # Make sure the snap is installable
     - name: Test
       run: |
-        sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
         # workaround https://github.com/canonical/mesa-2404/issues/63
+        # for an unknown reason refreshing the mesa-2404 snap to use beta after installation results in
+        # gpsbabel using the original mesa-2404 version.
         if [ "${RUNNER_ARCH}" = "ARM64" ]; then
-          mesaver=$(snap info mesa-2404 | grep installed: | tr -s ' ' '\t' | cut -f2,2 | cut -d . -f1,1)
+          mesaver=$(snap info mesa-2404 | grep latest/stable: | tr -s ' ' '\t' | cut -f2,2 | cut -d . -f1,1)
           if [ "$mesaver" -lt 25 ]; then
             echo "Forcing installation of temporary mesa-2404 snap!"
-            sudo snap refresh --channel=beta mesa-2404
-            sudo systemctl restart snapd snapd.socket
+            sudo snap install --channel=beta mesa-2404
           fi
         fi
+        sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
         snap list
         export GBTEMP=$(pwd)/gbtemp
         mkdir -p "$GBTEMP"
