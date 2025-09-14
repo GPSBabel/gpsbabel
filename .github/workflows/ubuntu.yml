@@ -129,8 +129,8 @@ jobs:
         if [ "${RUNNER_ARCH}" = "ARM64" ]; then
           mesaver=$(snap info mesa-2404 | grep latest/stable: | tr -s ' ' '\t' | cut -f3 | cut -d . -f1,1)
           if [ "$mesaver" -lt 25 ]; then
-            echo "Forcing installation of temporary mesa-2404 snap!"
-            sudo snap install --channel=beta mesa-2404
+            echo "Forcing installation of beta mesa-2404 snap!"
+            sudo snap install --channel=latest/beta mesa-2404
           fi
         fi
         sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
