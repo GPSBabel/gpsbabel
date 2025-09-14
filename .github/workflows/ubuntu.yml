@@ -68,7 +68,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: build_and_test
       run: |
@@ -111,7 +111,7 @@ jobs:
       snap-file: ${{ steps.build-snap.outputs.snap }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
         fetch-tags: true
@@ -142,7 +142,7 @@ jobs:
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation }}
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       with:
         subject-path: ${{ steps.build-snap.outputs.snap }}
 

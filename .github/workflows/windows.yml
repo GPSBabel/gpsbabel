@@ -82,7 +82,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Cache Qt
       uses: actions/cache@v4
@@ -94,11 +94,8 @@ jobs:
     - name: Install Qt setup(aqt)
       if: ( steps.cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
       uses: actions/setup-python@v5
-      # aqt depends on pyppmd, which isn't supported on WoA as of pyppmd 1.1.1
-      # force x64 python, which will run under emulation of WoA.
       with:
-        python-version: '3.12'
-        architecture: x64
+        python-version: '3.13'
 
     - name: Install Qt
       if: steps.cache.outputs.cache-hit != 'true'
@@ -154,7 +151,7 @@ jobs:
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       with:
         subject-path: 'bld/gui/GPSBabel-*-Setup-*.exe'
 
@@ -185,10 +182,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: 'Download Artifacts'
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         path: bld
         pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
