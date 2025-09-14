@@ -122,20 +122,16 @@ jobs:
 
     # Make sure the snap is installable
     - name: Test
-      env:
-        JOB_OS: $${ matrix.os }}
       run: |
         sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
         # workaround https://github.com/canonical/mesa-2404/issues/63
-        set -x
-        echo JOB_OS is: ${JOB_OS}
-        if [ "${JOB_OS}" = "ubuntu-24.04-arm" ]; then
+        if [ "${RUNNER_ARCH}" = "ARM64" ]; then
           mesaver=$(snap info mesa-2404 | grep installed: | tr -s ' ' '\t' | cut -f2,2 | cut -d . -f1,1)
           if [ "$mesaver" -lt 25 ]; then
+            echo "Forcing installation of temporary mesa-2404 snap!"
             sudo snap refresh --revision 1033
           fi
         fi
-        set +x
         snap list
         export GBTEMP=$(pwd)/gbtemp
         mkdir -p "$GBTEMP"
