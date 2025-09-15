@@ -1,8 +1,8 @@
 /*
     Read and write GeoNiche files.
 
-    Copyright (C) 2003 Rick Richardson <rickr@mn.rr.com>
-    Copyright (C) 2006 Robert Lipe <robertlipe@usa.net>
+    Copyright (C) 2003 Rick Richardson
+    Copyright (C) 2006 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

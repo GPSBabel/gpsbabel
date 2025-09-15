@@ -3,7 +3,7 @@
         http://www.mglavionics.co.za/Docs/Enigma%20Waypoint%20format.pdf
         Binary data are stored in little endian (Intel)
 
-	Copyright (C) 2009 Tobias Kretschmar, tobias.kretschmar@gmx.de
+	Copyright (C) 2009 Tobias Kretschmar
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

@@ -51,7 +51,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Cache Qt
       uses: actions/cache@v4
@@ -104,7 +104,7 @@ jobs:
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       with:
         subject-path: 'gui/GPSBabel-*.dmg'
 

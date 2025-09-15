@@ -53,8 +53,29 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   ui_.mapPreviewCheck->setChecked(babelData_.mapPreviewEnabled_);
   ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
 
+#ifdef DISABLE_UPGRADE_CHECK
+  ui_.startupCheck->hide();
+  ui_.reportStatisticsCheck->hide();
+  ui_.upgradeMenuCheck->hide();
+
+  QLabel* noStartupCheckLabel = new QLabel(tr("This version never checks for a newer version on start."), ui_.privacy_tab);
+  noStartupCheckLabel->setObjectName("noStartupCheckLabel");
+  ui_.verticalLayout_5->insertWidget(0, noStartupCheckLabel);
+ 
+  QLabel* noReportStatisticsLabel = new QLabel(tr("This version never reports usage data."), ui_.privacy_tab);
+  noReportStatisticsLabel->setObjectName("noReportStatisticsLabel");
+  ui_.verticalLayout_5->insertWidget(1, noReportStatisticsLabel);
+ 
+  QLabel* noUpgradeMenuLabel = new QLabel(tr("This version does not include the ability to check for an upgrade."), ui_.privacy_tab);
+  noUpgradeMenuLabel->setObjectName("noUpgradeMenuLabel");
+  ui_.verticalLayout_5->insertWidget(2, noUpgradeMenuLabel);
+#endif
 #ifdef DISABLE_MAPPREVIEW
   ui_.mapPreviewCheck->hide();
+
+  QLabel* noPreviewLabel = new QLabel(tr("The version does not include the map preview feature."), ui_.privacy_tab);
+  noPreviewLabel->setObjectName("noPreviewLabel");
+  ui_.verticalLayout_5->insertWidget(3, noPreviewLabel);
 #endif
 
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &Preferences::acceptClicked);

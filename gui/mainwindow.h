@@ -42,7 +42,9 @@
 #include "filterdata.h"     // for AllFiltersData
 #include "format.h"         // for Format
 #include "ui_mainwinui.h"   // for Ui_MainWindow
+#ifndef DISABLE_UPGRADE_CHECK
 #include "upgrade.h"        // for UpgradeCheck
+#endif
 
 
 class MainWindow: public QMainWindow
@@ -101,8 +103,10 @@ private:
   void updateFilterStatus();
   void setWidgetValues();
   void getWidgetValues();
+#ifndef DISABLE_UPGRADE_CHECK
   UpgradeCheck* upgrade;
   bool allowBetaUpgrades();
+#endif
   void osLoadDeviceNameCombos(QComboBox*);
   QString getFormatNameForExtension(const QString& ext);
 
@@ -135,7 +139,9 @@ private slots:
   void preferencesActionX();
   void visitWebsiteActionX();
   void resetFormatDefaults();
+#ifndef DISABLE_UPGRADE_CHECK
   void upgradeCheckActionX();
+#endif
 
 
 };
