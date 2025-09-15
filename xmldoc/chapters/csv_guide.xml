@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter id="csv_guide">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="csv_guide">
   <title>Choosing the Right CSV Format in GPSBabel</title>
 
   <note>
@@ -22,7 +22,7 @@
     waypoints, tracks, and routes.
   </para>
 
-  <section id="csv_guide_overview_table">
+  <section xml:id="csv_guide_overview_table">
     <title>Quick Comparison: Which CSV Format to Use?</title>
     <para>
       Use the table below to quickly identify the most appropriate
@@ -39,9 +39,9 @@
         </thead>
         <tbody>
           <row>
-            <entry>Has NO header row, and contains exactly three
-            fields per line in the order: Latitude, Longitude, Name.</entry>
-            <entry><link linkend="fmt_csv"><code>csv</code></link></entry>
+            <entry><para>Has NO header row, and contains exactly three
+            fields per line in the order: Latitude, Longitude, Name.</para></entry>
+            <entry><para><link linkend="fmt_csv"><code>csv</code></link></para></entry>
             <entry>
               <para>This is the simplest CSV format, designed for
               legacy files with a very specific, fixed structure. It
@@ -50,10 +50,10 @@
             </entry>
           </row>
           <row>
-            <entry>Has a HEADER row (e.g., "Latitude,Longitude,Name",
+            <entry><para>Has a HEADER row (e.g., "Latitude,Longitude,Name",
             "lat,lon", "Waypoint Name,Lat,Lon"), and contains common
-            GPS field names.</entry>
-            <entry><link linkend="fmt_unicsv"><code>unicsv</code></link></entry>
+            GPS field names.</para></entry>
+            <entry><para><link linkend="fmt_unicsv"><code>unicsv</code></link></para></entry>
             <entry>
               <para>
                 **Recommended for most users.** <code>unicsv</code>
@@ -66,17 +66,17 @@
                 Use this format when you want GPSBabel to automatically
                 figure out the CSV structure for you.
               </para>
-              <para>Example: <code>Name,Lat,Lon,Description<br/>
+              <para>Example: <code>Name,Lat,Lon,Description
                 Home,34.000,-118.000,My House</code></para>
             </entry>
           </row>
           <row>
-            <entry>
+            <entry><para>
               Has a custom or unusual structure (e.g., no headers,
               non-standard field names, unique separators,
               prologue/epilogue lines, many custom data fields).
-            </entry>
-            <entry><link linkend="fmt_xcsv"><code>xcsv</code></link></entry>
+            </para></entry>
+            <entry><para><link linkend="fmt_xcsv"><code>xcsv</code></link></para></entry>
             <entry>
               <para>
                 For advanced users. <code>xcsv</code> requires you to
@@ -99,7 +99,7 @@
     </informaltable>
   </section>
 
-  <section id="csv_guide_detailed_unicsv">
+  <section xml:id="csv_guide_detailed_unicsv">
     <title>Understanding Universal CSV (<link linkend="fmt_unicsv">
       <code>unicsv</code></link>)</title>
     <para>
@@ -127,7 +127,7 @@
     </para>
   </section>
 
-  <section id="csv_guide_detailed_xcsv">
+  <section xml:id="csv_guide_detailed_xcsv">
     <title>When to Use Extended CSV (<link linkend="fmt_xcsv">
       <code>xcsv</code></link>)</title>
     <para>
@@ -156,7 +156,7 @@
       </link>.</para>
   </section>
 
-  <section id="csv_guide_detailed_csv">
+  <section xml:id="csv_guide_detailed_csv">
     <title>Legacy CSV (<link linkend="fmt_csv"><code>csv</code></link>)
     </title>
     <para>
@@ -177,3 +177,4 @@
   </section>
 
 </chapter>
+

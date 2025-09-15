@@ -1,16 +1,16 @@
       <para>
-	There are a billion variants of Comma Separated Value
-	data. This is the one specifically that makes
-	<link xmlns:xlink="http://www.w3.org/1999/xlink"
-	xlink:href="http://www.delorme.com">DeLorme</link>
-	<trademark>S&amp;A Deluxe 9</trademark> happy. It's
-	also a very simple format and useful for many other programs like
-	spreadsheets, but contains only a very minimal information.
-	For general purpose use, you'll probably be more happy with our
-	<link linkend="fmt_unicsv">universal csv (<code>unicsv</code>)</link>
-	format. For a comprehensive guide to choosing the right CSV format
-	for your data, please refer to the
-	<link linkend="csv_guide">Choosing the Right CSV Format</link> guide.
+        There are a billion variants of Comma Separated Value
+        data. This is the one specifically that makes
+        <link xmlns:xlink="http://www.w3.org/1999/xlink"
+        xlink:href="http://www.delorme.com">DeLorme</link>
+        <trademark>S&amp;A Deluxe 9</trademark> happy. It's
+        also a very simple program and useful for many other programs like
+        spreadsheets, but contains only a very minimal information.
+        For general purpose use, you'll probably be more happy with our
+        <link linkend="fmt_unicsv">universal csv (<code>unicsv</code>)</link>
+        format. For a comprehensive guide to choosing the right CSV format
+        for your data, please refer to the
+        <link linkend="csv_guide">Choosing the Right CSV Format</link> guide.
       </para>
       <para> CSV is also the correct format for
 	<trademark>Lowrance MapCreate</trademark>,
