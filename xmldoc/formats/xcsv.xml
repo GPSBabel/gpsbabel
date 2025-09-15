@@ -8,7 +8,7 @@ format of the waypoint files.
   <para>
     <emphasis role="strong">Advanced Use:</emphasis> <code>xcsv</code>
     (Extended CSV) provides powerful, highly customizable CSV import
-    and export, requiring the definition of a "style file." It is
+    and export, requiring the definition of a "style file". It is
     intended for advanced users working with unique or complex CSV
     structures that cannot be handled by other formats.
   </para>
