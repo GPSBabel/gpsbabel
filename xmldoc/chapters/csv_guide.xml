@@ -21,7 +21,6 @@
     ways to store tabular data, and they are widely used for GPS
     waypoints, tracks, and routes.
   </para>
-
   <section xml:id="csv_guide_overview_table">
     <title>Quick Comparison: Which CSV Format to Use?</title>
     <para>
@@ -98,7 +97,6 @@
       </tgroup>
     </informaltable>
   </section>
-
   <section xml:id="csv_guide_detailed_unicsv">
     <title>Understanding Universal CSV (<link linkend="fmt_unicsv">
       <code>unicsv</code></link>)</title>
@@ -145,16 +143,17 @@
       </itemizedlist>
       Then defining an <code>xcsv</code> style file allows you to specify
       every detail of the CSV's structure and how its fields map to
-      GPSBabel's internal data model. Many of GPSBabel's other obscure
-      or unique text-based formats are, in fact, implemented using
-      <code>xcsv</code> style files internally (see the
-      <filename>style</filename> directory in the GPSBabel source code
-      for examples).
-    </para>
-    <para>For comprehensive details on creating style files, see the
-      full documentation for <link linkend="fmt_xcsv"><code>xcsv</code>
-      </link>.</para>
-  </section>
+      GPSBabel's internal data model. This provides
+      ultimate control but requires upfront definition.
+      </para>
+      <para>
+        <code>xcsv</code> is internally used by GPSBabel for
+        many other formats where a structured, custom
+        text-based output is needed (see the
+        <filename>style</filename> directory in the GPSBabel
+        source code for examples).
+      </para>
+    </section>
 
   <section xml:id="csv_guide_detailed_csv">
     <title>Legacy CSV (<link linkend="fmt_csv"><code>csv</code></link>)
@@ -175,6 +174,4 @@
     <para>For more information, refer to the full documentation for
       <link linkend="fmt_csv"><code>csv</code></link>.</para>
   </section>
-
 </chapter>
-
