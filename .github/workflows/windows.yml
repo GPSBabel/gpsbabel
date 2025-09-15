@@ -93,7 +93,7 @@ jobs:
 
     - name: Install Qt setup(aqt)
       if: ( steps.cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.13'
 
