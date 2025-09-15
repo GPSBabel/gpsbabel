@@ -111,6 +111,7 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   ozi.cc
   qstarz_bl_1000.cc
   random.cc
+  seventymai.cc
   shape.cc
   skytraq.cc
   subrip.cc
@@ -248,6 +249,7 @@ set(HEADERS
   qstarz_bl_1000.h
   random.h
   session.h
+  seventymai.h
   shape.h
   skytraq.h
   subrip.h
@@ -423,6 +425,7 @@ set(TESTS
   resample
   route_reverse
   serialization
+  seventymai
   shape
   simplify-relative
   simplify

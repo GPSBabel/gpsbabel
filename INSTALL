@@ -19,8 +19,8 @@ GPSBABEL_WITH_LIBUSB:STRING=no|pkgconfig|system*|included*|custom
   note that libusb is NOT used on windows.
   no: build without libusb-1.0.  functionality will be limited.
   pkgconfig: build with libusb-1.0 found by pkg-config.
-  system: build with libusb-1.0 found on system library path and under
-    libusb-1.0 on system include path (default, linux, openbsd).
+  system: build with libusb-1.0 found on the system library path and under
+    libusb-1.0 on the system include path (default, linux, openbsd).
   included: build with libusb-1.0 included with gpsbabel (default, macOS only).
   custom: build with user supplied libusb-1.0. LIBS and INCLUDEPATH may need to
     be set with GPSBABEL_EXTRA_LINK_LIBRARIES and
@@ -44,8 +44,8 @@ GPSBABEL_WITH_ZLIB:STRING=no|pkgconfig|included*|custom
 
 GPSBABEL_MAPPREVIEW=ON*|OFF
   This options enables the map preview feature.  With the feature disabled
-  QtWebEngine and QtWebEngineWdigets are not used. Note that QtWebKit and
-  QtWebKitWidgets are not longer supported.
+  QtWebEngine and QtWebEngineWidgets are not used. Note that QtWebKit and
+  QtWebKitWidgets are no longer supported.
 
 GPSBABEL_EMBED_MAP:BOOL=ON|OFF
   Embed gmapbase.html for map preview.  When using this option gmapbase.html
@@ -58,6 +58,9 @@ GPSBABEL_EMBED_TRANSLATIONS:BOOL:ON|OFF
 
 GPSBABEL_ENABLE_PCH:BOOL 
   Enable precompiled headers when building the target gpsbabel.
+
+GPSBABEL_UPGRADE_CHECK:BOOL
+  Enable the graphical user interface upgrade check and usage statistic reporting.
 
 GPSBABEL_EXTRA_COMPILE_OPTIONS:STRING
   Extra compile options when building the target gpsbabel.

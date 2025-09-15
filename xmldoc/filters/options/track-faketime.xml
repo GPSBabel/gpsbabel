@@ -25,7 +25,7 @@ require a time value for each trackpoint.
 <title>Replace time values of a track</title>
 <para>
 Replace all time values with new time values.
-Start at the 5 th of July, 2010 at 8 PM and
+Start at the 5th of July, 2010 at 8 PM and
 increment 2 seconds between each trackpoint:
 </para>
 <para><userinput>gpsbabel -i kml -f in.kml -x track,faketime=f20100705200000+2 -o gtrnctr -F out.tcx</userinput></para>
@@ -34,7 +34,7 @@ increment 2 seconds between each trackpoint:
 <title>Add time values to a track</title>
 <para>
 Add a time value to a trackpoint, if the trackpoint contains no time value.
-Start at the 6 th of May, 2010 at 6 AM and
+Start at the 6th of May, 2010 at 6 AM and
 increment 5 seconds between each trackpoint:
 </para>
 <para><userinput>gpsbabel -i kml -f in.kml -x track,faketime=20100506060000+5 -o gtrnctr -F out.tcx</userinput></para>

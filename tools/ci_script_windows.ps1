@@ -7,11 +7,11 @@
 # powershell.exe -ExecutionPolicy Unrestricted -File tools\make_windows_release.ps1
 #
 # The defaults should be compatible with github action builds.
-Param(
+param(
     $build_dir_name = "bld",
     $generator = "Ninja",
     $toolset = "",
-    [ValidateSet("x86", "amd64", "amd64_x86", "x86_amd64")] $arch = "amd64"
+    [ValidateSet("x86", "amd64", "amd64_x86", "x86_amd64", "arm64")] $arch = "amd64"
 )
 # the arch parameter values correspond to:
 # vcvarsall arch parameter x86 => host x86, target x86.
@@ -33,6 +33,7 @@ switch ($arch) {
     "amd64" { $platform = "x64" }
     "amd64_x86" { $platform = "Win32" }
     "x86_amd64" { $platform = "x64" }
+    "arm64" { $platform = "ARM64" }
 }
 # make sure we are staring with a clean build directory
 Remove-Item $build_dir -Recurse -ErrorAction Ignore
@@ -40,15 +41,16 @@ New-Item $build_dir -type directory -Force | Out-Null
 Set-Location $build_dir
 $hashargs = "-G", $generator
 if ( $toolset ) {
-  $hashargs += "-T", $toolset
+    $hashargs += "-T", $toolset
 }
 if ( $generator -like "Visual Studio*") {
-  $hashargs += "-A", $platform
-} else {
-  $hashargs += "-DCMAKE_BUILD_TYPE:STRING=Release"
+    $hashargs += "-A", $platform
+}
+else {
+    $hashargs += "-DCMAKE_BUILD_TYPE:STRING=Release"
 }
 $hashargs += "-DCMAKE_PREFIX_PATH:PATH=$CMAKE_PREFIX_PATH"
-Write-Output cmake $hashargs $src_dir
+Write-Output "cmake $hashargs $src_dir"
 cmake $hashargs $src_dir
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 switch -wildcard ($generator) {
@@ -58,6 +60,6 @@ switch -wildcard ($generator) {
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
 switch -wildcard ($generator) {
     "Visual Studio*" { cmake --build $build_dir --config Release --target package_app }
-    default { cmake --build $build_dir --target package_app}
+    default { cmake --build $build_dir --target package_app }
 }
 if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }

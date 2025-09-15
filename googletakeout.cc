@@ -59,13 +59,13 @@ Waypoint* GoogleTakeoutFormat::takeout_waypoint(
   auto* waypoint = new Waypoint();
   waypoint->latitude = lat_e7 / 1e7;
   waypoint->longitude = lon_e7 / 1e7;
-  if (shortname && shortname->length() > 0) {
+  if (shortname && !shortname->isEmpty()) {
     waypoint->shortname = *shortname;
   }
-  if (description && description->length() > 0) {
+  if (description && !description->isEmpty()) {
     waypoint->description = *description;
   }
-  if (start_str && start_str->length() > 0) {
+  if (start_str && !start_str->isEmpty()) {
     gpsbabel::DateTime start = QDateTime::fromString(*start_str, Qt::ISODate);
     waypoint->SetCreationTime(start);
   }
@@ -286,12 +286,12 @@ GoogleTakeoutFormat::add_place_visit(const QJsonObject& placeVisit)
   const QString timestamp = placeVisit[DURATION][START_TIMESTAMP].toString();
   Waypoint* waypoint;
 
-  if (loc.contains(NAME) && loc[NAME].toString().length() > 0) {
+  if (loc.contains(NAME) && !loc[NAME].toString().isEmpty()) {
     QString name = loc[NAME].toString();
     waypoint = takeout_waypoint(
       loc[LOCATION_LATE7].toInt(),
       loc[LOCATION_LONE7].toInt(),
-      name.length() > 0 ? &name : nullptr,
+      !name.isEmpty() ? &name : nullptr,
       &address,
       &timestamp
     );

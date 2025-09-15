@@ -143,7 +143,7 @@ QStringList TrackFilterData::makeOptionString() const
     s += QString(",title=%1").arg(titleString);
   }
 
-  if (s.length() != 0) {
+  if (!s.isEmpty()) {
     args << "-x" << "track" + s;
   }
 

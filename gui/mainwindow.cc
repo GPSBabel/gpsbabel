@@ -73,7 +73,9 @@
 #include "optionsdlg.h"        // for OptionsDlg
 #include "preferences.h"       // for Preferences
 #include "runmachine.h"        // for RunMachine
+#ifndef DISABLE_UPGRADE_CHECK
 #include "upgrade.h"           // for UpgradeCheck
+#endif
 #include "version_mismatch.h"  // for VersionMismatch
 
 
@@ -98,6 +100,7 @@ QString MainWindow::findBabelVersion()
   return str;
 }
 
+#ifndef DISABLE_UPGRADE_CHECK
 //------------------------------------------------------------------------
 // Decides whether available beta upgrades are suggested to user for download.
 bool MainWindow::allowBetaUpgrades()
@@ -107,6 +110,7 @@ bool MainWindow::allowBetaUpgrades()
   // 'suggest beta upgrade' box, allow betas to be suggested for installation.
   return isBeta_ || babelData_.allowBetaUpgrades_;
 }
+#endif
 
 //------------------------------------------------------------------------
 static QString MakeOptions(const QList<FormatOption>& options)
@@ -142,7 +146,7 @@ static QString MakeOptions(const QList<FormatOption>& options)
 static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 {
   QString str = MakeOptions(options);
-  return (str.length()) != 0 ? str.mid(1) : str;
+  return !str.isEmpty() ? str.mid(1) : str;
 
 }
 
@@ -170,7 +174,11 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui_.actionAbout, &QAction::triggered, this, &MainWindow::aboutActionX);
   connect(ui_.actionVisit_Website, &QAction::triggered, this, &MainWindow::visitWebsiteActionX);
   connect(ui_.actionMake_a_Donation, &QAction::triggered, this, &MainWindow::donateActionX);
+#ifndef DISABLE_UPGRADE_CHECK
   connect(ui_.actionUpgradeCheck, &QAction::triggered, this, &MainWindow::upgradeCheckActionX);
+#else
+  ui_.menuHelp->removeAction(ui_.actionUpgradeCheck);
+#endif
   connect(ui_.actionPreferences, &QAction::triggered, this, &MainWindow::preferencesActionX);
 
   connect(ui_.inputFormatCombo, &QComboBox::currentIndexChanged,
@@ -222,11 +230,13 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
+#ifndef DISABLE_UPGRADE_CHECK
   upgrade = new UpgradeCheck(this, formatList_, babelData_);
   if (babelData_.startupVersionCheck_) {
     upgrade->checkForUpgrade(babelVersion_, babelData_.upgradeCheckTime_,
                              allowBetaUpgrades());
   }
+#endif
 
   if (!babelData_.ignoreVersionMismatch_ && babelVersion_ != VERSION) {
     VersionMismatch vm(nullptr, babelVersion_, QString(VERSION));
@@ -461,7 +471,7 @@ QString MainWindow::filterForFormat(int idx)
 QString MainWindow::ensureExtensionPresent(const QString& name, int idx)
 {
   QString outname = name;
-  if (QFileInfo(name).suffix().length() == 0) {
+  if (QFileInfo(name).suffix().isEmpty()) {
     QStringList extensions = formatList_[idx].getExtensions();
     if (!extensions.empty() && !extensions[0].isEmpty()) {
       outname += "." + extensions[0];
@@ -524,7 +534,7 @@ void MainWindow::browseInputFile()
 void MainWindow::browseOutputFile()
 {
   int idx = currentComboFormatIndex(ui_.outputFormatCombo);
-  QString startFile = babelData_.outputFileName_.length() == 0 ? babelData_.outputBrowse_ : babelData_.outputFileName_;
+  QString startFile = babelData_.outputFileName_.isEmpty() ? babelData_.outputBrowse_ : babelData_.outputFileName_;
   QFileInfo finfo(startFile);
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
     startFile = finfo.dir().absolutePath();
@@ -534,7 +544,7 @@ void MainWindow::browseOutputFile()
     QFileDialog::getSaveFileName(nullptr, tr("Output File Name"),
                                  startFile,
                                  filterForFormat(idx));
-  if (str.length() != 0) {
+  if (!str.isEmpty()) {
     str = ensureExtensionPresent(str, idx);
     babelData_.outputBrowse_ = str;
     babelData_.outputFileName_ = str;
@@ -805,7 +815,7 @@ bool MainWindow::isOkToGo()
     babelData_.inputFileNames_ << ui_.inputFileNameText->text();
   }
   if ((babelData_.outputType_ == BabelData::fileType_) &&
-      (babelData_.outputFileName_.size() == 0) &&
+      (babelData_.outputFileName_.isEmpty()) &&
       (!ui_.outputFileNameText->text().isEmpty())) {
     babelData_.outputFileName_ = ui_.outputFileNameText->text();
   }
@@ -825,7 +835,7 @@ bool MainWindow::isOkToGo()
     return false;
   }
   if (babelData_.outputType_ == BabelData::fileType_ &&
-      babelData_.outputFileName_.length() == 0) {
+      babelData_.outputFileName_.isEmpty()) {
     QMessageBox::information(nullptr, QString(appName), tr("No output file specified"));
     return false;
   }
@@ -920,7 +930,7 @@ void MainWindow::applyActionX()
 
     // output file or device option
     if (outIsFile) {
-      if (babelData_.outputFileName_ != "") {
+      if (!babelData_.outputFileName_.isEmpty()) {
         args << "-F" << babelData_.outputFileName_;
       }
     } else if (babelData_.outputType_ == BabelData::deviceType_) {
@@ -1000,10 +1010,12 @@ void MainWindow::applyActionX()
 //------------------------------------------------------------------------
 void MainWindow::closeActionX()
 {
+#ifndef DISABLE_UPGRADE_CHECK
   QDateTime wt= upgrade->getUpgradeWarningTime();
   if (wt.isValid()) {
     babelData_.upgradeCheckTime_ = wt;
   }
+#endif
   babelData_.runCount_++;
 
   QDateTime now = QDateTime::currentDateTime();
@@ -1130,7 +1142,7 @@ void MainWindow::resetFormatDefaults()
 void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(nullptr, babelData_.synthShortNames_,
-                babelData_.previewGmap_, babelData_.debugLevel_);
+                babelData_.mapPreviewEnabled_, babelData_.previewGmap_, babelData_.debugLevel_);
   connect(advDlg.formatButton(), &QAbstractButton::clicked,
           this, &MainWindow::resetFormatDefaults);
   advDlg.exec();
@@ -1148,6 +1160,7 @@ void MainWindow::aboutActionX()
   aboutDlg.exec();
 }
 
+#ifndef DISABLE_UPGRADE_CHECK
 //------------------------------------------------------------------------
 void MainWindow::upgradeCheckActionX()
 {
@@ -1155,6 +1168,7 @@ void MainWindow::upgradeCheckActionX()
                            QDateTime(QDate(2000, 1, 1), QTime(0, 0)),
                            allowBetaUpgrades());
 }
+#endif
 
 //------------------------------------------------------------------------
 void MainWindow::preferencesActionX()
@@ -1162,7 +1176,10 @@ void MainWindow::preferencesActionX()
   Preferences preferences(nullptr, formatList_, babelData_);
   preferences.exec();
 
-  // We may have changed the list of displayed formats.  Resynchronize.
+  // The user may have changed the list of displayed formats, and/or
+  // enabled or disabled the upgrade menu item.
+  // Resynchronize.
+
   setWidgetValues();
 }
 
@@ -1195,6 +1212,9 @@ void MainWindow::updateFilterStatus()
 //------------------------------------------------------------------------
 void MainWindow::setWidgetValues()
 {
+#ifndef DISABLE_UPGRADE_CHECK
+  ui_.actionUpgradeCheck->setEnabled(babelData_.upgradeMenuEnabled_);
+#endif
   if (babelData_.inputType_ == BabelData::fileType_) {
     ui_.inputFileOptBtn->setChecked(true);
     inputFileOptBtnClicked();

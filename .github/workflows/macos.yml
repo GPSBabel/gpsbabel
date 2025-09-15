@@ -43,7 +43,7 @@ jobs:
             GENERATOR: 'Ninja'
             RELEASE: true
             os: macos-14
-          - QT_VERSION: '6.8.1'
+          - QT_VERSION: '6.8.3'
             XCODE_VERSION: '16.2'
             GENERATOR: 'Ninja'
             RELEASE: false
@@ -51,7 +51,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Cache Qt
       uses: actions/cache@v4
@@ -89,7 +89,6 @@ jobs:
         brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
         brew list -1 | grep python
         ls -l $(brew --prefix)/bin | grep -i python
-        brew install ninja
         brew install docbook docbook-xsl fop gnu-sed
         # brew install is taking forever on macos-11, skip jing-trang and all it's dependencies.
         # jing 20241231 is failing with "Unknown XPath version 0", https://github.com/relaxng/jing-trang/issues/284
@@ -105,7 +104,7 @@ jobs:
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       with:
         subject-path: 'gui/GPSBabel-*.dmg'
 

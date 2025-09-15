@@ -87,19 +87,19 @@ bool FormatLoad::processFormat(Format& format)
     } else if (optionType == "string") {
       type = FormatOption::OPTstring;
     } else if (optionType == "integer") {
-      type = (optionMax != "" && optionMin != "") ? FormatOption::OPTboundedInt : FormatOption::OPTint;
-      if (optionMax == "") {
+      type = (!optionMax.isEmpty() && !optionMin.isEmpty()) ? FormatOption::OPTboundedInt : FormatOption::OPTint;
+      if (optionMax.isEmpty()) {
         optionMax = "2147483647";
       }
-      if (optionMin == "") {
+      if (optionMin.isEmpty()) {
         optionMin = "-2147483647";
       }
     } else if (optionType == "float") {
       type = FormatOption::OPTfloat;
-      if (optionMax == "") {
+      if (optionMax.isEmpty()) {
         optionMax = "1.0E308";
       }
-      if (optionMin == "") {
+      if (optionMin.isEmpty()) {
         optionMin = "-1.0E308";
       }
     } else if (optionType == "file") {
@@ -125,7 +125,7 @@ bool FormatLoad::processFormat(Format& format)
                   optionList,
                   optionList2, htmlPage);
 #ifndef GENERATE_CORE_STRINGS
-  if (htmlPage.length() > 0 && Format::getHtmlBase().length() == 0) {
+  if (!htmlPage.isEmpty() && Format::getHtmlBase().isEmpty()) {
     QString base = htmlPage;
     static const QRegularExpression re("/[^/]+$");
     base.replace(re, "/");

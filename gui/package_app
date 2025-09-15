@@ -131,6 +131,6 @@ else # Mac
   rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
   APPBUNDLE="$(basename "$APPDIR")"
-  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2
+  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2 -fs=APFS
   popd
 fi

@@ -834,7 +834,7 @@ XcsvFormat::read()
      * is whitespace and we have leading whitespace.
      */
     // This could be hoisted out as a generic rtrim() if we need such a thing.
-    while (buff.size() > 0 && buff.at(buff.size() - 1).isSpace()) {
+    while (!buff.isEmpty() && buff.at(buff.size() - 1).isSpace()) {
       buff.chop(1);
     }
 

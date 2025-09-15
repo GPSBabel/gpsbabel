@@ -21,7 +21,7 @@ are not good fits for this scheme.  It should have:
       <para>Once you have created a style file that describes the file format you have
 or want, you must tell GPSBabel to use the xcsv format and have the xcsv
 format use that file.  If you created a new style file called
-"mystyle.style" and you want to write the  waypoints from
+"mystyle.style" and you want to write the waypoints from
 a GPX file named "mine.gpx" to it, you would issue a command like:
 </para>
       <para>
@@ -75,7 +75,7 @@ DESCRIPTION       Microsoft Streets and Trips 2002-2006
 EXTENSION               txt
 
 #
-# FILE LAYOUT DEFINITIIONS:
+# FILE LAYOUT DEFINITIONS:
 #
 FIELD_DELIMITER      TAB
 RECORD_DELIMITER  NEWLINE
@@ -369,7 +369,7 @@ processing functions of GPSBabel.
       <title>Defining Fields Within the File</title>
       <para>A field defines data.  There are two different classifications of FIELDS,
 IFIELD (file input) and OFIELD (file output).  In the absence of any OFIELDS,
-IFIELDS are use as both input and output.  The existence of OFIELDS is
+IFIELDS are used as both input and output.  The existence of OFIELDS is
 primarily to allow more flexible mapping of GPSBabel data to output data
 (say, for instance, to map the internal GPSBabel "description" variable to
 two or more fields on output).  For all practical purposes, IFIELDS and
@@ -402,7 +402,7 @@ OFIELDS are defined the same way in the style file.</para>
       <para>There are several different types of fields that may be defined.  Each field
 consists of three pieces of information: the FIELD TYPE, a DEFAULT VALUE, and
 a PRINTF CONVERSION (for output).  In many cases, not all pieces are used,
-but all 3 pieces are required.   Additionally, an fourth field is supported
+but all 3 pieces are required.   Additionally, a fourth field is supported
 that modifies the behavior of the field being described.
 </para>
       <para>FIELDS should be defined in the style file in the logical order that they
@@ -638,8 +638,8 @@ parsed from input and written to output.
       <section xml:id="style_def_latddmmdir">
          <title>LAT_DDMMDIR</title>
          <para>Derived from the LAT_NMEA latitude format, with degrees * 100 plus decimal
-minutes, but using an additional specifier to position the  'N' or 'S' instead of a leading minus sign (or
-absence thereof) to give direction from zero.
+minutes, but using an additional specifier to position the 'N' or 'S' instead of a leading minus sign (or
+absence thereof) to give the direction from zero.
 </para>
          <para>
             <screen>IFIELD LAT_DDMMDIR, "%f", "%08.3f%c" # (writes "5334.192S" giving -53.56987 degrees latitude)
@@ -659,7 +659,7 @@ absence thereof) to give direction from zero.
       <section xml:id="style_def_londdmmdir">
          <title>LON_DDMMDIR</title>
          <para>Derived from the LON_NMEA longitude format, with degrees * 100 plus decimal minutes, but using an additional character format character to position the
-'E' or 'W' instead of a leading minus sign (or absence thereof) to give direction from zero.
+'E' or 'W' instead of a leading minus sign (or absence thereof) to give the direction from zero.
 </para>
          <para>Example:
 </para>
@@ -808,7 +808,7 @@ longitude)
          <title>TIMET_TIME</title>
          <para>TIMET_TIME is the waypoint's creation time, if any.  This is actually
    the integer seconds since 1970-01-01T00:00:00 UTC. It
-   is handled internally as a 64 bit integer and requires a LONG LONG INTEGER
+   is handled internally as a 64-bit integer and requires a LONG LONG INTEGER
    printf conversion.
 </para>
          <para>example:
@@ -819,7 +819,7 @@ longitude)
       <section xml:id="style_def_timettimems">
          <title>TIMET_TIME_MS</title>
          <para>TIMET_TIME_MS is the same as TIMET_TIME, but expressed in milliseconds.
-   It too is handled internally as a 64 bit integer and requires a LONG LONG INTEGER
+   It too is handled internally as a 64-bit integer and requires a LONG LONG INTEGER
    printf conversion.
 </para>
          <para>example:
@@ -847,16 +847,16 @@ longitude)
    or a date in one column and a time in another column.  If used to parse a date and a
    time in separate columns the date and time can be in either order.
 </para>
-<para>example with a a date followed by a time using a 12 hour clock and an AM/PM indication:</para>
+<para>example with a date followed by a time using a 12 hour clock and an AM/PM indication:</para>
 <screen>IFIELD GMT_TIME,"","%m/%d/%Y %I:%M:%S %p"
 </screen>
-<para>example with a a date followed by a time using a 24 hour clock:</para>
+<para>example with a date followed by a time using a 24 hour clock:</para>
 <screen>IFIELD GMT_TIME,"","%Y/%m/%d"
 IFIELD GMT_TIME,"","%H:%M:%S"
 </screen>
 <para>Search the web for 'strptime man page' for details strptime, but one
    such page can be found at
-   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.die.net/doc/linux/man/man3/strptime.3.html">http://www.die.net/doc/linux/man/man3/strptime.3.html</link></para>
+   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://linux.die.net/man/3/strptime">https://linux.die.net/man/3/strptime</link></para>
       </section>
       <section xml:id="style_def_localtime">
          <title>LOCAL_TIME</title>
@@ -1279,7 +1279,7 @@ IFIELD GMT_TIME,"","%H:%M:%S"
 # Format: Garmin POI
 # Author: Robert Lipe
 # Date: 10/07/2005
-# Reference: http://forums.groundspeak.com/GC/index.php?showtopic=110641&amp;st=0&amp;#entry1752204
+# Reference: https://forums.geocaching.com/GC/index.php?/topic/110641-garmin-streetpilot-csv-format/#entry1752204
 #
 DESCRIPTION Garmin POI database
 #

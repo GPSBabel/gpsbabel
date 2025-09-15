@@ -52,13 +52,12 @@ public:
 
 private:
   QString currentVersion_;
-  QNetworkAccessManager* manager_;
-  QNetworkReply* replyId_;
-  QUrl upgradeUrl_;
-  QString latestVersion_;
+  QNetworkAccessManager* manager_{nullptr};
+  QNetworkReply* replyId_{nullptr};
+  QUrl upgradeUrl_{QStringLiteral("https://www.gpsbabel.org/upgrade_check.html")};
   QDateTime upgradeWarningTime_;  // invalid time if this object never issued.
   QList<Format>& formatList_;
-  updateStatus updateStatus_;
+  updateStatus updateStatus_{updateUnknown};
   BabelData& babelData_;
 
   static QString getOsName();
