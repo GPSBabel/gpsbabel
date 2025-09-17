@@ -79,6 +79,22 @@ jobs:
             RELEASE: false
             GENERATOR: 'Ninja'
             os: windows-11-arm
+          - QT_VERSION: '6.10.0'
+            TARGET_ARCH: 'arm64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2022_64'
+            CROSS_COMPILER: 'msvc2022_arm64'
+            METHOD: 'aqt'
+            RELEASE: false
+            os: windows-2025
+          - QT_VERSION: '6.10.0'
+            ARCH: 'arm64'
+            HOST_ARCH: 'arm64'
+            COMPILER: 'msvc2022_arm64'
+            METHOD: 'aqt'
+            RELEASE: false
+            GENERATOR: 'Ninja'
+            os: windows-11-arm
 
     steps:
     - name: Checkout repository
