@@ -48,6 +48,11 @@ jobs:
             GENERATOR: 'Ninja'
             RELEASE: false
             os: macos-15
+          - QT_VERSION: '6.10.0'
+            XCODE_VERSION: '26.0'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-26
 
     steps:
     - name: Checkout repository
