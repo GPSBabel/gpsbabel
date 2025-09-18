@@ -955,8 +955,7 @@ void MainWindow::applyActionX()
       // ftemp.fileName() may be empty so display ftemp.fileTemplate().
       QMessageBox::warning(nullptr, QString(appName),
         tr("Failed to open temporary file \"%1\" for map preview.  The error was: \"%2\".  The map preview will not be shown.")
-        .arg(ftemp.fileTemplate())
-        .arg(ftemp.errorString()));
+        .arg(ftemp.fileTemplate(), ftemp.errorString()));
     }
   }
 #endif
