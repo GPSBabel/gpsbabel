@@ -942,21 +942,22 @@ void MainWindow::applyActionX()
 
 #ifndef DISABLE_MAPPREVIEW
   // Now output for preview in google maps
-  QString tempName;
+  QString mapFileName;
   if (babelData_.previewGmap_) {
-    QTemporaryFile ftemp;
-    ftemp.open();
-    tempName = ftemp.fileName();
-    ftemp.close();
-
-    // Ideally, expost this in the UI.  For now, just split the track
-    // if we've no recorded fixes for > 5 mins and we've moved > 300 meters.
-    //args << "-x";
-    //args << "track,pack,sdistance=0.3k,split=5m";
-
-    args << "-o";
-    args << "gpx";
-    args << "-F" << tempName;
+    if (QTemporaryFile ftemp; ftemp.open()) {
+      mapFileName = ftemp.fileName();
+      ftemp.close();
+  
+      args << "-o";
+      args << "gpx";
+      args << "-F" << mapFileName;
+    } else {
+      // ftemp.fileName() may be empty so display ftemp.fileTemplate().
+      QMessageBox::warning(nullptr, QString(appName),
+        tr("Failed to open temporary file \"%1\" for map preview.  The error was: \"%2\".  The map preview will not be shown.")
+        .arg(ftemp.fileTemplate())
+        .arg(ftemp.errorString()));
+    }
   }
 #endif
 
@@ -973,10 +974,10 @@ void MainWindow::applyActionX()
   if (x) {
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
 #ifndef DISABLE_MAPPREVIEW
-    if (babelData_.previewGmap_) {
+    if (!mapFileName.isEmpty()) {
       Gpx mapData;
-      QString mapStatus = mapData.read(tempName);
-      QFile(tempName).remove();
+      QString mapStatus = mapData.read(mapFileName);
+      QFile(mapFileName).remove();
       if (!mapStatus.isNull()) {
         QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
         QTextCharFormat errorFormat = defaultFormat;
