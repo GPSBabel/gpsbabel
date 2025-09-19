@@ -9,5 +9,5 @@ xmllint --noout --relaxng http://docbook.org/xml/5.0/rng/docbook.rng xmldoc/read
 if command -v jing >/dev/null 2>&1; then
   jing tools/schema/xml/docbook/schema/rng/5.0/docbook.rng xmldoc/readme.xml
   # can seed a failure by removing version="5.0" from xmldoc/readme.xml
-  jing tools/schema/xml/docbook/schema/rng/5.0/docbook.rng xmldoc/readme.xml
+  jing tools/schema/xml/docbook/schema/schematron/5.0/docbook.sch xmldoc/readme.xml
 fi
