@@ -17,9 +17,12 @@ if [ $# -ge 3 ]; then
     GENERATOR[1]=$3
   fi
 fi
-if version_ge "${QTVER}" 6.8.0; then
+if version_ge "${QTVER}" 6.10.0; then
+  DEPLOY_TARGET="13.0"
+  ARCHS="x86_64h;arm64"
+elif version_ge "${QTVER}" 6.8.0; then
   DEPLOY_TARGET="12.0"
-  ARCHS="x86_64;arm64"
+  ARCHS="x86_64h;arm64"
 elif version_ge "${QTVER}" 6.5.0; then
   DEPLOY_TARGET="11.0"
   ARCHS="x86_64;arm64"
