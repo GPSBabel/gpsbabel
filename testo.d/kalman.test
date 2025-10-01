@@ -1,0 +1,35 @@
+rm -f ${TMPDIR}/kalman_out.gpx
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_in.gpx -x kalman -o gpx -F ${TMPDIR}/kalman_in_filtered.gpx -o gpx -F ${TMPDIR}/kalman_out_filtered.gpx
+
+# Filter out dynamic time tags from the generated output
+# sed -e '/<time>/d' ${TMPDIR}/kalman_out.gpx > ${TMPDIR}/kalman_out_filtered.gpx
+
+# Filter out dynamic time tags from the reference file
+# sed -e '/<time>/d' ${REFERENCE}/track/kalman_out.gpx > ${TMPDIR}/kalman_ref_filtered.gpx
+
+# compare  ${TMPDIR}/kalman_in_filtered.gpx ${TMPDIR}/kalman_out_filtered.gpx
+compare  ${REFERENCE}/track/kalman_out.gpx ${TMPDIR}/kalman_out_filtered.gpx
+
+# Test for 'running' profile
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_in.gpx -x kalman,profile=running -o gpx -F ${TMPDIR}/kalman_out_running_filtered.gpx
+compare ${REFERENCE}/track/kalman_out_running.gpx ${TMPDIR}/kalman_out_running_filtered.gpx
+
+# Test for kalman_seen_track.gpx
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_seen_track.gpx -x kalman -o gpx -F ${TMPDIR}/kalman_seen_track_filtered.gpx
+compare ${REFERENCE}/track/kalman_seen_track_out.gpx ${TMPDIR}/kalman_seen_track_filtered.gpx
+
+# New Test for NVector and Vector3D utility methods
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_nvector_test_in.gpx -x kalman -o gpx -F ${TMPDIR}/kalman_nvector_test_filtered.gpx
+compare ${REFERENCE}/track/kalman_nvector_test_out.gpx ${TMPDIR}/kalman_nvector_test_filtered.gpx
+
+# New Test for PreFilterState transitions and edge cases
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_prefilter_edge_in.gpx -x kalman -o gpx -F ${TMPDIR}/kalman_prefilter_edge_filtered.gpx > ${TMPDIR}/kalman_prefilter_edge_debug.log 2>&1
+compare ${REFERENCE}/track/kalman_prefilter_edge_out.gpx ${TMPDIR}/kalman_prefilter_edge_filtered.gpx
+
+# New Test for configurable parameters (profile=walking)
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_profile_test_in.gpx -x kalman,profile=walking -o gpx -F ${TMPDIR}/kalman_profile_walking_filtered.gpx
+compare ${REFERENCE}/track/kalman_profile_walking_out.gpx ${TMPDIR}/kalman_profile_walking_filtered.gpx
+
+# New Test for configurable parameters (profile=driving)
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman,profile=driving -o gpx -F ${TMPDIR}/kalman_profile_driving_filtered.gpx
+compare ${REFERENCE}/track/kalman_profile_driving_out.gpx ${TMPDIR}/kalman_profile_driving_filtered.gpx

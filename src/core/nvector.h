@@ -83,6 +83,7 @@ public:
   static LatLon crossTrackProjection(double latitude_a_degrees, double longitude_a_degrees, double latitude_b_degrees, double longitude_b_degrees, double latitude_x_degrees, double longitude_x_degrees);
   static double crossTrackDistance(const NVector& n_EA_E, const NVector& n_EB_E, const NVector& n_EX_E);
   static double crossTrackDistance(double latitude_a_degrees, double longitude_a_degrees, double latitude_b_degrees, double longitude_b_degrees, double latitude_x_degrees, double longitude_x_degrees);
+  static double euclideanDistance(const NVector& a, const NVector& b);
 };
 
 class PVector : public Vector3D

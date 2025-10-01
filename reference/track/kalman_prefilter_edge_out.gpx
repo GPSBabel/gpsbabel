@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="34.052200000" minlon="-118.244499400" maxlat="34.052999400" maxlon="-118.243700000"/>
+  <trk>
+    <name>Prefilter Edge Test Track</name>
+    <trkseg>
+      <trkpt lat="34.052200000" lon="-118.243700000">
+        <time>2025-09-29T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="34.052300000" lon="-118.243800000">
+        <time>2025-09-29T10:00:01Z</time>
+      </trkpt>
+      <trkpt lat="34.052800000" lon="-118.244300000">
+        <time>2025-09-29T10:01:02Z</time>
+      </trkpt>
+      <trkpt lat="34.052898500" lon="-118.244398500">
+        <time>2025-09-29T10:01:03Z</time>
+      </trkpt>
+      <trkpt lat="34.052999400" lon="-118.244499400">
+        <time>2025-09-29T10:01:04Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

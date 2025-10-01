@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="40.712800000" minlon="-74.006200000" maxlat="40.713000000" maxlon="-74.006000000"/>
+  <trk>
+    <name>NVector Test Track</name>
+    <trkseg>
+      <trkpt lat="40.712800000" lon="-74.006000000">
+        <time>2025-09-29T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="40.712900000" lon="-74.006100000">
+        <time>2025-09-29T10:00:01Z</time>
+      </trkpt>
+      <trkpt lat="40.713000000" lon="-74.006200000">
+        <time>2025-09-29T10:00:02Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

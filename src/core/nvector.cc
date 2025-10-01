@@ -135,6 +135,14 @@ double NVector::distance(double latitude_a_degrees, double longitude_a_degrees, 
   return result;
 }
 
+double NVector::euclideanDistance(const NVector& a, const NVector& b)
+{
+    double dx = a.getx() - b.getx();
+    double dy = a.gety() - b.gety();
+    double dz = a.getz() - b.getz();
+    return std::sqrt(dx*dx + dy*dy + dz*dz) * gpsbabel::MEAN_EARTH_RADIUS_METERS;
+}
+
 double NVector::azimuth_radians(const NVector& n_EA_E, const NVector& n_EB_E, double height_a, double height_b)
 {
   PVector p_EA_E(n_EA_E, height_a);

@@ -22,6 +22,8 @@
 // A wrapper for QDebug that provides a sensible Warning() and FatalMsg()
 // with convenient functions, stream operators and manipulators.
 
+#include "defs.h"
+
 #include <QDebug>            // for QDebug
 #include <QtGlobal>          // for QtCriticalMsg, QtWarningMsg
 
@@ -67,5 +69,40 @@ public:
   Debug() : QDebug(QtDebugMsg) {nospace().noquote();}
   explicit Debug(int level) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(level);}
 };
+
+class ConditionalDebug {
+public:
+  explicit ConditionalDebug(int level) : enabled_(level <= global_opts.debug_level) {
+    if (enabled_) {
+      debug_ = new QDebug(QtDebugMsg);
+      debug_->nospace().noquote();
+    } else {
+      debug_ = nullptr;
+    }
+  }
+
+  ~ConditionalDebug() {
+    delete debug_;
+  }
+
+  template<typename T>
+  ConditionalDebug& operator<<(const T& value) {
+    if (debug_) {
+      *debug_ << value;
+    }
+    return *this;
+  }
+
+private:
+  bool enabled_;
+  QDebug* debug_;
+};
+
+inline ConditionalDebug gbDebug(int level) {
+  return ConditionalDebug(level);
+}
+
+// gdDebug(foo) <<  blah; only blogs if global_opts.debug_level >= foo.
+// ConditionalDebug gbDebug(int level);
 
 #endif //  SRC_CORE_LOGGING_H_

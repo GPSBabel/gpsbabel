@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="GPSBabel - http://www.gpsbabel.org" version="1.0">
+  <trk>
+    <name>NVector Test Track</name>
+    <trkseg>
+      <trkpt lat="40.7128" lon="-74.0060">
+        <time>2025-09-29T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="40.7129" lon="-74.0061">
+        <time>2025-09-29T10:00:01Z</time>
+      </trkpt>
+      <trkpt lat="40.7130" lon="-74.0062">
+        <time>2025-09-29T10:00:02Z</time>
+      </trkpt>
+      <trkpt lat="40.7135" lon="-74.0067">
+        <time>2025-09-29T10:00:05Z</time>
+      </trkpt>
+      <trkpt lat="40.7140" lon="-74.0072">
+        <time>2025-09-29T10:00:08Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
