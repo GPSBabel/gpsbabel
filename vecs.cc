@@ -1073,7 +1073,42 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
       if (arg.argval == nullptr) {
         Warning() << name << "option" << arg.argstring << "does not point to an Option instance.";
         ok = false;
+        continue;
       }
+
+      {
+        const uint32_t actual_type = arg.argval->get_type();
+        const uint32_t declared_type = arg.argtype & ARGTYPE_TYPEMASK;
+
+        if (actual_type != declared_type) {
+          bool is_ok = false;
+          if (actual_type == ARGTYPE_STRING) {
+            if (declared_type == ARGTYPE_FILE ||
+                declared_type == ARGTYPE_OUTFILE ||
+                declared_type == ARGTYPE_UNKNOWN) {
+              is_ok = true;
+            }
+          } else if (actual_type == ARGTYPE_INT) {
+              const auto* int_option = static_cast<const OptionInt*>(arg.argval);
+              if (int_option->trailing_data_allowed() && declared_type == ARGTYPE_STRING) {
+                  is_ok = true;
+              }
+          } else if (actual_type == ARGTYPE_FLOAT) {
+              const auto* double_option = static_cast<const OptionDouble*>(arg.argval);
+              if (double_option->trailing_data_allowed() && declared_type == ARGTYPE_STRING) {
+                  is_ok = true;
+              }
+          }
+
+          if (!is_ok) {
+              gbFatal("Mismatched option type for '%s' in format/filter '%s'. "
+                      "Declared: %u, Actual: %u",
+                      CSTR(arg.argstring), CSTR(name),
+                      declared_type, actual_type);
+          }
+        }
+      }
+
       if (const auto* int_option = dynamic_cast<const OptionInt*>(arg.argval); int_option != nullptr) {
         if (int_option->trailing_data_allowed()) {
           // GUI QIntValidator will reject input with trailing data.

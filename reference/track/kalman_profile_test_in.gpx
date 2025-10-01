@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="GPSBabel - http://www.gpsbabel.org" version="1.0">
+  <trk>
+    <name>Profile Test Track - Walking</name>
+    <trkseg>
+      <trkpt lat="34.0000" lon="-118.0000">
+        <time>2025-09-29T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="34.0001" lon="-118.0001">
+        <time>2025-09-29T10:00:05Z</time>
+      </trkpt>
+      <trkpt lat="34.0002" lon="-118.0002">
+        <time>2025-09-29T10:00:10Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Profile Test Track - Driving</name>
+    <trkseg>
+      <trkpt lat="34.1000" lon="-118.1000">
+        <time>2025-09-29T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="34.1050" lon="-118.1050">
+        <time>2025-09-29T10:00:01Z</time>
+      </trkpt>
+      <trkpt lat="34.1100" lon="-118.1100">
+        <time>2025-09-29T10:00:02Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

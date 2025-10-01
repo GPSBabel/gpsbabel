@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="34.000000000" minlon="-118.100000000" maxlat="34.100000000" maxlon="-118.000000000"/>
+  <trk>
+    <name>Profile Test Track - Walking</name>
+    <trkseg>
+      <trkpt lat="34.000000000" lon="-118.000000000">
+        <time>2025-09-29T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="34.000100000" lon="-118.000100000">
+        <time>2025-09-29T10:00:05Z</time>
+      </trkpt>
+      <trkpt lat="34.000200000" lon="-118.000200000">
+        <time>2025-09-29T10:00:10Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Profile Test Track - Driving</name>
+    <trkseg>
+      <trkpt lat="34.100000000" lon="-118.100000000">
+        <time>2025-09-29T10:00:00Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

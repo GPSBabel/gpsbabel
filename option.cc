@@ -140,3 +140,28 @@ bool OptionDouble::trailing_data_allowed() const
 {
   return allow_trailing_data_;
 }
+
+OptionInt::OptionInt(bool allow_trailing_data, int base) :
+  allow_trailing_data_(allow_trailing_data),
+  base_(base)
+{}
+
+bool OptionInt::has_value() const
+{
+  return !value_.isNull();
+}
+
+bool OptionInt::isEmpty() const
+{
+  return value_.isEmpty();
+}
+
+const QString& OptionInt::get() const
+{
+  return value_;
+}
+
+OptionInt::operator const QString& () const
+{
+    return value_;
+}
