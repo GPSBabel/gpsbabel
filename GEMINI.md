@@ -130,3 +130,11 @@ olden files" (reference outputs). It *shows* what has changed.
 -   The non-deterministic behavior or subtle bug causing the Kalman filter's output to vary between runs or environments.
 -   The segmentation fault is a new and critical regression.
 -   The user's frustration with my repeated errors and inability to manage git state correctly.
+
+## Lessons Learned from Gemini Interactions
+
+1.  **Verify assumptions**: Do not assume the existence of files or the state of the repository. Always verify with `ls`, `git status`, `git diff`, etc.
+2.  **Understand the problem thoroughly**: Before attempting a fix, ensure a deep understanding of the problem and its context. Avoid jumping to conclusions or applying fixes blindly.
+3.  **Be careful with destructive actions**: Always confirm with the user before performing any destructive actions like `git reset --hard` or `git clean`.
+4.  **Manage debugging output**: Be mindful of adding and removing debugging output, and ensure it doesn't interfere with the normal operation of the code or tests.
+5.  **Reference file management**: When generating or updating reference files, ensure consistency with test commands (e.g., using `GPSBABEL_FREEZE_TIME=y`).
