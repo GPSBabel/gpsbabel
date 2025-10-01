@@ -65,7 +65,6 @@ void Kalman::init() {
 }
 
 void Kalman::deinit() {
-	gbDebug(debugLevelInfo) << "Kalman::deinit()";
   // Nothing to do.
 }
 
@@ -82,6 +81,11 @@ void Kalman::process() {
     r_scale_ = r_scale_option_.get_result();
     q_scale_pos_ = q_scale_pos_option_.get_result();
     q_scale_vel_ = q_scale_vel_option_.get_result();
+    if (gap_factor_option_.has_value()) {
+      gap_factor_ = gap_factor_option_.get_result();
+    } else {
+      gap_factor_ = 5.0;
+    }
     interp_max_dt_ = interp_max_dt_option_.get_result();
     interp_min_multiplier_ = interp_min_multiplier_option_.get_result();
 
@@ -154,8 +158,6 @@ void Kalman::process() {
             if (median_dt_for_stats < 1e-6) median_dt_for_stats = 1.0;
         }
 
-        gbDebug(debugLevelInfo) << "[INFO] Track Stats - Avg Speed:" << average_speed << "m/s, Max Speed:" << max_speed_observed << "m/s, Median dt:" << median_dt_for_stats << "s";
-
         // Auto-profile inference logic (moved here)
         QString current_profile = profile_option_.get(); // Use a new variable to avoid confusion
         if (!max_speed_option_.has_value() && current_profile == "auto") {
@@ -170,9 +172,7 @@ void Kalman::process() {
             } else { // Flying speed
                 current_profile = "flying";
             }
-            gbDebug(debugLevelInfo) << "[INFO] Auto-inferred profile:" << current_profile;
         }
-        gbDebug(debugLevelDebug) << "[DEBUG] Profile after inference:" << current_profile; // Added debug line
 
         // Apply profile settings based on current_profile
         if (current_profile == "walking") {
@@ -183,7 +183,7 @@ void Kalman::process() {
             if (!interp_max_dt_option_.has_value()) interp_max_dt_ = 60.0; // 1 minute
             if (!interp_min_multiplier_option_.has_value()) interp_min_multiplier_ = 2.0;
         } else if (current_profile == "running") { // New running profile
-            MAX_REASONABLE_SPEED = 15.0; // e.g., 18 km/h
+            MAX_REASONABLE_SPEED = 10.0; // e.g., 18 km/h
             if (!r_scale_option_.has_value()) r_scale_ = 10.0;
             if (!q_scale_pos_option_.has_value()) q_scale_pos_ = 0.1;
             if (!q_scale_vel_option_.has_value()) q_scale_vel_ = 0.01;
@@ -217,7 +217,6 @@ void Kalman::process() {
             if (!q_scale_vel_option_.has_value()) q_scale_vel_ = 0.1;
             if (!interp_max_dt_option_.has_value()) interp_max_dt_ = 300.0; // 5 minutes
             if (!interp_min_multiplier_option_.has_value()) interp_min_multiplier_ = 1.5;
-            gbDebug(debugLevelInfo) << "[INFO] Unknown profile or no profile specified, defaulting to cycling.";
         }
 
         // ---------------------------
@@ -226,7 +225,6 @@ void Kalman::process() {
         enum class PreFilterState { NORMAL, RECOVERY, FIRST_GOOD_SEEN_IN_RECOVERY };
         PreFilterState state = PreFilterState::NORMAL;
         Waypoint* last_accepted_wpt = nullptr;
-        constexpr double GAP_FACTOR = 5.0;
 
         for (auto it = wpt_list->begin(); it != wpt_list->end(); ++it) {
             Waypoint* current_wpt = *it;
@@ -249,7 +247,7 @@ void Kalman::process() {
                 double speed = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
                                                gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt);
 
-                if (dt > GAP_FACTOR || speed > MAX_REASONABLE_SPEED) {
+                if (dt >= gap_factor_ || speed > MAX_REASONABLE_SPEED) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
                     ((KalmanExtraData*)current_wpt->extra_data)->is_zinger_deletion = true; // Mark as zinger deletion
                     state = PreFilterState::RECOVERY;
@@ -268,7 +266,7 @@ void Kalman::process() {
                 double speed_from_anchor = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
                                                     gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt_from_anchor);
 
-                if (dt_consecutive > GAP_FACTOR || speed_consecutive > MAX_REASONABLE_SPEED || speed_from_anchor > MAX_REASONABLE_SPEED) {
+                if (dt_consecutive > gap_factor_ || speed_consecutive > MAX_REASONABLE_SPEED || speed_from_anchor > MAX_REASONABLE_SPEED) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
                     ((KalmanExtraData*)current_wpt->extra_data)->is_zinger_deletion = true; // Mark as zinger deletion
                     state = PreFilterState::RECOVERY;
@@ -313,8 +311,6 @@ void Kalman::process() {
             if (median_dt < 1e-6) median_dt = 1.0;
         }
 
-        gbDebug(debugLevelInfo) << "[INFO] route median_dt=" << median_dt;
-
         // Interpolate moderate gaps and build new route
         route_head* new_route_head = new route_head(); // Temporary route to build the new sequence
         Waypoint* last_kept_for_interp = nullptr;
@@ -349,12 +345,10 @@ void Kalman::process() {
                     // This is a zinger deletion, do not interpolate across it.
                     // Reset last_kept_for_interp to effectively start a new segment.
                     last_kept_for_interp = nullptr;
-                    gbDebug(debugLevelInterpolate) << "[INTERP] Skipping zinger deletion at" << current_original_wpt->GetCreationTime().toString();
                 } else {
                     // This is a marked point but NOT a zinger.
                     // We simply skip adding it to new_route_head, but keep last_kept_for_interp
                     // so that the next non-deleted point can be interpolated against the previous one.
-                    gbDebug(debugLevelInterpolate) << "[INTERP] Skipping non-zinger marked point at" << current_original_wpt->GetCreationTime().toString();
                 }
             } else {
                 // This is a good point, consider interpolation if there was a previous kept point
@@ -430,23 +424,19 @@ void Kalman::process() {
 void Kalman::kalman_point_cb(Waypoint* wpt) {
     gpsbabel::NVector current_nvector(wpt->latitude, wpt->longitude);
     QDateTime current_timestamp = wpt->GetCreationTime();
-    gbDebug(debugLevelDebug) << "kalman_point_cb: Wpt:" << wpt->latitude << wpt->longitude << current_timestamp.toString() << "Initialized:" << is_initialized_ << "Vel Estimated:" << initial_velocity_estimated_;
 
     if (!is_initialized_) {
         // First point: store it and wait for the second point to estimate initial velocity
         last_nvector_ = current_nvector;
         last_timestamp_ = current_timestamp;
         is_initialized_ = true;
-        gbDebug(debugLevelDebug) << "kalman_point_cb: Initializing first point.";
         return;
     }
   
     double dt = last_timestamp_.secsTo(current_timestamp);
-    gbDebug(debugLevelDebug) << "kalman_point_cb: dt:" << dt;
  
     // If dt is zero, skip this point to avoid division by zero and infinite velocity.
     if (dt == 0) {
-        gbDebug(debugLevelDebug) << "kalman_point_cb: dt is zero, skipping point.";
         return;
     }
 
@@ -458,7 +448,6 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     Q_(3, 3) = 1e-1 * q_scale_vel_ * dt;     // Velocity uncertainty grows with dt
     Q_(4, 4) = 1e-1 * q_scale_vel_ * dt;
     Q_(5, 5) = 1e-1 * q_scale_vel_ * dt;
-    gbDebug(debugLevelDebug) << "kalman_point_cb: Q_ initialized.";
 
     if (!initial_velocity_estimated_) {
         // Second point: estimate initial velocity and initialize state and covariance
@@ -473,7 +462,6 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
 
         // Initialize P_ with some uncertainty for position and velocity
         P_ = Matrix::identity(6) * 1000.0;
-        gbDebug(debugLevelDebug) << "kalman_point_cb: Initializing second point. x_:" << x_(0,0) << x_(1,0) << x_(2,0) << x_(3,0) << x_(4,0) << x_(5,0);
 
         initial_velocity_estimated_ = true;
     } else {
@@ -483,11 +471,9 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
         F_(1, 4) = dt;
         F_(2, 5) = dt;
 
-        gbDebug(debugLevelDebug) << "kalman_point_cb: Before Prediction. x_:" << x_(0,0) << x_(1,0) << x_(2,0) << x_(3,0) << x_(4,0) << x_(5,0);
         // Predict
         x_ = F_ * x_;
         P_ = F_ * P_ * F_.transpose() + Q_;
-        gbDebug(debugLevelDebug) << "kalman_point_cb: After Prediction. x_:" << x_(0,0) << x_(1,0) << x_(2,0) << x_(3,0) << x_(4,0) << x_(5,0);
     }
 
     // Update
@@ -507,16 +493,13 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
 
     Matrix d_squared_matrix = y.transpose() * S_inv * y;
     double d_squared = d_squared_matrix(0, 0);
-    gbDebug(debugLevelDebug) << "kalman_point_cb: d_squared:" << d_squared << "Threshold:" << CHI_SQUARED_THRESHOLD;
 
     if (d_squared < CHI_SQUARED_THRESHOLD) {
       Matrix K = P_ * H_.transpose() * S_inv;
 
       x_ = x_ + (K * y);
       P_ = (Matrix::identity(6) - (K * H_)) * P_;
-      gbDebug(debugLevelDebug) << "kalman_point_cb: After Update (accepted). x_:" << x_(0,0) << x_(1,0) << x_(2,0) << x_(3,0) << x_(4,0) << x_(5,0);
     } else {
-        gbDebug(debugLevelDebug) << "kalman_point_cb: Update rejected (d_squared > threshold).";
     }
 
     gpsbabel::Vector3D filtered_position(x_(0, 0), x_(1, 0), x_(2, 0));
@@ -525,7 +508,6 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
 
     double new_lat = std::round(filtered_nvector.latitude() * 1e7) / 1e7;
     double new_lon = std::round(filtered_nvector.longitude() * 1e7) / 1e7;
-    gbDebug(debugLevelDebug) << "kalman_point_cb: Filtered Lat/Lon:" << new_lat << new_lon;
 
     if (wpt->latitude != new_lat || wpt->longitude != new_lon) {
         wpt->latitude = new_lat;

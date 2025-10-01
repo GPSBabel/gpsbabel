@@ -76,6 +76,7 @@ class Kalman : public Filter {
   double q_scale_vel_;
   double interp_max_dt_;
   double interp_min_multiplier_;
+  double gap_factor_;
 
   QVector<arglist_t> args = {
     {"gap_factor", &gap_factor_option_, "Factor to determine if a time gap is significant enough to trigger gap recovery",

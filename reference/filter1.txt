@@ -24,6 +24,15 @@ interpolate	Interpolate between trackpoints	https://www.gpsbabel.org/WEB_DOC_DIR
 option	interpolate	time	Time interval in seconds	float		0		https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_time
 option	interpolate	distance	Distance interval	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_distance
 option	interpolate	route	Interpolate routes instead	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_interpolate.html#fmt_interpolate_o_route
+kalman	Kalman filter	https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html
+option	kalman	gap_factor	Factor to determine if a time gap is significant enough to trigger gap recovery	float	10.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html#fmt_kalman_o_gap_factor
+option	kalman	r_scale	Measurement noise covariance scaling factor	float	1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html#fmt_kalman_o_r_scale
+option	kalman	q_scale_pos	Process noise covariance scaling factor for position	float	1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html#fmt_kalman_o_q_scale_pos
+option	kalman	q_scale_vel	Process noise covariance scaling factor for velocity	float	1.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html#fmt_kalman_o_q_scale_vel
+option	kalman	max_speed	Maximum reasonable speed in m/s for pre-filtering	float	15.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html#fmt_kalman_o_max_speed
+option	kalman	profile	Predefined profile for Kalman filter tuning (auto, walking, running, cycling, driving, flying)	string	auto			https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html#fmt_kalman_o_profile
+option	kalman	interp_max_dt	Maximum time gap (seconds) for interpolation	float	300.0			https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html#fmt_kalman_o_interp_max_dt
+option	kalman	interp_min_multiplier	Minimum multiplier for median dt to consider interpolation	float	1.5			https://www.gpsbabel.org/WEB_DOC_DIR/filter_kalman.html#fmt_kalman_o_interp_min_multiplier
 height	Manipulate altitudes	https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html
 option	height	add	Adds a constant value to every altitude	string				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_add
 option	height	wgs84tomsl	Converts WGS84 ellipsoidal height to orthometric height (MSL)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/filter_height.html#fmt_height_o_wgs84tomsl

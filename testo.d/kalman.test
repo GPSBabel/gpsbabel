@@ -15,8 +15,13 @@ compare  ${REFERENCE}/track/kalman_out.gpx ${TMPDIR}/kalman_out_filtered.gpx
 compare ${REFERENCE}/track/kalman_out_running.gpx ${TMPDIR}/kalman_out_running_filtered.gpx
 
 # Test for kalman_seen_track.gpx
-./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_seen_track.gpx -x kalman -o gpx -F ${TMPDIR}/kalman_seen_track_filtered.gpx
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_seen_track.gpx -x kalman,gap_factor=5.0 -o gpx -F ${TMPDIR}/kalman_seen_track_filtered.gpx
 compare ${REFERENCE}/track/kalman_seen_track_out.gpx ${TMPDIR}/kalman_seen_track_filtered.gpx
+
+# Test for kalman_seen_track.gpx with gap_factor=10.0
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_seen_track.gpx -x kalman,gap_factor=10.0 -o gpx -F ${TMPDIR}/kalman_seen_track_gap10_filtered.gpx
+compare ${REFERENCE}/track/kalman_seen_track_gap10_out.gpx ${TMPDIR}/kalman_seen_track_gap10_filtered.gpx
+
 
 # New Test for NVector and Vector3D utility methods
 ./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_nvector_test_in.gpx -x kalman -o gpx -F ${TMPDIR}/kalman_nvector_test_filtered.gpx
@@ -31,5 +36,5 @@ compare ${REFERENCE}/track/kalman_prefilter_edge_out.gpx ${TMPDIR}/kalman_prefil
 compare ${REFERENCE}/track/kalman_profile_walking_out.gpx ${TMPDIR}/kalman_profile_walking_filtered.gpx
 
 # New Test for configurable parameters (profile=driving)
-./gpsbabel -i gpx -f ${REFERENCE}/track/kalman,profile=driving -o gpx -F ${TMPDIR}/kalman_profile_driving_filtered.gpx
+./gpsbabel -i gpx -f ${REFERENCE}/track/kalman_profile_test_in.gpx -x kalman,profile=driving -o gpx -F ${TMPDIR}/kalman_profile_driving_filtered.gpx
 compare ${REFERENCE}/track/kalman_profile_driving_out.gpx ${TMPDIR}/kalman_profile_driving_filtered.gpx

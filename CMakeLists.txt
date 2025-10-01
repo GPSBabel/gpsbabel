@@ -191,6 +191,7 @@ set(SUPPORT
   session.cc
   src/core/codecdevice.cc
   src/core/logging.cc
+  src/core/matrix.cc
   src/core/nvector.cc
   src/core/textstream.cc
   src/core/usasciicodec.cc
@@ -286,6 +287,7 @@ set(HEADERS
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
+  src/core/matrix.h
   src/core/nvector.h
   src/core/textstream.h
   src/core/usasciicodec.h
