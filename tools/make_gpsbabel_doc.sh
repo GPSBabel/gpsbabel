@@ -1,6 +1,7 @@
 #!/bin/sh
 set -ex
 
+make -j8
 perl xmldoc/makedoc
 xmllint --noout --relaxng http://docbook.org/xml/5.0/rng/docbook.rng xmldoc/readme.xml
 # the following doesn't seem to work.
