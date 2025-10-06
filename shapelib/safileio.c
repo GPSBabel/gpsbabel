@@ -13,7 +13,7 @@
  *
  */
 
-#include "shapefil.h"
+#include "shapefil_private.h"
 
 #include <assert.h>
 #include <math.h>
@@ -101,7 +101,7 @@ void SASetupDefaultHooks(SAHooks *psHooks)
 
     psHooks->Error = SADError;
     psHooks->Atof = atof;
-    psHooks->pvUserData = NULL;
+    psHooks->pvUserData = SHPLIB_NULLPTR;
 }
 
 #ifdef SHPAPI_WINDOWS
@@ -182,5 +182,6 @@ void SASetupUtf8Hooks(SAHooks *psHooks)
 
     psHooks->Error = SADError;
     psHooks->Atof = atof;
+    psHooks->pvUserData = SHPLIB_NULLPTR;
 }
 #endif
