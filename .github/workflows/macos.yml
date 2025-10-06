@@ -28,23 +28,23 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - QT_VERSION: '6.8.3'
+          - QT_VERSION: '6.5.3'
             XCODE_VERSION: '15.4'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-14
+          - QT_VERSION: '6.8.3'
+            XCODE_VERSION: '16.4'
             GENERATOR: 'Xcode'
             RELEASE: false
-            os: macos-14
+            os: macos-15
           - QT_VERSION: '6.8.3'
-            XCODE_VERSION: '15.4'
-            GENERATOR: 'Ninja'
-            RELEASE: true
-            os: macos-14
-          - QT_VERSION: '6.10.0'
             XCODE_VERSION: '16.4'
             GENERATOR: 'Ninja'
-            RELEASE: false
+            RELEASE: true
             os: macos-15
           - QT_VERSION: '6.10.0'
-            XCODE_VERSION: '26.0'
+            XCODE_VERSION: '26.0.1'
             GENERATOR: 'Ninja'
             RELEASE: false
             os: macos-26
