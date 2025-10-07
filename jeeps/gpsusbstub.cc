@@ -1,7 +1,7 @@
 /*
     Stubs to keep build happy when USB just isn't available to us.
 
-    Copyright (C) 2004, 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2006 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
