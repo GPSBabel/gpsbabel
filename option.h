@@ -20,6 +20,7 @@
 #define OPTION_H_INCLUDED_
 
 #include <QString>     // for QString, operator!=
+#include "defs.h"
 
 class Option /* Abstract Class */
 {
@@ -46,6 +47,8 @@ public:
   virtual void init(const QString& id) {}
   virtual void reset() = 0;
   virtual void set(const QString& s) = 0;
+  virtual bool isValid(const QString& s) const = 0;
+  [[nodiscard]] virtual uint32_t get_type() const = 0;
 
   /* Data Members */
   // I.25: Prefer empty abstract classes as interfaces to class hierarchies
@@ -104,6 +107,16 @@ public:
   int toInt(bool* ok, QString* end, int base) const;
   double toDouble() const;
   double toDouble(bool* ok) const;
+  bool isValid(const QString& /*s*/) const override
+  {
+    return true;
+  }
+
+  [[nodiscard]] uint32_t get_type() const override
+  {
+    return ARGTYPE_STRING;
+  }
+
   double toDouble(bool* ok, QString* end) const;
 
 private:
@@ -116,40 +129,25 @@ class OptionInt : public Option
 public:
   /* Special Member Functions */
   OptionInt() = default;
-  explicit OptionInt(bool allow_trailing_data, int base) :
-    allow_trailing_data_(allow_trailing_data),
-    base_(base)
-  {}
+  explicit OptionInt(bool allow_trailing_data, int base);
 
-  explicit(false) operator const QString& () const
-  {
-    return value_;
-  }
-
+  explicit(false) operator const QString& () const;
   explicit(false) operator bool () const
   {
     return !value_.isNull();
   }
 
-  [[nodiscard]] bool has_value() const override
-  {
-    return !value_.isNull();
-  }
-
-  [[nodiscard]] bool isEmpty() const override
-  {
-    return value_.isEmpty();
-  }
-
-  [[nodiscard]] const QString& get() const override
-  {
-    return value_;
-  }
-
+  [[nodiscard]] bool has_value() const override;
+  [[nodiscard]] bool isEmpty() const override;
+  [[nodiscard]] const QString& get() const override;
   void init(const QString& id) override;
   void reset() override;
   void set(const QString& s) override;
-  bool isValid(const QString& s) const;
+  bool isValid(const QString& s) const override;
+  uint32_t get_type() const override
+  {
+    return ARGTYPE_INT;
+  }
   int get_result(QString* end = nullptr) const;
   bool trailing_data_allowed() const;
 
@@ -199,7 +197,11 @@ public:
   void init(const QString& id) override;
   void reset() override;
   void set(const QString& s) override;
-  bool isValid(const QString& s) const;
+  bool isValid(const QString& s) const override;
+  uint32_t get_type() const override
+  {
+    return ARGTYPE_FLOAT;
+  }
   double get_result(QString* end = nullptr) const;
   bool trailing_data_allowed() const;
 
@@ -249,6 +251,16 @@ public:
   void set(const QString& s) override
   {
     value_ = s;
+  }
+
+  bool isValid(const QString& /*s*/) const override
+  {
+    return true;
+  }
+
+  uint32_t get_type() const override
+  {
+    return ARGTYPE_BOOL;
   }
 
 private:
