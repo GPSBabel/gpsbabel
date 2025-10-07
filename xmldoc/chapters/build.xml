@@ -266,6 +266,12 @@ distributed. The Qt provided translations still need to be distributed.
           </listitem>
         </varlistentry>
         <varlistentry>
+          <term>GPSBABEL_UPGRADE_CHECK</term>
+          <listitem>
+            <para>Enable the graphical user interface upgrade check and usage statistic reporting.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
           <term>GPSBABEL_EXTRA_COMPILE_OPTIONS</term>
           <listitem>
             <para>Extra compile options when building the target gpsbabel.</para>

@@ -47,11 +47,11 @@ void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char
    * but autodetection may switch to a converter that is.
    */
   if (!use_stringconverter && (mode & QFile::ReadOnly)) {
-    QFile file = QFile(fname);
-    file.open(mode);
+    auto scanfile = gpsbabel::File(fname);
+    scanfile.open(mode);
     char data[4];
-    qint64 bytesread = file.read(data, 4);
-    file.close();
+    qint64 bytesread = scanfile.read(data, 4);
+    scanfile.close();
     encoding = QStringConverter::encodingForData(QByteArrayView(data, bytesread));
     if (encoding.has_value()) {
       use_stringconverter = true;
