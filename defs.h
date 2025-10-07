@@ -46,15 +46,14 @@
 #include "geocache.h"                // for Geocache
 #include "formspec.h"                // for FormatSpecificData
 #include "inifile.h"                 // for inifile_t
-#include "option.h"
 #include "session.h"                 // for session_t
 #include "src/core/datetime.h"       // for DateTime
 
+class Option;                        // forward declare
 
 #define gbLogCStr(qstr) qUtf8Printable(qstr)
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
-
 
 /*
  * The constants marked "exact in decimal notation" may be more accurately
