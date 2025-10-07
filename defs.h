@@ -46,9 +46,8 @@
 #include "geocache.h"                // for Geocache
 #include "formspec.h"                // for FormatSpecificData
 #include "inifile.h"                 // for inifile_t
+#include "option.h"
 #include "session.h"                 // for session_t
-
-class Option;                      // for arglist_t
 #include "src/core/datetime.h"       // for DateTime
 
 
