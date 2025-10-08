@@ -17,10 +17,11 @@
 */
 
 #include "matrix.h"
-#include "defs.h" // For gbFatal
-#include <cmath> // For std::abs
-#include <algorithm> // For std::swap
-#include <utility> // For std::move
+
+#include "defs.h"       // For gbFatal
+#include <cmath>        // For std::abs
+#include <algorithm>    // For std::swap
+#include <utility>      // For std::move
 
 Matrix::Matrix(int rows, int cols) : rows_(rows), cols_(cols), data_(rows * cols, 0.0) {}
 
