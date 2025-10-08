@@ -416,10 +416,19 @@ Supported data filters:
 	interpolate           Interpolate between trackpoints                   
 	  time                  Time interval in seconds 
 	  distance              Distance interval 
-	  route                 Interpolate routes instead 
-	nuketypes             Remove all waypoints, tracks, or routes           
-	  waypoints             Remove all waypoints from data stream 
-	  tracks                Remove all tracks from data stream 
+	   	  route                 Interpolate routes instead 
+	  kalman                Kalman filter                                     
+	   	  gap_factor            Factor to determine if a time gap is significant e 
+	   	  r_scale               Measurement noise covariance scaling factor 
+	   	  q_scale_pos           Process noise covariance scaling factor for positi 
+	   	  q_scale_vel           Process noise covariance scaling factor for veloci 
+	   	  max_speed             Maximum reasonable speed in m/s for pre-filtering 
+	   	  profile               Predefined profile for Kalman filter tuning (auto, 
+	   	  interp_max_dt         Maximum time gap (seconds) for interpolation 
+	   	   	  interp_min_multipl    Minimum multiplier for median dt to consider inter 
+	   	   	  nuketypes             Remove all waypoints, tracks, or routes           
+	   	   	  waypoints             Remove all waypoints from data stream 
+ 	  tracks                Remove all tracks from data stream 
 	  routes                Remove all routes from data stream 
 	polygon               Include Only Points Inside Polygon                
 	  file                  File containing vertices of polygon (required)

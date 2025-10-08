@@ -134,6 +134,7 @@ set(FILTERS
   duplicate.cc
   height.cc
   interpolate.cc
+  kalman.cc
   nukedata.cc
   polygon.cc
   position.cc
@@ -190,6 +191,7 @@ set(SUPPORT
   session.cc
   src/core/codecdevice.cc
   src/core/logging.cc
+  src/core/matrix.cc
   src/core/nvector.cc
   src/core/textstream.cc
   src/core/usasciicodec.cc
@@ -239,6 +241,7 @@ set(HEADERS
   html.h
   inifile.h
   kml.h
+  kalman.h
   igc.h
   lowranceusr.h
   mkshort.h
@@ -284,6 +287,7 @@ set(HEADERS
   src/core/datetime.h
   src/core/file.h
   src/core/logging.h
+  src/core/matrix.h
   src/core/nvector.h
   src/core/textstream.h
   src/core/usasciicodec.h

@@ -43,6 +43,7 @@
 #include "height.h"         // for HeightFilter
 #include "inifile.h"        // for inifile_readstr
 #include "interpolate.h"    // for InterpolateFilter
+#include "kalman.h"         // for Kalman
 #include "nukedata.h"       // for NukeDataFilter
 #include "polygon.h"        // for PolygonFilter
 #include "position.h"       // for PositionFilter
@@ -99,6 +100,12 @@ struct FilterVecs::Impl {
       "interpolate",
       "Interpolate between trackpoints",
       &fltfactory<InterpolateFilter>
+    },
+    {
+      nullptr,
+      "kalman",
+      "Kalman filter",
+      &fltfactory<Kalman>
     },
     {
       nullptr,
