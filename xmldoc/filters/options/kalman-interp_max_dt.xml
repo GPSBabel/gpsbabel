@@ -1,0 +1,27 @@
+<para xml:id="g-filter-kalman-interp_max_dt">
+  This option sets the absolute maximum duration (in seconds) for a
+  gap that the filter will fill with interpolated points.
+</para>
+<mediaobject>
+  <imageobject>
+    <imagedata fileref="xmldoc/images/kalman_interpolation.png" format="PNG" width="100%" scalefit="1"/>
+  </imageobject>
+</mediaobject>
+<para>
+  This is an important safeguard. For example, if you stop your GPS
+  for lunch and restart it an hour later, you almost certainly do not
+  want the filter to draw a straight line across the map connecting
+  the stop and start points. This setting prevents that by defining a
+  time limit beyond which interpolation will not be performed.
+</para>
+<para>
+  If you want to prevent any interpolation, you can set this value to
+  zero.
+</para>
+<para>
+  The pre-defined profiles use the following values: 'walking' (60s), 'running' (120s), 'cycling' (300s), 'driving' (600s), and 'flying' (3600s). If you are using a profile, you do not need to set this option unless you want to override the profile's default.
+</para>
+<para>
+  If you are using a <link linkend="g-filter-kalman-profile">profile</link>,
+  this value is set automatically, but you can override it here.
+</para>
