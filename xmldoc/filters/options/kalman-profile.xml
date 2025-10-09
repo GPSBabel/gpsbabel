@@ -1,0 +1,21 @@
+<para xml:id="g-filter-kalman-profile">
+  This is the easiest way to configure the Kalman filter. It provides a
+  set of pre-tuned parameters for common activities. You can choose
+  from the following profiles: 'auto', 'walking', 'running', 'cycling', 'driving', and 'flying'.
+</para>
+<para>
+  When you select a profile, you are setting a group of parameters
+  like <link linkend="g-filter-kalman-r_scale">r_scale</link> and
+  <link linkend="g-filter-kalman-max_speed">max_speed</link> to values that
+  have been found to work well for that activity. You can always
+  override a specific parameter after selecting a profile.
+</para>
+<para>
+  The 'auto' profile attempts to automatically detect the activity type by analyzing the average speed of the track. It then applies the corresponding profile ('walking', 'running', 'cycling', 'driving', or 'flying'). This is useful when you are processing multiple tracks with different activity types.
+</para>
+<para>
+  Example: Use the auto profile, but override the max speed:
+<screen>
+gpsbabel -i gpx -f my_track.gpx -x kalman,profile=auto,max_speed=20 -o gpx -F my_track_filtered.gpx
+</screen>
+</para>
