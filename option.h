@@ -20,6 +20,7 @@
 #define OPTION_H_INCLUDED_
 
 #include <QString>     // for QString, operator!=
+#include "defs.h"
 
 class Option /* Abstract Class */
 {
@@ -46,6 +47,8 @@ public:
   virtual void init(const QString& id) {}
   virtual void reset() = 0;
   virtual void set(const QString& s) = 0;
+  [[nodiscard]] virtual bool isValid(const QString& s) const = 0;
+  [[nodiscard]] virtual uint32_t get_type() const = 0;
 
   /* Data Members */
   // I.25: Prefer empty abstract classes as interfaces to class hierarchies
@@ -104,6 +107,16 @@ public:
   int toInt(bool* ok, QString* end, int base) const;
   double toDouble() const;
   double toDouble(bool* ok) const;
+  [[nodiscard]] bool isValid(const QString& /*s*/) const override
+  {
+    return true;
+  }
+
+  [[nodiscard]] uint32_t get_type() const override
+  {
+    return ARGTYPE_STRING;
+  }
+
   double toDouble(bool* ok, QString* end) const;
 
 private:
@@ -125,7 +138,6 @@ public:
   {
     return value_;
   }
-
   explicit(false) operator bool () const
   {
     return !value_.isNull();
@@ -149,11 +161,16 @@ public:
   void init(const QString& id) override;
   void reset() override;
   void set(const QString& s) override;
-  bool isValid(const QString& s) const;
+  [[nodiscard]] bool isValid(const QString& s) const override;
+  uint32_t get_type() const override
+  {
+    return ARGTYPE_INT;
+  }
   int get_result(QString* end = nullptr) const;
   bool trailing_data_allowed() const;
 
 private:
+  /* Data Members */
   QString value_;
   QString id_;
   int result_{};
@@ -199,7 +216,11 @@ public:
   void init(const QString& id) override;
   void reset() override;
   void set(const QString& s) override;
-  bool isValid(const QString& s) const;
+  [[nodiscard]] bool isValid(const QString& s) const override;
+  uint32_t get_type() const override
+  {
+    return ARGTYPE_FLOAT;
+  }
   double get_result(QString* end = nullptr) const;
   bool trailing_data_allowed() const;
 
@@ -249,6 +270,16 @@ public:
   void set(const QString& s) override
   {
     value_ = s;
+  }
+
+  [[nodiscard]] bool isValid(const QString& /*s*/) const override
+  {
+    return true;
+  }
+
+  uint32_t get_type() const override
+  {
+    return ARGTYPE_BOOL;
   }
 
 private:
