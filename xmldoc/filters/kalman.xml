@@ -1,0 +1,85 @@
+<para>
+  The Kalman filter is a powerful signal processing algorithm used to
+  produce a statistically optimal estimate of a system's state from a
+  series of incomplete and noisy measurements. In the world of GPS,
+  this means it can take a raw, jittery track and produce a
+  smoother, more accurate representation of your actual path.
+</para>
+
+<para><emphasis role="bold">For the Everyday User: Cleaner Tracks Made Easy</emphasis></para>
+<para>
+  Have you ever looked at a GPS track of your bike ride and seen it
+  zig-zagging across the street, even though you were riding in a
+  straight line? Or maybe you ran through a short tunnel and the
+  track on the other side went haywire for a moment. The Kalman
+  filter is designed to fix these kinds of problems.
+</para>
+<para>
+  The easiest way to use the filter is to select a
+  <link linkend="g-filter-kalman-profile">profile</link> that matches your
+  activity. The filter will automatically apply a set of sensible
+  defaults to clean up your track.
+</para>
+<para>
+  For example, to clean up a cycling track, you would use:
+  <screen>
+gpsbabel -i gpx -f my_ride.gpx -x kalman,profile=cycling -o gpx -F my_ride_smooth.gpx
+  </screen>
+</para>
+<para>
+  The filter performs several actions:
+</para>
+<simplelist type="vert">
+  <member>It smooths out jitter and noise caused by poor satellite
+  reception.</member>
+  <member>It removes outlier points ("zingers") that are physically
+  impossible to have reached.</member>
+  <member>It can intelligently fill in small gaps in your track where
+  the signal was lost.</member>
+</simplelist>
+
+<para><emphasis role="bold">For the Power User: Tuning the Filter</emphasis></para>
+<para>
+  While the profiles are a great starting point, you can fine-tune
+  the filter's behavior by adjusting its parameters. This gives you
+  more control over the trade-off between smoothing and faithfulness
+  to the original data.
+</para>
+
+<para><emphasis role="bold">For the Science and Math Nerds</emphasis></para>
+<para>
+  The filter implemented in GPSBabel is a 6-state Extended Kalman
+  Filter (EKF). The state vector being estimated is:
+  <screen>
+[x, y, z, vx, vy, vz]
+  </screen>
+  where (x, y, z) are the ECEF coordinates of the position and (vx,
+  vy, vz) are the components of the velocity vector.
+</para>
+<para>
+  The filter operates in a continuous predict-update cycle:
+</para>
+<orderedlist>
+  <listitem><para><emphasis role="bold">Predict:</emphasis> Using a
+  constant-velocity model, the filter predicts the next state
+  based on the current one.</para></listitem>
+  <listitem><para><emphasis role="bold">Update:</emphasis> When a new
+  GPS measurement arrives, it is compared to the predicted state.
+  The difference (the "innovation") is used to correct the state
+  estimate. The amount of correction is governed by the Kalman
+  Gain, which is calculated based on the relative uncertainties of
+  the prediction and the measurement.</para></listitem>
+</orderedlist>
+<para>
+  The <option>r_scale</option> parameter directly scales the
+  measurement noise covariance matrix (R), which represents the
+  uncertainty of the incoming GPS data. The
+  <option>q_scale_pos</option> and <option>q_scale_vel</option>
+  parameters scale the process noise covariance matrix (Q), which
+  represents the uncertainty in our constant-velocity motion model.
+  The use of R and Q are standard conventions in Kalman filter literature.
+  By adjusting these, you are essentially telling the filter how
+  much to trust its own predictions versus the incoming data, and
+  how dynamically you expect the tracked object to behave.
+</para>
+

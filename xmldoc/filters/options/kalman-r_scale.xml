@@ -1,0 +1,39 @@
+<para xml:id="g-filter-kalman-r_scale">
+  This option adjusts the filter's sensitivity to the raw GPS
+  measurements. It answers the question: "How much should I trust the
+  incoming GPS data points?"
+</para>
+<mediaobject>
+  <imageobject>
+    <imagedata fileref="xmldoc/images/kalman_r_scale.png" format="PNG" width="100%" scalefit="1"/>
+  </imageobject>
+</mediaobject>
+<para>
+  Think of this as a "skepticism" knob. A higher
+  <option>r_scale</option> value makes the filter more skeptical of
+  each measurement, leading to more aggressive smoothing. This is
+  useful if your track is very jittery or noisy, which can happen in
+  urban canyons or under heavy tree cover. A lower value tells the
+  filter to trust the measurements more, sticking closer to the
+  original data.
+</para>
+<para>
+  This option is a unitless scaling factor. For technically-minded
+  users, this parameter scales the measurement
+  noise covariance matrix (R). Increasing it causes the filter to give
+  less weight to the measurement and more weight to its own internal
+  prediction.
+</para>
+<para>
+  The value is a floating-point number. There's no strict range, but
+  the pre-defined profiles offer a guide. For activities with smooth,
+  predictable motion like 'flying', a low value like 0.01 is
+  used. For activities with more erratic or slower movement like
+  'walking', a high value of 100.0 is used. A value of 1.0 (the
+  default for 'cycling') is a common starting point. Experimentation
+  is encouraged to find the best value for your specific data.
+</para>
+<para>
+  If you are using a <link linkend="g-filter-kalman-profile">profile</link>,
+  this value is set automatically, but you can override it here.
+</para>

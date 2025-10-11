@@ -1,0 +1,29 @@
+<para xml:id="g-filter-kalman-q_scale_pos">
+  This option controls how much the filter expects your position to
+  change unpredictably between GPS points. It models the uncertainty
+  in your movement dynamics.
+</para>
+<mediaobject>
+  <imageobject role="pdf">
+    <imagedata fileref="xmldoc/images/kalman_q_scale_pos.png" format="PNG" width="100%" scalefit="1"/>
+  </imageobject>
+  <imageobject role="html">
+    <imagedata fileref="xmldoc/images/kalman_q_scale_pos.gif" format="GIF"/>
+  </imageobject>
+</mediaobject>
+<para>
+  Imagine you are driving. A low <option>q_scale_pos</option> is like a heavy sedan; it has high inertia and is best for smooth, predictable motion like a long, straight highway. A high <option>q_scale_pos</option> is like a nimble sports car; it has low inertia and can react quickly to sudden changes in direction, making it better for a twisty mountain road.
+</para>
+<para>
+  For technically-minded users, this parameter scales the position
+  components of the process noise covariance matrix (Q). A higher
+  value allows the filter's state estimate to change more rapidly,
+  making it more responsive to un-modeled accelerations.
+</para>
+<para>
+  This option is a unitless scaling factor. The pre-defined profiles use the following values: 'walking' (0.01), 'running' (0.1), 'cycling' (1.0), 'driving' (10.0), and 'flying' (100.0). If you are using a profile, you do not need to set this option unless you want to override the profile's default.
+</para>
+<para>
+  If you are using a <link linkend="g-filter-kalman-profile">profile</link>,
+  this value is set automatically, but you can override it here.
+</para>
