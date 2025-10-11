@@ -18,20 +18,22 @@
 #ifndef KALMAN_H_INCLUDED_
 #define KALMAN_H_INCLUDED_
 
-#include "filter.h"
-#include "src/core/matrix.h"
-#include "src/core/nvector.h"
-#include <QtCore/QVector>
-#include <deque>
-#include <vector>
-#include "option.h" // Added for OptionDouble
+#include <QDateTime>
+#include <QList>
+#include <QString>
+#include <QVector>
 
+#include "defs.h" // for arglist_t, ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_STRING, Waypoint
+#include "filter.h" // for Filter
+#include "option.h" // for OptionDouble, OptionString
+#include "src/core/matrix.h" // for Matrix
+#include "src/core/nvector.h" // for NVector/
+                              //
 #if FILTERS_ENABLED
 
 class Kalman : public Filter {
  public:
   Kalman();
-  ~Kalman() override = default;
 
   enum class PreFilterState { NORMAL, RECOVERY, FIRST_GOOD_SEEN_IN_RECOVERY };
 
@@ -41,24 +43,27 @@ class Kalman : public Filter {
   QVector<arglist_t>* get_args() override;
 
  private:
+  static constexpr int STATE_SIZE = 6;   // [x,y,z,vx,vy,vz]
+  static constexpr int MEAS_SIZE  = 3;   // [x,y,z] measurements
+
   struct KalmanExtraData {
     bool is_zinger_deletion = false;
   };
 
   void kalman_point_cb(Waypoint* wpt);
 
-  bool is_initialized_;
-  bool initial_velocity_estimated_;
+  bool is_initialized_{false};
+  bool initial_velocity_estimated_{false};
   QDateTime last_timestamp_;
   gpsbabel::NVector last_nvector_;
 
   // Kalman filter matrices
-  Matrix x_;  // State vector [x, y, z, vel_x, vel_y, vel_z]
-  Matrix P_;  // Covariance matrix
-  Matrix F_;  // State transition matrix
-  Matrix H_;  // Measurement matrix
-  Matrix R_;  // Measurement noise covariance matrix
-  Matrix Q_;  // Process noise covariance matrix
+  Matrix x_{6, 1};  // State vector [x, y, z, vel_x, vel_y, vel_z]
+  Matrix P_{6, 6};  // Covariance matrix
+  Matrix F_{6, 6};  // State transition matrix
+  Matrix H_{3, 6};  // Measurement matrix
+  Matrix R_{3, 3};  // Measurement noise covariance matrix
+  Matrix Q_{STATE_SIZE, STATE_SIZE};  // Process noise covariance matrix
 
   // Configurable parameters
   OptionDouble gap_factor_option_;

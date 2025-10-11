@@ -17,44 +17,33 @@
 */
 
 #include "kalman.h"
-#include "defs.h"
-#include "option.h"
-#include "session.h"
-#include "src/core/logging.h"
-#include "src/core/nvector.h"
-#include "src/core/vector3d.h"
-#include <QDebug>
-#include <deque>
-#include <numeric>
+
+#include <algorithm>   // for max, sort
+#include <cstdlib>     // for abs
+#include <cstddef>     // for size_t
+#include <cmath>       // for round, floor
+#include <iterator>    // for distance, prev
+#include <vector>      // for vector
+
+#include <QDebug>      // for QDebug
+
+#include "defs.h" // for Waypoint, WaypointList, route_head, RouteList, wp_flags, track_add_wpt, arglist_t
+#include "option.h" // for OptionDouble, OptionString
+#include "src/core/datetime.h" // for DateTime
+#include "src/core/nvector.h" // for NVector
+#include "src/core/vector3d.h" // for Vector3D
 
 // Constants
-static constexpr int STATE_SIZE = 6;   // [x,y,z,vx,vy,vz]
-static constexpr int MEAS_SIZE  = 3;   // [x,y,z] measurements
 
 // static constexpr int debugLevelInfo = 1;
 // static constexpr int debugLevelDebug = 2;
 // static constexpr int debugLevelInterpolate = 7;
-
 
 extern RouteList* global_track_list;
 
 #if FILTERS_ENABLED
 
 Kalman::Kalman()
-  : is_initialized_(false),
-    initial_velocity_estimated_(false),
-    last_timestamp_(),
-    last_nvector_(),
-
-    x_(6, 1),
-    P_(6, 6),
-    F_(6, 6),
-    H_(3, 6),
-    R_(3, 3),
-    Q_(STATE_SIZE, STATE_SIZE),
-    r_scale_option_(),
-    q_scale_pos_option_(),
-    q_scale_vel_option_()
 {
 //	global_opts.debug_level = debugLevelInfo; // TODO: get from options
 //    global_opts.debug_level = std::max(global_opts.debug_level, debugLevelInfo); // TODO: get from options
@@ -89,8 +78,7 @@ void Kalman::process() {
     interp_max_dt_ = interp_max_dt_option_.get_result();
     interp_min_multiplier_ = interp_min_multiplier_option_.get_result();
 
-    for (RouteList::iterator route_it = global_track_list->begin();
-         route_it != global_track_list->end(); ++route_it) {
+    for (auto & route_it : *global_track_list) {
 
         // Per-track state initialization
         is_initialized_ = false;
@@ -114,7 +102,7 @@ void Kalman::process() {
         // Q_(4, 4) = 1e-1 * q_scale_vel;
         // Q_(5, 5) = 1e-1 * q_scale_vel;
 
-        WaypointList* wpt_list = &((*route_it)->waypoint_list);
+        WaypointList* wpt_list = &(route_it->waypoint_list);
 
 
         // Calculate track statistics for auto-profile inference
@@ -125,13 +113,12 @@ void Kalman::process() {
         gpsbabel::NVector prev_nvector_for_stats;
         bool first_point_for_stats = true;
 
-        for (auto it_stats = wpt_list->begin(); it_stats != wpt_list->end(); ++it_stats) {
-            Waypoint* wpt_stats = *it_stats;
+        for (auto wpt_stats : *wpt_list) {
             QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
             gpsbabel::NVector cur_nvector_for_stats(wpt_stats->latitude, wpt_stats->longitude);
 
             if (!first_point_for_stats) {
-                double dt_stats = prev_time_for_stats.secsTo(cur_time_for_stats);
+                double dt_stats = prev_time_for_stats.msecsTo(cur_time_for_stats) / 1000.0;
                 if (dt_stats > 0) {
                     double dist_stats = gpsbabel::NVector::euclideanDistance(prev_nvector_for_stats, cur_nvector_for_stats);
                     double speed_stats = dist_stats / dt_stats;
@@ -316,7 +303,7 @@ void Kalman::process() {
             }
 
             if (state == PreFilterState::NORMAL) {
-                double dt = last_accepted_wpt->GetCreationTime().secsTo(current_wpt->GetCreationTime());
+                double dt = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
                 double speed = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
                                                gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt);
 
@@ -330,12 +317,12 @@ void Kalman::process() {
                 }
             } else { // RECOVERY or FIRST_GOOD_SEEN_IN_RECOVERY
                 Waypoint* prev_wpt_in_list = *std::prev(it);
-                double dt_consecutive = prev_wpt_in_list->GetCreationTime().secsTo(current_wpt->GetCreationTime());
+                double dt_consecutive = prev_wpt_in_list->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
                 double speed_consecutive = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(prev_wpt_in_list->latitude, prev_wpt_in_list->longitude),
                                                            gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt_consecutive);
 
                 // Recalculate dt from anchor for speed_from_anchor
-                double dt_from_anchor = last_accepted_wpt->GetCreationTime().secsTo(current_wpt->GetCreationTime());
+                double dt_from_anchor = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
                 double speed_from_anchor = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
                                                     gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt_from_anchor);
                 if (dt_consecutive > gap_factor_ || speed_consecutive > max_speed_ || speed_from_anchor > max_speed_) {
@@ -364,11 +351,10 @@ void Kalman::process() {
         // Collect dt samples from non-deleted points for median_dt calculation
         std::vector<double> dt_samples;
         Waypoint* last_valid_for_dt = nullptr;
-        for (auto it = wpt_list->begin(); it != wpt_list->end(); ++it) {
-            Waypoint* current_wpt = *it;
+        for (auto current_wpt : *wpt_list) {
             if (!current_wpt->wpt_flags.marked_for_deletion) {
                 if (last_valid_for_dt) {
-                    double dt = last_valid_for_dt->GetCreationTime().secsTo(current_wpt->GetCreationTime());
+                    double dt = last_valid_for_dt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
                     if (dt > 0) dt_samples.push_back(dt);
                 }
                 last_valid_for_dt = current_wpt;
@@ -389,8 +375,7 @@ void Kalman::process() {
         Waypoint* last_kept_for_interp = nullptr;
 
         // Handle the first non-deleted point
-        for (auto it = wpt_list->begin(); it != wpt_list->end(); ++it) {
-            Waypoint* current_original_wpt = *it;
+        for (auto current_original_wpt : *wpt_list) {
             if (!current_original_wpt->wpt_flags.marked_for_deletion) {
                 track_add_wpt(new_route_head, current_original_wpt);
                 last_kept_for_interp = current_original_wpt;
@@ -413,7 +398,7 @@ void Kalman::process() {
             }
 
             if (current_original_wpt->wpt_flags.marked_for_deletion) {
-                KalmanExtraData* extra_data = (KalmanExtraData*)current_original_wpt->extra_data;
+                auto extra_data = (KalmanExtraData*)current_original_wpt->extra_data;
                 if (extra_data && extra_data->is_zinger_deletion) {
                     // This is a zinger deletion, do not interpolate across it.
                     // Reset last_kept_for_interp to effectively start a new segment.
@@ -426,7 +411,7 @@ void Kalman::process() {
             } else {
                 // This is a good point, consider interpolation if there was a previous kept point
                 if (last_kept_for_interp) {
-                    double gap = std::abs(last_kept_for_interp->GetCreationTime().secsTo(current_original_wpt->GetCreationTime()));
+                    double gap = std::abs(last_kept_for_interp->GetCreationTime().msecsTo(current_original_wpt->GetCreationTime())) / 1000.0;
 
                     if (gap >= interp_min_multiplier_ * median_dt && gap <= interp_max_dt_) {
                         int n_insert = static_cast<int>(std::floor(gap / median_dt)) - 1;
@@ -441,7 +426,7 @@ void Kalman::process() {
 
                                 QDateTime gen_time = last_kept_for_interp->GetCreationTime().addSecs(qRound(frac * gap));
 
-                                Waypoint* new_wpt = new Waypoint();
+                                auto new_wpt = new Waypoint();
                                 new_wpt->latitude = interpolated_nvector.latitude();
                                 new_wpt->longitude = interpolated_nvector.longitude();
                                 new_wpt->SetCreationTime(gen_time);
@@ -467,8 +452,8 @@ void Kalman::process() {
 
         // Now, iterate through the old list (which was the original wpt_list)
         // and delete waypoints that were marked for deletion and their extra_data.
-        for (WaypointList::iterator it = new_route_head->waypoint_list.begin(); it != new_route_head->waypoint_list.end(); ++it) {
-            Waypoint* old_wpt = *it;
+        for (auto & it : new_route_head->waypoint_list) {
+            Waypoint* old_wpt = it;
             if (old_wpt->wpt_flags.marked_for_deletion) {
                 if (old_wpt->extra_data) {
                     delete (KalmanExtraData*)old_wpt->extra_data;
@@ -478,7 +463,7 @@ void Kalman::process() {
             } else {
                 // For points that were not marked for deletion, they are now owned by the new wpt_list.
                 // We must set their pointer to nullptr in the old list to prevent double deletion.
-                *it = nullptr;
+                it = nullptr;
             }
         }
         // Clear the old list (now held by new_route_head) to prevent its destructor from deleting Waypoints
@@ -488,8 +473,8 @@ void Kalman::process() {
         delete new_route_head; // Clean up temporary route_head object
 
         // Now apply Kalman filter to the cleaned and interpolated data
-        for (WaypointList::iterator wpt_it = wpt_list->begin(); wpt_it != wpt_list->end(); ++wpt_it) {
-            kalman_point_cb(*wpt_it);
+        for (auto & wpt_it : *wpt_list) {
+            kalman_point_cb(wpt_it);
         }
     }
 }
@@ -506,10 +491,10 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
         return;
     }
 
-    double dt = last_timestamp_.secsTo(current_timestamp);
+    double dt = last_timestamp_.msecsTo(current_timestamp) / 1000.0;
 
     // If dt is zero, skip this point to avoid division by zero and infinite velocity.
-    if (dt == 0) {
+    if (dt < 1e-3) {
         return;
     }
 
