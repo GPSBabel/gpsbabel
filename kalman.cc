@@ -78,7 +78,7 @@ void Kalman::process() {
     interp_max_dt_ = interp_max_dt_option_.get_result();
     interp_min_multiplier_ = interp_min_multiplier_option_.get_result();
 
-    for (auto & route_it : *global_track_list) {
+    for (const auto& route_it : *global_track_list) {
 
         // Per-track state initialization
         is_initialized_ = false;
@@ -86,13 +86,13 @@ void Kalman::process() {
         last_timestamp_ = QDateTime();
         last_nvector_ = gpsbabel::NVector();
         x_ = Matrix(STATE_SIZE, 1);
-        P_ = Matrix::identity(STATE_SIZE) * 1000.0;
+        P_ = Matrix::identity(STATE_SIZE) * INITIAL_UNCERTAINTY;
         F_ = Matrix::identity(STATE_SIZE);
         H_ = Matrix(MEAS_SIZE, STATE_SIZE);
         H_(0, 0) = 1.0;
         H_(1, 1) = 1.0;
         H_(2, 2) = 1.0;
-        R_ = Matrix::identity(MEAS_SIZE) * 1e-1 * r_scale_;
+        R_ = Matrix::identity(MEAS_SIZE) * MEASUREMENT_NOISE_SCALE * r_scale_;
         // Q_ matrix initialization moved to kalman_point_cb()
         // Q_ = Matrix::identity(STATE_SIZE);
         // Q_(0, 0) = 1e-3 * q_scale_pos;
@@ -113,15 +113,15 @@ void Kalman::process() {
         gpsbabel::NVector prev_nvector_for_stats;
         bool first_point_for_stats = true;
 
-        for (auto wpt_stats : *wpt_list) {
-            QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
-            gpsbabel::NVector cur_nvector_for_stats(wpt_stats->latitude, wpt_stats->longitude);
+        for (const auto& wpt_stats : *wpt_list) {
+            const QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
+            const gpsbabel::NVector cur_nvector_for_stats(wpt_stats->latitude, wpt_stats->longitude);
 
             if (!first_point_for_stats) {
-                double dt_stats = prev_time_for_stats.msecsTo(cur_time_for_stats) / 1000.0;
+                const double dt_stats = prev_time_for_stats.msecsTo(cur_time_for_stats) / 1000.0;
                 if (dt_stats > 0) {
-                    double dist_stats = gpsbabel::NVector::euclideanDistance(prev_nvector_for_stats, cur_nvector_for_stats);
-                    double speed_stats = dist_stats / dt_stats;
+                    const double dist_stats = gpsbabel::NVector::euclideanDistance(prev_nvector_for_stats, cur_nvector_for_stats);
+                    const double speed_stats = dist_stats / dt_stats;
                     total_speed += speed_stats;
                     if (speed_stats > max_speed_observed) {
                         max_speed_observed = speed_stats;
@@ -135,7 +135,7 @@ void Kalman::process() {
             prev_nvector_for_stats = cur_nvector_for_stats;
         }
 
-        double average_speed = dt_samples_for_stats.empty() ? 0.0 : total_speed / dt_samples_for_stats.size();
+        const double average_speed = dt_samples_for_stats.empty() ? 0.0 : total_speed / dt_samples_for_stats.size();
         double median_dt_for_stats = 1.0;
         if (!dt_samples_for_stats.empty()) {
             std::sort(dt_samples_for_stats.begin(), dt_samples_for_stats.end());
@@ -287,14 +287,15 @@ void Kalman::process() {
         Waypoint* last_accepted_wpt = nullptr;
 
         for (auto it = wpt_list->begin(); it != wpt_list->end(); ++it) {
-            Waypoint* current_wpt = *it;
+            auto* const current_wpt = *it;
 
             // Ensure KalmanExtraData is attached
             if (current_wpt->extra_data == nullptr) {
                 current_wpt->extra_data = new KalmanExtraData();
             }
+            auto* extra_data = static_cast<KalmanExtraData*>(current_wpt->extra_data);
             // Initialize or reset zinger flag for all points initially
-            ((KalmanExtraData*)current_wpt->extra_data)->is_zinger_deletion = false;
+            extra_data->is_zinger_deletion = false;
 
             if (last_accepted_wpt == nullptr) {
                 last_accepted_wpt = current_wpt;
@@ -303,36 +304,36 @@ void Kalman::process() {
             }
 
             if (state == PreFilterState::NORMAL) {
-                double dt = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
-                double speed = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
+                const double dt = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
+                const double speed = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
                                                gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt);
 
                 if (dt >= gap_factor_ || speed > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
-                    ((KalmanExtraData*)current_wpt->extra_data)->is_zinger_deletion = true; // Mark as zinger deletion
+                    extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                     state = PreFilterState::RECOVERY;
                     // last_accepted_wpt remains unchanged as the anchor
                 } else {
                     last_accepted_wpt = current_wpt;
                 }
             } else { // RECOVERY or FIRST_GOOD_SEEN_IN_RECOVERY
-                Waypoint* prev_wpt_in_list = *std::prev(it);
-                double dt_consecutive = prev_wpt_in_list->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
-                double speed_consecutive = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(prev_wpt_in_list->latitude, prev_wpt_in_list->longitude),
+                const auto* const prev_wpt_in_list = *std::prev(it);
+                const double dt_consecutive = prev_wpt_in_list->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
+                const double speed_consecutive = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(prev_wpt_in_list->latitude, prev_wpt_in_list->longitude),
                                                            gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt_consecutive);
 
                 // Recalculate dt from anchor for speed_from_anchor
-                double dt_from_anchor = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
-                double speed_from_anchor = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
+                const double dt_from_anchor = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
+                const double speed_from_anchor = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
                                                     gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt_from_anchor);
                 if (dt_consecutive > gap_factor_ || speed_consecutive > max_speed_ || speed_from_anchor > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
-                    ((KalmanExtraData*)current_wpt->extra_data)->is_zinger_deletion = true; // Mark as zinger deletion
+                    extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                     state = PreFilterState::RECOVERY;
                 } else {
                     if (state == PreFilterState::RECOVERY) {
                         current_wpt->wpt_flags.marked_for_deletion = true;
-                        ((KalmanExtraData*)current_wpt->extra_data)->is_zinger_deletion = true; // Mark as zinger deletion
+                        extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                         last_accepted_wpt = current_wpt;
                         state = PreFilterState::FIRST_GOOD_SEEN_IN_RECOVERY;
                     } else { // FIRST_GOOD_SEEN_IN_RECOVERY
@@ -351,7 +352,7 @@ void Kalman::process() {
         // Collect dt samples from non-deleted points for median_dt calculation
         std::vector<double> dt_samples;
         Waypoint* last_valid_for_dt = nullptr;
-        for (auto current_wpt : *wpt_list) {
+        for (const auto& current_wpt : *wpt_list) {
             if (!current_wpt->wpt_flags.marked_for_deletion) {
                 if (last_valid_for_dt) {
                     double dt = last_valid_for_dt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
@@ -375,7 +376,7 @@ void Kalman::process() {
         Waypoint* last_kept_for_interp = nullptr;
 
         // Handle the first non-deleted point
-        for (auto current_original_wpt : *wpt_list) {
+        for (const auto& current_original_wpt : *wpt_list) {
             if (!current_original_wpt->wpt_flags.marked_for_deletion) {
                 track_add_wpt(new_route_head, current_original_wpt);
                 last_kept_for_interp = current_original_wpt;
@@ -389,16 +390,17 @@ void Kalman::process() {
             continue;
         }
 
+        int i = -1;
         // Iterate through the rest of the original wpt_list
-        for (auto it = wpt_list->begin(); it != wpt_list->end(); ++it) {
-            Waypoint* current_original_wpt = *it;
+        for (const auto& current_original_wpt : *wpt_list) {
+            i++;
 
             if (current_original_wpt == last_kept_for_interp) {
                 continue; // Skip the first point, already handled
             }
 
             if (current_original_wpt->wpt_flags.marked_for_deletion) {
-                auto extra_data = (KalmanExtraData*)current_original_wpt->extra_data;
+                auto extra_data = static_cast<KalmanExtraData*>(current_original_wpt->extra_data);
                 if (extra_data && extra_data->is_zinger_deletion) {
                     // This is a zinger deletion, do not interpolate across it.
                     // Reset last_kept_for_interp to effectively start a new segment.
@@ -411,26 +413,26 @@ void Kalman::process() {
             } else {
                 // This is a good point, consider interpolation if there was a previous kept point
                 if (last_kept_for_interp) {
-                    double gap = std::abs(last_kept_for_interp->GetCreationTime().msecsTo(current_original_wpt->GetCreationTime())) / 1000.0;
+                    const double gap = std::abs(last_kept_for_interp->GetCreationTime().msecsTo(current_original_wpt->GetCreationTime())) / 1000.0;
 
                     if (gap >= interp_min_multiplier_ * median_dt && gap <= interp_max_dt_) {
-                        int n_insert = static_cast<int>(std::floor(gap / median_dt)) - 1;
+                        const int n_insert = static_cast<int>(std::floor(gap / median_dt)) - 1;
                         if (n_insert > 0) {
                             for (int k = 1; k <= n_insert; ++k) {
-                                double frac = double(k) / (n_insert + 1);
+                                const double frac = double(k) / (n_insert + 1);
 
                                 // Linear interpolation in NVector space
-                                gpsbabel::NVector na(last_kept_for_interp->latitude, last_kept_for_interp->longitude);
-                                gpsbabel::NVector nb(current_original_wpt->latitude, current_original_wpt->longitude);
-                                gpsbabel::NVector interpolated_nvector = gpsbabel::NVector::linepart(na, nb, frac);
+                                const gpsbabel::NVector na(last_kept_for_interp->latitude, last_kept_for_interp->longitude);
+                                const gpsbabel::NVector nb(current_original_wpt->latitude, current_original_wpt->longitude);
+                                const gpsbabel::NVector interpolated_nvector = gpsbabel::NVector::linepart(na, nb, frac);
 
-                                QDateTime gen_time = last_kept_for_interp->GetCreationTime().addSecs(qRound(frac * gap));
+                                const QDateTime gen_time = last_kept_for_interp->GetCreationTime().addSecs(qRound(frac * gap));
 
-                                auto new_wpt = new Waypoint();
+                                auto* const new_wpt = new Waypoint();
                                 new_wpt->latitude = interpolated_nvector.latitude();
                                 new_wpt->longitude = interpolated_nvector.longitude();
                                 new_wpt->SetCreationTime(gen_time);
-                                new_wpt->shortname = "interpolated" + QString::number(std::distance(wpt_list->begin(), it)) + "-" + QString::number(k);
+                                new_wpt->shortname = "interpolated" + QString::number(i) + "-" + QString::number(k);
                                 new_wpt->extra_data = new KalmanExtraData(); // Default to false
 
                                 track_add_wpt(new_route_head, new_wpt);
@@ -445,6 +447,7 @@ void Kalman::process() {
             }
         }
 
+
         // Swap the lists. The original route now owns the new interpolated list.
         // The old wpt_list (containing all original points, including marked ones)
         // is now held by new_route_head->waypoint_list.
@@ -452,18 +455,18 @@ void Kalman::process() {
 
         // Now, iterate through the old list (which was the original wpt_list)
         // and delete waypoints that were marked for deletion and their extra_data.
-        for (auto & it : new_route_head->waypoint_list) {
-            Waypoint* old_wpt = it;
+        for (auto& wpt_ptr : new_route_head->waypoint_list) {
+            Waypoint* old_wpt = wpt_ptr;
             if (old_wpt->wpt_flags.marked_for_deletion) {
                 if (old_wpt->extra_data) {
-                    delete (KalmanExtraData*)old_wpt->extra_data;
+                    delete static_cast<KalmanExtraData*>(old_wpt->extra_data);
                     old_wpt->extra_data = nullptr;
                 }
                 delete old_wpt;
             } else {
                 // For points that were not marked for deletion, they are now owned by the new wpt_list.
                 // We must set their pointer to nullptr in the old list to prevent double deletion.
-                it = nullptr;
+                wpt_ptr = nullptr;
             }
         }
         // Clear the old list (now held by new_route_head) to prevent its destructor from deleting Waypoints
@@ -473,15 +476,15 @@ void Kalman::process() {
         delete new_route_head; // Clean up temporary route_head object
 
         // Now apply Kalman filter to the cleaned and interpolated data
-        for (auto & wpt_it : *wpt_list) {
+        for (const auto& wpt_it : *wpt_list) {
             kalman_point_cb(wpt_it);
         }
     }
 }
 
 void Kalman::kalman_point_cb(Waypoint* wpt) {
-    gpsbabel::NVector current_nvector(wpt->latitude, wpt->longitude);
-    QDateTime current_timestamp = wpt->GetCreationTime();
+    const gpsbabel::NVector current_nvector(wpt->latitude, wpt->longitude);
+    const QDateTime current_timestamp = wpt->GetCreationTime();
 
     if (!is_initialized_) {
         // First point: store it and wait for the second point to estimate initial velocity
@@ -491,25 +494,25 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
         return;
     }
 
-    double dt = last_timestamp_.msecsTo(current_timestamp) / 1000.0;
+    const double dt = last_timestamp_.msecsTo(current_timestamp) / 1000.0;
 
     // If dt is zero, skip this point to avoid division by zero and infinite velocity.
-    if (dt < 1e-3) {
+    if (dt < MIN_DT) {
         return;
     }
 
     // Initialize Q_ (process noise covariance) adaptively with dt
     Q_ = Matrix::identity(STATE_SIZE);
-    Q_(0, 0) = 1e-3 * q_scale_pos_ * dt * dt; // Position uncertainty grows with dt^2
-    Q_(1, 1) = 1e-3 * q_scale_pos_ * dt * dt;
-    Q_(2, 2) = 1e-3 * q_scale_pos_ * dt * dt;
-    Q_(3, 3) = 1e-1 * q_scale_vel_ * dt;     // Velocity uncertainty grows with dt
-    Q_(4, 4) = 1e-1 * q_scale_vel_ * dt;
-    Q_(5, 5) = 1e-1 * q_scale_vel_ * dt;
+    Q_(0, 0) = POSITION_PROCESS_NOISE_SCALE * q_scale_pos_ * dt * dt; // Position uncertainty grows with dt^2
+    Q_(1, 1) = POSITION_PROCESS_NOISE_SCALE * q_scale_pos_ * dt * dt;
+    Q_(2, 2) = POSITION_PROCESS_NOISE_SCALE * q_scale_pos_ * dt * dt;
+    Q_(3, 3) = VELOCITY_PROCESS_NOISE_SCALE * q_scale_vel_ * dt;     // Velocity uncertainty grows with dt
+    Q_(4, 4) = VELOCITY_PROCESS_NOISE_SCALE * q_scale_vel_ * dt;
+    Q_(5, 5) = VELOCITY_PROCESS_NOISE_SCALE * q_scale_vel_ * dt;
 
     if (!initial_velocity_estimated_) {
         // Second point: estimate initial velocity and initialize state and covariance
-        gpsbabel::Vector3D delta_nvector = current_nvector - last_nvector_;
+        const gpsbabel::Vector3D delta_nvector = current_nvector - last_nvector_;
 
         x_(0, 0) = last_nvector_.getx();
         x_(1, 0) = last_nvector_.gety();
@@ -519,7 +522,7 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
         x_(5, 0) = delta_nvector.getz() / dt;
 
         // Initialize P_ with some uncertainty for position and velocity
-        P_ = Matrix::identity(6) * 1000.0;
+        P_ = Matrix::identity(6) * INITIAL_UNCERTAINTY;
 
         initial_velocity_estimated_ = true;
     } else {
@@ -543,17 +546,17 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     // Chi-squared threshold for 3 degrees of freedom, p=0.01 (approx 11.34)
     const double CHI_SQUARED_THRESHOLD = 11.34;
 
-    Matrix y = z - (H_ * x_);
+    const Matrix y = z - (H_ * x_);
 
-    Matrix S = H_ * P_ * H_.transpose() + R_;
+    const Matrix S = H_ * P_ * H_.transpose() + R_;
 
-    Matrix S_inv = S.inverse();
+    const Matrix S_inv = S.inverse();
 
-    Matrix d_squared_matrix = y.transpose() * S_inv * y;
-    double d_squared = d_squared_matrix(0, 0);
+    const Matrix d_squared_matrix = y.transpose() * S_inv * y;
+    const double d_squared = d_squared_matrix(0, 0);
 
     if (d_squared < CHI_SQUARED_THRESHOLD) {
-      Matrix K = P_ * H_.transpose() * S_inv;
+      const Matrix K = P_ * H_.transpose() * S_inv;
 
       x_ = x_ + (K * y);
       P_ = (Matrix::identity(6) - (K * H_)) * P_;
@@ -561,10 +564,10 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
 
     gpsbabel::Vector3D filtered_position(x_(0, 0), x_(1, 0), x_(2, 0));
     filtered_position.normalize(); // Ensure it's a unit vector
-    gpsbabel::NVector filtered_nvector(filtered_position);
+    const gpsbabel::NVector filtered_nvector(filtered_position);
 
-    double new_lat = std::round(filtered_nvector.latitude() * 1e7) / 1e7;
-    double new_lon = std::round(filtered_nvector.longitude() * 1e7) / 1e7;
+    const double new_lat = std::round(filtered_nvector.latitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
+    const double new_lon = std::round(filtered_nvector.longitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
 
     if (wpt->latitude != new_lat || wpt->longitude != new_lon) {
         wpt->latitude = new_lat;

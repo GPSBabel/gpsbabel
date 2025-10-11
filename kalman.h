@@ -43,6 +43,28 @@ class Kalman : public Filter {
   QVector<arglist_t>* get_args() override;
 
  private:
+  // Constants for Kalman filter tuning
+
+  // A high initial uncertainty allows the filter to converge quickly to the measured state.
+  static constexpr double INITIAL_UNCERTAINTY = 1000.0;
+
+  // Scales the measurement noise covariance (R). A larger value makes the filter
+  // trust the raw measurements less and produces a smoother output.
+  static constexpr double MEASUREMENT_NOISE_SCALE = 0.1;
+
+  // Scales the process noise on position (in Q). This represents the expected
+  // variance of the acceleration. A larger value allows for faster position changes.
+  static constexpr double POSITION_PROCESS_NOISE_SCALE = 0.001;
+
+  // Scales the process noise on velocity (in Q). This represents the expected
+  // variance of the jerk (rate of change of acceleration). A larger value allows
+  // for faster velocity changes.
+  static constexpr double VELOCITY_PROCESS_NOISE_SCALE = 0.1;
+
+  // Minimum time delta between points to be considered for processing.
+  static constexpr double MIN_DT = 1e-3; // seconds
+
+  static constexpr double COORDINATE_PRECISION_FACTOR = 1e7;
   static constexpr int STATE_SIZE = 6;   // [x,y,z,vx,vy,vz]
   static constexpr int MEAS_SIZE  = 3;   // [x,y,z] measurements
 
