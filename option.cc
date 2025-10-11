@@ -17,11 +17,9 @@
 
  */
 #include "option.h"
+#include "parse.h"             // for parse_double, parse_integer
 
 #include <QString>             // for QString
-
-#include "defs.h"              // for parse_double, parse_integer
-
 
 int OptionString::toInt() const
 {

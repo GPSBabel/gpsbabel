@@ -134,6 +134,7 @@ set(FILTERS
   duplicate.cc
   height.cc
   interpolate.cc
+  kalman.cc
   nukedata.cc
   polygon.cc
   position.cc
@@ -239,6 +240,7 @@ set(HEADERS
   humminbird.h
   html.h
   inifile.h
+  kalman.h
   kml.h
   igc.h
   lowranceusr.h
