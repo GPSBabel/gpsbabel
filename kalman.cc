@@ -160,124 +160,123 @@ void Kalman::process() {
                 current_profile = "flying";
             }
         }
-/* FIXME1 RJL START - I have a replacement design in mind to replace this.  Soon... */
+
         // Apply profile settings based on current_profile
         if (current_profile == "walking") {
-            if (max_speed_option_.get_result() == 15.0) { // Default for max_speed_option_
+            if (is_using_default_value(max_speed_option_, "max_speed")) {
                 max_speed_ = 2.0; // e.g., 7.2 km/h
             }
-            if (r_scale_option_.get_result() == 1.0) { // Default for r_scale_option_
+            if (is_using_default_value(r_scale_option_, "r_scale")) {
                 r_scale_ = 100.0;
             }
-            if (q_scale_pos_option_.get_result() == 1.0) { // Default for q_scale_pos_option_
+            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
                 q_scale_pos_ = 0.01;
             }
-            if (q_scale_vel_option_.get_result() == 1.0) { // Default for q_scale_vel_option_
+            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
                 q_scale_vel_ = 0.001;
             }
-            if (interp_max_dt_option_.get_result() == 300.0) { // Default for interp_max_dt_option_
+            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
                 interp_max_dt_ = 60.0; // 1 minute
             }
-            if (interp_min_multiplier_option_.get_result() == 1.5) { // Default for interp_min_multiplier_option_
+            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
                 interp_min_multiplier_ = 2.0;
             }
         } else if (current_profile == "running") { // New running profile
-            if (max_speed_option_.get_result() == 15.0) {
+            if (is_using_default_value(max_speed_option_, "max_speed")) {
                 max_speed_ = 10.0; // e.g., 18 km/h
             }
-            if (r_scale_option_.get_result() == 1.0) {
+            if (is_using_default_value(r_scale_option_, "r_scale")) {
                 r_scale_ = 10.0;
             }
-            if (q_scale_pos_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
                 q_scale_pos_ = 0.1;
             }
-            if (q_scale_vel_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
                 q_scale_vel_ = 0.01;
             }
-            if (interp_max_dt_option_.get_result() == 300.0) {
+            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
                 interp_max_dt_ = 120.0; // 2 minutes
             }
-            if (interp_min_multiplier_option_.get_result() == 1.5) {
+            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
                 interp_min_multiplier_ = 1.8;
             }
         } else if (current_profile == "cycling") {
-            if (max_speed_option_.get_result() == 15.0) {
+            if (is_using_default_value(max_speed_option_, "max_speed")) {
                 max_speed_ = 15.0; // e.g., 54 km/h
             }
-            if (r_scale_option_.get_result() == 1.0) {
+            if (is_using_default_value(r_scale_option_, "r_scale")) {
                 r_scale_ = 1.0;
             }
-            if (q_scale_pos_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
                 q_scale_pos_ = 1.0;
             }
-            if (q_scale_vel_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
                 q_scale_vel_ = 0.1;
             }
-            if (interp_max_dt_option_.get_result() == 300.0) {
+            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
                 interp_max_dt_ = 300.0; // 5 minutes
             }
-            if (interp_min_multiplier_option_.get_result() == 1.5) {
+            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
                 interp_min_multiplier_ = 1.5;
             }
         } else if (current_profile == "driving") {
-            if (max_speed_option_.get_result() == 15.0) {
+            if (is_using_default_value(max_speed_option_, "max_speed")) {
                 max_speed_ = 50.0; // e.g., 180 km/h
             }
-            if (r_scale_option_.get_result() == 1.0) {
+            if (is_using_default_value(r_scale_option_, "r_scale")) {
                 r_scale_ = 0.1;
             }
-            if (q_scale_pos_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
                 q_scale_pos_ = 10.0;
             }
-            if (q_scale_vel_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
                 q_scale_vel_ = 1.0;
             }
-            if (interp_max_dt_option_.get_result() == 300.0) {
+            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
                 interp_max_dt_ = 600.0; // 10 minutes
             }
-            if (interp_min_multiplier_option_.get_result() == 1.5) {
+            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
                 interp_min_multiplier_ = 1.2;
             }
         } else if (current_profile == "flying") {
-            if (max_speed_option_.get_result() == 15.0) {
+            if (is_using_default_value(max_speed_option_, "max_speed")) {
                 max_speed_ = 300.0; // e.g., 1080 km/h
             }
-            if (r_scale_option_.get_result() == 1.0) {
+            if (is_using_default_value(r_scale_option_, "r_scale")) {
                 r_scale_ = 0.01;
             }
-            if (q_scale_pos_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
                 q_scale_pos_ = 100.0;
             }
-            if (q_scale_vel_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
                 q_scale_vel_ = 10.0;
             }
-            if (interp_max_dt_option_.get_result() == 300.0) {
+            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
                 interp_max_dt_ = 3600.0; // 1 hour
             }
-            if (interp_min_multiplier_option_.get_result() == 1.5) {
+            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
                 interp_min_multiplier_ = 1.1;
             }
         } else { // Default to cycling if no profile or unknown profile
-            if (max_speed_option_.get_result() == 15.0) {
+            if (is_using_default_value(max_speed_option_, "max_speed")) {
                 max_speed_ = 15.0; // e.g., 54 km/h
             }
-            if (r_scale_option_.get_result() == 1.0) {
+            if (is_using_default_value(r_scale_option_, "r_scale")) {
                 r_scale_ = 1.0;
             }
-            if (q_scale_pos_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
                 q_scale_pos_ = 1.0;
             }
-            if (q_scale_vel_option_.get_result() == 1.0) {
+            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
                 q_scale_vel_ = 0.1;
             }
-            if (interp_max_dt_option_.get_result() == 300.0) {
+            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
                 interp_max_dt_ = 300.0; // 5 minutes
             }
-            if (interp_min_multiplier_option_.get_result() == 1.5) {
+            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
                 interp_min_multiplier_ = 1.5;
             }
         }
-/*FIXME1 RJL END*/
 
         // ---------------------------
         // 1) First pass: detect spikes and gaps, mark culprit waypoint(s)
@@ -480,6 +479,16 @@ void Kalman::process() {
             kalman_point_cb(wpt_it);
         }
     }
+}
+
+bool Kalman::is_using_default_value(const Option& opt, const char* opt_name) const {
+  for (const auto& arg : std::as_const(args)) {
+    if (arg.argstring == opt_name) {
+      // arg.defaultvalue is a const QString, opt.get() is a const QString&.
+      return arg.defaultvalue == opt.get();
+    }
+  }
+  return false; // Should not happen if opt_name is valid
 }
 
 void Kalman::kalman_point_cb(Waypoint* wpt) {

@@ -73,6 +73,7 @@ class Kalman : public Filter {
   };
 
   void kalman_point_cb(Waypoint* wpt);
+  bool is_using_default_value(const Option& opt, const char* opt_name) const;
 
   bool is_initialized_{false};
   bool initial_velocity_estimated_{false};
