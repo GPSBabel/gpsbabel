@@ -46,7 +46,7 @@ public:
   virtual void init(const QString& id) {}
   virtual void reset() = 0;
   virtual void set(const QString& s) = 0;
-  [[nodiscard]] virtual bool getDefaulted() const = 0;
+  [[nodiscard]] virtual bool isDefaulted() const = 0;
   virtual void setDefaulted(bool defaulted) = 0;
 
   /* Data Members */
@@ -100,14 +100,14 @@ public:
     value_ = s;
   }
 
-  [[nodiscard]] bool getDefaulted() const override
+  [[nodiscard]] bool isDefaulted() const override
   {
-    return isDefaulted;
+    return isDefaulted_;
   }
 
   void setDefaulted(bool defaulted) override
   {
-    isDefaulted = defaulted;
+    isDefaulted_ = defaulted;
   }
 
 // We use overloads instead of default parameters to enable tool visibility into different usages.
@@ -121,7 +121,7 @@ public:
 private:
   QString value_;
   QString id_;
-  bool isDefaulted{true};
+  bool isDefaulted_{true};
 };
 
 class OptionInt : public Option
@@ -159,14 +159,14 @@ public:
     return value_;
   }
 
-  [[nodiscard]] bool getDefaulted() const override
+  [[nodiscard]] bool isDefaulted() const override
   {
-    return isDefaulted;
+    return isDefaulted_;
   }
 
   void setDefaulted(bool defaulted) override
   {
-    isDefaulted = defaulted;
+    isDefaulted_ = defaulted;
   }
 
   void init(const QString& id) override;
@@ -183,7 +183,7 @@ private:
   QString end_;
   bool allow_trailing_data_{false};
   int base_{10};
-  bool isDefaulted{true};
+  bool isDefaulted_{true};
 };
 
 class OptionDouble : public Option
@@ -220,14 +220,14 @@ public:
     return value_;
   }
 
-  [[nodiscard]] bool getDefaulted() const override
+  [[nodiscard]] bool isDefaulted() const override
   {
-    return isDefaulted;
+    return isDefaulted_;
   }
 
   void setDefaulted(bool defaulted) override
   {
-    isDefaulted = defaulted;
+    isDefaulted_ = defaulted;
   }
 
   void init(const QString& id) override;
@@ -243,7 +243,7 @@ private:
   double result_{};
   QString end_;
   bool allow_trailing_data_{false};
-  bool isDefaulted{true};
+  bool isDefaulted_{true};
 };
 
 class OptionBool : public Option
@@ -286,18 +286,18 @@ public:
     value_ = s;
   }
 
-  [[nodiscard]] bool getDefaulted() const override
+  [[nodiscard]] bool isDefaulted() const override
   {
-    return isDefaulted;
+    return isDefaulted_;
   }
 
   void setDefaulted(bool defaulted) override
   {
-    isDefaulted = defaulted;
+    isDefaulted_ = defaulted;
   }
 
 private:
   QString value_;
-  bool isDefaulted{true};
+  bool isDefaulted_{true};
 };
 #endif // OPTION_H_INCLUDED_
