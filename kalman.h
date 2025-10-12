@@ -38,8 +38,6 @@ class Kalman : public Filter {
   enum class PreFilterState { NORMAL, RECOVERY, FIRST_GOOD_SEEN_IN_RECOVERY };
 
   void process() override;
-  void init() override;
-  void deinit() override;
   QVector<arglist_t>* get_args() override;
 
  private:

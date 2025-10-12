@@ -49,14 +49,6 @@ Kalman::Kalman()
 //    global_opts.debug_level = std::max(global_opts.debug_level, debugLevelInfo); // TODO: get from options
 }
 
-void Kalman::init() {
-  // All initialization is now done per-track in process().
-}
-
-void Kalman::deinit() {
-  // Nothing to do.
-}
-
 QVector<arglist_t>* Kalman::get_args() {
     return &args;
 }
@@ -92,7 +84,6 @@ void Kalman::process() {
         H_(0, 0) = 1.0;
         H_(1, 1) = 1.0;
         H_(2, 2) = 1.0;
-        R_ = Matrix::identity(MEAS_SIZE) * MEASUREMENT_NOISE_SCALE * r_scale_;
         // Q_ matrix initialization moved to kalman_point_cb()
         // Q_ = Matrix::identity(STATE_SIZE);
         // Q_(0, 0) = 1e-3 * q_scale_pos;
@@ -152,7 +143,7 @@ void Kalman::process() {
                 current_profile = "walking";
             } else if (average_speed <= 5.0) { // Running speed
                 current_profile = "running";
-            } else if (average_speed <= 15.0) { // Cycling speed
+            } else if (average_speed <= 20.0) { // Cycling speed
                 current_profile = "cycling";
             } else if (average_speed <= 50.0) { // Driving speed
                 current_profile = "driving";
@@ -202,7 +193,7 @@ void Kalman::process() {
             }
         } else if (current_profile == "cycling") {
             if (is_using_default_value(max_speed_option_, "max_speed")) {
-                max_speed_ = 15.0; // e.g., 54 km/h
+                max_speed_ = 30.0; // e.g., 108 km/h
             }
             if (is_using_default_value(r_scale_option_, "r_scale")) {
                 r_scale_ = 1.0;
@@ -277,6 +268,8 @@ void Kalman::process() {
                 interp_min_multiplier_ = 1.5;
             }
         }
+
+        R_ = Matrix::identity(MEAS_SIZE) * MEASUREMENT_NOISE_SCALE * r_scale_;
 
         // ---------------------------
         // 1) First pass: detect spikes and gaps, mark culprit waypoint(s)
@@ -354,20 +347,20 @@ void Kalman::process() {
         for (const auto& current_wpt : *wpt_list) {
             if (!current_wpt->wpt_flags.marked_for_deletion) {
                 if (last_valid_for_dt) {
-                    double dt = last_valid_for_dt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
+                    double dt = last_valid_for_dt->GetCreationTime().msecsTo(current_wpt->GetCreationTime());
                     if (dt > 0) dt_samples.push_back(dt);
                 }
                 last_valid_for_dt = current_wpt;
             }
         }
 
-        double median_dt = 1.0;
+        double median_dt = 1000.0;
         if (!dt_samples.empty()) {
             std::sort(dt_samples.begin(), dt_samples.end());
             size_t mid = dt_samples.size() / 2;
             median_dt = (dt_samples.size() % 2 == 0) ?
                         (dt_samples[mid-1] + dt_samples[mid])/2.0 : dt_samples[mid];
-            if (median_dt < 1e-6) median_dt = 1.0;
+            if (median_dt < 1.0) median_dt = 1000.0;
         }
 
         // Interpolate moderate gaps and build new route
@@ -412,11 +405,15 @@ void Kalman::process() {
             } else {
                 // This is a good point, consider interpolation if there was a previous kept point
                 if (last_kept_for_interp) {
-                    const double gap = std::abs(last_kept_for_interp->GetCreationTime().msecsTo(current_original_wpt->GetCreationTime())) / 1000.0;
+                    const qint64 gap = std::abs(last_kept_for_interp->GetCreationTime().msecsTo(current_original_wpt->GetCreationTime()));
 
-                    if (gap >= interp_min_multiplier_ * median_dt && gap <= interp_max_dt_) {
+                    if (gap >= interp_min_multiplier_ * median_dt && gap <= interp_max_dt_ * 1000.0) {
                         const int n_insert = static_cast<int>(std::floor(gap / median_dt)) - 1;
                         if (n_insert > 0) {
+                            const double last_alt = last_kept_for_interp->altitude;
+                            const double current_alt = current_original_wpt->altitude;
+                            const bool can_interp_alt = (last_alt != unknown_alt && current_alt != unknown_alt);
+
                             for (int k = 1; k <= n_insert; ++k) {
                                 const double frac = double(k) / (n_insert + 1);
 
@@ -425,11 +422,14 @@ void Kalman::process() {
                                 const gpsbabel::NVector nb(current_original_wpt->latitude, current_original_wpt->longitude);
                                 const gpsbabel::NVector interpolated_nvector = gpsbabel::NVector::linepart(na, nb, frac);
 
-                                const QDateTime gen_time = last_kept_for_interp->GetCreationTime().addSecs(qRound(frac * gap));
+                                const QDateTime gen_time = last_kept_for_interp->GetCreationTime().addMSecs(qRound64(frac * gap));
 
                                 auto* const new_wpt = new Waypoint();
                                 new_wpt->latitude = interpolated_nvector.latitude();
                                 new_wpt->longitude = interpolated_nvector.longitude();
+                                if (can_interp_alt) {
+                                  new_wpt->altitude = last_alt + frac * (current_alt - last_alt);
+                                }
                                 new_wpt->SetCreationTime(gen_time);
                                 new_wpt->shortname = "interpolated" + QString::number(i) + "-" + QString::number(k);
                                 new_wpt->extra_data = new KalmanExtraData(); // Default to false
@@ -477,6 +477,14 @@ void Kalman::process() {
         // Now apply Kalman filter to the cleaned and interpolated data
         for (const auto& wpt_it : *wpt_list) {
             kalman_point_cb(wpt_it);
+        }
+
+        // Clean up the extra_data that we allocated.
+        for (const auto& wpt_it : *wpt_list) {
+            if (wpt_it->extra_data) {
+                delete static_cast<KalmanExtraData*>(wpt_it->extra_data);
+                wpt_it->extra_data = nullptr;
+            }
         }
     }
 }
