@@ -108,7 +108,7 @@ public:
   void setDefaulted(bool defaulted) override
   {
     isDefaulted = defaulted;
-  } 
+  }
 
 // We use overloads instead of default parameters to enable tool visibility into different usages.
   int toInt() const;
@@ -167,7 +167,7 @@ public:
   void setDefaulted(bool defaulted) override
   {
     isDefaulted = defaulted;
-  } 
+  }
 
   void init(const QString& id) override;
   void reset() override;
@@ -228,7 +228,7 @@ public:
   void setDefaulted(bool defaulted) override
   {
     isDefaulted = defaulted;
-  } 
+  }
 
   void init(const QString& id) override;
   void reset() override;
@@ -294,7 +294,7 @@ public:
   void setDefaulted(bool defaulted) override
   {
     isDefaulted = defaulted;
-  } 
+  }
 
 private:
   QString value_;
