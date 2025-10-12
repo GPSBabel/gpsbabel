@@ -19,16 +19,16 @@
 
  */
 
-#include <QDateTime>                        // for QDateTime
-#include <QList>                            // for QList
-#include <QObject>                          // for QObject
-#include <QString>                          // for QString
-#include <QUrl>                             // for QUrl
-#include <QNetworkAccessManager>            // for QNetworkAccessManager
-#include <QNetworkReply>                    // for QNetworkReply
-#include <QWidget>                          // for QWidget
-#include "babeldata.h"                      // for BabelData
-#include "format.h"                         // for Format
+#include <QDateTime>              // for QDateTime
+#include <QList>                  // for QList
+#include <QNetworkAccessManager>  // for QNetworkAccessManager
+#include <QNetworkReply>          // for QNetworkReply
+#include <QObject>                // for QObject, Q_OBJECT, slots
+#include <QString>                // for QString
+#include <QUrl>                   // for QUrl
+#include <QWidget>                // for QWidget
+#include "babeldata.h"            // for BabelData
+#include "format.h"               // for Format
 
 
 class UpgradeCheck : public QObject
@@ -52,13 +52,12 @@ public:
 
 private:
   QString currentVersion_;
-  QNetworkAccessManager* manager_;
-  QNetworkReply* replyId_;
-  QUrl upgradeUrl_;
-  QString latestVersion_;
+  QNetworkAccessManager* manager_{nullptr};
+  QNetworkReply* replyId_{nullptr};
+  QUrl upgradeUrl_{QStringLiteral("https://www.gpsbabel.org/upgrade_check.html")};
   QDateTime upgradeWarningTime_;  // invalid time if this object never issued.
   QList<Format>& formatList_;
-  updateStatus updateStatus_;
+  updateStatus updateStatus_{updateUnknown};
   BabelData& babelData_;
 
   static QString getOsName();

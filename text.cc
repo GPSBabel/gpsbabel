@@ -22,6 +22,8 @@
 #include "text.h"
 
 #include <QIODevice>               // for QIODevice, QIODevice::WriteOnly
+#include <QRegularExpression>      // for QRegularExpression
+#include <QRegularExpressionMatch> // for QRegularExpressionMatch
 #include <QString>                 // for QString, operator!=
 #include <QTextStream>             // for QTextStream
 #include <Qt>                      // for CaseInsensitive
@@ -37,8 +39,6 @@
 #include "src/core/xmltag.h"       // for xml_findfirst, xml_tag, xml_attribute, fs_xml, xml_findnext
 
 
-#define MYNAME "TEXT"
-
 void
 TextFormat::wr_init(const QString& fname)
 {
@@ -46,9 +46,26 @@ TextFormat::wr_init(const QString& fname)
   output_name = fname;
   if (!split_output) {
     file_out = new gpsbabel::TextStream;
-    file_out->open(fname, QIODevice::WriteOnly, MYNAME);
+    file_out->open(fname, QIODevice::WriteOnly);
   }
-  mkshort_handle = mkshort_new_handle();
+  mkshort_handle = new MakeShort;
+
+  static const QRegularExpression re("^(?:ddd|dmm|dms)$");
+  assert(re.isValid());
+  if (re.match(opt_degformat).hasMatch()) {
+    degformat = opt_degformat.get().at(2).toLatin1();
+  } else {
+    gbFatal("Unrecognized degformat %s, expected 'ddd', 'dmm' or 'dms'.\n", gbLogCStr(opt_degformat));
+  }
+
+  if (opt_altunits.get().startsWith('f')) {
+    altunits = 'f';
+  } else if (opt_altunits.get().startsWith('m')) {
+    altunits = 'm';
+  } else {
+    gbFatal("Unrecognized altunits %s, expected 'f' for feet or 'm' for meters.\n", gbLogCStr(opt_altunits));
+  }
+
 }
 
 void
@@ -59,7 +76,8 @@ TextFormat::wr_deinit()
     delete file_out;
     file_out = nullptr;
   }
-  mkshort_del_handle(&mkshort_handle);
+  delete mkshort_handle;
+  mkshort_handle = nullptr;
   output_name.clear();
 }
 
@@ -67,7 +85,8 @@ void
 TextFormat::text_disp(const Waypoint* wpt)
 {
   int32_t utmz;
-  double utme, utmn;
+  double utme;
+  double utmn;
   char utmzc;
 
   waypoint_count++;
@@ -76,21 +95,21 @@ TextFormat::text_disp(const Waypoint* wpt)
     QString thisfname(output_name);
     thisfname += QString::number(waypoint_count);
     file_out = new gpsbabel::TextStream;
-    file_out->open(thisfname, QIODevice::WriteOnly, MYNAME);
+    file_out->open(thisfname, QIODevice::WriteOnly);
   }
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
   QString position = QStringLiteral("%1 (%2%3 %4 %5)")
-                     .arg(pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", false))
+                     .arg(pretty_deg_format(wpt->latitude, wpt->longitude, degformat, " ", false))
                      .arg(utmz)
                      .arg(utmzc)
                      .arg(utme, 6, 'f', 0)
                      .arg(utmn, 7, 'f', 0);
   if (wpt->altitude != unknown_alt) {
-    position += QStringLiteral(" alt:%1").arg((int)((altunits[0]=='f') ? METERS_TO_FEET(wpt->altitude) : wpt->altitude));
+    position += QStringLiteral(" alt:%1").arg((int)((altunits == 'f') ? METERS_TO_FEET(wpt->altitude) : wpt->altitude));
   }
-  QString sn = global_opts.synthesize_shortnames ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname;
+  QString sn = global_opts.synthesize_shortnames ? mkshort_handle->mkshort_from_wpt(wpt) : wpt->shortname;
   *file_out << sn.leftJustified(16) << "  " <<  position.rightJustified(59) << "\n";
 
   if (wpt->description != wpt->shortname) {
@@ -146,7 +165,7 @@ TextFormat::text_disp(const Waypoint* wpt)
 
         logpart = curlog->xml_findfirst(u"groundspeak:date");
         if (logpart) {
-          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toLocalTime();
+          gpsbabel::DateTime logtime = xml_parse_time(logpart->cdata).toUTC();
           *file_out << logtime.toString(u"yyyy-MM-dd") << "\n";
         }
 
@@ -154,7 +173,7 @@ TextFormat::text_disp(const Waypoint* wpt)
         if (logpart) {
           double lat = logpart->xml_attribute("lat").toDouble();
           double lon = logpart->xml_attribute("lon").toDouble();
-          *file_out << pretty_deg_format(lat, lon, degformat[2], " ", false) << "\n";
+          *file_out << pretty_deg_format(lat, lon, degformat, " ", false) << "\n";
         }
 
         logpart = curlog->xml_findfirst(u"groundspeak:text");
@@ -196,7 +215,7 @@ TextFormat::write()
   if (!suppresssep && !split_output) {
     *file_out << "-----------------------------------------------------------------------------\n";
   }
-  setshort_length(mkshort_handle, 6);
+  mkshort_handle->set_length(6);
   auto text_disp_lambda = [this](const Waypoint* waypointp)->void {
     text_disp(waypointp);
   };

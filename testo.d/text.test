@@ -16,3 +16,7 @@ gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx \
   -o text,logs -F ${TMPDIR}/GC7FA4.text
 compare ${REFERENCE}/gc/GC7FA4.html ${TMPDIR}/GC7FA4.html
 compare ${REFERENCE}/gc/GC7FA4.text ${TMPDIR}/GC7FA4.text
+
+# GCGC8_nasty.gpx is hand modifed to test strip_nasty_html
+gpsbabel -i gpx -f ${REFERENCE}/gc/GCGCA8_nasty.gpx -o html -F ${TMPDIR}/GCGCA8_nasty.html
+compare ${REFERENCE}/gc/GCGCA8_nasty.html ${TMPDIR}/GCGCA8_nasty.html

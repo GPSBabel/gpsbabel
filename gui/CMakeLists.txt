@@ -22,20 +22,21 @@ if(NOT UNIX OR APPLE)
 endif()
 
 # Find the QtCore library
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Network SerialPort Widgets Xml REQUIRED)
-list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::SerialPort Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Xml)
-if(${Qt${QT_VERSION_MAJOR}Core_VERSION} VERSION_LESS 5.12)
-  message(FATAL_ERROR "Qt version ${Qt${QT_VERSION_MAJOR}Core_VERSION} found, but version 5.12 or newer is required.")
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Network SerialPort Widgets Xml OPTIONAL_COMPONENTS WebEngineWidgets WebChannel)
+list(APPEND QT_LIBRARIES Qt6::Core Qt6::Gui Qt6::Network Qt6::SerialPort Qt6::Widgets Qt6::Xml)
+if(${Qt6Core_VERSION} VERSION_LESS 6.2)
+  message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.2 or newer is required.")
 else()
-  message(STATUS "Using Qt${QT_VERSION_MAJOR} version ${Qt${QT_VERSION_MAJOR}Core_VERSION}")
+  message(STATUS "Using Qt6 version ${Qt6Core_VERSION}")
 endif()
 
-option(GPSBABEL_MAPPREVIEW "enable map preview." ON)
+cmake_dependent_option(GPSBABEL_MAPPREVIEW "enable map preview." ON "Qt6WebEngineWidgets_FOUND;Qt6WebChannel_FOUND" OFF)
 if (GPSBABEL_MAPPREVIEW)
-  find_package(Qt${QT_VERSION_MAJOR} COMPONENTS WebEngineWidgets WebChannel REQUIRED)
-  list(APPEND QT_LIBRARIES Qt${QT_VERSION_MAJOR}::WebEngineWidgets Qt${QT_VERSION_MAJOR}::WebChannel)
+  list(APPEND QT_LIBRARIES Qt6::WebEngineWidgets Qt6::WebChannel)
 else()
+  if (NOT Qt6WebEngineWidgets_FOUND OR NOT Qt6WebChannel_FOUND)
+    message(WARNING "Optional components Qt6 WebEngineWidgets and/or Qt6 WebChannel not found, MAPPREVIEW is not available.")
+  endif()
   target_compile_definitions(gpsbabelfe PRIVATE DISABLE_MAPPREVIEW)
 endif()
 
@@ -43,6 +44,10 @@ if(UNIX AND NOT APPLE)
   set_target_properties(gpsbabelfe PROPERTIES RUNTIME_OUTPUT_DIRECTORY GPSBabelFE)
 endif()
 
+option(GPSBABEL_UPGRADE_CHECK "upgrade check and usage statistic reporting." ON)
+if(NOT GPSBABEL_UPGRADE_CHECK)
+  target_compile_definitions(gpsbabelfe PRIVATE DISABLE_UPGRADE_CHECK)
+endif()
 # RESOURCES
 list(APPEND RESOURCES app.qrc)
 if(WIN32)
@@ -62,7 +67,6 @@ list(APPEND FORMS miscfltui.ui)
 list(APPEND FORMS preferences.ui)
 list(APPEND FORMS rttrkui.ui)
 list(APPEND FORMS trackui.ui)
-list(APPEND FORMS upgrade.ui)
 list(APPEND FORMS version_mismatch.ui)
 list(APPEND FORMS wayptsui.ui)
 
@@ -91,7 +95,9 @@ list(APPEND SOURCES optionsdlg.cc)
 list(APPEND SOURCES preferences.cc)
 list(APPEND SOURCES processwait.cc)
 list(APPEND SOURCES runmachine.cc)
-list(APPEND SOURCES upgrade.cc)
+if(GPSBABEL_UPGRADE_CHECK)
+  list(APPEND SOURCES upgrade.cc)
+endif()
 list(APPEND SOURCES version_mismatch.cc)
 
 if(UNIX)
@@ -125,7 +131,9 @@ list(APPEND HEADERS preferences.h)
 list(APPEND HEADERS processwait.h)
 list(APPEND HEADERS runmachine.h)
 list(APPEND HEADERS setting.h)
-list(APPEND HEADERS upgrade.h)
+if(GPSBABEL_UPGRADE_CHECK)
+  list(APPEND HEADERS upgrade.h)
+endif()
 list(APPEND HEADERS version_mismatch.h)
 
 if(UNIX AND NOT APPLE)
@@ -171,11 +179,11 @@ message(STATUS "Defines are: \"${DirDefs}\"")
 get_target_property(LnkLibs gpsbabelfe LINK_LIBRARIES)
 message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabelfe INCLUDE_DIRECTORIES)
-message(STATUS "Include Directores are: \"${IncDirs}\"")
+message(STATUS "Include Directories are: \"${IncDirs}\"")
 
-find_package(Qt${QT_VERSION_MAJOR} QUIET COMPONENTS LinguistTools)
-if (NOT Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
-  message(WARNING "Qt${QT_VERSION_MAJOR}LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
+find_package(Qt6 QUIET COMPONENTS LinguistTools)
+if (NOT Qt6LinguistTools_FOUND)
+  message(WARNING "Qt6LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
 else()
 # FIXME: translations updated and released in source directory (and under version control).
   list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
@@ -186,19 +194,19 @@ else()
   list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
 
   add_custom_target(gpsbabelfe_lupdate
-                    COMMAND Qt${QT_VERSION_MAJOR}::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
+                    COMMAND Qt6::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     VERBATIM
                     USES_TERMINAL)
   add_custom_target(gpsbabelfe_lrelease
-                    COMMAND Qt${QT_VERSION_MAJOR}::lrelease ${TRANSLATIONS}
+                    COMMAND Qt6::lrelease ${TRANSLATIONS}
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     DEPENDS gpsbabelfe_lupdate
                     VERBATIM
                     USES_TERMINAL)
 
   if(APPLE)
-    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
                       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
@@ -206,7 +214,7 @@ else()
                       VERBATIM
                       USES_TERMINAL)
   elseif(UNIX)
-    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_FILE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
                       DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
@@ -220,7 +228,7 @@ else()
     endif()
 
     # in 5.12.12 cmake doesn't know about windeployqt, look in directory that has qmake.
-    get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+    get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
     find_program(WINDEPLOYQT NAMES windeployqt PATHS "${_qt_bin_dir}" NO_DEFAULT_PATH)
     if (WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND")
@@ -230,6 +238,25 @@ else()
     if((NOT WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND") AND (NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND"))
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" _win_binary_path)
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" _win_source_path)
+      # for cross compiles we need to tell windeployqt about the target qt paths.
+      if(CMAKE_TOOLCHAIN_FILE)
+        get_filename_component(_qt_toolchain_dir ${CMAKE_TOOLCHAIN_FILE} DIRECTORY)
+        get_filename_component(_qt_target_bin_dir ${_qt_toolchain_dir}/../../../bin ABSOLUTE)
+        file(TO_NATIVE_PATH "${_qt_target_bin_dir}/qtpaths.bat" _qtpaths_file)
+        set(_qtpaths_option --qtpaths "${_qtpaths_file}")
+        message(STATUS "Deploying with target qtpaths \"${_qtpaths_file}\".")
+      endif()
+      # generate architecture for inno setup
+      # don't trust CMAKE_SYSTEM_PROCESSOR https://gitlab.kitware.com/cmake/cmake/-/issues/15170#note_891234
+      if(CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "arm64" OR CMAKE_CXX_COMPILER_ARCHITECTURE_ID STREQUAL "ARM64")
+        set(_installer_arch arm64)
+      else()
+        set(_installer_arch x64compatible)
+      endif()
+      message(STATUS "PROCESSOR_ARCHITECTURE is \"$ENV{PROCESSOR_ARCHITECTURE}\".")
+      message(STATUS "CMAKE_HOST_SYSTEM_PROCESSOR is \"${CMAKE_HOST_SYSTEM_PROCESSOR}\".")
+      message(STATUS "CMAKE_SYSTEM_PROCESSOR is \"${CMAKE_SYSTEM_PROCESSOR}\".")
+      message(STATUS "CMAKE_CXX_COMPILER_ARCHITECTURE_ID is \"${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}\".  Building installer for architecture identifier \"${_installer_arch}\".")
       add_custom_target(package_app
                         # deploy to a clean directory as different build systems create differently named debris in release.
                         COMMAND ${CMAKE_COMMAND} -E remove_directory package
@@ -237,9 +264,9 @@ else()
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabelfe> package
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> package
                         # use --plugindir option to locate the plugins.
-                        COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe
+                        COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe ${_qtpaths_option}
                         # set location to location of generated setup.iss file.
-                        COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} setup.iss
+                        COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} /Darch=${_installer_arch} setup.iss
                         DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                         VERBATIM
                         USES_TERMINAL)

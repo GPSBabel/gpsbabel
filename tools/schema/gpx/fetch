@@ -1,0 +1,14 @@
+#!/bin/bash
+
+wget -O topografix/gpx10.xsd "http://www.topografix.com/GPX/1/0/gpx.xsd"
+wget -O topografix/gpx11.xsd "http://www.topografix.com/GPX/1/1/gpx.xsd"
+
+wget -P garmin "https://www8.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd"
+wget -P garmin "https://www8.garmin.com/xmlschemas/TrackPointExtensionv1.xsd"
+wget -P garmin "https://www8.garmin.com/xmlschemas/TrackPointExtensionv2.xsd"
+wget -P garmin "https://www8.garmin.com/xmlschemas/TripExtensionsv1.xsd"
+
+wget -O groundspeak/cache10.xsd "http://www.groundspeak.com/cache/1/0/cache.xsd"
+wget -O groundspeak/cache101.xsd "http://www.groundspeak.com/cache/1/0/1/cache.xsd"
+wget -O groundspeak/cache11.xsd "http://www.groundspeak.com/cache/1/1/cache.xsd"
+wget -O groundspeak/cache12.xsd "http://www.groundspeak.com/cache/1/2/cache.xsd"

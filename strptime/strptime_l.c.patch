@@ -1,0 +1,80 @@
+--- ../../glibc/time/strptime_l.c	2023-06-25 08:08:49.327979261 -0600
++++ strptime_l.c	2023-06-30 06:45:48.529139134 -0600
+@@ -21,7 +21,7 @@
+ 
+ #include <assert.h>
+ #include <ctype.h>
+-#include <langinfo.h>
++//#include <langinfo.h>
+ #include <limits.h>
+ #include <string.h>
+ #include <time.h>
+@@ -59,13 +59,18 @@
+ #if defined __GNUC__ && __GNUC__ >= 2
+ # define match_string(cs1, s2) \
+   ({ size_t len = strlen (cs1);						      \
+-     int result = __strncasecmp_l ((cs1), (s2), len, locale) == 0;	      \
++     int result = strncasecmp ((cs1), (s2), len) == 0;	      \
+      if (result) (s2) += len;						      \
+      result; })
+ #else
+ /* Oh come on.  Get a reasonable compiler.  */
+-# define match_string(cs1, s2) \
+-  (strncasecmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
++# ifdef _WIN32
++#  define match_string(cs1, s2) \
++   (_strnicmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
++# else
++#  define match_string(cs1, s2) \
++   (strncasecmp ((cs1), (s2), strlen (cs1)) ? 0 : ((s2) += strlen (cs1), 1))
++# endif
+ #endif
+ /* We intentionally do not use isdigit() for testing because this will
+    lead to problems with the wide character version.  */
+@@ -268,7 +273,7 @@
+     unsigned int want_century : 1;
+     unsigned int want_era : 1;
+     unsigned int want_xday : 1;
+-    enum ptime_locale_status decided : 2;
++    enum ptime_locale_status decided : 3;
+     signed char week_no;
+     signed char century;
+     int era_cnt;
+@@ -788,7 +793,7 @@
+ 	    if (*rp == 'Z')
+ 	      {
+ 		++rp;
+-		tm->tm_gmtoff = 0;
++		//tm->tm_gmtoff = 0;
+ 		break;
+ 	      }
+ 	    if (*rp != '+' && *rp != '-')
+@@ -810,9 +815,9 @@
+ 	    else if (val % 100 >= 60)
+ 	      /* Minutes valid range is 0 through 59.  */
+ 	      return NULL;
+-	    tm->tm_gmtoff = (val / 100) * 3600 + (val % 100) * 60;
+-	    if (neg)
+-	      tm->tm_gmtoff = -tm->tm_gmtoff;
++	    //tm->tm_gmtoff = (val / 100) * 3600 + (val % 100) * 60;
++	    //if (neg)
++	      //tm->tm_gmtoff = -tm->tm_gmtoff;
+ 	  }
+ 	  break;
+ 	case 'E':
+@@ -1162,6 +1167,7 @@
+ 	tm->tm_year = (s.century - 19) * 100;
+     }
+ 
++#ifdef _NL_CURRENT
+   if (s.era_cnt != -1)
+     {
+       era = _nl_select_era_entry (s.era_cnt HELPER_LOCALE_ARG);
+@@ -1176,6 +1182,7 @@
+ 	tm->tm_year = era->start_date[0];
+     }
+   else
++#endif
+     if (s.want_era)
+       {
+ 	/* No era found but we have seen an E modifier.  Rectify some

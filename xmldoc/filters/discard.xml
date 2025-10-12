@@ -14,7 +14,7 @@ HDOP and VDOP are measures of the best possible horizontal or vertical precision
 </example>
 </para>
 <para>
-You may specify a minimum number of  satellites.
+You may specify a minimum number of satellites.
 </para>
 <para>
 <example xml:id="example_discard_filter_sats">

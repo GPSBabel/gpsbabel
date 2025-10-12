@@ -11,7 +11,7 @@ At least one of these options is required, both can be combined.
 <example xml:id="height_wgs84tomsl">
   <title> This option subtracts the WGS84 geoid height from every altitude. For GPS receivers like the iBlue747 the result is the height above mean see level.</title>
   <para><userinput> gpsbabel -i gpx -f in.gpx -x height,wgs84tomsl -o gpx -F out.gpx</userinput></para>
-  <para>The coordinates and altitude vales must be based an the WGS84 ellipsoid for this option to produce sensible results</para>
+  <para>The coordinates and altitude vales must be based on the WGS84 ellipsoid for this option to produce sensible results</para>
 </example>
 <example xml:id="height_add">
   <title> This options adds a constant value to every altitude.</title>

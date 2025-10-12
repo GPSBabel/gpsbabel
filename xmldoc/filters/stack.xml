@@ -16,7 +16,7 @@ can fit in your computer's memory.
  replace each copy with a filtered list.  Finally, append all
  of the filtered lists to create one big list, which is then
  output.  The following example finds a list of all points
- that are either inside county A or inside county B.  Any
+ that are either inside county A or inside county B. Any
  points that are inside both counties are duplicated (but the
  duplicates can be removed with the DUPLICATE filter; see
  above.)

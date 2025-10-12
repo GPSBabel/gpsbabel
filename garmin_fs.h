@@ -24,14 +24,14 @@
 #ifndef GARMIN_FS_H
 #define GARMIN_FS_H
 
-#include <cstddef>                  // for size_t
-#include <cstdint>                  // for int32_t, int16_t, uint16_t
+#include <cstdint>     // for int32_t, int16_t, uint16_t
+#include <optional>    // for optional
 
-#include <QString>                  // for QString
-#include <QXmlStreamWriter>         // for QXmlStreamWriter
+#include <QList>       // for QList
+#include <QString>     // for QString
 
 #include "defs.h"
-#include "formspec.h"               // for FsChainFind, kFsGmsd, FormatSpecificData
+#include "formspec.h"  // for FormatSpecificData, kFsGmsd, FormatSpecificDataList
 
 
 /* this order is used by most devices */
@@ -43,60 +43,40 @@
 */
 
 struct garmin_ilink_t {
-  int ref_count;
-  double lat, lon, alt;
-  garmin_ilink_t* next;
+  double lat;
+  double lon;
+  double alt;
 };
 
 struct garmin_fs_flags_t {
 public:
-  garmin_fs_flags_t() :
-  icon(0),
-  wpt_class(0),
-  display(0),
-  category(0),
-  city(0),
-  state(0),
-  facility(0),
-  cc(0),
-  cross_road(0),
-  addr(0),
-  country(0),
-  phone_nr(0),
-  phone_nr2(0),
-  fax_nr(0),
-  postal_code(0),
-  email(0),
-  duration(0)
-#ifdef GMSD_EXPERIMENTAL
-  , subclass(0)
-#endif
-  {}
 
-  unsigned int icon:1;
-  unsigned int wpt_class:1;
-  unsigned int display:1;
-  unsigned int category:1;
-  unsigned int city:1;
-  unsigned int state:1;
-  unsigned int facility:1;
-  unsigned int cc:1;
-  unsigned int cross_road:1;
-  unsigned int addr:1;
-  unsigned int country:1;
-  unsigned int phone_nr:1;
-  unsigned int phone_nr2:1;
-  unsigned int fax_nr:1;
-  unsigned int postal_code:1;
-  unsigned int email:1;
-  unsigned int duration:1;
+  unsigned int icon:1{0};
+  unsigned int wpt_class:1{0};
+  unsigned int display:1{0};
+  unsigned int category:1{0};
+  unsigned int city:1{0};
+  unsigned int state:1{0};
+  unsigned int facility:1{0};
+  unsigned int cc:1{0};
+  unsigned int cross_road:1{0};
+  unsigned int addr:1{0};
+  unsigned int country:1{0};
+  unsigned int phone_nr:1{0};
+  unsigned int phone_nr2:1{0};
+  unsigned int fax_nr:1{0};
+  unsigned int postal_code:1{0};
+  unsigned int email:1{0};
+  unsigned int duration:1{0};
 #ifdef GMSD_EXPERIMENTAL
-  unsigned int subclass:1;
+  unsigned int subclass:1{0};
 #endif
 };
 
 class garmin_fs_t : public FormatSpecificData {
 public:
+  /* Data Members */
+
   garmin_fs_flags_t flags;
 
   int protocol{0};		/* ... used by device (-1 is MapSource) */
@@ -117,27 +97,31 @@ public:
   QString fax_nr;				/* fax number */
   QString postal_code;	/* postal code */
   QString email;				/* email address */
-  unsigned int duration; /* expected travel time to next route point, in seconds, only when auto-routed */
+  unsigned int duration{0}; /* expected travel time to next route point, in seconds, only when auto-routed */
 
-  garmin_ilink_t* ilinks{nullptr};
+  QList<garmin_ilink_t> ilinks;
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22]{};
 #endif
 
-public:
-  garmin_fs_t() : FormatSpecificData(kFsGmsd) {}
-private:
-  garmin_fs_t(const garmin_fs_t& other) = default;
-public:
-  garmin_fs_t& operator=(const garmin_fs_t& rhs) = delete; /* not implemented */
-  garmin_fs_t(garmin_fs_t&&) = delete; /* not implemented */
-  garmin_fs_t& operator=(garmin_fs_t&&) = delete; /* not implemented */
-  ~garmin_fs_t() override;
+  /* Special Member Functions */
 
-  garmin_fs_t* clone() const override;
+  garmin_fs_t() : FormatSpecificData(kFsGmsd) {}
+  explicit garmin_fs_t(int p) : garmin_fs_t() {protocol = p;}
+
+  /* Member Functions */
+
+  garmin_fs_t* clone() const override
+  {
+    return new garmin_fs_t(*this);
+  }
+
   static garmin_fs_t* find(const Waypoint* wpt) {
     return reinterpret_cast<garmin_fs_t*>(wpt->fs.FsChainFind(kFsGmsd));
   }
+
+  static std::optional<uint16_t> convert_category(const QString& category_name);
+  static QStringList print_categories(uint16_t categories);
 
 #define GEN_GMSD_METHODS(field) \
   static bool has_##field(const garmin_fs_t* gmsd) \
@@ -214,25 +198,10 @@ public:
   GEN_GMSD_STR_METHODS(email)
 
 #undef GEN_GMSD_STR_METHODS
+
+private:
+  /* Constants */
+
+  static constexpr char kGmsdSectionCategories[] = "Garmin Categories";
 };
-
-garmin_fs_t* garmin_fs_alloc(int protocol);
-void garmin_fs_destroy(void* fs);
-void garmin_fs_copy(void** dest, const void* src);
-char* garmin_fs_xstrdup(const char* src, size_t size);
-
-/* for GPX */
-void garmin_fs_xml_convert(int base_tag, int tag, const QString& qstr, Waypoint* waypt);
-void garmin_fs_xml_fprint(const Waypoint* waypt, QXmlStreamWriter*);
-
-/* common garmin_fs utilities */
-
-/* ..convert_category: returns 1=OK; 0=Unable to convert category */
-unsigned char garmin_fs_convert_category(const char* category_name, uint16_t* category);
-
-/* ..merge_category: returns 1=OK; 0=Unable to convert category */
-unsigned char garmin_fs_merge_category(const char* category_name, Waypoint* waypt);
-
-#define GMSD_SECTION_CATEGORIES "Garmin Categories"
-
 #endif

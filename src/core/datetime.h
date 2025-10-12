@@ -29,6 +29,9 @@
 #include <QtGlobal>
 #include <QDateTime>
 #include <QString>
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+#include <QTimeZone>
+#endif
 
 // As this code began in C, we have several hundred places that set and
 // read creation_time as a time_t.  Provide some operator overloads to make
@@ -37,9 +40,11 @@
 // "Better" code in the callers.
 
 // Consider putting in a namespace instead of prefixing 'gb'.
-namespace gpsbabel {
+namespace gpsbabel
+{
 
-class DateTime : public QDateTime {
+class DateTime : public QDateTime
+{
 public:
   // As a crutch, mimic the old behaviour of an uninitialized creation time
   // being 1/1/1970.
@@ -52,35 +57,42 @@ public:
   // Qt::LocalTime compared to Qt::UTC on ubuntu bionic.
   // Note that these conversions can be required if the Qt::TimeSpec is
   // set to Qt:LocalTime after construction.
-  DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, Qt::UTC)) {
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+  DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, QTimeZone::UTC))
+#else
+  DateTime() : QDateTime(QDateTime::fromMSecsSinceEpoch(0, Qt::UTC))
+#endif
+  {
   }
 
   DateTime(const QDate& date, const QTime& time) : QDateTime(date, time) {}
   DateTime(const QDateTime& dt) : QDateTime(dt) {}
 
   // Temporary: Override the standard, also handle time_t 0 as invalid.
-  bool isValid() const {
+  [[nodiscard]] bool isValid() const
+  {
     return QDateTime::isValid() && (toSecsSinceEpoch() != 0);
   }
 
   // Like toString, but with subsecond time that's included only when
   // the trailing digits aren't .000.  Always UTC.
-  QString toPrettyString() const {
-    if (time().msec()) {
+  [[nodiscard]] QString toPrettyString() const
+  {
+    if (time().msec() != 0) {
       return toUTC().toString(QStringLiteral("yyyy-MM-ddTHH:mm:ss.zzzZ"));
-    } else {
-      return toUTC().toString(QStringLiteral("yyyy-MM-ddTHH:mm:ssZ"));
     }
+    return toUTC().toString(QStringLiteral("yyyy-MM-ddTHH:mm:ssZ"));
   }
 
   // QDateTime::toTime_t was deprecated in Qt5.8, and deleted in Qt6.
-  uint32_t toTime_t() const {
+  [[nodiscard]] uint32_t toTime_t() const
+  {
     if (!QDateTime::isValid()) {
-      return -1;
+      return UINT32_MAX;
     }
     long long secs_since_epoch = toSecsSinceEpoch();
-    if ((secs_since_epoch < 0) || (secs_since_epoch > 0xfffffffe)) {
-      return -1;
+    if ((secs_since_epoch < 0) || (secs_since_epoch >= UINT32_MAX)) {
+      return UINT32_MAX;
     }
     return secs_since_epoch;
   }

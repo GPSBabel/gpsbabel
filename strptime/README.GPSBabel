@@ -1,0 +1,13 @@
+This is a modified subset of glibc from:
+https://sourceware.org/git/glibc.git
+cd glibc
+git checkout release/2.37/master
+
+The varbatim files from glibc.git are:
+COPYING
+COPYING.LIB
+LICENSES
+README
+
+The modified files from glibc.git are:
+strptime_l.c

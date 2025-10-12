@@ -46,7 +46,7 @@ rm -rf bld-clazy
 mkdir bld-clazy
 pushd bld-clazy
 export CLAZY_CHECKS=level0,level1,no-non-pod-global-static,no-qstring-ref
-cmake -DCMAKE_CXX_COMPILER=clazy -DCMAKE_BUILD_TYPE=Debug -G Ninja "${SOURCE_DIR}"
+cmake -DCMAKE_CXX_COMPILER=clazy -DCMAKE_BUILD_TYPE=Debug -DGPSBABEL_ENABLE_PCH=OFF -G Ninja "${SOURCE_DIR}"
 cmake --build . 2>&1 | tee clazy.log
 if grep -- '-Wclazy' clazy.log; then
   exit 1

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:foreign="http://www.gpsbabel.org/testonlyschema">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="30.062183333" minlon="-117.422570000" maxlat="36.463640000" maxlon="-91.608266667"/>
+  </metadata>
+  <wpt lat="36.339560000" lon="-117.422570000">
+    <ele>479.300</ele>
+    <name>Head east on CA-190 E/Nadeau Trail Continue to follow CA-190 E</name>
+    <cmt>Head east on CA-190 E/Nadeau Trail Continue to follow CA-190 E</cmt>
+    <desc>Head east on CA-190 E/Nadeau Trail Continue to follow CA-190 E</desc>
+  </wpt>
+  <wpt lat="36.460850000" lon="-116.865460000">
+    <ele>-55.600</ele>
+    <name>Turn right at Airport Rd</name>
+    <cmt>Turn right at Airport Rd</cmt>
+    <desc>Turn right at Airport Rd</desc>
+    <extensions>
+      <foreign:something>wpt</foreign:something>
+    </extensions>
+  </wpt>
+  <wpt lat="36.463640000" lon="-116.879200000">
+    <ele>-67.300</ele>
+    <name>Arrive at: Furnace Creek Airport-L06, Death Valley National Park, Death Valley, CA 92328</name>
+    <cmt>Arrive at: Furnace Creek Airport-L06, Death Valley National Park, Death Valley, CA 92328</cmt>
+    <desc>Arrive at: Furnace Creek Airport-L06, Death Valley National Park, Death Valley, CA 92328</desc>
+  </wpt>
+  <rte>
+    <name>Low Road</name>
+    <desc>Generated from track Route</desc>
+    <extensions>
+      <foreign:something>rte</foreign:something>
+    </extensions>
+    <rtept lat="36.339560000" lon="-117.422570000">
+      <ele>479.300</ele>
+      <name>RPT001</name>
+    </rtept>
+    <rtept lat="36.345010000" lon="-117.354270000">
+      <ele>624.300</ele>
+      <name>RPT005</name>
+      <extensions>
+        <foreign:something>rtept</foreign:something>
+      </extensions>
+    </rtept>
+    <rtept lat="36.344640000" lon="-117.349030000">
+      <ele>663.700</ele>
+      <name>RPT011</name>
+    </rtept>
+  </rte>
+  <trk>
+    <name>meridian</name>
+    <extensions>
+      <foreign:something>trk</foreign:something>
+    </extensions>
+    <trkseg>
+      <trkpt lat="30.062183333" lon="-91.610350000">
+        <ele>1.000</ele>
+        <time>2002-05-25T17:06:21.250Z</time>
+      </trkpt>
+      <trkpt lat="30.062783333" lon="-91.610566667">
+        <ele>0.000</ele>
+        <time>2002-05-25T17:09:55.190Z</time>
+        <extensions>
+          <foreign:something>trkpt</foreign:something>
+        </extensions>
+      </trkpt>
+      <trkpt lat="30.062700000" lon="-91.608266667">
+        <ele>0.000</ele>
+        <time>2002-05-25T17:12:00.200Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

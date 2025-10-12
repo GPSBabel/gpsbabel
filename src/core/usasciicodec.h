@@ -31,8 +31,8 @@ public:
   QByteArray name() const override;
   QList<QByteArray> aliases() const override;
   int mibEnum() const override;
-  QString convertToUnicode(const char*, int, ConverterState*) const override;
-  QByteArray convertFromUnicode(const QChar*, int, ConverterState*) const override;
+  QString convertToUnicode(const char* chars, int len, ConverterState* state) const override;
+  QByteArray convertFromUnicode(const QChar* uc, int len, ConverterState* state) const override;
 };
 
 } // namespace gpsbabel

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="39.973869717" minlon="-105.498962400" maxlat="40.003967283" maxlon="-105.465850367"/>
+  </metadata>
+  <wpt lat="39.973869717" lon="-105.465850367">
+    <time>2013-03-09T20:45:12Z</time>
+    <name>Hwy 119</name>
+    <cmt>The Diagonal</cmt>
+    <desc>The Diagonal</desc>
+    <sym>Flag, Blue</sym>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+        <gpxx:Categories>
+          <gpxx:Category>Slow food</gpxx:Category>
+          <gpxx:Category>Category 11</gpxx:Category>
+        </gpxx:Categories>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="40.003967283" lon="-105.498962400">
+    <time>2013-03-09T20:45:02Z</time>
+    <name>Hwy 72</name>
+    <cmt>The Peak to Peak</cmt>
+    <desc>The Peak to Peak</desc>
+    <sym>Flag, Blue</sym>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+</gpx>

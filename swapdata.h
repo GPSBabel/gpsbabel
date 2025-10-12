@@ -40,8 +40,7 @@ public:
   void process() override;
 
 private:
-  QVector<arglist_t> args = {
-  };
+  QVector<arglist_t> args;
 
   static void swapdata_cb(const Waypoint* ref);
 

@@ -1,8 +1,11 @@
 <para>
-By default, GPSBabel makes effort in order to keep courses already present on
-the device, if any. This option allow to replace courses already present. If
-you don't mind to keep old courses, this option is recommended because it
-allows a faster transfer.
+By default, when writing courses to the device,
+GPSBabel tries to keep any courses that already exist on the device.
+To do this, all the courses on the device must be downloaded,
+merged with the new courses, and then sent to the device.
+This option allows for any preexisting courses on the device to be overwritten.
+If you don't want to preserve preexisting courses,
+this option is recommended because it allows a faster transfer.
 </para>
 <para>
 This option applies only to Garmin devices that support courses such as the Edge 305 or the Forerunner 305.

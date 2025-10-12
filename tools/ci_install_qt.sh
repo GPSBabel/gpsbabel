@@ -3,9 +3,9 @@
 # install Qt
 #
 # Examples:
-# ci_install_qt.sh mac 6.2.0 clang_64 /tmp/Qt
-# ci_install_qt.sh windows 6.2.0 win64_msvc2019_64 /tmp/Qt
-# ci_install_qt.sh linux 6.2.0 gcc_64 /tmp/Qt
+# ci_install_qt.sh mac 6.8.1 clang_64 /tmp/Qt
+# ci_install_qt.sh windows 6.8.1 win64_msvc2022_64 /tmp/Qt
+# ci_install_qt.sh linux 6.8.1 linux_gcc_64 /tmp/Qt
 
 host=$1
 version=$2
@@ -19,9 +19,13 @@ remove=( \
 debug_info \
 qtcharts \
 qtdatavis3d \
+qtgraphs \
+qtgrpc \
+qthttpserver \
 qtlottie \
 qtnetworkauth \
 qtquick3d \
+qtquick3dphysics \
 qtquicktimeline \
 qtwebglplugin \
 qtshadertools \
@@ -39,6 +43,9 @@ do
       skip=true
     fi
   done
+  if [[ "$a" == *".debug_information" ]]; then
+    skip=true
+  fi
   if [ $skip == false ]; then
     mods+=( "$a" )
   fi

@@ -49,11 +49,11 @@ p, li { white-space: pre-wrap; }
         <string>Simplify route by removing points</string>
        </property>
        <property name="whatsThis">
-        <string> The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
+        <string>The Simplify filter is used to simplify routes and tracks for use with formats that limit the number of points they can contain or just to reduce the complexity of a route.
 
 The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
 
-The quality of the results will vary depending on the density of points in the original route and the length of the original route. </string>
+The quality of the results will vary depending on the density of points in the original route and the length of the original route.</string>
        </property>
        <property name="text">
         <string>Simplify</string>
@@ -121,8 +121,8 @@ The quality of the results will vary depending on the density of points in the o
       <string>Reverse tracks and routes</string>
      </property>
      <property name="whatsThis">
-      <string>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
-Additionally, if you're using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </string>
+      <string>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints, so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day.
+Additionally, if you're using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for an unpleasant ride. Applications care about timestamps.</string>
      </property>
      <property name="text">
       <string>Reverse</string>

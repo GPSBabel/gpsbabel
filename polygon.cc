@@ -19,18 +19,18 @@
 
  */
 
+#include "polygon.h"
+
 #include <cstdio>                 // for sscanf
 
 #include <QString>                // for QString
 #include <QtGlobal>               // for foreach
 
 #include "defs.h"
-#include "polygon.h"
 #include "src/core/textstream.h"  // for TextStream
 
 
 #if FILTERS_ENABLED
-#define MYNAME "Polygon filter"
 
 /*
  * This test for insideness is essentially an odd/even test.  The
@@ -228,7 +228,7 @@ void PolygonFilter::process()
   QString line;
 
   gpsbabel::TextStream stream;
-  stream.open(polyfileopt, QIODevice::ReadOnly, MYNAME);
+  stream.open(polyfileopt, QIODevice::ReadOnly);
 
   double olat = BADVAL;
   double olon = BADVAL;
@@ -247,9 +247,8 @@ void PolygonFilter::process()
     lat2 = lon2 = BADVAL;
     int argsfound = sscanf(CSTR(line), "%lf %lf", &lat2, &lon2);
 
-    if ((argsfound != 2) && (line.trimmed().size() > 0)) {
-      warning(MYNAME
-              ": Warning: Polygon file contains unusable vertex on line %d.\n",
+    if ((argsfound != 2) && (!line.trimmed().isEmpty())) {
+      gbWarning("Warning: Polygon file contains unusable vertex on line %d.\n",
               fileline);
     } else if (lat1 != BADVAL && lon1 != BADVAL &&
                lat2 != BADVAL && lon2 != BADVAL) {
@@ -257,7 +256,7 @@ void PolygonFilter::process()
         if (waypointp->extra_data) {
           ed = (extra_data*) waypointp->extra_data;
         } else {
-          ed = (extra_data*) xcalloc(1, sizeof(*ed));
+          ed = new extra_data;
           ed->state = OUTSIDE;
           ed->override = 0;
           waypointp->extra_data = ed;
@@ -298,19 +297,19 @@ void PolygonFilter::process()
   stream.close();
 
   foreach (Waypoint* wp, *global_waypoint_list) {
-    ed = (extra_data*) wp->extra_data;
-    wp->extra_data = nullptr;
-    if (ed) {
+    if (wp->extra_data) {
+      ed = (extra_data*) wp->extra_data;
+      wp->extra_data = nullptr;
       if (ed->override) {
         ed->state = INSIDE;
       }
-      if (((ed->state & INSIDE) == OUTSIDE) == (exclopt == nullptr)) {
-        waypt_del(wp);
-        delete wp;
+      if (((ed->state & INSIDE) == OUTSIDE) == !exclopt) {
+        wp->wpt_flags.marked_for_deletion = 1;
       }
-      xfree(ed);
+      delete ed;
     }
   }
+  del_marked_wpts();
 }
 
 #endif // FILTERS_ENABLED

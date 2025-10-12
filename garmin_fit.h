@@ -39,6 +39,7 @@
 #include "defs.h"
 #include "format.h"             // for Format
 #include "gbfile.h"             // for gbfile
+#include "option.h"             // for OptionBool
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -258,8 +259,8 @@ private:
 
   /* Data Members */
 
-  char* opt_allpoints = nullptr;
-  char* opt_recoverymode = nullptr;
+  OptionBool opt_allpoints;
+  OptionBool opt_recoverymode;
   int lap_ct = 0;
   bool new_trkseg = false;
   bool write_header_msgs = false;

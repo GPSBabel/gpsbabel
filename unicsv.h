@@ -21,16 +21,20 @@
 #ifndef UNICSV_H_INCLUDED_
 #define UNICSV_H_INCLUDED_
 
-#include <cstdint>
-#include <ctime>                  // for gmtime
+#include <bitset>                 // for bitset
+#include <cstdint>                // for uint32_t
 
+#include <QDate>                  // for QDate
 #include <QDateTime>              // for QDateTime
-#include <QString>                // for QString, operator!=, operator==
+#include <QList>                  // for QList
+#include <QString>                // for QString
+#include <QTime>                  // for QTime
 #include <QVector>                // for QVector
 
 #include "defs.h"
 #include "format.h"               // for Format
 #include "geocache.h"             // for Geocache, Geocache::status_t
+#include "option.h"               // for OptionString, OptionBool
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -131,7 +135,6 @@ private:
     fld_gc_diff,
     fld_gc_is_archived,
     fld_gc_is_available,
-    fld_gc_exported,
     fld_gc_last_found,
     fld_gc_placer,
     fld_gc_placer_id,
@@ -147,7 +150,7 @@ private:
 
   /* Constants */
 
-  /* "UNICSV_FIELD_SEP" and "UNICSV_LINE_SEP" are only used by the writer */
+  /* "kUnicsvFieldSep" and "kUnicsvLineSep" are only used by the writer */
 
   static constexpr const char* kUnicsvFieldSep = ",";
   static constexpr const char* kUnicsvLineSep = "\r\n";
@@ -164,49 +167,51 @@ private:
   /* Member Functions */
 
   static long long int unicsv_parse_gc_code(const QString& str);
-  static time_t unicsv_parse_date(const char* str, int* consumed);
-  static time_t unicsv_parse_time(const char* str, int* usec, time_t* date);
-  static time_t unicsv_parse_time(const QString& str, int* msec, time_t* date);
+  static QDate unicsv_parse_date(const char* str, int* consumed);
+  static QTime unicsv_parse_time(const char* str, QDate& date);
+  static QTime unicsv_parse_time(const QString& str, QDate& date);
   static Geocache::status_t unicsv_parse_status(const QString& str);
-  QDateTime unicsv_adjust_time(time_t time, const time_t* date) const;
-  static bool unicsv_compare_fields(const QString& s, const field_t* f);
+  QDateTime unicsv_adjust_time(QDate date, QTime time, bool is_localtime) const;
+  static bool unicsv_compare_fields(const QString& s, const field_t& f);
   void unicsv_fondle_header(QString header);
   void unicsv_parse_one_line(const QString& ibuf);
-  void unicsv_fatal_outside(const Waypoint* wpt) const;
+  [[noreturn]] void unicsv_fatal_outside(const Waypoint* wpt) const;
   void unicsv_print_str(const QString& s) const;
-  void unicsv_print_data_time(const QDateTime& idt) const;
+  void unicsv_print_date_time(const QDateTime& idt) const;
   void unicsv_waypt_enum_cb(const Waypoint* wpt);
   void unicsv_waypt_disp_cb(const Waypoint* wpt);
   static void unicsv_check_modes(bool test);
 
   /* Data Members */
 
-  static const field_t fields_def[];
+  static const QVector<field_t> fields_def;
 
   QVector<field_e> unicsv_fields_tab;
   double unicsv_altscale{};
   double unicsv_depthscale{};
   double unicsv_proximityscale{};
   const char* unicsv_fieldsep{nullptr};
+  int unicsv_lineno{0};
   gpsbabel::TextStream* fin{nullptr};
   gpsbabel::TextStream* fout{nullptr};
   gpsdata_type unicsv_data_type{unknown_gpsdata};
   route_head* unicsv_track{nullptr};
   route_head* unicsv_route{nullptr};
-  char unicsv_outp_flags[(fld_terminator + 8) / 8] {};
+  std::bitset<fld_terminator> unicsv_outp_flags;
   grid_type unicsv_grid_idx{grid_unknown};
   int unicsv_datum_idx{};
-  char* opt_datum{nullptr};
-  char* opt_grid{nullptr};
-  char* opt_utc{nullptr};
-  char* opt_filename{nullptr};
-  char* opt_format{nullptr};
-  char* opt_prec{nullptr};
-  char* opt_fields{nullptr};
-  char* opt_codec{nullptr};
+  OptionString opt_datum;
+  OptionString opt_grid;
+  OptionInt opt_utc;
+  OptionBool opt_filename;
+  OptionBool opt_format;
+  OptionInt opt_prec;
+  OptionString opt_fields;
+  OptionString opt_codec;
   int unicsv_waypt_ct{};
   char unicsv_detect{};
   int llprec{};
+  int utc_offset{};
 
   QVector<arglist_t> unicsv_args = {
     {
@@ -219,7 +224,7 @@ private:
     },
     {
       "utc",   &opt_utc,   "Write timestamps with offset x to UTC time",
-      nullptr, ARGTYPE_INT, "-23", "+23", nullptr
+      nullptr, ARGTYPE_INT, "-14", "+14", nullptr
     },
     {
       "format", &opt_format,   "Write name(s) of format(s) from input session(s)",

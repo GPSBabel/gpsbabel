@@ -26,14 +26,16 @@
 #include <QList>                       // for QList
 #include <QPair>                       // for QPair
 #include <QString>                     // for QString
+#include <QStringList>                 // for QStringList
 #include <QVector>                     // for QVector
 #include <QXmlStreamAttributes>        // for QXmlStreamAttributes
 
 #include "defs.h"
 #include "format.h"                    // for Format
+#include "option.h"                    // for OptionString
 #include "src/core/file.h"             // for File
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
-#include "xmlgeneric.h"                // for xg_functor_map_entry, cb_start, cb_end, xg_string
+#include "xmlgeneric.h"                // for xg_functor_map_entry, cb_start, cb_end
 
 
 class OsmFormat : public Format
@@ -73,29 +75,29 @@ private:
 
   struct osm_icon_mapping_t {
     int key;
-    const char* value;
-    const char* icon;
+    QString value;
+    QString icon;
   };
 
   /* Constants */
 
-  static const char* const osm_features[];
-  static const osm_icon_mapping_t osm_icon_mappings[];
+  static const QStringList osm_features;
+  static const QVector<osm_icon_mapping_t> osm_icon_mappings;
 
   /* Member Functions */
 
   void osm_features_init();
-  char osm_feature_ikey(const QString& key) const;
-  QString osm_feature_symbol(int ikey, const char* value) const;
+  int osm_feature_ikey(const QString& key) const;
+  QString osm_feature_symbol(int ikey, const QString& value) const;
   static QString osm_strip_html(const QString& str);
-  void osm_node_end(xg_string /* unused */, const QXmlStreamAttributes* /* unused */);
-  void osm_node(xg_string /* unused */, const QXmlStreamAttributes* attrv);
-  void osm_node_tag(xg_string /* unused */, const QXmlStreamAttributes* attrv);
-  void osm_way(xg_string /* unused */, const QXmlStreamAttributes* attrv);
-  void osm_way_nd(xg_string /* unused */, const QXmlStreamAttributes* attrv);
-  void osm_way_tag(xg_string /* unused */, const QXmlStreamAttributes* attrv);
-  void osm_way_center(xg_string /* unused */, const QXmlStreamAttributes* attrv);
-  void osm_way_end(xg_string /* unused */, const QXmlStreamAttributes* /* unused */);
+  void osm_node_end(const QString& /* unused */, const QXmlStreamAttributes* /* unused */);
+  void osm_node(const QString& /* unused */, const QXmlStreamAttributes* attrv);
+  void osm_node_tag(const QString& /* unused */, const QXmlStreamAttributes* attrv);
+  void osm_way(const QString& /* unused */, const QXmlStreamAttributes* attrv);
+  void osm_way_nd(const QString& /* unused */, const QXmlStreamAttributes* attrv);
+  void osm_way_tag(const QString& /* unused */, const QXmlStreamAttributes* attrv);
+  void osm_way_center(const QString& /* unused */, const QXmlStreamAttributes* attrv);
+  void osm_way_end(const QString& /* unused */, const QXmlStreamAttributes* /* unused */);
   void osm_init_icons();
   void osm_write_tag(const QString& key, const QString& value) const;
   void osm_disp_feature(const Waypoint* waypoint) const;
@@ -109,9 +111,9 @@ private:
 
   /* Data Members */
 
-  char* opt_tag{};
-  char* opt_tagnd{};
-  char* created_by{};
+  OptionString opt_tag;
+  OptionString opt_tagnd;
+  OptionString created_by;
 
   QVector<arglist_t> osm_args = {
     { "tag", &opt_tag, 	"Write additional way tag key/value pairs", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
@@ -133,15 +135,16 @@ private:
   route_head* rte{};
   Waypoint* wpt{};
 
-  QList<xg_functor_map_entry<OsmFormat>> osm_map = {
-    {&OsmFormat::osm_node,	cb_start,	"/osm/node"},
-    {&OsmFormat::osm_node_tag,	cb_start,	"/osm/node/tag"},
-    {&OsmFormat::osm_node_end,	cb_end,		"/osm/node"},
-    {&OsmFormat::osm_way,	cb_start,	"/osm/way"},
-    {&OsmFormat::osm_way_nd,	cb_start,	"/osm/way/nd"},
-    {&OsmFormat::osm_way_tag,	cb_start,	"/osm/way/tag"},
-    {&OsmFormat::osm_way_center,	cb_start,	"/osm/way/center"},
-    {&OsmFormat::osm_way_end,	cb_end,		"/osm/way"}
+  QList<XmlGenericReader::xg_fmt_map_entry<OsmFormat>> osm_map  {
+    {&OsmFormat::osm_node, xg_cb_type::cb_start,	"/osm/node"},
+    {&OsmFormat::osm_node_tag, xg_cb_type::cb_start,	"/osm/node/tag"},
+    {&OsmFormat::osm_node_end, xg_cb_type::cb_end,		"/osm/node"},
+    {&OsmFormat::osm_way, xg_cb_type::cb_start,	"/osm/way"},
+    {&OsmFormat::osm_way_nd, xg_cb_type::cb_start,	"/osm/way/nd"},
+    {&OsmFormat::osm_way_tag, xg_cb_type::cb_start,	"/osm/way/tag"},
+    {&OsmFormat::osm_way_center, xg_cb_type::cb_start,	"/osm/way/center"},
+    {&OsmFormat::osm_way_end, xg_cb_type::cb_end,		"/osm/way"}
   };
+  XmlGenericReader* xml_reader{nullptr};
 };
 #endif // OSM_H_INCLUDED_

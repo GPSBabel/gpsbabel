@@ -2,7 +2,7 @@
 
 Format converter for MediaTek Locus-capable devices.
 
-Copyright (C) 2012 Jeremy Mortis, mortis@tansay.ca
+Copyright (C) 2012 Jeremy Mortis
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

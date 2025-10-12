@@ -22,9 +22,9 @@
 #include "src/core/logging.h"
 
 
-QDebug operator<< (QDebug debug, const DebugIndent& indent)
+QDebug& operator<< (QDebug& debug, const DebugIndent& indent)
 {
-  for (int i = 1; i<indent.level; i++) {
+  for (int i = 1; i<indent.level_; i++) {
     debug << '.';
   }
   return debug;

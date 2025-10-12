@@ -19,10 +19,13 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 
-#include "ui_preferences.h"
-
-#include "babeldata.h"
-#include "format.h"
+#include <QDialog>           // for QDialog
+#include <QList>             // for QList
+#include <QObject>           // for Q_OBJECT, slots
+#include <QWidget>           // for QWidget
+#include "babeldata.h"       // for BabelData
+#include "format.h"          // for Format
+#include "ui_preferences.h"  // for Ui_Preferences
 
 class Preferences : public QDialog
 {

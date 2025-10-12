@@ -228,7 +228,7 @@ merged data to multiple destinations.
          of similar limitations, things work very well.</para>
     <para>Many of those hazards can be overcome with our filters
    but there are often compromises to be made.  For example, if you
-   have a GPX route that contains  150 turn points but you're sending
+   have a GPX route that contains 150 turn points but you're sending
    the route to a GPS receiver that supports only 30 turnpoints, something has
    to go.   One might use our 'simplify' filter to produce a route that
    retained the 30 most mathematically significant turnpoints but that
@@ -372,7 +372,7 @@ merged data to multiple destinations.
           suitable for a self-refreshing network link in Google Earth.
         </para>
     </example>
-    <para>Be sure to substitute an device name appropriate for your device
+    <para>Be sure to substitute a device name appropriate for your device
           and OS, such as
       <filename>/dev/cu.usbserial</filename>
       or
@@ -428,7 +428,7 @@ merged data to multiple destinations.
     <para>
       <option>-p</option> Read preferences file.   On startup, GPSBabel will look for a file named
       <filename>gpsbabel.ini</filename>
-      containing preferences you have provided.  This option lets you pick a different files.  See
+      containing preferences you have provided.  This option lets you pick a different file.  See
       <xref linkend="inifile"/>
       for more info.</para>
     <para>
@@ -448,9 +448,9 @@ merged data to multiple destinations.
       <option>-b</option> Process batch file. In addition to reading arguments from the command line, we can read them from files containing lists of commands as described in
       <xref linkend="batchfile"/></para>
     <para>
-      <option>-x</option> <parameter class="command">filter</parameter> Run filter. This option lets use use one of of our many data filters. Position of this in the command line does matter - remember, we process left to right.</para>
+      <option>-x</option> <parameter class="command">filter</parameter> Run filter. This option invokes one of our many data filters. Position of this in the command line does matter - remember, we process left to right.</para>
     <para>
-      <option>-D</option> Enable debugging.   Not all formats support this.  It's typically better supported by the various protocol modules because they just plain need more debugging.   This option may be followed by a number.   Zero means no debugging.  Larger numbers mean more debugging. </para>
+      <option>-D</option> Enable debugging.   Not all formats support this.  It's typically better supported by the various protocol modules because they just plain need more debugging.   This option may be followed by a number.   Zero means no debugging.  Larger numbers mean more debugging.</para>
     <para>
       <option>-h</option>,
       <option>-?</option> Print help. </para>

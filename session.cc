@@ -50,7 +50,7 @@ curr_session()
   if (!session_list.isEmpty()) {
     return &session_list.last();
   } else {
-    fatal("Attempt to fetch session outside of session range.");
+    gbFatal("Attempt to fetch session outside of session range.\n");
   }
 }
 

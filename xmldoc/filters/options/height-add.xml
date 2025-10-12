@@ -2,5 +2,16 @@
 Adds a constant value to every altitude. You can specify negative numbers to subtract the value.
 </para>
 <para>
-If no unit is specified, (m)eters are assumed. You can override this by attaching a "f" for feet to the number.
+The units may be specified by appending a suffix to the supplied number:
+</para>
+<simplelist type="vert">
+<member>'m' for meters, e.g. 3.5m</member>
+<member>'ft' or 'feet' for feet, e.g. 11.483ft</member>
+<member>'k' or 'km' for kilometers, e.g 0.0035km</member>
+<member>'nm' for nautical miles, e.g. 0.0018898nm</member>
+<member>'mi' for miles, e.g. 0.0021748mi</member>
+<member>'fa' for fathoms, e.g. 1.9138fa</member>
+</simplelist>
+<para>
+If no units are specified, the units are assumed to be meters.
 </para>

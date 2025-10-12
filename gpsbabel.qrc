@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>style/arc.style</file>
-        <file>style/cambridge.style</file>
         <file>style/csv.style</file>
+        <file>style/cup.style</file>
         <file>style/custom.style</file>
         <file>style/garmin301.style</file>
         <file>style/garmin_g1000.style</file>

@@ -3,7 +3,7 @@
     These symbols should not be publicly used.  They're "friend" functions
     of USB details internal to jeeps.
 
-    Copyright (C) 2005, 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2005, 2006 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +21,11 @@
 
  */
 
-int32 GPS_Packet_Read_usb(gpsdevh* fd, GPS_PPacket* packet, int eatbulk);
-void  GPS_Make_Packet_usb(GPS_PPacket* packet, UC type, UC* data, int16 n);
-int32 GPS_Write_Packet_usb(gpsdevh* fd, GPS_PPacket& packet);
+#ifndef JEEPS_GPSUSBINT_H_INCLUDED_
+#define JEEPS_GPSUSBINT_H_INCLUDED_
+
+int32_t GPS_Packet_Read_usb(gpsdevh* fd, GPS_Packet* packet, int eatbulk);
+int32_t GPS_Write_Packet_usb(gpsdevh* fd, const GPS_Packet& packet);
+
+#endif // JEEPS_GPSUSBINT_H_INCLUDED_
 

@@ -1,0 +1,6 @@
+paths-ignore:
+  - coverity_model.cc
+  - deprecated
+  - reference
+  - 'shapelib/*.html'
+  - '**/gpsbabel*.ts'

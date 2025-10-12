@@ -2,8 +2,8 @@
     China mapbar navigation track reader for sonim xp3300
        it's maybe can used in other demo devices of mapbar navigation
 
-    Copyright (C) 2013 xiao jian cheng, azuresky.xjc@gmail.com
-    Copyright (C) 2001-2013 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2013 xiao jian cheng
+    Copyright (C) 2001-2013 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

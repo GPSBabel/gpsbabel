@@ -1,7 +1,7 @@
 /*
 
     Minimum support for Palm/OS database files
-    Copyright (C) 2007 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2007 Olaf Klein
 
     Written after study the Coldsync project
 

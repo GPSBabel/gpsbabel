@@ -15,7 +15,11 @@ git --no-pager log -n 1
 # build and test keeping output within the pwd.
 export GBTEMP=$(pwd)/gbtemp
 mkdir -p "$GBTEMP"
-cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release
+if [ -n "$1" ]; then
+  cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release -DGPSABEL_DOCVERSION="$1"
+else
+  cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release
+fi
 # As of 2018-10, all the virtualized travis build images are two cores per:
 # https://docs.travis-ci.com/user/reference/overview/
 # We'll be slightly abusive on CPU knowing that I/O is virtualized.

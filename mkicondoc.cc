@@ -3,31 +3,26 @@
 
 #include <algorithm>             // for sort
 #include <cstdio>                // for printf
-#include <cstring>               // for strcmp
 
+#include <QString>               // for QString, operator<
 #include <QVector>               // for QVector<>::iterator, QVector
 
-#include "garmin_icon_tables.h"  // for garmin_icon_table, garmin_smart_icon_table
-#include "garmin_tables.h"       // for icon_mapping_t
+#include "garmin_icon_tables.h"  // for icon_mapping_t, garmin_icon_table, garmin_smart_icon_table
 
 
 int main()
 {
   QVector<icon_mapping_t> table;
-  for (const icon_mapping_t* entry = garmin_icon_table; entry->icon; entry++) {
-    table.append(*entry);
-  }
-  for (const icon_mapping_t* entry = garmin_smart_icon_table; entry->icon; entry++) {
-    table.append(*entry);
-  }
+  table.append(garmin_icon_table);
+  table.append(garmin_smart_icon_table);
 
   auto sort_lambda = [](const icon_mapping_t& a, const icon_mapping_t& b)->bool {
-    return strcmp(a.icon, b.icon) < 0;
+    return a.icon < b.icon;
   };
   std::sort(table.begin(), table.end(), sort_lambda);
 
   for (const auto& entry : table) {
-    printf("    <member>%s</member>\n",entry.icon);
+    printf("    <member>%s</member>\n", qPrintable(entry.icon));
   }
 
   return 0;

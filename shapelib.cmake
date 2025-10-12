@@ -15,14 +15,19 @@ else()
       shapelib/safileio.c
       shapelib/shpopen.c
       shapelib/shapefil.h
+      shapelib/shapefil_private.h
     )
     # note gpsbabel has conditional code include "shapelib/shapefil.h",
     # so it doesn't actually rely on the include directory being PUBLIC/INTERFACE
     target_include_directories(shp PUBLIC shape)
+    include(TestBigEndian)
+    if(HAVE_BYTE_ORDER_BIG_ENDIAN)
+      # Define SHP_BIG_ENDIAN if the system is big-endian
+      target_compile_definitions(shp PRIVATE SHP_BIG_ENDIAN=1)
+    endif()
     if(MSVC)
       target_compile_definitions(shp PRIVATE _CRT_SECURE_NO_WARNINGS)
-      target_compile_definitions(shp PRIVATE _CRT_NONSTDC_NO_WARNINGS)
-      target_compile_options(shp PRIVATE /MP -wd4100 -wd4267)
+      target_compile_options(shp PRIVATE -wd4100)
     endif()
     list(APPEND LIBS shp)
   elseif(GPSBABEL_WITH_SHAPELIB STREQUAL "custom")

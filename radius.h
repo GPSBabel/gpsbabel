@@ -22,10 +22,13 @@
 #ifndef RADIUS_H_INCLUDED_
 #define RADIUS_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>    // for QString
+#include <QVector>    // for QVector
 
-#include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED
-#include "filter.h"  // for Filter
+#include "defs.h"     // for arglist_t, ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED, ARGTYPE_BOOL, ARGTYPE_INT, ARGTYPE_STRING, Waypoint
+#include "filter.h"   // for Filter
+#include "option.h"  // for OptionString, OptionBool
 
 #if FILTERS_ENABLED
 
@@ -41,41 +44,47 @@ public:
   void deinit() override;
 
 private:
-  double pos_dist{};
-  char* distopt = nullptr;
-  char* latopt = nullptr;
-  char* lonopt = nullptr;
-  char* exclopt = nullptr;
-  char* nosort = nullptr;
-  char* maxctarg = nullptr;
-  char* routename = nullptr;
-  int maxct{};
-
-  Waypoint* home_pos{};
+  /* Types */
 
   struct extra_data {
     double distance;
   };
 
+  /* Member Functions */
+
+  /* Data Members */
+
+  double pos_dist{};
+  OptionDouble distopt{true};
+  OptionDouble latopt;
+  OptionDouble lonopt;
+  OptionBool exclopt;
+  OptionBool nosort;
+  OptionInt maxctarg;
+  OptionString routename;
+  int maxct{};
+
+  Waypoint* home_pos{};
+
   QVector<arglist_t> args = {
     {
-      "lat", &latopt,       "Latitude for center point (D.DDDDD)",
+      "lat", &latopt, "Latitude for center point (D.DDDDD)",
       nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
-      "lon", &lonopt,       "Longitude for center point (D.DDDDD)",
+      "lon", &lonopt, "Longitude for center point (D.DDDDD)",
       nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "distance", &distopt, "Maximum distance from center",
-      nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr, ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
-      "exclude", &exclopt,  "Exclude points close to center",
+      "exclude", &exclopt, "Exclude points close to center",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "nosort", &nosort,    "Inhibit sort by distance to center",
+      "nosort", &nosort, "Inhibit sort by distance to center",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
@@ -87,8 +96,6 @@ private:
       nullptr, ARGTYPE_STRING, nullptr, nullptr, nullptr
     },
   };
-
-  static double gc_distance(double lat1, double lon1, double lat2, double lon2);
 
 };
 #endif // FILTERS_ENABLED

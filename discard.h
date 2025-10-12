@@ -22,12 +22,14 @@
 #ifndef DISCARD_H_INCLUDED_
 #define DISCARD_H_INCLUDED_
 
+#include <QList>               // for QList
 #include <QRegularExpression>  // for QRegularExpression
 #include <QString>             // for QString
 #include <QVector>             // for QVector
 
 #include "defs.h"              // for arglist_t, ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_STRING, ARGTYPE_BOOL, ARGTYPE_INT, ARGTYPE_FLOAT, route_head, ARGTYPE_END_REQ, Waypoint, gpsdata_type
 #include "filter.h"            // for Filter
+#include "option.h"            // for OptionString, OptionBool
 
 #if FILTERS_ENABLED
 class DiscardFilter:public Filter
@@ -41,24 +43,28 @@ public:
   void process() override;
 
 private:
+  /* Member Functions */
+
+  void fix_process_wpt(const Waypoint* wpt);
   static QRegularExpression generateRegExp(const QString& glob_pattern);
 
-private:
-  char* hdopopt = nullptr;
-  char* vdopopt = nullptr;
-  char* andopt = nullptr;
-  char* satopt = nullptr;
-  char* fixnoneopt = nullptr;
-  char* fixunknownopt = nullptr;
-  char* eleminopt = nullptr;
-  char* elemaxopt = nullptr;
-  char* nameopt = nullptr;
+  /* Data Members */
+
+  OptionDouble hdopopt;
+  OptionDouble vdopopt;
+  OptionBool andopt;
+  OptionInt satopt;
+  OptionBool fixnoneopt;
+  OptionBool fixunknownopt;
+  OptionInt eleminopt;
+  OptionInt elemaxopt;
+  OptionString nameopt;
   QRegularExpression name_regex;
-  char* descopt = nullptr;
+  OptionString descopt;
   QRegularExpression desc_regex;
-  char* cmtopt = nullptr;
+  OptionString cmtopt;
   QRegularExpression cmt_regex;
-  char* iconopt = nullptr;
+  OptionString iconopt;
   QRegularExpression icon_regex;
 
   double hdopf{};
@@ -66,8 +72,6 @@ private:
   int satpf{};
   int eleminpf{};
   int elemaxpf{};
-  gpsdata_type what{};
-  route_head* head{};
 
   QVector<arglist_t> args = {
     {
@@ -84,7 +88,7 @@ private:
     },
     {
       "sat", &satopt, "Minimum sats to keep points",
-      "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
+      "-1", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
     },
     {
       "fixnone", &fixnoneopt, "Suppress points without fix",
@@ -123,9 +127,6 @@ private:
       ARG_NOMINMAX, nullptr
     },
   };
-
-  void fix_process_wpt(const Waypoint* wpt);
-  void fix_process_head(const route_head* trk);
 
 };
 

@@ -3,7 +3,7 @@
   decimal number to the output filename.
 </para>
 <example xml:id="text_splitoutput">
-  <title>Example for splitoutput option to text format</title>
+  <title>Example for the splitoutput option to text format</title>
   <para>
     If "MyPQ.gpx" contains five waypoints,
 	<userinput>

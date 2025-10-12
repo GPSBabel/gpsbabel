@@ -52,74 +52,38 @@
 
  */
 
+#include "mtk_logger.h"
 
-
-#include "defs.h"
-#include "gbfile.h" /* used for csv output */
-#include "gbser.h"
-#include <QDir>
-#include <QFile>
-#include <QThread>
-#include <cerrno>
-#include <cmath>
-#include <cstdlib>
+#include <algorithm>           // for clamp
+#include <cctype>              // for isdigit
+#include <cerrno>              // for errno
+#include <cmath>               // for fabs
+#include <cstdarg>             // for va_end, va_start
+#include <cstring>             // for memcmp, memset, strncmp, strlen, memmove, strchr, strcpy, strerror, strstr
+#include <cstdlib>             // for strtoul
 #if __WIN32__
-#include <io.h>
+#include <io.h>                // for _chsize
 #else
-#include <unistd.h>
+#include <unistd.h>            // for ftruncate
 #endif
 
-#define MYNAME "mtk_logger"
+#include <QByteArray>          // for QByteArray
+#include <QChar>               // for QChar
+#include <QDateTime>           // for QDateTime
+#include <QDir>                // for QDir
+#include <QFile>               // for QFile
+#include <QLatin1Char>         // for QLatin1Char
+#include <QMessageLogContext>  // for QtMsgType
+#include <QStringLiteral>      // for qMakeStringPrivate, QStringLiteral
+#include <QThread>             // for QThread
+#include <QtGlobal>            // for qPrintable
 
-/* MTK packet id's -- currently unused... */
-enum MTK_NMEA_PACKET {
-  PMTK_TEST = 0,
-  PMTK_ACK  = 1,
-  PMTK_SYS_MSG = 10,
-  PMTK_CMD_HOT_START  = 101,
-  PMTK_CMD_WARM_START = 102,
-  PMTK_CMD_COLD_START = 103,
-  PMTK_CMD_FULL_COLD_START  = 104,
-  PMTK_CMD_LOG                = 182, /* Data log commands */
-  PMTK_SET_NMEA_BAUDRATE      = 251,
-  PMTK_API_SET_DGPS_MODE    = 301,
-  PMTK_API_SET_SBAS_ENABLED = 313,
-  PMTK_API_SET_NMEA_OUTPUT  = 314,
-  PMTK_API_SET_PWR_SAV_MODE = 320,
-  PMTK_API_SET_DATUM          = 330,
-  PMTK_API_SET_DATUM_ADVANCE  = 331,
-  PMTK_API_SET_USER_OPTION    = 390,
-  PMTK_API_Q_FIX_CTL          = 400,
-  PMTK_API_Q_DGPS_MODE    = 401,
-  PMTK_API_Q_SBAS_ENABLED = 413,
-  PMTK_API_Q_NMEA_OUTPUT  = 414,
-  PMTK_API_Q_PWR_SAV_MODE = 420,
-  PMTK_API_Q_DATUM            = 430,
-  PMTK_API_Q_DATUM_ADVANCE    = 431,
-  PMTK_API_GET_USER_OPTION    = 490,
-  PMTK_DT_FIX_CTL             = 500,
-  PMTK_DT_DGPS_MODE    = 501,
-  PMTK_DT_SBAS_ENABLED = 513,
-  PMTK_DT_NMEA_OUTPUT  = 514,
-  PMTK_DT_PWR_SAV_MODE = 520,
-  PMTK_DT_DATUM               = 530,
-  PMTK_DT_FLASH_USER_OPTION   = 590,
-  PMTK_Q_VERSION       = 604,
-  PMTK_Q_RELEASE              = 605,
-  PMTK_DT_VERSION      = 704,
-  PMTK_DT_RELEASE             = 705
-};
+#include "defs.h"
+#include "gbfile.h"            // for gbfprintf, gbfputc, gbfputs, gbfclose, gbfopen, gbfile
+#include "gbser.h"             // for gbser_read_line, gbser_set_port, gbser_OK, gbser_deinit, gbser_init, gbser_print, gbser_TIMEOUT
+#include "src/core/datetime.h" // for DateTime
+#include "src/core/logging.h"  // for Fatal, Warning
 
-static const unsigned char LOG_RST[16] = {
-  0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, /* start marker */
-  0x00, 0x00, 0x00, 0x00, 0x00,       /* data */
-  0xbb, 0xbb, 0xbb, 0xbb
-};          /* end marker */
-
-static const char* MTK_ACK[] = { /* Flags returned from PMTK001 ack packet */
-  "Invalid packet", "Unsupported packet type",
-  "Valid packet but action failed", "Valid packet, action success"
-};
 
 #define MTK_EVT_BITMASK  (1<<0x02)
 #define MTK_EVT_PERIOD   (1<<0x03)
@@ -128,168 +92,21 @@ static const char* MTK_ACK[] = { /* Flags returned from PMTK001 ack packet */
 #define MTK_EVT_START    (1<<0x07)
 #define MTK_EVT_WAYPT    (1<<0x10)  /* Holux waypoint follows... */
 
-/* *************************************** */
-
-/* Data id, type, sizes used by MTK chipset - don't touch.... */
-enum {
-  UTC = 0,
-  VALID,
-  LATITUDE,
-  LONGITUDE,
-  HEIGHT,
-  SPEED,
-  HEADING,
-  DSTA,
-  DAGE,
-  PDOP,
-  HDOP,
-  VDOP,
-  NSAT,
-  SID,
-  ELEVATION,
-  AZIMUTH,
-  SNR,
-  RCR,
-  MILLISECOND,
-  DISTANCE,
-} /* DATA_TYPES */;
-
-static struct log_type {
-  int id;
-  int size;
-  const char* name;
-} log_type[32] =  {
-  { 0, 4, "UTC" },
-  { 1, 2, "VALID" },
-  { 2, 8, "LATITUDE,N/S"},
-  { 3, 8, "LONGITUDE,E/W"},
-  { 4, 4, "HEIGHT" },
-  { 5, 4, "SPEED" },
-  { 6, 4, "HEADING" },
-  { 7, 2, "DSTA" },
-  { 8, 4, "DAGE" },
-  { 9, 2, "PDOP" },
-  { 10, 2, "HDOP"},
-  { 11, 2, "VDOP"},
-  { 12, 2, "NSAT (USED/VIEW)"},
-  { 13, 4, "SID",},
-  { 14, 2, "ELEVATION" },
-  { 15, 2, "AZIMUTH" },
-  { 16, 2, "SNR"},
-  { 17, 2, "RCR"},
-  { 18, 2, "MILLISECOND"},
-  { 19, 8, "DISTANCE" },
-  { 20, 0, nullptr},
-};
-
-struct sat_info {
-  char id, used;
-  short elevation, azimut, snr;
-};
-
-struct data_item {
-  time_t timestamp;
-  short valid;
-  double lat;
-  double lon;
-  float height;
-  float speed;
-  float heading;
-  short dsta; // differential station id
-  float dage;  // differential data age
-  float pdop, hdop, vdop;
-  char sat_used, sat_view, sat_count;
-  short rcr;
-  unsigned short timestamp_ms;
-  double distance;
-  struct sat_info sat_data[32];
-};
-
-struct mtk_loginfo {
-  unsigned int bitmask;
-  int logLen;
-  int period, distance, speed; /* in 10:ths of sec, m, km/h */
-  int track_event;
-};
-
-/* *************************************** */
-
-/* MTK chip based devices with different baudrate, tweaks, ... */
-enum MTK_DEVICE_TYPE {
-  MTK_LOGGER,
-  HOLUX_M241,
-  HOLUX_GR245
-};
-
 #define TIMEOUT        1500
 #define MTK_BAUDRATE 115200
 #define MTK_BAUDRATE_M241 38400
 
 #define HOLUX245_MASK (1 << 27)
 
-static void* fd;  /* serial fd */
-static FILE* fl;  /* bin.file fd */
-static char* port; /* serial port name */
-static char* OPT_erase;  /* erase ? command option */
-static char* OPT_erase_only;  /* erase_only ? command option */
-static char* OPT_log_enable;  /* enable ? command option */
-static char* csv_file; /* csv ? command option */
-static char* OPT_block_size_kb; /* block_size_kb ? command option */
-static enum MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
-
-static struct mtk_loginfo mtk_info;
-
-const char LIVE_CHAR[4] = {'-', '\\','|','/'};
-
-const char CMD_LOG_DISABLE[]= "$PMTK182,5*20\r\n";
-const char CMD_LOG_ENABLE[] = "$PMTK182,4*21\r\n";
-const char CMD_LOG_FORMAT[] = "$PMTK182,2,2*39\r\n";
-const char CMD_LOG_ERASE[]  = "$PMTK182,6,1*3E\r\n";
-const char CMD_LOG_STATUS[] = "$PMTK182,2,7*3C\r\n";
-
-static int  mtk_log_len(unsigned int bitmask);
-static void mtk_rd_init(const QString& fname);
-static void file_init(const QString& fname);
-static void file_deinit() ;
-static void holux245_init();
-static void file_read();
-static int mtk_parse_info(const unsigned char* data, int dataLen);
-
-
-// Arguments for log fetch 'mtk' command..
-
-static QVector<arglist_t> mtk_sargs = {
-  {
-    "erase", &OPT_erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "erase_only", &OPT_erase_only, "Only erase device data, do not download anything",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "log_enable", &OPT_log_enable, "Enable logging after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "csv",   &csv_file, "MTK compatible CSV output file",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "block_size_kb", &OPT_block_size_kb, "Size of blocks in KB to request from device",
-    "1", ARGTYPE_INT, "1", "64", nullptr
-  },
-};
-
-static void dbg(int l, const char* msg, ...)
+// TODO: These should become Debug() from src/core/logging.
+void MtkLoggerBase::dbg(int l, const char* msg, ...)
 {
-  va_list ap;
-  va_start(ap, msg);
   if (global_opts.debug_level >= l) {
-    vfprintf(stderr,msg, ap);
-    fflush(stderr);
+    va_list ap;
+    va_start(ap, msg);
+    gbVLegacyLog(QtDebugMsg, msg, ap);
+    va_end(ap);
   }
-  va_end(ap);
 }
 
 // Returns a fully qualified pathname to a temporary file that is a copy
@@ -298,7 +115,7 @@ static void dbg(int l, const char* msg, ...)
 //
 // It returns a temporary C string - it's totally kludged in to replace
 // TEMP_DATA_BIN being string constants.
-static QString GetTempName(bool backup)
+QString MtkLoggerBase::GetTempName(bool backup)
 {
   const char kData[]= "data.bin";
   const char kDataBackup[]= "data_old.bin";
@@ -307,19 +124,19 @@ static QString GetTempName(bool backup)
 #define TEMP_DATA_BIN GetTempName(false)
 #define TEMP_DATA_BIN_OLD GetTempName(true)
 
-static int do_send_cmd(const char* cmd, int cmdLen)
+int MtkLoggerBase::do_send_cmd(const char* cmd, int cmdLen)
 {
   dbg(6, "Send %s ", cmd);
   int rc = gbser_print(fd, cmd);
   if (rc != gbser_OK) {
-    fatal(MYNAME ": Write error (%d)\n", rc);
+    gbFatal("Write error (%d)\n", rc);
   }
 
   return cmdLen;
 }
 
 
-static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec)
+int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec)
 {
   char line[256];
   int len;
@@ -343,12 +160,12 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
   if (strncmp(cmd, CMD_LOG_ERASE, 12) == 0) {
     cmd_erase = 1;
     if (global_opts.verbose_status || global_opts.debug_level > 0) {
-      fprintf(stderr, "Erasing    ");
+      gbDebug("Erasing    ");
     }
   }
   // dbg(6, "## Send '%s' -- Expect '%s' in %d sec\n", cmd, expect, timeout_sec);
 
-  do_send_cmd(cmd, strlen(cmd)); // success or fatal()...
+  do_send_cmd(cmd, strlen(cmd)); // success or gbFatal()...
 
   int done = 0;
   int loops = 0;
@@ -359,7 +176,7 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
       if (rc == gbser_TIMEOUT && time(nullptr) > tout) {
         dbg(2, "NMEA command '%s' timeout !\n", cmd);
         return -1;
-        // fatal(MYNAME "do_cmd(): Read error (%d)\n", rc);
+        // gbFatal("do_cmd(): Read error (%d)\n", rc);
       }
       len = -1;
     } else {
@@ -369,13 +186,12 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
     dbg(8, "Read %d bytes: '%s'\n", len, line);
     if (cmd_erase && (global_opts.verbose_status || (global_opts.debug_level > 0 && global_opts.debug_level <= 3))) {
       // erase cmd progress wheel -- only for debug level 1-3
-      fprintf(stderr,"\b%c", LIVE_CHAR[loops%4]);
-      fflush(stderr);
+      gbDebug("\b%c", LIVE_CHAR[loops%4]);
     }
     if (len > 5 && line[0] == '$') {
       if (expect_len > 0 && strncmp(&line[1], expect, expect_len) == 0) {
         if (cmd_erase && (global_opts.verbose_status || global_opts.debug_level > 0)) {
-          fprintf(stderr,"\n");
+          gbDebug("\n");
         }
         dbg(6, "NMEA command success !\n");
         if ((len - 4) > expect_len) {  // alloc and copy data segment...
@@ -418,23 +234,23 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
-static void mtk_rd_init_m241(const QString& fname)
+void MtkLoggerBase::mtk_rd_init_m241(const QString& fname)
 {
   mtk_device = HOLUX_M241;
   mtk_rd_init(fname);
 }
 
-static void mtk_rd_init(const QString& fname)
+void MtkLoggerBase::mtk_rd_init(const QString& fname)
 {
   int rc;
   char* model;
 
-  port = xstrdup(qPrintable(fname));
+  port = fname;
 
   errno = 0;
-  dbg(1, "Opening port %s...\n", port);
-  if ((fd = gbser_init(port)) == nullptr) {
-    fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", port, strerror(errno));
+  dbg(1, "Opening port %s...\n", qPrintable(port));
+  if ((fd = gbser_init(qPrintable(port))) == nullptr) {
+    gbFatal(FatalMsg() << "Can't initialise port" << port << strerror(errno));
   }
 
   // verify that we have a MTK based logger...
@@ -454,12 +270,12 @@ static void mtk_rd_init(const QString& fname)
   }
   if (rc) {
     dbg(1, "Set baud rate to %d failed (%d)\n", MTK_BAUDRATE, rc);
-    fatal(MYNAME ": Failed to set baudrate !\n");
+    gbFatal("Failed to set baudrate !\n");
   }
 
   rc = do_cmd("$PMTK605*31\r\n", "PMTK705,", &model, 10);
   if (rc != 0) {
-    fatal(MYNAME ": This is not a MTK based GPS ! (or is device turned off ?)\n");
+    gbFatal("This is not a MTK based GPS ! (or is device turned off ?)\n");
   }
 
   // say hello to GR245 to make it display "USB PROCESSING"
@@ -474,7 +290,7 @@ static void mtk_rd_init(const QString& fname)
   xfree(model);
 }
 
-static void mtk_rd_deinit()
+void MtkLoggerBase::mtk_rd_deinit()
 {
   if (mtk_device == HOLUX_GR245) {
     int rc = do_cmd("$PHLX827*31\r\n", "PHLX860*32", nullptr, 10);
@@ -486,10 +302,10 @@ static void mtk_rd_deinit()
   dbg(3, "Closing port...\n");
   gbser_deinit(fd);
   fd = nullptr;
-  xfree(port);
+  port = nullptr;
 }
 
-static int mtk_erase()
+int MtkLoggerBase::mtk_erase()
 {
   char* lstatus = nullptr;
 
@@ -526,7 +342,7 @@ static int mtk_erase()
   return 0;
 }
 
-static void mtk_read()
+void MtkLoggerBase::mtk_read()
 {
   char cmd[256];
   char* line = nullptr;
@@ -537,7 +353,7 @@ static void mtk_read()
   char* fusage = nullptr;
 
 
-  if (*OPT_erase_only != '0') {
+  if (OPT_erase_only) {
     mtk_erase();
     return;
   }
@@ -548,19 +364,18 @@ static void mtk_read()
   if (dout == nullptr) {
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      fatal(MYNAME ": Can't create temporary file %s",
-            qPrintable(TEMP_DATA_BIN));
+      gbFatal(FatalMsg() << "Can't create temporary file" << TEMP_DATA_BIN);
     }
   }
   fseek(dout, 0L,SEEK_END);
   unsigned long dsize = ftell(dout);
   if (dsize > 1024) {
-    dbg(1, "Temp %s file exists. with size %lu\n", qPrintable(TEMP_DATA_BIN),
+    dbg(1, "Temp %s file exists. with size %lu\n", gbLogCStr(TEMP_DATA_BIN),
         dsize);
     dpos = 0;
     init_scan = 1;
   }
-  dbg(1, "Download %s -> %s\n", port, qPrintable(TEMP_DATA_BIN));
+  dbg(1, "Download %s -> %s\n", qPrintable(port), gbLogCStr(TEMP_DATA_BIN));
 
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &fusage, 2);
@@ -596,26 +411,20 @@ static void mtk_read()
   dbg(1, "Download %dkB from device\n", (addr_max+1) >> 10);
 
   if (dsize > addr_max) {
-    dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", qPrintable(TEMP_DATA_BIN), dsize, addr_max);
+    dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", gbLogCStr(TEMP_DATA_BIN), dsize, addr_max);
     fclose(dout);
     dsize = 0;
     init_scan = 0;
     QFile::rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
-      fatal(MYNAME ": Can't create temporary file %s",
-            qPrintable(TEMP_DATA_BIN));
+      gbFatal(FatalMsg() << "Can't create temporary file " << TEMP_DATA_BIN);
     }
   }
 
   unsigned int scan_step = 0x10000;
   unsigned int scan_bsize = 0x0400;
-  unsigned int read_bsize_kb = strtol(OPT_block_size_kb, nullptr, 10);
-  if (errno == ERANGE || read_bsize_kb < 1) {
-    read_bsize_kb = 1;
-  } else if (read_bsize_kb > 64) {
-    read_bsize_kb = 64;
-  }
+  unsigned int read_bsize_kb = std::clamp(OPT_block_size_kb.get_result(), 1, 64);
   unsigned int read_bsize = read_bsize_kb * 1024;
   dbg(2, "Download block size is %d bytes\n", read_bsize);
   if (init_scan) {
@@ -628,10 +437,10 @@ static void mtk_read()
   unsigned int line_size = 2*read_bsize + 32; // logdata as nmea/hex.
   unsigned int data_size = read_bsize + 32;
   if ((line = (char*) xmalloc(line_size)) == nullptr) {
-    fatal(MYNAME ": Can't allocate %u bytes for NMEA buffer\n",  line_size);
+    gbFatal("Can't allocate %u bytes for NMEA buffer\n",  line_size);
   }
   if ((data = (unsigned char*) xmalloc(data_size)) ==  nullptr) {
-    fatal(MYNAME ": Can't allocate %u bytes for data buffer\n",  data_size);
+    gbFatal("Can't allocate %u bytes for data buffer\n",  data_size);
   }
   memset(line, '\0', line_size);
   memset(data, '\0', data_size);
@@ -659,7 +468,7 @@ mtk_retry:
           retry_cnt++;
           goto mtk_retry;
         } // else
-        fatal(MYNAME "mtk_read(): Read error (%d)\n", rc);
+        gbFatal("mtk_read(): Read error (%d)\n", rc);
       }
       int len = strlen(line);
       dbg(8, "Read %d bytes: '%s'\n", len, line);
@@ -697,7 +506,7 @@ mtk_retry:
             }
           } else {
             if (null_len == chunk_size) {  // 0x00 block - bad block....
-              fprintf(stderr, "FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
+              gbWarning("FIXME -- read bad block at 0x%.6x - retry ? skip ?\n%s\n", data_addr, line);
             }
             if (ff_len == chunk_size) {  // 0xff block - read complete...
               len = ff_len;
@@ -726,9 +535,9 @@ mtk_retry:
         fseek(dout, addr, SEEK_SET);
         if (fread(line, 1, rcvd_bsize, dout) == rcvd_bsize && memcmp(line, data, rcvd_bsize) == 0) {
           dpos = addr;
-          dbg(2, "%s same at %d\n", qPrintable(TEMP_DATA_BIN), addr);
+          dbg(2, "%s same at %d\n", gbLogCStr(TEMP_DATA_BIN), addr);
         } else {
-          dbg(2, "%s differs at %d\n", qPrintable(TEMP_DATA_BIN), addr);
+          dbg(2, "%s differs at %d\n", gbLogCStr(TEMP_DATA_BIN), addr);
           init_scan = 0;
           addr = dpos;
           bsize = read_bsize;
@@ -745,7 +554,7 @@ mtk_retry:
     } else {
       fseek(dout, addr, SEEK_SET);
       if (fwrite(data, 1, rcvd_bsize, dout) != rcvd_bsize) {
-        fatal(MYNAME ": Failed to write temp. binary file\n");
+        gbFatal("Failed to write temp. binary file\n");
       }
       addr += rcvd_bsize;
       if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
@@ -753,7 +562,7 @@ mtk_retry:
         if (addr >= addr_max) {
           perc = 100;
         }
-        fprintf(stderr, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
+        gbDebug("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\bReading 0x%.6x %3d %%", addr, perc);
       }
     }
   }
@@ -766,11 +575,11 @@ mtk_retry:
     fclose(dout);
   }
   if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
-    fprintf(stderr,"\n");
+    gbDebug("\n");
   }
 
   // Fixme - Order or. Enable - parse - erase ??
-  if (log_enabled || *OPT_log_enable=='1') {
+  if (log_enabled || OPT_log_enable) {
     i = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", nullptr, 2);
     dbg(3, " ---- LOG ENABLE ----%s\n", i==0?"Success":"Fail");
   } else {
@@ -788,15 +597,14 @@ mtk_retry:
   file_deinit();
 
   /* fixme -- we're assuming all went well - erase flash.... */
-  if (*OPT_erase != '0') {
+  if (OPT_erase) {
     mtk_erase();
   }
 
 }
 
 
-static route_head*  trk_head = nullptr;
-static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
+int MtkLoggerBase::add_trackpoint(int idx, unsigned long bmask, data_item* itm)
 {
   auto* trk = new Waypoint;
 
@@ -917,22 +725,22 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
 
 
 /********************** MTK Logger -- CSV output *************************/
-static gbfile* cd;
-static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
+void MtkLoggerBase::mtk_csv_init(const QString& csv_fname, unsigned long bitmask)
 {
   FILE* cf;
 
-  dbg(1, "Opening csv output file %s...\n", csv_fname);
+  dbg(1, "Opening csv output file %s...\n", gbLogCStr(csv_fname));
 
-  // can't use gbfopen here - it will fatal() if file doesn't exist
-  if ((cf = ufopen(QString::fromUtf8(csv_fname), "r")) != nullptr) {
+  // can't use gbfopen here - it will gbFatal() if file doesn't exist
+  if ((cf = ufopen(csv_fname, "r")) != nullptr) {
     fclose(cf);
-    warning(MYNAME ": CSV file %s already exist ! Cowardly refusing to overwrite.\n", csv_fname);
+    Warning() << "CSV file " << gbLogCStr(csv_fname) << 
+                 "already exists ! Cowardly refusing to overwrite";
     return;
   }
 
-  if ((cd = gbfopen(csv_fname, "w", MYNAME)) == nullptr) {
-    fatal(MYNAME ": Can't open csv file '%s'\n", csv_fname);
+  if ((cd = gbfopen(csv_fname, "w")) == nullptr) {
+    gbFatal(FatalMsg() << "Can't open csv file " <<  csv_fname);
   }
 
   /* Add the header line */
@@ -969,7 +777,7 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
   gbfprintf(cd, "\n");
 }
 
-static void mtk_csv_deinit()
+void MtkLoggerBase::mtk_csv_deinit()
 {
   if (cd != nullptr) {
     gbfclose(cd);
@@ -978,7 +786,7 @@ static void mtk_csv_deinit()
 }
 
 /* Output a single data line in MTK application compatible format - i.e ignore any locale settings... */
-static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_item* itm)
+int MtkLoggerBase::csv_line(gbfile* csvFile, int idx, unsigned long bmask, data_item* itm)
 {
   const char* fix_str = "";
   if (bmask & (1U<<VALID)) {
@@ -1024,10 +832,10 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
               , (itm->rcr&0x0004)?"D":"", (itm->rcr&0x0008)?"B":"");
 
   if (bmask & (1U<<UTC)) {
-    QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, Qt::UTC);
+    QDateTime dt = QDateTime::fromSecsSinceEpoch(itm->timestamp, QtUTC);
     dt = dt.addMSecs(itm->timestamp_ms);
 
-    QString timestamp = dt.toUTC().toString("yyyy/MM/dd,hh:mm:ss.zzz");;
+    QString timestamp = dt.toUTC().toString(u"yyyy/MM/dd,hh:mm:ss.zzz");
     gbfputs(timestamp, csvFile);
     gbfputc(',', csvFile);
   }
@@ -1105,22 +913,21 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
 
 
 /********************* MTK Logger -- Parse functions *********************/
-static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
+int MtkLoggerBase::mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
 {
   static int count = 0;
   int sat_id;
   int hspd;
   unsigned char hbuf[4];
-  struct data_item itm;
+  data_item itm;
 
   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n", count, dataLen);
   if (global_opts.debug_level > 5) {
-    fprintf(stderr,"# Data block:");
+    gbDebug("# Data block:");
     for (int j = 0; j<dataLen; j++) {
-      fprintf(stderr,"%.2x ", data[j]);
+      gbDebug("%.2x ", data[j]);
     }
-    fprintf(stderr,"\n");
-    fflush(stderr);
+    gbDebug("\n");
   }
 
   memset(&itm, 0, sizeof(itm));
@@ -1329,7 +1136,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   Description: Parse an info block
   Globals: mtk_info - bitmask/period/speed/... may be affected if updated.
  */
-static int mtk_parse_info(const unsigned char* data, int dataLen)
+int MtkLoggerBase::mtk_parse_info(const unsigned char* data, int dataLen)
 {
   unsigned int bm;
 
@@ -1402,18 +1209,18 @@ static int mtk_parse_info(const unsigned char* data, int dataLen)
     }
   } else {
     if (global_opts.debug_level > 0) {
-      fprintf(stderr,"#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
+      gbDebug("#!! Invalid INFO block !! %d bytes\n >> ", dataLen);
       for (bm=0; bm<16; bm++) {
-        fprintf(stderr, "%.2x ", data[bm]);
+        gbDebug("%.2x ", data[bm]);
       }
-      fprintf(stderr,"\n");
+      gbDebug("\n");
     }
     return 0;
   }
   return 16;
 }
 
-static int mtk_log_len(unsigned int bitmask)
+int MtkLoggerBase::mtk_log_len(unsigned int bitmask)
 {
   int len;
 
@@ -1431,7 +1238,7 @@ static int mtk_log_len(unsigned int bitmask)
   for (int i = 0; i<32; i++) {
     if ((1U<<i) & bitmask) {
       if (i > DISTANCE && global_opts.debug_level > 0) {
-        warning(MYNAME ": Unknown size/meaning of bit %d\n", i);
+        gbWarning("Unknown size/meaning of bit %d\n", i);
       }
       if ((i == SID || i == ELEVATION || i == AZIMUTH || i == SNR) && (1U<<SID) & bitmask) {
         len += log_type[i].size*32;  // worst case, max sat. count..
@@ -1446,17 +1253,17 @@ static int mtk_log_len(unsigned int bitmask)
 
 /********************** File-in interface ********************************/
 
-static void file_init_m241(const QString& fname)
+void MtkLoggerBase::file_init_m241(const QString& fname)
 {
   mtk_device = HOLUX_M241;
   file_init(fname);
 }
 
-static void file_init(const QString& fname)
+void MtkLoggerBase::file_init(const QString& fname)
 {
-  dbg(4, "Opening file %s...\n", qPrintable(fname));
+  dbg(4, "Opening file %s...\n", gbLogCStr(fname));
   if (fl = ufopen(fname, "rb"), nullptr == fl) {
-    fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
+    gbFatal(FatalMsg() << "Can't open file" <<  fname);
   }
   switch (mtk_device) {
   case HOLUX_M241:
@@ -1469,13 +1276,13 @@ static void file_init(const QString& fname)
   }
 }
 
-static void file_deinit()
+void MtkLoggerBase::file_deinit()
 {
   dbg(4, "Closing file...\n");
   fclose(fl);
 }
 
-static void holux245_init()
+void MtkLoggerBase::holux245_init()
 {
   mtk_device = HOLUX_GR245;
 
@@ -1487,7 +1294,7 @@ static void holux245_init()
   log_type[SPEED].size  = 3; // height size..
 }
 
-static int is_holux_string(const unsigned char* data, int dataLen)
+int MtkLoggerBase::is_holux_string(const unsigned char* data, int dataLen)
 {
   if (mtk_device != MTK_LOGGER &&
       dataLen >= 5 &&
@@ -1501,7 +1308,7 @@ static int is_holux_string(const unsigned char* data, int dataLen)
   return 0;
 }
 
-static void file_read()
+void MtkLoggerBase::file_read()
 {
   //  int i, j, k, bLen;
   unsigned char buf[512];
@@ -1512,7 +1319,7 @@ static void file_read()
   fseek(fl, 0L, SEEK_END);
   long fsize = ftell(fl);
   if (fsize <= 0) {
-    fatal(MYNAME ": File has size %ld\n", fsize);
+    gbFatal(FatalMsg() << "File has size" <<  fsize);
   }
 
   fseek(fl, 0L, SEEK_SET);
@@ -1581,7 +1388,7 @@ static void file_read()
 
   mtk_info.logLen = mtk_log_len(mtk_info.bitmask);
   dbg(3, "Log item size %d bytes\n", mtk_info.logLen);
-  if (csv_file && *csv_file) {
+  if (!csv_file.isEmpty()) {
     mtk_csv_init(csv_file, mtk_info.bitmask);
   }
 
@@ -1651,91 +1458,5 @@ static void file_read()
 }
 
 
-/**************************************************************************/
-// GPS logger will only handle tracks - neither waypoints or tracks...
-// Actually, some of the Holux devices will read waypoints.
-
-/* ascii is the expected character set */
-/* not fixed, can be changed through command line parameter */
-
-ff_vecs_t mtk_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_read 	/* waypoints */,
-    ff_cap_read 	/* tracks */,
-    ff_cap_none 	/* routes */
-  },
-  mtk_rd_init,
-  nullptr,
-  mtk_rd_deinit,
-  nullptr,
-  mtk_read,
-  nullptr,
-  nullptr,
-  &mtk_sargs,
-  NULL_POS_OPS
-};
-
-/* ascii is the expected character set */
-/* not fixed, can be changed through command line parameter */
-
-ff_vecs_t mtk_m241_vecs = {
-  ff_type_serial,
-  {
-    ff_cap_none 	/* waypoints */,
-    ff_cap_read 	/* tracks */,
-    ff_cap_none 	/* routes */
-  },
-  mtk_rd_init_m241,
-  nullptr,
-  mtk_rd_deinit,
-  nullptr,
-  mtk_read,
-  nullptr,
-  nullptr,
-  &mtk_sargs,
-  NULL_POS_OPS
-};
-
-/* used for mtk-bin */
-
-static QVector<arglist_t> mtk_fargs = {
-  {
-    "csv",   &csv_file, "MTK compatible CSV output file",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-};
-
-/* master process: don't convert anything */
-
-ff_vecs_t mtk_fvecs = {
-  ff_type_file,
-  { ff_cap_read, ff_cap_read, ff_cap_none },
-  file_init,
-  nullptr,
-  file_deinit,
-  nullptr,
-  file_read,
-  nullptr,
-  nullptr,
-  &mtk_fargs,
-  NULL_POS_OPS
-};
-
-/* master process: don't convert anything */
-
-ff_vecs_t mtk_m241_fvecs = {
-  ff_type_file,
-  { ff_cap_read, ff_cap_read, ff_cap_none },
-  file_init_m241,
-  nullptr,
-  file_deinit,
-  nullptr,
-  file_read,
-  nullptr,
-  nullptr,
-  &mtk_fargs,
-  NULL_POS_OPS
-};
 /* End file: mtk_logger.c */
 /**************************************************************************/

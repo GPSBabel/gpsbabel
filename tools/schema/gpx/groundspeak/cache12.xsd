@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<!-- cache.xsd version 1.2: Private GPX extensions used for Garmin express -->
+<xs:schema targetNamespace="http://www.groundspeak.com/cache/1/2" xmlns:mstns="http://www.topografix.com/GPX/1/0" xmlns="http://www.groundspeak.com/cache/1/2" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" xmlns:app1="http://www.groundspeak.com/cache/1/2">
+  <xs:element name="cache">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" type="xs:string" minOccurs="0"/>
+        <!--  placed_by is a freeform field to describe the individuals who placed the cache -->
+        <xs:element name="placed_by" type="xs:string" minOccurs="0" />
+        <xs:element name="owner" nillable="true" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <!--  Owner ID corresponds to account on Geocaching.com. -->
+                <xs:attribute name="id" form="unqualified" type="xs:string" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="type"  type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="container" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <!--  attributes like 'dog-friendly' or 'handicapped access' will be listed here. ID corresponds to an enum in the Geocaching.com database -->
+        <xs:element name="attributes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="attribute" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="id" form="unqualified" type="xs:long" />
+                      <xs:attribute name="inc" form="unqualified" type="xs:byte" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Difficulty and terrain are on a 1 to 5 scale. 1 being easiest. Can be incremented by .5 -->
+        <xs:element name="difficulty" type="xs:double" minOccurs="0" maxOccurs="1" />
+        <xs:element name="terrain" type="xs:double" minOccurs="0" maxOccurs="1" />
+        <xs:element name="country" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="state" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="short_description" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="long_description" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <!--  Encoded hints use Rot13 encryption on Geocaching.com but displayed in cleartext here -->
+        <!--  Text enclosed in brackets [] are not encrypted -->
+        <xs:element name="encoded_hints" type="xs:string" minOccurs="0" />
+        <xs:element name="logs" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="log" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="date" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="type" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="text" nillable="true" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="encoded" form="unqualified" type="xs:string" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="finder" nillable="true" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="id" form="unqualified" type="xs:string" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="log_wpt" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:attribute name="lat" form="unqualified" type="xs:decimal" />
+                        <xs:attribute name="lon" form="unqualified" type="xs:decimal" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="id" form="unqualified" type="xs:long" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" form="unqualified" type="xs:long" />
+      <xs:attribute name="available" form="unqualified" type="xs:string" />
+      <xs:attribute name="archived" form="unqualified" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

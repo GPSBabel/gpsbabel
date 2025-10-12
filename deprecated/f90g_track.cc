@@ -1,8 +1,8 @@
 /*
   Map file reader for F90G Automobile DVR.
 
-    Copyright (C) 2014 Jim Keeler, James.L.Keeler@gmail.com
-    Copyright (C) 2001-2013 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2014 Jim Keeler
+    Copyright (C) 2001-2013 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

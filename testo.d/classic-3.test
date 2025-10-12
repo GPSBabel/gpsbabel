@@ -14,24 +14,6 @@ gpsbabel -i gpx -f ${TMPDIR}/wpts.gpx -f ${TMPDIR}/trks.gpx -f ${TMPDIR}/rtes.gp
 compare ${TMPDIR}/alltypes.gpx ${TMPDIR}/merged.gpx
 
 #
-# WBT-200 tests
-#
-rm -f ${TMPDIR}/wbt-200.*
-gpsbabel -i wbt-bin -f ${REFERENCE}/wbt-200.bin -o gpx -F ${TMPDIR}/wbt-200.gpx
-# Remove the timestamp
-grep -v time <${TMPDIR}/wbt-200.gpx >${TMPDIR}/wbt-200.gpx2
-compare ${REFERENCE}/wbt-200.gpx ${TMPDIR}/wbt-200.gpx2
-
-#
-# WBT-201 tests
-#
-rm -f ${TMPDIR}/wbt-201.*
-gpsbabel -t -w -i wbt-bin -f ${REFERENCE}/wbt-201.tk1 -o gpx -F ${TMPDIR}/wbt-201.gpx
-# Remove the timestamp
-grep -v time <${TMPDIR}/wbt-201.gpx >${TMPDIR}/wbt-201.gpx2
-compare ${REFERENCE}/wbt-201.gpx ${TMPDIR}/wbt-201.gpx2
-
-#
 # gzipped file i/o (reading only)
 #
 gpsbabel -i nmea -f ${REFERENCE}/waypoints.nmea.gz -o nmea -F ${TMPDIR}/waypoints.nmea

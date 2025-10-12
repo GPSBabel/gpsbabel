@@ -38,8 +38,6 @@
 
 #include "defs.h"
 
-#define MYNAME "format_skeleton"
-
 
 // Any arg in this list will appear in command line help and will be
 // populated for you.
@@ -58,7 +56,7 @@ QVector<arglist_t> format_skeleton_args = {
 static void
 format_skeleton_rd_init(const char* fname)
 {
-//	fin = gbfopen(fname, "r", MYNAME);
+//	fin = gbfopen(fname, "r");
 }
 
 static void
@@ -105,7 +103,7 @@ format_skeleton_read()
 static void
 format_skeleton_wr_init(const char* fname)
 {
-//	fout = gbfopen(fname, "w", MYNAME);
+//	fout = gbfopen(fname, "w");
 }
 
 static void

@@ -21,15 +21,18 @@
 //
 
 #include "aboutdlg.h"
-#include <QTextCursor>                // for QTextCursor
-#include <QTextDocument>              // for QTextDocument
-#include <QTextEdit>                  // for QTextEdit
-#include "appname.h"                  // for appName
-#include "upgrade.h"                  // for UpgradeCheck
+#include <QTextCursor>    // for QTextCursor
+#include <QTextDocument>  // for QTextDocument
+#include <QTextEdit>      // for QTextEdit
+#include "appname.h"      // for appName
+#ifndef DISABLE_UPGRADE_CHECK
+#include "upgrade.h"      // for UpgradeCheck
+#endif
 
 
 AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
                    const QString& ver2, const QString& ver3,
+                   const QString& date,
                    const QString& installationId): QDialog(parent)
 {
   ui_.setupUi(this);
@@ -44,11 +47,20 @@ AboutDlg::AboutDlg(QWidget* parent, const QString& ver1,
   } else {
     tt.replace("$hash$", "Hash: " + ver3);
   }
+  if (date.isEmpty()) {
+    tt.replace("$date$", "");
+  } else {
+    tt.replace("$date$", "Date: " + date);
+  }
   tt.replace("$installationId$", installationId);
 
   // Not localized as it should never be seen.
+#ifndef DISABLE_UPGRADE_CHECK
   tt.replace("$upgradetestmode$",
              UpgradeCheck::isTestMode() ? "**Upgrade test mode**" : "");
+#else
+  tt.remove("$upgradetestmode$");
+#endif
 
   doc->setHtml(tt);
   QTextCursor cur(doc);
