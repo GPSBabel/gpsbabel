@@ -46,6 +46,8 @@ public:
   virtual void init(const QString& id) {}
   virtual void reset() = 0;
   virtual void set(const QString& s) = 0;
+  [[nodiscard]] virtual bool getDefaulted() const = 0;
+  virtual void setDefaulted(bool defaulted) = 0;
 
   /* Data Members */
   // I.25: Prefer empty abstract classes as interfaces to class hierarchies
@@ -98,6 +100,16 @@ public:
     value_ = s;
   }
 
+  [[nodiscard]] bool getDefaulted() const override
+  {
+    return isDefaulted;
+  }
+
+  void setDefaulted(bool defaulted) override
+  {
+    isDefaulted = defaulted;
+  } 
+
 // We use overloads instead of default parameters to enable tool visibility into different usages.
   int toInt() const;
   int toInt(bool* ok) const;
@@ -109,6 +121,7 @@ public:
 private:
   QString value_;
   QString id_;
+  bool isDefaulted{true};
 };
 
 class OptionInt : public Option
@@ -146,6 +159,16 @@ public:
     return value_;
   }
 
+  [[nodiscard]] bool getDefaulted() const override
+  {
+    return isDefaulted;
+  }
+
+  void setDefaulted(bool defaulted) override
+  {
+    isDefaulted = defaulted;
+  } 
+
   void init(const QString& id) override;
   void reset() override;
   void set(const QString& s) override;
@@ -160,6 +183,7 @@ private:
   QString end_;
   bool allow_trailing_data_{false};
   int base_{10};
+  bool isDefaulted{true};
 };
 
 class OptionDouble : public Option
@@ -196,6 +220,16 @@ public:
     return value_;
   }
 
+  [[nodiscard]] bool getDefaulted() const override
+  {
+    return isDefaulted;
+  }
+
+  void setDefaulted(bool defaulted) override
+  {
+    isDefaulted = defaulted;
+  } 
+
   void init(const QString& id) override;
   void reset() override;
   void set(const QString& s) override;
@@ -209,6 +243,7 @@ private:
   double result_{};
   QString end_;
   bool allow_trailing_data_{false};
+  bool isDefaulted{true};
 };
 
 class OptionBool : public Option
@@ -251,7 +286,18 @@ public:
     value_ = s;
   }
 
+  [[nodiscard]] bool getDefaulted() const override
+  {
+    return isDefaulted;
+  }
+
+  void setDefaulted(bool defaulted) override
+  {
+    isDefaulted = defaulted;
+  } 
+
 private:
   QString value_;
+  bool isDefaulted{true};
 };
 #endif // OPTION_H_INCLUDED_
