@@ -28,30 +28,30 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '14.3.1'
-            GENERATOR: 'Ninja'
-            RELEASE: false
-            os: macos-13
-          - QT_VERSION: '6.5.3'
-            XCODE_VERSION: '15.4'
-            GENERATOR: 'Xcode'
-            RELEASE: false
-            os: macos-14
           - QT_VERSION: '6.5.3'
             XCODE_VERSION: '15.4'
             GENERATOR: 'Ninja'
-            RELEASE: true
+            RELEASE: false
             os: macos-14
           - QT_VERSION: '6.8.3'
-            XCODE_VERSION: '16.2'
-            GENERATOR: 'Ninja'
+            XCODE_VERSION: '16.4'
+            GENERATOR: 'Xcode'
             RELEASE: false
             os: macos-15
+          - QT_VERSION: '6.8.3'
+            XCODE_VERSION: '16.4'
+            GENERATOR: 'Ninja'
+            RELEASE: true
+            os: macos-15
+          - QT_VERSION: '6.10.0'
+            XCODE_VERSION: '26.0.1'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-26
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Cache Qt
       uses: actions/cache@v4
@@ -62,7 +62,7 @@ jobs:
 
     - name: Qt install setup
       if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.12'
 
@@ -104,7 +104,7 @@ jobs:
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}
-      uses: actions/attest-build-provenance@v2
+      uses: actions/attest-build-provenance@v3
       with:
         subject-path: 'gui/GPSBabel-*.dmg'
 

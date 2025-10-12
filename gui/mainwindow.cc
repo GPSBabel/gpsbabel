@@ -73,7 +73,9 @@
 #include "optionsdlg.h"        // for OptionsDlg
 #include "preferences.h"       // for Preferences
 #include "runmachine.h"        // for RunMachine
+#ifndef DISABLE_UPGRADE_CHECK
 #include "upgrade.h"           // for UpgradeCheck
+#endif
 #include "version_mismatch.h"  // for VersionMismatch
 
 
@@ -98,6 +100,7 @@ QString MainWindow::findBabelVersion()
   return str;
 }
 
+#ifndef DISABLE_UPGRADE_CHECK
 //------------------------------------------------------------------------
 // Decides whether available beta upgrades are suggested to user for download.
 bool MainWindow::allowBetaUpgrades()
@@ -107,6 +110,7 @@ bool MainWindow::allowBetaUpgrades()
   // 'suggest beta upgrade' box, allow betas to be suggested for installation.
   return isBeta_ || babelData_.allowBetaUpgrades_;
 }
+#endif
 
 //------------------------------------------------------------------------
 static QString MakeOptions(const QList<FormatOption>& options)
@@ -170,7 +174,11 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui_.actionAbout, &QAction::triggered, this, &MainWindow::aboutActionX);
   connect(ui_.actionVisit_Website, &QAction::triggered, this, &MainWindow::visitWebsiteActionX);
   connect(ui_.actionMake_a_Donation, &QAction::triggered, this, &MainWindow::donateActionX);
+#ifndef DISABLE_UPGRADE_CHECK
   connect(ui_.actionUpgradeCheck, &QAction::triggered, this, &MainWindow::upgradeCheckActionX);
+#else
+  ui_.menuHelp->removeAction(ui_.actionUpgradeCheck);
+#endif
   connect(ui_.actionPreferences, &QAction::triggered, this, &MainWindow::preferencesActionX);
 
   connect(ui_.inputFormatCombo, &QComboBox::currentIndexChanged,
@@ -222,11 +230,13 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
+#ifndef DISABLE_UPGRADE_CHECK
   upgrade = new UpgradeCheck(this, formatList_, babelData_);
   if (babelData_.startupVersionCheck_) {
     upgrade->checkForUpgrade(babelVersion_, babelData_.upgradeCheckTime_,
                              allowBetaUpgrades());
   }
+#endif
 
   if (!babelData_.ignoreVersionMismatch_ && babelVersion_ != VERSION) {
     VersionMismatch vm(nullptr, babelVersion_, QString(VERSION));
@@ -932,21 +942,21 @@ void MainWindow::applyActionX()
 
 #ifndef DISABLE_MAPPREVIEW
   // Now output for preview in google maps
-  QString tempName;
+  QString mapFileName;
   if (babelData_.previewGmap_) {
-    QTemporaryFile ftemp;
-    ftemp.open();
-    tempName = ftemp.fileName();
-    ftemp.close();
-
-    // Ideally, expost this in the UI.  For now, just split the track
-    // if we've no recorded fixes for > 5 mins and we've moved > 300 meters.
-    //args << "-x";
-    //args << "track,pack,sdistance=0.3k,split=5m";
-
-    args << "-o";
-    args << "gpx";
-    args << "-F" << tempName;
+    if (QTemporaryFile ftemp; ftemp.open()) {
+      mapFileName = ftemp.fileName();
+      ftemp.close();
+  
+      args << "-o";
+      args << "gpx";
+      args << "-F" << mapFileName;
+    } else {
+      // ftemp.fileName() may be empty so display ftemp.fileTemplate().
+      QMessageBox::warning(nullptr, QString(appName),
+        tr("Failed to open temporary file \"%1\" for map preview.  The error was: \"%2\".  The map preview will not be shown.")
+        .arg(ftemp.fileTemplate(), ftemp.errorString()));
+    }
   }
 #endif
 
@@ -963,10 +973,10 @@ void MainWindow::applyActionX()
   if (x) {
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
 #ifndef DISABLE_MAPPREVIEW
-    if (babelData_.previewGmap_) {
+    if (!mapFileName.isEmpty()) {
       Gpx mapData;
-      QString mapStatus = mapData.read(tempName);
-      QFile(tempName).remove();
+      QString mapStatus = mapData.read(mapFileName);
+      QFile(mapFileName).remove();
       if (!mapStatus.isNull()) {
         QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
         QTextCharFormat errorFormat = defaultFormat;
@@ -1000,10 +1010,12 @@ void MainWindow::applyActionX()
 //------------------------------------------------------------------------
 void MainWindow::closeActionX()
 {
+#ifndef DISABLE_UPGRADE_CHECK
   QDateTime wt= upgrade->getUpgradeWarningTime();
   if (wt.isValid()) {
     babelData_.upgradeCheckTime_ = wt;
   }
+#endif
   babelData_.runCount_++;
 
   QDateTime now = QDateTime::currentDateTime();
@@ -1148,6 +1160,7 @@ void MainWindow::aboutActionX()
   aboutDlg.exec();
 }
 
+#ifndef DISABLE_UPGRADE_CHECK
 //------------------------------------------------------------------------
 void MainWindow::upgradeCheckActionX()
 {
@@ -1155,6 +1168,7 @@ void MainWindow::upgradeCheckActionX()
                            QDateTime(QDate(2000, 1, 1), QTime(0, 0)),
                            allowBetaUpgrades());
 }
+#endif
 
 //------------------------------------------------------------------------
 void MainWindow::preferencesActionX()
@@ -1198,7 +1212,9 @@ void MainWindow::updateFilterStatus()
 //------------------------------------------------------------------------
 void MainWindow::setWidgetValues()
 {
+#ifndef DISABLE_UPGRADE_CHECK
   ui_.actionUpgradeCheck->setEnabled(babelData_.upgradeMenuEnabled_);
+#endif
   if (babelData_.inputType_ == BabelData::fileType_) {
     ui_.inputFileOptBtn->setChecked(true);
     inputFileOptBtnClicked();

@@ -3,7 +3,7 @@
     These symbols should not be publicly used.  They're "friend" functions
     of USB details internal to jeeps.
 
-    Copyright (C) 2005, 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2005, 2006 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
