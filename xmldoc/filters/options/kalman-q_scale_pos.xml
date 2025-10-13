@@ -8,8 +8,7 @@
     <imagedata fileref="xmldoc/images/kalman_q_scale_pos.png" format="PNG" width="100%" scalefit="1"/>
   </imageobject>
   <imageobject role="html">
-    <imagedata fileref="xmldoc/images/kalman_q_scale_pos.gif" format="GIF"/>
-  </imageobject>
+    <imagedata fileref="xmldoc/images/kalman_q_scale_pos.gif" format="GIF"/>  </imageobject>
 </mediaobject>
 <para>
   Imagine you are driving. A low <option>q_scale_pos</option> is like a heavy sedan; it has high inertia and is best for smooth, predictable motion like a long, straight highway. A high <option>q_scale_pos</option> is like a nimble sports car; it has low inertia and can react quickly to sudden changes in direction, making it better for a twisty mountain road.
