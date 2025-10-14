@@ -33,22 +33,7 @@ const double& Matrix::operator()(int row, int col) const {
     return data_[row * cols_ + col];
 }
 
-Matrix::Matrix(Matrix&& other) noexcept
-    : rows_(other.rows_), cols_(other.cols_), data_(std::move(other.data_)) {
-    other.rows_ = 0;
-    other.cols_ = 0;
-}
 
-Matrix& Matrix::operator=(Matrix&& other) noexcept {
-    if (this != &other) {
-        rows_ = other.rows_;
-        cols_ = other.cols_;
-        data_ = std::move(other.data_);
-        other.rows_ = 0;
-        other.cols_ = 0;
-    }
-    return *this;
-}
 
 Matrix Matrix::identity(int size) {
     Matrix result(size, size);
