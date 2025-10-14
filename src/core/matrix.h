@@ -6,10 +6,7 @@
 class Matrix {
 public:
     Matrix(int rows, int cols);
-    Matrix(const Matrix&) = default;
-    Matrix& operator=(const Matrix&) = default;
-    Matrix(Matrix&& other) noexcept;
-    Matrix& operator=(Matrix&& other) noexcept;
+
 
     double& operator()(int row, int col);
     const double& operator()(int row, int col) const;
