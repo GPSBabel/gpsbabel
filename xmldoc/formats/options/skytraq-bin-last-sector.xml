@@ -1,1 +1,15 @@
-
+<para>
+  This option specifies the last sector number to read from a Skytraq binary log file.
+</para>
+<para>
+  By default, this is set to -1, which enables a "smart read" mode. In this mode, GPSBabel reads data until it encounters an empty sector, which typically signifies the end of the logged data. This is generally reliable and ensures all data is read, even if the device's internal record of the last sector is incorrect.
+</para>
+<para>
+  You can use this option to force reading to stop at a specific sector, which may be useful for debugging or for reading a specific portion of a very large log file.
+</para>
+<example xml:id="skytraq_bin_last_sector_example">
+  <title>Read only the first 100 sectors of a log file</title>
+  <para>
+    <userinput>gpsbabel -i skytraq-bin,last-sector=99 -f my_track.bin -o gpx -F partial_track.gpx</userinput>
+  </para>
+</example>

@@ -1,1 +1,15 @@
-
+<para>
+  This option allows you to manually specify the offset, in seconds, between GPS Time and Coordinated Universal Time (UTC).
+</para>
+<para>
+  The GPS satellite system uses its own time scale which does not include leap seconds. As a result, GPS Time slowly drifts away from UTC. While GPSBabel contains a built-in table of these offsets, this option allows you to override it if the table is out of date or if you are working with very old data.
+</para>
+<para>
+  If this option is not specified, or is set to 0, GPSBabel will use its internal "best guess" based on the timestamp of the data. You should only need to use this option if you are an expert user dealing with time-sensitive data and know the precise offset for the date your data was recorded.
+</para>
+<example xml:id="gps_utc_offset_example">
+  <title>Specify a GPS-UTC offset of 18 seconds</title>
+  <para>
+    <userinput>gpsbabel -i skytraq-bin,gps-utc-offset=18 -f my_track.bin -o gpx -F track.gpx</userinput>
+  </para>
+</example>
