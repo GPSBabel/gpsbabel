@@ -33,8 +33,6 @@
 
 class Kalman : public Filter {
  public:
-  Kalman();
-
   enum class PreFilterState { NORMAL, RECOVERY, FIRST_GOOD_SEEN_IN_RECOVERY };
 
   void process() override;
@@ -72,6 +70,7 @@ class Kalman : public Filter {
 
   void kalman_point_cb(Waypoint* wpt);
   bool is_using_default_value(const Option& opt, const char* opt_name) const;
+  static double median(std::vector<double>& samples);
 
   bool is_initialized_{false};
   bool initial_velocity_estimated_{false};

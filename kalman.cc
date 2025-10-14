@@ -18,7 +18,7 @@
 
 #include "kalman.h"
 
-#include <algorithm>   // for max, sort
+#include <algorithm>   // for max, nth_element
 #include <cstdlib>     // for abs
 #include <cstddef>     // for size_t
 #include <cmath>       // for round, floor
@@ -42,12 +42,6 @@
 extern RouteList* global_track_list;
 
 #if FILTERS_ENABLED
-
-Kalman::Kalman()
-{
-//	global_opts.debug_level = debugLevelInfo; // TODO: get from options
-//    global_opts.debug_level = std::max(global_opts.debug_level, debugLevelInfo); // TODO: get from options
-}
 
 QVector<arglist_t>* Kalman::get_args() {
     return &args;
@@ -97,9 +91,7 @@ void Kalman::process() {
 
 
         // Calculate track statistics for auto-profile inference
-        double total_speed = 0.0;
-        double max_speed_observed = 0.0;
-        std::vector<double> dt_samples_for_stats;
+        std::vector<double> speed_samples_for_stats;
         QDateTime prev_time_for_stats;
         gpsbabel::NVector prev_nvector_for_stats;
         bool first_point_for_stats = true;
@@ -109,15 +101,11 @@ void Kalman::process() {
             const gpsbabel::NVector cur_nvector_for_stats(wpt_stats->latitude, wpt_stats->longitude);
 
             if (!first_point_for_stats) {
-                const double dt_stats = prev_time_for_stats.msecsTo(cur_time_for_stats) / 1000.0;
-                if (dt_stats > 0) {
-                    const double dist_stats = gpsbabel::NVector::euclideanDistance(prev_nvector_for_stats, cur_nvector_for_stats);
-                    const double speed_stats = dist_stats / dt_stats;
-                    total_speed += speed_stats;
-                    if (speed_stats > max_speed_observed) {
-                        max_speed_observed = speed_stats;
-                    }
-                    dt_samples_for_stats.push_back(dt_stats);
+                const double dt = prev_time_for_stats.msecsTo(cur_time_for_stats) / 1000.0;
+                if (dt > 0.0) {
+                    const double dist = gpsbabel::NVector::euclideanDistance(prev_nvector_for_stats, cur_nvector_for_stats);
+                    const double speed = dist / dt;
+                    speed_samples_for_stats.push_back(speed);
                 }
             } else {
                 first_point_for_stats = false;
@@ -125,27 +113,18 @@ void Kalman::process() {
             prev_time_for_stats = cur_time_for_stats;
             prev_nvector_for_stats = cur_nvector_for_stats;
         }
-
-        const double average_speed = dt_samples_for_stats.empty() ? 0.0 : total_speed / dt_samples_for_stats.size();
-        double median_dt_for_stats = 1.0;
-        if (!dt_samples_for_stats.empty()) {
-            std::sort(dt_samples_for_stats.begin(), dt_samples_for_stats.end());
-            size_t mid = dt_samples_for_stats.size() / 2;
-            median_dt_for_stats = (dt_samples_for_stats.size() % 2 == 0) ?
-                                  (dt_samples_for_stats[mid-1] + dt_samples_for_stats[mid])/2.0 : dt_samples_for_stats[mid];
-            if (median_dt_for_stats < 1e-6) median_dt_for_stats = 1.0;
-        }
+        double median_speed = speed_samples_for_stats.empty()? 0.0 : median(speed_samples_for_stats);
 
         // Auto-profile inference logic (moved here)
         QString current_profile = profile_option_.get(); // Use a new variable to avoid confusion
         if (current_profile == "auto") {
-            if (average_speed <= 2.0) { // Walking speed
+            if (median_speed <= 2.0) { // Walking speed
                 current_profile = "walking";
-            } else if (average_speed <= 5.0) { // Running speed
+            } else if (median_speed <= 5.0) { // Running speed
                 current_profile = "running";
-            } else if (average_speed <= 20.0) { // Cycling speed
+            } else if (median_speed <= 20.0) { // Cycling speed
                 current_profile = "cycling";
-            } else if (average_speed <= 50.0) { // Driving speed
+            } else if (median_speed <= 50.0) { // Driving speed
                 current_profile = "driving";
             } else { // Flying speed
                 current_profile = "flying";
@@ -354,14 +333,7 @@ void Kalman::process() {
             }
         }
 
-        double median_dt = 1000.0;
-        if (!dt_samples.empty()) {
-            std::sort(dt_samples.begin(), dt_samples.end());
-            size_t mid = dt_samples.size() / 2;
-            median_dt = (dt_samples.size() % 2 == 0) ?
-                        (dt_samples[mid-1] + dt_samples[mid])/2.0 : dt_samples[mid];
-            if (median_dt < 1.0) median_dt = 1000.0;
-        }
+        double median_dt = dt_samples.empty()? 1000.0 : median(dt_samples);
 
         // Interpolate moderate gaps and build new route
         route_head* new_route_head = new route_head(); // Temporary route to build the new sequence
@@ -596,4 +568,25 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     last_nvector_ = current_nvector;
 }
 
+double Kalman::median(std::vector<double>& samples)
+{
+    /* Note nth_element modifies the samples vector! */
+    if (!samples.empty()) {
+        auto n = samples.size();
+        if (n % 2 == 0) {
+            // Even number of samples, average middle two elements.
+            std::nth_element(samples.begin(), samples.begin() + n / 2, samples.end());
+            auto last = samples[n / 2];
+            std::nth_element(samples.begin(), samples.begin() + n / 2 - 1, samples.end());
+            auto first = samples[n / 2 - 1];
+            return (first + last) / 2.0;
+
+        } else {
+            // Odd number of samples, return middle element.
+            std::nth_element(samples.begin(), samples.begin() + n / 2, samples.end());
+            return samples[n / 2];
+        }
+    }
+    gbFatal("Attempt to compute median without any samples.");
+}
 #endif // FILTERS_ENABLED
