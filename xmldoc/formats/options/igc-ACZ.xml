@@ -1,0 +1,15 @@
+<para>
+  This option controls whether to include the vertical acceleration data, recorded as the "ACZ" extension, from the IGC file. This data represents the G-force experienced along the Z-axis (vertical).
+</para>
+<para>
+  This is a boolean option that is enabled by default. Including this data can be useful for post-flight analysis of turbulence, aerobatic maneuvers, or hard landings. However, if you are only interested in the basic track and position data, you can disable this option to reduce the amount of data processed.
+</para>
+<para>
+  To exclude this data, use <userinput>ACZ=0</userinput>.
+</para>
+<example xml:id="igc_acz_example">
+  <title>Convert an IGC file while excluding the Z-axis acceleration data</title>
+  <para>
+    <userinput>gpsbabel -i igc,ACZ=0 -f my_flight.igc -o gpx -F my_flight.gpx</userinput>
+  </para>
+</example>

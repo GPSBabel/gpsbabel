@@ -1,0 +1,15 @@
+<para>
+  This option controls whether to include the Outside Air Temperature (OAT) data from the IGC file.
+</para>
+<para>
+  This is a boolean option that is enabled by default. The temperature data is useful for flight analysis, particularly for calculating true airspeed and analyzing atmospheric conditions. GPSBabel will also populate the standard temperature field for the waypoint if this data is included.
+</para>
+<para>
+  To exclude this data, use <userinput>OAT=0</userinput>.
+</para>
+<example xml:id="igc_oat_example">
+  <title>Convert an IGC file while excluding the Outside Air Temperature data</title>
+  <para>
+    <userinput>gpsbabel -i igc,OAT=0 -f my_flight.igc -o gpx -F my_flight.gpx</userinput>
+  </para>
+</example>
