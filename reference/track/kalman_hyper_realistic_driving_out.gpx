@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata>
+    <name>Hyper-Realistic Kalman Filter Test Data</name>
+    <desc>A test file with highly distinct tracks for different activity profiles.</desc>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="40.300000000" minlon="-122.300000000" maxlat="40.300000000" maxlon="-122.300000000"/>
+  </metadata>
+  <trk>
+    <name>Driving Track</name>
+    <type>driving</type>
+    <trkseg>
+      <trkpt lat="40.300000000" lon="-122.300000000"/>
+    </trkseg>
+  </trk>
+</gpx>

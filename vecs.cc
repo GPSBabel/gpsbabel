@@ -570,7 +570,7 @@ void Vecs::exit_vecs()
   style_list.squeeze();
 }
 
-void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& val)
+void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& val, bool isDefault)
 {
   QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
 
@@ -579,6 +579,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   }
 
   arg.argval->reset();
+  arg.argval->setDefaulted(isDefault);
 
   if (val.isNull()) {
     return;
@@ -668,7 +669,7 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
       if (!fmtdata.options.isEmpty()) {
         const QString opt = get_option(fmtdata.options, arg.argstring);
         if (!opt.isNull()) {
-          assign_option(fmtdata.fmtname, arg, opt);
+          assign_option(fmtdata.fmtname, arg, opt, false);
           continue;
         }
       }
@@ -677,9 +678,9 @@ void Vecs::prepare_format(const fmtinfo_t& fmtdata)
         qopt = inifile_readstr(global_opts.inifile, "Common format settings", arg.argstring);
       }
       if (qopt.isNull()) {
-        assign_option(fmtdata.fmtname, arg, arg.defaultvalue);
+        assign_option(fmtdata.fmtname, arg, arg.defaultvalue, true);
       } else {
-        assign_option(fmtdata.fmtname, arg, qopt);
+        assign_option(fmtdata.fmtname, arg, qopt, true);
       }
     }
   }
