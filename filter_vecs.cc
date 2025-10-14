@@ -43,6 +43,7 @@
 #include "height.h"         // for HeightFilter
 #include "inifile.h"        // for inifile_readstr
 #include "interpolate.h"    // for InterpolateFilter
+#include "kalman.h"         // for KalmanFilter
 #include "nukedata.h"       // for NukeDataFilter
 #include "polygon.h"        // for PolygonFilter
 #include "position.h"       // for PositionFilter
@@ -99,6 +100,12 @@ struct FilterVecs::Impl {
       "interpolate",
       "Interpolate between trackpoints",
       &fltfactory<InterpolateFilter>
+    },
+    {
+      nullptr,
+      "kalman",
+      "Kalman track filter",
+      &fltfactory<Kalman>
     },
     {
       nullptr,
@@ -217,9 +224,9 @@ void FilterVecs::prepare_filter(const fltinfo_t& fltdata)
         qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", arg.argstring);
       }
       if (qtemp.isNull()) {
-        Vecs::assign_option(fltdata.fltname, arg, arg.defaultvalue);
+        Vecs::assign_option(fltdata.fltname, arg, arg.defaultvalue, true);
       } else {
-        Vecs::assign_option(fltdata.fltname, arg, qtemp);
+        Vecs::assign_option(fltdata.fltname, arg, qtemp, true);
       }
     }
   }
@@ -231,7 +238,7 @@ void FilterVecs::prepare_filter(const fltinfo_t& fltdata)
       for (auto& arg : *args) {
         const QString opt = Vecs::get_option(fltdata.options, arg.argstring);
         if (!opt.isNull()) {
-          Vecs::assign_option(fltdata.fltname, arg, opt);
+          Vecs::assign_option(fltdata.fltname, arg, opt, false);
         }
       }
     }
