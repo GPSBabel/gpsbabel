@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="GPSBabel - http://www.gpsbabel.org" version="1.0">
+  <trk>
+    <name>Prefilter Edge Test Track</name>
+    <trkseg>
+      <trkpt lat="34.0522" lon="-118.2437">
+        <time>2025-09-29T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="34.0523" lon="-118.2438">
+        <time>2025-09-29T10:00:01Z</time>
+      </trkpt>
+      <!-- Spike: sudden, unrealistic movement -->
+      <trkpt lat="34.1000" lon="-118.3000">
+        <time>2025-09-29T10:00:02Z</time>
+      </trkpt>
+      <trkpt lat="34.0524" lon="-118.2439">
+        <time>2025-09-29T10:00:03Z</time>
+      </trkpt>
+      <trkpt lat="34.0525" lon="-118.2440">
+        <time>2025-09-29T10:00:04Z</time>
+      </trkpt>
+      <!-- Gap: large time difference -->
+      <trkpt lat="34.0526" lon="-118.2441">
+        <time>2025-09-29T10:01:00Z</time>
+      </trkpt>
+      <trkpt lat="34.0527" lon="-118.2442">
+        <time>2025-09-29T10:01:01Z</time>
+      </trkpt>
+      <!-- Zinger: another spike -->
+      <trkpt lat="34.0528" lon="-118.2443">
+        <time>2025-09-29T10:01:02Z</time>
+      </trkpt>
+      <trkpt lat="34.0529" lon="-118.2444">
+        <time>2025-09-29T10:01:03Z</time>
+      </trkpt>
+      <trkpt lat="34.0530" lon="-118.2445">
+        <time>2025-09-29T10:01:04Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
