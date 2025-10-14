@@ -98,3 +98,18 @@ cat ${TMPDIR}/kalman_r_scale_low.log
 gpsbabel -i gpx -f ${REFERENCE}/track/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,r_scale=10.0 -o gpx -F ${TMPDIR}/kalman_r_scale_high_filtered.gpx > ${TMPDIR}/kalman_r_scale_high.log 2>&1
 compare ${REFERENCE}/track/kalman_r_scale_high_out.gpx ${TMPDIR}/kalman_r_scale_high_filtered.gpx
 cat ${TMPDIR}/kalman_r_scale_high.log
+
+# Low q_scale_vel (more velocity smoothing)
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_vel=0.01 -o gpx -F ${TMPDIR}/kalman_q_scale_vel_low_filtered.gpx > ${TMPDIR}/kalman_q_scale_vel_low.log 2>&1
+compare ${REFERENCE}/track/kalman_q_scale_vel_low_out.gpx ${TMPDIR}/kalman_q_scale_vel_low_filtered.gpx
+cat ${TMPDIR}/kalman_q_scale_vel_low.log
+
+# High q_scale_vel (less velocity smoothing)
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_vel=1.0 -o gpx -F ${TMPDIR}/kalman_q_scale_vel_high_filtered.gpx > ${TMPDIR}/kalman_q_scale_vel_high.log 2>&1
+compare ${REFERENCE}/track/kalman_q_scale_vel_high_out.gpx ${TMPDIR}/kalman_q_scale_vel_high_filtered.gpx
+cat ${TMPDIR}/kalman_q_scale_vel_high.log
+
+# Test for interp_max_dt override
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_max_dt=10 -o gpx -F ${TMPDIR}/kalman_interp_max_dt_override_filtered.gpx > ${TMPDIR}/kalman_interp_max_dt_override.log 2>&1
+compare ${REFERENCE}/track/kalman_interp_max_dt_override_out.gpx ${TMPDIR}/kalman_interp_max_dt_override_filtered.gpx
+cat ${TMPDIR}/kalman_interp_max_dt_override.log
