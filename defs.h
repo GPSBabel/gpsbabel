@@ -1032,8 +1032,6 @@ int xstrtoi(const char* str, char** str_end, int base);
 /*
  *  From parse.c
  */
-int parse_integer(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr, int base = 10);
-double parse_double(const QString& str, const QString& id, bool* ok = nullptr, QString* end = nullptr);
 int parse_coordinates(const char* str, int datum, grid_type grid,
                       double* latitude, double* longitude);
 int parse_coordinates(const QString& str, int datum, grid_type grid,
