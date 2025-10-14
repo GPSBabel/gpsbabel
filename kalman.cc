@@ -64,7 +64,7 @@ void Kalman::process() {
     interp_max_dt_ = interp_max_dt_option_.get_result();
     interp_min_multiplier_ = interp_min_multiplier_option_.get_result();
 
-    for (const auto& route_it : *global_track_list) {
+    for (const auto& route_it : std::as_const(*global_track_list)) {
 
         // Per-track state initialization
         is_initialized_ = false;
@@ -96,7 +96,7 @@ void Kalman::process() {
         gpsbabel::NVector prev_nvector_for_stats;
         bool first_point_for_stats = true;
 
-        for (const auto& wpt_stats : *wpt_list) {
+        for (const auto& wpt_stats : std::as_const(*wpt_list)) {
             const QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
             const gpsbabel::NVector cur_nvector_for_stats(wpt_stats->latitude, wpt_stats->longitude);
 
@@ -323,7 +323,7 @@ void Kalman::process() {
         // Collect dt samples from non-deleted points for median_dt calculation
         std::vector<double> dt_samples;
         Waypoint* last_valid_for_dt = nullptr;
-        for (const auto& current_wpt : *wpt_list) {
+        for (const auto& current_wpt : std::as_const(*wpt_list)) {
             if (!current_wpt->wpt_flags.marked_for_deletion) {
                 if (last_valid_for_dt) {
                     double dt = last_valid_for_dt->GetCreationTime().msecsTo(current_wpt->GetCreationTime());
@@ -340,7 +340,7 @@ void Kalman::process() {
         Waypoint* last_kept_for_interp = nullptr;
 
         // Handle the first non-deleted point
-        for (const auto& current_original_wpt : *wpt_list) {
+        for (const auto& current_original_wpt : std::as_const(*wpt_list)) {
             if (!current_original_wpt->wpt_flags.marked_for_deletion) {
                 track_add_wpt(new_route_head, current_original_wpt);
                 last_kept_for_interp = current_original_wpt;
@@ -356,7 +356,7 @@ void Kalman::process() {
 
         int i = -1;
         // Iterate through the rest of the original wpt_list
-        for (const auto& current_original_wpt : *wpt_list) {
+        for (const auto& current_original_wpt : std::as_const(*wpt_list)) {
             i++;
 
             if (current_original_wpt == last_kept_for_interp) {
@@ -447,12 +447,12 @@ void Kalman::process() {
         delete new_route_head; // Clean up temporary route_head object
 
         // Now apply Kalman filter to the cleaned and interpolated data
-        for (const auto& wpt_it : *wpt_list) {
+        for (const auto& wpt_it : std::as_const(*wpt_list)) {
             kalman_point_cb(wpt_it);
         }
 
         // Clean up the extra_data that we allocated.
-        for (const auto& wpt_it : *wpt_list) {
+        for (const auto& wpt_it : std::as_const(*wpt_list)) {
             if (wpt_it->extra_data) {
                 delete static_cast<KalmanExtraData*>(wpt_it->extra_data);
                 wpt_it->extra_data = nullptr;
