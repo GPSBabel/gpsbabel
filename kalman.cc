@@ -65,7 +65,6 @@ void Kalman::process() {
     interp_min_multiplier_ = interp_min_multiplier_option_.get_result();
 
     for (const auto& route_it : std::as_const(*global_track_list)) {
-
         // Per-track state initialization
         is_initialized_ = false;
         initial_velocity_estimated_ = false;
@@ -88,7 +87,6 @@ void Kalman::process() {
         // Q_(5, 5) = 1e-1 * q_scale_vel;
 
         WaypointList* wpt_list = &(route_it->waypoint_list);
-
 
         // Calculate track statistics for auto-profile inference
         std::vector<double> speed_samples_for_stats;
