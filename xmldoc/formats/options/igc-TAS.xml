@@ -1,0 +1,15 @@
+<para>
+  This option controls whether to include the True Airspeed (TAS) data from the IGC file.
+</para>
+<para>
+  This is a boolean option that is enabled by default. True airspeed is the speed of the aircraft relative to the airmass in which it is flying. It is a critical piece of data for flight analysis and performance calculations. While the IGC specification suggests the units should be defined in the file, this is rarely done; GPSBabel assumes the value is in kilometers per hour (km/h).
+</para>
+<para>
+  To exclude this data, use <userinput>TAS=0</userinput>.
+</para>
+<example xml:id="igc_tas_example">
+  <title>Convert an IGC file while excluding the True Airspeed data</title>
+  <para>
+    <userinput>gpsbabel -i igc,TAS=0 -f my_flight.igc -o gpx -F my_flight.gpx</userinput>
+  </para>
+</example>
