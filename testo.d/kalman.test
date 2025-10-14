@@ -105,7 +105,7 @@ compare ${REFERENCE}/track/kalman_q_scale_vel_low_out.gpx ${TMPDIR}/kalman_q_sca
 cat ${TMPDIR}/kalman_q_scale_vel_low.log
 
 # High q_scale_vel (less velocity smoothing)
-gpsbabel -i gpx -f ${REFERENCE}/track/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_vel=1.0 -o gpx -F ${TMPDIR}/kalman_q_scale_vel_high_filtered.gpx > ${TMPDIR}/kalman_q_scale_vel_high.log 2>&1
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_vel=0.1 -o gpx -F ${TMPDIR}/kalman_q_scale_vel_high_filtered.gpx > ${TMPDIR}/kalman_q_scale_vel_high.log 2>&1
 compare ${REFERENCE}/track/kalman_q_scale_vel_high_out.gpx ${TMPDIR}/kalman_q_scale_vel_high_filtered.gpx
 cat ${TMPDIR}/kalman_q_scale_vel_high.log
 

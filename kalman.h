@@ -69,7 +69,6 @@ class Kalman : public Filter {
   };
 
   void kalman_point_cb(Waypoint* wpt);
-  bool is_using_default_value(const Option& opt, const char* opt_name) const;
   static double median(std::vector<double>& samples);
 
   bool is_initialized_{false};
