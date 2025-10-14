@@ -22,14 +22,16 @@
 #ifndef SUBRIP_H_INCLUDED_
 #define SUBRIP_H_INCLUDED_
 
-#include <QDateTime>         // for QDateTime, operator<<
-#include <QString>           // for QString
-#include <QTime>             // for QTime
-#include <QVector>           // for QVector
+#include <QList>      // for QList
+#include <QDateTime>  // for QDateTime, operator<<
+#include <QString>    // for QString
+#include <QTime>      // for QTime
+#include <QVector>    // for QVector
 
 #include "defs.h"
-#include "format.h"          // for Format
-#include "gbfile.h"          // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
+#include "format.h"   // for Format
+#include "gbfile.h"   // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
+#include "option.h"   // for OptionString
 
 
 class SubripFormat : public Format
@@ -50,16 +52,6 @@ public:
     return { ff_cap_none, ff_cap_write, ff_cap_none }; // waypoints, track, route; for now, we just do tracks
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void wr_init(const QString& fname) override;
   void write() override;
   void wr_deinit() override;
@@ -73,10 +65,10 @@ private:
 
   /* Data Members */
 
-  char* opt_videotime{nullptr};
-  char* opt_gpstime{nullptr};
-  char* opt_gpsdate{nullptr};
-  char* opt_format{nullptr};
+  OptionString opt_videotime;
+  OptionString opt_gpstime;
+  OptionString opt_gpsdate;
+  OptionString opt_format;
   QDateTime gps_datetime;    // Date time corresponding to video video_offset_ms
   QDateTime video_datetime;  // Date time corresponding to video time 00:00:00,000.
   int video_offset_ms{0};

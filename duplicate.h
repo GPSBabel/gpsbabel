@@ -1,7 +1,7 @@
 /*
     exact duplicate point filter utility.
 
-    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,10 +22,13 @@
 #ifndef DUPLICATE_H_INCLUDED_
 #define DUPLICATE_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
 #include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, Waypoint (ptr only)
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool
 
 #if FILTERS_ENABLED
 
@@ -36,13 +39,14 @@ public:
   {
     return &args;
   }
+  void init() override;
   void process() override;
 
 private:
-  char* snopt = nullptr;
-  char* lcopt = nullptr;
-  char* purge_duplicates = nullptr;
-  char* correct_coords = nullptr;
+  OptionBool snopt;
+  OptionBool lcopt;
+  OptionBool purge_duplicates;
+  OptionBool correct_coords;
 
   QVector<arglist_t> args = {
     {
@@ -62,23 +66,6 @@ private:
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
   };
-
-  struct btree_node {
-    btree_node* left;
-    btree_node* right;
-    unsigned long data;
-    Waypoint* wpt;
-  };
-
-  static btree_node* addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode);
-  void free_tree(btree_node* tree);
-
-  struct wpt_ptr {
-    Waypoint* wpt;
-    int index;
-  };
-
-  static int compare(const void* a, const void* b);
 
 };
 #endif

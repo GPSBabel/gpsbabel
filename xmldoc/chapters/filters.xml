@@ -1,4 +1,4 @@
-   <chapter id="Data_Filters">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Data_Filters">
       <title>Data Filters</title>
       <para> GPSBabel supports data filtering.  Data filters are
       invoked from the command line via the '-x' option.  It should be
@@ -16,7 +16,7 @@
       <para> Beware that most filters only apply to a certain kind of
       data. This is usually indicated below by referring to points,
       tracks or routes in the first sentence which describes each
-      filter or in the table at <ulink url="https://www.gpsbabel.org/capabilities.html">gpsbabel.org</ulink>
+      filter or in the table at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.gpsbabel.org/capabilities.html">gpsbabel.org</link>
       .
 </para>
      &filters;

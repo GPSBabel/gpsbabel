@@ -40,8 +40,7 @@ public:
 
 private:
   int prev_new_trkseg{};
-  QVector<arglist_t> args = {
-  };
+  QVector<arglist_t> args;
 
   void reverse_route_wpt(const Waypoint* waypointp);
   void reverse_route_head(const route_head* rte);

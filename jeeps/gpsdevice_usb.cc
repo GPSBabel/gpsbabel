@@ -1,7 +1,7 @@
 /*
     USB operations.
 
-    Copyright (C) 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2006 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,17 +32,17 @@ static bool success_stub()
   return true;
 }
 
-static int32 gdu_on(const char* port, gpsdevh** fd)
+static int32_t gdu_on(const char* port, gpsdevh** fd)
 {
   return gusb_init(port, fd);
 }
 
-static int32 gdu_off(gpsdevh* dh)
+static int32_t gdu_off(gpsdevh* dh)
 {
   return gusb_close(dh);
 }
 
-static int32  gdu_read(gpsdevh* fd, GPS_PPacket* packet)
+static int32_t gdu_read(gpsdevh* fd, GPS_Packet* packet)
 {
   /* Default is to eat bulk request packets. */
   return GPS_Packet_Read_usb(fd, packet, 1);

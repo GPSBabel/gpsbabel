@@ -21,7 +21,7 @@
 //
 //------------------------------------------------------------------------
 #include "latlng.h"
-#include <cmath>
+#include <cmath>  // for cos, sin, asin, sqrt
 
 
 // copied from the web somewhere.

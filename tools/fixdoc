@@ -12,9 +12,10 @@ DIR=$1
 TITLE=$2
 
 SED="sed"
-# MacOS using Homebrew
-[ -f /usr/local/bin/gsed ] && SED=/usr/local/bin/gsed
-[ -f /opt/local/bin/gsed ] && SED=/opt/local/bin/gsed
+# macOS using Homebrew may be /usr/local (macOS intel) or /opt/homebrew (apple silicion) ... 
+if command -v gsed >/dev/null 2>&1; then
+  SED=$(command -v gsed)
+fi
 
 [ ! -d "$DIR/tpl" ] && mkdir -p "$DIR/tpl"
 

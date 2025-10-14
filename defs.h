@@ -19,49 +19,42 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <algorithm>              // for sort, stable_sort
-#include <cmath>                  // for M_PI
-#include <cstdarg>                // for va_list
-#include <cstddef>                // for NULL, nullptr_t, size_t
-#include <cstdint>                // for int32_t, uint32_t
-#include <cstdio>                 // for NULL, fprintf, FILE, stdout
-#include <ctime>                  // for time_t
-#include <optional>               // for optional
-#include <utility>                // for move
+#include <cmath>                     // for nan
+#include <cstddef>                   // for NULL, nullptr_t, size_t
+#include <cstdint>                   // for int32_t, uint32_t
+#include <cstdio>                    // for NULL, fprintf, FILE, stdout
+#include <ctime>                     // for time_t
+#include <numbers>                   // for inv_pi, pi
+#include <optional>                  // for optional
+#include <utility>                   // for move
 
-#if HAVE_LIBZ
-#include <zlib.h>                 // doesn't really belong here, but is missing elsewhere.
-#elif !ZLIB_INHIBITED
-#include "zlib.h"                 // doesn't really belong here, but is missing elsewhere.
+#include <QByteArray>                // for QByteArray
+#include <QDate>                     // for QDate
+#include <QTime>                     // for QTime
+#include <QDateTime>                 // for QDateTime
+#include <QDebug>                    // for QDebug
+#include <QList>                     // for QList, QList<>::const_iterator, QList<>::const_reverse_iterator, QList<>::count, QList<>::reverse_iterator
+#include <QString>                   // for QString
+#include <QStringView>               // for QStringView
+#include <QTextCodec>                // for QTextCodec
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+#include <QTimeZone>                 // for QTimeZone
 #endif
+#include <Qt>                        // for CaseInsensitive
+#include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
-#include <QDebug>                 // for QDebug
-#include <QList>                  // for QList, QList<>::const_reverse_iterator, QList<>::reverse_iterator
-#include <QScopedPointer>         // for QScopedPointer
-#include <QString>                // for QString
-#include <QTextCodec>             // for QTextCodec
-#include <QVector>                // for QVector
-#include <Qt>                     // for CaseInsensitive
-#include <QtGlobal>               // for foreach
-
-#include "formspec.h"             // for FormatSpecificData
-#include "inifile.h"              // for inifile_t
-#include "gbfile.h"               // doesn't really belong here, but is missing elsewhere.
-#include "session.h"              // for session_t
-#include "src/core/datetime.h"    // for DateTime
+#include "geocache.h"                // for Geocache
+#include "formspec.h"                // for FormatSpecificData
+#include "inifile.h"                 // for inifile_t
+#include "option.h"
+#include "session.h"                 // for session_t
+#include "src/core/datetime.h"       // for DateTime
 
 
+#define gbLogCStr(qstr) qUtf8Printable(qstr)
 #define CSTR(qstr) ((qstr).toUtf8().constData())
 #define CSTRc(qstr) ((qstr).toLatin1().constData())
-#define STRFROMUNICODE(qstr) (global_opts.codec->fromUnicode(qstr).constData())
-#define STRTOUNICODE(cstr) (global_opts.codec->toUnicode(cstr))
 
-/*
- * Amazingly, this constant is not specified in the standard...
- */
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
 
 /*
  * The constants marked "exact in decimal notation" may be more accurately
@@ -121,26 +114,16 @@ constexpr double MPH_TO_MPS(double a) { return a * kMPSPerMPH;}
 /* knots(nautical miles/hour) to meters/second */
 constexpr double KNOTS_TO_MPS(double a)  {return a * kMPSPerKnot;}
 
-#define MILLI_TO_MICRO(t) ((t) * 1000)  /* Milliseconds to Microseconds */
-#define MICRO_TO_MILLI(t) ((t) / 1000)  /* Microseconds to Milliseconds*/
-#define CENTI_TO_MICRO(t) ((t) * 10000) /* Centiseconds to Microseconds */
-#define MICRO_TO_CENTI(t) ((t) / 10000) /* Centiseconds to Microseconds */
+/* Degrees to radians */
+constexpr double kDegreesPerRadian = 180.0 * std::numbers::inv_pi;
+constexpr double DEG(double x) { return x * kDegreesPerRadian; }
 
-/* Pathname separator character */
-#if __WIN32__
-#  define GB_PATHSEP '\\'
-#else
-#  define GB_PATHSEP '/'
-#endif
+/* Radians to degrees */
+constexpr double kRadiansPerDegree = 1.0 / kDegreesPerRadian;
+constexpr double RAD(double x) { return x * kRadiansPerDegree; }
 
-/*
- *  Toss in some GNU C-specific voodoo for checking.
- */
-#if __GNUC__
-#  define PRINTFLIKE(x,y) __attribute__ ((__format__ (__printf__, (x), (y))))
-#else
-#  define PRINTFLIKE(x,y)
-#endif
+constexpr int kDatumOSGB36 = 86; // GPS_Lookup_Datum_Index("OSGB36")
+constexpr int kDatumWGS84 = 118; // GPS_Lookup_Datum_Index("WGS 84")
 
 
 /*
@@ -176,20 +159,18 @@ enum gpsdata_type {
 #define	doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
 
 struct global_options {
-  int synthesize_shortnames;
   int debug_level;
   gpsdata_type objective;
   unsigned int	masked_objective;
   int verbose_status;	/* set by GUI wrappers for status */
-  int smart_icons;
-  int smart_names;
   inifile_t* inifile;
-  QTextCodec* codec;
+  bool synthesize_shortnames;
+  bool smart_icons;
+  bool smart_names;
 };
 
 extern global_options global_opts;
 extern const char gpsbabel_version[];
-extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 
 enum fix_type {
@@ -199,93 +180,6 @@ enum fix_type {
   fix_3d,
   fix_dgps,
   fix_pps
-};
-
-enum status_type {
-  status_unknown=0,
-  status_true,
-  status_false
-};
-
-/*
- * Extended data if waypoint happens to represent a geocache.  This is
- * totally voluntary data...
- */
-
-enum geocache_type {
-  gt_unknown = 0,
-  gt_traditional,
-  gt_multi,
-  gt_virtual,
-  gt_letterbox,
-  gt_event,
-  gt_surprise,
-  gt_webcam,
-  gt_earth,
-  gt_locationless,
-  gt_benchmark, /* Extension to Groundspeak for GSAK */
-  gt_cito,
-  gt_ape,
-  gt_mega,
-  gt_wherigo
-};
-
-enum geocache_container {
-  gc_unknown = 0,
-  gc_micro,
-  gc_other,
-  gc_regular,
-  gc_large,
-  gc_virtual,
-  gc_small
-};
-
-class utf_string
-{
-public:
-  utf_string() = default;
-  utf_string(bool html, QString str) :
-    is_html{html},
-    utfstring{std::move(str)}
-  {}
-  bool is_html{false};
-  QString utfstring;
-};
-
-class geocache_data
-{
-public:
-  geocache_data() :
-    id(0),
-    type(gt_unknown),
-    container(gc_unknown),
-    diff(0),
-    terr(0),
-    is_archived(status_unknown),
-    is_available(status_unknown),
-    is_memberonly(status_unknown),
-    has_customcoords(status_unknown),
-    placer_id(0),
-    favorite_points(0)
-  {}
-  long long id; /* The decimal cache number */
-  geocache_type type:5;
-  geocache_container container:4;
-  unsigned int diff:6; /* (multiplied by ten internally) */
-  unsigned int terr:6; /* (likewise) */
-  status_type is_archived:2;
-  status_type is_available:2;
-  status_type is_memberonly:2;
-  status_type has_customcoords:2;
-  gpsbabel::DateTime exported;
-  gpsbabel::DateTime last_found;
-  QString placer; /* Placer name */
-  int placer_id; /* Placer id */
-  QString hint; /* all these UTF8, XML entities removed, May be not HTML. */
-  utf_string desc_short;
-  utf_string desc_long;
-  int favorite_points;
-  QString personal_note;
 };
 
 class gb_color
@@ -306,7 +200,7 @@ public:
   UrlLink(QString url) :
     url_(std::move(url))
   { }
-  UrlLink(const char* url) :
+  explicit UrlLink(const char* url) :
     url_(url)
   { }
   UrlLink(QString url, QString url_link_text) :
@@ -348,55 +242,11 @@ public:
 class wp_flags
 {
 public:
-  wp_flags() :
-    shortname_is_synthetic(0),
-    fmt_use(0),
-    temperature(0),
-    proximity(0),
-    course(0),
-    speed(0),
-    geoidheight(0),
-    depth(0),
-    is_split(0),
-    new_trkseg(0) {}
-  unsigned int shortname_is_synthetic:1;
-  unsigned int fmt_use:2;			/* lightweight "extra data" */
-  /* "flagged fields" */
-  unsigned int temperature:1;		/* temperature field is set */
-  unsigned int proximity:1;		/* proximity field is set */
-  unsigned int course:1;			/* course field is set */
-  unsigned int speed:1;			/* speed field is set */
-  unsigned int geoidheight:1;	/* geoidheight field is set */
-  unsigned int depth:1;			/* depth field is set */
-  /* !ToDo!
-  unsigned int altitude:1;		/+ altitude field is set +/
-  ... and others
-  */
-  unsigned int is_split:1;		/* the waypoint represents a split */
-  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
-
-};
-
-// These are dicey as they're collected on read. Subsequent filters may change
-// things, though it's unlikely to matter in practical terms.  Don't use these
-// if a false positive would be deleterious.
-#
-class global_trait
-{
-public:
-  global_trait() :
-    trait_geocaches(0),
-    trait_heartrate(0),
-    trait_cadence(0),
-    trait_power(0),
-    trait_depth(0),
-    trait_temperature(0) {}
-  unsigned int trait_geocaches:1;
-  unsigned int trait_heartrate:1;
-  unsigned int trait_cadence:1;
-  unsigned int trait_power:1;
-  unsigned int trait_depth:1;
-  unsigned int trait_temperature:1;
+  unsigned int shortname_is_synthetic:1{0};
+  unsigned int fmt_use:2{0};                /* lightweight "extra data" */
+  unsigned int is_split:1{0};               /* the waypoint represents a split */
+  unsigned int new_trkseg:1{0};             /* True if first in new trkseg. */
+  unsigned int marked_for_deletion:1{0};    /* True if schedulded for deletion. */
 };
 
 /*
@@ -411,10 +261,34 @@ struct bounds {
   double min_alt;	/* -unknown_alt => invalid */
 };
 
-#define WAYPT_SET(wpt,member,val) do { (wpt)->member = (val); wpt->wpt_flags.member = 1; } while (0)
-#define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
-#define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
-#define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
+struct PositionRad; // forward declare
+struct PositionDeg
+{
+  PositionDeg() = default;
+  explicit(false) inline PositionDeg(const PositionRad& posr); /* converting ctor */
+  PositionDeg(double latd, double lond) : latD(latd), lonD(lond) {}
+
+  double latD{std::nan("")};
+  double lonD{std::nan("")};
+};
+
+struct PositionRad
+{
+  PositionRad() = default;
+  explicit(false) inline PositionRad(const PositionDeg& posd); /* converting ctor */
+  PositionRad(double latr, double lonr) : latR(latr), lonR(lonr) {}
+
+  double latR{std::nan("")};
+  double lonR{std::nan("")};
+};
+
+inline PositionDeg::PositionDeg(const PositionRad& posr) :
+  latD(posr.latR * kDegreesPerRadian),
+  lonD(posr.lonR * kDegreesPerRadian) {}
+
+inline PositionRad::PositionRad(const PositionDeg& posd) :
+  latR(posd.latD * kRadiansPerDegree),
+  lonR(posd.lonD * kRadiansPerDegree) {}
 
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
@@ -425,13 +299,29 @@ struct bounds {
 class Waypoint
 {
 private:
-  static geocache_data empty_gc_data;
 
-public:
+  /* Types */
 
-  double latitude;		/* Degrees */
-  double longitude; 		/* Degrees */
-  double altitude; 		/* Meters. */
+  class op_flags
+  {
+  public:
+    bool temperature:1{false}; /* temperature field is set */
+    bool proximity:1{false};   /* proximity field is set */
+    bool course:1{false};      /* course field is set */
+    bool speed:1{false};       /* speed field is set */
+    bool geoidheight:1{false}; /* geoidheight field is set */
+    bool depth:1{false};       /* depth field is set */
+    /* !ToDo!
+    unsigned int altitude:1{false}; /+ altitude field is set +/
+    ... and hdop,pdop,vdop,fix,sat,heartrate,cadence,power,
+    odometer_distance
+    */
+  };
+
+  /* Data Members */
+
+  static Geocache empty_gc_data;
+
   double geoidheight;	/* Height (in meters) of geoid (mean sea level) above WGS84 earth ellipsoid. */
 
   /*
@@ -447,6 +337,86 @@ public:
    * The units are meters.
    */
   double proximity;
+  float course;	/* Optional: degrees true */
+  float speed;   	/* Optional: meters per second. */
+  float temperature; /* Degrees celsius */
+  op_flags opt_flags;
+
+public:
+
+  /* Special Member Functions */
+
+  Waypoint();
+  ~Waypoint();
+  Waypoint(const Waypoint& other);
+  Waypoint& operator=(const Waypoint& rhs);
+
+  /* Member Functions */
+
+  bool HasUrlLink() const;
+  const UrlLink& GetUrlLink() const;
+  void AddUrlLink(const UrlLink& l);
+  QString CreationTimeXML() const;
+  gpsbabel::DateTime GetCreationTime() const;
+  void SetCreationTime(const gpsbabel::DateTime& t);
+  void SetCreationTime(qint64 t, qint64 ms = 0);
+  Geocache* AllocGCData();
+  int EmptyGCData() const;
+  void NormalizePosition();
+  PositionDeg position() const {return PositionDeg(latitude, longitude);}
+  void SetPosition(const PositionDeg& pos)
+  {
+    latitude = pos.latD;
+    longitude = pos.lonD;
+  }
+
+// mimic std::optional interface, but use our more space
+// efficient wp_flags.
+#define GEN_WAYPT_METHODS(field) \
+  bool field##_has_value() const \
+  { \
+    return opt_flags.field; \
+  } \
+  decltype(field) field##_value() const \
+  { \
+    if (!opt_flags.field) { \
+      throw std::bad_optional_access(); \
+    } \
+    return field; \
+  } \
+  bool field##s_equal(const Waypoint& other) const \
+  { \
+    return (opt_flags.field && other.opt_flags.field && (field == other.field)) || \
+           (!opt_flags.field && !other.opt_flags.field); \
+  } \
+  decltype(field) field##_value_or(decltype(field) p) const \
+  { \
+    return (opt_flags.field)? field : p; \
+  } \
+  void set_##field(decltype(field) p) \
+  { \
+    field = p; \
+    opt_flags.field = 1; \
+  } \
+  void reset_##field() \
+  { \
+    opt_flags.field = 0; \
+  }
+
+  GEN_WAYPT_METHODS(temperature)
+  GEN_WAYPT_METHODS(proximity)
+  GEN_WAYPT_METHODS(course)
+  GEN_WAYPT_METHODS(speed)
+  GEN_WAYPT_METHODS(geoidheight)
+  GEN_WAYPT_METHODS(depth)
+
+#undef GEN_WAYPT_METHODS
+
+  /* Data Members */
+
+  double latitude;		/* Degrees */
+  double longitude; 		/* Degrees */
+  double altitude; 		/* Meters. */
 
   /* shortname is a waypoint name as stored in receiver.  It should
    * strive to be, well, short, and unique.   Enforcing length and
@@ -471,22 +441,11 @@ public:
 
   UrlList urls;
 
-  wp_flags wpt_flags;
   QString icon_descr;
 
   gpsbabel::DateTime creation_time;
 
-  /*
-   * route priority is for use by the simplify filter.  If we have
-   * some reason to believe that the route point is more important,
-   * we can give it a higher (numerically; 0 is the lowest) priority.
-   * This causes it to be removed last.
-   * This is currently used by the saroute input filter to give named
-   * waypoints (representing turns) a higher priority.
-   * This is also used by the google input filter because they were
-   * nice enough to use exactly the same priority scheme.
-   */
-  int route_priority;
+  wp_flags wpt_flags;
 
   /* Optional dilution of precision:  positional, horizontal, vertical.
    * 1 <= dop <= 50
@@ -494,36 +453,17 @@ public:
   float hdop;
   float vdop;
   float pdop;
-  float course;	/* Optional: degrees true */
-  float speed;   	/* Optional: meters per second. */
   fix_type fix;	/* Optional: 3d, 2d, etc. */
   int  sat;	/* Optional: number of sats used for fix */
 
   unsigned char heartrate; /* Beats/min. likely to get moved to fs. */
   unsigned char cadence;	 /* revolutions per minute */
   float power; /* watts, as measured by cyclists */
-  float temperature; /* Degrees celsius */
   float odometer_distance; /* Meters */
-  geocache_data* gc_data;
+  Geocache* gc_data;
   FormatSpecificDataList fs;
   const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
-
-public:
-  Waypoint();
-  ~Waypoint();
-  Waypoint(const Waypoint& other);
-  Waypoint& operator=(const Waypoint& other);
-
-  bool HasUrlLink() const;
-  const UrlLink& GetUrlLink() const;
-  void AddUrlLink(const UrlLink& l);
-  QString CreationTimeXML() const;
-  gpsbabel::DateTime GetCreationTime() const;
-  void SetCreationTime(const gpsbabel::DateTime& t);
-  void SetCreationTime(qint64 t, qint64 ms = 0);
-  geocache_data* AllocGCData();
-  int EmptyGCData() const;
 };
 
 using waypt_cb = void (*)(const Waypoint*);
@@ -533,10 +473,11 @@ class WaypointList : private QList<Waypoint*>
 {
 public:
   void waypt_add(Waypoint* wpt); // a.k.a. append(), push_back()
-  void add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
+  void add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, QStringView namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void waypt_del(Waypoint* wpt); // a.k.a. erase()
+  void del_marked_wpts();
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the element to be deleted, use iterator instead,
   //        and/or implement pop_back() a.k.a. removeLast(), and/or pop_front() a.k.a. removeFirst().
   void del_rte_waypt(Waypoint* wpt);
@@ -571,19 +512,20 @@ public:
   using QList<Waypoint*>::front; // a.k.a. first()
   using QList<Waypoint*>::rbegin;
   using QList<Waypoint*>::rend;
+  using QList<Waypoint*>::size_type;
 };
 
-const global_trait* get_traits();
 void waypt_init();
 //void update_common_traits(const Waypoint* wpt);
 void waypt_add(Waypoint* wpt);
 void waypt_del(Waypoint* wpt);
-unsigned int waypt_count();
+void del_marked_wpts();
+int waypt_count();
 void waypt_status_disp(int total_ct, int myct);
 //void waypt_disp_all(waypt_cb); /* template */
 //void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
 void waypt_init_bounds(bounds* bounds);
-int waypt_bounds_valid(bounds* bounds);
+bool waypt_bounds_valid(bounds* bounds);
 void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds* bounds);
 Waypoint* find_waypt_by_name(const QString& name);
@@ -630,7 +572,9 @@ WaypointList::waypt_disp_session(const session_t* se, T cb)
     }
   }
   if (global_opts.verbose_status) {
-    fprintf(stdout, "\r\n");
+    // Terminate the progress line from waypt_status_disp.
+    fprintf(stderr, "\n");
+    fflush(stderr);
   }
 }
 
@@ -663,11 +607,13 @@ struct computed_trkdata {
   std::optional<double> min_spd;	/* Meters/sec */
   std::optional<double> avg_hrt;	/* Avg Heartrate */
   std::optional<double> avg_cad;	/* Avg Cadence */
+  std::optional<double> avg_pwr;	/* Avg Power */
   gpsbabel::DateTime start;		/* Min time */
   gpsbabel::DateTime end;		/* Max time */
   std::optional<int> min_hrt;			/* Min Heartrate */
   std::optional<int> max_hrt;			/* Max Heartrate */
   std::optional<int> max_cad;			/* Max Cadence */
+  std::optional<float> max_pwr;	  /* Max Power */
 };
 
 class route_head
@@ -693,6 +639,7 @@ public:
   ~route_head();
 
   int rte_waypt_ct() const {return waypoint_list.count();}		/* # waypoints in waypoint list */
+  bool rte_waypt_empty() const {return waypoint_list.empty();}
 };
 
 using route_hdr = void (*)(const route_head*);
@@ -709,14 +656,16 @@ public:
   void del_head(route_head* rte); // a.k.a. erase()
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void insert_head(route_head* rte, route_head* predecessor); // a.k.a. insert
-  void add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& namepart, int number_digits);
+  void add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits);
   // FIXME: Generally it is inefficient to use an element pointer or reference to define the insertion point, use iterator instead.
   void del_wpt(route_head* rte, Waypoint* wpt);
+  void del_marked_wpts(route_head* rte);
   void common_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
   void flush(); // a.k.a. clear()
   void copy(RouteList** dst) const;
   void restore(RouteList* src);
   void swap(RouteList& other);
+  void swap_wpts(route_head* rte, WaypointList& other);
   template <typename Compare>
   void sort(Compare cmp) {std::sort(begin(), end(), cmp);}
   template <typename T1, typename T2, typename T3>
@@ -757,20 +706,24 @@ private:
 };
 
 void route_init();
-unsigned int route_waypt_count();
-unsigned int route_count();
-unsigned int track_waypt_count();
-unsigned int track_count();
+int route_waypt_count();
+int route_count();
+int track_waypt_count();
+int track_count();
 route_head* route_head_alloc();
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
 void track_add_head(route_head* rte);
 void track_del_head(route_head* rte);
 void track_insert_head(route_head* rte, route_head* predecessor);
-void route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart = "RPT", int number_digits = 3);
-void track_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart = "RPT", int number_digits = 3);
+void route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
+void track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart = u"RPT", int number_digits = 3);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
+void route_del_marked_wpts(route_head* rte);
+void track_del_marked_wpts(route_head* rte);
+void route_swap_wpts(route_head* rte, WaypointList& other);
+void track_swap_wpts(route_head* rte, WaypointList& other);
 //void route_disp(const route_head* rte, waypt_cb); /* template */
 void route_disp(const route_head* rte, std::nullptr_t /* waypt_cb */); /* override to catch nullptr */
 //void route_disp_all(route_hdr, route_trl, waypt_cb); /* template */
@@ -780,8 +733,8 @@ void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_c
 void route_flush_all_routes();
 void route_flush_all_tracks();
 void route_deinit();
-void route_append(RouteList* src);
-void track_append(RouteList* src);
+void route_append(const RouteList* src);
+void track_append(const RouteList* src);
 void route_backup(RouteList** head_bak);
 void route_restore(RouteList* head_bak);
 void route_swap(RouteList& other);
@@ -886,40 +839,6 @@ struct posn_status {
 
 extern posn_status tracking_status;
 
-using ff_init = void (*)(const QString&);
-using ff_deinit = void (*)();
-using ff_read = void (*)();
-using ff_write = void (*)();
-using ff_exit = void (*)();
-using ff_writeposn = void (*)(Waypoint*);
-using ff_readposn = Waypoint* (*)(posn_status*);
-
-geocache_type gs_mktype(const QString& t);
-geocache_container gs_mkcont(const QString& t);
-
-/*
- * All shortname functions take a shortname handle as the first arg.
- * This is an opaque pointer.  Callers must not fondle the contents of it.
- */
-// This is a crutch until the new C++ shorthandle goes in.
-
-struct mkshort_handle_imp; // forward declare, definition in mkshort.cc
-using short_handle = mkshort_handle_imp*;
-
-char* mkshort(short_handle,  const char*, bool);
-QString mkshort(short_handle,  const QString&);
-short_handle mkshort_new_handle();
-QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
-void mkshort_del_handle(short_handle* h);
-void setshort_length(short_handle, int n);
-void setshort_badchars(short_handle,  const char*);
-void setshort_goodchars(short_handle,  const char*);
-void setshort_mustupper(short_handle,  int n);
-void setshort_mustuniq(short_handle,  int n);
-void setshort_whitespace_ok(short_handle,  int n);
-void setshort_repeating_whitespace_ok(short_handle,  int n);
-void setshort_defname(short_handle, const char* s);
-
 #define ARGTYPE_UNKNOWN    0x00000000U
 #define ARGTYPE_INT        0x00000001U
 #define ARGTYPE_FLOAT      0x00000002U
@@ -957,14 +876,14 @@ void setshort_defname(short_handle, const char* s);
 #define ARG_NOMINMAX nullptr, nullptr
 
 struct arglist_t {
-  const char* argstring{nullptr};
-  char** argval{nullptr};
-  const char* helpstring{nullptr};
-  const char* defaultvalue{nullptr};
+  const QString argstring;
+  Option* const argval{nullptr};
+  const QString helpstring;
+  const QString defaultvalue;
   const uint32_t argtype{ARGTYPE_UNKNOWN};
-  const char* minvalue{nullptr};    /* minimum value for numeric options */
-  const char* maxvalue{nullptr};    /* maximum value for numeric options */
-  char* argvalptr{nullptr};         /* !!! internal helper. Not used in definitions !!! */
+  const QString minvalue;    /* minimum value for numeric options */
+  const QString maxvalue;    /* maximum value for numeric options */
+  char* unused{nullptr};     /* TODO: delete from initialization lists */
 };
 
 enum ff_type {
@@ -991,55 +910,31 @@ enum ff_cap {
 #define FF_CAP_RW_WPT \
 	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
 
-/*
- * Format capabilities for realtime positioning.
- */
-struct position_ops_t {
-  ff_init rd_init;
-  ff_readposn rd_position;
-  ff_deinit rd_deinit;
+[[noreturn]] void gbFatal(QDebug& msginstance);
+// cppcheck 2.10.3 fails to assign noreturn attribute to gbFatal if
+// the noreturn attribute is listed before the gnu::format attribute.
+// A PR to resolve this is https://github.com/danmar/cppcheck/pull/4971,
+// but cppcheck works if the noreturn attribute follows the gnu::format
+// attribute.
+// This can have a large effect on codacy issues from cppcheck
+// nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
+// negativeIndex, arrayIndexOutOfBoundsCond.
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void gbFatal(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbWarning(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...);
+[[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...);
 
-  ff_init wr_init;
-  ff_writeposn wr_position;
-  ff_deinit wr_deinit;
-};
+void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args1);
 
-#define NULL_POS_OPS { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, }
-
-/*
- *  Describe the file format to the caller.
- */
-struct ff_vecs_t {
-  ff_type type;
-  QVector<ff_cap> cap;
-  ff_init rd_init;
-  ff_init wr_init;
-  ff_deinit rd_deinit;
-  ff_deinit wr_deinit;
-  ff_read read;
-  ff_write write;
-  ff_exit exit;
-  QVector<arglist_t>* args;
-  QString encode;
-  int fixed_encode;
-  position_ops_t position_ops;
-};
-
-[[noreturn]] void fatal(QDebug& msginstance);
-[[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
-void warning(const char*, ...) PRINTFLIKE(1, 2);
-
-void printposn(double c, int is_lat);
+void printposn(double c, bool is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
-char* xstrdup(const QString& s);
-char* xstrndup(const char* str, size_t sz);
 char* xstrdup(const char* s);
 
-FILE* xfopen(const char* fname, const char* type, const char* errtxt);
+FILE* xfopen(const QString& fname, const char* type);
 
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);
@@ -1058,53 +953,23 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
   return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
-int str_match(const char* str, const char* match);
-
-void rtrim(char* s);
-char* lrtrim(char* buff);
-int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
-int xasprintf(QString* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
-int xasprintf(QScopedPointer<char, QScopedPointerPodDeleter>& strp, const char* fmt, ...) PRINTFLIKE(2, 3);
-int xvasprintf(char** strp, const char* fmt, va_list ap);
-char* strupper(char* src);
-char* strlower(char* src);
-time_t mklocaltime(struct tm* t);
-time_t mkgmtime(struct tm* t);
+QDateTime make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();
 QDateTime dotnet_time_to_qdatetime(long long dotnet);
-const char* get_cache_icon(const Waypoint* waypointp);
-const char* gs_get_cachetype(geocache_type t);
-const char* gs_get_container(geocache_container t);
-char* xml_entitize(const char* str);
-char* html_entitize(const QString& str);
-char* strip_html(const utf_string*);
-char* strip_nastyhtml(const QString& in);
-char* convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
-char* convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
-char* pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
+long long qdatetime_to_dotnet_time(const QDateTime& dt);
+QString strip_html(const QString& utfstring);
+QString strip_nastyhtml(const QString& in);
+QString convert_human_date_format(const QString& human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
+QString convert_human_time_format(const QString& human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
+QString pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
 QString get_filename(const QString& fname);			/* extract the filename portion */
-
-/*
- * Character encoding transformations.
- */
-
-#define CET_CHARSET_ASCII	"US-ASCII"
-#define CET_CHARSET_UTF8	"UTF-8"
-#define CET_CHARSET_MS_ANSI	"windows-1252"
 
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& dateTimeString);
 
 QString rot13(const QString& s);
-
-/*
- * PalmOS records like fixed-point numbers, which should be rounded
- * to deal with possible floating-point representation errors.
- */
-
-signed int si_round(double d);
 
 /*
  * Prototypes for Endianness helpers.
@@ -1158,52 +1023,40 @@ enum grid_type {
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
 #define GRID_INDEX_MAX	grid_swiss
 
-#define DATUM_OSGB36	86
-#define DATUM_WGS84	118
-
-/* bit manipulation functions (util.c) */
-
-char gb_getbit(const void* buf, uint32_t nr);
-void gb_setbit(void* buf, uint32_t nr);
-
-void* gb_int2ptr(int i);
-int gb_ptr2int(const void* p);
-
+QTextCodec* get_codec(const QByteArray& cs_name);
 void list_codecs();
 void list_timezones();
 QString grapheme_truncate(const QString& input, unsigned int count);
+int xstrtoi(const char* str, char** str_end, int base);
 
 /*
  *  From parse.c
  */
 int parse_coordinates(const char* str, int datum, grid_type grid,
-                      double* latitude, double* longitude, const char* module);
+                      double* latitude, double* longitude);
 int parse_coordinates(const QString& str, int datum, grid_type grid,
-                      double* latitude, double* longitude, const char* module);
-int parse_distance(const char* str, double* val, double scale, const char* module);
-int parse_distance(const QString& str, double* val, double scale, const char* module);
-int parse_speed(const char* str, double* val, double scale, const char* module);
-int parse_speed(const QString& str, double* val, double scale, const char* module);
-
-/*
- *  From util_crc.c
- */
-unsigned long get_crc32(const void* data, int datalen);
+                      double* latitude, double* longitude);
+int parse_distance(const QString& str, double* val, double scale);
+int parse_speed(const QString& str, double* val, double scale);
 
 /*
  * Color helpers.
  */
-int color_to_bbggrr(const char* cname);
+int color_to_bbggrr(const QString& cname);
 
 /*
  * A constant for unknown altitude.   It's tempting to just use zero
  * but that's not very nice for the folks near sea level.
  */
-#define unknown_alt 	-99999999.0
-#define unknown_color	-1
+constexpr double unknown_alt = -99999999.0;
+constexpr int unknown_color = -1;
 
-// TODO: this is a (probably temporary) shim for the C->QString conversion.
-// It's here instead of gps to avoid C/C++ linkage issues.
-int32_t GPS_Lookup_Datum_Index(const QString& n);
+#ifdef LIGHTWEIGHT_TIMEZONES_SUPPORTED
+constexpr QTimeZone::Initialization QtLocalTime = QTimeZone::LocalTime;
+constexpr QTimeZone::Initialization QtUTC = QTimeZone::UTC;
+#else
+constexpr Qt::TimeSpec QtLocalTime = Qt::LocalTime;
+constexpr Qt::TimeSpec QtUTC = Qt::UTC;
+#endif
 
 #endif // DEFS_H_INCLUDED_

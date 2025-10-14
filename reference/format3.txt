@@ -1,3 +1,5 @@
+file	--r---	70mai	txt	70mai Dash Cam	70mai
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_70mai.html
 internal	rw----	xcsv		? Character Separated Values	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html
 option	xcsv	style	Full path to XCSV style file	file				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_style
@@ -16,6 +18,8 @@ option	xcsv	prefer_shortnames	Use shortname instead of description	boolean				ht
 
 option	xcsv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_datum
 
+option	xcsv	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_utc
+
 internal	rw----	tabsep		All database fields on one tab-separated line	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html
 option	tabsep	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snlen
@@ -32,23 +36,7 @@ option	tabsep	prefer_shortnames	Use shortname instead of description	boolean				
 
 option	tabsep	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_datum
 
-serial	--r---	baroiq		Brauniger IQ Series Barograph Download	baroiq
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_baroiq.html
-file	rw----	cambridge	dat	Cambridge/Winpilot glider software	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html
-option	cambridge	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snlen
-
-option	cambridge	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snwhite
-
-option	cambridge	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snupper
-
-option	cambridge	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_snunique
-
-option	cambridge	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_urlbase
-
-option	cambridge	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_prefer_shortnames
-
-option	cambridge	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cambridge.html#fmt_cambridge_o_datum
+option	tabsep	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_utc
 
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)	v900
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_v900.html
@@ -68,6 +56,8 @@ option	csv	prefer_shortnames	Use shortname instead of description	boolean				htt
 
 option	csv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_datum
 
+option	csv	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_utc
+
 internal	rw----	custom		Custom "Everything" Style	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html
 option	custom	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_snlen
@@ -83,6 +73,8 @@ option	custom	urlbase	Basename prepended to URL on output	string				https://www.
 option	custom	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_prefer_shortnames
 
 option	custom	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_datum
+
+option	custom	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_custom.html#fmt_custom_o_utc
 
 file	--rw--	iblue747	csv	Data Logger iBlue747 csv	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html
@@ -100,6 +92,8 @@ option	iblue747	prefer_shortnames	Use shortname instead of description	boolean		
 
 option	iblue747	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html#fmt_iblue747_o_datum
 
+option	iblue747	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue747.html#fmt_iblue747_o_utc
+
 file	--rw--	iblue757	csv	Data Logger iBlue757 csv	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html
 option	iblue757	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_snlen
@@ -116,6 +110,8 @@ option	iblue757	prefer_shortnames	Use shortname instead of description	boolean		
 
 option	iblue757	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_datum
 
+option	iblue757	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_iblue757.html#fmt_iblue757_o_utc
+
 file	rw----	exif	jpg	Embedded Exif-GPS data (.jpg)	exif
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html
 option	exif	filename	Set waypoint name to source filename	boolean	Y			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_filename
@@ -125,6 +121,8 @@ option	exif	frame	Time-frame (in seconds)	integer	10	0		https://www.gpsbabel.org
 option	exif	name	Locate waypoint for tagging by this name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_name
 
 option	exif	overwrite	!OVERWRITE! the original file. Default=N	boolean	N			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_overwrite
+
+option	exif	offset	Image Offset Time (+HH:MM or -HH:MM)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_exif.html#fmt_exif_o_offset
 
 file	rwrwrw	shape	shp	ESRI shapefile	shape
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_shape.html
@@ -136,17 +134,31 @@ file	--rwrw	igc		FAI/IGC Flight Recorder Data Format	igc
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html
 option	igc	timeadj	(integer sec or 'auto') Barograph to GPS time diff	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_timeadj
 
+option	igc	ENL	Engine Noise (ENL; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_ENL
+
+option	igc	TAS	True Airspeed (TAS; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_TAS
+
+option	igc	VAT	Total Energy Vario (VAT; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_VAT
+
+option	igc	OAT	Outside Air Temperature (OAT; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_OAT
+
+option	igc	TRT	True Track (TRT; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_TRT
+
+option	igc	GSP	Ground Speed (GSP; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GSP
+
+option	igc	FXA	Fix Accuracy (FXA; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_FXA
+
+option	igc	SIU	# Of Sats (SIU; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_SIU
+
+option	igc	ACZ	Z Acceleration (ACZ; default=1)	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_ACZ
+
+option	igc	GFO	G Force? (GFO; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GFO
+
 file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file	garmin_fit
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html
 option	garmin_fit	allpoints	Read all points even if latitude or longitude is missing	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_allpoints
 
 option	garmin_fit	recoverymode	Attempt to recovery data from corrupt file	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_recoverymode
-
-file	-w-w-w	gpssim	gpssim	Franson GPSGate Simulation	gpssim
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html
-option	gpssim	wayptspd	Default speed for waypoints (knots/hr)	float				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html#fmt_gpssim_o_wayptspd
-
-option	gpssim	split	Split input into separate files	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpssim.html#fmt_gpssim_o_split
 
 file	rw----	garmin301		Garmin 301 Custom position and heartrate	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html
@@ -164,6 +176,8 @@ option	garmin301	prefer_shortnames	Use shortname instead of description	boolean	
 
 option	garmin301	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_datum
 
+option	garmin301	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin301.html#fmt_garmin301_o_utc
+
 file	--rw--	garmin_g1000	csv	Garmin G1000 datalog input filter file	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html
 option	garmin_g1000	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_snlen
@@ -179,6 +193,8 @@ option	garmin_g1000	urlbase	Basename prepended to URL on output	string				https:
 option	garmin_g1000	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_prefer_shortnames
 
 option	garmin_g1000	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_datum
+
+option	garmin_g1000	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_g1000.html#fmt_garmin_g1000_o_utc
 
 file	rwrwrw	gdb	gdb	Garmin MapSource - gdb	gdb
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gdb.html
@@ -196,7 +212,7 @@ option	gdb	roadbook	Include major turn points (with description) from calculated
 
 file	rwrwrw	garmin_txt	txt	Garmin MapSource - txt (tab delimited)	garmin_txt
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html
-option	garmin_txt	date	Read/Write date format (i.e. yyyy/mm/dd)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_date
+option	garmin_txt	date	Read/Write date format (i.e. yyyy/mm/dd)	string	dd/mm/yyyy			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_date
 
 option	garmin_txt	datum	GPS datum (def. WGS 84)	string	WGS 84			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_datum
 
@@ -208,7 +224,7 @@ option	garmin_txt	prec	Precision of coordinates	integer	3			https://www.gpsbabel
 
 option	garmin_txt	temp	Temperature unit [c=Celsius, f=Fahrenheit]	string	c			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_temp
 
-option	garmin_txt	time	Read/Write time format (i.e. HH:mm:ss xx)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_time
+option	garmin_txt	time	Read/Write time format (i.e. HH:mm:ss xx)	string	HH:mm:ss			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_time
 
 option	garmin_txt	utc	Write timestamps with offset x to UTC time	integer		-23	+23	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_txt.html#fmt_garmin_txt_o_utc
 
@@ -227,6 +243,8 @@ option	garmin_poi	urlbase	Basename prepended to URL on output	string				https://
 option	garmin_poi	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_prefer_shortnames
 
 option	garmin_poi	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_datum
+
+option	garmin_poi	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_poi.html#fmt_garmin_poi_o_utc
 
 file	rw----	garmin_gpi	gpi	Garmin Points of Interest (.gpi)	garmin_gpi
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html
@@ -280,6 +298,8 @@ option	garmin	bitscategory	Bitmap of categories	integer		1	65535	https://www.gps
 
 option	garmin	baud	Speed in bits per second of serial port (baud=9600)	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin.html#fmt_garmin_o_baud
 
+option	garmin	codec	override codec to use for device	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin.html#fmt_garmin_o_codec
+
 file	r-rw--	gtrnctr	tcx/crs/hst/xml	Garmin Training Center (.tcx/.crs/.hst/.xml)	gtrnctr
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html
 option	gtrnctr	course	Write course rather than history, default yes	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_course
@@ -290,11 +310,13 @@ file	rw----	geo	loc	Geocaching.com .loc	geo
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html
 option	geo	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html#fmt_geo_o_deficon
 
-option	geo	nuke_placer	Omit Placer name	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html#fmt_geo_o_nuke_placer
-
 file	rwrwrw	geojson	json	GeoJson	geojson
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html
-option	geojson	compact	Compact Output. Default is off.	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_compact
+option	geojson	compact	Compact Output. Default is off	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_compact
+
+option	geojson	name	Property key to use for name	string	name			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_name
+
+option	geojson	desc	Property key to use for description	string	description			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geojson.html#fmt_geojson_o_desc
 
 internal	r-r---	dg-100-bin		GlobalSat DG-100/BT-335 Binary File	dg-100-bin
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-100-bin.html
@@ -323,8 +345,6 @@ option	dg-200	erase_only	Only erase device data, do not download anything	boolea
 serial	--r---	globalsat		GlobalSat GH625XT GPS training watch	globalsat
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html
 option	globalsat	showlist	list tracks	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_showlist
-
-option	globalsat	track	get track	integer	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_track
 
 option	globalsat	dump-file	Dump raw data to this file	outfile				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_dump-file
 
@@ -364,6 +384,8 @@ option	kml	rotate_colors	Rotate colors for tracks and routes (default automatic)
 
 option	kml	prec	Precision of coordinates, number of decimals	integer	6			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_kml.html#fmt_kml_o_prec
 
+file	r-r---	googletakeout	json	Google Takeout Location History	googletakeout
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_googletakeout.html
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html
 option	land_air_sea	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_snlen
@@ -379,6 +401,8 @@ option	land_air_sea	urlbase	Basename prepended to URL on output	string				https:
 option	land_air_sea	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_prefer_shortnames
 
 option	land_air_sea	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_datum
+
+option	land_air_sea	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_land_air_sea.html#fmt_land_air_sea_o_utc
 
 file	rwrwrw	gtm	gtm	GPS TrackMaker	gtm
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtm.html
@@ -398,6 +422,8 @@ option	arc	prefer_shortnames	Use shortname instead of description	boolean				htt
 
 option	arc	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html#fmt_arc_o_datum
 
+option	arc	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_arc.html#fmt_arc_o_utc
+
 file	rw----	gpsdrive		GpsDrive Format	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html
 option	gpsdrive	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_snlen
@@ -414,6 +440,8 @@ option	gpsdrive	prefer_shortnames	Use shortname instead of description	boolean		
 
 option	gpsdrive	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_datum
 
+option	gpsdrive	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrive.html#fmt_gpsdrive_o_utc
+
 file	rw----	gpsdrivetrack		GpsDrive Format for Tracks	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html
 option	gpsdrivetrack	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_snlen
@@ -429,6 +457,8 @@ option	gpsdrivetrack	urlbase	Basename prepended to URL on output	string				https
 option	gpsdrivetrack	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_prefer_shortnames
 
 option	gpsdrivetrack	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_datum
+
+option	gpsdrivetrack	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpsdrivetrack.html#fmt_gpsdrivetrack_o_utc
 
 file	rwrwrw	gpx	gpx	GPX XML	gpx
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpx.html
@@ -448,8 +478,6 @@ option	gpx	garminextensions	Add info (depth) as Garmin extension	boolean				http
 
 option	gpx	elevprec	Precision of elevations, number of decimals	integer	3			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gpx.html#fmt_gpx_o_elevprec
 
-file	rw----	holux	wpo	Holux (gm-100) .wpo Format	holux
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_holux.html
 file	r-r---	m241-bin	bin	Holux M-241 (MTK based) Binary File Format	m241-bin
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_m241-bin.html
 option	m241-bin	csv	MTK compatible CSV output file	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_m241-bin.html#fmt_m241-bin_o_csv
@@ -507,30 +535,6 @@ option	lowranceusr	title	(USR output) Output file title string	string				https:/
 option	lowranceusr	serialnum	(USR output) Device serial number	integer	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lowranceusr.html#fmt_lowranceusr_o_serialnum
 
 option	lowranceusr	description	(USR output) Output file content description	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_lowranceusr.html#fmt_lowranceusr_o_description
-
-file	rwrwrw	magellanx	upt	Magellan SD files (as for eXplorist)	magellanx
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellanx.html
-option	magellanx	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellanx.html#fmt_magellanx_o_deficon
-
-option	magellanx	maxcmts	Max number of comments to write (maxcmts=200)	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellanx.html#fmt_magellanx_o_maxcmts
-
-file	rwrwrw	magellan		Magellan SD files (as for Meridian)	magellan
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html
-option	magellan	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_deficon
-
-option	magellan	maxcmts	Max number of comments to write (maxcmts=200)	integer				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_maxcmts
-
-serial	rwrwrw	magellan		Magellan serial protocol	magellan
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html
-option	magellan	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_deficon
-
-option	magellan	maxcmts	Max number of comments to write (maxcmts=200)	integer	200			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_maxcmts
-
-option	magellan	baud	Numeric value of bitrate (baud=4800)	integer	4800			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_baud
-
-option	magellan	noack	Suppress use of handshaking in name of speed	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_noack
-
-option	magellan	nukewpt	Delete all waypoints	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_magellan.html#fmt_magellan_o_nukewpt
 
 serial	r-r---	miniHomer		MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)	miniHomer
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_miniHomer.html
@@ -594,24 +598,6 @@ file	--r---	tpo2	tpo	National Geographic Topo 2.x .tpo	tpo2
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpo2.html
 file	r-r-r-	tpo3	tpo	National Geographic Topo 3.x/4.x .tpo	tpo3
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tpo3.html
-serial	rwrwrw	navilink		NaviGPS GT-11/BGT-11 Download	navilink
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html
-option	navilink	nuketrk	Delete all track points	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nuketrk
-
-option	navilink	nukerte	Delete all routes	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukerte
-
-option	navilink	nukewpt	Delete all waypoints	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukewpt
-
-option	navilink	nukedlg	Clear the datalog	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_nukedlg
-
-option	navilink	datalog	Read from datalogger buffer	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_datalog
-
-option	navilink	power_off	Command unit to power itself down	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_navilink.html#fmt_navilink_o_power_off
-
-file	--r---	sbp	sbp	NaviGPS GT-31/BGT-31 datalogger (.sbp)	sbp
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_sbp.html
-file	--r---	sbn	sbn	NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)	sbn
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_sbn.html
 file	rwrw--	nmea		NMEA 0183 sentences	nmea
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmea.html
 option	nmea	snlen	Max length of waypoint name to write	integer	6	1	64	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_nmea.html#fmt_nmea_o_snlen
@@ -672,6 +658,24 @@ option	ozi	codec	codec to use for reading and writing strings (default windows-1
 
 file	r-r---	qstarz_bl-1000		Qstarz BL-1000	qstarz_bl-1000
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_qstarz_bl-1000.html
+file	rw----	cup	cup	See You flight analysis data	xcsv
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html
+option	cup	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_snlen
+
+option	cup	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_snwhite
+
+option	cup	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_snupper
+
+option	cup	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_snunique
+
+option	cup	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_urlbase
+
+option	cup	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_prefer_shortnames
+
+option	cup	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_datum
+
+option	cup	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_cup.html#fmt_cup_o_utc
+
 serial	r-r---	skytraq		SkyTraq Venus based loggers (download)	skytraq
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_skytraq.html
 option	skytraq	erase	Erase device data after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_skytraq.html#fmt_skytraq_o_erase
@@ -734,6 +738,8 @@ option	openoffice	prefer_shortnames	Use shortname instead of description	boolean
 
 option	openoffice	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_openoffice.html#fmt_openoffice_o_datum
 
+option	openoffice	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_openoffice.html#fmt_openoffice_o_utc
+
 file	-w----	text	txt	Textual Output	text
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_text.html
 option	text	nosep	Suppress separator lines between waypoints	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_text.html#fmt_text_o_nosep
@@ -754,7 +760,7 @@ option	unicsv	datum	GPS datum (def. WGS 84)	string	WGS 84			https://www.gpsbabel
 
 option	unicsv	grid	Write position using this grid.	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_unicsv.html#fmt_unicsv_o_grid
 
-option	unicsv	utc	Write timestamps with offset x to UTC time	integer		-23	+23	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_unicsv.html#fmt_unicsv_o_utc
+option	unicsv	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_unicsv.html#fmt_unicsv_o_utc
 
 option	unicsv	format	Write name(s) of format(s) from input session(s)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_unicsv.html#fmt_unicsv_o_format
 
@@ -770,11 +776,3 @@ file	-w----	vcard	vcf	Vcard Output (for iPod)	vcard
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html
 option	vcard	encrypt	Encrypt hints using ROT13	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_vcard.html#fmt_vcard_o_encrypt
 
-file	--r---	wbt-bin	bin	Wintec WBT-100/200 Binary File Format	wbt-bin
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt-bin.html
-serial	r-r---	wbt		Wintec WBT-100/200 GPS Download	wbt
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt.html
-option	wbt	erase	Erase device data after download	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt.html#fmt_wbt_o_erase
-
-file	--r---	wbt-tk1	tk1	Wintec WBT-201/G-Rays 2 Binary File Format	wbt-tk1
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_wbt-tk1.html

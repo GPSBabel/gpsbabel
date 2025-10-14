@@ -23,6 +23,56 @@ bincompare ${REFERENCE}/kodak-dc210.jpg.jpg ${TMPDIR}/kodak-dc210.jpg.jpg
 # test a big endian image
 # image from 	https://github.com/ianare/exif-samples.git
 cp ${REFERENCE}/ricoh-rdc5300.jpg ${TMPDIR}/ricoh-rdc5300.jpg
-gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/ricoh-rdc5300.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/ricoh-rdc5300_offset.csv -o exif,name=ricoh-rdc5300 -F ${TMPDIR}/ricoh-rdc5300.jpg
 bincompare ${REFERENCE}/ricoh-rdc5300.jpg.jpg ${TMPDIR}/ricoh-rdc5300.jpg.jpg
+
+# test offset option. photo has no gps info and no exif offset tags.
+# the offset is only required if the current system timezone is differnt from utc.
+# cat reference/ricoh-rdc5300_offset.csv
+# No,Latitude,Longitude,Name,Speed,utc_d,utc_t
+# 1,44.315150,15.265690,"ricoh-rdc5300",0.00,2000/05/31,22:50:40
+# $ exiftool -D -G -time:all -composite:GPSPosition -c "%+.6f" reference/ricoh-rdc5300.jpg
+# [File]              - File Modification Date/Time     : 2024:09:27 07:18:42-06:00
+# [File]              - File Access Date/Time           : 2024:09:28 07:19:24-06:00
+# [File]              - File Inode Change Date/Time     : 2024:09:27 07:18:42-06:00
+# [EXIF]          36867 Date/Time Original              : 2000:05:31 21:50:40
+# [EXIF]          36868 Create Date                     : 2000:05:31 21:50:40
+# $ exiftool -D -G -time:all -composite:GPSPosition -c "%+.6f" reference/ricoh-rdc5300.jpg.jpg
+# [File]              - File Modification Date/Time     : 2024:09:29 07:04:04-06:00
+# [File]              - File Access Date/Time           : 2024:09:29 07:04:06-06:00
+# [File]              - File Inode Change Date/Time     : 2024:09:29 07:04:04-06:00
+# [EXIF]          36867 Date/Time Original              : 2000:05:31 21:50:40
+# [EXIF]          36868 Create Date                     : 2000:05:31 21:50:40
+# [EXIF]              7 GPS Time Stamp                  : 22:50:40
+# [EXIF]             29 GPS Date Stamp                  : 2000:05:31
+# [Composite]         - GPS Date/Time                   : 2000:05:31 22:50:40Z
+# [Composite]         - GPS Position                    : +44.315150, +15.265690
+cp ${REFERENCE}/ricoh-rdc5300.jpg ${TMPDIR}/ricoh-rdc5300_offset.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/ricoh-rdc5300_offset.csv -o exif,offset="-01:00" -F ${TMPDIR}/ricoh-rdc5300_offset.jpg
+bincompare ${REFERENCE}/ricoh-rdc5300.jpg.jpg ${TMPDIR}/ricoh-rdc5300_offset.jpg.jpg
+
+# prove the option value is handled the same as the OffsetTimeOriginal tag.
+# $ exiftool -D -G -time:all -composite:GPSPosition -c "%+.6f" reference/ricoh-rdc5300_offsettime.jpg
+# [File]              - File Modification Date/Time     : 2024:09:29 06:32:54-06:00
+# [File]              - File Access Date/Time           : 2024:09:29 06:33:20-06:00
+# [File]              - File Inode Change Date/Time     : 2024:09:29 06:32:54-06:00
+# [EXIF]          36867 Date/Time Original              : 2000:05:31 21:50:40
+# [EXIF]          36868 Create Date                     : 2000:05:31 21:50:40
+# [EXIF]          36881 Offset Time Original            : -01:00
+# [Composite]         - Date/Time Original              : 2000:05:31 21:50:40-01:00
+# $ exiftool -D -G -time:all -composite:GPSPosition -c "%+.6f" reference/ricoh-rdc5300_offsettime.jpg.jpg
+# [File]              - File Modification Date/Time     : 2024:09:29 07:09:20-06:00
+# [File]              - File Access Date/Time           : 2024:09:29 07:09:53-06:00
+# [File]              - File Inode Change Date/Time     : 2024:09:29 07:09:20-06:00
+# [EXIF]          36867 Date/Time Original              : 2000:05:31 21:50:40
+# [EXIF]          36868 Create Date                     : 2000:05:31 21:50:40
+# [EXIF]          36881 Offset Time Original            : -01:00
+# [EXIF]              7 GPS Time Stamp                  : 22:50:40
+# [EXIF]             29 GPS Date Stamp                  : 2000:05:31
+# [Composite]         - Date/Time Original              : 2000:05:31 21:50:40-01:00
+# [Composite]         - GPS Date/Time                   : 2000:05:31 22:50:40Z
+# [Composite]         - GPS Position                    : +44.315150, +15.265690
+cp ${REFERENCE}/ricoh-rdc5300_offsettime.jpg ${TMPDIR}/ricoh-rdc5300_offsettime.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/ricoh-rdc5300_offset.csv -o exif -F ${TMPDIR}/ricoh-rdc5300_offsettime.jpg
+bincompare ${REFERENCE}/ricoh-rdc5300_offsettime.jpg.jpg ${TMPDIR}/ricoh-rdc5300_offsettime.jpg.jpg
 

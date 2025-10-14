@@ -19,16 +19,18 @@
 
 #include <cassert>              // for assert
 #include <cstddef>              // for nullptr_t
-#include <algorithm>            // for sort
-#include <iterator>
 #include <optional>             // for optional, operator>, operator<
+#include <utility>              // for as_const
 
-#include <QDateTime>            // for QDateTime
-#include <QList>                // for QList<>::iterator
+#include <QDateTime>            // for operator>, QDateTime, operator<
+#include <QList>                // for QList<>::const_iterator
 #include <QString>              // for QString
-#include <QtGlobal>             // for foreach
+#include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
+#include <QStringView>          // for QStringView
+#include <QtGlobal>             // for QForeachContainer, qMakeForeachContainer, foreach
 
 #include "defs.h"
+#include "formspec.h"           // for FormatSpecificDataList
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t (ptr only)
 #include "src/core/datetime.h"  // for DateTime
@@ -37,8 +39,6 @@
 RouteList* global_route_list;
 RouteList* global_track_list;
 
-extern void update_common_traits(const Waypoint* wpt);
-
 void
 route_init()
 {
@@ -46,27 +46,27 @@ route_init()
   global_track_list = new RouteList;
 }
 
-unsigned int
+int
 route_waypt_count()
 {
   /* total waypoint count -- all routes */
   return global_route_list->waypt_count();
 }
 
-unsigned int
+int
 route_count()
 {
   return global_route_list->count();	/* total # of routes */
 }
 
-unsigned int
+int
 track_waypt_count()
 {
   /* total waypoint count -- all tracks */
   return global_track_list->waypt_count();
 }
 
-unsigned int
+int
 track_count()
 {
   return global_track_list->count();	/* total # of tracks */
@@ -103,7 +103,7 @@ track_insert_head(route_head* rte, route_head* predecessor)
 }
 
 void
-route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
+route_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits)
 {
   // First point in a route is always a new segment.
   // This improves compatibility when reading from
@@ -116,7 +116,7 @@ route_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int numbe
 }
 
 void
-track_add_wpt(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
+track_add_wpt(route_head* rte, Waypoint* wpt, QStringView namepart, int number_digits)
 {
   // First point in a track is always a new segment.
   // This improves compatibility when reading from
@@ -140,6 +140,30 @@ void
 track_del_wpt(route_head* rte, Waypoint* wpt)
 {
   global_track_list->del_wpt(rte, wpt);
+}
+
+void
+route_del_marked_wpts(route_head* rte)
+{
+  global_route_list->del_marked_wpts(rte);
+}
+
+void
+track_del_marked_wpts(route_head* rte)
+{
+  global_track_list->del_marked_wpts(rte);
+}
+
+void
+route_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_route_list->swap_wpts(rte, other);
+}
+
+void
+track_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_track_list->swap_wpts(rte, other);
 }
 
 void
@@ -182,13 +206,13 @@ route_deinit()
 }
 
 void
-route_append(RouteList* src)
+route_append(const RouteList* src)
 {
   src->copy(&global_route_list);
 }
 
 void
-track_append(RouteList* src)
+track_append(const RouteList* src)
 {
   src->copy(&global_track_list);
 }
@@ -234,65 +258,57 @@ track_swap(RouteList& other)
  * Run over all the trackpoints, computing heading (course), speed, and
  * and so on.
  *
- * If trkdatap is non-null upon entry, a pointer to an allocated collection
- * (hopefully interesting) statistics about the track will be placed there.
+ * return a collection of (hopefully interesting) statistics about the track.
  */
 computed_trkdata track_recompute(const route_head* trk)
 {
-  Waypoint first;
-  const Waypoint* prev = &first;
+  const Waypoint* prev = nullptr;
   int tkpt = 0;
   int pts_hrt = 0;
   double tot_hrt = 0.0;
   int pts_cad = 0;
   double tot_cad = 0.0;
+  int pts_pwr = 0;
+  double tot_pwr = 0.0;
   computed_trkdata tdata;
-
-//  first.latitude = 0;
-//  first.longitude = 0;
-//  first.creation_time = 0;
 
   foreach (Waypoint* thisw, trk->waypoint_list) {
 
-    /*
-     * gcdist and heading want radians, not degrees.
-     */
-    double tlat = RAD(thisw->latitude);
-    double tlon = RAD(thisw->longitude);
-    double plat = RAD(prev->latitude);
-    double plon = RAD(prev->longitude);
-    WAYPT_SET(thisw, course, heading_true_degrees(plat, plon,
-              tlat, tlon));
-    double dist = radtometers(gcdist(plat, plon, tlat, tlon));
-
-    /*
-     * Avoid that 6300 mile jump as we move from 0,0.
-     */
-    if (plat && plon) {
+    if (prev != nullptr) {
+      /*
+       * gcdist and heading want radians, not degrees.
+       */
+      if (!thisw->course_has_value()) {
+        // Only recompute course if the waypoint
+        // didn't already have a course.
+        thisw->set_course(heading_true_degrees(prev->position(), thisw->position()));
+      }
+      double dist = radtometers(gcdist(prev->position(), thisw->position()));
       tdata.distance_meters += dist;
+
+      /*
+       * If we've moved as much as a meter,
+       * conditionally recompute speeds.
+       */
+      if (!thisw->speed_has_value() && (dist > 1)) {
+        // Only recompute speed if the waypoint
+        // didn't already have a speed
+        if (thisw->GetCreationTime().isValid() &&
+            prev->GetCreationTime().isValid() &&
+            thisw->GetCreationTime() > prev->GetCreationTime()) {
+          double timed =
+            prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
+          thisw->set_speed(dist / timed);
+        }
+      }
     }
 
-    /*
-     * If we've moved as much as a meter,
-     * conditionally recompute speeds.
-     */
-    if (!WAYPT_HAS(thisw, speed) && (dist > 1)) {
-      // Only recompute speed if the waypoint
-      // didn't already have a speed
-      if (thisw->GetCreationTime().isValid() &&
-          prev->GetCreationTime().isValid() &&
-          thisw->GetCreationTime() > prev->GetCreationTime()) {
-        double timed =
-          prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
-        WAYPT_SET(thisw, speed, dist / timed);
+    if (thisw->speed_has_value()) {
+      if ((!tdata.min_spd) || (thisw->speed_value() < tdata.min_spd)) {
+        tdata.min_spd = thisw->speed_value();
       }
-    }
-    if (WAYPT_HAS(thisw, speed)) {
-      if ((!tdata.min_spd) || (thisw->speed < tdata.min_spd)) {
-        tdata.min_spd = thisw->speed;
-      }
-      if ((!tdata.max_spd) || (thisw->speed > tdata.max_spd)) {
-        tdata.max_spd = thisw->speed;
+      if ((!tdata.max_spd) || (thisw->speed_value() > tdata.max_spd)) {
+        tdata.max_spd = thisw->speed_value();
       }
     }
 
@@ -328,6 +344,15 @@ computed_trkdata track_recompute(const route_head* trk)
       tdata.max_cad = thisw->cadence;
     }
 
+    if (thisw->power > 0) {
+      pts_pwr++;
+      tot_pwr += thisw->power;
+    }
+
+    if ((thisw->power > 0) && ((!tdata.max_pwr) || (thisw->power > tdata.max_pwr))) {
+      tdata.max_pwr = thisw->power;
+    }
+
     if (thisw->GetCreationTime().isValid()) {
       if (!tdata.start.isValid() || (thisw->GetCreationTime() < tdata.start)) {
         tdata.start = thisw->GetCreationTime();
@@ -339,7 +364,7 @@ computed_trkdata track_recompute(const route_head* trk)
     }
 
     if (thisw->shortname.isEmpty()) {
-      thisw->shortname = QString("%1-%2").arg(trk->rte_name).arg(tkpt);
+      thisw->shortname = QStringLiteral("%1-%2").arg(trk->rte_name).arg(tkpt);
     }
     tkpt++;
     prev = thisw;
@@ -351,6 +376,10 @@ computed_trkdata track_recompute(const route_head* trk)
 
   if (pts_cad > 0) {
     tdata.avg_cad = tot_cad / pts_cad;
+  }
+
+  if (pts_pwr > 0) {
+    tdata.avg_pwr = tot_pwr / pts_pwr;
   }
 
   return tdata;
@@ -408,13 +437,10 @@ RouteList::insert_head(route_head* rte, route_head* predecessor)
 // in the RouteList AND any routes that have had waypoints added but haven't been
 // added themselves yet.
 void
-RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, const QString& namepart, int number_digits)
+RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namepart, int number_digits)
 {
   ++waypt_ct;
   rte->waypoint_list.add_rte_waypt(waypt_ct, wpt, synth, namepart, number_digits);
-  if ((this == global_route_list) || (this == global_track_list)) {
-    update_common_traits(wpt);
-  }
 }
 
 void
@@ -422,6 +448,31 @@ RouteList::del_wpt(route_head* rte, Waypoint* wpt)
 {
   rte->waypoint_list.del_rte_waypt(wpt);
   --waypt_ct;
+}
+
+void
+RouteList::del_marked_wpts(route_head* rte)
+{
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  swap_wpts(rte, oldlist);
+
+  // mimic trkseg handling from WaypointList::del_rte_waypt
+  bool inherit_new_trkseg = false;
+  for (Waypoint* wpt : std::as_const(oldlist)) {
+    if (wpt->wpt_flags.marked_for_deletion) {
+      if (wpt->wpt_flags.new_trkseg) {
+        inherit_new_trkseg = true;
+      }
+      delete wpt;
+    } else {
+      if (inherit_new_trkseg) {
+        wpt->wpt_flags.new_trkseg = 1;
+        inherit_new_trkseg = false;
+      }
+      add_wpt(rte, wpt, false, u"RPT", 3);
+    }
+  }
 }
 
 void
@@ -456,7 +507,6 @@ RouteList::copy(RouteList** dst) const
     *dst = new RouteList;
   }
 
-  const char RPT[] = "RPT";
   for (const auto& rte_old : *this) {
     auto* rte_new = new route_head;
     // waypoint_list created below with add_wpt.
@@ -471,7 +521,7 @@ RouteList::copy(RouteList** dst) const
     (*dst)->add_head(rte_new);
     const auto& old_list = rte_old->waypoint_list;
     for (const auto& old_wpt : old_list) {
-      (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, RPT, 3);
+      (*dst)->add_wpt(rte_new, new Waypoint(*old_wpt), false, u"RPT", 3);
     }
   }
 }
@@ -494,4 +544,11 @@ void RouteList::swap(RouteList& other)
   const RouteList tmp_list = *this;
   *this = other;
   other = tmp_list;
+}
+
+void RouteList::swap_wpts(route_head* rte, WaypointList& other)
+{
+  this->waypt_ct -= rte->rte_waypt_ct();
+  this->waypt_ct += other.count();
+  rte->waypoint_list.swap(other);
 }

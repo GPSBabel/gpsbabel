@@ -24,9 +24,7 @@
 #include <QDebug>              // for QDebug
 #include <QRegularExpression>  // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpressionMatch
 
-#include <cstdlib>             // for atoi, atof
-
-#include "defs.h"              // for Waypoint, fatal, route_del_wpt, route_disp_all, track_del_wpt, track_disp_all, waypt_del, waypt_disp_all, route_head, rtedata, trkdata, wptdata, fix_none, fix_unknown
+#include "defs.h"              // for Waypoint, gbFatal, route_head (ptr only), del_marked_wpts, route_del_marked_wpts, route_disp_all, track_del_marked_wpts, track_disp_all, waypt_disp_all, fix_none, fix_unknown
 #include "src/core/logging.h"  // for FatalMsg
 
 
@@ -37,17 +35,15 @@
  */
 void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
 {
-  int del = 0;
-  int delh = 0;
-  int delv = 0;
+  bool del = false;
+  bool delh = false;
+  bool delv = false;
 
-  auto* waypointp = const_cast<Waypoint*>(wpt);
-
-  if ((hdopf >= 0.0) && (waypointp->hdop > hdopf)) {
-    delh = 1;
+  if ((hdopf >= 0.0) && (wpt->hdop > hdopf)) {
+    delh = true;
   }
-  if ((vdopf >= 0.0) && (waypointp->vdop > vdopf)) {
-    delv = 1;
+  if ((vdopf >= 0.0) && (wpt->vdop > vdopf)) {
+    delv = true;
   }
 
   if (andopt) {
@@ -56,81 +52,65 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
     del = delh || delv;
   }
 
-  if ((satpf >= 0) && (waypointp->sat < satpf)) {
-    del = 1;
+  if ((satpf >= 0) && (wpt->sat < satpf)) {
+    del = true;
   }
 
-  if ((fixnoneopt) && (waypointp->fix == fix_none)) {
-    del = 1;
+  if ((fixnoneopt) && (wpt->fix == fix_none)) {
+    del = true;
   }
 
-  if ((fixunknownopt) && (waypointp->fix == fix_unknown)) {
-    del = 1;
+  if ((fixunknownopt) && (wpt->fix == fix_unknown)) {
+    del = true;
   }
 
-  if ((eleminopt) && (waypointp->altitude < eleminpf)) {
-    del = 1;
+  if ((eleminopt) && (wpt->altitude < eleminpf)) {
+    del = true;
   }
 
-  if ((elemaxopt) && (waypointp->altitude > elemaxpf)) {
-    del = 1;
+  if ((elemaxopt) && (wpt->altitude > elemaxpf)) {
+    del = true;
   }
 
-  if (nameopt && name_regex.match(waypointp->shortname).hasMatch()) {
-    del = 1;
+  if (nameopt && name_regex.match(wpt->shortname).hasMatch()) {
+    del = true;
   }
-  if (descopt && desc_regex.match(waypointp->description).hasMatch()) {
-    del = 1;
+  if (descopt && desc_regex.match(wpt->description).hasMatch()) {
+    del = true;
   }
-  if (cmtopt && cmt_regex.match(waypointp->notes).hasMatch()) {
-    del = 1;
+  if (cmtopt && cmt_regex.match(wpt->notes).hasMatch()) {
+    del = true;
   }
-  if (iconopt && icon_regex.match(waypointp->icon_descr).hasMatch()) {
-    del = 1;
+  if (iconopt && icon_regex.match(wpt->icon_descr).hasMatch()) {
+    del = true;
   }
 
   if (del) {
-    switch (what) {
-    case wptdata:
-      waypt_del(waypointp);
-      delete waypointp;
-      break;
-    case trkdata:
-      track_del_wpt(head, waypointp);
-      delete waypointp;
-      break;
-    case rtedata:
-      route_del_wpt(head, waypointp);
-      delete waypointp;
-      break;
-    default:
-      return;
-    }
+    const_cast<Waypoint*>(wpt)->wpt_flags.marked_for_deletion = 1;
   }
-}
-
-void DiscardFilter::fix_process_head(const route_head* trk)
-{
-  head = const_cast<route_head*>(trk);
 }
 
 void DiscardFilter::process()
 {
-  WayptFunctor<DiscardFilter> fix_process_wpt_f(this, &DiscardFilter::fix_process_wpt);
-  RteHdFunctor<DiscardFilter> fix_process_head_f(this, &DiscardFilter::fix_process_head);
+  auto waypoint_cb_lambda = [this](const Waypoint* wpt) -> void {
+    fix_process_wpt(wpt);
+  };
 
   // Filter waypoints.
-  what = wptdata;
-  waypt_disp_all(fix_process_wpt_f);
+  waypt_disp_all(waypoint_cb_lambda);
+  del_marked_wpts();
 
   // Filter tracks
-  what = trkdata;
-  track_disp_all(fix_process_head_f, nullptr, fix_process_wpt_f);
+  auto track_tlr_lambda = [](const route_head* rte)->void {
+    track_del_marked_wpts(const_cast<route_head*>(rte));
+  };
+  track_disp_all(nullptr, track_tlr_lambda, waypoint_cb_lambda);
 
   // And routes
-  what = rtedata;
-  route_disp_all(fix_process_head_f, nullptr, fix_process_wpt_f);
-
+  auto route_tlr_lambda = [](const route_head* rte)->void {
+    route_del_marked_wpts(const_cast<route_head*>(rte));
+  };
+  route_disp_all(nullptr, route_tlr_lambda, waypoint_cb_lambda);
 }
 
 QRegularExpression DiscardFilter::generateRegExp(const QString& glob_pattern)
@@ -149,53 +129,53 @@ QRegularExpression DiscardFilter::generateRegExp(const QString& glob_pattern)
 void DiscardFilter::init()
 {
   if (hdopopt) {
-    hdopf = atof(hdopopt);
+    hdopf = hdopopt.get_result();
   } else {
     hdopf = -1.0;
   }
 
   if (vdopopt) {
-    vdopf = atof(vdopopt);
+    vdopf = vdopopt.get_result();
   } else {
     vdopf = -1.0;
   }
 
   if (satopt) {
-    satpf = atoi(satopt);
+    satpf = satopt.get_result();
   } else {
     satpf = -1;
   }
 
   if (eleminopt) {
-    eleminpf = atoi(eleminopt);
+    eleminpf = eleminopt.get_result();
   }
 
   if (elemaxopt) {
-    elemaxpf = atoi(elemaxopt);
+    elemaxpf = elemaxopt.get_result();
   }
 
   if (nameopt) {
     name_regex = generateRegExp(nameopt);
     if (!name_regex.isValid()) {
-      fatal(FatalMsg() << "discard: matchname option is an invalid expression.");
+      gbFatal(FatalMsg() << "discard: matchname option is an invalid expression.");
     }
   }
   if (descopt) {
     desc_regex = generateRegExp(descopt);
     if (!desc_regex.isValid()) {
-      fatal(FatalMsg() << "discard: matchdesc option is an invalid expression.");
+      gbFatal(FatalMsg() << "discard: matchdesc option is an invalid expression.");
     }
   }
   if (cmtopt) {
     cmt_regex = generateRegExp(cmtopt);
     if (!cmt_regex.isValid()) {
-      fatal(FatalMsg() << "discard: matchcmt option is an invalid expression.");
+      gbFatal(FatalMsg() << "discard: matchcmt option is an invalid expression.");
     }
   }
   if (iconopt) {
     icon_regex = generateRegExp(iconopt);
     if (!icon_regex.isValid()) {
-      fatal(FatalMsg() << "discard: matchicon option is an invalid expression.");
+      gbFatal(FatalMsg() << "discard: matchicon option is an invalid expression.");
     }
   }
 }

@@ -22,11 +22,13 @@
 #ifndef SHAPE_H_INCLUDED_
 #define SHAPE_H_INCLUDED_
 
+#include <QList>               // for QList
 #include <QString>              // for QString
 #include <QVector>              // for QVector
 
-#include "defs.h"               // for arglist_t, ARGTYPE_STRING, Waypoint, route_head, CET_CHARSET_ASCII, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
+#include "defs.h"               // for arglist_t, ARGTYPE_STRING, Waypoint, route_head, FF_CAP_RW_ALL, ff_cap, ff_type, ff_type_file
 #include "format.h"             // for Format
+#include "option.h"            // for OptionString
 #if SHAPELIB_ENABLED
 #if HAVE_LIBSHAPE
 #  include <shapefil.h>
@@ -53,16 +55,6 @@ public:
     return FF_CAP_RW_ALL;
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void rd_init(const QString& fname) override;
   void read() override;
   void rd_deinit() override;
@@ -75,7 +67,7 @@ private:
   static SHPHandle SHPAPI_CALL SHPCreateGpsbabel(const QString& pszLayer, int nShapeType);
   static DBFHandle SHPAPI_CALL DBFOpenGpsbabel(const QString& pszFilename, const char* pszAccess);
   static DBFHandle SHPAPI_CALL DBFCreateExGpsbabel(const QString& pszFilename, const char* pszCodePage);
-  void dump_fields() const;
+  [[noreturn]] void dump_fields() const;
   void check_field_index(int fieldIdx) const;
   int get_field_index(const QString& fieldName) const;
   void write_wpt(const Waypoint* wpt) const;
@@ -96,8 +88,8 @@ private:
   QString ofname;
   int nameFieldIdx{};	// the field index of the field with fieldName "name" in the output DBF.
 
-  char* opt_name = nullptr;
-  char* opt_url = nullptr;
+  OptionString opt_name;
+  OptionString opt_url;
 
   QVector<arglist_t> shp_args = {
     {

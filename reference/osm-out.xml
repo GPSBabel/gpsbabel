@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="GPSBabel">
+  <node id="-1" visible="true" lat="48.1421982" lon="11.5412243" timestamp="2008-03-06T19:16:18Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 250870628"/>
+    <tag k="note" v="osm-id 250870628"/>
+  </node>
+  <node id="-2" visible="true" lat="48.1449059" lon="11.5411711" timestamp="2006-12-14T23:22:36Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21585826"/>
+    <tag k="note" v="osm-id 21585826"/>
+  </node>
+  <node id="-3" visible="true" lat="48.1444666" lon="11.5407244" timestamp="2006-12-29T14:41:35Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21585827"/>
+    <tag k="note" v="osm-id 21585827"/>
+  </node>
+  <node id="-4" visible="true" lat="48.1448788" lon="11.5426666" timestamp="2006-11-30T14:20:49Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21324374"/>
+    <tag k="note" v="osm-id 21324374"/>
+  </node>
+  <node id="-5" visible="true" lat="48.1463562" lon="11.5357400" timestamp="2008-02-10T13:05:27Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 245339"/>
+    <tag k="note" v="osm-id 245339"/>
+  </node>
+  <node id="-6" visible="true" lat="48.1462960" lon="11.5363118" timestamp="2008-02-10T13:05:27Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 245353"/>
+    <tag k="note" v="osm-id 245353"/>
+  </node>
+  <node id="-7" visible="true" lat="48.1452410" lon="11.5415523" timestamp="2007-02-07T16:49:43Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 398692"/>
+    <tag k="note" v="osm-id 398692"/>
+  </node>
+  <node id="-8" visible="true" lat="48.1452209" lon="11.5408870" timestamp="2006-12-18T10:06:05Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 398694"/>
+    <tag k="note" v="osm-id 398694"/>
+  </node>
+  <node id="-9" visible="true" lat="48.1453234" lon="11.5405037" timestamp="2006-12-18T10:06:05Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 398704"/>
+    <tag k="note" v="osm-id 398704"/>
+  </node>
+  <node id="-10" visible="true" lat="48.1457468" lon="11.5386711" timestamp="2006-12-18T10:07:09Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 398705"/>
+    <tag k="note" v="osm-id 398705"/>
+  </node>
+  <node id="-11" visible="true" lat="48.1462259" lon="11.5369775" timestamp="2006-08-28T22:19:19Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 398710"/>
+    <tag k="note" v="osm-id 398710"/>
+  </node>
+  <node id="-12" visible="true" lat="48.1442413" lon="11.5454470" timestamp="2006-10-24T12:41:23Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 19404292"/>
+    <tag k="note" v="osm-id 19404292"/>
+  </node>
+  <node id="-13" visible="true" lat="48.1461044" lon="11.5369041" timestamp="2006-11-17T12:37:19Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21040287"/>
+    <tag k="note" v="osm-id 21040287"/>
+  </node>
+  <node id="-14" visible="true" lat="48.1462212" lon="11.5356144" timestamp="2008-02-10T13:05:37Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21040288"/>
+    <tag k="note" v="osm-id 21040288"/>
+  </node>
+  <node id="-15" visible="true" lat="48.1461793" lon="11.5362042" timestamp="2008-02-10T13:05:36Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21040289"/>
+    <tag k="note" v="osm-id 21040289"/>
+  </node>
+  <node id="-16" visible="true" lat="48.1459432" lon="11.5377728" timestamp="2006-12-18T10:06:05Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21040291"/>
+    <tag k="note" v="osm-id 21040291"/>
+  </node>
+  <node id="-17" visible="true" lat="48.1462657" lon="11.5365998" timestamp="2008-02-10T13:05:26Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21040296"/>
+    <tag k="note" v="osm-id 21040296"/>
+  </node>
+  <node id="-18" visible="true" lat="48.1439353" lon="11.5467331" timestamp="2006-11-30T14:20:49Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21324375"/>
+    <tag k="note" v="osm-id 21324375"/>
+  </node>
+  <node id="-19" visible="true" lat="48.1451471" lon="11.5418860" timestamp="2006-12-18T10:06:06Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21324376"/>
+    <tag k="note" v="osm-id 21324376"/>
+  </node>
+  <node id="-20" visible="true" lat="48.1453506" lon="11.5409376" timestamp="2006-12-18T10:06:04Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21324380"/>
+    <tag k="note" v="osm-id 21324380"/>
+  </node>
+  <node id="-21" visible="true" lat="48.1454507" lon="11.5405629" timestamp="2006-12-18T10:06:07Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21324381"/>
+    <tag k="note" v="osm-id 21324381"/>
+  </node>
+  <node id="-22" visible="true" lat="48.1459135" lon="11.5386510" timestamp="2006-12-18T10:06:04Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21324382"/>
+    <tag k="note" v="osm-id 21324382"/>
+  </node>
+  <node id="-23" visible="true" lat="48.1447078" lon="11.5384168" timestamp="2007-06-27T18:34:56Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21585828"/>
+    <tag k="note" v="osm-id 21585828"/>
+  </node>
+  <node id="-24" visible="true" lat="48.1451206" lon="11.5414087" timestamp="2006-12-18T10:06:01Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21632176"/>
+    <tag k="note" v="osm-id 21632176"/>
+  </node>
+  <node id="-25" visible="true" lat="48.1439747" lon="11.5453262" timestamp="2007-06-27T18:34:56Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 21632177"/>
+    <tag k="note" v="osm-id 21632177"/>
+  </node>
+  <node id="-26" visible="true" lat="48.1423259" lon="11.5327741" timestamp="2008-03-06T19:16:17Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 250870622"/>
+    <tag k="note" v="osm-id 250870622"/>
+  </node>
+  <node id="-27" visible="true" lat="48.1423839" lon="11.5358031" timestamp="2008-03-06T19:16:17Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 250870624"/>
+    <tag k="note" v="osm-id 250870624"/>
+  </node>
+  <node id="-28" visible="true" lat="48.1423608" lon="11.5384055" timestamp="2008-03-06T19:16:17Z">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 250870626"/>
+    <tag k="note" v="osm-id 250870626"/>
+  </node>
+  <way id="-29" visible="true">
+    <nd ref="-4"/>
+    <nd ref="-19"/>
+    <nd ref="-7"/>
+    <nd ref="-20"/>
+    <nd ref="-21"/>
+    <nd ref="-22"/>
+    <nd ref="-11"/>
+    <nd ref="-17"/>
+    <nd ref="-6"/>
+    <nd ref="-5"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="Arnulfstraße"/>
+    <tag k="note" v="osm-id 4020271"/>
+  </way>
+  <way id="-30" visible="true">
+    <nd ref="-4"/>
+    <nd ref="-12"/>
+    <nd ref="-18"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="Arnulfstraße"/>
+    <tag k="note" v="osm-id 4020916"/>
+  </way>
+  <way id="-31" visible="true">
+    <nd ref="-7"/>
+    <nd ref="-24"/>
+    <nd ref="-2"/>
+    <nd ref="-3"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="Helmholtzstraße"/>
+    <tag k="note" v="osm-id 4078867"/>
+  </way>
+  <way id="-32" visible="true">
+    <nd ref="-25"/>
+    <nd ref="-3"/>
+    <nd ref="-23"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="Marlene-Dietrich-Straße"/>
+    <tag k="note" v="osm-id 4078868"/>
+  </way>
+  <way id="-33" visible="true">
+    <nd ref="-14"/>
+    <nd ref="-15"/>
+    <nd ref="-13"/>
+    <nd ref="-16"/>
+    <nd ref="-10"/>
+    <nd ref="-9"/>
+    <nd ref="-8"/>
+    <nd ref="-24"/>
+    <nd ref="-4"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="Arnulfstraße"/>
+    <tag k="note" v="osm-id 4513917"/>
+  </way>
+  <way id="-34" visible="true">
+    <nd ref="-26"/>
+    <nd ref="-27"/>
+    <nd ref="-28"/>
+    <nd ref="-1"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="S7"/>
+    <tag k="note" v="osm-id 23197114"/>
+  </way>
+</osm>

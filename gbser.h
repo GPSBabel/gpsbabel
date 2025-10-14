@@ -19,8 +19,8 @@
 
  */
 
-#ifndef __GBSER_H
-#define __GBSER_H
+#ifndef GBSER_H_INCLUDED_
+#define GBSER_H_INCLUDED_
 
 #include <cstddef> // for size_t
 
@@ -55,13 +55,6 @@ int gbser_set_port(void* handle, unsigned speed,
                    unsigned bits,
                    unsigned parity,
                    unsigned stop);
-
-/* Set the serial port up by parsing the supplied parameter string.
- * Valid parameter strings look like '4800,8,N,1'. Parsing is case-
- * insensitive, spaces are allowed around the commas and omitted
- * trailing fields will default to '8', 'N' and '1'
- */
-int gbser_setup(void* handle, const char* spec);
 
 /* Return true if there are characters available on the serial port
  */
@@ -136,4 +129,4 @@ int gbser_is_serial(const char* port_name);
 const char* fix_win_serial_name_r(const char* comname, char* obuf, size_t len);
 const char* fix_win_serial_name(const char* comname);
 
-#endif /* GBSER_H */
+#endif /* GBSER_H_INCLUDED_ */

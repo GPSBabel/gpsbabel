@@ -12,4 +12,3 @@
     gpsbabel -i gpx -f "warnings.gpx" -o garmin_gpi,alerts=1 -F "warnings.gpi"
   </userinput>
 </para>
-

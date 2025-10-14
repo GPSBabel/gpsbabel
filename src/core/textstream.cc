@@ -18,24 +18,18 @@
  */
 
 
-#include <QtGlobal>          // for qint64, QT_VERSION, QT_VERSION_CHECK
+#include <QtGlobal>          // for qint64
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 #include <QByteArrayView>    // for QByteArrayView
-#endif
 #include <QFile>             // for QFile
 #include <QFlags>            // for QFlags
 #include <QIODevice>         // for QIODevice
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 #include <QIODeviceBase>           // for QIODeviceBase::OpenMode
 #include <QStringConverter>  // for QStringConverter, QStringConverter::Utf8, QStringConverter::Encoding, QStringConverter::Utf16
-#endif
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 #include <optional>          // for optional
-#endif
 
-#include "defs.h"            // for fatal, list_codecs
+#include "defs.h"            // for gbFatal, list_codecs
 #include "src/core/textstream.h"
 #include "src/core/file.h"   // for File
 
@@ -43,33 +37,8 @@
 namespace gpsbabel
 {
 
-void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char* module, const char* codec_name)
+void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char* codec_name)
 {
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  codec_ = QTextCodec::codecForName(codec_name);
-  if (codec_ == nullptr) {
-    list_codecs();
-    fatal("%s: Unsupported codec '%s'.\n", module, codec_name);
-  }
-
-  file_ = new gpsbabel::File(fname);
-  file_->open(mode);
-  setDevice(file_);
-  setCodec(codec_);
-
-  if (mode & QFile::ReadOnly) {
-    if (codec_->mibEnum() == 106) { // UTF-8
-      setAutoDetectUnicode(true);
-    }
-  }
-
-  if (mode & QFile::WriteOnly) {
-    // enable bom for all UTF codecs except UTF-8
-    if (codec_->mibEnum() != 106) {
-      setGenerateByteOrderMark(true);
-    }
-  }
-#else
   std::optional<QStringConverter::Encoding> encoding = QStringConverter::encodingForName(codec_name);
   bool use_stringconverter = encoding.has_value();
 
@@ -78,11 +47,11 @@ void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char
    * but autodetection may switch to a converter that is.
    */
   if (!use_stringconverter && (mode & QFile::ReadOnly)) {
-    QFile file = QFile(fname);
-    file.open(mode);
+    auto scanfile = gpsbabel::File(fname);
+    scanfile.open(mode);
     char data[4];
-    qint64 bytesread = file.read(data, 4);
-    file.close();
+    qint64 bytesread = scanfile.read(data, 4);
+    scanfile.close();
     encoding = QStringConverter::encodingForData(QByteArrayView(data, bytesread));
     if (encoding.has_value()) {
       use_stringconverter = true;
@@ -108,15 +77,14 @@ void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char
       }
     }
   } else {
-    device_ = new gpsbabel::CodecDevice(fname, module, codec_name);
+    device_ = new gpsbabel::CodecDevice(fname, codec_name);
     bool status = device_->open(mode);
     if (!status) {
-      fatal("%s: device not open %d\n", module, status);
+      gbFatal("device not open %d\n", status);
     }
     setDevice(device_);
     setEncoding(QStringConverter::Utf16);
   }
-#endif
 }
 
 void TextStream::close()
@@ -127,15 +95,11 @@ void TextStream::close()
     delete file_;
     file_ = nullptr;
   }
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  codec_ = nullptr;
-#else
   if (device_ != nullptr) {
     device_->close();
     delete device_;
     device_ = nullptr;
   }
-#endif
 }
 
-} // namespace
+} // namespace gpsbabel

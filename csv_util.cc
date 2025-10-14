@@ -20,25 +20,19 @@
 
  */
 
-#include <cassert>             // for assert
 #include <cmath>               // for fabs
-#include <cstdlib>             // for atof, strtod
+#include <cstdlib>             // for strtod
 #include <cstring>             // for strlen, strchr, strncmp, strcmp, memmove, strcpy, strcspn, strncpy
 
 #include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar
 #include <QDebug>              // for QDebug
-#include <QRegularExpression>  // for QRegularExpression
+#include <QList>               // for QList
 #include <QString>             // for QString, operator+
 
 #include "defs.h"
 #include "csv_util.h"
 #include "src/core/logging.h"  // for Warning
-
-
-#define MYNAME "CSV_UTIL"
-
-#define ISWHITESPACE(a) ((a == ' ') || (a == '\t'))
 
 
 /*********************************************************************/
@@ -52,12 +46,10 @@ csv_stringclean(const QString& source, const QString& to_nuke)
 {
   QString r = source;
   if (!to_nuke.isEmpty()) {
-    // avoid problematic regular rexpressions, e.g. xmapwpt generated [:\n:],
-    // or one can imagine [0-9] when we meant the characters, '0', '-', and '9',
-    // or one can imagine [^a] when we meant the characters '^' and 'a'.
-    QRegularExpression regex = QRegularExpression(QString("[%1]").arg(QRegularExpression::escape(to_nuke)));
-    assert(regex.isValid());
-    r.remove(regex);
+    auto isNukeable = [&to_nuke](const QChar &ch)->bool {
+        return to_nuke.contains(ch);
+    };
+    r.removeIf(isNukeable);
   }
   return r;
 }
@@ -110,7 +102,7 @@ QString
 csv_enquote(const QString& str, const QString& enclosure)
 {
   QString retval = str;
-  if (enclosure.size() > 0) {
+  if (!enclosure.isEmpty()) {
     retval = enclosure + retval.replace(enclosure, enclosure + enclosure) + enclosure;
   }
   return retval;
@@ -154,7 +146,8 @@ csv_dequote(const QString& string, const QString& enclosure)
 /*****************************************************************************/
 QStringList
 csv_linesplit(const QString& string, const QString& delimited_by,
-              const QString& enclosed_in, const int line_no, CsvQuoteMethod method)
+              const QString& enclosed_in, const int line_no, CsvQuoteMethod method,
+              bool* delimiter_detected)
 {
   QStringList retval;
 
@@ -168,6 +161,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
    * whitespace eater consume the space.
    */
   QString delimiter = delimited_by;
+  bool delimiter_seen = false;
   if (delimited_by == ", ") {
     delimiter = ",";
   }
@@ -200,8 +194,10 @@ csv_linesplit(const QString& string, const QString& delimited_by,
       if (!enclosed) {
         if ((dlen > 0) && string.mid(p).startsWith(delimiter)) {
           dfound = true;
+          delimiter_seen = true;
         } else if (hyper_whitespace_delimiter && string.at(p).isSpace()) {
           dfound = true;
+          delimiter_seen = true;
           while ((p < string.size()) && string.at(p).isSpace()) {
             p++;
           }
@@ -231,7 +227,7 @@ csv_linesplit(const QString& string, const QString& delimited_by,
     }
 
     if (enclosed) {
-      Warning() << MYNAME":" <<
+      Warning() <<
               "Warning- Unbalanced Field Enclosures" <<
               enclosed_in <<
               "on line" <<
@@ -240,6 +236,9 @@ csv_linesplit(const QString& string, const QString& delimited_by,
 
     retval.append(value);
 
+  }
+  if (delimiter_detected != nullptr) {
+    *delimiter_detected = delimiter_seen;
   }
   return retval;
 }
@@ -322,9 +321,9 @@ ddmmdir_to_degrees(const char* ddmmdir)
   // if not N or E, prepend a '-' to ddmm2degrees input
   // see XT_LAT_NMEA which handles ddmm directly
   if (strchr(ddmmdir, 'W') || strchr(ddmmdir, 'S')) {
-    return ddmm2degrees(- atof(ddmmdir));
+    return ddmm2degrees(- strtod(ddmmdir, nullptr));
   }
-  return ddmm2degrees(atof(ddmmdir));
+  return ddmm2degrees(strtod(ddmmdir, nullptr));
 
 }
 
@@ -527,7 +526,7 @@ dec_to_human(const char* format, const char* dirs, double val)
       case 'x':
       case 'X':
         if (index>2) {
-          fatal(MYNAME ": too many format specifiers\n");
+          gbFatal("too many format specifiers\n");
         }
         buff += QString::asprintf(subformat, intvals[index]);
         index++;
@@ -538,7 +537,7 @@ dec_to_human(const char* format, const char* dirs, double val)
       case 'g':
       case 'G':
         if (index>2) {
-          fatal(MYNAME ": too many format specifiers\n");
+          gbFatal("too many format specifiers\n");
         }
         buff += QString::asprintf(subformat, dblvals[index]);
         index++;
@@ -547,7 +546,7 @@ dec_to_human(const char* format, const char* dirs, double val)
         buff += subformat;
         break;
       default:
-        fatal(MYNAME ": invalid format specifier\n");
+        gbFatal("invalid format specifier\n");
         break;
 
       }

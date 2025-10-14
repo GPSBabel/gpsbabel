@@ -21,53 +21,38 @@
 
 #include <cassert>              // for assert
 #include <cmath>                // for fabs
-#include <cstdio>               // for printf, fflush, fprintf, stdout
-#include <algorithm>            // for stable_sort
+#include <cstdio>               // for fflush, fprintf, stdout
+#include <utility>              // for as_const
 
 #include <QChar>                // for QChar
 #include <QDateTime>            // for QDateTime
-#include <QList>                // for QList
+#include <QDebug>               // for QDebug
+#include <QLatin1Char>          // for QLatin1Char
+#include <QList>                // for QList<>::const_iterator
 #include <QString>              // for QString, operator==
+#include <QStringLiteral>       // for qMakeStringPrivate, QStringLiteral
+#include <QStringView>          // for QStringView
 #include <QTime>                // for QTime
-#include <QtGlobal>             // for qPrintable
+#include <QtGlobal>             // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
 #include "defs.h"
-#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t, GMSD_FIND
+#include "formspec.h"           // for FormatSpecificDataList
+#include "garmin_fs.h"          // for garmin_ilink_t, garmin_fs_t
+#include "geocache.h"           // for Geocache
 #include "grtcirc.h"            // for RAD, gcdist, heading_true_degrees, radtometers
 #include "session.h"            // for curr_session, session_t
 #include "src/core/datetime.h"  // for DateTime
-#include "src/core/logging.h"   // for Warning, Fatal
+#include "src/core/logging.h"   // for FatalMsg
+
 
 WaypointList* global_waypoint_list;
 
-geocache_data Waypoint::empty_gc_data;
-static global_trait traits;
-
-const global_trait* get_traits()
-{
-  return &traits;
-}
+Geocache Waypoint::empty_gc_data;
 
 void
 waypt_init()
 {
   global_waypoint_list = new WaypointList;
-}
-
-void update_common_traits(const Waypoint* wpt)
-{
-  /* This is a bit tacky, but it allows a hint whether we've seen
-   * this data or not in the life cycle of this run.   Of course,
-   * the caches could have been filtered out of existence and not
-   * all waypoints may have this and a few other pitfalls, but it's
-   * an easy and fast test here.
-   */
-  traits.trait_geocaches |= (wpt->gc_data->diff && wpt->gc_data->terr);
-  traits.trait_heartrate |= wpt->heartrate > 0;
-  traits.trait_cadence |= wpt->cadence > 0;
-  traits.trait_power |= wpt->power > 0;
-  traits.trait_depth |= WAYPT_HAS(wpt, depth);
-  traits.trait_temperature |= WAYPT_HAS(wpt, temperature);
 }
 
 void
@@ -82,7 +67,13 @@ waypt_del(Waypoint* wpt)
   global_waypoint_list->waypt_del(wpt);
 }
 
-unsigned int
+void
+del_marked_wpts()
+{
+  global_waypoint_list->del_marked_wpts();
+}
+
+int
 waypt_count()
 {
   return global_waypoint_list->count();
@@ -91,8 +82,10 @@ waypt_count()
 void
 waypt_status_disp(int total_ct, int myct)
 {
-  fprintf(stdout, "%d/%d/%d\r", myct*100/total_ct, myct, total_ct);
-  fflush(stdout);
+  // If we use logging the first update will have this info trailing the
+  // "id: " output by qFormatLogMessage but subsequent updates will not.
+  fprintf(stderr, "%d/%d/%d\r", myct*100/total_ct, myct, total_ct);
+  fflush(stderr);
 }
 
 void
@@ -107,7 +100,7 @@ waypt_init_bounds(bounds* bounds)
   bounds->min_alt = -unknown_alt;
 }
 
-int
+bool
 waypt_bounds_valid(bounds* bounds)
 {
   /* Returns true if bb has any 'real' data in it */
@@ -209,16 +202,12 @@ waypt_add_url(Waypoint* wpt, const QString& link, const QString& url_link_text, 
   wpt->AddUrlLink(UrlLink(link, url_link_text, url_link_type));
 }
 
+// TODO: change inputs to PositionDeg?
 double
 gcgeodist(const double lat1, const double lon1,
           const double lat2, const double lon2)
 {
-  double res = radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
-  if (res < 0.1) {
-    res = 0;  /* calc. diffs on 32- and 64-bit hosts */
-  }
-
-  return res;
+ return radtometers(gcdist(PositionDeg(lat1, lon1), PositionDeg(lat2, lon2)));
 }
 
 /*
@@ -245,22 +234,20 @@ double
 waypt_distance_ex(const Waypoint* A, const Waypoint* B)
 {
   double res = 0;
-  garmin_fs_t* gmsd;
 
   if ((A == nullptr) || (B == nullptr)) {
     return 0;
   }
 
-  if ((gmsd = garmin_fs_t::find(A)) && (gmsd->ilinks != nullptr)) {
-    garmin_ilink_t* link = gmsd->ilinks;
-
-    res = gcgeodist(A->latitude, A->longitude, link->lat, link->lon);
-    while (link->next != nullptr) {
-      garmin_ilink_t* prev = link;
-      link = link->next;
-      res += gcgeodist(prev->lat, prev->lon, link->lat, link->lon);
+  if (const garmin_fs_t* gmsd = garmin_fs_t::find(A); (gmsd != nullptr) && (!gmsd->ilinks.isEmpty())) {
+    auto prev_lat = A->latitude;
+    auto prev_lon = A->longitude;
+    for (const auto& link : gmsd->ilinks) {
+      res += gcgeodist(prev_lat, prev_lon, link.lat, link.lon);
+      prev_lat = link.lat;
+      prev_lon = link.lon;
     }
-    res += gcgeodist(link->lat, link->lon, B->latitude, B->longitude);
+    res += gcgeodist(gmsd->ilinks.last().lat, gmsd->ilinks.last().lon, B->latitude, B->longitude);
   } else {
     res = gcgeodist(A->latitude, A->longitude, B->latitude, B->longitude);
   }
@@ -371,31 +358,30 @@ double
 waypt_course(const Waypoint* A, const Waypoint* B)
 {
   if (A && B) {
-    return heading_true_degrees(RAD(A->latitude), RAD(A->longitude), RAD(B->latitude), RAD(B->longitude));
+    return heading_true_degrees(A->position(), B->position());
   } else {
     return 0;
   }
 }
 
 Waypoint::Waypoint() :
-  latitude(0),  // These should probably use some invalid data, but
-  longitude(0), // it looks like we have code that relies on them being zero.
-  altitude(unknown_alt),
   geoidheight(0),
   depth(0),
   proximity(0),
-  route_priority(0),
+  course(0),
+  speed(0),
+  temperature(0),
+  latitude(0),  // These should probably use some invalid data, but
+  longitude(0), // it looks like we have code that relies on them being zero.
+  altitude(unknown_alt),
   hdop(0),
   vdop(0),
   pdop(0),
-  course(0),
-  speed(0),
   fix(fix_unknown),
   sat(-1),
   heartrate(0),
   cadence(0),
   power(0),
-  temperature(0),
   odometer_distance(0),
   gc_data(&Waypoint::empty_gc_data),
   session(curr_session()),
@@ -412,31 +398,31 @@ Waypoint::~Waypoint()
 }
 
 Waypoint::Waypoint(const Waypoint& other) :
-  latitude(other.latitude),
-  longitude(other.longitude),
-  altitude(other.altitude),
   geoidheight(other.geoidheight),
   depth(other.depth),
   proximity(other.proximity),
+  course(other.course),
+  speed(other.speed),
+  temperature(other.temperature),
+  opt_flags(other.opt_flags),
+  latitude(other.latitude),
+  longitude(other.longitude),
+  altitude(other.altitude),
   shortname(other.shortname),
   description(other.description),
   notes(other.notes),
   urls(other.urls),
-  wpt_flags(other.wpt_flags),
   icon_descr(other.icon_descr),
   creation_time(other.creation_time),
-  route_priority(other.route_priority),
+  wpt_flags(other.wpt_flags),
   hdop(other.hdop),
   vdop(other.vdop),
   pdop(other.pdop),
-  course(other.course),
-  speed(other.speed),
   fix(other.fix),
   sat(other.sat),
   heartrate(other.heartrate),
   cadence(other.cadence),
   power(other.power),
-  temperature(other.temperature),
   odometer_distance(other.odometer_distance),
   gc_data(other.gc_data),
   session(other.session),
@@ -444,7 +430,7 @@ Waypoint::Waypoint(const Waypoint& other) :
 {
   // deep copy geocache data unless it is the special static empty_gc_data.
   if (other.gc_data != &Waypoint::empty_gc_data) {
-    gc_data = new geocache_data(*other.gc_data);
+    gc_data = new Geocache(*other.gc_data);
   }
 
   // deep copy fs chain data.
@@ -478,7 +464,6 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     wpt_flags = rhs.wpt_flags;
     icon_descr = rhs.icon_descr;
     creation_time = rhs.creation_time;
-    route_priority = rhs.route_priority;
     hdop = rhs.hdop;
     vdop = rhs.vdop;
     pdop = rhs.pdop;
@@ -496,7 +481,7 @@ Waypoint& Waypoint::operator=(const Waypoint& rhs)
     extra_data = rhs.extra_data;
     // deep copy geocache data unless it is the special static empty_gc_data.
     if (rhs.gc_data != &Waypoint::empty_gc_data) {
-      gc_data = new geocache_data(*rhs.gc_data);
+      gc_data = new Geocache(*rhs.gc_data);
     }
 
     // deep copy fs chain data.
@@ -536,12 +521,11 @@ Waypoint::CreationTimeXML() const
 
   QDateTime dt = GetCreationTime().toUTC();
 
-  const char* format = "yyyy-MM-ddTHH:mm:ssZ";
   if (dt.time().msec()) {
-    format = "yyyy-MM-ddTHH:mm:ss.zzzZ";
+    return dt.toString(u"yyyy-MM-ddTHH:mm:ss.zzzZ");
+  } else {
+    return dt.toString(u"yyyy-MM-ddTHH:mm:ssZ");
   }
-
-  return dt.toString(format);
 }
 
 gpsbabel::DateTime
@@ -562,11 +546,11 @@ Waypoint::SetCreationTime(qint64 t, qint64 ms)
   creation_time.setMSecsSinceEpoch((t * 1000) + ms);
 }
 
-geocache_data*
+Geocache*
 Waypoint::AllocGCData()
 {
   if (gc_data == &Waypoint::empty_gc_data) {
-    gc_data = new geocache_data;
+    gc_data = new Geocache;
   }
   return gc_data;
 }
@@ -577,31 +561,53 @@ Waypoint::EmptyGCData() const
   return (gc_data == &Waypoint::empty_gc_data);
 }
 
+void Waypoint::NormalizePosition()
+{
+  double lat_orig = this->latitude;
+  double lon_orig = this->longitude;
+
+  if (this->latitude < -90.0 || this->latitude > 90.0) {
+    bool fliplon = false;
+    this->latitude = remainder(this->latitude, 360.0); // -180 <= this->latitude <= 180
+    if (this->latitude < -90.0) {
+      this->latitude = -180.0 - this->latitude;
+      fliplon = true;
+    } else if (this->latitude > 90.0) {
+      this->latitude = 180.0 - this->latitude;
+      fliplon = true;
+    }
+
+    if (fliplon) {
+      if (this->longitude < 0.0) {
+        this->longitude += 180.0;
+      } else {
+        this->longitude -= 180.0;
+      }
+    }
+  }
+
+  if (this->longitude < -180.0 || this->longitude >= 180.0) {
+    this->longitude = remainder(this->longitude, 360.0); // -180 <= this->longitude <= 180
+    if (this->longitude == 180.0) {
+      this->longitude = -180.0;
+    }
+  }
+
+  if ((this->latitude < -90) || (this->latitude > 90.0))
+    gbFatal(FatalMsg() << this->session->name
+          << "Invalid latitude" << lat_orig << "in waypoint"
+          << this->shortname);
+  if ((this->longitude < -180) || (this->longitude > 180.0))
+    gbFatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
+          << this->shortname);
+}
+
 void
 WaypointList::waypt_add(Waypoint* wpt)
 {
-  double lat_orig = wpt->latitude;
-  double lon_orig = wpt->longitude;
   append(wpt);
 
-  if (wpt->latitude < -90) {
-    wpt->latitude += 180;
-  } else if (wpt->latitude > +90) {
-    wpt->latitude -= 180;
-  }
-  if (wpt->longitude < -180) {
-    wpt->longitude += 360;
-  } else if (wpt->longitude > +180) {
-    wpt->longitude -= 360;
-  }
-
-  if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    fatal(FatalMsg() << wpt->session->name
-          << "Invalid latitude" << lat_orig << "in waypoint"
-          << wpt->shortname);
-  if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    fatal(FatalMsg() << "Invalid longitude" << lon_orig << "in waypoint"
-          << wpt->shortname);
+  wpt->NormalizePosition();
 
   /*
    * Some input may not have one or more of these types so we
@@ -617,7 +623,7 @@ WaypointList::waypt_add(Waypoint* wpt)
     } else if (!wpt->notes.isNull()) {
       wpt->shortname = wpt->notes;
     } else {
-      wpt->shortname = QString("WPT%1").arg(waypt_count(), 3, 10, QLatin1Char('0'));
+      wpt->shortname = QStringLiteral("WPT%1").arg(waypt_count(), 3, 10, QLatin1Char('0'));
     }
   }
 
@@ -631,19 +637,17 @@ WaypointList::waypt_add(Waypoint* wpt)
     }
   }
 
-  if (this == global_waypoint_list) {
-    update_common_traits(wpt);
-  }
-
 }
 
 void
-WaypointList::add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, const QString& namepart, int number_digits)
+WaypointList::add_rte_waypt(int waypt_ct, Waypoint* wpt, bool synth, QStringView namepart, int number_digits)
 {
   append(wpt);
 
+  wpt->NormalizePosition();
+
   if (synth && wpt->shortname.isEmpty()) {
-    wpt->shortname = QString("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
+    wpt->shortname = QStringLiteral("%1%2").arg(namepart).arg(waypt_ct, number_digits, 10, QChar('0'));
     wpt->wpt_flags.shortname_is_synthetic = 1;
   }
 }
@@ -654,6 +658,22 @@ WaypointList::waypt_del(Waypoint* wpt)
   const int idx = this->indexOf(wpt);
   assert(idx >= 0);
   removeAt(idx);
+}
+
+void
+WaypointList::del_marked_wpts()
+{
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  swap(oldlist);
+
+  for (Waypoint* wpt : std::as_const(oldlist)) {
+    if (wpt->wpt_flags.marked_for_deletion) {
+      delete wpt;
+    } else {
+      waypt_add(wpt);
+    }
+  }
 }
 
 void

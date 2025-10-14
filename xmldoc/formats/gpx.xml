@@ -1,15 +1,14 @@
 <para>This is one of the most capable and expressive formats of all the file
-formats supported by GPSBabel.  It is described at <ulink url="http://www.topografix.com/gpx.asp">topografix.com</ulink> and is
+formats supported by GPSBabel.  It is described at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.topografix.com/gpx.asp">topografix.com</link> and is
 supported by EasyGPS, ExpertGPS, and many other programs described at
-<ulink url="http://www.topografix.com/gpx_resources.asp">topografix.com</ulink>
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.topografix.com/gpx_resources.asp">topografix.com</link>
 </para>
 <para>
 GPSBabel's reader of this module attempts to preserve tags it doesn't
 really understand.   It also tries to glean interesting data from:
 <itemizedlist>
-  <listitem><para><ulink url="http://www.geocaching.com">pocket queries from Geocaching.com,</ulink></para></listitem>
+  <listitem><para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.geocaching.com">pocket queries from Geocaching.com,</link></para></listitem>
   <listitem><para>Garmin's "gpxx" GPX extensions,</para></listitem>
   <listitem><para>Humminbird's "h" GPX extensions.</para></listitem>
 </itemizedlist>
 </para>
-

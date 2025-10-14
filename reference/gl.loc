@@ -1,4 +1,5 @@
-<?xml version="1.0"?><loc version="1.0" src="EasyGPS">
+<?xml version="1.0" encoding="UTF-8"?>
+<loc version="1.0" src="EasyGPS">
 <waypoint>
 <name id="GCEBB"><![CDATA[Mountain Bike Heaven by susy1313]]></name>
 <coord lat="35.972033" lon="-87.134700"/>

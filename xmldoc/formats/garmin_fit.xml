@@ -1,10 +1,10 @@
 <para>
 GPSBabel supports reading and writing of tracks in the .fit
 format used by products based on the Garmin
-<ulink url="https://www.thisisant.com/">ANT+ protocol</ulink>.
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.thisisant.com/">ANT+ protocol</link>.
 </para>
 <para>
-As in case of <link  linkend="fmt_gtrnctr">Garmin Training Center</link>,
+As in case of <link linkend="fmt_gtrnctr">Garmin Training Center</link>,
 FIT files contain courses with laps etc. which don't exactly match
 GPSBabel's waypoints, tracks, and routes. An attempt is made to extract and
 transform data than can be handled by GPSBabel like heart rate etc. and
@@ -20,7 +20,7 @@ inserting them at the nearest location in the track/course. By default,
 generic course points are written unless the waypoint name contains one of
 the following words in which case course points of type left/right are
 emitted:
-<simplelist>
+<simplelist type="vert">
 <member>left, links, gauche, izquierda, sinistra</member>
 <member>right, rechts, droit, derecha, destro</member>
 </simplelist>

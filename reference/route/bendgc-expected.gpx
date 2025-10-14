@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="35.752604000" minlon="-170.887231372" maxlat="46.365335996" maxlon="178.578290065"/>
+  <wpt lat="35.752604000" lon="140.615728000">
+    <name>RPT001</name>
+    <cmt>&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: 140.615728&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Latitude: 35.752604&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</cmt>
+    <desc>&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: 140.615728&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Latitude: 35.752604&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</desc>
+  </wpt>
+  <wpt lat="42.992831000" lon="166.492918000">
+    <name>RPT002</name>
+    <cmt>&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: 166.492918&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Latitude: 42.992831&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</cmt>
+    <desc>&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: 166.492918&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Latitude: 42.992831&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</desc>
+  </wpt>
+  <wpt lat="46.203079000" lon="-157.876012000">
+    <name>RPT003</name>
+    <cmt>&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: -157.876012&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Latitude: 46.203079&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</cmt>
+    <desc>&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: -157.876012&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Latitude: 46.203079&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</desc>
+  </wpt>
+  <wpt lat="42.925678000" lon="-127.622914000">
+    <name>RPT004</name>
+    <cmt>&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: -127.622914&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Latitude: 42.925678&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</cmt>
+    <desc>&lt;table&gt;
+&lt;tr&gt;&lt;td&gt;Longitude: -127.622914&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Latitude: 42.925678&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</desc>
+  </wpt>
+  <rte>
+    <name>Path</name>
+    <desc>Generated from track Path</desc>
+    <rtept lat="35.752604000" lon="140.615728000">
+      <name>RPT001</name>
+    </rtept>
+    <rtept lat="40.634773725" lon="154.851041506">
+      <name>RPT002</name>
+    </rtept>
+    <rtept lat="45.401171523" lon="178.578290065">
+      <name>RPT002</name>
+    </rtept>
+    <rtept lat="46.365335996" lon="-170.887231372">
+      <name>RPT003</name>
+    </rtept>
+    <rtept lat="45.830296919" lon="-144.937135097">
+      <name>RPT003</name>
+    </rtept>
+    <rtept lat="42.925678000" lon="-127.622914000">
+      <name>RPT004</name>
+    </rtept>
+  </rte>
+</gpx>

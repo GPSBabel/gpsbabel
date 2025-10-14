@@ -31,7 +31,7 @@
 #include <QVector>             // for QVector
 #include <QtGlobal>            // for qint8, quint16, quint8
 
-#include "defs.h"              // for ff_cap, ff_cap_read, ff_cap_none, CET_CHARSET_ASCII, ff_type, ff_type_file, route_head
+#include "defs.h"              // for ff_cap, ff_cap_read, ff_cap_none, ff_type, ff_type_file, route_head
 #include "format.h"            // for Format
 #include "formspec.h"          // for FormatSpecificData, kFsQstarzBl1000
 
@@ -55,6 +55,8 @@ struct qstarz_bl_1000_fsdata : FormatSpecificData {
 class QstarzBL1000Format : public Format
 {
 public:
+  using Format::Format;
+
   ff_type get_type() const override
   {
     return ff_type_file;
@@ -69,25 +71,9 @@ public:
     };
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
-  void rd_init(const QString& fname) override;
+  void rd_init(const QString& fname) override {}
   void read() override;
-  void rd_deinit() override;
   void qstarz_bl_1000_read(QDataStream& stream);
   void qstarz_bl_1000_read_record(QDataStream& stream, route_head* track_route);
-
-private:
-  QString read_fname;
 };
-
-
 #endif

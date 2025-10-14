@@ -3,7 +3,7 @@
     Support for Destinator POI's, Itineraries and Tracklogs.
     ( as described at "http://mozoft.com/d3log.html" )
 
-    Copyright (C) 2008 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2008 Olaf Klein
 
 
     This program is free software; you can redistribute it and/or modify

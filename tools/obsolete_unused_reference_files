@@ -1,0 +1,30 @@
+#!/bin/bash -ex
+# delay -t must be long enough for testo to complete
+inotifywait -r -m -t 120 reference > log&
+# wait to make sure inotifywait is monitoring
+sleep 10
+./testo
+# wait to make sure inotifywait is done
+sleep 120 
+grep ' OPEN ' log | sed 's/ OPEN //' | sort -u > used
+find reference/ -type f | sort -u > exists
+diff used exists | grep '^>' | sed 's/^> /git rm /' > delete_unused.dirty
+
+# whitelist some files used in encoding testing or referred to in test comments
+# that may one day be implemented.
+cat delete_unused.dirty | \
+grep -v reference/gis.osm_places_free_1.license | \
+grep -v reference/gis.osm_places_free_1.prj | \
+grep -v reference/gis.osm_railways_free_1.license | \
+grep -v reference/gis.osm_railways_free_1.prj | \
+grep -v reference/navilink_tracks_gpx.trk | \
+grep -v reference/navilink_waypoints_gpx.wpt | \
+grep -v reference/track/bike~unicsv.csv | \
+grep -v reference/track/mtk_logger_m241_alternate.csv | \
+grep -v reference/track/tpo-sample2.gpx | \
+grep -v reference/track/tpo-sample2.tpo \
+> delete_unused
+
+. ./delete_unused
+./testo
+

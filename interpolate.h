@@ -1,7 +1,7 @@
 /*
     Interpolate filter
 
-    Copyright (C) 2002 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002,2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,13 +22,13 @@
 #ifndef INTERPOLATE_H_INCLUDED_
 #define INTERPOLATE_H_INCLUDED_
 
-#include <optional>             // for optional
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
-#include <QVector>              // for QVector
-#include <QtGlobal>             // for qint64
-
-#include "defs.h"               // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
-#include "filter.h"             // for Filter
+#include "defs.h"    // for ARG_NOMINMAX, arglist_t, ARGTYPE_BEGIN_EXCL, ARG...
+#include "filter.h"  // for Filter
+#include "option.h"  // for OptionString, OptionBool
 
 #if FILTERS_ENABLED
 
@@ -43,20 +43,26 @@ public:
   void process() override;
 
 private:
-  char* opt_time{nullptr};
+  /* Member Functions */
+
+  void process_rte(route_head* rte);
+
+  /* Data Members */
+
+  OptionDouble opt_time;
   double max_time_step{0};
-  char* opt_dist{nullptr};
+  OptionDouble opt_dist{true};
   double max_dist_step{0};
-  char* opt_route{nullptr};
+  OptionBool opt_route;
 
   QVector<arglist_t> args = {
     {
       "time", &opt_time, "Time interval in seconds", nullptr,
-      ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_INT,
+      ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT,
       "0", nullptr, nullptr
     },
     {
-      "distance", &opt_dist, "Distance interval in miles or kilometers",
+      "distance", &opt_dist, "Distance interval",
       nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
       ARG_NOMINMAX, nullptr
     },

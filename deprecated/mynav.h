@@ -1,8 +1,8 @@
 /*
     Handle MyNav TRC format .trc and .ftn files
 
-    Copyright (c) 2014-2020 Ralf Horstmann <ralf@ackstorm.de>
-    Copyright (C) 2014-2020 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (c) 2014-2020 Ralf Horstmann
+    Copyright (C) 2014-2020 Robert Lipe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

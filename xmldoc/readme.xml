@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-  "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+<!DOCTYPE book
 [
   <!ENTITY % parts SYSTEM "autogen/_parts.xml">
   %parts;
@@ -9,11 +7,8 @@
   %chaps;
 ]
 >
-
-<book id="GPSBabel_Documentation_Book">
-  <bookinfo>
-    <title>GPSBabel Documentation</title>
-  </bookinfo>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="GPSBabel_Documentation_Book">
+  <info><title>GPSBabel Documentation</title></info>
 
   &allchapters;
 

@@ -26,6 +26,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="previewGmap">
+     <property name="toolTip">
+      <string>Enable this is the File Menu, Preferences Item, Privacy tab.</string>
+     </property>
      <property name="text">
       <string>Preview in Google Maps</string>
      </property>

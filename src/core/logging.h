@@ -16,8 +16,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-#ifndef gpsbabel_logging_h_included
-#define gpsbabel_logging_h_included
+#ifndef SRC_CORE_LOGGING_H_
+#define SRC_CORE_LOGGING_H_
 
 // A wrapper for QDebug that provides a sensible Warning() and FatalMsg()
 // with convenient functions, stream operators and manipulators.
@@ -33,13 +33,13 @@ public:
 };
 
 /*
- * To use a FatalMsg pass it to fatal(), e.g.
- * fatal(FatalMsg() << "bye bye");
+ * To use a FatalMsg pass it to gbFatal(), e.g.
+ * gbFatal(FatalMsg() << "bye bye");
  *
  * This
- * 1) allows the noreturn attribute on fatal to be use by analysis
+ * 1) allows the noreturn attribute on gbFatal to be use by analysis
  *    tools such as cppcheck.
- * 2) allows fatal to throw an exception instead of calling exit.
+ * 2) allows gbFatal to throw an exception instead of calling exit.
  *    This could be caught by main for a cleaner exit from a fatal error.
  */
 class FatalMsg : public QDebug
@@ -52,31 +52,20 @@ public:
 class DebugIndent
 {
 public:
-  explicit DebugIndent(int l) : level(l) {}
+  explicit DebugIndent(int level) : level_(level) {}
+  friend QDebug& operator<<(QDebug& debug, const DebugIndent& indent);
 
-  int level;
+private:
+  int level_;
 };
 
-QDebug operator<< (QDebug debug, const DebugIndent& indent);
+QDebug& operator<< (QDebug& debug, const DebugIndent& indent);
 
 class Debug : public QDebug
 {
 public:
   Debug() : QDebug(QtDebugMsg) {nospace().noquote();}
-  explicit Debug(int l) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(l);}
+  explicit Debug(int level) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(level);}
 };
 
-/*
- * Kludge any used QTextStream modifiers into Qt namespace as they are in newer
- * versions of Qt.  This makes source compatiblity easier.
- */
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))
-namespace Qt
-{
-  inline QTextStream& dec(QTextStream &s) { return ::dec(s); }
-  inline QTextStream& hex(QTextStream &s) { return ::hex(s); }
-  inline QTextStream& endl(QTextStream &s) { return ::endl(s); }
-  inline QTextStream& uppercasedigits(QTextStream &s) { return ::uppercasedigits(s); }
-}
-#endif
-#endif //  gpsbabel_logging_h_included
+#endif //  SRC_CORE_LOGGING_H_

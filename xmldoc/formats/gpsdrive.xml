@@ -2,6 +2,5 @@
 
 
       <para>GpsDrive way.txt file format. A space separated format
-file. Tested against GpsDrive v 1.30 found at <ulink url="http://www.gpsdrive.de">gpsdrive.de</ulink>.
+file. Tested against GpsDrive v 1.30 found at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.gpsdrive.de">gpsdrive.de</link>.
 Contributed by Alan Curry.</para>
-

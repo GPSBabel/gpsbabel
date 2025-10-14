@@ -16,7 +16,7 @@ RECORD_DELIMITER NEWLINE
 # Individual data fields in order of appearance
 
 IFIELD LOCAL_TIME,"","%m-%d-%Y"
-IFIELD HMSG_TIME,"","%d:%d:%d"
+IFIELD LOCAL_TIME,"","%H:%M:%S"
 IFIELD LAT_HUMAN_READABLE,"","%c %d°%d'%f\""
 IFIELD LON_HUMAN_READABLE,"","%c %d°%d'%f\""
 IFIELD PATH_SPEED_MPH,"","%.1fmph"

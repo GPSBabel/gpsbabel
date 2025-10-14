@@ -112,7 +112,7 @@ and the barograph and adjusting accordingly:
 
     gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc
 
-The same can be acheived by downloading directly from a barograph instrument
+The same can be achieved by downloading directly from a barograph instrument
 supported by GPSBabel.  For example with a Brauniger IQ Comp GPS variometer:
 
     gpsbabel -i baroiq -f /dev/ttyS0 -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc

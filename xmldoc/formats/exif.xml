@@ -1,6 +1,6 @@
 <para>
   This format reads and writes GPS information embedded in
-   <ulink url="http://www.exif.org">EXIF</ulink>,
+   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.exif.org">EXIF</link>,
    the Exchangeable Image Format, data.  EXIF is a standardized method
   of encoding data in pictures such as JPEG, TIFF, and WAV and is frequently
   used by mobile phones with cameras and cameras with built-in GPS.
@@ -9,4 +9,3 @@
   EXIF is frequently used for Geolocating photographs so their images can be
   correlated with time and location.
 </para>
-

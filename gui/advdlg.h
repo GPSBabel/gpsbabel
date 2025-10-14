@@ -22,7 +22,11 @@
 #ifndef ADVDLG_H
 #define ADVDLG_H
 
-#include "ui_advui.h"
+#include <QDialog>      // for QDialog
+#include <QObject>      // for Q_OBJECT, slots
+#include <QPushButton>  // for QPushButton
+#include <QWidget>      // for QWidget
+#include "ui_advui.h"   // for Ui_AdvUi
 
 class AdvDlg: public QDialog
 {
@@ -30,9 +34,10 @@ class AdvDlg: public QDialog
 
 public:
   AdvDlg(QWidget* parent,
-         bool& synthShortNames_,
-         bool& previewGmap_,
-         int&   debugLevel_);
+         bool& synthShortNames,
+         bool mapPreviewEnabled,
+         bool& previewGmap,
+         int&   debugLevel);
   QPushButton* formatButton()
   {
     return ui_.formatButton;

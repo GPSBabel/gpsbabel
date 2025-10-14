@@ -2,7 +2,7 @@
 
         Support for Swiss Map # (.xol) format
 
-        Copyright (C) 2007 Olaf Klein, o.b.klein@gpsbabel.org
+        Copyright (C) 2007 Olaf Klein
 
         This program is free software; you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by

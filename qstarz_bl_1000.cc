@@ -31,11 +31,8 @@
 #include <QDebug>              // for QDebug
 #include <QFile>               // for QFile
 #include <QIODevice>           // for QIODevice, QIODevice::ReadOnly
-#include "defs.h"              // for Waypoint, ddmm2degrees, route_head, track_add_head, track_add_wpt, waypt_add, waypt_count, wp_flags, fix_unknown, fix_2d, fix_3d, fix_dgps, fix_none, fix_pps, fix_type, global_options, global_opts
+#include "defs.h"
 #include "src/core/logging.h"  // for Fatal
-
-
-#define MYNAME "Qstarz BL-1000"
 
 
 enum BL1000_POINT_TYPE {
@@ -135,7 +132,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   stream >> unused2;
 
   if (stream.status() != QDataStream::Ok) {
-    fatal(FatalMsg() << MYNAME << ": File format error on " << read_fname << ". Perhaps this isn't a Qstarz BL-1000 file");
+    gbFatal(FatalMsg() << "File format error on " << fname << ". Perhaps this isn't a Qstarz BL-1000 file");
   }
 
   BL1000_POINT_TYPE type;
@@ -171,7 +168,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   default:
     type = BL1000_POINT_TYPE_UNKNOWN;
 
-    fatal(FatalMsg() << MYNAME << ": File format error on " << read_fname << ". Unexpected value for RCR (record reason): " << rcr);
+    gbFatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for RCR (record reason): " << rcr);
 
     break;
   }
@@ -205,7 +202,7 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
     fix = fix_unknown;
 
     if (type != BL1000_POINT_TYPE_UNKNOWN) {
-      fatal(FatalMsg() << MYNAME << ": File format error on " << read_fname << ". Unexpected value for fix quality: " << fixQuality);
+      gbFatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for fix quality: " << fixQuality);
     }
 
     break;
@@ -219,25 +216,23 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
   // qDebug(waypoint)
 
   if ((waypoint->latitude < -90) || (waypoint->latitude > 90)) {
-    fatal(FatalMsg() << MYNAME << ": File format error on " << read_fname << ". Unexpected value for latitude: " << waypoint->latitude);
+    gbFatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for latitude: " << waypoint->latitude);
   }
 
   if ((waypoint->longitude < -180) || (waypoint->longitude > 180)) {
-    fatal(FatalMsg() << MYNAME << ": File format error on " << read_fname << ". Unexpected value for longitude: " << waypoint->longitude);
+    gbFatal(FatalMsg() << "File format error on " << fname << ". Unexpected value for longitude: " << waypoint->longitude);
   }
 
   waypoint->altitude = altitude;
 
-  waypoint->hdop = round(hdop * 1000) / 1000;
-  waypoint->vdop = round(vdop * 1000) / 1000;
+  waypoint->hdop = std::round(hdop * 1000) / 1000;
+  waypoint->vdop = std::round(vdop * 1000) / 1000;
   waypoint->fix = fix;
   waypoint->sat = satelliteCountUsed;
 
-  waypoint->speed = KPH_TO_MPS(speed);
-  waypoint->wpt_flags.speed = 1;
+  waypoint->set_speed(KPH_TO_MPS(speed));
 
-  waypoint->course = heading;
-  waypoint->wpt_flags.course = 1;
+  waypoint->set_course(heading);
   waypoint->SetCreationTime(time, milliseconds);
 
   auto* fsdata = new qstarz_bl_1000_fsdata;
@@ -254,12 +249,12 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
 
   if (qstarz_bl_1000_is_waypoint_type(type)) {
     if (global_opts.synthesize_shortnames) {
-      waypoint->shortname = QString("WP%2").arg(waypt_count() + 1, 3, 10, QChar('0'));
+      waypoint->shortname = QStringLiteral("WP%2").arg(waypt_count() + 1, 3, 10, QChar('0'));
       waypoint->wpt_flags.shortname_is_synthetic = 1;
     }
     waypt_add(waypoint);
   } else if (qstarz_bl_1000_is_trackpoint_type(type)) {
-    track_add_wpt(track_route, waypoint, "TP", 3);
+    track_add_wpt(track_route, waypoint, u"TP", 3);
   } else {
     delete waypoint;
   }
@@ -271,23 +266,11 @@ QstarzBL1000Format::qstarz_bl_1000_read_record(QDataStream& stream, route_head* 
  ***************************************************************************/
 
 void
-QstarzBL1000Format::rd_init(const QString& fname)
-{
-  read_fname = fname;
-}
-
-void
-QstarzBL1000Format::rd_deinit()
-{
-  read_fname.clear();
-}
-
-void
 QstarzBL1000Format::read()
 {
-  QFile file(read_fname);
+  QFile file(fname);
   if (!file.open(QIODevice::ReadOnly)) {
-    fatal(FatalMsg() << MYNAME << ": Error opening file " << read_fname);
+    gbFatal(FatalMsg() << "Error opening file " << fname);
   }
 
   QDataStream stream(&file);

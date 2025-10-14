@@ -19,15 +19,16 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include <QMessageBox>
-#include <QProcess>
-#include <QFileDialog>
-#include <QSettings>
+
 #include "advdlg.h"
+#include <QCheckBox>         // for QCheckBox
+#include <QComboBox>         // for QComboBox
+#include <QDialogButtonBox>  // for QDialogButtonBox
 
 //------------------------------------------------------------------------
 AdvDlg::AdvDlg(QWidget* parent,
                bool& synthShortNames,
+               bool mapPreviewEnabled,
                bool& previewGmap,
                int&  debugLevel):
   QDialog(parent),
@@ -37,6 +38,10 @@ AdvDlg::AdvDlg(QWidget* parent,
 {
   ui_.setupUi(this);
   ui_.synthShortNames->setChecked(synthShortNames);
+  ui_.previewGmap->setEnabled(mapPreviewEnabled);
+  if (!mapPreviewEnabled) {
+    previewGmap = false;
+  }
   ui_.previewGmap->setChecked(previewGmap);
   ui_.debugCombo->setCurrentIndex(debugLevel+1);
 #if defined (Q_OS_WIN)

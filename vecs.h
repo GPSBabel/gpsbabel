@@ -21,11 +21,12 @@
 #ifndef VECS_H_INCLUDED_
 #define VECS_H_INCLUDED_
 
-#include <cstdint>              // for uint32_t
+#include <cstdint>      // for uint32_t
 
-#include <QString>              // for QString
-#include <QStringList>          // for QStringList
-#include <QVector>              // for QVector<>::iterator, QVector
+#include <QList>        // for QList
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
+#include <QVector>      // for QVector<>::iterator, QVector
 
 #include "defs.h"
 #include "format.h"
@@ -35,6 +36,31 @@ class Vecs
 {
 // Meyers Singleton
 public:
+
+  /* Types */
+
+  using FormatFactory = Format* (*)(const QString&);
+
+  class fmtinfo_t {
+  public:
+
+    bool isDynamic() const {
+      return factory != nullptr;
+    }
+    explicit operator bool() const {
+      return ((fmt != nullptr) || (factory != nullptr));
+    }
+    Format* operator->() const {
+      return fmt;
+    }
+
+    Format* fmt{nullptr};
+    QString fmtname;
+    QString style_filename;
+    QStringList options;
+    FormatFactory factory{nullptr};
+  };
+
   /* Special Member Functions */
 
   static Vecs& Instance();
@@ -45,15 +71,18 @@ public:
 
   /* Member Functions */
 
+  static void init_vec(Format* fmt, const QString& fmtname);
   void init_vecs();
+  static void free_options(QVector<arglist_t>* args);
+  static void exit_vec(Format* fmt);
   void exit_vecs();
-  static void assign_option(const QString& module, arglist_t* arg, const char* val);
+  static void assign_option(const QString& module, arglist_t& arg, const QString& val, bool isDefault);
   static void disp_vec_options(const QString& vecname, const QVector<arglist_t>* args);
   static void validate_options(const QStringList& options, const QVector<arglist_t>* args, const QString& name);
-  static QString get_option(const QStringList& options, const char* argname);
-  Format* find_vec(const QString& vecname);
-  void disp_vecs() const;
-  void disp_vec(const QString& vecname) const;
+  static QString get_option(const QStringList& options, const QString& argname);
+  static void prepare_format(const fmtinfo_t& data);
+  fmtinfo_t find_vec(const QString& fmtargstring);
+  void disp_vec(const QString& vecname = QString()) const;
   static const char* name_option(uint32_t type);
   void disp_formats(int version) const;
   static bool validate_args(const QString& name, const QVector<arglist_t>* args);
@@ -70,6 +99,7 @@ private:
     QString desc;
     QString extensions; // list of possible extensions separated by '/', first is output default for GUI.
     QString parent;
+    FormatFactory factory{nullptr};
   };
 
   struct arginfo_t {
@@ -113,7 +143,7 @@ private:
 
   /* Member Functions */
 
-  static int is_integer(const char* c);
+  static bool is_bool(const QString& val);
   static QVector<style_vec_t> create_style_vec();
   QVector<vecinfo_t> sort_and_unify_vecs() const;
   static void disp_v1(ff_type t);

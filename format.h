@@ -45,6 +45,7 @@ class Format
 {
 public:
   Format() = default;
+  Format(const QString& filename) : fname{filename} {}
   // Provide virtual public destructor to avoid undefined behavior when
   // an object of derived class type is deleted through a pointer to
   // its base class type.
@@ -64,8 +65,8 @@ public:
 
   virtual void rd_init(const QString& /* fname */)
   {
-    fatal("Format does not support reading.\n");
-//	fin = gbfopen(fname, "r", MYNAME);
+    gbFatal("Format does not support reading.\n");
+//	fin = gbfopen(fname, "r");
   }
 
   virtual void rd_deinit()
@@ -109,8 +110,8 @@ public:
 
   virtual void wr_init(const QString& /* fname */)
   {
-    fatal("Format does not support writing.\n");
-//	fout = gbfopen(fname, "w", MYNAME);
+    gbFatal("Format does not support writing.\n");
+//	fout = gbfopen(fname, "w");
   }
 
   virtual void wr_deinit()
@@ -132,7 +133,7 @@ public:
 
   virtual void rd_position_init(const QString& /* fname */)
   {
-    fatal("Realtime tracking (-T) is not supported by this input type.\n");
+    gbFatal("Realtime tracking (-T) is not supported by this input type.\n");
   }
 
   virtual Waypoint* rd_position(posn_status* /* status */)
@@ -150,7 +151,7 @@ public:
 
   virtual void wr_position(Waypoint* /* wpt */)
   {
-    fatal("This output format does not support output of realtime positioning.\n");
+    gbFatal("This output format does not support output of realtime positioning.\n");
   }
 
   virtual void wr_position_deinit()
@@ -168,31 +169,8 @@ public:
 
   virtual ff_type get_type() const = 0;
   virtual QVector<ff_cap> get_cap() const = 0;
-  virtual QString get_encode() const = 0;
-  virtual int get_fixed_encode() const = 0;
 
-  QString get_name() const
-  {
-    return name;
-  }
-
-  void set_name(const QString& nm)
-  {
-    name = nm;
-  }
-
-  QString get_argstring() const
-  {
-    return argstring;
-  }
-
-  void set_argstring(const QString& string)
-  {
-    argstring = string;
-  }
-private:
-  QString name;
-  QString argstring;
+  QString fname;
 
 protected:
   template <class MyFormat>

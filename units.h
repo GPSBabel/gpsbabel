@@ -23,25 +23,34 @@
 #ifndef GPSBABEL_UNITS_H
 #define GPSBABEL_UNITS_H
 
-/*
- *  From units.c
- */
-enum fmt_units {
-  units_unknown = 0,
-  units_statute = 1,
-  units_metric = 2,
-  units_nautical =3,
-  units_aviation =4
+#include <utility>  // for pair
+
+#include <QString>  // for QString
+
+
+class UnitsFormatter
+{
+public:
+
+  /* Types */
+
+  enum class units_t {
+    statute,
+    metric,
+    nautical,
+    aviation
+  };
+
+  /* Member Functions */
+
+  void setunits(units_t u);
+  std::pair<double, QString> fmt_distance(double distance_meters) const;
+  std::pair<double, QString> fmt_altitude(double distance_meters) const;
+  std::pair<double, QString> fmt_speed(double speed_meters_per_sec) const;
+
+  /* Data Members */
+
+  units_t units{units_t::statute};
+
 };
-
-int    fmt_setunits(fmt_units);
-
-double fmt_distance(double, const char** tag);
-
-double fmt_altitude(double, const char** tag);
-
-double fmt_speed(double, const char** tag);
-
-#include "defs.h"
-
 #endif //GPSBABEL_UNITS_H

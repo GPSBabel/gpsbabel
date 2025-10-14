@@ -1,0 +1,76 @@
+#!/bin/bash -e
+
+fixem() {
+encapsulate=$1
+echo encapsulate "$encapsulate"
+for file in *.xml
+do
+if [ "$file" != "allchapters.xml" ]; then
+if [ "$file" !=  "_chapters.xml" ]; then
+  echo  "converting $file ($(wc -c "$file" | awk '{print $1}') bytes)"
+  if [ "$encapsulate" = "yes" ]; then
+    echo -e "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!DOCTYPE book PUBLIC \"-//OASIS//DTD DocBook XML V4.5//EN\" \"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd\">\n<book><chapter><title>T</title>\n$(cat $file)" > "$file"
+    echo "</chapter></book>" >> "$file"
+  fi
+  xmllint --noout --valid "$file" || true
+  # db4-upgrade.xsl from https://docbook.org/xml/5.1/docbook-v5.1-os.zip
+  xsltproc  -o "$file".new /home/tsteven4/builds/docbook-v5.1/tools/db4-upgrade.xsl "$file"
+  if [ "$encapsulate" == "yes" ]; then
+    head --lines=-1 "$file".new | tail --lines=+3 > "$file"
+  else
+    tail --lines=+2 "$file".new > "$file"
+  fi
+  rm "$file".new
+fi
+fi
+done
+}
+
+pushd xmldoc
+pushd formats
+fixem yes
+# 4.5 productname defaulted to class=trade.  5.0 does not, use trademark
+for file in *.xml
+do
+  echo -e "<fake>\n$(cat $file)" > "$file"
+  echo "</fake>" >> "$file"
+  xsltproc -o "$file".trademark ../tmissue.xsl "$file"
+  head --lines=-1 "$file".trademark | tail --lines=+2 > "$file" 
+  rm "$file".trademark
+done
+pushd options
+# for some reason the upgrade wants to insert a ^L character in gpx-urlbase.xml unless we
+sed -e 's|\\|\\\\|g' -i  gpx-urlbase.xml 
+sed -e 's|\\|\\\\|g' -i  subrip-format.xml
+sed -e 's|\\|\\\\|g' -i  exif-filename.xml
+fixem yes
+popd
+popd
+pushd filters
+fixem yes
+pushd options
+fixem yes
+popd
+popd
+pushd chapters
+sed -e 's|&filters;|[[[filters]]]|' -i filters.xml
+sed -e 's|&formats;|[[[formats]]]|' -i formats.xml
+fixem no
+sed -e 's|\[\[\[filters\]\]\]|\&filters;|' -i filters.xml
+sed -e 's|\[\[\[formats\]\]\]|\&formats;|' -i formats.xml
+#sed -i -e '$a\' formats.xml
+#sed -i -e '$a\' filters.xml
+popd
+# the 5.1 version of db4-update.xsl drops the term/ulink
+patch -p0 <build.patch
+nonewlines=$(pcregrep -LMr '\n\Z' .)
+for file in ${nonewlines[@]}
+do
+  echo fixing newline in "$file"
+  sed -i -e '$a\' "$file"
+done
+popd
+perl xmldoc/makedoc
+
+
+

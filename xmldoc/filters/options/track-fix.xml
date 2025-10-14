@@ -6,4 +6,3 @@ value.  Valid values for this option are PPS, DGPS, 3D, 2D, or NONE.
 This option is most useful when converting from a format that doesn't
 contain GPS fix status to one that requires it.
 </para>
-

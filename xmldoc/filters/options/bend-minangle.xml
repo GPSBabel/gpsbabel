@@ -4,4 +4,3 @@
 greater than this value. This avoids replacing a point if the GPS unit
 is already pointing in the correct direction, or if the route reaches
 a certain point and goes back the same road.</para>
-

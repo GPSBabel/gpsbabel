@@ -22,16 +22,23 @@
 #ifndef SORT_H_INCLUDED_
 #define SORT_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
-#include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, arglist_t, ARG_TERMI...
+#include "defs.h"    // for arglist_t, ARGTYPE_BOOL, ARG_NOMINMAX, Waypoint
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool
+
 
 #if FILTERS_ENABLED
 
 class SortFilter:public Filter
 {
 public:
+
+  /* Member Functions */
+
   QVector<arglist_t>* get_args() override
   {
     return &args;
@@ -40,6 +47,9 @@ public:
   void process() override;
 
 private:
+
+  /* Types */
+
   enum class SortModeWpt {
     none,
     description,
@@ -48,8 +58,6 @@ private:
     time
   };
 
-  SortModeWpt wpt_sort_mode = SortModeWpt::none;	/* How are we sorting these? */
-
   enum class SortModeRteHd {
     none,
     description,
@@ -57,12 +65,32 @@ private:
     number
   };
 
-  SortModeRteHd rte_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
-  SortModeRteHd trk_sort_mode = SortModeRteHd::none;	/* How are we sorting these? */
+  /* Member Functions */
 
-  char* opt_sm_gcid{}, *opt_sm_shortname{}, *opt_sm_description{}, *opt_sm_time{};
-  char* opt_sm_rtenum{}, *opt_sm_rtename{}, *opt_sm_rtedesc{};
-  char* opt_sm_trknum{}, *opt_sm_trkname{}, *opt_sm_trkdesc{};
+  static bool sort_comp_wpt_by_description(const Waypoint* a, const Waypoint* b);
+  static bool sort_comp_wpt_by_gcid(const Waypoint* a, const Waypoint* b);
+  static bool sort_comp_wpt_by_shortname(const Waypoint* a, const Waypoint* b);
+  static bool sort_comp_wpt_by_time(const Waypoint* a, const Waypoint* b);
+  static bool sort_comp_rh_by_description(const route_head* a, const route_head* b);
+  static bool sort_comp_rh_by_name(const route_head* a, const route_head* b);
+  static bool sort_comp_rh_by_number(const route_head* a, const route_head* b);
+
+  /* Data Members */
+
+  SortModeWpt wpt_sort_mode{SortModeWpt::none};	/* How are we sorting these? */
+  SortModeRteHd rte_sort_mode{SortModeRteHd::none};	/* How are we sorting these? */
+  SortModeRteHd trk_sort_mode{SortModeRteHd::none};	/* How are we sorting these? */
+
+  OptionBool opt_sm_gcid;
+  OptionBool opt_sm_shortname;
+  OptionBool opt_sm_description;
+  OptionBool opt_sm_time;
+  OptionBool opt_sm_rtenum;
+  OptionBool opt_sm_rtename;
+  OptionBool opt_sm_rtedesc;
+  OptionBool opt_sm_trknum;
+  OptionBool opt_sm_trkname;
+  OptionBool opt_sm_trkdesc;
 
   QVector<arglist_t> args = {
     {
@@ -106,14 +134,6 @@ private:
       nullptr, ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
   };
-
-  static bool sort_comp_wpt_by_description(const Waypoint* a, const Waypoint* b);
-  static bool sort_comp_wpt_by_gcid(const Waypoint* a, const Waypoint* b);
-  static bool sort_comp_wpt_by_shortname(const Waypoint* a, const Waypoint* b);
-  static bool sort_comp_wpt_by_time(const Waypoint* a, const Waypoint* b);
-  static bool sort_comp_rh_by_description(const route_head* a, const route_head* b);
-  static bool sort_comp_rh_by_name(const route_head* a, const route_head* b);
-  static bool sort_comp_rh_by_number(const route_head* a, const route_head* b);
 
 };
 #endif // FILTERS_ENABLED

@@ -19,4 +19,3 @@ otherwise throw away.  You will still get no more than
 <varname>maxcount</varname> points, but they will all be at least
 <varname>distance</varname> away from the center.  (And possibly sorted.)
 </para>
-

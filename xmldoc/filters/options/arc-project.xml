@@ -4,9 +4,9 @@ closest segment, or over the nearest point if <option>points</option> option
 is used.
 </para>
 <para>
-With <option>rte</option> and <option>trk</option> optinos, if
-is possible, altitude, creation_time and microsecond fields of waypoints
-are updated by interpolation.
+With either the <option>rte</option> or <option>trk</option> option 
+the altitude and creation_time of the projected waypoints
+are updated, if possible, by interpolation from the route or track data.
 </para>
 <para>
 This is most useful if you are trying to obtain the closest points in

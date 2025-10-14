@@ -41,7 +41,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fop \
     xsltproc \
     docbook-xml \
+    docbook5-xml \
     docbook-xsl \
+    docbook-xsl-ns \
+    libavalon-framework-java \
+    jing \
  && rm -rf /var/lib/apt/lists/*
 
 # pkgs with libraries needed by gpsbabel
@@ -54,6 +58,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # pkgs with qt used by gpsbabel
 RUN apt-get update && apt-get install -y --no-install-recommends \
     qt5-default \
+    qttools5-dev \
     qttools5-dev-tools \
     qttranslations5-l10n \
     qtwebengine5-dev \

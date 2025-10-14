@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="GPSBabel">
+  <node id="-1" visible="true" lat="50.9000000" lon="0.1000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 1"/>
+    <tag k="note" v="osm-id 1"/>
+  </node>
+  <node id="-2" visible="true" lat="50.9000000" lon="-0.1000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 2"/>
+    <tag k="note" v="osm-id 2"/>
+  </node>
+  <node id="-3" visible="true" lat="51.1000000" lon="-0.1000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 3"/>
+    <tag k="note" v="osm-id 3"/>
+  </node>
+  <node id="-4" visible="true" lat="51.1000000" lon="0.1000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 4"/>
+    <tag k="note" v="osm-id 4"/>
+  </node>
+  <node id="-5" visible="true" lat="50.8000000" lon="0.0000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 5"/>
+    <tag k="note" v="osm-id 5"/>
+  </node>
+  <node id="-6" visible="true" lat="50.8000000" lon="-0.2000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 6"/>
+    <tag k="note" v="osm-id 6"/>
+  </node>
+  <node id="-7" visible="true" lat="51.0000000" lon="-0.2000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 7"/>
+    <tag k="note" v="osm-id 7"/>
+  </node>
+  <node id="-8" visible="true" lat="51.0000000" lon="0.0000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 8"/>
+    <tag k="note" v="osm-id 8"/>
+  </node>
+  <node id="-9" visible="true" lat="50.7000000" lon="-0.1000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 9"/>
+    <tag k="note" v="osm-id 9"/>
+  </node>
+  <node id="-10" visible="true" lat="50.7000000" lon="-0.3000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 10"/>
+    <tag k="note" v="osm-id 10"/>
+  </node>
+  <node id="-11" visible="true" lat="50.9000000" lon="-0.3000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 11"/>
+    <tag k="note" v="osm-id 11"/>
+  </node>
+  <node id="-12" visible="true" lat="50.9000000" lon="-0.1000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 12"/>
+    <tag k="note" v="osm-id 12"/>
+  </node>
+  <node id="-13" visible="true" lat="50.6000000" lon="-0.2000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 13"/>
+    <tag k="note" v="osm-id 13"/>
+  </node>
+  <node id="-14" visible="true" lat="50.6000000" lon="-0.4000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 14"/>
+    <tag k="note" v="osm-id 14"/>
+  </node>
+  <node id="-15" visible="true" lat="50.8000000" lon="-0.4000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 15"/>
+    <tag k="note" v="osm-id 15"/>
+  </node>
+  <node id="-16" visible="true" lat="50.8000000" lon="-0.2000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="osm-id 16"/>
+    <tag k="note" v="osm-id 16"/>
+  </node>
+  <node id="-17" visible="true" lat="51.0000000" lon="0.0000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="My Restuarant"/>
+    <tag k="note" v="My Restuarant"/>
+    <tag k="amenity" v="restaurant"/>
+  </node>
+  <node id="-18" visible="true" lat="50.8000000" lon="-0.2000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="My Pub"/>
+    <tag k="note" v="My Local Pub"/>
+    <tag k="amenity" v="nightclub"/>
+  </node>
+  <node id="-19" visible="true" lat="50.7000000" lon="-0.3000000">
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="My Store"/>
+    <tag k="note" v="My Local Store; Sells Food"/>
+    <tag k="shop" v="convenience"/>
+  </node>
+  <way id="-20" visible="true">
+    <nd ref="-1"/>
+    <nd ref="-2"/>
+    <nd ref="-3"/>
+    <nd ref="-4"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="My Restuarant"/>
+    <tag k="note" v="osm-id 1"/>
+  </way>
+  <way id="-21" visible="true">
+    <nd ref="-5"/>
+    <nd ref="-6"/>
+    <nd ref="-7"/>
+    <nd ref="-8"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="My Pub"/>
+    <tag k="note" v="osm-id 2"/>
+  </way>
+  <way id="-22" visible="true">
+    <nd ref="-9"/>
+    <nd ref="-10"/>
+    <nd ref="-11"/>
+    <nd ref="-12"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="My Pub"/>
+    <tag k="note" v="osm-id 3"/>
+  </way>
+  <way id="-23" visible="true">
+    <nd ref="-13"/>
+    <nd ref="-14"/>
+    <nd ref="-15"/>
+    <nd ref="-16"/>
+    <tag k="created_by" v="GPSBabel"/>
+    <tag k="name" v="My Store"/>
+    <tag k="note" v="osm-id 3"/>
+  </way>
+</osm>

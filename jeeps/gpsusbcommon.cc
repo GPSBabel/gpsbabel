@@ -1,7 +1,7 @@
 /*
     Garmin USB layer - OS independent component.
 
-    Copyright (C) 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2006 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ top:
     rv = gusb_llops->llop_get_bulk(ibuf, sz);
     break;
   default:
-    fatal("Unknown receiver state %d\n", receive_state);
+    gbFatal("Unknown receiver state %d\n", receive_state);
   }
 
   pkt_id = le_read16(&ibuf->gusb_pkt.pkt_id);
@@ -153,7 +153,7 @@ top:
 int
 gusb_cmd_send(const garmin_usb_packet* opkt, size_t sz)
 {
-  auto* obuf = (unsigned char*) &opkt->dbuf;
+  const auto* obuf = opkt->dbuf;
   const char* m2;
 
   unsigned int rv = gusb_llops->llop_send(opkt, sz);
@@ -215,7 +215,7 @@ gusb_id_unit(garmin_unit_info_t* gu)
   garmin_usb_packet iresp;
   int i;
 
-  gusb_cmd_send((garmin_usb_packet*)oid, sizeof(oid));
+  gusb_cmd_send(reinterpret_cast<const garmin_usb_packet*>(oid), sizeof(oid));
 
   for (i = 0; i < 25; i++) {
     iresp.gusb_pkt.type = 0;
@@ -236,7 +236,7 @@ gusb_id_unit(garmin_unit_info_t* gu)
       return;
     }
   }
-  fatal("Unable to sync with Garmin USB device in %d attempts.", i);
+  gbFatal("Unable to sync with Garmin USB device in %d attempts.\n", i);
 }
 
 void
@@ -272,5 +272,5 @@ gusb_syncup()
       return;
     }
   }
-  fatal("Unable to establish USB syncup\n");
+  gbFatal("Unable to establish USB syncup\n");
 }

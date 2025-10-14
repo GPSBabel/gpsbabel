@@ -1,7 +1,7 @@
 /*
     Windows layer of Garmin/USB protocol.
 
-    Copyright (C) 2004, 2006, 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2006, 2006 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@
 #include <setupapi.h>
 #include <winioctl.h>
 
-#include "garmin_device_xml.h"
 #include "jeeps/garminusb.h"
 #include "jeeps/gps.h"
 #include "jeeps/gpsapp.h"
@@ -55,7 +54,6 @@ typedef struct {
 
 static HANDLE usb_handle = INVALID_HANDLE_VALUE;
 static int usb_tx_packet_size ;
-static const gdx_info* gdx;
 
 static int
 gusb_win_close(gpsdevh* /* handle */, bool /* exit_lib */)
@@ -82,7 +80,7 @@ gusb_win_get(garmin_usb_packet* ibuf, size_t sz)
     if (!DeviceIoControl(usb_handle, IOCTL_GARMIN_USB_INTERRUPT_IN, NULL, 0,
                          buf, GARMIN_USB_INTERRUPT_DATA_SIZE, &rxed, NULL)) {
       GPS_Serial_Error("Ioctl");
-      fatal("ioctl\n");
+      gbFatal("ioctl\n");
     }
     buf += rxed;
     sz  -= rxed;
@@ -110,7 +108,7 @@ static int
 gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
 {
   DWORD rsz;
-  unsigned char* obuf = (unsigned char*) &opkt->dbuf;
+  const auto* obuf = opkt->dbuf;
 
   /* The spec warns us about making writes an exact multiple
    * of the packet size, but isn't clear whether we can issue
@@ -119,7 +117,7 @@ gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
   WriteFile(usb_handle, obuf, sz, &rsz, NULL);
 
   if (rsz != sz) {
-    fatal("Error sending %d bytes.   Successfully sent %ld\n", sz, rsz);
+    gbFatal("Error sending %zu bytes.  Successfully sent %ld\n", sz, rsz);
   }
 
   return rsz;
@@ -157,14 +155,14 @@ HANDLE garmin_usb_start(HDEVINFO hdevinfo, SP_DEVICE_INTERFACE_DATA* infodata)
            pdd->DevicePath);
 
   if (usb_handle != INVALID_HANDLE_VALUE) {
-    fatal("garmin_usb_start called while device already started.\n");
+    gbFatal("garmin_usb_start called while device already started.\n");
   }
 
   usb_handle = CreateFile(pdd->DevicePath, GENERIC_READ|GENERIC_WRITE,
                           0, NULL, OPEN_EXISTING, 0, NULL);
   if (usb_handle == INVALID_HANDLE_VALUE) {
     if (GetLastError() == ERROR_ACCESS_DENIED) {
-      warning(
+      gbWarning(
         "Exclusive access is denied.  It's likely that something else such as\n"
         "Garmin Lifetime Updater, Communicator, Basecamp, Nroute, Spanner,\n"
         "Google Earth, or GPSGate already has control of the device\n");
@@ -176,37 +174,13 @@ HANDLE garmin_usb_start(HDEVINFO hdevinfo, SP_DEVICE_INTERFACE_DATA* infodata)
   if (!DeviceIoControl(usb_handle, IOCTL_GARMIN_USB_BULK_OUT_PACKET_SIZE,
                        NULL, 0, &usb_tx_packet_size, GARMIN_USB_INTERRUPT_DATA_SIZE,
                        &size, NULL)) {
-    fatal("Couldn't get USB packet size.\n");
+    gbFatal("Couldn't get USB packet size.\n");
   }
   win_llops.max_tx_size = usb_tx_packet_size;
 
   gusb_syncup();
 
   return usb_handle;
-}
-
-
-static char** get_garmin_mountpoints(void)
-{
-#define BUFSIZE 512
-  char szTemp[MAX_PATH];
-  char* p = szTemp;
-  char** dlist = (char **) xmalloc(sizeof(*dlist));
-
-  dlist[0] = NULL;
-
-  if (GetLogicalDriveStringsA(BUFSIZE-1, szTemp)) {
-    int i = 0;
-    while (*p) {
-      dlist = (char **) xrealloc(dlist, sizeof(*dlist) * (++i + 1));
-      //            fprintf(stderr, "Found: %d, %s\n", i, p);
-      dlist[i-1] = xstrdup(p);
-      dlist[i] = NULL;
-      while (*p++);
-    }
-  }
-
-  return dlist;
 }
 
 /*
@@ -232,16 +206,16 @@ gusb_init(const char* pname, gpsdevh** dh)
     if (0 == strcmp(pname+4, "list")) {
       req_unit_number = -1;
     } else {
-      req_unit_number = atoi(pname+4);
+      req_unit_number = xstrtoi(pname+4, nullptr, 10);
     }
   }
 
-  hdevinfo = SetupDiGetClassDevs((GUID*) &GARMIN_GUID, NULL, NULL,
+  hdevinfo = SetupDiGetClassDevs(&GARMIN_GUID, NULL, NULL,
                                  DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
 
   if (hdevinfo == INVALID_HANDLE_VALUE) {
     GPS_Serial_Error("SetupDiGetClassDevs failed");
-    warning("Is the Garmin USB driver installed?\n");
+    gbWarning("Is the Garmin USB driver installed?\n");
     return 0;
   }
 
@@ -249,21 +223,10 @@ gusb_init(const char* pname, gpsdevh** dh)
 
   if (req_unit_number >= 0) {
     if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL,
-                                     (GUID*) &GARMIN_GUID,
+                                     &GARMIN_GUID,
                                      req_unit_number, &devinterface)) {
-      // If there were zero matches, we may be trying to talk to a "GPX Mode" device.
-
-
-      char** dlist = get_garmin_mountpoints();
-      gdx = gdx_find_file(dlist);
-      if (gdx) {
-        return 1;
-      }
-
-
-      // Plan C.
       GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
-      warning("Is the Garmin USB unit number %d powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.\nAre the Garmin USB drivers installed and functioning with other programs?\nIs it a storage based device like Nuvi, CO, or OR?\n  If so, send GPX files to it, don't use this module.\n", un);
+      gbWarning("Is the Garmin USB unit number %d powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.\nAre the Garmin USB drivers installed and functioning with other programs?\nIs it a storage based device like Nuvi, CO, or OR?\n  If so, send GPX files to it, don't use this module.\n", un);
       return 0;
     }
     /* We've matched.  Now start the specific unit. */
@@ -277,14 +240,14 @@ gusb_init(const char* pname, gpsdevh** dh)
    */
   for (match = 0;; match++) {
     if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL,
-                                     (GUID*) &GARMIN_GUID, match, &devinterface)) {
+                                     &GARMIN_GUID, match, &devinterface)) {
       if (GetLastError() == ERROR_NO_MORE_ITEMS) {
 
         break;
       } else {
 
         GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
-        warning("Is the Garmin USB unit number %d powered up and connected?\n", un);
+        gbWarning("Is the Garmin USB unit number %d powered up and connected?\n", un);
         return 0;
       }
     }

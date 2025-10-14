@@ -20,39 +20,41 @@
 
  */
 
-#include <cctype>                       // for tolower, toupper
-#include <cmath>                        // for fabs
-#include <cstdio>                       // for sscanf, printf
-#include <cstdlib>                      // for atoi, atol, atof
-#include <cstring>                      // for strcmp
-#include <optional>                     // for optional
-#include <tuple>                        // for tuple, make_tuple, tie
+#include "kml.h"
 
-#include <QByteArray>                   // for QByteArray
-#include <QChar>                        // for QChar
-#include <QDate>                        // for QDate
-#include <QDateTime>                    // for QDateTime
-#include <QFile>                        // for QFile
-#include <QIODevice>                    // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
-#include <QList>                        // for QList
-#include <QString>                      // for QString, QStringLiteral, operator+, operator!=
-#include <QStringList>                  // for QStringList
-#include <QVector>                      // for QVector
-#include <QXmlStreamAttributes>         // for QXmlStreamAttributes
-#include <Qt>                           // for ISODate
-#include <QtGlobal>                     // for foreach, qint64, qPrintable
+#include <cmath>                       // for fabs
+#include <cstdio>                      // for sscanf, EOF
+#include <optional>                    // for optional
+#include <tuple>                       // for tuple, make_tuple
+
+#include <QByteArray>                  // for QByteArray
+#include <QChar>                       // for QChar
+#include <QDate>                       // for QDate
+#include <QDateTime>                   // for QDateTime
+#include <QFile>                       // for QFile
+#include <QHash>                       // for QHash
+#include <QIODevice>                   // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
+#include <QList>                       // for QList
+#include <QString>                     // for QString, QStringLiteral, operator+, operator!=
+#include <QStringList>                 // for QStringList
+#include <QStringLiteral>              // for qMakeStringPrivate, QStringLit...
+#include <QVector>                     // for QVector
+#include <QXmlStreamAttributes>        // for QXmlStreamAttributes
+#include <Qt>                          // for ISODate
+#include <QtGlobal>                    // for foreach, qint64, qRound, qPrintable
 
 #include "defs.h"
-#include "kml.h"
-#include "formspec.h"                   // for FsChainFind, kFsGpx
-#include "grtcirc.h"                    // for RAD, gcdist, radtometers
-#include "src/core/datetime.h"          // for DateTime
-#include "src/core/file.h"              // for File
-#include "src/core/logging.h"           // for Warning, Fatal
-#include "src/core/xmlstreamwriter.h"   // for XmlStreamWriter
-#include "src/core/xmltag.h"            // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
-#include "units.h"                      // for fmt_setunits, fmt_speed, fmt_altitude, fmt_distance, units_aviation, units_metric, units_nautical, units_statute
-#include "xmlgeneric.h"                 // for cb_cdata, cb_end, cb_start, xg_callback, xg_string, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
+#include "igc.h"                       // For igc_fsdata
+#include "formspec.h"                  // for FsChainFind, kFsGpxm kFsIGC
+#include "geocache.h"                  // for Geocache, Geocache::type_t
+#include "grtcirc.h"                   // for RAD, gcdist, radtometers
+#include "src/core/datetime.h"         // for DateTime
+#include "src/core/file.h"             // for File
+#include "src/core/logging.h"          // for Warning, Fatal
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "src/core/xmltag.h"           // for xml_findfirst, xml_tag, fs_xml, xml_attribute, xml_findnext
+#include "units.h"                     // for UnitsFormatter, UnitsFormatter...
+#include "xmlgeneric.h"                // for cb_cdata, cb_end, cb_start, xg_callback, xg_cb_type, xml_deinit, xml_ignore_tags, xml_init, xml_read, xg_tag_mapping
 
 
 //  Icons provided and hosted by Google.  Used with permission.
@@ -64,20 +66,51 @@
 #define ICON_MULTI_TRK ICON_BASE "track-directional/track-0.png"
 #define ICON_DIR ICON_BASE "track-directional/track-%1.png" // format string where next arg is rotational degrees.
 
-#define MYNAME "kml"
 
-void KmlFormat::kml_init_color_sequencer(unsigned int steps_per_rev)
+const QStringList KmlFormat::kml_tags_to_ignore = {
+  "kml",
+  "Document",
+  "Folder"
+};
+
+const QStringList KmlFormat::kml_tags_to_skip = {
+  "Camera",
+  "LookAt",
+  "styleUrl",
+  "snippet"
+};
+
+const QVector<KmlFormat::mt_field_t> KmlFormat::mt_fields_def = {
+  { wp_field::igc_enl, "igc_enl", "Engine Noise", "double" },
+  { wp_field::igc_tas, "igc_tas", "True Airspd", "double" },
+  { wp_field::igc_oat, "igc_oat", "Otsd Air Temp", "double" },
+  { wp_field::igc_vat, "igc_vat", "Ttl Enrg Vario", "double" },
+  { wp_field::igc_gsp, "igc_gsp", "Ground Speed", "double" },
+  { wp_field::igc_fxa, "igc_fxa", "Fix Accuracy", "double" },
+  { wp_field::igc_gfo, "igc_gfo", "G Force?", "double" },
+  { wp_field::igc_acz, "igc_acz", "Z Accel", "double" },
+  { wp_field::igc_siu, "igc_siu", "# Of Sats", "double" },
+  { wp_field::igc_trt, "igc_trt", "True Track", "double" },
+  { wp_field::cadence, "cadence", "Cadence", "int" },
+  { wp_field::depth, "depth", "Depth", "float" },
+  { wp_field::heartrate, "heartrate", "Heart Rate", "int" },
+  { wp_field::temperature, "temperature", "Temperature", "float" },
+  { wp_field::power, "power", "Power", "float" },
+  { wp_field::sat, "satellites", "Satellites", "int" },
+};
+
+void KmlFormat::kml_init_color_sequencer(int steps_per_rev)
 {
-  if (rotate_colors) {
-    float color_step = atof(opt_rotate_colors);
+  if (opt_rotate_colors) {
+    float color_step = opt_rotate_colors.get_result();
     if (color_step > 0.0f) {
       // step around circle by given number of degrees for each track(route)
-      kml_color_sequencer.step = ((float)kml_color_limit) * 6.0f * color_step / 360.0f;
+      kml_color_sequencer.step = static_cast<float>(kml_color_limit) * 6.0f * color_step / 360.0f;
     } else {
       // one cycle around circle for all the tracks(routes)
-      kml_color_sequencer.step = ((float)kml_color_limit) * 6.0f / ((float)steps_per_rev);
+      kml_color_sequencer.step = static_cast<float>(kml_color_limit) * 6.0f / static_cast<float>(steps_per_rev);
     }
-    kml_color_sequencer.color.opacity=255;
+    kml_color_sequencer.color.opacity = 255;
     kml_color_sequencer.seq = 0.0f;
   }
 }
@@ -86,34 +119,34 @@ void KmlFormat::kml_step_color()
 {
   // Map kml_color_sequencer.seq to an integer in the range [0, kml_color_limit*6).
   // Note that color_seq may be outside this range if the cast from float to int fails.
-  int color_seq = ((int) kml_color_sequencer.seq) % (kml_color_limit * 6);
+  int color_seq = static_cast<int>(kml_color_sequencer.seq) % (kml_color_limit * 6);
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME ": kml_color_sequencer seq %f %d, step %f\n",kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
+    gbDebug("kml_color_sequencer seq %f %d, step %f\n", kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
   }
   if ((color_seq >= (0*kml_color_limit)) && (color_seq < (1*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (0)<<16 | (color_seq)<<8 | (kml_color_limit);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(0, color_seq, kml_color_limit);
   } else if ((color_seq >= (1*kml_color_limit)) && (color_seq < (2*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (0)<<16 | (kml_color_limit)<<8 | (2*kml_color_limit-color_seq);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(0, kml_color_limit, 2*kml_color_limit-color_seq);
   } else if ((color_seq >= (2*kml_color_limit)) && (color_seq < (3*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (color_seq-2*kml_color_limit)<<16 | (kml_color_limit)<<8 | (0);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(color_seq-2*kml_color_limit, kml_color_limit, 0);
   } else if ((color_seq >= (3*kml_color_limit)) && (color_seq < (4*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (kml_color_limit)<<16 | (4*kml_color_limit-color_seq)<<8 | (0);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(kml_color_limit, 4*kml_color_limit-color_seq,0);
   } else if ((color_seq >= (4*kml_color_limit)) && (color_seq < (5*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (kml_color_limit)<<16 | (0)<<8 | (color_seq-4*kml_color_limit);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(kml_color_limit, 0, color_seq-4*kml_color_limit);
   } else if ((color_seq >= (5*kml_color_limit)) && (color_seq < (6*kml_color_limit))) {
-    kml_color_sequencer.color.bbggrr = (6*kml_color_limit-color_seq)<<16 | (0)<<8 | (kml_color_limit);
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(6*kml_color_limit-color_seq, 0, kml_color_limit);
   } else { // should not occur, but to be safe generate a legal color.
-    warning(MYNAME ": Error in color conversion - using default color.\n");
-    kml_color_sequencer.color.bbggrr = (102)<<16 | (102)<<8 | (102);
+    gbWarning("Error in color conversion - using default color.\n");
+    kml_color_sequencer.color.bbggrr = kml_bgr_to_color(102, 102, 102);
   }
   // compute next color.
-  kml_color_sequencer.seq = kml_color_sequencer.seq + kml_color_sequencer.step;
+  kml_color_sequencer.seq += kml_color_sequencer.step;
 }
 
-void KmlFormat::wpt_s(xg_string /*args*/, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::wpt_s(const QString& /*args*/, const QXmlStreamAttributes* /*attrs*/)
 {
   if (wpt_tmp) {
-    fatal(MYNAME ": wpt_s: invalid kml file\n");
+    gbFatal("wpt_s: invalid kml file\n");
   }
   wpt_tmp = new Waypoint;
   wpt_tmp_queued = false;
@@ -124,10 +157,10 @@ void KmlFormat::wpt_s(xg_string /*args*/, const QXmlStreamAttributes* /*attrs*/)
   wpt_timespan_end = gpsbabel::DateTime();
 }
 
-void KmlFormat::wpt_e(xg_string /*args*/, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::wpt_e(const QString& /*args*/, const QXmlStreamAttributes* /*attrs*/)
 {
   if (!wpt_tmp) {
-    fatal(MYNAME ": wpt_e: invalid kml file\n");
+    gbFatal("wpt_e: invalid kml file\n");
   }
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
@@ -139,10 +172,10 @@ void KmlFormat::wpt_e(xg_string /*args*/, const QXmlStreamAttributes* /*attrs*/)
   wpt_tmp_queued = false;
 }
 
-void KmlFormat::wpt_name(xg_string args, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::wpt_name(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (!wpt_tmp) {
-    fatal(MYNAME ": wpt_name: invalid kml file\n");
+    gbFatal("wpt_name: invalid kml file\n");
   }
   wpt_tmp->shortname = args;
 }
@@ -150,32 +183,34 @@ void KmlFormat::wpt_name(xg_string args, const QXmlStreamAttributes* /*attrs*/)
 void KmlFormat::wpt_desc(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (!wpt_tmp) {
-    fatal(MYNAME ": wpt_desc: invalid kml file\n");
+    gbFatal("wpt_desc: invalid kml file\n");
   }
   wpt_tmp->description += args.trimmed();
 }
 
-void KmlFormat::wpt_time(xg_string args, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::wpt_time(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (!wpt_tmp) {
-    fatal(MYNAME ": wpt_time: invalid kml file\n");
+    gbFatal("wpt_time: invalid kml file\n");
   }
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
 
-void KmlFormat::wpt_ts_begin(xg_string args, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::wpt_ts_begin(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   wpt_timespan_begin = xml_parse_time(args);
 }
 
-void KmlFormat::wpt_ts_end(xg_string args, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::wpt_ts_end(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   wpt_timespan_end = xml_parse_time(args);
 }
 
 void KmlFormat::wpt_coord(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
-  double lat, lon, alt;
+  double lat;
+  double lon;
+  double alt;
   if (! wpt_tmp) {
     return;
   }
@@ -191,14 +226,14 @@ void KmlFormat::wpt_coord(const QString& args, const QXmlStreamAttributes* /*att
   wpt_tmp_queued = true;
 }
 
-void KmlFormat::wpt_icon(xg_string args, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::wpt_icon(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (wpt_tmp)  {
     wpt_tmp->icon_descr = args;
   }
 }
 
-void KmlFormat::trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::trk_coord(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   auto* trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
@@ -219,7 +254,7 @@ void KmlFormat::trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
       trkpt->latitude = coords[1].toDouble();
       trkpt->longitude = coords[0].toDouble();
     } else {
-      Warning() << MYNAME << ": malformed coordinates " << vec;
+      Warning() << "malformed coordinates " << vec;
     }
     track_add_wpt(trk_head, trkpt);
   }
@@ -236,10 +271,10 @@ void KmlFormat::trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
   if (wpt_timespan_begin.isValid() && wpt_timespan_end.isValid()) {
 
     // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
-    if (trk_head->rte_waypt_ct() > 0) {
+    if (!trk_head->rte_waypt_empty()) {
       qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
       if (trk_head->rte_waypt_ct() < 2) {
-        fatal(MYNAME ": attempt to interpolate TimeSpan with too few points.");
+        gbFatal("attempt to interpolate TimeSpan with too few points.\n");
       }
       qint64 ms_per_waypoint = timespan_ms / (trk_head->rte_waypt_ct() - 1);
       foreach (Waypoint* trackpoint, trk_head->waypoint_list) {
@@ -250,7 +285,7 @@ void KmlFormat::trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
   }
 }
 
-void KmlFormat::gx_trk_s(xg_string /*args*/, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::gx_trk_s(const QString& /*args*/, const QXmlStreamAttributes* /*attrs*/)
 {
   gx_trk_head = new route_head;
   if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
@@ -266,12 +301,12 @@ void KmlFormat::gx_trk_s(xg_string /*args*/, const QXmlStreamAttributes* /*attrs
   gx_trk_coords = new QList<std::tuple<int, double, double, double>>;
 }
 
-void KmlFormat::gx_trk_e(xg_string /*args*/, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::gx_trk_e(const QString& /*args*/, const QXmlStreamAttributes* /*attrs*/)
 {
   // Check that for every temporal value (kml:when) in a kml:Track there is a position (kml:coord) value.
   // Check that for every temporal value (kml:when) in a gx:Track there is a position (gx:coord) value.
   if (gx_trk_times->size() != gx_trk_coords->size()) {
-    fatal(MYNAME ": There were more coord elements than the number of when elements.\n");
+    gbFatal("There were more coord elements than the number of when elements.\n");
   }
 
   // In KML 2.3 kml:Track elements kml:coord and kml:when elements are not required to be in any order.
@@ -280,9 +315,7 @@ void KmlFormat::gx_trk_e(xg_string /*args*/, const QXmlStreamAttributes* /*attrs
   while (!gx_trk_times->isEmpty()) {
     auto* trkpt = new Waypoint;
     trkpt->SetCreationTime(gx_trk_times->takeFirst());
-    double lat, lon, alt;
-    int n;
-    std::tie(n, lat, lon, alt) = gx_trk_coords->takeFirst();
+    auto [n, lat, lon, alt] = gx_trk_coords->takeFirst();
     // An empty kml:coord element is permitted to indicate missing position data;
     // the estimated position may be determined using some interpolation method.
     // However if we get one we will throw away the time as we don't have a location.
@@ -309,69 +342,71 @@ void KmlFormat::gx_trk_e(xg_string /*args*/, const QXmlStreamAttributes* /*attrs
   gx_trk_coords = nullptr;
 }
 
-void KmlFormat::gx_trk_when(xg_string args, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::gx_trk_when(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (! gx_trk_times) {
-    fatal(MYNAME ": gx_trk_when: invalid kml file\n");
+    gbFatal("gx_trk_when: invalid kml file\n");
   }
   gx_trk_times->append(xml_parse_time(args));
 }
 
-void KmlFormat::gx_trk_coord(xg_string args, const QXmlStreamAttributes* /*attrs*/)
+void KmlFormat::gx_trk_coord(const QString& args, const QXmlStreamAttributes* /*attrs*/)
 {
   if (! gx_trk_coords) {
-    fatal(MYNAME ": gx_trk_coord: invalid kml file\n");
+    gbFatal("gx_trk_coord: invalid kml file\n");
   }
 
-  double lat, lon, alt;
+  double lat;
+  double lon;
+  double alt;
   int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
   if (EOF != n && 2 != n && 3 != n) {
-    fatal(MYNAME ": coord field decode failure on \"%s\".\n", qPrintable(args));
+    gbFatal("coord field decode failure on \"%s\".\n", gbLogCStr(args));
   }
   gx_trk_coords->append(std::make_tuple(n, lat, lon, alt));
 }
 
 void KmlFormat::rd_init(const QString& fname)
 {
-  xml_init(fname, build_xg_tag_map(this, kml_map), nullptr, kml_tags_to_ignore, kml_tags_to_skip, true);
+  xml_reader = new XmlGenericReader;
+  xml_reader->xml_init(fname, this, kml_map, nullptr, kml_tags_to_ignore, kml_tags_to_skip);
 }
 
 void KmlFormat::read()
 {
-  xml_read();
+  xml_reader->xml_read();
 }
 
 void KmlFormat::rd_deinit()
 {
-  xml_deinit();
+  delete xml_reader;
+  xml_reader = nullptr;
 }
 
 void KmlFormat::wr_init(const QString& fname)
 {
-  char u = 's';
   waypt_init_bounds(&kml_bounds);
-  kml_time_min = QDateTime();
-  kml_time_max = QDateTime();
+  kml_time_min = gpsbabel::DateTime();
+  kml_time_max = gpsbabel::DateTime();
 
-  if (opt_units) {
-    u = tolower(opt_units[0]);
-  }
+  QChar u = opt_units.isEmpty()? 's' : opt_units.get().front().toLower();
 
-  switch (u) {
-  case 's':
-    fmt_setunits(units_statute);
+  unitsformatter = new UnitsFormatter();
+  switch (u.unicode()) {
+  case u's':
+    unitsformatter->setunits(UnitsFormatter::units_t::statute);
     break;
-  case 'm':
-    fmt_setunits(units_metric);
+  case u'm':
+    unitsformatter->setunits(UnitsFormatter::units_t::metric);
     break;
-  case 'n':
-    fmt_setunits(units_nautical);
+  case u'n':
+    unitsformatter->setunits(UnitsFormatter::units_t::nautical);
     break;
-  case 'a':
-    fmt_setunits(units_aviation);
+  case u'a':
+    unitsformatter->setunits(UnitsFormatter::units_t::aviation);
     break;
   default:
-    fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", opt_units);
+    gbFatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", gbLogCStr(opt_units));
     break;
   }
   /*
@@ -391,9 +426,9 @@ void KmlFormat::wr_init(const QString& fname)
 void KmlFormat::wr_position_init(const QString& fname)
 {
   posnfilename = fname;
-  posnfilenametmp = QString("%1-").arg(fname);
-  realtime_positioning = 1;
-  max_position_points = atoi(opt_max_position_points);
+  posnfilenametmp = QStringLiteral("%1-").arg(fname);
+  realtime_positioning = true;
+  max_position_points = opt_max_position_points.get_result();
 }
 
 void KmlFormat::wr_deinit()
@@ -404,6 +439,8 @@ void KmlFormat::wr_deinit()
   oqfile->close();
   delete oqfile;
   oqfile = nullptr;
+  delete unitsformatter;
+  unitsformatter = nullptr;
 
   if (!posnfilenametmp.isEmpty()) {
     // QFile::rename() can't replace an existing file, so do a QFile::remove()
@@ -412,6 +449,9 @@ void KmlFormat::wr_deinit()
     QFile::remove(posnfilename);
     QFile::rename(posnfilenametmp, posnfilename);
   }
+
+  kml_track_traits.reset();
+  kml_track_traits_hash.clear();
 }
 
 void KmlFormat::wr_position_deinit()
@@ -419,21 +459,24 @@ void KmlFormat::wr_position_deinit()
 //	kml_wr_deinit();
   posnfilename.clear();
   posnfilenametmp.clear();
+
+  kml_track_traits.reset();
+  kml_track_traits_hash.clear();
 }
 
 
-void KmlFormat::kml_output_linestyle(char* /*color*/, int width) const
+void KmlFormat::kml_output_linestyle(const QString& color, int width) const
 {
   // Style settings for line strings
   writer->writeStartElement(QStringLiteral("LineStyle"));
-  writer->writeTextElement(QStringLiteral("color"), opt_line_color);
+  writer->writeTextElement(QStringLiteral("color"), color);
   writer->writeTextElement(QStringLiteral("width"), QString::number(width));
   writer->writeEndElement(); // Close LineStyle tag
 }
 
 
 void KmlFormat::kml_write_bitmap_style_(const QString& style, const QString& bitmap,
-                                        int highlighted, int force_heading) const
+                                        bool highlighted, bool force_heading) const
 {
   int is_track = style.startsWith("track");
   int is_multitrack = style.startsWith("multiTrack");
@@ -481,7 +524,7 @@ void KmlFormat::kml_write_bitmap_style_(const QString& style, const QString& bit
 void KmlFormat::kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap,
                                        const QString& customstyle) const
 {
-  int force_heading = 0;
+  bool force_heading = false;
   QString style;
   switch (pt_type) {
   case kmlpt_track:
@@ -498,15 +541,15 @@ void KmlFormat::kml_write_bitmap_style(kml_point_type pt_type, const QString& bi
     break;
   case kmlpt_other:
     style = customstyle;
-    force_heading = 1;
+    force_heading = true;
     break;
   default:
-    fatal("kml_output_point: unknown point type");
+    gbFatal("kml_output_point: unknown point type\n");
     break;
   }
 
-  kml_write_bitmap_style_(style, bitmap, 0, force_heading);
-  kml_write_bitmap_style_(style, bitmap, 1, force_heading);
+  kml_write_bitmap_style_(style, bitmap, false, force_heading);
+  kml_write_bitmap_style_(style, bitmap, true, force_heading);
 
   writer->writeStartElement(QStringLiteral("StyleMap"));
   writer->writeAttribute(QStringLiteral("id"), style);
@@ -570,62 +613,64 @@ void KmlFormat::kml_output_trkdescription(const route_head* header, const comput
 
   hwriter.writeStartElement(QStringLiteral("table"));
   if (!header->rte_desc.isEmpty()) {
-    kml_td(hwriter, QStringLiteral("Description"), QStringLiteral(" %1 ").arg(header->rte_desc));
+    kml_td(hwriter, QStringLiteral("Description"), QStringLiteral(" %1").arg(header->rte_desc));
   }
-  const char* distance_units;
-  double distance = fmt_distance(td->distance_meters, &distance_units);
-  kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2 ").arg(QString::number(distance, 'f', 1), distance_units));
+  auto [distance, distance_units] = unitsformatter->fmt_distance(td->distance_meters);
+  kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2").arg(QString::number(distance, 'f', 1), distance_units));
   if (td->min_alt) {
-    const char* min_alt_units;
-    double min_alt = fmt_altitude(*td->min_alt, &min_alt_units);
-    kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(min_alt, 'f', 3), min_alt_units));
+    auto [min_alt, min_alt_units] = unitsformatter->fmt_altitude(*td->min_alt);
+    kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2").arg(QString::number(min_alt, 'f', 3), min_alt_units));
   }
   if (td->max_alt) {
-    const char* max_alt_units;
-    double max_alt = fmt_altitude(*td->max_alt, &max_alt_units);
-    kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(max_alt, 'f', 3), max_alt_units));
+    auto [max_alt, max_alt_units] = unitsformatter->fmt_altitude(*td->max_alt);
+    kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2").arg(QString::number(max_alt, 'f', 3), max_alt_units));
   }
   if (td->min_spd) {
-    const char* spd_units;
-    double spd = fmt_speed(*td->min_spd, &spd_units);
-    kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+    auto [spd, spd_units] = unitsformatter->fmt_speed(*td->min_spd);
+    kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd) {
-    const char* spd_units;
-    double spd = fmt_speed(*td->max_spd, &spd_units);
-    kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+    auto [spd, spd_units] = unitsformatter->fmt_speed(*td->max_spd);
+    kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd && td->start.isValid() && td->end.isValid()) {
-    const char* spd_units;
     double elapsed = td->start.msecsTo(td->end)/1000.0;
-    double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
-    if (spd > 1.0)  {
-      kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+    if (elapsed > 0.0) {
+      auto [spd, spd_units] = unitsformatter->fmt_speed(td->distance_meters / elapsed);
+      if (spd > 1.0)  {
+        kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2").arg(QString::number(spd, 'f', 1), spd_units));
+      }
     }
   }
-  if (td->avg_hrt) {
-    kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->avg_hrt, 'f', 1)));
-  }
-  if (td->min_hrt) {
-    kml_td(hwriter, QStringLiteral("Min Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->min_hrt)));
-  }
-  if (td->max_hrt) {
-    kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->max_hrt)));
-  }
   if (td->avg_cad) {
-    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->avg_cad, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm").arg(QString::number(*td->avg_cad, 'f', 1)));
   }
   if (td->max_cad) {
-    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->max_cad)));
+    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm").arg(QString::number(*td->max_cad)));
+  }
+  if (td->avg_hrt) {
+    kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm").arg(QString::number(*td->avg_hrt, 'f', 1)));
+  }
+  if (td->min_hrt) {
+    kml_td(hwriter, QStringLiteral("Min Heart Rate"), QStringLiteral(" %1 bpm").arg(QString::number(*td->min_hrt)));
+  }
+  if (td->max_hrt) {
+    kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm").arg(QString::number(*td->max_hrt)));
+  }
+  if (td->avg_pwr) {
+    kml_td(hwriter, QStringLiteral("Avg Power"), QStringLiteral(" %1 watts").arg(QString::number(*td->avg_pwr, 'f', 1)));
+  }
+  if (td->max_pwr) {
+    kml_td(hwriter, QStringLiteral("Max Power"), QStringLiteral(" %1 watts").arg(QString::number(*td->max_pwr, 'f', 1)));
   }
   if (td->start.isValid() && td->end.isValid()) {
-    kml_td(hwriter, QStringLiteral("Start Time"), td->start.toPrettyString());
-    kml_td(hwriter, QStringLiteral("End Time"), td->end.toPrettyString());
+    kml_td(hwriter, QStringLiteral("Start Time"), QStringLiteral(" %1").arg(td->start.toPrettyString()));
+    kml_td(hwriter, QStringLiteral("End Time"), QStringLiteral(" %1").arg(td->end.toPrettyString()));
   }
 
   hwriter.writeCharacters(QStringLiteral("\n"));
   hwriter.writeEndElement(); // Close table tag
-  //hwriter.writeEndDocument(); // FIXME: it seems like we should end the doc but it causes a reference mismatch by adding a final \n
+  hwriter.writeEndDocument();
   writer->writeCharacters(QStringLiteral("\n"));
   writer->writeCDATA(hstring);
   writer->writeCharacters(QStringLiteral("\n"));
@@ -647,24 +692,24 @@ void KmlFormat::kml_output_header(const route_head* header, const computed_trkda
   writer->writeOptionalTextElement(QStringLiteral("name"), header->rte_name);
   kml_output_trkdescription(header, td);
 
-  if (export_points && header->rte_waypt_ct() > 0) {
+  if (export_points && !header->rte_waypt_empty()) {
     // Put the points in a subfolder
     writer->writeStartElement(QStringLiteral("Folder"));
     writer->writeTextElement(QStringLiteral("name"), QStringLiteral("Points"));
   }
 }
 
-int KmlFormat::kml_altitude_known(const Waypoint* waypoint)
+bool KmlFormat::kml_altitude_known(const Waypoint* waypoint)
 {
   if (waypoint->altitude == unknown_alt) {
-    return 0;
+    return false;
   }
   // We see way more data that's sourced at 'zero' than is actually
   // precisely at 0 MSL.
   if (fabs(waypoint->altitude) < 0.01) {
-    return 0;
+    return false;
   }
-  return 1;
+  return true;
 }
 
 void KmlFormat::kml_write_coordinates(const Waypoint* waypointp) const
@@ -715,8 +760,6 @@ void KmlFormat::kml_output_positioning(bool tessellate) const
 /* Output something interesting when we can for route and trackpoints */
 void KmlFormat::kml_output_description(const Waypoint* pt) const
 {
-  const char* alt_units;
-
   if (!trackdata) {
     return;
   }
@@ -724,46 +767,47 @@ void KmlFormat::kml_output_description(const Waypoint* pt) const
   QString hstring;
   gpsbabel::XmlStreamWriter hwriter(&hstring);
 
-  double alt = fmt_altitude(pt->altitude, &alt_units);
-
   writer->writeStartElement(QStringLiteral("description"));
   hwriter.writeCharacters(QStringLiteral("\n"));
   hwriter.writeStartElement(QStringLiteral("table"));
 
-  kml_td(hwriter, QStringLiteral("Longitude: %1 ").arg(QString::number(pt->longitude, 'f', precision)));
-  kml_td(hwriter, QStringLiteral("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', precision)));
+  kml_td(hwriter, QStringLiteral("Longitude: %1").arg(QString::number(pt->longitude, 'f', precision)));
+  kml_td(hwriter, QStringLiteral("Latitude: %1").arg(QString::number(pt->latitude, 'f', precision)));
 
   if (kml_altitude_known(pt)) {
-    kml_td(hwriter, QStringLiteral("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3), alt_units));
-  }
-
-  if (pt->heartrate) {
-    kml_td(hwriter, QStringLiteral("Heart rate: %1 ").arg(QString::number(pt->heartrate)));
+    auto [alt, alt_units] = unitsformatter->fmt_altitude(pt->altitude);
+    kml_td(hwriter, QStringLiteral("Altitude: %1 %2").arg(QString::number(alt, 'f', 3), alt_units));
   }
 
   if (pt->cadence) {
-    kml_td(hwriter, QStringLiteral("Cadence: %1 ").arg(QString::number(pt->cadence)));
+    kml_td(hwriter, QStringLiteral("Cadence: %1").arg(QString::number(pt->cadence)));
+  }
+
+  if (pt->heartrate) {
+    kml_td(hwriter, QStringLiteral("Heart rate: %1").arg(QString::number(pt->heartrate)));
+  }
+
+  if (pt->power) {
+    kml_td(hwriter, QStringLiteral("Power: %1").arg(QString::number(pt->power, 'f', 1)));
   }
 
   /* Which unit is this temp in? C? F? K? */
-  if WAYPT_HAS(pt, temperature) {
-    kml_td(hwriter, QStringLiteral("Temperature: %1 ").arg(QString::number(pt->temperature, 'f', 1)));
+  if (pt->temperature_has_value()) {
+    kml_td(hwriter, QStringLiteral("Temperature: %1").arg(QString::number(pt->temperature_value(), 'f', 1)));
   }
 
-  if WAYPT_HAS(pt, depth) {
-    const char* depth_units;
-    double depth = fmt_distance(pt->depth, &depth_units);
-    kml_td(hwriter, QStringLiteral("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1), depth_units));
+  if (pt->depth_has_value()) {
+    auto [depth, depth_units] = unitsformatter->fmt_distance(pt->depth_value());
+    kml_td(hwriter, QStringLiteral("Depth: %1 %2").arg(QString::number(depth, 'f', 1), depth_units));
   }
 
-  if WAYPT_HAS(pt, speed) {
-    const char* spd_units;
-    double spd = fmt_speed(pt->speed, &spd_units);
-    kml_td(hwriter, QStringLiteral("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
+  if (pt->speed_has_value()) {
+    auto [spd, spd_units] = unitsformatter->fmt_speed(pt->speed_value());
+    kml_td(hwriter, QStringLiteral("Speed: %1 %2").arg(QString::number(spd, 'f', 1), spd_units));
   }
 
-  if WAYPT_HAS(pt, course) {
-    kml_td(hwriter, QStringLiteral("Heading: %1 ").arg(QString::number(pt->course, 'f', 1)));
+  if (pt->course_has_value()) {
+    kml_td(hwriter, QStringLiteral("Heading: %1").arg(QString::number(pt->course_value(), 'f', 1)));
   }
 
   /* This really shouldn't be here, but as of this writing,
@@ -772,7 +816,7 @@ void KmlFormat::kml_output_description(const Waypoint* pt) const
   if (pt->GetCreationTime().isValid()) {
     QString time_string = pt->CreationTimeXML();
     if (!time_string.isEmpty()) {
-      kml_td(hwriter, QStringLiteral("Time: %1 ").arg(time_string));
+      kml_td(hwriter, QStringLiteral("Time: %1").arg(time_string));
     }
   }
 
@@ -815,13 +859,13 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
     style = "#route";
     break;
   default:
-    fatal("kml_output_point: unknown point type");
+    gbFatal("kml_output_point: unknown point type\n");
     break;
   }
 
   if (export_points) {
     writer->writeStartElement(QStringLiteral("Placemark"));
-    if (atoi(opt_labels)) {
+    if (opt_labels) {
       writer->writeOptionalTextElement(QStringLiteral("name"), waypointp->shortname);
     }
     writer->writeEmptyElement(QStringLiteral("snippet"));
@@ -841,11 +885,12 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
     } else {
       if (trackdirection && (pt_type == kmlpt_track)) {
         QString value;
-        if (waypointp->speed < 1) {
-          value = QString("%1-none").arg(style);
+        if (!waypointp->speed_has_value() || !waypointp->course_has_value() ||
+            (waypointp->speed_value() < 1.0f)) {
+          value = QStringLiteral("%1-none").arg(style);
         } else {
-          value = QString("%1-%2").arg(style)
-                  .arg((int)(waypointp->course / 22.5 + .5) % 16);
+          value = QStringLiteral("%1-%2").arg(style)
+                  .arg(qRound(waypointp->course_value() / 22.5) % 16);
         }
         writer->writeTextElement(QStringLiteral("styleUrl"), value);
       } else {
@@ -865,30 +910,30 @@ void KmlFormat::kml_output_point(const Waypoint* waypointp, kml_point_type pt_ty
 void KmlFormat::kml_output_tailer(const route_head* header)
 {
 
-  if (export_points && header->rte_waypt_ct() > 0) {
+  if (export_points && !header->rte_waypt_empty()) {
     writer->writeEndElement(); // Close Folder tag
   }
 
   // Add a linestring for this track?
-  if (export_lines && header->rte_waypt_ct() > 0) {
-    int needs_multigeometry = 0;
+  if (export_lines && !header->rte_waypt_empty()) {
+    bool needs_multigeometry = false;
 
     foreach (const Waypoint* tpt, header->waypoint_list) {
       int first_in_trk = tpt == header->waypoint_list.front();
       if (!first_in_trk && tpt->wpt_flags.new_trkseg) {
-        needs_multigeometry = 1;
+        needs_multigeometry = true;
         break;
       }
     }
     writer->writeStartElement(QStringLiteral("Placemark"));
     writer->writeTextElement(QStringLiteral("name"), QStringLiteral("Path"));
-    if (!rotate_colors) {
+    if (!opt_rotate_colors) {
       writer->writeTextElement(QStringLiteral("styleUrl"), QStringLiteral("#lineStyle"));
     }
-    if (header->line_color.bbggrr >= 0 || header->line_width >= 0 || rotate_colors) {
+    if (header->line_color.bbggrr >= 0 || header->line_width >= 0 || opt_rotate_colors) {
       writer->writeStartElement(QStringLiteral("Style"));
       writer->writeStartElement(QStringLiteral("LineStyle"));
-      if (rotate_colors) {
+      if (opt_rotate_colors) {
         kml_step_color();
         writer->writeTextElement(QStringLiteral("color"), QStringLiteral("%1%2")
                                  .arg(kml_color_sequencer.color.opacity, 2, 16, QChar('0')).arg(kml_color_sequencer.color.bbggrr, 6, 16, QChar('0')));
@@ -1097,43 +1142,43 @@ QString KmlFormat::kml_lookup_gc_icon(const Waypoint* waypointp)
    * initializers...
    */
   switch (waypointp->gc_data->type) {
-  case gt_traditional:
+  case Geocache::type_t::gt_traditional:
     icon = "2.png";
     break;
-  case gt_multi:
+  case Geocache::type_t::gt_multi:
     icon = "3.png";
     break;
-  case gt_virtual:
+  case Geocache::type_t::gt_virtual:
     icon = "4.png";
     break;
-  case gt_letterbox:
+  case Geocache::type_t::gt_letterbox:
     icon = "5.png";
     break;
-  case gt_event:
+  case Geocache::type_t::gt_event:
     icon = "6.png";
     break;
-  case gt_ape:
+  case Geocache::type_t::gt_ape:
     icon = "7.png";
     break;
-  case gt_locationless:
+  case Geocache::type_t::gt_locationless:
     icon = "8.png";
     break; // No unique icon.
-  case gt_surprise:
+  case Geocache::type_t::gt_surprise:
     icon = "8.png";
     break;
-  case gt_webcam:
+  case Geocache::type_t::gt_webcam:
     icon = "11.png";
     break;
-  case gt_cito:
+  case Geocache::type_t::gt_cito:
     icon = "13.png";
     break;
-  case gt_earth:
+  case Geocache::type_t::gt_earth:
     icon = "earthcache.png";
     break;
-  case gt_mega:
+  case Geocache::type_t::gt_mega:
     icon = "453.png";
     break;
-  case gt_wherigo:
+  case Geocache::type_t::gt_wherigo:
     icon = "1858.png";
     break;
   default:
@@ -1141,7 +1186,7 @@ QString KmlFormat::kml_lookup_gc_icon(const Waypoint* waypointp)
     break;
   }
 
-  return QString("https://www.geocaching.com/images/kml/%1").arg(icon);
+  return QStringLiteral("https://www.geocaching.com/images/kml/%1").arg(icon);
 }
 
 const char* KmlFormat::kml_lookup_gc_container(const Waypoint* waypointp)
@@ -1149,22 +1194,22 @@ const char* KmlFormat::kml_lookup_gc_container(const Waypoint* waypointp)
   const char* cont;
 
   switch (waypointp->gc_data->container) {
-  case gc_micro:
+  case Geocache::container_t::gc_micro:
     cont="micro";
     break;
-  case gc_regular:
+  case Geocache::container_t::gc_regular:
     cont="regular";
     break;
-  case gc_large:
+  case Geocache::container_t::gc_large:
     cont="large";
     break;
-  case gc_small:
+  case Geocache::container_t::gc_small:
     cont="small";
     break;
-  case gc_virtual:
+  case Geocache::container_t::gc_virtual:
     cont="virtual";
     break;
-  case gc_other:
+  case Geocache::container_t::gc_other:
     cont="other";
     break;
   default:
@@ -1180,20 +1225,20 @@ QString KmlFormat::kml_gc_mkstar(int rating)
   QString star_content;
 
   if (rating < 0 || rating > 50 || rating % 5 != 0) {
-    fatal("Bogus difficulty or terrain rating.");
+    gbFatal("Bogus difficulty or terrain rating.\n");
   }
 
   if (0 == rating % 10) {
-    star_content = QString("stars%1").arg(rating / 10);
+    star_content = QStringLiteral("stars%1").arg(rating / 10);
   } else {
-    star_content = QString("stars%1_%2").arg(rating / 10).arg(rating % 10);
+    star_content = QStringLiteral("stars%1_%2").arg(rating / 10).arg(rating % 10);
   }
 
   return star_content;
 
 }
 
-QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
+QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 
@@ -1203,22 +1248,22 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
     return r;
   }
 
-  xml_tag* root = fs_gpx->tag;
-  xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
+  XmlTag* root = fs_gpx->tag;
+  XmlTag* curlog = root->xml_findfirst(u"groundspeak:log");
   while (curlog) {
     // Unless we have a broken GPX input, these logparts
     // branches will always be taken.
-    xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
+    XmlTag* logpart = curlog->xml_findfirst(u"groundspeak:type");
     if (logpart) {
       r = r + "<p><b>" + logpart->cdata + "</b>";
     }
 
-    logpart = xml_findfirst(curlog, "groundspeak:finder");
+    logpart = curlog->xml_findfirst(u"groundspeak:finder");
     if (logpart) {
       r = r + " by " + logpart->cdata;
     }
 
-    logpart = xml_findfirst(curlog, "groundspeak:date");
+    logpart = curlog->xml_findfirst(u"groundspeak:date");
     if (logpart) {
       gpsbabel::DateTime t = xml_parse_time(logpart->cdata);
       if (t.isValid()) {
@@ -1226,26 +1271,14 @@ QString KmlFormat::kml_geocache_get_logs(const Waypoint* wpt) const
       }
     }
 
-    logpart = xml_findfirst(curlog, "groundspeak:text");
+    logpart = curlog->xml_findfirst(u"groundspeak:text");
     if (logpart) {
-      QString encstr = xml_attribute(logpart->attributes, "encoded");
-      bool encoded = !encstr.startsWith('F', Qt::CaseInsensitive);
-
-      QString s;
-      if (html_encrypt && encoded) {
-        s = rot13(logpart->cdata);
-      } else {
-        s = logpart->cdata;
-      }
-
-      r = r + "<br />";
-      char* t = html_entitize(s);
-      r = r + t;
-      xfree(t);
+      r += "<br />";
+      r += logpart->cdata.toHtmlEscaped();
     }
 
     r += "</p>";
-    curlog = xml_findnext(root, curlog, "groundspeak:log");
+    curlog = curlog->xml_findnext(root, u"groundspeak:log");
   }
   return r;
 }
@@ -1292,7 +1325,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
 
   writer->writeStartElement(QStringLiteral("name"));
   if (waypointp->HasUrlLink()) {
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     writer->writeCDATA(link.url_link_text_);
   }
   writer->writeEndElement(); // Close name tag
@@ -1301,7 +1334,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
   kml_output_timestamp(waypointp);
   QString date_placed;
   if (waypointp->GetCreationTime().isValid()) {
-    date_placed = waypointp->GetCreationTime().toString("dd-MMM-yyyy");
+    date_placed = waypointp->GetCreationTime().toString(u"dd-MMM-yyyy");
   }
 
   writer->writeTextElement(QStringLiteral("styleUrl"), QStringLiteral("#geocache"));
@@ -1320,7 +1353,7 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
   }
 
   if (waypointp->HasUrlLink()) {
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     kml_write_data_element("gc_name", link.url_link_text_);
   }
 
@@ -1338,9 +1371,9 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
 
   // Highlight any issues with the cache, such as temp unavail
   // or archived.
-  if (waypointp->gc_data->is_archived == status_true) {
+  if (waypointp->gc_data->is_archived == Geocache::status_t::gs_true) {
     issues = "&lt;font color=\"red\"&gt;This cache has been archived.&lt;/font&gt;&lt;br/&gt;\n";
-  } else if (waypointp->gc_data->is_available == status_false) {
+  } else if (waypointp->gc_data->is_available == Geocache::status_t::gs_false) {
     issues = "&lt;font color=\"red\"&gt;This cache is temporarily unavailable.&lt;/font&gt;&lt;br/&gt;\n";
   }
   kml_write_data_element("gc_issues", issues);
@@ -1348,10 +1381,10 @@ void KmlFormat::kml_geocache_pr(const Waypoint* waypointp) const
   kml_write_data_element("gc_lat", waypointp->latitude);
   kml_write_data_element("gc_lon", waypointp->longitude);
 
-  kml_write_data_element("gc_type", gs_get_cachetype(waypointp->gc_data->type));
+  kml_write_data_element("gc_type", waypointp->gc_data->get_type());
   kml_write_data_element("gc_icon", is);
-  kml_write_cdata_element("gc_short_desc", waypointp->gc_data->desc_short.utfstring);
-  kml_write_cdata_element("gc_long_desc", waypointp->gc_data->desc_long.utfstring);
+  kml_write_cdata_element("gc_short_desc", waypointp->gc_data->desc_short.utf_string);
+  kml_write_cdata_element("gc_long_desc", waypointp->gc_data->desc_long.utf_string);
   QString logs = kml_geocache_get_logs(waypointp);
   kml_write_cdata_element("gc_logs", logs);
 
@@ -1395,7 +1428,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
   // Description
   if (waypointp->HasUrlLink()) {
     writer->writeEmptyElement(QStringLiteral("snippet"));
-    UrlLink link = waypointp->GetUrlLink();
+    const UrlLink& link = waypointp->GetUrlLink();
     if (!link.url_link_text_.isEmpty()) {
       QString odesc = link.url_;
       QString olink = link.url_link_text_;
@@ -1444,7 +1477,7 @@ void KmlFormat::kml_waypt_pr(const Waypoint* waypointp) const
 void KmlFormat::kml_track_hdr(const route_head* header) const
 {
   computed_trkdata td = track_recompute(header);
-  if (header->rte_waypt_ct() > 0 && (export_lines || export_points)) {
+  if (!header->rte_waypt_empty() && (export_lines || export_points)) {
     kml_output_header(header, &td);
   }
 }
@@ -1456,7 +1489,7 @@ void KmlFormat::kml_track_disp(const Waypoint* waypointp) const
 
 void KmlFormat::kml_track_tlr(const route_head* header)
 {
-  if (header->rte_waypt_ct() > 0 && (export_lines || export_points)) {
+  if (!header->rte_waypt_empty() && (export_lines || export_points)) {
     kml_output_tailer(header);
   }
 }
@@ -1468,50 +1501,86 @@ void KmlFormat::kml_track_tlr(const route_head* header)
  */
 
 void KmlFormat::kml_mt_simple_array(const route_head* header,
-                                    const char* name,
+                                    const QString& name,
                                     wp_field member) const
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
-
+  if (global_opts.debug_level >= 3) {
+    gbDebug("New KML SimpleArray: %s\n", gbLogCStr(name));
+  }
   foreach (const Waypoint* wpt, header->waypoint_list) {
-
+    const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
     switch (member) {
-    case fld_power:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->power, 'f', 1));
+    case wp_field::power:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->power?
+                               QString::number(wpt->power, 'f', 1) : QString());
       break;
-    case fld_cadence:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->cadence));
+    case wp_field::cadence:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->cadence?
+                               QString::number(wpt->cadence) : QString());
       break;
-    case fld_depth:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->depth, 'f', 1));
+    case wp_field::depth:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->depth_has_value()?
+                               QString::number(wpt->depth_value(), 'f', 1) : QString());
       break;
-    case fld_heartrate:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->heartrate));
+    case wp_field::heartrate:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->heartrate?
+                               QString::number(wpt->heartrate) : QString());
       break;
-    case fld_temperature:
-      writer->writeTextElement(QStringLiteral("gx:value"), QString::number(wpt->temperature, 'f', 1));
+    case wp_field::temperature:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->temperature_has_value()?
+                               QString::number(wpt->temperature_value(), 'f', 1) : QString());
+      break;
+    case wp_field::sat:
+      writer->writeTextElement(QStringLiteral("gx:value"), wpt->sat >= 0?
+                               QString::number(wpt->sat) : QString());
+      break;
+    case wp_field::igc_enl:
+    case wp_field::igc_tas:
+    case wp_field::igc_vat:
+    case wp_field::igc_oat:
+    case wp_field::igc_trt:
+    case wp_field::igc_gsp:
+    case wp_field::igc_fxa:
+    case wp_field::igc_gfo:
+    case wp_field::igc_siu:
+    case wp_field::igc_acz:
+      if (fs_igc && fs_igc->get_value(member).has_value()) {
+        double value = fs_igc->get_value(member).value();
+        if (global_opts.debug_level >= 6) {
+          gbDebug("Writing KML SimpleArray data: %s of %f\n", gbLogCStr(name), value);
+        }
+        writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
+        // No igc_fsdata present, but we still need to write out the SimpleArray.
+        // This can happen when merging tracks with different sets of IGC extensions.
+      } else {
+        if (global_opts.debug_level >= 7) {
+          gbDebug("Writing empty KML SimpleArray data for %s\n", gbLogCStr(name));
+        }
+        writer->writeTextElement(QStringLiteral("gx:value"), QString());
+      }
       break;
     default:
-      fatal("Bad member type");
+      gbFatal("Bad member type\n");
     }
   }
   writer->writeEndElement(); // Close SimpleArrayData tag
 }
 
 // True if at least two points in the track have timestamps.
-int KmlFormat::track_has_time(const route_head* header)
+bool KmlFormat::track_has_time(const route_head* header)
 {
   int points_with_time = 0;
   foreach (const Waypoint* tpt, header->waypoint_list) {
     if (tpt->GetCreationTime().isValid()) {
       points_with_time++;
       if (points_with_time >= 2) {
-        return 1;
+        return true;
       }
     }
   }
-  return 0;
+  return false;
 }
 
 // Simulate a track_disp_all callback sequence for a single track.
@@ -1525,14 +1594,85 @@ void KmlFormat::write_as_linestring(const route_head* header)
 
 }
 
+void KmlFormat::kml_accumulate_track_traits(const route_head* rte)
+{
+  track_trait_t track_traits;
+
+  foreach (const Waypoint* tpt, rte->waypoint_list) {
+    const auto* fs_igc = reinterpret_cast<igc_fsdata*>(tpt->fs.FsChainFind(kFsIGC));
+
+    // Capture interesting traits to see if we need to do an ExtendedData
+    // section later.
+    if (tpt->cadence) {
+      track_traits[static_cast<int>(wp_field::cadence)] = true;
+    }
+    if (tpt->depth_has_value()) {
+      track_traits[static_cast<int>(wp_field::depth)] = true;
+    }
+    if (tpt->heartrate) {
+      track_traits[static_cast<int>(wp_field::heartrate)] = true;
+    }
+    if (tpt->temperature_has_value()) {
+      track_traits[static_cast<int>(wp_field::temperature)] = true;
+    }
+    if (tpt->power) {
+      track_traits[static_cast<int>(wp_field::power)] = true;
+    }
+    // # of satellites can legitimately be zero, so -1 means no data in this case
+    if (tpt->sat >= 0) {
+      track_traits[static_cast<int>(wp_field::sat)] = true;
+    }
+    if (fs_igc) {
+      if (fs_igc->enl.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_enl)] = true;
+      }
+      if (fs_igc->tas.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_tas)] = true;
+      }
+      if (fs_igc->oat.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_oat)] = true;
+      }
+      if (fs_igc->vat.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_vat)] = true;
+      }
+      if (fs_igc->gsp.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_gsp)] = true;
+      }
+      if (fs_igc->fxa.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_fxa)] = true;
+      }
+      if (fs_igc->gfo.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_gfo)] = true;
+      }
+      if (fs_igc->acz.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_acz)] = true;
+      }
+      if (fs_igc->siu.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_siu)] = true;
+      }
+      if (fs_igc->trt.has_value()) {
+        track_traits[static_cast<int>(wp_field::igc_trt)] = true;
+      }
+    }
+  }
+
+  // For dual source fields give priority to igc.
+  if (track_traits[static_cast<int>(wp_field::igc_oat)]) {
+    track_traits[static_cast<int>(wp_field::temperature)] = false;
+  }
+  if (track_traits[static_cast<int>(wp_field::igc_siu)]) {
+    track_traits[static_cast<int>(wp_field::sat)] = false;
+  }
+
+  // When doing real time positioning we may already have been here.
+  // If so, replace the previous value corresponding to the key.
+  // If not, insert a new key value pair.
+  kml_track_traits_hash.insert(rte, track_traits);
+  kml_track_traits |= track_traits;
+}
+
 void KmlFormat::kml_mt_hdr(const route_head* header)
 {
-  int has_cadence = 0;
-  int has_depth = 0;
-  int has_heartrate = 0;
-  int has_temperature = 0;
-  int has_power = 0;
-
   // This logic is kind of inside-out for GPSBabel.  If a track doesn't
   // have enough interesting timestamps, just write it as a LineString.
   if (!track_has_time(header)) {
@@ -1547,6 +1687,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
   kml_output_positioning(false);
 
   foreach (const Waypoint* tpt, header->waypoint_list) {
+
     if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
       writer->writeOptionalTextElement(QStringLiteral("when"), time_string);
@@ -1558,6 +1699,7 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   foreach (const Waypoint* tpt, header->waypoint_list) {
+
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
                                QString::number(tpt->longitude, 'f', precision) + QString(" ") +
@@ -1570,50 +1712,19 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
                                QString::number(tpt->latitude, 'f', precision)
                               );
     }
-
-    // Capture interesting traits to see if we need to do an ExtendedData
-    // section later.
-    if (tpt->cadence) {
-      has_cadence = 1;
-    }
-    if (WAYPT_HAS(tpt, depth)) {
-      has_depth = 1;
-    }
-    if (tpt->heartrate) {
-      has_heartrate = 1;
-    }
-    if (WAYPT_HAS(tpt, temperature)) {
-      has_temperature = 1;
-    }
-    if (tpt->power) {
-      has_power = 1;
-    }
   }
 
-  if (has_cadence || has_depth || has_heartrate || has_temperature ||
-      has_power) {
+
+  auto track_traits = kml_track_traits_hash.value(header);
+  if (track_traits.any()) {
     writer->writeStartElement(QStringLiteral("ExtendedData"));
     writer->writeStartElement(QStringLiteral("SchemaData"));
     writer->writeAttribute(QStringLiteral("schemaUrl"), QStringLiteral("#schema"));
 
-    if (has_cadence) {
-      kml_mt_simple_array(header, kmt_cadence, fld_cadence);
-    }
-
-    if (has_depth) {
-      kml_mt_simple_array(header, kmt_depth, fld_depth);
-    }
-
-    if (has_heartrate) {
-      kml_mt_simple_array(header, kmt_heartrate, fld_heartrate);
-    }
-
-    if (has_temperature) {
-      kml_mt_simple_array(header, kmt_temperature, fld_temperature);
-    }
-
-    if (has_power) {
-      kml_mt_simple_array(header, kmt_power, fld_power);
+    for (const auto& flddef : mt_fields_def) {
+      if (track_traits[static_cast<int>(flddef.id)]) {
+        kml_mt_simple_array(header, flddef.name, flddef.id);
+      }
     }
 
     writer->writeEndElement(); // Close SchemaData tag
@@ -1712,8 +1823,9 @@ void KmlFormat::kml_write_AbstractView()
   writer->writeEndElement(); // Close LookAt tag
 }
 
-void KmlFormat::kml_mt_array_schema(const char* field_name, const char* display_name,
-                                    const char* type) const
+
+void KmlFormat::kml_mt_array_schema(const QString& field_name, const QString& display_name,
+                                    const QString& type) const
 {
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayField"));
   writer->writeAttribute(QStringLiteral("name"), field_name);
@@ -1724,19 +1836,16 @@ void KmlFormat::kml_mt_array_schema(const char* field_name, const char* display_
 
 void KmlFormat::write()
 {
-  const global_trait* traits = get_traits();
-
   // Parse options
-  export_lines = (0 == strcmp("1", opt_export_lines));
-  export_points = (0 == strcmp("1", opt_export_points));
-  export_track = (0 ==  strcmp("1", opt_export_track));
-  floating = (!! strcmp("0", opt_floating));
-  extrude = (!! strcmp("0", opt_extrude));
-  rotate_colors = (!! opt_rotate_colors);
-  trackdata = (!! strcmp("0", opt_trackdata));
-  trackdirection = (!! strcmp("0", opt_trackdirection));
-  line_width = atol(opt_line_width);
-  precision = atol(opt_precision);
+  export_lines = opt_export_lines;
+  export_points = opt_export_points;
+  export_track = opt_export_track;
+  floating = opt_floating;
+  extrude = opt_extrude;
+  trackdata = opt_trackdata;
+  trackdirection = opt_trackdirection;
+  line_width = opt_line_width.get_result();
+  precision = opt_precision.get_result();
 
   writer->writeStartDocument();
 
@@ -1770,7 +1879,7 @@ void KmlFormat::write()
     if (trackdirection) {
       kml_write_bitmap_style(kmlpt_other, ICON_TRK, "track-none");
       for (int i = 0; i < 16; ++i) {
-        kml_write_bitmap_style(kmlpt_other, QString(ICON_DIR).arg(i), QString("track-%1").arg(i));
+        kml_write_bitmap_style(kmlpt_other, QStringLiteral(ICON_DIR).arg(i), QStringLiteral("track-%1").arg(i));
       }
     } else {
       kml_write_bitmap_style(kmlpt_track, ICON_TRK, nullptr);
@@ -1789,34 +1898,35 @@ void KmlFormat::write()
     writer->writeEndElement(); // Close Style tag
   }
 
-  if (traits->trait_geocaches) {
+  bool has_geocaches = false;
+  auto kml_accumulate_wpt_traits_lambda = [&has_geocaches](const Waypoint* wpt)->void {
+    has_geocaches |= (wpt->gc_data->diff && wpt->gc_data->terr);
+  };
+  waypt_disp_all(kml_accumulate_wpt_traits_lambda);
+
+  if (has_geocaches) {
     kml_gc_make_balloonstyle();
   }
 
-  if (traits->trait_heartrate ||
-      traits->trait_cadence ||
-      traits->trait_power ||
-      traits->trait_temperature ||
-      traits->trait_depth) {
-    writer->writeStartElement(QStringLiteral("Schema"));
-    writer->writeAttribute(QStringLiteral("id"), QStringLiteral("schema"));
+  if (export_track) {
+    kml_track_traits.reset();
+    kml_track_traits_hash.clear();
+    auto kml_accumulate_track_traits_lambda = [this](const route_head* rte)->void {
+      kml_accumulate_track_traits(rte);
+    };
+    track_disp_all(kml_accumulate_track_traits_lambda, nullptr, nullptr);
 
-    if (traits->trait_heartrate) {
-      kml_mt_array_schema(kmt_heartrate, "Heart Rate", "int");
+    if (kml_track_traits.any()) {
+      writer->writeStartElement(QStringLiteral("Schema"));
+      writer->writeAttribute(QStringLiteral("id"), QStringLiteral("schema"));
+
+      for (const auto& flddef : mt_fields_def) {
+        if (kml_track_traits[static_cast<int>(flddef.id)]) {
+          kml_mt_array_schema(flddef.name, flddef.displayName, flddef.type);
+        }
+      }
+      writer->writeEndElement(); // Close Schema tag
     }
-    if (traits->trait_cadence) {
-      kml_mt_array_schema(kmt_cadence, "Cadence", "int");
-    }
-    if (traits->trait_power) {
-      kml_mt_array_schema(kmt_power, "Power", "float");
-    }
-    if (traits->trait_temperature) {
-      kml_mt_array_schema(kmt_temperature, "Temperature", "float");
-    }
-    if (traits->trait_depth) {
-      kml_mt_array_schema(kmt_depth, "Depth", "float");
-    }
-    writer->writeEndElement(); // Close Schema tag
   }
 
   if (waypt_count()) {
@@ -1954,7 +2064,7 @@ void KmlFormat::wr_position(Waypoint* wpt)
     last_valid_fix = wpt->GetCreationTime();
   }
 
-  wpt->icon_descr = kml_get_posn_icon(wpt->GetCreationTime().toTime_t() - last_valid_fix.toTime_t());
+  wpt->icon_descr = kml_get_posn_icon(last_valid_fix.secsTo(wpt->GetCreationTime()));
 
 
   /* In order to avoid clutter while we're sitting still, don't add
@@ -1965,8 +2075,7 @@ void KmlFormat::wr_position(Waypoint* wpt)
   } else {
     Waypoint* newest_posn= posn_trk_head->waypoint_list.back();
 
-    if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
-                           RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
+    if (radtometers(gcdist(wpt->position(), newest_posn->position())) > 50) {
       track_add_wpt(posn_trk_head, new Waypoint(*wpt));
     } else {
       /* If we haven't move more than our threshold, pretend

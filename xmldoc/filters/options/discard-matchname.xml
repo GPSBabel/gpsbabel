@@ -2,7 +2,7 @@
 This option discards points that have shortnames that match the
 provided regular expression.
 </para>
-<example id="discarding_points_with_names">
+<example xml:id="discarding_points_with_names">
 <title>Discarding specific point by regular expression</title>
 <para>
 For example geocaches typically have names starting with GC followed

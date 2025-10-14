@@ -20,11 +20,12 @@
 //  USA.
 //
 //------------------------------------------------------------------------
-#include <QtGlobal>                // for QT_VERSION, QT_VERSION_CHECK
-#include <QIcon>                   // for QIcon
-#include <QApplication>            // for QApplication
+#include <QApplication>  // for QApplication
+#include <QIcon>         // for QIcon
+#include <QString>       // for QString
+#include <QtGlobal>      // for QT_VERSION, QT_VERSION_CHECK
 
-#include "mainwindow.h"             // for MainWindow
+#include "mainwindow.h"  // for MainWindow
 
 //------------------------------------------------------------------------
 int main(int argc, char** argv)
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
 // MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
 // arguments in main.cc and gui/main.cc and the version check in
 // CMakeLists.txt, gui/CMakeLists.txt.
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+#if (QT_VERSION < QT_VERSION_CHECK(6, 2, 0))
 #error this version of Qt is not supported.
 #endif
 

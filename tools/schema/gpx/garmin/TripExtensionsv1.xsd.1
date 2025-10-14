@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="http://www.garmin.com/xmlschemas/TripExtensions/v1"
+  elementFormDefault="qualified" xmlns="http://www.garmin.com/xmlschemas/TripExtensions/v1"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:annotation>
+    <xsd:documentation> This schema defines the Garmin route extensions specific to trips to be used
+      with the GPX 1.1 schema. The root elements defined by this schema are intended to be used as
+      child elements of the rte element in the GPX 1.1 schema. The GPX 1.1 schema is available at
+      http://www.topografix.com/GPX/1/1/gpx.xsd. </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="Trip" type="TripExtension_t"/>
+
+  <xsd:complexType name="TripExtension_t">
+    <xsd:annotation>
+      <xsd:documentation> This type contains data fields intended to be used as child elements of
+        the rte element in the GPX 1.1 schema </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="TransportationMode" type="xsd:token" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation> Suggested transportation mode for this route. If the processor does
+            not know about the suggested transportation mode, a default will be chosen. Examples
+            include; Automotive, Motorcycling, Walking, Hiking, Mountaineering, Bicyling,
+            TourCycling, MountainBiking, ATV, DirtBiking, Truck, RV </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="ViaPoint" type="ViaPointExtension_t"/>
+
+  <xsd:complexType name="ViaPointExtension_t">
+    <xsd:annotation>
+      <xsd:documentation> Route via points are announced stops during a route. This type contains
+        data fields intended to be used as child elements of the rtept element in the GPX 1.1 schema
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="DepartureTime" type="xsd:dateTime" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation> Planned time to leave this route via, not valid for the last via in a
+            route. Date and time are in Univeral Coordinated Time (UTC), not local time. Conforms to
+            ISO 8601 specification for date/time representation. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="StopDuration" type="xsd:duration" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation> Time spent at this route via. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ArrivalTime" type="xsd:dateTime" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation> Planned time to arrive at this route via, not valid for the first via
+            in a route. Date and time are in Univeral Coordinated Time (UTC), not local time.
+            Conforms to ISO 8601 specification for date/time representation. </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="CalculationMode" type="xsd:token" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation> Suggested calculation mode between this route via and the next route
+            via. If the CalculationMode element is not present or if the processor does not
+            recognize the suggested calculation mode, the processor may use a calculation mode
+            specified on a previous via. If none have been previously specified, the processor may
+            chose a default. Examples include; FasterTime, ShorterDistance, Direct (Off Road),
+            LessFuel, ScenicRoads </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ElevationMode" type="xsd:token" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation> Suggested elevation mode between this route via and the next route
+            via. If the ElevationMode element is not present or if the processor does not recognize
+            the suggested elevation mode, the processor may use an elevation mode specified on a
+            previous via. If none have been previously specified, the processor may chose a default.
+            Examples include; Standard, MinimizeAscent </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="NamedRoad" type="NamedRoad_t" minOccurs="0"/>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="NamedRoad_t">
+    <xsd:annotation>
+      <xsd:documentation> A specific road or trail that the user selected to follow
+            between this route via and the next route via. If the NamedRoad element is not present
+            or if the processor does not recognize the suggested named road, the processor may use a
+            named road specified on a previous via. If none have been previously specified, the
+            processor may ignore this. </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation> User friendly name of the road or trail </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Id" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation> ID of the road or trail </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ProductId" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation> Product and family ID of map product that contains the road or trail </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>	  
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:element name="ShapingPoint" type="ShapingPointExtension_t"/>
+
+  <xsd:complexType name="ShapingPointExtension_t">
+    <xsd:annotation>
+      <xsd:documentation> Route shaping points influence the route path that is calculated, but are
+        not announced or listed in driving directions. This type contains data fields intended to be
+        used as child elements of the rtept element in the GPX 1.1 schema </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Extensions_t">
+    <xsd:annotation>
+      <xsd:documentation>This type provides the ability to extend any data type that includes
+        it.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

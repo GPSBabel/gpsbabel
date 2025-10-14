@@ -9,9 +9,8 @@ overrides any icon description that might be in the input file.
 </para>
 <para>
 Value specified may be a number from the Garmin Protocol Spec or a name
-as described in the <xref linkend="GarminIcons"></xref>.
+as described in the <xref linkend="GarminIcons"/>.
 </para>
 <para>
 This option has no effect on input.
 </para>
-

@@ -1,17 +1,17 @@
 <para>
-Many <ulink url="http://www.lowrance.com">Lowrance</ulink> systems have the ability
+Many <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.lowrance.com">Lowrance</link> systems have the ability
 to output their data to an external storage device.
 Early models (such as iFinder Hunt) supported an MMC card.
-Newer models (HDS, Hook, Hook2, etc) support either an SD card or a microSD card.
-When exported the data is saved to the card as a
+Newer models (HDS, Hook, Hook2, etc.) support either an SD card or a microSD card.
+When exported, the data is saved to the card as a
 file.  Some models have the ability to export data in GPX format but the
-format native to <ulink url="http://www.lowrance.com">Lowrance</ulink> units is called USR.
+format native to <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.lowrance.com">Lowrance</link> units is called USR.
 Typically the file created by the export operation will have a ".usr" suffix if is a
-native format or a ".gpx" suffix if is is a GPX format file.
+native format or a ".gpx" suffix if it is a GPX format file.
 </para>
 
 <para>
-<ulink url="http://www.lowrance.com">Lowrance</ulink> units currently use five different versions of USR files.
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.lowrance.com">Lowrance</link> units currently use five different versions of USR files.
 These different USR versions store the four internal elements (waypoints, routes, trails, and event marker icons)
 using different formats.  Some units do not support all four elements (typically event marker icons are not supported).
 Some USR formats also have multiple element versions (i.e. USR version 4 has two different formats for storing
@@ -22,7 +22,7 @@ five USR formats or even the GPX format.
 
 <para>
 The following provides a high-level description of the multiple USR formats that are supported by the Lowrance product set
-(this is based on information contained in the <ulink url="ftp://software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf">2018 Lowrance Hook2 Series Operator Manual</ulink>) and other sources.
+(this is based on information contained in the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="ftp://software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf">2018 Lowrance Hook2 Series Operator Manual</link>) and other sources.
 </para>
 <para>
           <emphasis>User Data File version 2 </emphasis>-
@@ -40,8 +40,8 @@ The following provides a high-level description of the multiple USR formats that
 <para>
           <emphasis>User Data File version 4</emphasis> -
             Seems to be the best option for transferring data from older Lowrance units.
-            Many of the counts (Number of Waypoints, Number of Routes, etc) were exanded from
-            16-bit integer values (maximum value of 65,535) to 32-bit (maxumum value 2,147,483,647)
+            Many of the counts (Number of Waypoints, Number of Routes, etc.) were expanded from
+            16-bit integer values (maximum value of 65,535) to 32-bit (maximum value 2,147,483,647)
             USRv4 and above support a maximum of 20,000 trail-points (actually 24K and change).
             USRv4 and above and GPX support trails with trail-segments.
 
@@ -63,7 +63,7 @@ Some early systems also supported entities called event marker icons.
 Event icon markers are represented by symbol, latitude and longitude data only.
 By default, event marker icons are converted by GPSBabel to waypoints on read with their name being generated
 in the format "Event Marker NNN"
-where NNN is replaced by the squence number of the Event Marker ICON found in the input data.
+where NNN is replaced by the sequence number of the Event Marker ICON found in the input data.
 You have the option to ignore Event Icon Markers
 effectively removing them from the output data using the input option <emphasis>ignoreicons</emphasis>.
 On output, you can use the write option <emphasis>writeasicons</emphasis> to create event marker icons
@@ -83,33 +83,30 @@ The following tables detail the content format of USR data files.</para>
   <listitem><para><link linkend="usr4_trail">Lowrance USR 4, 5 and 6 Trail Object Format</link></para></listitem>
 </itemizedlist>
 
-<table id="usr_format">
+<table xml:id="usr_format">
   <title>Lowrance USR Data File Contents</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2.5*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -117,7 +114,7 @@ The following tables detail the content format of USR data files.</para>
         <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
         <entry>  USR Format </entry>
         <entry>  4 </entry>
-        <entry>  Identifies the USR file format (interger).  Valid values are 2 (USR 2), 3 (USR 3), 4 (USR 4), 5 (USR 5) and 6 (USR 6).  </entry>
+        <entry>  Identifies the USR file format (integer).  Valid values are 2 (USR 2), 3 (USR 3), 4 (USR 4), 5 (USR 5) and 6 (USR 6).  </entry>
       </row>
       <row valign="middle">
         <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
@@ -129,7 +126,7 @@ The following tables detail the content format of USR data files.</para>
         <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
         <entry>  File Title Length </entry>
         <entry>  4 </entry>
-        <entry>  Appears only in USR 4, 5, and 6. Length of file title text (integer).  </entry>
+        <entry>  Appears only in USR 4, 5, and 6. Length of the file title text (integer).  </entry>
       </row>
       <row valign="middle">
         <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
@@ -263,33 +260,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr_waypoint">
+<table xml:id="usr_waypoint">
   <title>Lowrance USR 2 and 3 Waypoint Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -375,33 +369,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr4_waypoint">
+<table xml:id="usr4_waypoint">
   <title>Lowrance USR 4, 5 and 6 Waypoint Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -535,33 +526,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr_route">
+<table xml:id="usr_route">
   <title>Lowrance USR 2 and 3 Route Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -647,33 +635,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr4_route">
+<table xml:id="usr4_route">
   <title>Lowrance USR 4, 5 and 6 Route Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -748,33 +733,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr4_leg">
+<table xml:id="usr4_leg">
   <title>Lowrance USR 4, 5 and 6 Route Leg Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -784,7 +766,7 @@ The following tables detail the content format of USR data files.</para>
         <entry>  16 </entry>
         <entry>  Appears only in USR 5 and 6 format.  Universally Unique ID for Waypoint
                  that represents this leg of Route captured as four integers.  Used to find
-                 Lat/Long values for leg. </entry>
+                 Lat/Long values for the leg. </entry>
       </row>
       <row valign="middle">
         <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry>
@@ -804,33 +786,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr_eventmarker">
+<table xml:id="usr_eventmarker">
   <title>Lowrance USR 2 and 3 Event Marker ICON Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -856,33 +835,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr_trail">
+<table xml:id="usr_trail">
   <title>Lowrance USR 2 and 3 Trail Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -927,33 +903,30 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 
-<table id="usr_trail_pts">
+<table xml:id="usr_trail_pts">
   <title>Lowrance USR 2 and 3 Trail Point Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -973,33 +946,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr4_trail">
+<table xml:id="usr4_trail">
   <title>Lowrance USR 4, 5 and 6 Trail Object Format</title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -1127,33 +1097,30 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
-<table id="usr4_trail_pts">
+<table xml:id="usr4_trail_pts">
   <title>Lowrance USR 4, 5 and 6 Trail Point Object Format </title>
   <tgroup cols="8">
-    <colspec colname="u2" align="center" colwidth="22pt"/>
-    <colspec colname="u3" align="center" colwidth="22pt"/>
-    <colspec colname="u4" align="center" colwidth="22pt"/>
-    <colspec colname="u5" align="center" colwidth="22pt"/>
-    <colspec colname="u6" align="center" colwidth="22pt"/>
-    <colspec colname="f" colwidth="*" />
-    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="u2" align="center" colwidth="12pt"/>
+    <colspec colname="u3" align="center" colwidth="12pt"/>
+    <colspec colname="u4" align="center" colwidth="12pt"/>
+    <colspec colname="u5" align="center" colwidth="12pt"/>
+    <colspec colname="u6" align="center" colwidth="12pt"/>
+    <colspec colname="f" colwidth="*"/>
+    <colspec colname="s" align="center" colwidth="35pt"/>
     <colspec colname="d" colwidth="2*"/>
     <thead>
       <row>
-        <entry namest="u2" nameend="u6" align="center">Present In</entry>
-        <entry></entry>
-        <entry></entry>
-        <entry></entry>
+        <entry namest="u2" nameend="u6" align="center">Present In USR Version</entry>
+        <entry align="center" morerows="1">Field</entry>
+        <entry align="center" morerows="1">Size (Bytes)</entry>
+        <entry align="center" morerows="1">Description</entry>
       </row>
       <row>
-        <entry>USR 2</entry>
-        <entry>USR 3</entry>
-        <entry>USR 4</entry>
-        <entry>USR 5</entry>
-        <entry>USR 6</entry>
-        <entry>Field</entry>
-        <entry>Size (Bytes)</entry>
-        <entry>Descrption</entry>
+        <entry>2</entry>
+        <entry>3</entry>
+        <entry>4</entry>
+        <entry>5</entry>
+        <entry>6</entry>
       </row>
     </thead>
     <tbody>
@@ -1199,39 +1166,39 @@ The following tables detail the content format of USR data files.</para>
 
 <para>
 Some Lowrance units have the ability to export
-<ulink url="https://www.topografix.com/gpx.asp">GPX</ulink> (GPS Exchange Format) formatted data.
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.topografix.com/gpx.asp">GPX</link> (GPS Exchange Format) formatted data.
 Lowrance only provides minimal
 support for GPX export data on their HOOK2 series (only data available to the author).  Refer to
-the official <ulink url="https://www.topografix.com/gpx/1/1/">GPX 1.1 Schema Documentation</ulink> for the complete schema.
+the official <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.topografix.com/gpx/1/1/">GPX 1.1 Schema Documentation</link> for the complete schema.
 </para>
-<example id="lowrance-export">
+<example xml:id="lowrance-export">
   <title>Lowrance GPX Export Data</title>
   <programlisting>
-    &lt;metadata>
-      &lt;time>xsd:dateTime&lt;/time>
-      &lt;depthunits>meters&lt;/depthunits>
-      &lt;tempunits>C&lt;/tempunits>
-      &lt;sogunits>m/s&lt;/sogunits>
-    &lt;/metadata>
-    &lt;wpt lon="longitudeType" lat="latitudeType">
-      &lt;time>xsd:dateTime&lt;/time>
-      &lt;name>xsd:string&lt;/name>
-      &lt;sym>xsd:string&lt;/sym>
-    &lt;/rte>
-      &lt;name>xsd:string&lt;/name>
-      &lt;rtept lon="longitudeType" lat="latitudeType">
-        &lt;time>xsd:dateTime&lt;/time>
-        &lt;name>xsd:string&lt;/name>
-        &lt;sym>xsd:string&lt;/sym>
-      &lt;/rtept>
-    &lt;/rte>
-    &lt;trk>
-      &lt;name>xsd:string&lt;/name>
-      &lt;trkseg>
-        &lt;trkpt lon="longitudeType" lat="latitudeType">
-          &lt;time>xsd:dateTime&lt;/time>
-        &lt;/trkpt>
-      &lt;/trkseg>
-    &lt;/trk>
+    &lt;metadata&gt;
+      &lt;time&gt;xsd:dateTime&lt;/time&gt;
+      &lt;depthunits&gt;meters&lt;/depthunits&gt;
+      &lt;tempunits&gt;C&lt;/tempunits&gt;
+      &lt;sogunits&gt;m/s&lt;/sogunits&gt;
+    &lt;/metadata&gt;
+    &lt;wpt lon="longitudeType" lat="latitudeType"&gt;
+      &lt;time&gt;xsd:dateTime&lt;/time&gt;
+      &lt;name&gt;xsd:string&lt;/name&gt;
+      &lt;sym&gt;xsd:string&lt;/sym&gt;
+    &lt;/rte&gt;
+      &lt;name&gt;xsd:string&lt;/name&gt;
+      &lt;rtept lon="longitudeType" lat="latitudeType"&gt;
+        &lt;time&gt;xsd:dateTime&lt;/time&gt;
+        &lt;name&gt;xsd:string&lt;/name&gt;
+        &lt;sym&gt;xsd:string&lt;/sym&gt;
+      &lt;/rtept&gt;
+    &lt;/rte&gt;
+    &lt;trk&gt;
+      &lt;name&gt;xsd:string&lt;/name&gt;
+      &lt;trkseg&gt;
+        &lt;trkpt lon="longitudeType" lat="latitudeType"&gt;
+          &lt;time&gt;xsd:dateTime&lt;/time&gt;
+        &lt;/trkpt&gt;
+      &lt;/trkseg&gt;
+    &lt;/trk&gt;
   </programlisting>
 </example>

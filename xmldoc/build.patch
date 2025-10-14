@@ -1,0 +1,20 @@
+--- chapters/build.xml.new	2022-10-27 09:44:25.567011354 -0600
++++ chapters/build.xml	2022-10-27 09:49:05.876956001 -0600
+@@ -30,7 +30,7 @@
+     <variablelist>
+       <varlistentry>
+         <term>
+-          Qt
++          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://qt-project.org">Qt</link>
+         </term>
+         <listitem>
+           <para>
+@@ -45,7 +45,7 @@
+       </varlistentry>
+       <varlistentry>
+         <term>
+-          libusb 1.0
++          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://libusb.sourceforge.net">libusb 1.0</link>
+         </term>
+         <listitem>
+           <para>

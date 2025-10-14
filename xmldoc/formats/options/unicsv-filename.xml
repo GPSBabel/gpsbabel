@@ -6,14 +6,14 @@
   This can be very helpful for locating specific waypoints (i.e. using the position filter)
   in more than one file.
 </para>
-<example id="unicsv_filename">
+<example xml:id="unicsv_filename">
   <title>Example for unicsv filename option to write filenames of input formats.</title>
   <para>
     The next example ...
     <userinput>
       gpsbabel -i gpx -f file1.gpx -i gdb -f file2.gdb -o unicsv,filename=1 -F result.txt
     </userinput>
-    ... could produce following output:
+    ... could produce the following output:
     <simplelist type="vert">
       <member>No,Latitude,Longitude,Name,Date,Time,Filename</member>
       <member>1,51.075139,12.463689,"578",2005/04/26,16:27:23,"reference/gdb-sample.gdb"</member>

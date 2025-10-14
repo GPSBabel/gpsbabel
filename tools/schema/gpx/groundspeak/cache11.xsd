@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<!-- cache.xsd version 1.1: Private GPX extensions used for Geocaching pages on Geocaching.com -->
+<!-- Changes to the cache.xsd -->
+<!-- Added GUID for transition to database redesign. Both GUID and ID are now optional -->
+<!-- Added lastUpdated and exported dates to each cache -->
+<xs:schema targetNamespace="http://www.groundspeak.com/cache/1/1" xmlns:mstns="http://www.topografix.com/GPX/1/0" xmlns="http://www.groundspeak.com/cache/1/1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified" xmlns:app1="http://www.groundspeak.com/cache/1/1">
+  <xs:element name="cache" msdata:Prefix="groundspeak">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
+        <!-- lastUpdated is the last time the cache has been edited by the user -->
+        <xs:element name="lastUpdated" msdata:Prefix="groundspeak" nillable="true" minOccurs="0" type="xs:dateTime" msdata:Ordinal="1" />
+        <!-- for the benefit of splitting out caches, exported has been added here -->
+        <xs:element name="exported" msdata:Prefix="groundspeak" nillable="true" minOccurs="0" type="xs:dateTime" msdata:Ordinal="2" />
+        <!--  placed_by is a freeform field to describe the individuals who placed the cache -->
+        <xs:element name="placed_by" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="3" />
+        <xs:element name="owner" msdata:Prefix="groundspeak" nillable="true" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:simpleContent msdata:ColumnName="owner_Text" msdata:Ordinal="1">
+              <xs:extension base="xs:string">
+                <!--  Owner ID corresponds to an account on Geocaching.com. -->
+                <xs:attribute name="id" form="unqualified" type="xs:long" />
+                <xs:attribute name="guid" form="unqualified" type="xs:string" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="type" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="4" />
+        <xs:element name="container" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="5" />
+        <!--  attributes like 'dog-friendly' or 'handicapped access' will be listed here. ID corresponds to an enum in the Geocaching.com database -->
+        <xs:element name="attributes" msdata:Prefix="groundspeak" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="attribute" msdata:Prefix="groundspeak" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:ColumnName="attribute_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="id" form="unqualified" type="xs:long" />
+                      <xs:attribute name="inc" form="unqualified" type="xs:byte" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Difficulty and terrain are on a 1 to 5 scale. 1 being easiest. Can be incremented by .5 -->
+        <xs:element name="difficulty" msdata:Prefix="groundspeak" type="xs:double" minOccurs="0" msdata:Ordinal="6" />
+        <xs:element name="terrain" msdata:Prefix="groundspeak" type="xs:double" minOccurs="0" msdata:Ordinal="7" />
+        <xs:element name="country" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="8" />
+        <xs:element name="state" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="9" />
+        <xs:element name="short_description" msdata:Prefix="groundspeak" nillable="true" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:simpleContent msdata:ColumnName="short_description_Text" msdata:Ordinal="1">
+              <xs:extension base="xs:string">
+                <!--  html is a boolean. If html=true the enclosed text contains html -->
+                <xs:attribute name="html" form="unqualified" type="xs:string" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="long_description" msdata:Prefix="groundspeak" nillable="true" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:simpleContent msdata:ColumnName="long_description_Text" msdata:Ordinal="1">
+              <xs:extension base="xs:string">
+                <!--  html is a boolean. If html=true the enclosed text contains html -->
+                <xs:attribute name="html" form="unqualified" type="xs:string" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <!--  Encoded hints use Rot13 encryption on Geocaching.com but displayed in cleartext here -->
+        <!--  Text enclosed in brackets [] are not encrypted -->
+        <xs:element name="encoded_hints" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="10" />
+        <xs:element name="logs" msdata:Prefix="groundspeak" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="log" msdata:Prefix="groundspeak" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="date" msdata:Prefix="groundspeak" type="xs:dateTime" minOccurs="0" msdata:Ordinal="0" />
+                    <xs:element name="type" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="1" />
+                    <xs:element name="finder" msdata:Prefix="groundspeak" nillable="true" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:simpleContent msdata:ColumnName="finder_Text" msdata:Ordinal="1">
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="id" form="unqualified" type="xs:long" />
+                            <xs:attribute name="guid" form="unqualified" type="xs:string" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="text" msdata:Prefix="groundspeak" nillable="true" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:simpleContent msdata:ColumnName="text_Text" msdata:Ordinal="1">
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="encoded" form="unqualified" type="xs:string" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="log_wpt" msdata:Prefix="groundspeak" minOccurs="0" maxOccurs="1">
+                      <xs:complexType>
+                        <xs:attribute name="lat" form="unqualified" type="xs:decimal" />
+                        <xs:attribute name="lon" form="unqualified" type="xs:decimal" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="id" form="unqualified" type="xs:long" />
+                  <xs:attribute name="guid" form="unqualified" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!--  Travel bugs indicate that they have been reported currently in a cache -->
+        <xs:element name="travelbugs" msdata:Prefix="groundspeak" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="travelbug" msdata:Prefix="groundspeak" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" msdata:Prefix="groundspeak" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
+                  </xs:sequence>
+                  <xs:attribute name="id" form="unqualified" type="xs:long" />
+                  <xs:attribute name="guid" form="unqualified" type="xs:string" />
+                  <xs:attribute name="ref" form="unqualified" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" form="unqualified" type="xs:long" />
+      <xs:attribute name="guid" form="unqualified" type="xs:string" />
+      <xs:attribute name="available" form="unqualified" type="xs:string" />
+      <xs:attribute name="archived" form="unqualified" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <!-- simpleTypes used for the groundspeak:cache namespace -->
+  <xs:simpleType name="logType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Found it" />
+      <xs:enumeration value="Didn't find it" />
+      <xs:enumeration value="Other" />
+      <xs:enumeration value="Needs Archived" />
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="Archive (show)" />
+      <xs:enumeration value="Archive (no show)" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

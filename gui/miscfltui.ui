@@ -287,6 +287,21 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>nukeRoutes</tabstop>
+  <tabstop>nukeTracks</tabstop>
+  <tabstop>nukeWaypoints</tabstop>
+  <tabstop>transformCheck</tabstop>
+  <tabstop>transformCombo</tabstop>
+  <tabstop>deleteCheck</tabstop>
+  <tabstop>swapCheck</tabstop>
+  <tabstop>sortWptCheck</tabstop>
+  <tabstop>sortWptBy</tabstop>
+  <tabstop>sortRteCheck</tabstop>
+  <tabstop>sortRteBy</tabstop>
+  <tabstop>sortTrkCheck</tabstop>
+  <tabstop>sortTrkBy</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

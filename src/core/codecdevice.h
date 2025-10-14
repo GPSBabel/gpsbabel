@@ -16,6 +16,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
+#ifndef SRC_CORE_CODECDEVICE_H_
+#define SRC_CORE_CODECDEVICE_H_
 
 #include <QIODevice>        // for QIODevice
 #include <QIODeviceBase>    // for QIODeviceBase::OpenMode
@@ -33,7 +35,7 @@ namespace gpsbabel
 class CodecDevice : public QIODevice
 {
 public:
-  CodecDevice(const QString& fname, const char* module, const char* codec_name);
+  CodecDevice(const QString& fname, const char* codec_name);
   ~CodecDevice();
   bool open(QIODevice::OpenMode mode) override;
   bool isSequential() const override;
@@ -45,7 +47,6 @@ private:
 
 private:
   QString fname_;
-  const char* module_;
   const char* codec_name_;
   gpsbabel::File* file_{nullptr};
   QTextCodec* codec_{nullptr};
@@ -60,4 +61,5 @@ private:
   qint64 charbuffer_bytes_free_{charbuffer_size_};
 };
 
-} // namespace
+} // namespace gpsbabel
+#endif // SRC_CORE_CODECDEVICE_H_

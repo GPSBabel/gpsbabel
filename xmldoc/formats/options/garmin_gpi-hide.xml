@@ -1,7 +1,7 @@
 <para>
-   For a large list of points (or whyever) it can be useful when
-   no bitmaps are displayed on device. With this option no bitmap
-   is stored and displayed.
+   For a large list of points it may be desirable if
+   no bitmaps are displayed on the device. With this option no bitmaps
+   are stored and displayed.
 </para>
 <para>
   <userinput>

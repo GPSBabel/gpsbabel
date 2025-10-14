@@ -8,13 +8,13 @@ change in heading big enough.</para>
 intersections. That means that, while navigating that route using a
 GPS unit, the course pointer would aim to the inside of that curve or
 intersection, and only when you have passed that point will the GPS
-aim to the next waypoint in the route. This behaviour is useful in
+aim to the next waypoint in the route. This behavior is useful in
 marine navigation but when biking, for instance, it may be a bit late
 to decide where to turn to in an intersection.</para>
 
-<para>This filter tries to solve that creating a waypoint before and after
-where there is a change in direction.That way, the course pointer will
-point to the direction you should turn to ahead in time.</para>
+<para>This filter tries to solve that problem by creating a waypoint before and after
+there is a change in direction. That way, the course pointer will
+point to the direction you should turn to ahead of time.</para>
 
 <para>For this filter to work correctly, the route should be simple enough
 that there is only one waypoint inside each curve or intersection.
@@ -29,4 +29,3 @@ larger than 5 degrees.</para>
 <para><userinput>gpsbabel -i gpx -f route.gpx -x
 bend,distance=25,interpolate,minangle=5 -o gpx -F newroute.gpx
 </userinput></para>
-

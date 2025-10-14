@@ -24,7 +24,6 @@
 #include "swapdata.h"
 #include <utility>     // for swap
 
-#define MYNAME "swapdata"
 
 #if FILTERS_ENABLED
 
@@ -40,11 +39,9 @@ void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 
 void SwapDataFilter::process()	/* this procedure must be present in vecs */
 {
-  WayptFunctor<SwapDataFilter> swapdata_cb_f(this, &SwapDataFilter::swapdata_cb);
-
-  waypt_disp_all(swapdata_cb_f);
-  route_disp_all(nullptr, nullptr, swapdata_cb_f);
-  track_disp_all(nullptr, nullptr, swapdata_cb_f);
+  waypt_disp_all(swapdata_cb);
+  route_disp_all(nullptr, nullptr, swapdata_cb);
+  track_disp_all(nullptr, nullptr, swapdata_cb);
 }
 
 #endif // FILTERS_ENABLED

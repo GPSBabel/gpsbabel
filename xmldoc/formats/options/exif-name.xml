@@ -6,4 +6,3 @@
 <para>
   <userinput>gpsbabel -i gpx -f holiday.gpx -o exif,name="On the beach" -F IMG0786.JPG</userinput>
 </para>
-

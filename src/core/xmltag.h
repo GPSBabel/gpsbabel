@@ -19,26 +19,39 @@
 #ifndef SRC_CORE_XMLTAG_H
 #define SRC_CORE_XMLTAG_H
 
-#include <QString>                                 // for QString
-#include <QXmlStreamAttributes>                    // for QXmlStreamAttributes
+#include <QString>               // for QString
+#include <QStringView>           // for QStringView
+#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 
-#include "defs.h"
+#include "formspec.h"            // for FormatSpecificData, FsType
 
-class xml_tag
+
+class XmlTag
 {
 public:
+
+  /* Member Functions */
+
+  XmlTag* xml_findnext(const XmlTag* root, QStringView name);
+  XmlTag* xml_findfirst(QStringView name);
+  QString xml_attribute(const QString& attrname) const;
+
+  /* Data Members */
+
   QString tagname;
   QString cdata;
   QString parentcdata;
   QXmlStreamAttributes attributes;
-  xml_tag* parent{nullptr};
-  xml_tag* sibling{nullptr};
-  xml_tag* child{nullptr};
-};
+  XmlTag* parent{nullptr};
+  XmlTag* sibling{nullptr};
+  XmlTag* child{nullptr};
 
-xml_tag* xml_findfirst(xml_tag* root, const QString& tagname);
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const QString& tagname);
-QString xml_attribute(const QXmlStreamAttributes& attributes, const QString& attrname);
+private:
+
+  /* Member Functions */
+
+  XmlTag* xml_next(const XmlTag* root);
+};
 
 struct fs_xml : FormatSpecificData {
   explicit fs_xml(FsType type) : FormatSpecificData(type) {}
@@ -52,9 +65,6 @@ public:
 
   fs_xml* clone() const override;
 
-  xml_tag* tag{nullptr};
+  XmlTag* tag{nullptr};
 };
-
-fs_xml* fs_xml_alloc(FsType type);
-
 #endif // SRC_CORE_XMLTAG_H

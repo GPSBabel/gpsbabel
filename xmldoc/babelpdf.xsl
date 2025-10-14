@@ -1,11 +1,12 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:exsl="http://exslt.org/common"
+    xmlns:db="http://docbook.org/ns/docbook"
 		version="1.0"
                 exclude-result-prefixes="exsl">
 
 
-<xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
+<xsl:import href="http://docbook.sourceforge.net/release/xsl-ns/current/fo/docbook.xsl"/>
 
 <!-- turn on extensions for newer versions of fop.  In particular, this makes
      the XSL generate an fo bookmark-tree, which fop translates into bookmarks
@@ -14,24 +15,25 @@
 
 <!-- This template formats userinput as a block-level element and adds the
      background and border we use in the HTML doc, for consistency.  RLP -->
-<xsl:template match="userinput">
+<xsl:template match="db:userinput">
   <fo:block background-color="#E5E9EB" padding="4pt"
 		break-after="auto" border="1pt dashed #000000">
     <xsl:call-template name="inline.boldmonoseq"/>
   </fo:block>
 </xsl:template>
-<!-- Sometimes we use userinput and sometimes screen. Format both. -->
-<xsl:template match="screen">
-  <fo:block background-color="#e5E9EB" padding="4pt"
-		break-after="auto" border="1pt dashed #000000">
-    <xsl:call-template name="inline.boldmonoseq"/>
-  </fo:block>
-</xsl:template>
+
+<!-- Wrap any long lines in verbatim elements, which presumably use monospace.
+     This is preferrable to truncating the lines, but manually breaking the line
+     allows for the appropriate level of indent and control over where the break
+     is. -->
+<xsl:attribute-set name="monospace.verbatim.properties">
+    <xsl:attribute name="wrap-option">wrap</xsl:attribute>
+</xsl:attribute-set>
 
 <!-- This template is used to get rid of a lot of warnings we were getting
      from fop due to the fact that it doesn't support table-layout="auto".
      Auto is apparently the default if no table layout is specified. RLP -->
-<xsl:template match="simplelist">
+<xsl:template match="db:simplelist">
   <!-- with no type specified, the default is 'vert' -->
   <xsl:variable name="explicit.table.width">
     <xsl:call-template name="dbfo-attribute">

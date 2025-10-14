@@ -5,4 +5,3 @@ handy for listings of any type of waypoint files.
 Groundspeak extensions and writes a text file with encrypted hints:
 </para>
 <para><userinput>gpsbabel -i gpx -f 12345.gpx -o text,encrypt -F 12345.txt</userinput></para>
-

@@ -20,22 +20,21 @@
 // https://en.wikipedia.org/wiki/N-vector
 // http://www.navlab.net/Publications/A_Nonsingular_Horizontal_Position_Representation.pdf
 
-#include <cfloat>
-#include <cmath>
-#include <cstdio>
-#include <iostream>
-#include <utility>
+#include "src/core/nvector.h"
 
-#include "nvector.h"
-#include "vector3d.h"
+#include <cfloat>               // for DBL_EPSILON
+#include <cmath>                // for sqrt, atan2, cos, nan, sin, cbrt
+#include <utility>              // for pair
+
+#include "src/core/vector3d.h"  // for Vector3D
 
 namespace gpsbabel
 {
 
-LatLon::LatLon(double latitude, double longitude)
+LatLon::LatLon(double latitude, double longitude) : lat(latitude), lon(longitude)
 {
-  lat = latitude;
-  lon = longitude;
+  
+  
 }
 
 NVector::NVector(double latitude_degrees, double longitude_degrees)
@@ -134,6 +133,12 @@ double NVector::distance(double latitude_a_degrees, double longitude_a_degrees, 
   NVector n_EB_E(latitude_b_degrees, longitude_b_degrees);
   double result = distance(n_EA_E, n_EB_E);
   return result;
+}
+
+double NVector::euclideanDistance(const NVector& n_EA_E, const NVector& n_EB_E)
+{
+  // https://www.ffi.no/en/research/n-vector, Example 5, dAB.
+  return (n_EA_E - n_EB_E).norm() * MEAN_EARTH_RADIUS_METERS;
 }
 
 double NVector::azimuth_radians(const NVector& n_EA_E, const NVector& n_EB_E, double height_a, double height_b)
@@ -401,7 +406,7 @@ double NVector::crossTrackDistance(const NVector& n_EA_E, const NVector& n_EB_E,
 {
   Vector3D c_E = crossProduct(n_EA_E, n_EB_E).normalize();
   double result = fabs((atan2(crossProduct(c_E, n_EX_E).norm(),
-                              dotProduct(c_E, n_EX_E)) - M_PI/2.0)) * MEAN_EARTH_RADIUS_METERS;
+                              dotProduct(c_E, n_EX_E)) - std::numbers::pi/2.0)) * MEAN_EARTH_RADIUS_METERS;
   return result;
 }
 #else

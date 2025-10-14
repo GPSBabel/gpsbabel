@@ -4,7 +4,7 @@
 	configuration, it can store ~100000 trackpoints with very limited
 	 data; to configure extended logging you can use the BT747 open
 	source software
-         <ulink url="http://bt747.wiki.sourceforge.net">bt747</ulink>
+         <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://bt747.wiki.sourceforge.net">bt747</link>
 	 Waypoint storage is possible only if "recording reason" (RCR) is enabled in the settings.
 </para>
 <para>

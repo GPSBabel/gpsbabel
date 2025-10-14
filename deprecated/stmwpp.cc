@@ -3,7 +3,7 @@
    Support for "Suunto Trek Manager" (STM) WaypointPlus files,
    see homepage "http://www.suunto.fi" for more details,
 
-   Copyright (C) 2005,2007 Olaf Klein, o.b.klein@gpsbabel.org
+   Copyright (C) 2005,2007 Olaf Klein
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

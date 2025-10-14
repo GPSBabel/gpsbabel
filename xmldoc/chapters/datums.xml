@@ -1,4 +1,4 @@
-<appendix id="Datums">
+<appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Datums">
 <title>Supported Datums</title>
 <para>
 Some formats in GPSBabel support multiple datums.  For example, the
@@ -135,4 +135,3 @@ The following is a list of the datums supported by GPSBabel.
 <member>Sweden</member>
 </simplelist>
 </appendix>
-

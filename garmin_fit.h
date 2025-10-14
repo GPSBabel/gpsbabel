@@ -39,6 +39,7 @@
 #include "defs.h"
 #include "format.h"             // for Format
 #include "gbfile.h"             // for gbfile
+#include "option.h"             // for OptionBool
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -62,16 +63,6 @@ public:
       (ff_cap)(ff_cap_read | ff_cap_write),	/* tracks */
       ff_cap_none 				/* routes */
     };
-  }
-
-  QString get_encode() const override
-  {
-    return CET_CHARSET_ASCII;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
   }
 
   void rd_init(const QString& fname) override;
@@ -110,12 +101,12 @@ private:
       : lat(wpt.latitude),
         lon(wpt.longitude),
         altitude(wpt.altitude),
-        speed(WAYPT_HAS((&wpt), speed) ? wpt.speed : -1),
+        speed(wpt.speed_value_or(-1)),
         odometer_distance(wpt.odometer_distance),
         creation_time(wpt.creation_time),
         shortname(wpt.shortname),
         is_course_point(is_course_point),
-        course_point_type(course_point_type) { }
+        course_point_type(course_point_type) {}
     double lat, lon, altitude;
     double speed, odometer_distance;
     gpsbabel::DateTime creation_time;
@@ -268,8 +259,8 @@ private:
 
   /* Data Members */
 
-  char* opt_allpoints = nullptr;
-  char* opt_recoverymode = nullptr;
+  OptionBool opt_allpoints;
+  OptionBool opt_recoverymode;
   int lap_ct = 0;
   bool new_trkseg = false;
   bool write_header_msgs = false;

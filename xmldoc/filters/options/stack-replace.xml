@@ -5,4 +5,3 @@ should never need to specify it, but it is included for the sake of
 readability.  When this option is specified, the popped state replaces
 the current state.
 </para>
-

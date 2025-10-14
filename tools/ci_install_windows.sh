@@ -5,8 +5,7 @@ set -ex
 function validate() {
   (
     set +e
-    # shellcheck source=/dev/null
-    source "${CACHEDIR}/qt.env"
+    PATH=${QTDIR}/bin:$PATH
     if [ "$(cygpath -u "$(qmake -query QT_INSTALL_BINS)")" != "${QTDIR}/bin" ]; then
       echo "ERROR: unexpected Qt location." >&2
       exit 1
@@ -18,19 +17,37 @@ function validate() {
   )
 }
 
-QT_VERSION=${1:-5.12.10}
-COMPILER=${2:-msvc2017_64}
+QT_VERSION=${1:-6.5.3}
+COMPILER=${2:-msvc2022_64}
 METHOD=${3:-default}
+CROSS_COMPILER=${4}
 
+HOST=windows
 if [ "${COMPILER}" = "msvc2017_64" ]; then
   PACKAGE_SUFFIX=win64_msvc2017_64
 elif [ "${COMPILER}" = "msvc2017" ]; then
   PACKAGE_SUFFIX=win32_msvc2017
 elif [ "${COMPILER}" = "msvc2019_64" ]; then
   PACKAGE_SUFFIX=win64_msvc2019_64
+elif [ "${COMPILER}" = "msvc2019" ]; then
+  PACKAGE_SUFFIX=win32_msvc2019
+elif [ "${COMPILER}" = "msvc2022_64" ]; then
+  PACKAGE_SUFFIX=win64_msvc2022_64
+elif [ "${COMPILER}" = "msvc2022_arm64" ]; then
+    PACKAGE_SUFFIX=win64_msvc2022_arm64
+    HOST=windows_arm64
 else
   echo "ERROR: unrecognized Qt compiler ${COMPILER}." >&2
   exit 1
+fi
+
+if [ -n "${CROSS_COMPILER}" ]; then
+  if [ "${CROSS_COMPILER}" = "msvc2022_arm64" ]; then
+    PACKAGE_SUFFIX_CROSS=win64_msvc2022_arm64_cross_compiled
+  else
+    echo "ERROR: unrecognized Qt cross compiler ${CROSS_COMPILER}." >&2
+    exit 1
+  fi
 fi
 
 CACHEDIR=${HOME}/Cache
@@ -43,24 +60,19 @@ else
   mkdir -p "${CACHEDIR}"
 
   if [ "${METHOD}" = "aqt" ]; then
-    pip3 install aqtinstall>=2.0.0
-    "${CI_BUILD_DIR}/tools/ci_install_qt.sh" windows "${QT_VERSION}" "${PACKAGE_SUFFIX}" "${CACHEDIR}/Qt"
-    echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt.env"
+    # we need https://github.com/miurahr/aqtinstall/pull/941 to install extensions with 6.10.0 for windows arm64.
+    # until this is merged and released use a locally generated version of aqt.
+    #pip3 install 'aqtinstall>=3.3.0'
+    archive=aqtinstall-3.3.1.dev13-py3-none-any.whl
+    curl -u "${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}" "${ARTIFACTORY_BASE_URL}/${archive}" -o "/tmp/${archive}"
+    pip3 install "/tmp/${archive}"
+    "${CI_BUILD_DIR}/tools/ci_install_qt.sh" "${HOST}" "${QT_VERSION}" "${PACKAGE_SUFFIX}" "${CACHEDIR}/Qt"
+    if [ -n "${PACKAGE_SUFFIX_CROSS}" ]; then
+      "${CI_BUILD_DIR}/tools/ci_install_qt.sh" "${HOST}" "${QT_VERSION}" "${PACKAGE_SUFFIX_CROSS}" "${CACHEDIR}/Qt"
+    fi
   else
-    QT_VERSION_SHORT=${QT_VERSION//./}
-    QT_VERSION_MAJMIN=${QT_VERSION%.*}
-    curl -s -L -o "qt-opensource-windows-x86-${QT_VERSION}.exe" "https://download.qt.io/official_releases/qt/${QT_VERSION_MAJMIN}/${QT_VERSION}/qt-opensource-windows-x86-${QT_VERSION}.exe"
-    ls -l ./*.exe
-    netsh advfirewall firewall add rule name=dummyupqt dir=out action=block program="$(cygpath -w "${PWD}/qt-opensource-windows-x86-${QT_VERSION}.exe")"
-    "${PWD}/qt-opensource-windows-x86-${QT_VERSION}.exe" --verbose --script "${CI_BUILD_DIR}/tools/qtci/qt-install.qs" QTCI_OUTPUT="${CACHEDIR}/Qt" QTCI_PACKAGES="qt.qt5.${QT_VERSION_SHORT}.${PACKAGE_SUFFIX},qt.qt5.${QT_VERSION_SHORT}.qtwebengine"
-    netsh advfirewall firewall delete rule name=dummyupqt
-    rm "qt-opensource-windows-x86-${QT_VERSION}.exe"
-    ls "${CACHEDIR}/Qt"
-    rm -fr "${CACHEDIR}/Qt/Docs"
-    rm -fr "${CACHEDIR}/Qt/Examples"
-    rm -fr "${CACHEDIR}/Qt/Tools"
-    rm -f "${CACHEDIR}/Qt/MaintenanceTool.*"
-    echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt.env"
+    echo "ERROR: unknown installation method ${METHOD}." >&2
+    exit 1
   fi
 fi
 validate

@@ -1,4 +1,5 @@
 name: "ubuntu"
+permissions: {}
 
 on:
   push:
@@ -8,105 +9,156 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
-  basic:
-    name: basic Build
-    runs-on: ubuntu-latest
+  ubuntu:
+    name: ubuntu Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # focal has Qt 5.12, end of standard support 4/2025, end of life 4/2030.
+          #- IMAGE: 'focal'
+          #  SCRIPT: './tools/build_and_test_cmake.sh'
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            os: ubuntu-latest
+          - IMAGE: 'jammy'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            TOOLS: 'clang'
+            os: ubuntu-latest
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            os: ubuntu-latest
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            TOOLS: 'clang'
+            os: ubuntu-latest
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_extra_tests.sh'
+            os: ubuntu-latest
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/aarch64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            os: ubuntu-24.04-arm
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/travis_script_linux_coverage'
+            os: ubuntu-latest
     container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
+      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}
       env:
         LC_ALL: 'C.UTF-8'
+        JOB_CMAKE_PREFIX_PATH: ${{ matrix.CMAKE_PREFIX_PATH }}
+        JOB_TOOLS: ${{ matrix.TOOLS }}
+        JOB_SCRIPT: ${{ matrix.SCRIPT }}
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v5
 
     - name: build_and_test
       run: |
-        ./tools/build_and_test.sh
+        # when using containers manually whitelist the checkout directory to allow git commands to work
+        git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+        if [ -n "${JOB_CMAKE_PREFIX_PATH}" ]; then
+          CMAKE_PREFIX_PATH="${JOB_CMAKE_PREFIX_PATH}"
+          export CMAKE_PREFIX_PATH
+        fi
+        if [ "${JOB_TOOLS}" = "clang" ]; then
+          CC=clang
+          export CC
+          CXX=clang++
+          export CXX
+        fi
+        "${JOB_SCRIPT}"
 
-  cmake:
-    name: cmake Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
-      env:
-        LC_ALL: 'C.UTF-8'
+    - name: upload_coverage 
+      if: contains(matrix.script, 'coverage') && ( github.secret_source == 'Actions' )
+      uses: codacy/codacy-coverage-reporter-action@v1.3.0
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: lcov.info
+        language: CPP
 
+  snap:
+    name: snap Build
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: ubuntu-24.04-arm
+    outputs:
+      snap-file: ${{ steps.build-snap.outputs.snap }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+        fetch-tags: true
 
-    - name: build_and_test
+    - name: Build
+      uses: snapcore/action-build@v1
+      id: build-snap
+
+    # Make sure the snap is installable
+    - name: Test
       run: |
-        ./tools/build_and_test_cmake.sh
+        # workaround https://github.com/canonical/mesa-2404/issues/63
+        # for an unknown reason refreshing the mesa-2404 snap to use beta after installation results in
+        # gpsbabel using the original mesa-2404 version.
+        if [ "${RUNNER_ARCH}" = "ARM64" ]; then
+          mesaver=$(snap info mesa-2404 | grep latest/stable: | tr -s ' ' '\t' | cut -f3 | cut -d . -f1,1)
+          if [ "$mesaver" -lt 25 ]; then
+            echo "Forcing installation of beta mesa-2404 snap!"
+            sudo snap install --channel=latest/beta mesa-2404
+          fi
+        fi
+        sudo snap install --dangerous ${{ steps.build-snap.outputs.snap }}
+        snap list
+        export GBTEMP=$(pwd)/gbtemp
+        mkdir -p "$GBTEMP"
+        /snap/bin/gpsbabel -D3 || true
+        ./testo -p /snap/bin/gpsbabel
 
-  qtio_gcc:
-    name: qtio gcc Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_qtio
+    - name: Generate artifact attestation
+      if: ${{ inputs.attestation }}
+      uses: actions/attest-build-provenance@v3
+      with:
+        subject-path: ${{ steps.build-snap.outputs.snap }}
+
+    - name: Deploy
+      # This only handles continous releases now, for other events artifacts may be saved in
+      # the 'Upload Artifacts' step.
+      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
       env:
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: build_and_test
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_NAME: Continuous-Linux
       run: |
-        . /opt/qtio.env
-        ./tools/build_and_test.sh
+        ./tools/uploadtool/upload_github.sh ${{ steps.build-snap.outputs.snap }}
 
-  qtio_clang:
-    name: qtio clang Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_qtio
-      env:
-        QMAKESPEC: 'linux-clang'
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: build_and_test
-      run: |
-        . /opt/qtio.env
-        ./tools/build_and_test.sh
-
-  advanced:
-    name: advanced Build
-    runs-on: ubuntu-latest
-    container:
-      image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_focal
-      env:
-        LC_ALL: 'C.UTF-8'
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: build_extra_tests
-      run: |
-        ./tools/build_extra_tests.sh
-
-  coverage:
-    name: coverage Build
-    runs-on: ubuntu-20.04
-    steps:
-    - name: install
-      run: |
-        sudo apt-get update
-        sudo apt-get install gcovr lcov libusb-1.0-0-dev qt5-default
-
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: script
-      env:
-        CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-      run: |
-        ./tools/travis_script_linux_coverage
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.build-snap.outputs.snap }}
+        path: ${{ steps.build-snap.outputs.snap }}
+        retention-days: 7

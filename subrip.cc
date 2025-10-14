@@ -33,8 +33,6 @@
 #include "src/core/logging.h"   // for Fatal
 
 
-#define MYNAME "subrip"
-
 /* internal helper functions */
 
 QTime
@@ -78,20 +76,19 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
             starttime.hour(), starttime.minute(), starttime.second(), starttime.msec(),
             endtime.hour(), endtime.minute(), endtime.second(), endtime.msec());
 
-  for (char* c = opt_format; *c != '\0' ; c++) {
-    char fmt;
+  const QByteArray format = opt_format.get().toUtf8();
+  for (auto it = format.cbegin(), end = format.cend(); it != end; ++it) {
 
-    switch (*c) {
+    switch (*it) {
     case '%':
-      fmt = *++c;
-      if (fmt == '\0') {
-        fatal("No character after %% in subrip format");
+      if (++it == end) {
+        gbFatal("No character after %% in subrip format.\n");
       }
 
-      switch (fmt) {
+      switch (*it) {
       case 's':
-        if WAYPT_HAS(prevwpp, speed) {
-          gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed));
+        if (prevwpp->speed_has_value()) {
+          gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed_value()));
         } else {
           gbfprintf(fout, "--.-");
         }
@@ -137,18 +134,19 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
       break;
 
     case '\\':
-      fmt = *++c;
-      if (fmt == '\0') {
-        fatal("No character after \\ in subrip format");
+      if (++it == end) {
+        gbFatal("No character after \\ in subrip format.\n");
       }
-      switch (fmt) {
+
+      switch (*it) {
       case 'n':
         gbfprintf(fout, "\n");
         break;
       }
       break;
+
     default:
-      gbfwrite(c, 1, 1, fout);
+      gbfputc(*it, fout);
     }
   }
   gbfprintf(fout, "\n\n");
@@ -180,7 +178,7 @@ SubripFormat::subrip_trkpt_pr(const Waypoint* waypointp)
       qDebug().noquote() << "GPS track start is           "
                          << waypointp->GetCreationTime().toUTC().toString(Qt::ISODateWithMs);
       qDebug().noquote() << "Synchronizing"
-                         << video_time(gps_datetime).toString("HH:mm:ss,zzz")
+                         << video_time(gps_datetime).toString(u"HH:mm:ss,zzz")
                          << "to" << gps_datetime.toString(Qt::ISODateWithMs);
       qDebug().noquote() << "Video start   00:00:00,000 is"
                          << video_datetime.toString(Qt::ISODateWithMs);
@@ -205,32 +203,32 @@ SubripFormat::wr_init(const QString& fname)
   vspeed = 0;
   gradient = 0;
 
-  if ((opt_gpstime == nullptr) != (opt_gpsdate == nullptr)) {
-    fatal(FatalMsg() << MYNAME ": Either both or neither of the gps_date and gps_time options must be supplied!");
+  if (opt_gpstime != opt_gpsdate) {
+    gbFatal(FatalMsg() << "Either both or neither of the gps_date and gps_time options must be supplied!");
   }
   gps_datetime = QDateTime();
-  if ((opt_gpstime != nullptr) && (opt_gpsdate != nullptr)) {
-    QDate gps_date = QDate::fromString(opt_gpsdate, "yyyyMMdd");
+  if (opt_gpstime && opt_gpsdate) {
+    QDate gps_date = QDate::fromString(opt_gpsdate, u"yyyyMMdd");
     if (!gps_date.isValid()) {
-      fatal(FatalMsg().nospace() << MYNAME ": option gps_date value (" << opt_gpsdate << ") is invalid.  Expected yyyymmdd.");
+      gbFatal(FatalMsg().nospace() << "option gps_date value (" << opt_gpsdate.get() << ") is invalid.  Expected yyyymmdd.");
     }
-    QTime gps_time = QTime::fromString(opt_gpstime, "HHmmss");
+    QTime gps_time = QTime::fromString(opt_gpstime, u"HHmmss");
     if (!gps_time.isValid()) {
-      gps_time = QTime::fromString(opt_gpstime, "HHmmss.z");
+      gps_time = QTime::fromString(opt_gpstime, u"HHmmss.z");
       if (!gps_time.isValid()) {
-        fatal(FatalMsg().nospace() << MYNAME ": option gps_time value (" << opt_gpstime << ") is invalid.  Expected hhmmss[.sss]");
+        gbFatal(FatalMsg().nospace() << "option gps_time value (" << opt_gpstime.get() << ") is invalid.  Expected hhmmss[.sss]");
       }
     }
-    gps_datetime = QDateTime(gps_date, gps_time, Qt::UTC);
+    gps_datetime = QDateTime(gps_date, gps_time, QtUTC);
   }
 
   video_offset_ms = 0;
-  if (opt_videotime != nullptr) {
-    QTime video_time = QTime::fromString(opt_videotime, "HHmmss");
+  if (opt_videotime) {
+    QTime video_time = QTime::fromString(opt_videotime, u"HHmmss");
     if (!video_time.isValid()) {
-      video_time = QTime::fromString(opt_videotime, "HHmmss.z");
+      video_time = QTime::fromString(opt_videotime, u"HHmmss.z");
       if (!video_time.isValid()) {
-        fatal(FatalMsg().nospace() << MYNAME ": option video_time value (" << opt_videotime << ") is invalid.  Expected hhmmss[.sss].");
+        gbFatal(FatalMsg().nospace() << "option video_time value (" << opt_videotime.get() << ") is invalid.  Expected hhmmss[.sss].");
       }
     }
     video_offset_ms = video_time.msecsSinceStartOfDay();
@@ -238,7 +236,7 @@ SubripFormat::wr_init(const QString& fname)
 
   video_datetime = QDateTime();
 
-  fout = gbfopen(fname, "wb", MYNAME);
+  fout = gbfopen(fname, "wb");
 }
 
 void

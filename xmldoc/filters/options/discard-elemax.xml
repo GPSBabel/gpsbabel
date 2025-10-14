@@ -1,4 +1,3 @@
 <para>
 This option drops waypoints with an altitude higher than the specified value (in meters).   See elemin for an explanation why this may be useful.
 </para>
-

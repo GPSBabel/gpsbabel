@@ -7,4 +7,3 @@ state from the stack.  By default, it is swapped with the top of the stack,
 but the <option>depth</option> can be used to specify a different saved
 state.
 </para>
-

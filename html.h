@@ -21,12 +21,15 @@
 #ifndef HTML_H_INCLUDED_
 #define HTML_H_INCLUDED_
 
-#include <QString>   // for QString
-#include <QVector>   // for QVector
+#include <QList>                  // for QList
+#include <QString>                // for QString
+#include <QVector>                // for QVector
 
-#include "defs.h"    // for arglist_t, ff_cap, ARG_NOMINMAX, ARGTYPE_STRING, ARGTYPE_BOOL, Waypoint, ff_cap_none, CET_CHARSET_UTF8, ff_cap_write, ff_type, ff_type_file, short_handle
-#include "format.h"  // for Format
-#include "gbfile.h"  // for gbfile
+#include "defs.h"
+#include "format.h"               // for Format
+#include "mkshort.h"              // for MakeShort
+#include "option.h"               // for OptionString, OptionBool
+#include "src/core/textstream.h"  // for TextStream
 
 
 class HtmlFormat : public Format
@@ -48,16 +51,6 @@ public:
     return { ff_cap_write, ff_cap_none, ff_cap_none };
   }
 
-  QString get_encode() const override
-  {
-    return CET_CHARSET_UTF8;
-  }
-
-  int get_fixed_encode() const override
-  {
-    return 0;
-  }
-
   void wr_init(const QString& fname) override;
   void write() override;
   void wr_deinit() override;
@@ -65,23 +58,28 @@ public:
 private:
   /* Member Functions */
 
+  static QString create_id(int sequence_number);
   void html_disp(const Waypoint* wpt) const;
   void html_index(const Waypoint* wpt) const;
 
   /* Data Members */
 
-  gbfile* file_out{};
-  short_handle mkshort_handle{};
+  gpsbabel::TextStream* file_out{nullptr};
+  MakeShort* mkshort_handle{};
 
-  char* stylesheet = nullptr;
-  char* html_encrypt = nullptr;
-  char* includelogs = nullptr;
-  char* degformat = nullptr;
-  char* altunits = nullptr;
+  int waypoint_number{};
+
+  OptionString opt_stylesheet;
+  OptionBool html_encrypt;
+  OptionBool includelogs;
+  OptionString opt_degformat;
+  OptionString opt_altunits;
+  char degformat{};
+  char altunits {};
 
   QVector<arglist_t> html_args = {
     {
-      "stylesheet", &stylesheet,
+      "stylesheet", &opt_stylesheet,
       "Path to HTML style sheet", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
@@ -93,11 +91,11 @@ private:
       "Include groundspeak logs if present", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "degformat", &degformat,
+      "degformat", &opt_degformat,
       "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
     {
-      "altunits", &altunits,
+      "altunits", &opt_altunits,
       "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
   };

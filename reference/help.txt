@@ -1,4 +1,4 @@
-GPSBabel Version 1.8.0.  https://www.gpsbabel.org
+GPSBabel Version 1.10.0.  https://www.gpsbabel.org
 
 Usage:
     ./gpsbabel [options] -i INTYPE -f INFILE [filter] -o OUTTYPE -F OUTFILE
@@ -32,15 +32,7 @@ Options:
     -V               Print GPSBabel version and exit
 
 File Types (-i and -o options):
-	baroiq                Brauniger IQ Series Barograph Download
-	cambridge             Cambridge/Winpilot glider software
-	  snlen                 Max synthesized shortname length
-	  snwhite               (0/1) Allow whitespace synth. shortnames
-	  snupper               (0/1) UPPERCASE synth. shortnames
-	  snunique              (0/1) Make synth. shortnames unique
-	  urlbase               Basename prepended to URL on output
-	  prefer_shortnames     (0/1) Use shortname instead of description
-	  datum                 GPS datum (def. WGS 84)
+	70mai                 70mai Dash Cam
 	v900                  Columbus/Visiontac V900 files (.csv)
 	csv                   Comma separated values
 	  snlen                 Max synthesized shortname length
@@ -50,6 +42,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	iblue747              Data Logger iBlue747 csv
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -58,6 +51,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	iblue757              Data Logger iBlue757 csv
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -66,22 +60,31 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	exif                  Embedded Exif-GPS data (.jpg)
 	  filename              (0/1) Set waypoint name to source filename
 	  frame                 Time-frame (in seconds)
 	  name                  Locate waypoint for tagging by this name
 	  overwrite             (0/1) !OVERWRITE! the original file. Default=N
+	  offset                Image Offset Time (+HH:MM or -HH:MM)
 	shape                 ESRI shapefile
 	  name                  Source for name field in .dbf
 	  url                   Source for URL field in .dbf
 	igc                   FAI/IGC Flight Recorder Data Format
 	  timeadj               (integer sec or 'auto') Barograph to GPS time diff
+	  ENL                   (0/1) Engine Noise (ENL; default=1)
+	  TAS                   (0/1) True Airspeed (TAS; default=1)
+	  VAT                   (0/1) Total Energy Vario (VAT; default=1)
+	  OAT                   (0/1) Outside Air Temperature (OAT; default=1)
+	  TRT                   (0/1) True Track (TRT; default=0)
+	  GSP                   (0/1) Ground Speed (GSP; default=1)
+	  FXA                   (0/1) Fix Accuracy (FXA; default=1)
+	  SIU                   (0/1) # Of Sats (SIU; default=0)
+	  ACZ                   (0/1) Z Acceleration (ACZ; default=1)
+	  GFO                   (0/1) G Force? (GFO; default=0)
 	garmin_fit            Flexible and Interoperable Data Transfer (FIT) Act
 	  allpoints             (0/1) Read all points even if latitude or longitude is m
 	  recoverymode          (0/1) Attempt to recovery data from corrupt file
-	gpssim                Franson GPSGate Simulation
-	  wayptspd              Default speed for waypoints (knots/hr)
-	  split                 (0/1) Split input into separate files
 	garmin301             Garmin 301 Custom position and heartrate
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -90,6 +93,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	garmin_g1000          Garmin G1000 datalog input filter file
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -98,13 +102,14 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gdb                   Garmin MapSource - gdb
 	  cat                   Default category on output (1..16)
 	  bitscategory          Bitmap of categories
 	  ver                   Version of gdb file to generate (1..3)
 	  via                   (0/1) Drop route points that do not have an equivalent w
 	  dropwpt               (0/1) Don't create waypoints for non-user points
-	  roadbook              (0/1) Include major turn points (with description) from
+	  roadbook              (0/1) Include major turn points (with description) from 
 	garmin_txt            Garmin MapSource - txt (tab delimited)
 	  date                  Read/Write date format (i.e. yyyy/mm/dd)
 	  datum                 GPS datum (def. WGS 84)
@@ -122,6 +127,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	garmin_gpi            Garmin Points of Interest (.gpi)
 	  alerts                (0/1) Enable alerts on speed or proximity distance
 	  bitmap                Use specified bitmap on output
@@ -148,14 +154,16 @@ File Types (-i and -o options):
 	  category              Category number to use for written waypoints
 	  bitscategory          Bitmap of categories
 	  baud                  Speed in bits per second of serial port (baud=9600
+	  codec                 override codec to use for device
 	gtrnctr               Garmin Training Center (.tcx/.crs/.hst/.xml)
 	  course                (0/1) Write course rather than history, default yes
 	  sport                 Sport: Biking (deflt), Running, MultiSport, Other
 	geo                   Geocaching.com .loc
 	  deficon               Default icon name
-	  nuke_placer           (0/1) Omit Placer name
 	geojson               GeoJson
-	  compact               (0/1) Compact Output. Default is off.
+	  compact               (0/1) Compact Output. Default is off
+	  name                  Property key to use for name
+	  desc                  Property key to use for description
 	dg-100                GlobalSat DG-100/BT-335 Download
 	  erase                 (0/1) Erase device data after download
 	  erase_only            (0/1) Only erase device data, do not download anything
@@ -164,7 +172,6 @@ File Types (-i and -o options):
 	  erase_only            (0/1) Only erase device data, do not download anything
 	globalsat             GlobalSat GH625XT GPS training watch
 	  showlist              (0/1) list tracks
-	  track                 get track
 	  dump-file             Dump raw data to this file
 	  input-is-dump-file    (0/1) Dump raw data to this file
 	  timezone              Time zone ID
@@ -180,10 +187,11 @@ File Types (-i and -o options):
 	  trackdata             (0/1) Include extended data for trackpoints (default = 1
 	  trackdirection        (0/1) Indicate direction of travel in track icons (defau
 	  units                 Units used when writing comments ('s'tatute, 'm'et
-	  labels                (0/1) Display labels on track and routepoints  (default
-	  max_position_point    Retain at most this number of position points  (0
+	  labels                (0/1) Display labels on track and routepoints  (default 
+	  max_position_point    Retain at most this number of position points  (0 
 	  rotate_colors         Rotate colors for tracks and routes (default autom
 	  prec                  Precision of coordinates, number of decimals
+	googletakeout         Google Takeout Location History
 	land_air_sea          GPS Tracking Key Pro text
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -192,6 +200,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gtm                   GPS TrackMaker
 	arc                   GPSBabel arc filter file
 	  snlen                 Max synthesized shortname length
@@ -201,6 +210,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpsdrive              GpsDrive Format
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -209,6 +219,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpsdrivetrack         GpsDrive Format for Tracks
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
@@ -217,6 +228,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	gpx                   GPX XML
 	  snlen                 Length of generated shortnames
 	  suppresswhite         (0/1) No whitespace in generated shortnames
@@ -226,7 +238,6 @@ File Types (-i and -o options):
 	  humminbirdextensio    (0/1) Add info (depth) as Humminbird extension
 	  garminextensions      (0/1) Add info (depth) as Garmin extension
 	  elevprec              Precision of elevations, number of decimals
-	holux                 Holux (gm-100) .wpo Format
 	m241-bin              Holux M-241 (MTK based) Binary File Format
 	  csv                   MTK compatible CSV output file
 	m241                  Holux M-241 (MTK based) download
@@ -252,25 +263,13 @@ File Types (-i and -o options):
 	  title                 (USR output) Output file title string
 	  serialnum             (USR output) Device serial number
 	  description           (USR output) Output file content description
-	magellanx             Magellan SD files (as for eXplorist)
-	  deficon               Default icon name
-	  maxcmts               Max number of comments to write (maxcmts=200)
-	magellan              Magellan SD files (as for Meridian)
-	  deficon               Default icon name
-	  maxcmts               Max number of comments to write (maxcmts=200)
-	magellan              Magellan serial protocol
-	  deficon               Default icon name
-	  maxcmts               Max number of comments to write (maxcmts=200)
-	  baud                  Numeric value of bitrate (baud=4800)
-	  noack                 (0/1) Suppress use of handshaking in name of speed
-	  nukewpt               (0/1) Delete all waypoints
 	miniHomer             MiniHomer, a skyTraq Venus 6 based logger (downloa
 	  baud                  Baud rate used for download
 	  dump-file             Dump raw data to this file
 	  erase                 (0/1) Erase device data after download
 	  first-sector          First sector to be read from the device
 	  initbaud              Baud rate used to init device (0=autodetect)
-	  last-sector           Last sector to be read from the device (-1: smart
+	  last-sector           Last sector to be read from the device (-1: smart 
 	  no-output             (0/1) Disable output (useful with erase)
 	  read-at-once          Number of sectors to read at once (0=use single se
 	  Home                  POI for Home Symbol as lat:lng[:alt]
@@ -295,15 +294,6 @@ File Types (-i and -o options):
 	  datum                 Datum (default=NAD27)
 	tpo2                  National Geographic Topo 2.x .tpo
 	tpo3                  National Geographic Topo 3.x/4.x .tpo
-	navilink              NaviGPS GT-11/BGT-11 Download
-	  nuketrk               (0/1) Delete all track points
-	  nukerte               (0/1) Delete all routes
-	  nukewpt               (0/1) Delete all waypoints
-	  nukedlg               (0/1) Clear the datalog
-	  datalog               (0/1) Read from datalogger buffer
-	  power_off             (0/1) Command unit to power itself down
-	sbp                   NaviGPS GT-31/BGT-31 datalogger (.sbp)
-	sbn                   NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)
 	nmea                  NMEA 0183 sentences
 	  snlen                 Max length of waypoint name to write
 	  gprmc                 (0/1) Read/write GPRMC sentences
@@ -334,6 +324,15 @@ File Types (-i and -o options):
 	  proxunit              Unit used in proximity values
 	  codec                 codec to use for reading and writing strings (defa
 	qstarz_bl-1000        Qstarz BL-1000
+	cup                   See You flight analysis data
+	  snlen                 Max synthesized shortname length
+	  snwhite               (0/1) Allow whitespace synth. shortnames
+	  snupper               (0/1) UPPERCASE synth. shortnames
+	  snunique              (0/1) Make synth. shortnames unique
+	  urlbase               Basename prepended to URL on output
+	  prefer_shortnames     (0/1) Use shortname instead of description
+	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	skytraq               SkyTraq Venus based loggers (download)
 	  erase                 (0/1) Erase device data after download
 	  targetlocation        Set location finder target location as lat,lng
@@ -342,7 +341,7 @@ File Types (-i and -o options):
 	  initbaud              Baud rate used to init device (0=autodetect)
 	  read-at-once          Number of sectors to read at once (0=use single se
 	  first-sector          First sector to be read from the device
-	  last-sector           Last sector to be read from the device (-1: smart
+	  last-sector           Last sector to be read from the device (-1: smart 
 	  dump-file             Dump raw data to this file
 	  no-output             (0/1) Disable output (useful with erase)
 	  gps-utc-offset        Seconds that GPS time tracks UTC (0: best guess)
@@ -365,6 +364,7 @@ File Types (-i and -o options):
 	  urlbase               Basename prepended to URL on output
 	  prefer_shortnames     (0/1) Use shortname instead of description
 	  datum                 GPS datum (def. WGS 84)
+	  utc                   Write timestamps with offset x to UTC time
 	text                  Textual Output
 	  nosep                 (0/1) Suppress separator lines between waypoints
 	  encrypt               (0/1) Encrypt hints using ROT13
@@ -382,126 +382,131 @@ File Types (-i and -o options):
 	  codec                 codec to use for reading and writing strings (defa
 	vcard                 Vcard Output (for iPod)
 	  encrypt               (0/1) Encrypt hints using ROT13
-	wbt-bin               Wintec WBT-100/200 Binary File Format
-	wbt                   Wintec WBT-100/200 GPS Download
-	  erase                 (0/1) Erase device data after download
-	wbt-tk1               Wintec WBT-201/G-Rays 2 Binary File Format
 
 Supported data filters:
-	arc                   Include Only Points Within Distance of Arc
-	  file                  File containing vertices of arc
-	  rte                   Route(s) are vertices of arc
-	  trk                   Track(s) are vertices of arc
+	arc                   Include Only Points Within Distance of Arc        
+	  file                  File containing vertices of arc 
+	  rte                   Route(s) are vertices of arc 
+	  trk                   Track(s) are vertices of arc 
 	  distance              Maximum distance from arc (required)
-	  exclude               Exclude points close to the arc
-	  points                Use distance from vertices not lines
-	  project               Move waypoints to its projection on lines or verti
-	bend                  Add points before and after bends in routes
-	  distance              Distance to the bend in meters where the new point
-	  minangle              Minimum bend angle in degrees
-	discard               Remove unreliable points with high hdop or vdop
-	  hdop                  Suppress points with higher hdop
-	  vdop                  Suppress points with higher vdop
-	  hdopandvdop           Link hdop and vdop suppression with AND
-	  sat                   Minimum sats to keep points
-	  fixnone               Suppress points without fix
-	  fixunknown            Suppress points with unknown fix
-	  elemin                Suppress points below given elevation in meters
-	  elemax                Suppress points above given elevation in meters
-	  matchname             Suppress points where name matches given name
-	  matchdesc             Suppress points where description matches given na
-	  matchcmt              Suppress points where comment matches given name
-	  matchicon             Suppress points where type matches given name
-	duplicate             Remove Duplicates
-	  shortname             Suppress duplicate waypoints based on name
-	  location              Suppress duplicate waypoint based on coords
-	  all                   Suppress all instances of duplicates
-	  correct               Use coords from duplicate points
-	interpolate           Interpolate between trackpoints
-	  time                  Time interval in seconds
-	  distance              Distance interval in miles or kilometers
-	  route                 Interpolate routes instead
-	nuketypes             Remove all waypoints, tracks, or routes
-	  waypoints             Remove all waypoints from data stream
-	  tracks                Remove all tracks from data stream
-	  routes                Remove all routes from data stream
-	polygon               Include Only Points Inside Polygon
+	  exclude               Exclude points close to the arc 
+	  points                Use distance from vertices not lines 
+	  project               Move waypoints to its projection on lines or verti 
+	bend                  Add points before and after bends in routes       
+	  distance              Distance to the bend in meters where the new point 
+	  minangle              Minimum bend angle in degrees 
+	discard               Remove unreliable points with high hdop or vdop   
+	  hdop                  Suppress points with higher hdop 
+	  vdop                  Suppress points with higher vdop 
+	  hdopandvdop           Link hdop and vdop suppression with AND 
+	  sat                   Minimum sats to keep points 
+	  fixnone               Suppress points without fix 
+	  fixunknown            Suppress points with unknown fix 
+	  elemin                Suppress points below given elevation in meters 
+	  elemax                Suppress points above given elevation in meters 
+	  matchname             Suppress points where name matches given name 
+	  matchdesc             Suppress points where description matches given na 
+	  matchcmt              Suppress points where comment matches given name 
+	  matchicon             Suppress points where type matches given name 
+	duplicate             Remove Duplicates                                 
+	  shortname             Suppress duplicate waypoints based on name 
+	  location              Suppress duplicate waypoint based on coords 
+	  all                   Suppress all instances of duplicates 
+	  correct               Use coords from duplicate points 
+	interpolate           Interpolate between trackpoints                   
+	  time                  Time interval in seconds 
+	  distance              Distance interval 
+	   	  route                 Interpolate routes instead 
+	  kalman                Kalman track filter                                     
+	   	  gap_factor            Factor to determine if a time gap is significant e 
+	   	  r_scale               Measurement noise covariance scaling factor 
+	   	  q_scale_pos           Process noise covariance scaling factor for positi 
+	   	  q_scale_vel           Process noise covariance scaling factor for veloci 
+	   	  max_speed             Maximum reasonable speed in m/s for pre-filtering 
+	   	  profile               Predefined profile for Kalman filter tuning (auto, 
+	   	  interp_max_dt         Maximum time gap (seconds) for interpolation 
+	   	   	  interp_min_multipl    Minimum multiplier for median dt to consider inter 
+	   	   	  nuketypes             Remove all waypoints, tracks, or routes           
+	   	   	  waypoints             Remove all waypoints from data stream 
+ 	  tracks                Remove all tracks from data stream 
+	  routes                Remove all routes from data stream 
+	polygon               Include Only Points Inside Polygon                
 	  file                  File containing vertices of polygon (required)
-	  exclude               Exclude points inside the polygon
-	position              Remove Points Within Distance
+	  exclude               Exclude points inside the polygon 
+	position              Remove Points Within Distance                     
 	  distance              Maximum positional distance (required)
-	  all                   Suppress all points close to other points
+	  all                   Suppress all points close to other points 
 	  time                  Maximum time in seconds between two points (required)
-	radius                Include Only Points Within Radius
+	radius                Include Only Points Within Radius                 
 	  lat                   Latitude for center point (D.DDDDD) (required)
 	  lon                   Longitude for center point (D.DDDDD) (required)
 	  distance              Maximum distance from center (required)
-	  exclude               Exclude points close to center
-	  nosort                Inhibit sort by distance to center
-	  maxcount              Output no more than this number of points
-	  asroute               Put resulting waypoints in route of this name
-	resample              Resample Track
-	  decimate              Decimate, decrease sample rate by a factor of n
-	  interpolate           Interpolate, increase sample rate by a factor of n
-	  average               Running average of n points
-	simplify              Simplify routes
-	  count                 Maximum number of points in route
-	  error                 Maximum error
-	  crosstrack            Use cross-track error (default)
-	  length                Use arclength error
-	  relative              Use relative error
+	  exclude               Exclude points close to center 
+	  nosort                Inhibit sort by distance to center 
+	  maxcount              Output no more than this number of points 
+	  asroute               Put resulting waypoints in route of this name 
+	resample              Resample Track                                    
+	  decimate              Decimate, decrease sample rate by a factor of n 
+	  interpolate           Interpolate, increase sample rate by a factor of n 
+	  average               Running average of n points 
+	simplify              Simplify routes                                   
+	  count                 Maximum number of points in route 
+	  error                 Maximum error 
+	  crosstrack            Use cross-track error (default) 
+	  length                Use arclength error 
+	  relative              Use relative error 
 	sort                  Rearrange waypoints, routes and/or tracks by resor
-	  description           Sort waypoints by description
-	  gcid                  Sort waypoints by numeric geocache ID
-	  shortname             Sort waypoints by short name
-	  time                  Sort waypoints by time
-	  rtedesc               Sort routes by description
-	  rtename               Sort routes by name
-	  rtenum                Sort routes by number
-	  trkdesc               Sort tracks by description
-	  trkname               Sort tracks by name
-	  trknum                Sort tracks by number
-	stack                 Save and restore waypoint lists
-	  push                  Push waypoint list onto stack
-	  pop                   Pop waypoint list from stack
-	  swap                  Swap waypoint list with <depth> item on stack
-	  copy                  (push) Copy waypoint list
-	  append                (pop) Append list
-	  discard               (pop) Discard top of stack
-	  replace               (pop) Replace list (default)
-	  depth                 (swap) Item to use (default=1)
-	reverse               Reverse stops within routes
-	track                 Manipulate track lists
-	  move                  Correct trackpoint timestamps by a delta
-	  pack                  Pack all tracks into one
-	  split                 Split by date or time interval (see README)
-	  sdistance             Split by distance
-	  merge                 Merge multiple tracks for the same way
-	  name                  Use only track(s) where title matches given name
-	  start                 Use only track points after this timestamp
-	  stop                  Use only track points before this timestamp
-	  title                 Basic title for new track(s)
-	  fix                   Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)
-	  course                Synthesize course
-	  speed                 Synthesize speed
-	  seg2trk               Split track at segment boundaries into multiple tr
-	  trk2seg               Merge tracks inserting segment separators at bound
-	  segment               segment tracks with abnormally long gaps
-	  faketime              Add specified timestamp to each trackpoint
-	  discard               Discard track points without timestamps during mer
-	  minimum_points        Discard tracks with fewer than these points
+	  description           Sort waypoints by description 
+	  gcid                  Sort waypoints by numeric geocache ID 
+	  shortname             Sort waypoints by short name 
+	  time                  Sort waypoints by time 
+	  rtedesc               Sort routes by description 
+	  rtename               Sort routes by name 
+	  rtenum                Sort routes by number 
+	  trkdesc               Sort tracks by description 
+	  trkname               Sort tracks by name 
+	  trknum                Sort tracks by number 
+	stack                 Save and restore waypoint lists                   
+	  push                  Push waypoint list onto stack 
+	  pop                   Pop waypoint list from stack 
+	  swap                  Swap waypoint list with <depth> item on stack 
+	  copy                  (push) Copy waypoint list 
+	  append                (pop) Append list 
+	  discard               (pop) Discard top of stack 
+	  replace               (pop) Replace list (default) 
+	  depth                 (swap) Item to use (default=1) 
+	reverse               Reverse stops within routes                       
+	track                 Manipulate track lists                            
+	  move                  Correct trackpoint timestamps by a delta 
+	  pack                  Pack all tracks into one 
+	  split                 Split by date or time interval 
+	  sdistance             Split by distance 
+	  merge                 Merge multiple tracks for the same way 
+	  name                  Use only track(s) where title matches given name 
+	  start                 Use only track points after or at this timestamp 
+	  stop                  Use only track points before or at this timestamp 
+	  title                 Basic title for new track(s) 
+	  fix                   Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE) 
+	  course                Synthesize course 
+	  speed                 Synthesize speed 
+	  seg2trk               Split track at segment boundaries into multiple tr 
+	  trk2seg               Merge tracks inserting segment separators at bound 
+	  segment               segment tracks with abnormally long gaps 
+	  faketime              Add specified timestamp to each trackpoint 
+	  discard               Discard track points without timestamps during mer 
+	  minimum_points        Discard tracks with fewer than these points 
 	transform             Transform waypoints into a route, tracks into rout
-	  wpt                   Transform track(s) or route(s) into waypoint(s) [R
-	  rte                   Transform waypoint(s) or track(s) into route(s) [W
-	  trk                   Transform waypoint(s) or route(s) into tracks(s) [
-	  rptdigits             Number of digits in generated names
-	  rptname               Use source name for route point names
-	  del                   Delete source data after transformation
-	  timeless              Create transformed points without times
-	height                Manipulate altitudes
-	  add                   Adds a constant value to every altitude (meter, ap
-	  wgs84tomsl            Converts WGS84 ellipsoidal height to orthometric h
-	swap                  Swap latitude and longitude of all loaded points
-	validate              Validate internal data structures
-	  checkempty            Check for empty input
-	  debug                 Output debug messages instead of possibly issuing
+	  wpt                   Transform track(s) or route(s) into waypoint(s) [R 
+	  rte                   Transform waypoint(s) or track(s) into route(s) [W 
+	  trk                   Transform waypoint(s) or route(s) into tracks(s) [ 
+	  rptdigits             Number of digits in generated names 
+	  rptname               Use source name for route point names 
+	  del                   Delete source data after transformation 
+	  timeless              Create transformed points without times 
+	height                Manipulate altitudes                              
+	  add                   Adds a constant value to every altitude 
+	  wgs84tomsl            Converts WGS84 ellipsoidal height to orthometric h 
+	swap                  Swap latitude and longitude of all loaded points  
+	validate              Validate internal data structures                 
+	  checkempty            Check for empty input 
+	  debug                 Output debug messages instead of possibly issuing  

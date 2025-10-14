@@ -7,7 +7,7 @@
 
     Latest changes at 11.01.2005 by Fredie Kern
 
-    Copyright (C) 2005 Fredie Kern, f.kern@xdesy.de
+    Copyright (C) 2005 Fredie Kern
 
 
     This program is free software; you can redistribute it and/or modify
