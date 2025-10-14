@@ -1,0 +1,18 @@
+<para>
+  This option specifies the time zone to be used when reading or writing timestamps in the CSV file.
+</para>
+<para>
+  Many CSV files contain timestamps in a local time zone without specifying what that zone is. This option allows you to specify the offset from Coordinated Universal Time (UTC) for those timestamps. The value is an integer representing the offset in hours.
+</para>
+<para>
+  For example, if the timestamps in your file are from US Eastern Standard Time (EST), which is 5 hours behind UTC, you would use <userinput>utc=-5</userinput>. For Central European Time (CET), which is 1 hour ahead of UTC, you would use <userinput>utc=1</userinput>.
+</para>
+<para>
+  Valid values range from -14 to +14.
+</para>
+<example xml:id="xcsv_utc_example">
+  <title>Read a CSV file with timestamps in US Pacific Standard Time (UTC-8)</title>
+  <para>
+    <userinput>gpsbabel -i xcsv,style=my_style.style,utc=-8 -f my_data.csv -o gpx -F my_track.gpx</userinput>
+  </para>
+</example>
