@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Hyper-Realistic Kalman Filter Test Data</name>
+    <desc>A test file with highly distinct tracks for different activity profiles.</desc>
+    <time>1970-01-01T00:00:00Z</time>
+  </metadata>
+  <trk>
+    <name>Walking Track</name>
+    <type>walking</type>
+    <trkseg>
+      <trkpt lat="40.00000" lon="-122.00000">
+        <time>1970-01-01T00:00:00Z</time>
+      </trkpt>
+      <trkpt lat="40.00001" lon="-122.00001">
+        <time>1970-01-01T00:00:01Z</time>
+      </trkpt>
+      <trkpt lat="40.00000" lon="-122.00002">
+        <time>1970-01-01T00:00:02Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Running Track</name>
+    <type>running</type>
+    <trkseg>
+      <trkpt lat="40.10000" lon="-122.10000">
+        <time>1970-01-01T00:00:00Z</time>
+      </trkpt>
+      <trkpt lat="40.10005" lon="-122.10005">
+        <time>1970-01-01T00:00:01Z</time>
+      </trkpt>
+      <trkpt lat="40.10010" lon="-122.10000">
+        <time>1970-01-01T00:00:02Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Cycling Track</name>
+    <type>cycling</type>
+    <trkseg>
+      <trkpt lat="40.20000" lon="-122.20000">
+        <time>1970-01-01T00:00:00Z</time>
+      </trkpt>
+      <trkpt lat="40.20010" lon="-122.20010">
+        <time>1970-01-01T00:00:01Z</time>
+      </trkpt>
+      <trkpt lat="40.20020" lon="-122.20020">
+        <time>1970-01-01T00:00:02Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Driving Track</name>
+    <type>driving</type>
+    <trkseg>
+      <trkpt lat="40.30000" lon="-122.30000">
+        <time>1970-01-01T00:00:00Z</time>
+      </trkpt>
+      <trkpt lat="40.30050" lon="-122.30050">
+        <time>1970-01-01T00:00:01Z</time>
+      </trkpt>
+      <trkpt lat="40.30100" lon="-122.30100">
+        <time>1970-01-01T00:00:02Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Flying Track</name>
+    <type>flying</type>
+    <trkseg>
+      <trkpt lat="40.40000" lon="-122.40000">
+        <time>1970-01-01T00:00:00Z</time>
+      </trkpt>
+      <trkpt lat="40.40500" lon="-122.40500">
+        <time>1970-01-01T00:00:01Z</time>
+      </trkpt>
+      <trkpt lat="40.41000" lon="-122.41000">
+        <time>1970-01-01T00:00:02Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

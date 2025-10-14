@@ -412,6 +412,7 @@ set(TESTS
   iblue747
   igc
   interpolate
+  kalman
   kml-read
   kml
   lowranceusr
