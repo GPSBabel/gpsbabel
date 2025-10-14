@@ -64,7 +64,6 @@ void Kalman::process() {
     interp_max_dt_ = interp_max_dt_option_.get_result();
     interp_min_multiplier_ = interp_min_multiplier_option_.get_result();
 
-
     for (const auto& route_it : std::as_const(*global_track_list)) {
         // Per-track state initialization
         is_initialized_ = false;
@@ -89,13 +88,11 @@ void Kalman::process() {
 
         WaypointList* wpt_list = &(route_it->waypoint_list);
 
-
         // Calculate track statistics for auto-profile inference
         std::vector<double> speed_samples_for_stats;
         QDateTime prev_time_for_stats;
         gpsbabel::NVector prev_nvector_for_stats;
         bool first_point_for_stats = true;
-
 
         for (const auto& wpt_stats : std::as_const(*wpt_list)) {
             const QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
@@ -324,7 +321,6 @@ void Kalman::process() {
         // Collect dt samples from non-deleted points for median_dt calculation
         std::vector<double> dt_samples;
         Waypoint* last_valid_for_dt = nullptr;
-
         for (const auto& current_wpt : std::as_const(*wpt_list)) {
             if (!current_wpt->wpt_flags.marked_for_deletion) {
                 if (last_valid_for_dt) {
