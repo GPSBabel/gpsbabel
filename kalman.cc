@@ -131,117 +131,117 @@ void Kalman::process() {
 
         // Apply profile settings based on current_profile
         if (current_profile == "walking") {
-            if (is_using_default_value(max_speed_option_, "max_speed")) {
+            if (max_speed_option_.isDefaulted()) {
                 max_speed_ = 2.0; // e.g., 7.2 km/h
             }
-            if (is_using_default_value(r_scale_option_, "r_scale")) {
+            if (r_scale_option_.isDefaulted()) {
                 r_scale_ = 100.0;
             }
-            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
+            if (q_scale_pos_option_.isDefaulted()) {
                 q_scale_pos_ = 0.01;
             }
-            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
+            if (q_scale_vel_option_.isDefaulted()) {
                 q_scale_vel_ = 0.001;
             }
-            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
+            if (interp_max_dt_option_.isDefaulted()) {
                 interp_max_dt_ = 60.0; // 1 minute
             }
-            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
+            if (interp_min_multiplier_option_.isDefaulted()) {
                 interp_min_multiplier_ = 2.0;
             }
         } else if (current_profile == "running") { // New running profile
-            if (is_using_default_value(max_speed_option_, "max_speed")) {
+            if (max_speed_option_.isDefaulted()) {
                 max_speed_ = 10.0; // e.g., 18 km/h
             }
-            if (is_using_default_value(r_scale_option_, "r_scale")) {
+            if (r_scale_option_.isDefaulted()) {
                 r_scale_ = 10.0;
             }
-            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
+            if (q_scale_pos_option_.isDefaulted()) {
                 q_scale_pos_ = 0.1;
             }
-            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
+            if (q_scale_vel_option_.isDefaulted()) {
                 q_scale_vel_ = 0.01;
             }
-            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
+            if (interp_max_dt_option_.isDefaulted()) {
                 interp_max_dt_ = 120.0; // 2 minutes
             }
-            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
+            if (interp_min_multiplier_option_.isDefaulted()) {
                 interp_min_multiplier_ = 1.8;
             }
         } else if (current_profile == "cycling") {
-            if (is_using_default_value(max_speed_option_, "max_speed")) {
+            if (max_speed_option_.isDefaulted()) {
                 max_speed_ = 30.0; // e.g., 108 km/h
             }
-            if (is_using_default_value(r_scale_option_, "r_scale")) {
+            if (r_scale_option_.isDefaulted()) {
                 r_scale_ = 1.0;
             }
-            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
+            if (q_scale_pos_option_.isDefaulted()) {
                 q_scale_pos_ = 1.0;
             }
-            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
+            if (q_scale_vel_option_.isDefaulted()) {
                 q_scale_vel_ = 0.1;
             }
-            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
+            if (interp_max_dt_option_.isDefaulted()) {
                 interp_max_dt_ = 300.0; // 5 minutes
             }
-            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
+            if (interp_min_multiplier_option_.isDefaulted()) {
                 interp_min_multiplier_ = 1.5;
             }
         } else if (current_profile == "driving") {
-            if (is_using_default_value(max_speed_option_, "max_speed")) {
+            if (max_speed_option_.isDefaulted()) {
                 max_speed_ = 50.0; // e.g., 180 km/h
             }
-            if (is_using_default_value(r_scale_option_, "r_scale")) {
+            if (r_scale_option_.isDefaulted()) {
                 r_scale_ = 0.1;
             }
-            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
+            if (q_scale_pos_option_.isDefaulted()) {
                 q_scale_pos_ = 10.0;
             }
-            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
+            if (q_scale_vel_option_.isDefaulted()) {
                 q_scale_vel_ = 1.0;
             }
-            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
+            if (interp_max_dt_option_.isDefaulted()) {
                 interp_max_dt_ = 600.0; // 10 minutes
             }
-            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
+            if (interp_min_multiplier_option_.isDefaulted()) {
                 interp_min_multiplier_ = 1.2;
             }
         } else if (current_profile == "flying") {
-            if (is_using_default_value(max_speed_option_, "max_speed")) {
+            if (max_speed_option_.isDefaulted()) {
                 max_speed_ = 300.0; // e.g., 1080 km/h
             }
-            if (is_using_default_value(r_scale_option_, "r_scale")) {
+            if (r_scale_option_.isDefaulted()) {
                 r_scale_ = 0.01;
             }
-            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
+            if (q_scale_pos_option_.isDefaulted()) {
                 q_scale_pos_ = 100.0;
             }
-            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
+            if (q_scale_vel_option_.isDefaulted()) {
                 q_scale_vel_ = 10.0;
             }
-            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
+            if (interp_max_dt_option_.isDefaulted()) {
                 interp_max_dt_ = 3600.0; // 1 hour
             }
-            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
+            if (interp_min_multiplier_option_.isDefaulted()) {
                 interp_min_multiplier_ = 1.1;
             }
         } else { // Default to cycling if no profile or unknown profile
-            if (is_using_default_value(max_speed_option_, "max_speed")) {
+            if (max_speed_option_.isDefaulted()) {
                 max_speed_ = 15.0; // e.g., 54 km/h
             }
-            if (is_using_default_value(r_scale_option_, "r_scale")) {
+            if (r_scale_option_.isDefaulted()) {
                 r_scale_ = 1.0;
             }
-            if (is_using_default_value(q_scale_pos_option_, "q_scale_pos")) {
+            if (q_scale_pos_option_.isDefaulted()) {
                 q_scale_pos_ = 1.0;
             }
-            if (is_using_default_value(q_scale_vel_option_, "q_scale_vel")) {
+            if (q_scale_vel_option_.isDefaulted()) {
                 q_scale_vel_ = 0.1;
             }
-            if (is_using_default_value(interp_max_dt_option_, "interp_max_dt")) {
+            if (interp_max_dt_option_.isDefaulted()) {
                 interp_max_dt_ = 300.0; // 5 minutes
             }
-            if (is_using_default_value(interp_min_multiplier_option_, "interp_min_multiplier")) {
+            if (interp_min_multiplier_option_.isDefaulted()) {
                 interp_min_multiplier_ = 1.5;
             }
         }
@@ -457,16 +457,6 @@ void Kalman::process() {
             }
         }
     }
-}
-
-bool Kalman::is_using_default_value(const Option& opt, const char* opt_name) const {
-  for (const auto& arg : std::as_const(args)) {
-    if (arg.argstring == opt_name) {
-      // arg.defaultvalue is a const QString, opt.get() is a const QString&.
-      return arg.defaultvalue == opt.get();
-    }
-  }
-  return false; // Should not happen if opt_name is valid
 }
 
 void Kalman::kalman_point_cb(Waypoint* wpt) {
