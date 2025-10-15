@@ -1,1 +1,19 @@
-
+<para>
+  This option specifies the file type of the Garmin Mobile XT data being read. Garmin Mobile XT devices can save track data in two formats: Active Track logs and Saved Tracks.
+</para>
+<para>
+  Valid values for this option are:
+  <itemizedlist>
+    <listitem><para><userinput>ATRK</userinput> (Default): Specifies an Active Track log file. These are the current, ongoing logs recorded by the device.</para></listitem>
+    <listitem><para><userinput>STRK</userinput>: Specifies a Saved Track file. These are tracks that have been explicitly saved by the user on the device.</para></listitem>
+  </itemizedlist>
+</para>
+<para>
+  GPSBabel defaults to "ATRK". You only need to specify this option if you are converting a Saved Track file.
+</para>
+<example xml:id="garmin_xt_ftype_example">
+  <title>Convert a Garmin Mobile XT Saved Track file</title>
+  <para>
+    <userinput>gpsbabel -i garmin_xt,ftype=STRK -f my_saved_track.dat -o gpx -F my_track.gpx</userinput>
+  </para>
+</example>
