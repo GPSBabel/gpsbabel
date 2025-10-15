@@ -3,7 +3,7 @@
 </para>
 <para>
   The GPS system broadcasts time as a week number and the number of seconds into that week. The week number is a 10-bit value, which means it resets to zero every 1024 weeks (approximately every 19.6 years). This event is known as a "week number rollover".
-
+</para>
 <table xml:id="gps_week_rollovers">
 <title>GPS week rollover dates</title>
 <tgroup cols="2">
@@ -46,7 +46,7 @@ time gpsbabel is run, which should be perfectly fine in almost all cases.
     <listitem><para><userinput>2</userinput>: Apr 7, 2019 - Nov 20, 2038</para></listitem>
   </itemizedlist>
 </para>
-<example xml:id="gps_week_rollover_example">
+<example>
   <title>Process a track from 2018 that may be misinterpreted as being from 1998</title>
   <para>
     <userinput>gpsbabel -i skytraq,gps-week-rollover=1 -f /dev/ttyUSB0 -o gpx -F track.gpx</userinput>

@@ -15,7 +15,7 @@
     <listitem><para><userinput>2</userinput>: Apr 7, 2019 - Nov 20, 2038</para></listitem>
   </itemizedlist>
 </para>
-<example xml:id="gps_week_rollover_example">
+<example xml:id="skytraq_bin_gps_week_rollover_example">
   <title>Process a track from 2018 that may be misinterpreted as being from 1998</title>
   <para>
     <userinput>gpsbabel -i skytraq-bin,gps-week-rollover=1 -f my_track.bin -o gpx -F track.gpx</userinput>
