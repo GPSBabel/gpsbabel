@@ -1,0 +1,15 @@
+<para>
+  This option controls whether to include the True Track (TRT) data from the IGC file.
+</para>
+<para>
+  This is a boolean option that is disabled by default. This value represents the true track or course of the aircraft in degrees. While this information can be useful for some analysis, it is often redundant if you are also processing the GPS location data, from which a track can be calculated. For this reason, it is not included by default.
+</para>
+<para>
+  To include this data, use <userinput>TRT=1</userinput> or <userinput>TRT</userinput>.
+</para>
+<example xml:id="igc_trt_example">
+  <title>Convert an IGC file while including the True Track data</title>
+  <para>
+    <userinput>gpsbabel -i igc,TRT -f my_flight.igc -o gpx -F my_flight.gpx</userinput>
+  </para>
+</example>
