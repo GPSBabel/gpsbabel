@@ -1,1 +1,23 @@
-
+<para>
+  This option allows you to manually specify the GPS week rollover period for the track data.
+</para>
+<para>
+  The GPS system broadcasts time as a week number and the number of seconds into that week. The week number is a 10-bit value, which means it resets to zero every 1024 weeks (approximately every 19.6 years). This event is known as a "week number rollover".
+</para>
+<para>
+  If this option is not specified, or is set to -1, GPSBabel will use its "best guess" to determine the correct 1024-week epoch, assuming the data was recorded in the most recent period. This is almost always correct for modern data.
+</para>
+<para>
+  You should only need to use this option if you are working with very old data that crosses a rollover boundary. The epochs are:
+  <itemizedlist>
+    <listitem><para><userinput>0</userinput>: Jan 6, 1980 - Aug 21, 1999</para></listitem>
+    <listitem><para><userinput>1</userinput>: Aug 22, 1999 - Apr 6, 2019</para></listitem>
+    <listitem><para><userinput>2</userinput>: Apr 7, 2019 - Nov 20, 2038</para></listitem>
+  </itemizedlist>
+</para>
+<example xml:id="skytraq_bin_gps_week_rollover_example">
+  <title>Process a track from 2018 that may be misinterpreted as being from 1998</title>
+  <para>
+    <userinput>gpsbabel -i skytraq-bin,gps-week-rollover=1 -f my_track.bin -o gpx -F track.gpx</userinput>
+  </para>
+</example>

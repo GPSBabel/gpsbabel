@@ -1,1 +1,19 @@
-
+<para>
+  This option controls how the track name header within a Garmin Mobile XT file is processed when reading data.
+</para>
+<para>
+  Valid values for this option are:
+  <itemizedlist>
+    <listitem><para><userinput>0</userinput> (Default): Normal processing. GPSBabel will attempt to read the track name from the file header.</para></listitem>
+    <listitem><para><userinput>1</userinput>: Ignore. GPSBabel will not read the track name from the file, leaving the track name blank.</para></listitem>
+  </itemizedlist>
+</para>
+<para>
+  This option is useful if the track name information in the file is corrupt or nonsensical, and you would prefer to have a blank track name that you can specify later.
+</para>
+<example xml:id="garmin_xt_trk_header_example">
+  <title>Ignore the track name when converting a Garmin Mobile XT file</title>
+  <para>
+    <userinput>gpsbabel -i garmin_xt,trk_header=1 -f my_track.dat -o gpx -F my_track.gpx</userinput>
+  </para>
+</example>
