@@ -1,0 +1,15 @@
+<para>
+  This option controls whether to include the G-Force (GFO) data from the IGC file.
+</para>
+<para>
+  This is a boolean option that is disabled by default. The GFO extension is not part of the official IGC specification, but has been observed in files from certain flight recorders. It is believed to represent G-force or load data. Because it is an unofficial and unverified extension, it is excluded by default.
+</para>
+<para>
+  To include this data, use <userinput>GFO=1</userinput> or <userinput>GFO</userinput>.
+</para>
+<example xml:id="igc_gfo_example">
+  <title>Convert an IGC file while including the unofficial G-Force data</title>
+  <para>
+    <userinput>gpsbabel -i igc,GFO -f my_flight.igc -o gpx -F my_flight.gpx</userinput>
+  </para>
+</example>

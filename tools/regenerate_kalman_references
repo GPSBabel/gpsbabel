@@ -1,0 +1,53 @@
+#!/bin/bash
+
+in="-i gpx -f reference/track"
+out="-o gpx -F reference/track"
+export GPSBABEL_FREEZE_TIME=y
+PATH=..:$PATH
+
+# Test with default Kalman filter options.
+gpsbabel ${in}/kalman_in.gpx -x kalman ${out}/kalman_out.gpx
+
+# Test outlier rejection with different gap_factor values.
+gpsbabel ${in}/kalman_seen_track.gpx -x kalman,gap_factor=5.0 ${out}/kalman_seen_track_out.gpx
+gpsbabel ${in}/kalman_seen_track.gpx -x kalman,gap_factor=10.0 ${out}/kalman_seen_track_gap10_out.gpx
+
+# Test NVector/Vector3D math.
+gpsbabel ${in}/kalman_nvector_test_in.gpx -x kalman ${out}/kalman_nvector_test_out.gpx
+
+# Test PreFilterState transitions and edge cases.
+gpsbabel ${in}/kalman_prefilter_edge_in.gpx -x kalman ${out}/kalman_prefilter_edge_out.gpx
+
+# Test each of the automatic profiles.
+gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Driving Track" -x kalman,profile=auto ${out}/kalman_hyper_realistic_auto_out.gpx
+gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Walking Track" -x kalman,profile=walking ${out}/kalman_hyper_realistic_walking_out.gpx
+gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Running Track" -x kalman,profile=running ${out}/kalman_hyper_realistic_running_out.gpx
+gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Cycling Track" -x kalman,profile=cycling ${out}/kalman_hyper_realistic_cycling_out.gpx
+gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Driving Track" -x kalman,profile=driving ${out}/kalman_hyper_realistic_driving_out.gpx
+gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Flying Track" -x kalman,profile=flying ${out}/kalman_hyper_realistic_flying_out.gpx
+
+# Test overriding interpolation parameters.
+gpsbabel ${in}/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_min_multiplier=1.0 ${out}/kalman_interp_min_multiplier_override_out.gpx
+
+# Test overriding max_speed parameter.
+gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Cycling Track" -x kalman,profile=cycling,max_speed=20.0 ${out}/kalman_cycling_maxspeed_override_out.gpx
+
+# Test handling of complex zinger (outlier) sequences.
+gpsbabel ${in}/kalman_complex_zinger_in.gpx -x kalman,profile=walking ${out}/kalman_complex_zinger_out.gpx
+
+# Test handling of points with identical timestamps (dt=0).
+gpsbabel ${in}/kalman_dt_zero_in.gpx -x kalman ${out}/kalman_dt_zero_out.gpx
+
+# Test sensitivity to q_scale (process noise) and r_scale (measurement noise).
+gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling ${out}/kalman_q_scale_base_out.gpx
+gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_pos=0.1 ${out}/kalman_q_scale_pos_low_out.gpx
+gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_pos=10.0 ${out}/kalman_q_scale_pos_high_out.gpx
+gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,r_scale=0.1 ${out}/kalman_r_scale_low_out.gpx
+gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,r_scale=10.0 ${out}/kalman_r_scale_high_out.gpx
+
+# Test sensitivity to q_scale_vel (velocity process noise).
+gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_vel=0.01 ${out}/kalman_q_scale_vel_low_out.gpx
+gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_vel=0.1 ${out}/kalman_q_scale_vel_high_out.gpx
+
+# Test overriding interp_max_dt to limit interpolation.
+gpsbabel ${in}/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_max_dt=10 ${out}/kalman_interp_max_dt_override_out.gpx
