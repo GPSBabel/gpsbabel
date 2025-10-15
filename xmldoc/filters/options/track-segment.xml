@@ -1,1 +1,15 @@
-
+<para>
+  This option analyzes a track and automatically creates new track segments when it detects an abnormally large gap between points.
+</para>
+<para>
+  This is useful for cleaning up tracks where the GPS signal may have been lost temporarily, causing a large, artificial jump between two points. The filter uses a weighted moving average of the distance between points to determine what constitutes an "abnormal" gap. When such a gap is found, it marks the beginning of a new track segment.
+</para>
+<para>
+  This option also performs a "denoising" step, removing series of redundant points that are extremely close together and have similar properties.
+</para>
+<example xml:id="track_segment_example">
+  <title>Automatically segment a track based on gaps</title>
+  <para>
+    <userinput>gpsbabel -i gpx -f my_track_with_gps.gpx -x track,segment -o gpx -F segmented_track.gpx</userinput>
+  </para>
+</example>

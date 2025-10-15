@@ -1,19 +1,18 @@
 <para>
-The duplicate filter is designed to remove duplicate points based on their
-short name (traditionally a waypoint's name on the GPS receiver), and/or
-their location (to a precision of 6 decimals).  This filter supports two
-options that specify how duplicates will be recognized,
-<option>shortname</option> and <option>location</option>.
-At least one of these options is required.
+  The duplicate filter removes duplicate waypoints from your data. You can define a "duplicate" based on a waypoint's short name, its geographic location, or both.
 </para>
-<example xml:id="duplicate_to_suppress_points">
-  <title>Using the duplicate filter to suppress points with the same
-         name and location</title>
-  <para>
-  This command line removes points that have duplicate short names
-  and duplicate locations.  The result would be a
-  <link linkend="fmt_gpx">gpx</link> file that more than likely
-  contains only unique points and point data.
-  </para>
-  <para><userinput> gpsbabel -i gpx -f 1.gpx -f 2.gpx -x duplicate,location,shortname -o gpx -F merged_with_no_dupes.gpx</userinput></para>
-</example>
+<para>
+  By default, the filter keeps the first occurrence of a waypoint and removes all subsequent duplicates. This behavior can be modified with the available options.
+</para>
+<para>
+  You must specify at least one of <option>shortname</option> or <option>location</option> to define how duplicates are identified.
+</para>
+<para>
+  The filter's behavior can be modified with these options:
+  <itemizedlist>
+    <listitem><para><option>shortname</option>: Identifies duplicates based on matching waypoint short names.</para></listitem>
+    <listitem><para><option>location</option>: Identifies duplicates based on matching geographic coordinates.</para></listitem>
+    <listitem><para><option>all</option>: Deletes all instances of a duplicated item, including the original.</para></listitem>
+    <listitem><para><option>correct</option>: Keeps the original waypoint's information but updates its coordinates with those from a subsequent duplicate.</para></listitem>
+  </itemizedlist>
+</para>

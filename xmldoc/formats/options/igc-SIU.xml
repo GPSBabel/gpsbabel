@@ -1,0 +1,15 @@
+<para>
+  This option controls whether to include the number of Satellites In Use (SIU) data from the IGC file.
+</para>
+<para>
+  This is a boolean option that is disabled by default. This data provides the number of satellites used to calculate the GPS fix for each point. While it can be an indicator of fix quality, it is often considered less critical than other metrics like Fix Accuracy (FXA) or HDOP, so it is not included by default. GPSBabel will also populate the standard 'sat' field for the waypoint if this data is included.
+</para>
+<para>
+  To include this data, use <userinput>SIU=1</userinput> or <userinput>SIU</userinput>.
+</para>
+<example xml:id="igc_siu_example">
+  <title>Convert an IGC file while including the number of satellites in use</title>
+  <para>
+    <userinput>gpsbabel -i igc,SIU -f my_flight.igc -o gpx -F my_flight.gpx</userinput>
+  </para>
+</example>

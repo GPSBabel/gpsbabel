@@ -1,7 +1,12 @@
 <para>
-This option is the one most often used with the duplicate filter.  This
-option instructs the duplicate filter to remove any waypoints that share
-a short name with a waypoint that has come before.  This option might be
-used to remove duplicates if you are merging two datasets that were
-each created in part from a common ancestor dataset.
+  This option instructs the duplicate filter to identify and remove waypoints that have the same short name as a waypoint that has already been processed. This comparison is case-sensitive.
 </para>
+<para>
+  This is one of the primary modes of the duplicate filter. It is useful for merging datasets that may have overlapping waypoints, ensuring that each unique waypoint name appears only once in the output. By default, only the second and subsequent occurrences of a waypoint are removed.
+</para>
+<example xml:id="duplicate_shortname_example">
+  <title>Merge two GPX files and remove duplicate waypoints by name</title>
+  <para>
+    <userinput>gpsbabel -i gpx -f file1.gpx -i gpx -f file2.gpx -x duplicate,shortname -o gpx -F merged.gpx</userinput>
+  </para>
+</example>
