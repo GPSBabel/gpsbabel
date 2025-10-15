@@ -1,0 +1,28 @@
+<para>
+  This option controls how much the filter expects your velocity to
+  change between GPS points. It is similar to
+  <link linkend="g-filter-kalman-q_scale_pos">q_scale_pos</link>, but it
+  applies to your speed and direction of travel.
+</para>
+<para>
+  This option is a unitless scaling factor. If you are moving at a
+  very steady pace (e.g., using cruise control
+  on a car, or running on a flat track), your velocity is not changing
+  much, so a smaller value is best. If you are in stop-and-go traffic
+  or doing interval training with sprints and rests, your velocity is
+  changing constantly, and a larger value will help the filter keep up
+  with these changes.
+</para>
+<para>
+  For technically-minded users, this parameter scales the velocity
+  components of the process noise covariance matrix (Q). A higher
+  value allows the filter to respond more quickly to changes in
+  velocity.
+</para>
+<para>
+  The pre-defined profiles use the following values: 'walking' (0.001), 'running' (0.01), 'cycling' (0.1), 'driving' (1.0), and 'flying' (10.0). If you are using a profile, you do not need to set this option unless you want to override the profile's default.
+</para>
+<para>
+  If you are using a <link linkend="g-filter-kalman-profile">profile</link>,
+  this value is set automatically, but you can override it here.
+</para>
