@@ -1,0 +1,26 @@
+<para>
+  This option helps the filter identify significant gaps in your
+  track, such as when you lose satellite signal in a tunnel or deep
+  valley.
+</para>
+<para>
+  The filter calculates the typical time interval between your GPS
+  points. If it finds a gap that is this factor larger than the
+  typical interval, it enters a "recovery mode." This factor is a
+  unitless multiplier. In this mode, it is
+  more cautious and re-evaluates its estimates more carefully once new
+  data arrives.
+</para>
+<para>
+  For example, if the median time interval between your GPS points is 2
+  seconds, and <option>gap_factor</option> is 5, the filter will
+  consider a gap of more than 10 seconds (5 * 2s) to be
+  significant. The default value is 5.0. A lower value like 2.0 would
+  make the filter more sensitive to gaps, while a higher value like
+  10.0 would make it less sensitive.
+</para>
+<para>
+  Most users will not need to adjust this setting. It is designed to
+  help the filter behave more robustly when faced with real-world
+  signal interruptions.
+</para>

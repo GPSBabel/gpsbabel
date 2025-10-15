@@ -1,0 +1,35 @@
+<para xml:id="g-filter-kalman-max_speed">
+  This option sets a speed limit for your track. The filter will
+  discard any point that would require you to have moved at a speed
+  greater than this limit to get there from the previous point.
+</para>
+<mediaobject>
+  <imageobject>
+    <imagedata fileref="xmldoc/images/kalman_max_speed.png" format="PNG" width="100%" scalefit="1"/>
+  </imageobject>
+</mediaobject>
+<para>
+  This is a powerful tool for cleaning up "GPS zingers" – those
+  moments where your GPS receiver momentarily reports a position far
+  away from your actual location and then jumps back. For example, if
+  you are recording a walk, you could set this to a reasonable walking
+  speed like 3 meters per second. Any point that would imply you
+  suddenly moved at 50 m/s will be thrown out.
+</para>
+<para>
+  Example: You are cycling and have a max speed of 15 m/s (54 km/h).
+  You could set:
+<screen>
+gpsbabel -i gpx -f my_ride.gpx -x kalman,max_speed=15 -o gpx -F my_ride_filtered.gpx
+</screen>
+</para>
+<para>
+  The units are always in meters per second.
+</para>
+<para>
+  The pre-defined profiles use the following values: 'walking' (2.0), 'running' (10.0), 'cycling' (30.0), 'driving' (50.0), and 'flying' (300.0). If you are using a profile, you do not need to set this option unless you want to override the profile's default.
+</para>
+<para>
+  If you are using a <link linkend="g-filter-kalman-profile">profile</link>,
+  this value is set automatically, but you can override it here.
+</para>
