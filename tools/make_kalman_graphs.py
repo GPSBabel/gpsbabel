@@ -142,7 +142,7 @@ def generate_q_scale_pos_graph():
         marker_high_q.set_data([high_q_path_x[i]], [high_q_path_y[i]])
         return line_low_q, line_high_q, marker_true, marker_low_q, marker_high_q
 
-    ani = animation.FuncAnimation(fig_gif, animate, frames=len(low_q_path_x), interval=1000, blit=True)
+    ani = animation.FuncAnimation(fig_gif, animate, frames=len(low_q_path_x), interval=50, blit=True)
     writer = animation.PillowWriter(fps=20)
     ani.save("xmldoc/images/kalman_q_scale_pos.gif", writer=writer)
     plt.close(fig_gif)
