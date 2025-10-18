@@ -1,7 +1,7 @@
 # this is to generate input for make_kalman_graphs.py
 # this isn't really a test, it is specifically exclued from testo unless manual passed.
 mkdir -p xmldoc/data
-gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/q_scale_sim_input.csv -x resample,interpolate=10,average=10 -o unicsv,utc -F xmldoc/data/q_scale_sim_output.csv
-gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/q_scale_sim_input.csv -x resample,interpolate=10,average=10 -x kalman,q_scale_pos=1 -o unicsv,utc -F xmldoc/data/q_scale_sim_lowq_output.csv
-gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/q_scale_sim_input.csv -x resample,interpolate=10,average=10 -x kalman,q_scale_pos=1000 -o unicsv,utc -F xmldoc/data/q_scale_sim_highq_output.csv
+gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/kalman_q_scale_sim_input.csv -o unicsv,utc -F xmldoc/data/kalman_q_scale_sim_output.csv
+gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/kalman_q_scale_sim_input.csv -x kalman,q_scale_pos=1 -o unicsv,utc -F xmldoc/data/kalman_q_scale_sim_lowq_output.csv
+gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/kalman_q_scale_sim_input.csv -x kalman,q_scale_pos=1000 -o unicsv,utc -F xmldoc/data/kalman_q_scale_sim_highq_output.csv
 python3 tools/make_kalman_graphs.py

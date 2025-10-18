@@ -85,15 +85,15 @@ def generate_q_scale_pos_graph():
     # 1. Create the paths
     xname="Longitude"
     yname="Latitude"
-    true_path_data = pd.read_csv("xmldoc/data/q_scale_sim_output.csv",sep=",")
+    true_path_data = pd.read_csv("xmldoc/data/kalman_q_scale_sim_output.csv",sep=",")
     zerox = true_path_data[xname][0]
     zeroy = true_path_data[yname][0]
     true_path_x = true_path_data[xname] - zerox;
     true_path_y = true_path_data[yname] - zeroy;
-    low_q_data = pd.read_csv("xmldoc/data/q_scale_sim_lowq_output.csv")
+    low_q_data = pd.read_csv("xmldoc/data/kalman_q_scale_sim_lowq_output.csv")
     low_q_path_x = low_q_data[xname] - zerox;
     low_q_path_y = low_q_data[yname] - zeroy;
-    high_q_data = pd.read_csv("xmldoc/data/q_scale_sim_highq_output.csv")
+    high_q_data = pd.read_csv("xmldoc/data/kalman_q_scale_sim_highq_output.csv")
     high_q_path_x = high_q_data[xname] - zerox;
     high_q_path_y = high_q_data[yname] - zeroy;
 
