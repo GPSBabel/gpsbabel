@@ -14,6 +14,7 @@ def generate_r_scale_graph():
     true_path_y = np.sin(t)
 
     # 2. Generate a noisy GPS track
+    np.random.seed(42)
     noise = np.random.normal(0, 0.2, 100)
     noisy_track_x = true_path_x
     noisy_track_y = true_path_y + noise
