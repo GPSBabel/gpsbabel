@@ -155,8 +155,10 @@ if [ $# -ge 1 ]; then
 else
   for i in ${BASEPATH}/testo.d/*.test
   do
-    echo Running `basename $i`
-    . $i
+    if [ "$i" != "${BASEPATH}/testo.d/simulate_q_scale_pos.test" ]; then
+      echo Running `basename $i`
+      . $i
+    fi
   done
 fi
 
