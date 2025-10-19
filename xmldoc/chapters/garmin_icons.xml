@@ -20,6 +20,9 @@ These values are also used internally by the
     <member>Bait and Tackle</member>
     <member>Ball Park</member>
     <member>Bank</member>
+    <member>Bank, Euro</member>
+    <member>Bank, Pound</member>
+    <member>Bank, Yen</member>
     <member>Bar</member>
     <member>Beach</member>
     <member>Beacon</member>
@@ -94,6 +97,11 @@ These values are also used internally by the
     <member>Diver Down Flag 1</member>
     <member>Diver Down Flag 2</member>
     <member>Dock</member>
+    <member>Dog, pointing</member>
+    <member>Dog, running</member>
+    <member>Dog, sitting</member>
+    <member>Dog, treed</member>
+    <member>Dog, unknown</member>
     <member>Dot, White</member>
     <member>Drinking Water</member>
     <member>Dropoff</member>
@@ -102,6 +110,8 @@ These values are also used internally by the
     <member>Exit</member>
     <member>Exit without services</member>
     <member>Fast Food</member>
+    <member>Favorite</member>
+    <member>Ferry</member>
     <member>First approach fix</member>
     <member>Fishing Area</member>
     <member>Fishing Hot Spot Facility</member>
@@ -112,6 +122,7 @@ These values are also used internally by the
     <member>Flag, Red</member>
     <member>Food Source</member>
     <member>Forest</member>
+    <member>Funicular</member>
     <member>Furbearer</member>
     <member>Gambling/casino</member>
     <member>Gas Station</member>
@@ -126,6 +137,7 @@ These values are also used internally by the
     <member>Ground Transportation</member>
     <member>Heliport</member>
     <member>Horn</member>
+    <member>Hospital, Euro</member>
     <member>Hotel</member>
     <member>House</member>
     <member>Hunting Area</member>
@@ -224,6 +236,9 @@ These values are also used internally by the
     <member>Parachute Area</member>
     <member>Park</member>
     <member>Parking Area</member>
+    <member>Parking, Euro</member>
+    <member>Parking, Euro Pay</member>
+    <member>Parking, Pay</member>
     <member>Pharmacy</member>
     <member>Picnic Area</member>
     <member>Pin, Blue</member>
@@ -237,6 +252,7 @@ These values are also used internally by the
     <member>Puzzle Cache</member>
     <member>RV Park</member>
     <member>Radio Beacon</member>
+    <member>Railway</member>
     <member>Ramp intersection</member>
     <member>Rectangle, Blue</member>
     <member>Rectangle, Green</member>
@@ -246,6 +262,7 @@ These values are also used internally by the
     <member>Restaurant</member>
     <member>Restricted Area</member>
     <member>Restroom</member>
+    <member>Sad Face</member>
     <member>Scales</member>
     <member>Scenic Area</member>
     <member>School</member>

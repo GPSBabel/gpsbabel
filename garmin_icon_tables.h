@@ -342,6 +342,25 @@ static const QVector<icon_mapping_t> garmin_icon_table = {
   { 246, -1, "Upland Game" },
   { 247, -1, "Waterfowl" },
   { 248, -1, "Water Source" },
+
+  /* BaseCamp 4.8.13 */
+  { 249, -1, "Dog, running" },
+  { 250, -1, "Dog, pointing" },
+  { 251, -1, "Dog, treed" },
+  { 252, -1, "Dog, sitting" },
+  { 253, -1, "Dog, unknown" },
+  { 254, -1, "Bank, Euro" },
+  { 255, -1, "Bank, Pound" },
+  { 256, -1, "Bank, Yen" },
+  { 257, -1, "Sad Face" },
+  { 258, -1, "Favorite" },
+  { 259, -1, "Ferry" },
+  { 260, -1, "Funicular" },
+  { 261, -1, "Railway" },
+  { 262, -1, "Parking, Pay" },
+  { 263, -1, "Parking, Euro" },
+  { 264, -1, "Parking, Euro Pay" },
+  { 265, -1, "Hospital, Euro" },
 };
 
 static const QVector<icon_mapping_t> garmin_smart_icon_table = {
