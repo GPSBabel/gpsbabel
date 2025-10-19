@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.animation as animation
+import pandas as pd
 
 def generate_r_scale_graph():
     """
@@ -13,6 +14,7 @@ def generate_r_scale_graph():
     true_path_y = np.sin(t)
 
     # 2. Generate a noisy GPS track
+    np.random.seed(42)
     noise = np.random.normal(0, 0.2, 100)
     noisy_track_x = true_path_x
     noisy_track_y = true_path_y + noise
@@ -82,12 +84,19 @@ def generate_q_scale_pos_graph():
     Generates both a static and an animated conceptual graph showing the effect of q_scale_pos on a sharp turn.
     """
     # 1. Create the paths
-    true_path_x = np.concatenate([np.linspace(0, 5, 50), np.full(100, 5)])
-    true_path_y = np.concatenate([np.full(50, 0), np.linspace(0, 10, 100)])
-    low_q_path_x = np.linspace(0, 5, 150)
-    low_q_path_y = np.piecewise(low_q_path_x, [low_q_path_x < 4, low_q_path_x >= 4], [0, lambda x: 0.5*(x-4)**2])
-    high_q_path_x = np.concatenate([np.linspace(0, 5.5, 55), np.full(50, 5.5), np.linspace(5.5, 5, 45)])
-    high_q_path_y = np.concatenate([np.full(55, 0), np.linspace(0, 0.5, 50), np.linspace(0.5, 10, 45)])
+    xname="Longitude"
+    yname="Latitude"
+    true_path_data = pd.read_csv("xmldoc/data/kalman_q_scale_sim_output.csv", sep=",")
+    zerox = true_path_data[xname][0]
+    zeroy = true_path_data[yname][0]
+    true_path_x = true_path_data[xname] - zerox;
+    true_path_y = true_path_data[yname] - zeroy;
+    low_q_data = pd.read_csv("xmldoc/data/kalman_q_scale_sim_lowq_output.csv", sep=",")
+    low_q_path_x = low_q_data[xname] - zerox;
+    low_q_path_y = low_q_data[yname] - zeroy;
+    high_q_data = pd.read_csv("xmldoc/data/kalman_q_scale_sim_highq_output.csv", sep=",")
+    high_q_path_x = high_q_data[xname] - zerox;
+    high_q_path_y = high_q_data[yname] - zeroy;
 
     # --- Static PNG Generation ---
     fig_png, ax_png = plt.subplots(figsize=(10, 6))
@@ -95,9 +104,9 @@ def generate_q_scale_pos_graph():
     ax_png.plot(low_q_path_x, low_q_path_y, 'r-', label='Filtered (Low q_scale_pos)')
     ax_png.plot(high_q_path_x, high_q_path_y, 'b-', label='Filtered (High q_scale_pos)')
     def add_arrows(ax, x, y, color):
-        for i in range(10, len(x), 30):
+        for i in range(10, len(x) - 1, 20):
             ax.arrow(x[i], y[i], x[i+1]-x[i], y[i+1]-y[i], 
-                     color=color, shape='full', lw=0, length_includes_head=True, head_width=.15)
+                     color=color, shape='full', lw=0, length_includes_head=True, width=0, head_width=0.000015)
     add_arrows(ax_png, true_path_x, true_path_y, 'g')
     add_arrows(ax_png, low_q_path_x, low_q_path_y, 'r')
     add_arrows(ax_png, high_q_path_x, high_q_path_y, 'b')
