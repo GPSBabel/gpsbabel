@@ -99,6 +99,7 @@ void Kalman::process() {
             const QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
             const gpsbabel::NVector cur_nvector_for_stats(wpt_stats->latitude, wpt_stats->longitude);
 
+            // FIXME: Enforce dt > 0 and all points have time?
             if (!first_point_for_stats) {
                 const double dt = prev_time_for_stats.msecsTo(cur_time_for_stats) / 1000.0;
                 if (dt > 0.0) {
@@ -286,8 +287,9 @@ void Kalman::process() {
 
             if (state == PreFilterState::NORMAL) {
                 const double dt = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
+                // FIXME: dt limit violated by subsecond sampling
                 const double speed = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
-                                               gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt);
+                                               gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(MIN_DT, dt);
 
                 if (dt >= gap_factor_ || speed > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
@@ -314,13 +316,15 @@ void Kalman::process() {
                 // FIXME: Should an isolated single "Spike: sudden, unrealistic movement" result in 3 points being tossed?
                 const auto* const prev_wpt_in_list = *std::prev(it);
                 const double dt_consecutive = prev_wpt_in_list->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
+                // FIXME: dt limit violated by subsecond sampling
                 const double speed_consecutive = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(prev_wpt_in_list->latitude, prev_wpt_in_list->longitude),
-                                                           gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt_consecutive);
+                                                           gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(MIN_DT, dt_consecutive);
 
                 // Recalculate dt from anchor for speed_from_anchor
                 const double dt_from_anchor = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
+                // FIXME: dt limit violated by subsecond sampling
                 const double speed_from_anchor = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
-                                                    gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(1.0, dt_from_anchor);
+                                                    gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(MIN_DT, dt_from_anchor);
                 if (dt_consecutive > gap_factor_ || speed_consecutive > max_speed_ || speed_from_anchor > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
