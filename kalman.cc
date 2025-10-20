@@ -252,6 +252,17 @@ void Kalman::process() {
         // 1) First pass: detect spikes and gaps, mark culprit waypoint(s)
         // ---------------------------
         enum class PreFilterState { NORMAL, RECOVERY, FIRST_GOOD_SEEN_IN_RECOVERY };
+        auto state_name_lambda = [](PreFilterState state)->QString {
+            if (state == PreFilterState::NORMAL) {
+                return "NORMAL";
+            } else if (state == PreFilterState::RECOVERY) {
+                return "RECOVERY";
+            } else if (state == PreFilterState::FIRST_GOOD_SEEN_IN_RECOVERY) {
+                return "FIRST GOOD SEEN IN RECOVERY";
+            } else {
+                return "UNKNOWN STATE";
+            }
+        };
         PreFilterState state = PreFilterState::NORMAL;
         Waypoint* last_accepted_wpt = nullptr;
 
@@ -280,12 +291,26 @@ void Kalman::process() {
                 if (dt >= gap_factor_ || speed > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
+                    if (global_opts.debug_level >= 5) {
+                        auto dbg = qDebug();
+                        dbg << "[ZNG0] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
+                            << Qt::fixed << qSetRealNumberPrecision(7)
+                            << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
+                        dbg.nospace() << qSetRealNumberPrecision(4);
+                        if (dt >= gap_factor_) {
+                            dbg << "delta t (" << dt << ") >= gap factor (" << gap_factor_ << ")";
+                        }
+                        if (speed > max_speed_) {
+                            dbg << "speed (" << speed << ") > max speed (" << max_speed_ << ")";
+                        }
+                    }
                     state = PreFilterState::RECOVERY;
                     // last_accepted_wpt remains unchanged as the anchor
                 } else {
                     last_accepted_wpt = current_wpt;
                 }
             } else { // RECOVERY or FIRST_GOOD_SEEN_IN_RECOVERY
+                // FIXME: Should an isolated single "Spike: sudden, unrealistic movement" result in 3 points being tossed?
                 const auto* const prev_wpt_in_list = *std::prev(it);
                 const double dt_consecutive = prev_wpt_in_list->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
                 const double speed_consecutive = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(prev_wpt_in_list->latitude, prev_wpt_in_list->longitude),
@@ -298,11 +323,32 @@ void Kalman::process() {
                 if (dt_consecutive > gap_factor_ || speed_consecutive > max_speed_ || speed_from_anchor > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
+                        if (global_opts.debug_level >= 5) {
+                            auto dbg = qDebug();
+                            dbg << "[ZNG1] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
+                                << Qt::fixed << qSetRealNumberPrecision(7)
+                                << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
+                            dbg.nospace() << qSetRealNumberPrecision(4);
+                            if (dt_consecutive > gap_factor_) {
+                                dbg << "delta t consecutive (" << dt_consecutive << ") > gap factor (" << gap_factor_ << ")";
+                            }
+                            if (speed_consecutive > max_speed_) {
+                                dbg << "speed consecutive (" << speed_consecutive << ") > max speed (" << max_speed_ << ")";
+                            }
+                            if (speed_from_anchor > max_speed_) {
+                                dbg << "speed from anchor (" << speed_from_anchor << ") > max speed (" << max_speed_ << ")";
+                            }
+                        }
                     state = PreFilterState::RECOVERY;
                 } else {
                     if (state == PreFilterState::RECOVERY) {
                         current_wpt->wpt_flags.marked_for_deletion = true;
                         extra_data->is_zinger_deletion = true; // Mark as zinger deletion
+                        if (global_opts.debug_level >= 5) {
+                            qDebug() << "[ZNG2] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
+                                     << Qt::fixed << qSetRealNumberPrecision(7)
+                                     << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
+                        }
                         last_accepted_wpt = current_wpt;
                         state = PreFilterState::FIRST_GOOD_SEEN_IN_RECOVERY;
                     } else { // FIRST_GOOD_SEEN_IN_RECOVERY
