@@ -18,20 +18,21 @@
 
 #include "kalman.h"
 
-#include <algorithm>   // for max, nth_element
-#include <cstdlib>     // for abs
-#include <cstddef>     // for size_t
-#include <cmath>       // for round, floor
-#include <iterator>    // for distance, prev
-#include <vector>      // for vector
+#include <algorithm>            // for max, nth_element
+#include <cmath>                // for round, floor
+#include <iterator>             // for prev
+#include <utility>              // for as_const
+#include <vector>               // for vector
 
-#include <QDebug>      // for QDebug
+#include <QDebug>               // for QDebug
+#include <QTextStream>          // for qSetRealNumberPrecision, fixed
+#include <QtGlobal>             // for qDebug, qRound64, qint64
 
-#include "defs.h" // for Waypoint, WaypointList, route_head, RouteList, wp_flags, track_add_wpt, arglist_t
-#include "option.h" // for OptionDouble, OptionString
-#include "src/core/datetime.h" // for DateTime
-#include "src/core/nvector.h" // for NVector
-#include "src/core/vector3d.h" // for Vector3D
+#include "defs.h"               // for Waypoint, WaypointList, route_head, wp_flags, RouteList, global_options, global_opts, track_add_wpt, gbFatal, unknown_alt, arglist_t
+#include "option.h"             // for OptionDouble, OptionString
+#include "src/core/datetime.h"  // for DateTime
+#include "src/core/nvector.h"   // for NVector
+#include "src/core/vector3d.h"  // for Vector3D
 
 // Constants
 
@@ -405,7 +406,7 @@ void Kalman::process() {
             } else {
                 // This is a good point, consider interpolation if there was a previous kept point
                 if (last_kept_for_interp) {
-                    const qint64 gap = std::abs(last_kept_for_interp->GetCreationTime().msecsTo(current_original_wpt->GetCreationTime()));
+                    const qint64 gap = last_kept_for_interp->GetCreationTime().msecsTo(current_original_wpt->GetCreationTime());
 
                     if (gap >= interp_min_multiplier_ * median_dt && gap <= interp_max_dt_ * 1000.0) {
                         const int n_insert = static_cast<int>(std::floor(gap / median_dt)) - 1;

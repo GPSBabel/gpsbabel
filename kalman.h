@@ -18,17 +18,17 @@
 #ifndef KALMAN_H_INCLUDED_
 #define KALMAN_H_INCLUDED_
 
-#include <QDateTime>
-#include <QList>
-#include <QString>
-#include <QVector>
+#include <QDateTime>           // for QDateTime
+#include <QList>               // for QList
+#include <QString>             // for QString
+#include <QVector>             // for QVector
 
-#include "defs.h" // for arglist_t, ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_STRING, Waypoint
-#include "filter.h" // for Filter
-#include "option.h" // for OptionDouble, OptionString
-#include "src/core/matrix.h" // for Matrix
-#include "src/core/nvector.h" // for NVector/
-                              //
+#include "defs.h"              // for arglist_t, ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_STRING, Waypoint
+#include "filter.h"            // for Filter
+#include "option.h"            // for OptionDouble, OptionString
+#include "src/core/matrix.h"   // for Matrix
+#include "src/core/nvector.h"  // for NVector
+
 #if FILTERS_ENABLED
 
 class Kalman : public Filter {
