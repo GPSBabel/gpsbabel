@@ -337,32 +337,16 @@ void Kalman::process() {
         route_head* new_route_head = new route_head(); // Temporary route to build the new sequence
         Waypoint* last_kept_for_interp = nullptr;
 
-        // Handle the first non-deleted point
-        for (const auto& current_original_wpt : std::as_const(*wpt_list)) {
-            if (!current_original_wpt->wpt_flags.marked_for_deletion) {
-                track_add_wpt(new_route_head, current_original_wpt);
-                last_kept_for_interp = current_original_wpt;
-                break; // Found the first non-deleted point, exit loop
-            }
-        }
-
-        if (!last_kept_for_interp) {
-            // No valid points to keep after pre-filtering, continue to next route
-            delete new_route_head;
-            continue;
-        }
-
         int i = -1;
-        // Iterate through the rest of the original wpt_list
+        // Iterate through the original wpt_list
         for (const auto& current_original_wpt : std::as_const(*wpt_list)) {
             i++;
 
-            if (current_original_wpt == last_kept_for_interp) {
-                continue; // Skip the first point, already handled
-            }
-
             if (current_original_wpt->wpt_flags.marked_for_deletion) {
                 auto extra_data = static_cast<KalmanExtraData*>(current_original_wpt->extra_data);
+                // FIXME: marked_for_deletion <==> is_zinger deletion.
+                // FIXME: We should interpolate across zingers to estimate actual data, or alternatively
+                //        modify the kalman filter to estimate missing data.
                 if (extra_data && extra_data->is_zinger_deletion) {
                     // This is a zinger deletion, do not interpolate across it.
                     // Reset last_kept_for_interp to effectively start a new segment.
@@ -405,8 +389,11 @@ void Kalman::process() {
                                 new_wpt->extra_data = new KalmanExtraData(); // Default to false
 
                                 track_add_wpt(new_route_head, new_wpt);
-                                qDebug() << "[GEN] interpolated point at" << gen_time.toString() << new_wpt->shortname
-                                         << "lat:" << new_wpt->latitude << "lon:" << new_wpt->longitude;
+                                if (global_opts.debug_level >= 5) {
+                                    qDebug() << "[GEN] interpolated point at" << gen_time.toString() << new_wpt->shortname
+                                             << Qt::fixed << qSetRealNumberPrecision(7)
+                                             << "lat:" << new_wpt->latitude << "lon:" << new_wpt->longitude;
+                                }
                             }
                         }
                     }
@@ -424,6 +411,8 @@ void Kalman::process() {
 
         // Now, iterate through the old list (which was the original wpt_list)
         // and delete waypoints that were marked for deletion and their extra_data.
+        // FIXME: use track_del_marked_wpt to forward any track segment markers.
+        //        this requires changes to interpolation so the marked points are added to new_route_head.
         for (auto& wpt_ptr : new_route_head->waypoint_list) {
             Waypoint* old_wpt = wpt_ptr;
             if (old_wpt->wpt_flags.marked_for_deletion) {
@@ -460,6 +449,7 @@ void Kalman::process() {
 }
 
 void Kalman::kalman_point_cb(Waypoint* wpt) {
+    // FIXME: Quote reference
     const gpsbabel::NVector current_nvector(wpt->latitude, wpt->longitude);
     const QDateTime current_timestamp = wpt->GetCreationTime();
 
@@ -543,13 +533,9 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     filtered_position.normalize(); // Ensure it's a unit vector
     const gpsbabel::NVector filtered_nvector(filtered_position);
 
-    const double new_lat = std::round(filtered_nvector.latitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
-    const double new_lon = std::round(filtered_nvector.longitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
-
-    if (wpt->latitude != new_lat || wpt->longitude != new_lon) {
-        wpt->latitude = new_lat;
-        wpt->longitude = new_lon;
-    }
+    // FIXME: Quit adding quantization noise to the filter output.
+    wpt->latitude= std::round(filtered_nvector.latitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
+    wpt->longitude = std::round(filtered_nvector.longitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
 
     // Update for next iteration
     last_timestamp_ = current_timestamp;
