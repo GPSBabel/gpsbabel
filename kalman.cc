@@ -31,6 +31,7 @@
 #include "defs.h"               // for Waypoint, WaypointList, route_head, wp_flags, RouteList, global_options, global_opts, track_add_wpt, gbFatal, unknown_alt, arglist_t
 #include "option.h"             // for OptionDouble, OptionString
 #include "src/core/datetime.h"  // for DateTime
+#include "src/core/logging.h"   // for Warning
 #include "src/core/nvector.h"   // for NVector
 #include "src/core/vector3d.h"  // for Vector3D
 
@@ -224,8 +225,9 @@ void Kalman::process() {
                 interp_min_multiplier_ = 1.1;
             }
         } else { // Default to cycling if no profile or unknown profile
+            Warning() << "profile" << current_profile << "is not recognized.";
             if (max_speed_option_.isDefaulted()) {
-                max_speed_ = 15.0; // e.g., 54 km/h
+                max_speed_ = 30.0; // e.g., 108 km/h
             }
             if (r_scale_option_.isDefaulted()) {
                 r_scale_ = 1.0;
