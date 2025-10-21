@@ -330,8 +330,8 @@ void Kalman::process() {
             if (current_original_wpt->wpt_flags.marked_for_deletion) {
                 auto extra_data = static_cast<KalmanExtraData*>(current_original_wpt->extra_data);
                 // FIXME: marked_for_deletion <==> is_zinger deletion.
-                // FIXME: We should interpolate across zingers to estimate actual data, or alternatively
-                //        modify the kalman filter to estimate missing data.
+                // Interpolate to estimate missing data, or alternatively just
+                // let the kalman filter predict across the gap.
                 if (extra_data && extra_data->is_zinger_deletion) {
                     // This is a zinger deletion, do not interpolate across it.
                     // Reset last_kept_for_interp to effectively start a new segment.
