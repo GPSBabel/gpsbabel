@@ -251,7 +251,7 @@ void Kalman::process() {
                                << ", q_scale_pos " << q_scale_pos_ << (q_scale_pos_option_.isDefaulted()? "":"*")
                                << ", q_scal_vel " << q_scale_vel_ << (q_scale_vel_option_.isDefaulted()? "":"*")
                                << ", interp_max_dt " << interp_max_dt_ << (interp_max_dt_option_.isDefaulted()? "":"*")
-                               << ", interp_min_multiplier_ " << interp_min_multiplier_ << (interp_min_multiplier_option_.isDefaulted()? "":"*")
+                               << ", interp_min_multiplier " << interp_min_multiplier_ << (interp_min_multiplier_option_.isDefaulted()? "":"*")
                                << " (* default overridden)";
             qDebug().nospace() << "Using gap_factor " << gap_factor_ << (gap_factor_option_.isDefaulted()? "":"*") << " (* default overridden)";
         }
