@@ -230,7 +230,7 @@ void Kalman::process() {
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                     if (global_opts.debug_level >= 5) {
                         auto dbg = qDebug();
-                        dbg << "[ZNG0] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
+                        dbg << "[DEL0] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
                             << Qt::fixed << qSetRealNumberPrecision(7)
                             << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
                         dbg.nospace() << qSetRealNumberPrecision(4);
@@ -264,7 +264,7 @@ void Kalman::process() {
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                         if (global_opts.debug_level >= 5) {
                             auto dbg = qDebug();
-                            dbg << "[ZNG1] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
+                            dbg << "[DEL1] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
                                 << Qt::fixed << qSetRealNumberPrecision(7)
                                 << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
                             dbg.nospace() << qSetRealNumberPrecision(4);
@@ -284,7 +284,7 @@ void Kalman::process() {
                         current_wpt->wpt_flags.marked_for_deletion = true;
                         extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                         if (global_opts.debug_level >= 5) {
-                            qDebug() << "[ZNG2] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
+                            qDebug() << "[DEL2] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
                                      << Qt::fixed << qSetRealNumberPrecision(7)
                                      << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
                         }
