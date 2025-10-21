@@ -57,12 +57,7 @@ void Kalman::process() {
     r_scale_ = r_scale_option_.get_result();
     q_scale_pos_ = q_scale_pos_option_.get_result();
     q_scale_vel_ = q_scale_vel_option_.get_result();
-    // FIXME: has_value is always true because there is a default.  If no value was given on command line you get a 0 for OptionDouble.
-    if (gap_factor_option_.has_value()) {
-      gap_factor_ = gap_factor_option_.get_result();
-    } else {
-      gap_factor_ = 5.0;
-    }
+    gap_factor_ = gap_factor_option_.get_result();
     interp_max_dt_ = interp_max_dt_option_.get_result();
     interp_min_multiplier_ = interp_min_multiplier_option_.get_result();
 
@@ -251,13 +246,14 @@ void Kalman::process() {
 
         if (global_opts.debug_level >= 1) {
             qDebug().nospace() << "Using profile " << current_profile
-                               << " with max_speed " << max_speed_
-                               << ", r_scale " << r_scale_
-                               << ", q_scale_pos " << q_scale_pos_
-                               << ", q_scal_vel " << q_scale_vel_
-                               << ", interp_max_dt " << interp_max_dt_
-                               << ", interp_min_multiplier_ " << interp_min_multiplier_;
-            qDebug() << "Using gap_factor" << gap_factor_;
+                               << " with max_speed " << max_speed_ << (max_speed_option_.isDefaulted()? "":"*")
+                               << ", r_scale " << r_scale_ << (r_scale_option_.isDefaulted()? "":"*")
+                               << ", q_scale_pos " << q_scale_pos_ << (q_scale_pos_option_.isDefaulted()? "":"*")
+                               << ", q_scal_vel " << q_scale_vel_ << (q_scale_vel_option_.isDefaulted()? "":"*")
+                               << ", interp_max_dt " << interp_max_dt_ << (interp_max_dt_option_.isDefaulted()? "":"*")
+                               << ", interp_min_multiplier_ " << interp_min_multiplier_ << (interp_min_multiplier_option_.isDefaulted()? "":"*")
+                               << " (* default overridden)";
+            qDebug().nospace() << "Using gap_factor " << gap_factor_ << (gap_factor_option_.isDefaulted()? "":"*") << " (* default overridden)";
         }
 
         R_ = Matrix::identity(MEAS_SIZE) * MEASUREMENT_NOISE_SCALE * r_scale_;
