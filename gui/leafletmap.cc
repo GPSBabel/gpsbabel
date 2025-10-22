@@ -214,8 +214,7 @@ void
 LeafletMap::setRouteVisibility(int i, bool show)
 {
   qDebug() << "LeafletMap::setRouteVisibility called for index:" << i << "show:" << show;
-  evaluateJS(QString("console.log('JS: setRouteVisibility called for index %1, show %2'); if (%2) rtes[%1].show(); else rtes[%1].hide();")
-             .arg(i).arg(show ? "true" : "false"));
+  evaluateJS(QString("setRouteVisibility(%1, %2);").arg(i).arg(show ? "true" : "false"));
 }
 
 //------------------------------------------------------------------------
@@ -245,8 +244,7 @@ void
 LeafletMap::setAllRoutesVisibility(bool show)
 {
   qDebug() << "LeafletMap::setAllRoutesVisibility called with:" << show;
-  evaluateJS(QString("console.log('JS: setAllRoutesVisibility called with: %1'); if (%1) map.addLayer(rteGroup); else map.removeLayer(rteGroup);")
-             .arg(show ? "true" : "false"));
+  evaluateJS(QString("setAllRoutesVisibility(%1);").arg(show ? "true" : "false"));
 }
 
 //------------------------------------------------------------------------
