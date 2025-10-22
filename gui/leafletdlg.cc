@@ -217,7 +217,6 @@ LeafletMapDialog::LeafletMapDialog(QWidget* parent,
   ui_.treeView->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui_.treeView, &QWidget::customContextMenuRequested,
           this, &LeafletMapDialog::showContextMenu);
-  connect(mapWidget_, &LeafletMap::overlayToggled, this, &LeafletMapDialog::onOverlayToggled);
   connect(mapWidget_, &LeafletMap::mapRendered, this, &LeafletMapDialog::onMapLoadedAndRendered);
 }
 
@@ -543,35 +542,4 @@ LeafletMapDialog::showContextMenu(const QPoint& pt)
       }
     }
   }
-}
-
-void
-LeafletMapDialog::onOverlayToggled(const QString& name, bool visible)
-{
-  // Use invokeMethod to ensure the update happens cleanly on the main GUI thread.
-  QMetaObject::invokeMethod(this, [this, name, visible]() {
-    model_->blockSignals(true);
-    QStandardItem* item_to_update = nullptr;
-    if (name == "Waypoints") {
-      item_to_update = wptItem_;
-    } else if (name == "Tracks") {
-      item_to_update = trkItem_;
-    } else if (name == "Routes") {
-      item_to_update = rteItem_;
-    }
-
-    if (item_to_update) {
-      item_to_update->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
-      // Update children's check states
-      for (int row = 0; row < item_to_update->rowCount(); ++row) {
-        item_to_update->child(row)->setCheckState(visible ? Qt::Checked : Qt::Unchecked);
-      }
-    }
-    model_->blockSignals(false);
-
-    // After unblocking signals, explicitly tell the view to update the specific item
-    if (item_to_update) {
-      ui_.treeView->update(item_to_update->index());
-    }
-  }, Qt::QueuedConnection);
 }

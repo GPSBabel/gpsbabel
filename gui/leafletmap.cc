@@ -65,7 +65,6 @@ LeafletMap::LeafletMap(QWidget* parent,
   connect(mclicker, &MarkerClicker::loadFinished, this, &LeafletMap::loadFinishedX);
   connect(mclicker, &MarkerClicker::markerClicked, this, &LeafletMap::markerClicked);
   connect(mclicker, &MarkerClicker::logTime, this, &LeafletMap::logTime);
-  connect(mclicker, &MarkerClicker::overlayToggled, this, &LeafletMap::overlayToggled);
 
   QString baseFile = QApplication::applicationDirPath() + "/leafletbase.html";
   QString fileName;

@@ -44,7 +44,6 @@ signals:
   void waypointClicked(int i);
   void trackClicked(int i);
   void routeClicked(int i);
-  void overlayToggled(const QString& name, bool visible);
   void mapRendered();
 
 private slots:

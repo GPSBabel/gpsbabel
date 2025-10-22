@@ -45,7 +45,6 @@ private slots:
   void itemClickedX(const QStandardItem* it);
   void selectionChangedX(const QItemSelection& sel, const QItemSelection& desel);
   void showContextMenu(const QPoint& pt);
-  void onOverlayToggled(const QString& name, bool visible);
 
 protected:
   QString formatLength(double l);

@@ -25,16 +25,11 @@ public slots:
   {
     emit loadFinished(true);
   }
-  void overlayToggledX(const QString& name, bool visible)
-  {
-    emit overlayToggled(name, visible);
-  }
 
 signals:
   void markerClicked(int t, int i);
   void logTime(const QString& s);
   void loadFinished(bool b);
-  void overlayToggled(const QString& name, bool visible);
 };
 
 #endif // MARKERCLICKER_H
