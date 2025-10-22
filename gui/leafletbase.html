@@ -42,9 +42,8 @@
       };
 
       function attachHandler(object, handler) {
-        console.log("Attaching handler to object: " + object + ", type: " + handler.type + ", index: " + handler.number);
         object.on("click", function () {
-          console.log("Object clicked! Type: " + handler.type + ", Index: " + handler.number);
+          // console.log("Object clicked! Type: " + handler.type + ", Index: " + handler.number);
           handler.clicked();
         });
       }
@@ -133,7 +132,7 @@
           },
 
           show: function () {
-            console.log("RTPolyline.show() called for line: " + this.line);
+            // console.log("RTPolyline.show() called for line: " + this.line);
             if (this.parentGroup) {
               this.parentGroup.addLayer(this);
             } else {
@@ -144,7 +143,7 @@
           },
 
           hide: function () {
-            console.log("RTPolyline.hide() called for line: " + this.line);
+            // console.log("RTPolyline.hide() called for line: " + this.line);
             if (this.parentGroup) {
               this.parentGroup.removeLayer(this);
             } else {
@@ -249,9 +248,7 @@
             routeLayerGroup.addLayer(clickLine);
             bounds.extend(visibleLine.getBounds());
 
-            console.log("routepoints " + feature.properties.name + ": " + feature.properties.routepoints);
             if (feature.properties.routepoints) {
-              console.log("Processing routepoints for route: " + feature.properties.name);
               feature.properties.routepoints.forEach(function(pt) {
                 var marker = L.marker([pt.lat, pt.lng], { icon: routePointIcon, title: pt.name });
                 var popupContent = "<b>" + (pt.name || 'N/A') + "</b><br/>";
