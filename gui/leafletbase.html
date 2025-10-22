@@ -78,7 +78,7 @@
         var mapContainer = document.getElementById('map');
         map = L.map(mapContainer).setView([0, 0], 2); // Default view
 
-        waypointLayerGroup = L.layerGroup();
+        waypointLayerGroup = L.markerClusterGroup();
         trackLayerGroup = L.layerGroup();
         rteGroup = L.layerGroup();
         waypts = {}; // Initialize as object

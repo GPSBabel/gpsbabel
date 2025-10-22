@@ -975,7 +975,6 @@ babelData_.outputFileName_= "/dev/null";
 
 #ifndef DISABLE_MAPPREVIEW
   // Now output for preview in google maps
-  QString mapFileName;
   bool useGoogleMaps = (babelData_.mapPreviewSelection_ == BabelData::GoogleMapsPreview);
   bool useLeafletMaps = (babelData_.mapPreviewSelection_ == BabelData::LeafletMapsPreview);
 
