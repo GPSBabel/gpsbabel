@@ -217,7 +217,8 @@
               trackLayers[originalIndex] = polyline;
               trackLayerGroup.addLayer(polyline);
               bounds.extend(polyline.getBounds());
-            } else if (featureType === 'route') {
+            } // Close if (coords.length > 0)
+          } else if (featureType === 'route') {
             var routeLayerGroup = L.featureGroup().addTo(rteGroup);
             var pathLayer = L.geoJSON(feature, {
               style: { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' }
@@ -236,8 +237,6 @@
             }
             routesById[originalIndex] = routeLayerGroup;
           }
-          // Do not add individual layers to map directly here, they will be added via layer groups
-          bounds.extend(layer.getBounds());
         });
 
         var streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
