@@ -97,11 +97,11 @@ These values are also used internally by the
     <member>Diver Down Flag 1</member>
     <member>Diver Down Flag 2</member>
     <member>Dock</member>
-    <member>Dog, pointing</member>
-    <member>Dog, running</member>
-    <member>Dog, sitting</member>
-    <member>Dog, treed</member>
-    <member>Dog, unknown</member>
+    <member>Dog Pointing</member>
+    <member>Dog Running</member>
+    <member>Dog Sitting</member>
+    <member>Dog Treed</member>
+    <member>Dog Unknown</member>
     <member>Dot, White</member>
     <member>Drinking Water</member>
     <member>Dropoff</member>
