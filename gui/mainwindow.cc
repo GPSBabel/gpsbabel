@@ -796,7 +796,7 @@ void MainWindow::inputOptionButtonClicked()
   } else {
     OptionsDlg optionDlg(nullptr,
                          formatList_[fidx].getName(),
-                         formatList_[fidx].getInputOptionsRef(),
+                         *formatList_[fidx].getInputOptionsRef(), // Dereference here
                          formatList_[fidx].getHtml());
     optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList_[fidx].getName()));
     optionDlg.exec();
@@ -815,7 +815,7 @@ void MainWindow::outputOptionButtonClicked()
   } else {
     OptionsDlg optionDlg(nullptr,
                          formatList_[fidx].getName(),
-                         formatList_[fidx].getOutputOptionsRef(),
+                         *formatList_[fidx].getOutputOptionsRef(), // Dereference here
                          formatList_[fidx].getHtml());
     optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList_[fidx].getName()));
     optionDlg.exec();

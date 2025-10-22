@@ -76,7 +76,7 @@
 
         mclicker = await webChannelPromise;
         var mapContainer = document.getElementById('map');
-        map = L.map(mapContainer).setView([0, 0], 2); // Default view
+        map = L.map(mapContainer, { maxZoom: 19 }).setView([0, 0], 2); // Default view
 
         waypointLayerGroup = L.markerClusterGroup();
         trackLayerGroup = L.layerGroup();
