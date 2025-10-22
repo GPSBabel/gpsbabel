@@ -205,9 +205,21 @@
           } else if (featureType === 'track') {
             trackLayers[originalIndex] = layer; // Store by originalIndex
             trackLayerGroup.addLayer(layer);
-          } else if (featureType === 'route') { // Assuming routes are MultiLineString
-            routesById[originalIndex] = layer; // Store by originalIndex
-            rteGroup.addLayer(layer); // Add route layers to rteGroup
+          } else if (featureType === 'route') {
+            var routeLayerGroup = L.featureGroup().addTo(rteGroup);
+            var pathLayer = L.geoJSON(feature, {
+              style: { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' }
+            });
+            routeLayerGroup.addLayer(pathLayer);
+            bounds.extend(pathLayer.getBounds());
+
+            if (feature.properties.routepoints) {
+              feature.properties.routepoints.forEach(function(pt) {
+                var marker = L.marker([pt.lat, pt.lng], { title: pt.name });
+                routeLayerGroup.addLayer(marker);
+              });
+            }
+            routesById[originalIndex] = routeLayerGroup;
           }
           // Do not add individual layers to map directly here, they will be added via layer groups
           bounds.extend(layer.getBounds());

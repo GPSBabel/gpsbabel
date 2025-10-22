@@ -266,6 +266,54 @@ void GeoJsonFormat::geojson_track_tlr(const route_head* /*unused*/)
   track_coords = nullptr;
 }
 
+void GeoJsonFormat::geojson_route_hdr(const route_head* route)
+{
+  route_object = new QJsonObject();
+  (*route_object)[TYPE] = FEATURE;
+  route_coords = new QJsonArray();
+
+  QJsonObject properties;
+  if (!route->rte_name.isEmpty()) {
+    properties[name_opt] = route->rte_name;
+  }
+  properties["gpsbabel_feature"] = "route";
+  (*route_object)[PROPERTIES] = properties;
+}
+
+void GeoJsonFormat::geojson_route_disp(const Waypoint* routepoint) const
+{
+  QJsonArray coords;
+  coords.append(routepoint->longitude);
+  coords.append(routepoint->latitude);
+  if (routepoint->altitude != unknown_alt && routepoint->altitude != 0) {
+    coords.append(routepoint->altitude);
+  }
+  route_coords->append(coords);
+
+  QJsonObject props = (*route_object)[PROPERTIES].toObject();
+  QJsonArray routepoints_array = props["routepoints"].toArray();
+  QJsonObject pt_obj;
+  pt_obj["lat"] = routepoint->latitude;
+  pt_obj["lng"] = routepoint->longitude;
+  pt_obj["name"] = routepoint->shortname;
+  routepoints_array.append(pt_obj);
+  props["routepoints"] = routepoints_array;
+  (*route_object)[PROPERTIES] = props;
+}
+
+void GeoJsonFormat::geojson_route_tlr(const route_head* /*unused*/)
+{
+  QJsonObject geometry;
+  geometry[TYPE] = LINESTRING;
+  geometry[COORDINATES] = *route_coords;
+  (*route_object)[GEOMETRY] = geometry;
+  feature_collection->append(*route_object);
+  delete route_object;
+  route_object = nullptr;
+  delete route_coords;
+  route_coords = nullptr;
+}
+
 void
 GeoJsonFormat::write()
 {
@@ -284,5 +332,15 @@ GeoJsonFormat::write()
     geojson_track_disp(waypointp);
   };
   track_disp_all(geojson_track_hdr_lambda, geojson_track_tlr_lambda, geojson_track_disp_lambda);
-}
 
+  auto geojson_route_hdr_lambda = [this](const route_head* rte)->void {
+    geojson_route_hdr(rte);
+  };
+  auto geojson_route_tlr_lambda = [this](const route_head* rte)->void {
+    geojson_route_tlr(rte);
+  };
+  auto geojson_route_disp_lambda = [this](const Waypoint* waypointp)->void {
+    geojson_route_disp(waypointp);
+  };
+  route_disp_all(geojson_route_hdr_lambda, geojson_route_tlr_lambda, geojson_route_disp_lambda);
+}
