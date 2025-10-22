@@ -53,9 +53,14 @@ gpsbabel -i gpx -f ${REFERENCE}/track/kalman_hyper_realistic_in.gpx -x track,nam
 compare ${REFERENCE}/track/kalman_hyper_realistic_flying_out.gpx ${TMPDIR}/kalman_hyper_realistic_flying_out.gpx
 cat ${TMPDIR}/kalman_flying.log
 
-# Test for interpolation with interp_min_multiplier override
-gpsbabel -i gpx -f ${REFERENCE}/track/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_min_multiplier=1.0 -o gpx -F ${TMPDIR}/kalman_interp_min_multiplier_override_filtered.gpx > ${TMPDIR}/kalman_interp_min_multiplier_override.log 2>&1
-compare ${REFERENCE}/track/kalman_interp_min_multiplier_override_out.gpx ${TMPDIR}/kalman_interp_min_multiplier_override_filtered.gpx
+# Test for interpolation (should interpolate)
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_interpolation_in.gpx -x kalman,profile=cycling -o gpx -F ${TMPDIR}/kalman_interp_filtered.gpx > ${TMPDIR}/kalman_interp.log 2>&1
+compare ${REFERENCE}/track/kalman_interp_out.gpx ${TMPDIR}/kalman_interp_filtered.gpx
+cat ${TMPDIR}/kalman_interp.log
+
+# Test for interpolation with interp_min_multiplier override (should not interpolate)
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_min_multiplier=10 -o gpx -F ${TMPDIR}/kalman_interp_min_multiplier_override_filtered.gpx > ${TMPDIR}/kalman_interp_min_multiplier_override.log 2>&1
+compare ${REFERENCE}/track/kalman_interp_none_out.gpx ${TMPDIR}/kalman_interp_min_multiplier_override_filtered.gpx
 cat ${TMPDIR}/kalman_interp_min_multiplier_override.log
 
 # Test for max_speed override with cycling profile
@@ -109,7 +114,7 @@ gpsbabel -i gpx -f ${REFERENCE}/track/kalman_q_scale_test_in.gpx -x kalman,profi
 compare ${REFERENCE}/track/kalman_q_scale_vel_high_out.gpx ${TMPDIR}/kalman_q_scale_vel_high_filtered.gpx
 cat ${TMPDIR}/kalman_q_scale_vel_high.log
 
-# Test for interp_max_dt override
-gpsbabel -i gpx -f ${REFERENCE}/track/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_max_dt=10 -o gpx -F ${TMPDIR}/kalman_interp_max_dt_override_filtered.gpx > ${TMPDIR}/kalman_interp_max_dt_override.log 2>&1
-compare ${REFERENCE}/track/kalman_interp_max_dt_override_out.gpx ${TMPDIR}/kalman_interp_max_dt_override_filtered.gpx
+# Test for interp_max_dt override (should not interpolate)
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_max_dt=3 -o gpx -F ${TMPDIR}/kalman_interp_max_dt_override_filtered.gpx > ${TMPDIR}/kalman_interp_max_dt_override.log 2>&1
+compare ${REFERENCE}/track/kalman_interp_none_out.gpx ${TMPDIR}/kalman_interp_max_dt_override_filtered.gpx
 cat ${TMPDIR}/kalman_interp_max_dt_override.log
