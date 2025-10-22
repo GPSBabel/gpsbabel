@@ -212,6 +212,11 @@
           bounds.extend(layer.getBounds());
         });
 
+        var streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+
         var satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
           attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
         });
@@ -222,6 +227,8 @@
         };
 
         streetMap.addTo(map);
+
+        L.control.layers(baseMaps).addTo(map);
 
         if (bounds.isValid()) {
           if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
@@ -251,10 +258,40 @@
         }
       }
 
+      function setTrackVisibility(index, show) {
+        if (trackLayers[index]) {
+          var targetLayer = trackLayers[index];
+          if (show) {
+            trackLayerGroup.addLayer(targetLayer);
+          } else {
+            trackLayerGroup.removeLayer(targetLayer);
+          }
+        }
+      }
+
       function setAllTracksVisibility(show) {
         for (var key in trackLayers) {
           if (trackLayers.hasOwnProperty(key)) {
             setTrackVisibility(key, show);
+          }
+        }
+      }
+
+      function setRouteVisibility(index, show) {
+        if (routesById[index]) {
+          var targetLayer = routesById[index];
+          if (show) {
+            rteGroup.addLayer(targetLayer);
+          } else {
+            rteGroup.removeLayer(targetLayer);
+          }
+        }
+      }
+
+      function setAllRoutesVisibility(show) {
+        for (var key in routesById) {
+          if (routesById.hasOwnProperty(key)) {
+            setRouteVisibility(key, show);
           }
         }
       }

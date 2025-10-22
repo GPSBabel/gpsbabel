@@ -292,54 +292,55 @@ LeafletMapDialog::showHideChildren(const QStandardItem* top)
 void
 LeafletMapDialog::itemChangedX(QStandardItem* it)
 {
-  trace("itemChangedX", it);
-  model_->blockSignals(true); // Block signals at the start
+  if (itemChangedActive_) {
+    return; // Prevent re-entrancy
+  }
+  itemChangedActive_ = true;
 
-  if (it == wptItem_ || it == trkItem_ || it == rteItem_) {
-    // A parent item was clicked. Propagate state to children.
+  if (it->isCheckable()) {
     Qt::CheckState newState = it->checkState();
-    if (newState == Qt::PartiallyChecked) {
-      // Clicking a partially checked box should make it fully checked.
-      newState = Qt::Checked;
-      it->setCheckState(newState);
-    }
-    for (int row = 0; row < it->rowCount(); ++row) {
-      it->child(row)->setCheckState(newState);
-    }
 
-    // Update the map visibility based on the new state.
-    if (it == wptItem_) {
-      mapWidget_->setAllWaypointsVisibility(newState != Qt::Unchecked);
-    } else if (it == trkItem_) {
-      mapWidget_->setAllTracksVisibility(newState != Qt::Unchecked);
-    } else if (it == rteItem_) {
-      mapWidget_->setAllRoutesVisibility(newState != Qt::Unchecked);
-    }
-  } else {
-    // A child item was clicked. Update its parent's state.
-    QStandardItem* parent = it->parent();
-    if (parent) {
-      int checkedCount = 0;
-      int childCount = parent->rowCount();
-      for (int row = 0; row < childCount; ++row) {
-        if (parent->child(row)->checkState() == Qt::Checked) {
-          checkedCount++;
+    if (it == wptItem_ || it == trkItem_ || it == rteItem_) {
+      // A parent item was clicked.
+      if (newState == Qt::PartiallyChecked) {
+        newState = Qt::Checked;
+        it->setCheckState(newState); // This will re-enter, but be guarded.
+      }
+      // Propagate state to all children.
+      for (int row = 0; row < it->rowCount(); ++row) {
+        it->child(row)->setCheckState(newState);
+      }
+      // Update the map.
+      if (it == wptItem_) mapWidget_->setAllWaypointsVisibility(newState != Qt::Unchecked);
+      else if (it == trkItem_) mapWidget_->setAllTracksVisibility(newState != Qt::Unchecked);
+      else if (it == rteItem_) mapWidget_->setAllRoutesVisibility(newState != Qt::Unchecked);
+
+    } else {
+      // A child item was clicked.
+      QStandardItem* parent = it->parent();
+      if (parent) {
+        // Recalculate the parent's state based on its children.
+        int checkedCount = 0;
+        int childCount = parent->rowCount();
+        for (int row = 0; row < childCount; ++row) {
+          if (parent->child(row)->checkState() == Qt::Checked) {
+            checkedCount++;
+          }
         }
-      }
 
-      if (checkedCount == 0) {
-        parent->setCheckState(Qt::Unchecked);
-      } else if (checkedCount == childCount) {
-        parent->setCheckState(Qt::Checked);
-      } else {
-        parent->setCheckState(Qt::PartiallyChecked);
+        if (checkedCount == 0) {
+          parent->setCheckState(Qt::Unchecked);
+        } else if (checkedCount == childCount) {
+          parent->setCheckState(Qt::Checked);
+        } else {
+          parent->setCheckState(Qt::PartiallyChecked);
+        }
+        showHideChild(it); // Update this item's visibility on the map.
       }
-      // Also update the individual item's visibility on the map
-      showHideChild(it);
     }
   }
 
-  model_->blockSignals(false); // Re-enable signals
+  itemChangedActive_ = false; // Reset the guard.
 }
 
 //------------------------------------------------------------------------

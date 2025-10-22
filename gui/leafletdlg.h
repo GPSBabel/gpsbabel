@@ -38,6 +38,7 @@ private:
   QStandardItem* trkItem_;
   QStandardItem* rteItem_;
   const Gpx& gpx_;
+  bool itemChangedActive_{false};
 
 private slots:
   void itemChangedX(QStandardItem* it);
