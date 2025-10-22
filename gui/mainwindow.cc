@@ -1024,6 +1024,9 @@ babelData_.outputFileName_= "/dev/null";
           dlg.exec();
         } else if (useLeafletMaps) {
           QString geojsonData;
+          // Generate GeoJSON internally for Leaflet map preview.
+          // This uses MainWindow::generateGeoJsonWithIndices to include GUI-specific properties
+          // like 'originalIndex' which are not present in the CLI's geojson writer output.
           geojsonData = generateGeoJsonWithIndices(mapData);
           LeafletMapDialog dlg(nullptr, mapData, geojsonData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
           dlg.show();
@@ -1367,6 +1370,11 @@ QString MainWindow::getFormatNameForExtension(const QString& ext)
 QString
 MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
 {
+  // This function generates GeoJSON specifically for the Leaflet map preview in the GUI.
+  // It is used instead of the CLI's geojson writer because it adds GUI-specific properties
+  // like 'originalIndex', which is crucial for linking map elements back to the GUI's
+  // internal data structures for interactive features (e.g., click handling, synchronization
+  // with the tree view). The CLI geojson writer does not include these GUI-specific properties.
   QJsonArray features;
 
   // Add Waypoints

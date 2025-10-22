@@ -238,6 +238,7 @@ void GeoJsonFormat::geojson_track_hdr(const route_head* track)
   if (!track->rte_name.isEmpty()) {
     properties[name_opt] = track->rte_name;
   }
+  properties["gpsbabel_feature"] = "track";
   (*track_object)[PROPERTIES] = properties;
 }
 

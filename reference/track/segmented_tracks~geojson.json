@@ -99,6 +99,7 @@
                 "type": "LineString"
             },
             "properties": {
+		"gpsbabel_feature": "track",
                 "name": "No Times"
             },
             "type": "Feature"
@@ -202,6 +203,7 @@
                 "type": "LineString"
             },
             "properties": {
+                "gpsbabel_feature": "track",
                 "name": "With Times"
             },
             "type": "Feature"
