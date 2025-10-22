@@ -17,7 +17,7 @@
       // Global variables that will be shared with C++ generated code
       var map;
       var mclicker = {};
-      var greenDotIcon, redDotIcon, blueIcon, redIcon;
+      var greenDotIcon, redDotIcon;
       var RTPolyline;
       var baseMaps;
       var waypointLayers = {}; // Changed to object
@@ -95,17 +95,6 @@
           iconSize: [7, 7],
           iconAnchor: [4, 4]
         });
-        blueIcon = L.icon({
-          iconUrl:
-`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFDBcMBidsiEMAAASrSURBVFjDxZZbbBRlGIafPe/szLa7hdKWbqAVExppjBUrWEu5MYoolKiQbIAbORgTjTTBGGOi8cKYaLxSE7nREGONqBTkoiCKirWRpDFCKTRtw0K32wPd7ml2d2Z2Zme9aDG0QeSwtF/yZ5Lv/5P3+fO+/5eBW6je3t4a7lFZ/+/AsWPH6kOh0AsLBpBIJD7t6OgwFgxAVdWWwcHB2L0CsN9sc/XqR5ZoqorS1fUdUAIP1oHNCZFhuDp8zwFWPVDXnMpq+Pd8kXyz/j57SamPrGFhbEpmKDLBQCR6fPT7t1+D8YE7BbDdbHP79uCLZ/omm4LbglZBcKEaBVQd8g43wqKlVK2sv7+5fterUcUrmcO/nSx6Bqqrq5vCkxpTiSzDExkiUZWRmEYkYTCSMgnJFhSpgupn9u2317+8t+gAZt5oUk2J4YkUY1MZRmMKowmdSKrASNbGqCEwnsyTTWhUrlh3oNgZ8GhqBtNdRXgiTSJrkMpbkU2YAmTJieZy4dQUSrMZSnSdkWIC7NyxvWkqpYKzmpRonlhaIJyCjNUCixzgkLAVTNw5FX86gaLEzxfVgoaGh5ouXLqKgchgJE3/lQwZwwoeEUQvuAWceg5RyeDNxhgY6nypqACBQPXj5wZTDF9NE00a4HKBSwBBBMmLjQJuTcEnp8jKfd2ET3QXNQN5Q28aSbrwVzmxFFJYHHkD0bTbfD6SlWVmdiJp9WQzVFmmONnX91fRB1EqlZZyavTw5OmP3iPx5/UCdf61719s3PAkquHmQugi+Btecdif69CHDp8qigXBYHCtnFFJ9rY/P0cc66rXP4yrZXR/8yMBSw+RSQdIPvTlrT87nOWBogA0NjY2yXLKnNsXqiSfaa94FosJbj8//HIFSrzTwSyrRW89GHYsbn70rgECgcD6cDj869y+5t97AKsXzDTkk1C6HEQPeCQQPFCxEn3nwTO2pz/+8q4Acrlc8+TkZNes21c4PAWbbxtmBiwSuBaDZ0Zc9E4vjwfKqnA9tmuHb3d3wb/hs6MEnnritkMYj8fLBEH4YxZU2e59BXsVFHSw2UAUQZwR98zYIEq4DR23kkEQKxBrWzbXVD68WZ8IoiiJHkWTu+XM1FjOiFUbRv5AfuCr85a54lu3bq1fs2ZNn81mE9va2rLX+l4r9syqd3XTsXRa3FsC3lLw+qa/JaU4rFZEJYOgZhFnlqDI2M0CFKwsrbQgZy/1dB75ehOxn8ZvaEFLS0uTLMtcLw4gmxhm7zsWpzl6WvI7QfKDpxTEEhC9WK023EoWp6ri1jSciopTUaitECgtjVFePnDo0CfBFZ2f72q8Jn5DCwKBwLqzZ8/2/Jdnub8/WJ87V15Tu+mNt3Rh+RbsyxY7fSKiBUSnjtTSxZobx+ORh0p8qVPfnujsMPqPHL/lDGia1hyLxY7cNLrm5OXQ0f17gD3TDVcdLPEBBoQvA9E7noTRaLRGkqTfb2+caP0Qvvu/4tbW1mWqqtLQ0NDNPNUsgI0bNzan02na2trGFwQgEAisGxsb62ceaxaAoijNyWSya8EA4vF4vWEYg/MJ8O8rkCRpS3t7O6FQKMECVSWgzLfoP0Pf/kzVF9v7AAAAAElFTkSuQmCC`,
-          iconSize: [32, 32],
-          iconAnchor: [16, 32]
-        });
-        redIcon = L.icon({
-          iconUrl: `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFDBcGFC46EYEAAASQSURBVFjDxZdbbBRVGMf/57Lbod2dgXZrSzskaAg21GARXLek8YFYA2oIQcHUQKLGRI1oIPaNBy9vPhDjCyHxngfhmmihpMSSiD2pIqRCpklIuttRiL7Dtbju7szvXc44PbElBUgGX9ktOMvl/k3y/+W6ZA9yD9ff3nn8ZDMvpfL3R3d68fHR19ackAcrncZz09PVgyANd1t46MjOQeFgBfyNne3m66rgvRaJ4E8EgCeIwCnnPA9MOMDVhw6wcuXKlJ0v4OXhoZGP9+7VGigFtW1kslkMpdMYzmS+O3z9+sE0cP5BAdhCzt27d79xndeBC5s6mx3lNGKLCshDJ5aA7DlYDSBrG2u3V1e9K142d87wfyp4B0zSTl789BoQ+wnQacnYWolBAnGARQSoFTitpoFO/reudUEAx3O86RsgJIpTbHp2fgBD6cXA6FIEBRKYSl1MUphR8EmBYCT2naobICnNDc3L3d9n6+yZjEeOLCUQlEpBFIiABCjFBKAV9IVUFnWEmzcuDE1M2vDQIihkMGSEpNhCBCCesZgnUAqhFFyl4EuJWSHOlRWgubm5OXrxAioJxR+eh4yUWEEpaimFQSmqKEUgJVyl4CiF0657oKyLqLGxsXV8YBCXwxCTQqCCEGiEIE4pVlAKKAUPQEFKjAvR+6vv/1LWDAilkvSvIdRyjhVKQSOkGI9EtERVnFa3jHDO5HDwAJBrFScs6X+5FxO2CXQ3sQtdR3/v8byH65hwGsOnFmpqzr65ahXByEqc8D3Wcv9NG2yLFTnneyLCXYs2dPyrEL6C4WOuYHB4BNmnaw4Dg4fPEipurqMGHbMCjFumj0+ycikTVlAWhpaUnm8/kcIUTO19dHIvUaITsUAI0x9Fy5Ar00EQ2c45VY7M9nKiqe/d8Apmm2jo2N9d6p1zJ2iBMCASBUHCtWcwygBGJTiUc6x3zB+3q/rR3GPe+GuAEEQpKanp0/P157kvJoT8poAwJVCJSHQCYFBCHRKb516nxrCjqur1LxOJwoeG8c3T0ejW+25uCy7LMeDx+Zr62nLE3lxECqRQ4ITe/mjEYc8+lo5SCA6CaMSQp3bk+Gt05HASwpOzLK3VmynXH84zV+Ep91et5g//KQEdHR4vrumhra7ut+aaFOOIqVWSEQGcMOqU3ng88rAQHgAfCVQljakp5SqGcMTYyltpnmB8+vXbvNc90vej1v8K4ZSKVSyWw2Kzs7O2fn6xfC0M5KnWbNJ047XUfpcJaWIz0FQiggAVyn4paCOEAiEQKKhAVNKwYvFvn7v7NlP0sClBUtgmmbrwMBA791KnMymle7xYbP+Nsaa3DOOAqKh4gWiaaSxbhgjn0JRCGkBBCIScXwp0/afD/f3Hf7TtE/fcA77vJ2dmnZk4s1DgTQlz6NJt9e66RKdAUA5aHQFgExgBMPPAmzGQy6wzD+Og+RllKYPBB/1pva8Jdu3atcV0XnGzZs6MMi2W0AW7ZsSebzeezbt29sSQBM02y9cePG71hEo3dcQpKWZfUtGUAmk0lKKUcWE+DWFOi6nvr2rqwvXrl3LYonMBDCVSCT4Ygb9B9fYD7KPxTs8AAAAAElFTkSuQmCC`,
-          iconSize: [32, 32],
-          iconAnchor: [16, 32]
-        });
 
         RTPolyline = L.FeatureGroup.extend({
           initialize: function(l, stp, enp, nm, ckobj, parentGroup) {
@@ -179,13 +168,20 @@
         waypointLayerGroup.clearLayers();
         trackLayerGroup.clearLayers();
 
+        // Fix for distorted icons by using Leaflet's default icon
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+          iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+          iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        });
+
         geojsonData.features.forEach(function(feature) {
           var originalIndex = feature.properties.originalIndex; // Assuming originalIndex is passed in properties
           var layer = L.geoJSON(feature, {
             pointToLayer: function(feature, latlng) {
               var marker = L.marker(latlng, {
                 title: feature.properties.name || 'Waypoint',
-                icon: blueIcon
               });
               attachHandler(marker, new MarkerHandler(0, originalIndex)); // Use originalIndex
               waypts[originalIndex] = marker; // Populate waypts object
