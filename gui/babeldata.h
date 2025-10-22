@@ -65,25 +65,28 @@ public:
   {
     SettingGroup sg;
     makeSettingGroup(sg);
+    MapPreviewType initialMapPreviewSelection = mapPreviewSelection_;
     sg.restoreSettings(st);
 
-    // Migration logic for old map preview settings
-    bool oldPreviewGmap = false;
-    bool oldMapPreviewEnabled = false;
-    bool oldMapPreviewLeafletEnabled = false;
+    // Only execute migration logic if the new setting was not found (i.e., it's an old installation)
+    if (mapPreviewSelection_ == initialMapPreviewSelection) {
+      bool oldPreviewGmap = false;
+      bool oldMapPreviewEnabled = false;
+      bool oldMapPreviewLeafletEnabled = false;
 
-    SettingGroup oldSg;
-    oldSg.addVarSetting(std::make_unique<BoolSetting>("app.previewGmap", oldPreviewGmap));
-    oldSg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewEnabled", oldMapPreviewEnabled));
-    oldSg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewLeafletEnabled", oldMapPreviewLeafletEnabled));
-    oldSg.restoreSettings(st);
+      SettingGroup oldSg;
+      oldSg.addVarSetting(std::make_unique<BoolSetting>("app.previewGmap", oldPreviewGmap));
+      oldSg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewEnabled", oldMapPreviewEnabled));
+      oldSg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewLeafletEnabled", oldMapPreviewLeafletEnabled));
+      oldSg.restoreSettings(st);
 
-    if (oldPreviewGmap) {
-      mapPreviewSelection_ = GoogleMapsPreview;
-    } else if (oldMapPreviewLeafletEnabled) {
-      mapPreviewSelection_ = LeafletMapsPreview;
-    } else if (!oldMapPreviewEnabled) {
-      mapPreviewSelection_ = NoMapPreview;
+      if (oldPreviewGmap) {
+        mapPreviewSelection_ = GoogleMapsPreview;
+      } else if (oldMapPreviewLeafletEnabled) {
+        mapPreviewSelection_ = LeafletMapsPreview;
+      } else if (!oldMapPreviewEnabled) {
+        mapPreviewSelection_ = NoMapPreview;
+      }
     }
   }
 
