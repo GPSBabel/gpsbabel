@@ -39,7 +39,9 @@
       };
 
       function attachHandler(object, handler) {
+        console.log("Attaching handler to object: " + object + ", type: " + handler.type + ", index: " + handler.number);
         object.on("click", function () {
+          console.log("Object clicked! Type: " + handler.type + ", Index: " + handler.number);
           handler.clicked();
         });
       }
