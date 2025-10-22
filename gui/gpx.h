@@ -53,9 +53,31 @@ public:
     return name;
   }
 
+  void setDescription(const QString& s)
+  {
+    description = s;
+  }
+
+  QString getDescription() const
+  {
+    return description;
+  }
+
+  void setComment(const QString& s)
+  {
+    comment = s;
+  }
+
+  QString getComment() const
+  {
+    return comment;
+  }
+
 private:
   LatLng location;
   QString name;
+  QString description;
+  QString comment;
 };
 
 //------------------------------------------------------------------------

@@ -201,6 +201,14 @@
               var marker = L.marker(latlng, {
                 title: feature.properties.name || 'Waypoint',
               });
+              var popupContent = "<b>" + (feature.properties.name || 'N/A') + "</b><br/>";
+              if (feature.properties.description) {
+                popupContent += "Description: " + feature.properties.description + "<br/>";
+              }
+              if (feature.properties.comment) {
+                popupContent += "Comment: " + feature.properties.comment + "<br/>";
+              }
+              marker.bindPopup(popupContent);
               attachHandler(marker, new MarkerHandler(0, originalIndex)); // Use originalIndex
               waypts[originalIndex] = marker; // Populate waypts object
               return marker;
@@ -246,6 +254,14 @@
               console.log("Processing routepoints for route: " + feature.properties.name);
               feature.properties.routepoints.forEach(function(pt) {
                 var marker = L.marker([pt.lat, pt.lng], { icon: routePointIcon, title: pt.name });
+                var popupContent = "<b>" + (pt.name || 'N/A') + "</b><br/>";
+                if (pt.description) {
+                  popupContent += "Description: " + pt.description + "<br/>";
+                }
+                if (pt.comment) {
+                  popupContent += "Comment: " + pt.comment + "<br/>";
+                }
+                marker.bindPopup(popupContent);
                 attachHandler(marker, new MarkerHandler(3, originalIndex)); // Type 3 for route points
                 routeLayerGroup.addLayer(marker);
               });
