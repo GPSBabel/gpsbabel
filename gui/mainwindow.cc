@@ -167,8 +167,10 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   babelVersion_ = findBabelVersion();
   fmtChgInterlock_ = false;
   loadDeviceNameCombos();
+// RJL
 babelData_.debugLevel_ = 9;
 babelData_.outputFileName_= "/dev/null";
+// RJL
 
   connect(ui_.inputFileOptBtn,        &QAbstractButton::clicked, this, &MainWindow::inputFileOptBtnClicked);
   connect(ui_.inputDeviceOptBtn,      &QAbstractButton::clicked, this, &MainWindow::inputDeviceOptBtnClicked);
@@ -241,8 +243,10 @@ babelData_.outputFileName_= "/dev/null";
 
   //--- Restore from registry
   restoreSettings();
+// RJL
 babelData_.debugLevel_ = 9;
 babelData_.outputFileName_= "/dev/null";
+// RJL
 
 #ifndef DISABLE_UPGRADE_CHECK
   upgrade = new UpgradeCheck(this, formatList_, babelData_);
@@ -258,8 +262,10 @@ babelData_.outputFileName_= "/dev/null";
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
   }
+// RJL
 babelData_.debugLevel_ = 9;
 babelData_.outputFileName_= "/dev/null";
+// RJL
 }
 
 void MainWindow::switchTranslator(QTranslator& translator, const QString& filename)
