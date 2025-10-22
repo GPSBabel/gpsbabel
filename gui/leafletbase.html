@@ -82,6 +82,11 @@
         trackLayers = {};    // Initialize as object
         routesById = {};     // Initialize as object
 
+        // Add layer groups to the map permanently.
+        waypointLayerGroup.addTo(map);
+        trackLayerGroup.addTo(map);
+        rteGroup.addTo(map);
+
         // --- Define Leaflet-dependent variables and classes here ---
         greenDotIcon = L.icon({
           iconUrl:
@@ -254,28 +259,17 @@
       }
 
       function setAllWaypointsVisibility(show) {
-        if (show) {
-          waypointLayerGroup.addTo(map);
-        } else {
-          map.removeLayer(waypointLayerGroup);
+        for (var key in waypointLayers) {
+          if (waypointLayers.hasOwnProperty(key)) {
+            setWaypointVisibility(key, show);
+          }
         }
       }
 
       function setAllTracksVisibility(show) {
-        if (show) {
-          trackLayerGroup.addTo(map);
-        } else {
-          map.removeLayer(trackLayerGroup);
-        }
-      }
-
-      function setRouteVisibility(index, show) {
-        if (routesById[index]) {
-          var targetLayer = routesById[index];
-          if (show) {
-            rteGroup.addLayer(targetLayer);
-          } else {
-            rteGroup.removeLayer(targetLayer);
+        for (var key in trackLayers) {
+          if (trackLayers.hasOwnProperty(key)) {
+            setTrackVisibility(key, show);
           }
         }
       }
