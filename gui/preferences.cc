@@ -51,12 +51,17 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   ui_.startupCheck->setChecked(babelData_.startupVersionCheck_);
   ui_.reportStatisticsCheck->setChecked(babelData_.reportStatistics_);
   ui_.upgradeMenuCheck->setChecked(babelData_.upgradeMenuEnabled_);
-  if (babelData_.mapPreviewLeafletEnabled_) {
-    ui_.leafletMapPreviewCheck->setChecked(true);
-  } else if (babelData_.mapPreviewEnabled_) {
-    ui_.mapPreviewCheck->setChecked(true);
-  } else {
-    ui_.disableMapPreviewCheck->setChecked(true);
+  switch (babelData_.mapPreviewSelection_) {
+    case BabelData::GoogleMapsPreview:
+      ui_.mapPreviewCheck->setChecked(true);
+      break;
+    case BabelData::LeafletMapsPreview:
+      ui_.leafletMapPreviewCheck->setChecked(true);
+      break;
+    case BabelData::NoMapPreview:
+    default:
+      ui_.disableMapPreviewCheck->setChecked(true);
+      break;
   }
   ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
 
@@ -132,8 +137,13 @@ void Preferences::acceptClicked()
   babelData_.startupVersionCheck_ = ui_.startupCheck->isChecked();
   babelData_.reportStatistics_ = ui_.reportStatisticsCheck->isChecked();
   babelData_.upgradeMenuEnabled_ = ui_.upgradeMenuCheck->isChecked();
-  babelData_.mapPreviewEnabled_ = ui_.mapPreviewCheck->isChecked();
-  babelData_.mapPreviewLeafletEnabled_ = ui_.leafletMapPreviewCheck->isChecked();
+  if (ui_.mapPreviewCheck->isChecked()) {
+    babelData_.mapPreviewSelection_ = BabelData::GoogleMapsPreview;
+  } else if (ui_.leafletMapPreviewCheck->isChecked()) {
+    babelData_.mapPreviewSelection_ = BabelData::LeafletMapsPreview;
+  } else {
+    babelData_.mapPreviewSelection_ = BabelData::NoMapPreview;
+  }
   babelData_.ignoreVersionMismatch_ = ui_.ignoreVersionMismatchCheck->isChecked();
   accept();
 }

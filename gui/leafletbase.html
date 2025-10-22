@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"/>
     <style>
       #map { height: 100%; width: 100%; }
+      .red-route-point-icon {
+        filter: hue-rotate(200deg) saturate(300%) brightness(70%) contrast(150%); /* Adjust these values to get the desired red shade */
+      }
     </style>
   </head>
   <body style="height: 100%; margin: 0">
@@ -17,7 +20,7 @@
       // Global variables that will be shared with C++ generated code
       var map;
       var mclicker = {};
-      var greenDotIcon, redDotIcon;
+      var greenDotIcon, redDotIcon, routePointIcon;
       var RTPolyline;
       var baseMaps;
       var waypointLayers = {}; // Changed to object
@@ -102,11 +105,13 @@
           iconSize: [7, 7],
           iconAnchor: [4, 4]
         });
-        routePointIcon = L.icon({
-          iconUrl:
-`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFEQEfHu83AQcAAABjSURBVAjXVc0xEYNQFETR836NFgQgAxfUCEiJiUwc0GGBOpGACOo8isDks80Wd+5uwIc2eaDDhilY4gQrmnDLB/m9BdIxK/3gq424t9NOT/kfVLyLZhqo8qrBAsG7JeRPDEes/UYQBcqkmIAAAAASUVORK5CYII=`,
-          iconSize: [7, 7],
-          iconAnchor: [4, 4]
+        // Define a custom red icon for route points using the default Leaflet marker structure
+        // and applying a CSS filter to color it red.
+        routePointIcon = new L.Icon.Default({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+            iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            className: 'red-route-point-icon' // Add a custom class for CSS targeting
         });
 
         RTPolyline = L.FeatureGroup.extend({

@@ -66,6 +66,25 @@ public:
     SettingGroup sg;
     makeSettingGroup(sg);
     sg.restoreSettings(st);
+
+    // Migration logic for old map preview settings
+    bool oldPreviewGmap = false;
+    bool oldMapPreviewEnabled = false;
+    bool oldMapPreviewLeafletEnabled = false;
+
+    SettingGroup oldSg;
+    oldSg.addVarSetting(std::make_unique<BoolSetting>("app.previewGmap", oldPreviewGmap));
+    oldSg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewEnabled", oldMapPreviewEnabled));
+    oldSg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewLeafletEnabled", oldMapPreviewLeafletEnabled));
+    oldSg.restoreSettings(st);
+
+    if (oldPreviewGmap) {
+      mapPreviewSelection_ = GoogleMapsPreview;
+    } else if (oldMapPreviewLeafletEnabled) {
+      mapPreviewSelection_ = LeafletMapsPreview;
+    } else if (!oldMapPreviewEnabled) {
+      mapPreviewSelection_ = NoMapPreview;
+    }
   }
 
   void makeSettingGroup(SettingGroup& sg)
@@ -92,8 +111,8 @@ public:
     sg.addVarSetting(std::make_unique<StringSetting>("app.inputBrowse", inputBrowse_));
     sg.addVarSetting(std::make_unique<StringSetting>("app.outputBrowse", outputBrowse_));
 
-    sg.addVarSetting(std::make_unique<BoolSetting>("app.previewGmap", previewGmap_));
-    sg.addVarSetting(std::make_unique<BoolSetting>("app.previewLeaflet", previewLeaflet_));
+
+    sg.addVarSetting(std::make_unique<IntSetting>("app.mapPreviewSelection", reinterpret_cast<int&>(mapPreviewSelection_)));
     sg.addVarSetting(std::make_unique<IntSetting>("app.upgradeCheckMethod", upgradeCheckMethod_));
     sg.addVarSetting(std::make_unique<DateTimeSetting>("app.upgradeCheckTime", upgradeCheckTime_));
     sg.addVarSetting(std::make_unique<DateTimeSetting>("app.donateSplashed", donateSplashed_));
@@ -109,12 +128,17 @@ public:
     sg.addVarSetting(std::make_unique<BoolSetting>("app.startupVersionCheck", startupVersionCheck_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.reportStatistics", reportStatistics_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.upgradeMenuEnabled", upgradeMenuEnabled_));
-    sg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewEnabled", mapPreviewEnabled_));
-    sg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewLeafletEnabled", mapPreviewLeafletEnabled_));
+
     sg.addVarSetting(std::make_unique<BoolSetting>("app.allowBetaUpgrades", allowBetaUpgrades_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.ignoreVersionMismatch", ignoreVersionMismatch_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.disableDonateDialog", disableDonateDialog_));
   }
+
+enum MapPreviewType {
+    NoMapPreview,
+    GoogleMapsPreview,
+    LeafletMapsPreview
+  };
 
   /* Data Members */
 
@@ -142,8 +166,7 @@ public:
 
   QString inputBrowse_, outputBrowse_;
 
-  bool  previewGmap_{false};
-  bool  previewLeaflet_{false};
+  MapPreviewType mapPreviewSelection_{NoMapPreview};
   int   upgradeCheckMethod_{0};
   QDateTime upgradeCheckTime_;
   QString installationUuid_;
@@ -158,8 +181,6 @@ public:
   bool startupVersionCheck_{true};
   bool reportStatistics_{true};
   bool upgradeMenuEnabled_{true};
-  bool mapPreviewEnabled_{true};
-  bool mapPreviewLeafletEnabled_{false};
   bool allowBetaUpgrades_{false};
   bool ignoreVersionMismatch_{false};
   bool disableDonateDialog_{false};

@@ -28,37 +28,29 @@
 //------------------------------------------------------------------------
 AdvDlg::AdvDlg(QWidget* parent,
                bool& synthShortNames,
-               bool mapPreviewEnabled,
-               bool& previewGmap,
-               bool mapPreviewLeafletEnabled,
-               bool& previewLeaflet,
+               BabelData::MapPreviewType& mapPreviewSelection,
                int&  debugLevel):
   QDialog(parent),
   synthShortNames_(synthShortNames),
-  previewGmap_(previewGmap),
-  previewLeaflet_(previewLeaflet),
+  mapPreviewSelection_(mapPreviewSelection),
   debugLevel_(debugLevel)
 {
   ui_.setupUi(this);
   ui_.synthShortNames->setChecked(synthShortNames);
 
-  ui_.previewGmap->setEnabled(mapPreviewEnabled);
-  ui_.previewLeaflet->setEnabled(mapPreviewLeafletEnabled);
-
-  if (previewLeaflet_) {
-    ui_.previewLeaflet->setChecked(true);
-  } else if (previewGmap_) {
-    ui_.previewGmap->setChecked(true);
-  } else {
-    ui_.previewDisable->setChecked(true);
+  switch (mapPreviewSelection_) {
+    case BabelData::NoMapPreview:
+      ui_.previewDisable->setChecked(true);
+      break;
+    case BabelData::GoogleMapsPreview:
+      ui_.previewGmap->setChecked(true);
+      break;
+    case BabelData::LeafletMapsPreview:
+      ui_.previewLeaflet->setChecked(true);
+      break;
   }
 
-  if (!mapPreviewEnabled) {
-    previewGmap_ = false;
-  }
-  if (!mapPreviewLeafletEnabled) {
-    previewLeaflet_ = false;
-  }
+
 
   ui_.debugCombo->setCurrentIndex(debugLevel+1);
 #if defined (Q_OS_WIN)
@@ -79,8 +71,13 @@ AdvDlg::AdvDlg(QWidget* parent,
 void AdvDlg::acceptClicked()
 {
   synthShortNames_ = ui_.synthShortNames->isChecked();
-  previewGmap_ = ui_.previewGmap->isChecked();
-  previewLeaflet_ = ui_.previewLeaflet->isChecked();
+  if (ui_.previewGmap->isChecked()) {
+    mapPreviewSelection_ = BabelData::GoogleMapsPreview;
+  } else if (ui_.previewLeaflet->isChecked()) {
+    mapPreviewSelection_ = BabelData::LeafletMapsPreview;
+  } else {
+    mapPreviewSelection_ = BabelData::NoMapPreview;
+  }
   debugLevel_ = ui_.debugCombo->currentIndex()-1;
   accept();
 }

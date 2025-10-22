@@ -850,7 +850,7 @@ bool MainWindow::isOkToGo()
   }
 
 #ifndef DISABLE_MAPPREVIEW
-  if (babelData_.outputType_ == BabelData::noType_ && !babelData_.previewGmap_ && !babelData_.previewLeaflet_) {
+  if (babelData_.outputType_ == BabelData::noType_ && babelData_.mapPreviewSelection_ == BabelData::NoMapPreview) {
 #else
   if (babelData_.outputType_ == BabelData::noType_) {
 #endif
@@ -971,12 +971,12 @@ babelData_.outputFileName_= "/dev/null";
 #ifndef DISABLE_MAPPREVIEW
   // Now output for preview in google maps
   QString mapFileName;
-  bool useGoogleMaps = babelData_.previewGmap_;
-  bool useLeafletMaps = babelData_.mapPreviewLeafletEnabled_;
+  bool useGoogleMaps = (babelData_.mapPreviewSelection_ == BabelData::GoogleMapsPreview);
+  bool useLeafletMaps = (babelData_.mapPreviewSelection_ == BabelData::LeafletMapsPreview);
 
         QString gpxTempName;
-
-        if (useGoogleMaps || useLeafletMaps) {
+qDebug() << "useGoogleMaps" << useGoogleMaps << "useLeafletMaps" << useLeafletMaps;
+        if (babelData_.mapPreviewSelection_ != BabelData::NoMapPreview) {
           if (QTemporaryFile gpxTempFile; gpxTempFile.open()) {
             gpxTempName = gpxTempFile.fileName();
             gpxTempFile.close();
@@ -1189,7 +1189,8 @@ void MainWindow::leafletMapPreviewActionX()
 void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(nullptr, babelData_.synthShortNames_,
-                babelData_.mapPreviewEnabled_, babelData_.previewGmap_, babelData_.mapPreviewLeafletEnabled_, babelData_.previewLeaflet_, babelData_.debugLevel_);
+                babelData_.mapPreviewSelection_,
+                babelData_.debugLevel_);
   connect(advDlg.formatButton(), &QAbstractButton::clicked,
           this, &MainWindow::resetFormatDefaults);
   advDlg.exec();
@@ -1263,7 +1264,7 @@ void MainWindow::setWidgetValues()
   ui_.actionUpgradeCheck->setEnabled(babelData_.upgradeMenuEnabled_);
 #endif
 #ifndef DISABLE_LEAFLETMAPPREVIEW
-  ui_.actionLeafletMapPreview->setEnabled(babelData_.mapPreviewLeafletEnabled_);
+  ui_.actionLeafletMapPreview->setEnabled(babelData_.mapPreviewSelection_ == BabelData::LeafletMapsPreview);
 #endif
   if (babelData_.inputType_ == BabelData::fileType_) {
     ui_.inputFileOptBtn->setChecked(true);
@@ -1389,6 +1390,8 @@ MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
 
     QJsonObject properties;
     properties["name"] = wpt.getName();
+    properties["description"] = wpt.getDescription();
+    properties["comment"] = wpt.getComment();
     properties["originalIndex"] = i;
     properties["gpsbabel_feature"] = "waypoint";
 
@@ -1444,6 +1447,8 @@ MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
           routePointObject["lat"] = rpt.getLocation().lat();
           routePointObject["lng"] = rpt.getLocation().lng();
           routePointObject["name"] = rpt.getName();
+          routePointObject["description"] = rpt.getDescription();
+          routePointObject["comment"] = rpt.getComment();
           routepointsArray.append(routePointObject);
         }
         geometry["coordinates"] = coordinatesArray;

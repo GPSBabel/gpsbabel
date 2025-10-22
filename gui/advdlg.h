@@ -27,30 +27,27 @@
 #include <QObject>
 #include <QPushButton>  // for QPushButton
 #include <QWidget>      // for QWidget
+#include "babeldata.h"  // for BabelData::MapPreviewType
 #include "ui_advui.h"   // for Ui_AdvUi
 
 class AdvDlg: public QDialog
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AdvDlg)
 
 public:
   AdvDlg(QWidget* parent,
          bool& synthShortNames,
-         bool mapPreviewEnabled,
-         bool& previewGmap,
-         bool mapPreviewLeafletEnabled,
-         bool& previewLeaflet,
+         BabelData::MapPreviewType& mapPreviewSelection,
          int&   debugLevel);
   QPushButton* formatButton()
   {
     return ui_.formatButton;
   }
-
 private:
   Ui_AdvUi ui_;
   bool& synthShortNames_;
-  bool& previewGmap_;
-  bool& previewLeaflet_;
+  BabelData::MapPreviewType& mapPreviewSelection_;
   int&  debugLevel_;
 
 protected:

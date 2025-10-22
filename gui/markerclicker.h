@@ -15,7 +15,11 @@ public:
 public slots:
   void clickedX(int t, int i)
   {
-    emit markerClicked(t, i);
+    if (t == 3) {
+      emit routePointClicked(i);
+    } else {
+      emit markerClicked(t, i);
+    }
   }
   void logTimeX(const QString& s)
   {

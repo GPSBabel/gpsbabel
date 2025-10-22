@@ -46,6 +46,10 @@ signals:
   void routeClicked(int i);
   void routePointClicked(int i);
   void mapRendered();
+  void routePointSelected(int index);
+
+public slots:
+  void handleRoutePointClicked(int index);
 
 private slots:
   void loadFinishedX(bool f);
