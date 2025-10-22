@@ -44,6 +44,7 @@ signals:
   void waypointClicked(int i);
   void trackClicked(int i);
   void routeClicked(int i);
+  void routePointClicked(int i);
   void mapRendered();
 
 private slots:

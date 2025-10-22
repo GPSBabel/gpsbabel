@@ -100,6 +100,12 @@
           iconSize: [7, 7],
           iconAnchor: [4, 4]
         });
+        routePointIcon = L.icon({
+          iconUrl:
+`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFEQEfHu83AQcAAABjSURBVAjXVc0xEYNQFETR836NFgQgAxfUCEiJiUwc0GGBOpGACOo8isDks80Wd+5uwIc2eaDDhilY4gQrmnDLB/m9BdIxK/3gq424t9NOT/kfVLyLZhqo8qrBAsG7JeRPDEes/UYQBcqkmIAAAAASUVORK5CYII=`,
+          iconSize: [7, 7],
+          iconAnchor: [4, 4]
+        });
 
         RTPolyline = L.FeatureGroup.extend({
           initialize: function(l, stp, enp, nm, ckobj, parentGroup) {
@@ -203,9 +209,15 @@
             waypointLayers[originalIndex] = layer; // Store by originalIndex
             waypointLayerGroup.addLayer(layer);
           } else if (featureType === 'track') {
-            trackLayers[originalIndex] = layer; // Store by originalIndex
-            trackLayerGroup.addLayer(layer);
-          } else if (featureType === 'route') {
+            var coords = feature.geometry.coordinates;
+            if (coords.length > 0) {
+              var latlngs = coords.map(function(c) { return L.latLng(c[1], c[0]); });
+              var polyline = L.polyline(latlngs, { color: '#0000E0', weight: 2, opacity: 0.6 });
+              attachHandler(polyline, new MarkerHandler(1, originalIndex)); // Type 1 for tracks
+              trackLayers[originalIndex] = polyline;
+              trackLayerGroup.addLayer(polyline);
+              bounds.extend(polyline.getBounds());
+            } else if (featureType === 'route') {
             var routeLayerGroup = L.featureGroup().addTo(rteGroup);
             var pathLayer = L.geoJSON(feature, {
               style: { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' }
@@ -217,8 +229,8 @@
             if (feature.properties.routepoints) {
               console.log("Processing routepoints for route: " + feature.properties.name);
               feature.properties.routepoints.forEach(function(pt) {
-                console.log("Creating marker for routepoint: " + pt.name + " at " + pt.lat + ", " + pt.lng);
-                var marker = L.marker([pt.lat, pt.lng], { title: pt.name });
+                var marker = L.marker([pt.lat, pt.lng], { icon: routePointIcon, title: pt.name });
+                attachHandler(marker, new MarkerHandler(3, originalIndex)); // Type 3 for route points
                 routeLayerGroup.addLayer(marker);
               });
             }

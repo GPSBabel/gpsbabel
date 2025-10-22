@@ -205,6 +205,7 @@ LeafletMapDialog::LeafletMapDialog(QWidget* parent,
     QStandardItem* item = rteItem_->child(i);
     if (item) itemClickedX(item);
   });
+  connect(mapWidget_, &LeafletMap::routePointClicked, this, &LeafletMapDialog::routePointClicked);
   connect(mapWidget_, &LeafletMap::trackClicked, this, [this](int i)->void {
     QStandardItem* item = trkItem_->child(i);
     if (item) itemClickedX(item);
@@ -237,6 +238,18 @@ LeafletMapDialog::onMapLoadedAndRendered()
   ui_.treeView->update(wptItem_->index());
   ui_.treeView->update(trkItem_->index());
   ui_.treeView->update(rteItem_->index());
+}
+
+void LeafletMapDialog::routePointClicked(int i)
+{
+  QStandardItem* item = rteItem_->child(i);
+  if (item) itemClickedX(item);
+}
+
+void LeafletMapDialog::trackClicked(int i)
+{
+  QStandardItem* item = trkItem_->child(i);
+  if (item) itemClickedX(item);
 }
 
 //------------------------------------------------------------------------

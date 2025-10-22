@@ -30,6 +30,7 @@ signals:
   void markerClicked(int t, int i);
   void logTime(const QString& s);
   void loadFinished(bool b);
+  void routePointClicked(int i);
 };
 
 #endif // MARKERCLICKER_H

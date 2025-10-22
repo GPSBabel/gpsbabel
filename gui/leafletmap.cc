@@ -65,6 +65,7 @@ LeafletMap::LeafletMap(QWidget* parent,
   connect(mclicker, &MarkerClicker::loadFinished, this, &LeafletMap::loadFinishedX);
   connect(mclicker, &MarkerClicker::markerClicked, this, &LeafletMap::markerClicked);
   connect(mclicker, &MarkerClicker::logTime, this, &LeafletMap::logTime);
+  connect(mclicker, &MarkerClicker::routePointClicked, this, &LeafletMap::routePointClicked);
 
   QString baseFile = QApplication::applicationDirPath() + "/leafletbase.html";
   QString fileName;
@@ -179,6 +180,8 @@ LeafletMap::markerClicked(int t, int i)
     emit trackClicked(i);
   } else if (t == 2) {
     emit routeClicked(i);
+  } else if (t == 3) {
+    emit routePointClicked(i);
   }
 }
 

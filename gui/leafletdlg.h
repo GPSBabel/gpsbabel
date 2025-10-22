@@ -46,6 +46,8 @@ private slots:
   void itemClickedX(const QStandardItem* it);
   void selectionChangedX(const QItemSelection& sel, const QItemSelection& desel);
   void showContextMenu(const QPoint& pt);
+  void routePointClicked(int i);
+  void trackClicked(int i);
 
 protected:
   QString formatLength(double l);
