@@ -1382,6 +1382,7 @@ MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
     QJsonObject properties;
     properties["name"] = wpt.getName();
     properties["originalIndex"] = i;
+    properties["gpsbabel_feature"] = "waypoint";
 
     QJsonObject feature;
     feature["type"] = "Feature";
@@ -1409,6 +1410,7 @@ MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
     QJsonObject properties;
     properties["name"] = trk.getName();
     properties["originalIndex"] = i;
+    properties["gpsbabel_feature"] = "track";
 
     QJsonObject feature;
     feature["type"] = "Feature";
@@ -1434,6 +1436,7 @@ MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
     QJsonObject properties;
     properties["name"] = rte.getName();
     properties["originalIndex"] = i;
+    properties["gpsbabel_feature"] = "route";
 
     QJsonObject feature;
     feature["type"] = "Feature";

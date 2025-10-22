@@ -198,13 +198,14 @@
             }
           });
 
-          if (feature.geometry.type === 'Point') {
+          var featureType = feature.properties.gpsbabel_feature;
+          if (featureType === 'waypoint') {
             waypointLayers[originalIndex] = layer; // Store by originalIndex
             waypointLayerGroup.addLayer(layer);
-          } else if (feature.geometry.type === 'LineString') {
+          } else if (featureType === 'track') {
             trackLayers[originalIndex] = layer; // Store by originalIndex
             trackLayerGroup.addLayer(layer);
-          } else if (feature.geometry.type === 'MultiLineString') { // Assuming routes are MultiLineString
+          } else if (featureType === 'route') { // Assuming routes are MultiLineString
             routesById[originalIndex] = layer; // Store by originalIndex
             rteGroup.addLayer(layer); // Add route layers to rteGroup
           }
