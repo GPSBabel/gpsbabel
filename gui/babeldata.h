@@ -93,6 +93,7 @@ public:
     sg.addVarSetting(std::make_unique<StringSetting>("app.outputBrowse", outputBrowse_));
 
     sg.addVarSetting(std::make_unique<BoolSetting>("app.previewGmap", previewGmap_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.previewLeaflet", previewLeaflet_));
     sg.addVarSetting(std::make_unique<IntSetting>("app.upgradeCheckMethod", upgradeCheckMethod_));
     sg.addVarSetting(std::make_unique<DateTimeSetting>("app.upgradeCheckTime", upgradeCheckTime_));
     sg.addVarSetting(std::make_unique<DateTimeSetting>("app.donateSplashed", donateSplashed_));
@@ -109,6 +110,7 @@ public:
     sg.addVarSetting(std::make_unique<BoolSetting>("app.reportStatistics", reportStatistics_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.upgradeMenuEnabled", upgradeMenuEnabled_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewEnabled", mapPreviewEnabled_));
+    sg.addVarSetting(std::make_unique<BoolSetting>("app.mapPreviewLeafletEnabled", mapPreviewLeafletEnabled_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.allowBetaUpgrades", allowBetaUpgrades_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.ignoreVersionMismatch", ignoreVersionMismatch_));
     sg.addVarSetting(std::make_unique<BoolSetting>("app.disableDonateDialog", disableDonateDialog_));
@@ -141,6 +143,7 @@ public:
   QString inputBrowse_, outputBrowse_;
 
   bool  previewGmap_{false};
+  bool  previewLeaflet_{false};
   int   upgradeCheckMethod_{0};
   QDateTime upgradeCheckTime_;
   QString installationUuid_;
@@ -156,6 +159,7 @@ public:
   bool reportStatistics_{true};
   bool upgradeMenuEnabled_{true};
   bool mapPreviewEnabled_{true};
+  bool mapPreviewLeafletEnabled_{false};
   bool allowBetaUpgrades_{false};
   bool ignoreVersionMismatch_{false};
   bool disableDonateDialog_{false};

@@ -20,6 +20,7 @@
 #include "preferences.h"
 #include <QAbstractButton>   // for QAbstractButton
 #include <QCheckBox>         // for QCheckBox
+#include <QButtonGroup>      // for QButtonGroup
 #include <QDialogButtonBox>  // for QDialogButtonBox
 #include <QListWidget>       // for QListWidget
 #include <QListWidgetItem>   // for QListWidgetItem
@@ -50,7 +51,13 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   ui_.startupCheck->setChecked(babelData_.startupVersionCheck_);
   ui_.reportStatisticsCheck->setChecked(babelData_.reportStatistics_);
   ui_.upgradeMenuCheck->setChecked(babelData_.upgradeMenuEnabled_);
-  ui_.mapPreviewCheck->setChecked(babelData_.mapPreviewEnabled_);
+  if (babelData_.mapPreviewLeafletEnabled_) {
+    ui_.leafletMapPreviewCheck->setChecked(true);
+  } else if (babelData_.mapPreviewEnabled_) {
+    ui_.mapPreviewCheck->setChecked(true);
+  } else {
+    ui_.disableMapPreviewCheck->setChecked(true);
+  }
   ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
 
 #ifdef DISABLE_UPGRADE_CHECK
@@ -76,6 +83,14 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   QLabel* noPreviewLabel = new QLabel(tr("The version does not include the map preview feature."), ui_.privacy_tab);
   noPreviewLabel->setObjectName("noPreviewLabel");
   ui_.verticalLayout_5->insertWidget(3, noPreviewLabel);
+#endif
+
+#ifdef DISABLE_LEAFLETMAPPREVIEW
+  ui_.leafletMapPreviewCheck->hide();
+
+  QLabel* noLeafletPreviewLabel = new QLabel(tr("The version does not include the Leaflet map preview feature."), ui_.privacy_tab);
+  noLeafletPreviewLabel->setObjectName("noLeafletPreviewLabel");
+  ui_.verticalLayout_5->insertWidget(4, noLeafletPreviewLabel);
 #endif
 
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &Preferences::acceptClicked);
@@ -118,6 +133,7 @@ void Preferences::acceptClicked()
   babelData_.reportStatistics_ = ui_.reportStatisticsCheck->isChecked();
   babelData_.upgradeMenuEnabled_ = ui_.upgradeMenuCheck->isChecked();
   babelData_.mapPreviewEnabled_ = ui_.mapPreviewCheck->isChecked();
+  babelData_.mapPreviewLeafletEnabled_ = ui_.leafletMapPreviewCheck->isChecked();
   babelData_.ignoreVersionMismatch_ = ui_.ignoreVersionMismatchCheck->isChecked();
   accept();
 }

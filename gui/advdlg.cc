@@ -30,19 +30,36 @@ AdvDlg::AdvDlg(QWidget* parent,
                bool& synthShortNames,
                bool mapPreviewEnabled,
                bool& previewGmap,
+               bool mapPreviewLeafletEnabled,
+               bool& previewLeaflet,
                int&  debugLevel):
   QDialog(parent),
   synthShortNames_(synthShortNames),
   previewGmap_(previewGmap),
+  previewLeaflet_(previewLeaflet),
   debugLevel_(debugLevel)
 {
   ui_.setupUi(this);
   ui_.synthShortNames->setChecked(synthShortNames);
+
   ui_.previewGmap->setEnabled(mapPreviewEnabled);
-  if (!mapPreviewEnabled) {
-    previewGmap = false;
+  ui_.previewLeaflet->setEnabled(mapPreviewLeafletEnabled);
+
+  if (previewLeaflet_) {
+    ui_.previewLeaflet->setChecked(true);
+  } else if (previewGmap_) {
+    ui_.previewGmap->setChecked(true);
+  } else {
+    ui_.previewDisable->setChecked(true);
   }
-  ui_.previewGmap->setChecked(previewGmap);
+
+  if (!mapPreviewEnabled) {
+    previewGmap_ = false;
+  }
+  if (!mapPreviewLeafletEnabled) {
+    previewLeaflet_ = false;
+  }
+
   ui_.debugCombo->setCurrentIndex(debugLevel+1);
 #if defined (Q_OS_WIN)
   ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":/images/ok.png"));
@@ -54,12 +71,16 @@ AdvDlg::AdvDlg(QWidget* parent,
 #ifdef DISABLE_MAPPREVIEW
   ui_.previewGmap->hide();
 #endif
+#ifdef DISABLE_LEAFLETMAPPREVIEW
+  ui_.previewLeaflet->hide();
+#endif
 }
 
 void AdvDlg::acceptClicked()
 {
   synthShortNames_ = ui_.synthShortNames->isChecked();
   previewGmap_ = ui_.previewGmap->isChecked();
+  previewLeaflet_ = ui_.previewLeaflet->isChecked();
   debugLevel_ = ui_.debugCombo->currentIndex()-1;
   accept();
 }

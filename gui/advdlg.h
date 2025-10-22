@@ -22,8 +22,9 @@
 #ifndef ADVDLG_H
 #define ADVDLG_H
 
-#include <QDialog>      // for QDialog
-#include <QObject>      // for Q_OBJECT, slots
+#include <QDialog>
+#include <QButtonGroup>
+#include <QObject>
 #include <QPushButton>  // for QPushButton
 #include <QWidget>      // for QWidget
 #include "ui_advui.h"   // for Ui_AdvUi
@@ -37,6 +38,8 @@ public:
          bool& synthShortNames,
          bool mapPreviewEnabled,
          bool& previewGmap,
+         bool mapPreviewLeafletEnabled,
+         bool& previewLeaflet,
          int&   debugLevel);
   QPushButton* formatButton()
   {
@@ -47,6 +50,7 @@ private:
   Ui_AdvUi ui_;
   bool& synthShortNames_;
   bool& previewGmap_;
+  bool& previewLeaflet_;
   int&  debugLevel_;
 
 protected:

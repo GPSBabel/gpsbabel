@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Leaflet Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"/>
+    <style>
+      #map { height: 100%; width: 100%; }
+    </style>
+  </head>
+  <body style="height: 100%; margin: 0">
+    <div id="map"></div>
+    <script>
+
+      // Global variables that will be shared with C++ generated code
+      var map;
+      var mclicker = {};
+      var greenDotIcon, redDotIcon, blueIcon, redIcon;
+      var RTPolyline;
+      var baseMaps;
+      var waypointLayers = {}; // Changed to object
+      var trackLayers = {};    // Changed to object
+      var routesById = {};     // New object for routes by ID
+      var waypointLayerGroup;
+      var trackLayerGroup;
+      var rteGroup;
+      var waypts = {};         // Changed to object
+
+      // Non-Leaflet-dependent helper functions
+      function MarkerHandler(t, i) {
+        this.type = t;
+        this.number = i;
+      }
+
+      MarkerHandler.prototype.clicked = function () {
+        mclicker.clickedX(this.type, this.number);
+      };
+
+      function attachHandler(object, handler) {
+        object.on("click", function () {
+          handler.clicked();
+        });
+      }
+
+      // Script loading functions
+      function loadScript(src) {
+        return new Promise(function(resolve, reject) {
+          const s = document.createElement("script");
+          s.src = src;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+
+      async function setupWebChannel() {
+        await loadScript("qrc:///qtwebchannel/qwebchannel.js");
+        const channel = await new Promise(function(resolve) {
+          new QWebChannel(qt.webChannelTransport, resolve);
+        });
+        return channel.objects.mclicker;
+      }
+
+      // Main initialization function
+      async function initialize() {
+        map = null; // Explicitly set map to null
+        const webChannelPromise = setupWebChannel();
+        await loadScript("https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js");
+        await loadScript("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js");
+
+        mclicker = await webChannelPromise;
+        var mapContainer = document.getElementById('map');
+        map = L.map(mapContainer).setView([0, 0], 2); // Default view
+
+        waypointLayerGroup = L.layerGroup();
+        trackLayerGroup = L.layerGroup();
+        rteGroup = L.layerGroup();
+        waypts = {}; // Initialize as object
+        waypointLayers = {}; // Initialize as object
+        trackLayers = {};    // Initialize as object
+        routesById = {};     // Initialize as object
+
+        // --- Define Leaflet-dependent variables and classes here ---
+        greenDotIcon = L.icon({
+          iconUrl:
+`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFEQAuF1F01CYAAABhSURBVAjXVc07EYNgFAXh7/41WhCAjLigjgBKTDA4SIeDJD4igjqXgvc2p9jZOQE+aqlDgx96YYpNfFEJV9rw9sLjEIlAmguaWxHHVmX7WIsr6V/Q34qTsQgTWsx7IQ14LpGFGBx6omuVAAAAAElFTkSuQmCC`,
+          iconSize: [7, 7],
+          iconAnchor: [4, 4]
+        });
+        redDotIcon = L.icon({
+          iconUrl:
+`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFEQEfHu83AQcAAABjSURBVAjXVc0xEYNQFETR836NFgQgAxfUCEiJiUwc0GGBOpGACOo8isDks80Wd+5uwIc2eaDDhilY4gQrmnDLB/m9BdIxK/3gq424t9NOT/kfVLyLZhqo8qrBAsG7JeRPDEes/UYQBcqkmIAAAAASUVORK5CYII=`,
+          iconSize: [7, 7],
+          iconAnchor: [4, 4]
+        });
+        blueIcon = L.icon({
+          iconUrl:
+`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFDBcMBidsiEMAAASrSURBVFjDxZZbbBRlGIafPe/szLa7hdKWbqAVExppjBUrWEu5MYoolKiQbIAbORgTjTTBGGOi8cKYaLxSE7nREGONqBTkoiCKirWRpDFCKTRtw0K32wPd7ml2d2Z2Zme9aDG0QeSwtF/yZ5Lv/5P3+fO+/5eBW6je3t4a7lFZ/+/AsWPH6kOh0AsLBpBIJD7t6OgwFgxAVdWWwcHB2L0CsN9sc/XqR5ZoqorS1fUdUAIP1oHNCZFhuDp8zwFWPVDXnMpq+Pd8kXyz/j57SamPrGFhbEpmKDLBQCR6fPT7t1+D8YE7BbDdbHP79uCLZ/omm4LbglZBcKEaBVQd8g43wqKlVK2sv7+5fterUcUrmcO/nSx6Bqqrq5vCkxpTiSzDExkiUZWRmEYkYTCSMgnJFhSpgupn9u2317+8t+gAZt5oUk2J4YkUY1MZRmMKowmdSKrASNbGqCEwnsyTTWhUrlh3oNgZ8GhqBtNdRXgiTSJrkMpbkU2YAmTJieZy4dQUSrMZSnSdkWIC7NyxvWkqpYKzmpRonlhaIJyCjNUCixzgkLAVTNw5FX86gaLEzxfVgoaGh5ouXLqKgchgJE3/lQwZwwoeEUQvuAWceg5RyeDNxhgY6nypqACBQPXj5wZTDF9NE00a4HKBSwBBBMmLjQJuTcEnp8jKfd2ET3QXNQN5Q28aSbrwVzmxFFJYHHkD0bTbfD6SlWVmdiJp9WQzVFmmONnX91fRB1EqlZZyavTw5OmP3iPx5/UCdf61719s3PAkquHmQugi+Btecdif69CHDp8qigXBYHCtnFFJ9rY/P0cc66rXP4yrZXR/8yMBSw+RSQdIPvTlrT87nOWBogA0NjY2yXLKnNsXqiSfaa94FosJbj8//HIFSrzTwSyrRW89GHYsbn70rgECgcD6cDj869y+5t97AKsXzDTkk1C6HEQPeCQQPFCxEn3nwTO2pz/+8q4Acrlc8+TkZNes21c4PAWbbxtmBiwSuBaDZ0Zc9E4vjwfKqnA9tmuHb3d3wb/hs6MEnnritkMYj8fLBEH4YxZU2e59BXsVFHSw2UAUQZwR98zYIEq4DR23kkEQKxBrWzbXVD68WZ8IoiiJHkWTu+XM1FjOiFUbRv5AfuCr85a54lu3bq1fs2ZNn81mE9va2rLX+l4r9syqd3XTsXRa3FsC3lLw+qa/JaU4rFZEJYOgZhFnlqDI2M0CFKwsrbQgZy/1dB75ehOxn8ZvaEFLS0uTLMtcLw4gmxhm7zsWpzl6WvI7QfKDpxTEEhC9WK023EoWp6ri1jSciopTUaitECgtjVFePnDo0CfBFZ2f72q8Jn5DCwKBwLqzZ8/2/Jdnub8/WJ87V15Tu+mNt3Rh+RbsyxY7fSKiBUSnjtTSxZobx+ORh0p8qVPfnujsMPqPHL/lDGia1hyLxY7cNLrm5OXQ0f17gD3TDVcdLPEBBoQvA9E7noTRaLRGkqTfb2+caP0Qvvu/4tbW1mWqqtLQ0NDNPNUsgI0bNzan02na2trGFwQgEAisGxsb62ceaxaAoijNyWSya8EA4vF4vWEYg/MJ8O8rkCRpS3t7O6FQKMECVSWgzLfoP0Pf/kzVF9v7AAAAAElFTkSuQmCC`,
+          iconSize: [32, 32],
+          iconAnchor: [4, 32]
+        });
+        redIcon = L.icon({
+          iconUrl: `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFDBcGFC46EYEAAASQSURBVFjDxZdbbBRVGMf/57Lbod2dgXZrSzskaAg21GARXLek8YFYA2oIQcHUQKLGRI1oIPaNBy9vPhDjCyHxngfhmmihpMSSiD2pIqRCpklIuttRiL7Dtbju7szvXc44PbElBUgGX9ktOMvl/k3y/+W6ZA9yD9ff3nn8ZDMvpfL3R3d68fHR19ackAcrncZz09PVgyANd1t46MjOQeFgBfyNne3m66rgvRaJ4E8EgCeIwCnnPA9MOMDVhw6wcuXKlJ0v4OXhoZGP9+7VGigFtW1kslkMpdMYzmS+O3z9+sE0cP5BAdhCzt27d79xndeBC5s6mx3lNGKLCshDJ5aA7DlYDSBrG2u3V1e9K142d87wfyp4B0zSTl789BoQ+wnQacnYWolBAnGARQSoFTitpoFO/reudUEAx3O86RsgJIpTbHp2fgBD6cXA6FIEBRKYSl1MUphR8EmBYCT2naobICnNDc3L3d9n6+yZjEeOLCUQlEpBFIiABCjFBKAV9IVUFnWEmzcuDE1M2vDQIihkMGSEpNhCBCCesZgnUAqhFFyl4EuJWSHOlRWgubm5OXrxAioJxR+eh4yUWEEpaimFQSmqKEUgJVyl4CiF0657oKyLqLGxsXV8YBCXwxCTQqCCEGiEIE4pVlAKKAUPQEFKjAvR+6vv/1LWDAilkvSvIdRyjhVKQSOkGI9EtERVnFa3jHDO5HDwAJBrFScs6X+5FxO2CXQ3sQtdR3/v8byH65hwGsOnFmpqzr65ahXByEqc8D3Wcv9NG2yLFTnneyLCXYs2dPyrEL6C4WOuYHB4BNmnaw4Dg4fPEipurqMGHbMCjFumj0+ycikTVlAWhpaUnm8/kcIUTO19dHIvUaITsUAI0x9Fy5Ar00EQ2c45VY7M9nKiqe/d8Apmm2jo2N9d6p1zJ2iBMCASBUHCtWcwygBGJTiUc6x3zB+3q/rR3GPe+GuAEEQpKanp0/P157kvJoT8poAwJVCJSHQCYFBCHRKb516nxrCjqur1LxOJwoeG8c3T0ejW+25uCy7LMeDx+Zr62nLE3lxECqRQ4ITe/mjEYc8+lo5SCA6CaMSQp3bk+Gt05HASwpOzLK3VmynXH84zV+Ep91et5g//KQEdHR4vrumhra7ut+aaFOOIqVWSEQGcMOqU3ng88rAQHgAfCVQljakp5SqGcMTYyltpnmB8+vXbvNc90vej1v8K4ZSKVSyWw2Kzs7O2fn6xfC0M5KnWbNJ047XUfpcJaWIz0FQiggAVyn4paCOEAiEQKKhAVNKwYvFvn7v7NlP0sClBUtgmmbrwMBA791KnMymle7xYbP+Nsaa3DOOAqKh4gWiaaSxbhgjn0JRCGkBBCIScXwp0/afD/f3Hf7TtE/fcA77vJ2dmnZk4s1DgTQlz6NJt9e66RKdAUA5aHQFgExgBMPPAmzGQy6wzD+Og+RllKYPBB/1pva8Jdu3atcV0XnGzZs6MMi2W0AW7ZsSebzeezbt29sSQBM02y9cePG71hEo3dcQpKWZfUtGUAmk0lKKUcWE+DWFOi6nvr2rqwvXrl3LYonMBDCVSCT4Ygb9B9fYD7KPxTs8AAAAAElFTkSuQmCC`,
+          iconSize: [32, 32],
+          iconAnchor: [4, 32]
+        });
+
+        RTPolyline = L.FeatureGroup.extend({
+          initialize: function(l, stp, enp, nm, ckobj, parentGroup) {
+            var s = L.marker(stp, {icon: greenDotIcon, title: nm});
+            var e = L.marker(enp, {icon: redDotIcon, title: nm});
+
+            // Call parent constructor with the layers
+            L.FeatureGroup.prototype.initialize.call(this, [l, s, e]);
+
+            this.line = l;
+            this.start = s;
+            this.end = e;
+            this.parentGroup = parentGroup;
+
+            attachHandler(l, ckobj);
+            attachHandler(s, ckobj);
+            attachHandler(e, ckobj);
+          },
+
+          show: function () {
+            console.log("RTPolyline.show() called for line: " + this.line);
+            if (this.parentGroup) {
+              this.parentGroup.addLayer(this);
+            } else {
+              this.line.addTo(map);
+              this.start.addTo(map);
+              this.end.addTo(map);
+            }
+          },
+
+          hide: function () {
+            console.log("RTPolyline.hide() called for line: " + this.line);
+            if (this.parentGroup) {
+              this.parentGroup.removeLayer(this);
+            } else {
+              this.line.remove();
+              this.start.remove();
+              this.end.remove();
+            }
+          }
+        });
+
+        map.whenReady(function() {
+          mclicker.logTimeX("Start renderGeoJson");
+          mclicker.loadedX();
+          mclicker.logTimeX("Done renderGeoJson");
+        });
+      }
+
+      function renderGeoJson(geojsonData) {
+        var bounds = L.latLngBounds();
+
+        // Clear existing layers and groups
+        // Iterate through objects and remove layers
+        for (var key in waypointLayers) {
+          if (waypointLayers.hasOwnProperty(key)) {
+            map.removeLayer(waypointLayers[key]);
+          }
+        }
+        for (var key in trackLayers) {
+          if (trackLayers.hasOwnProperty(key)) {
+            map.removeLayer(trackLayers[key]);
+          }
+        }
+        rteGroup.clearLayers(); // Clear rteGroup
+
+        waypts = {};         // Clear waypts object
+        waypointLayers = {}; // Clear waypointLayers object
+        trackLayers = {};    // Clear trackLayers object
+        routesById = {};     // Clear routesById object
+        waypointLayerGroup.clearLayers();
+        trackLayerGroup.clearLayers();
+
+        geojsonData.features.forEach(function(feature) {
+          var originalIndex = feature.properties.originalIndex; // Assuming originalIndex is passed in properties
+          var layer = L.geoJSON(feature, {
+            pointToLayer: function(feature, latlng) {
+              var marker = L.marker(latlng, {
+                title: feature.properties.name || 'Waypoint',
+                icon: blueIcon
+              });
+              attachHandler(marker, new MarkerHandler(0, originalIndex)); // Use originalIndex
+              waypts[originalIndex] = marker; // Populate waypts object
+              return marker;
+            },
+            style: function(feature) {
+              var color = (feature.geometry.type === 'LineString') ? '#0000E0' : '#8000B0';
+              return { color: color, weight: 2, opacity: 0.6 };
+            }
+          });
+
+          if (feature.geometry.type === 'Point') {
+            waypointLayers[originalIndex] = layer; // Store by originalIndex
+            waypointLayerGroup.addLayer(layer);
+          } else if (feature.geometry.type === 'LineString') {
+            trackLayers[originalIndex] = layer; // Store by originalIndex
+            trackLayerGroup.addLayer(layer);
+          } else if (feature.geometry.type === 'MultiLineString') { // Assuming routes are MultiLineString
+            routesById[originalIndex] = layer; // Store by originalIndex
+            rteGroup.addLayer(layer); // Add route layers to rteGroup
+          }
+          // Do not add individual layers to map directly here, they will be added via layer groups
+          bounds.extend(layer.getBounds());
+        });
+
+        var overlayMaps = {
+          "Waypoints": waypointLayerGroup,
+          "Tracks": trackLayerGroup
+        };
+
+        var streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+
+        var satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        });
+
+        baseMaps = {
+          "Street": streetMap,
+          "Satellite": satelliteMap
+        };
+
+        streetMap.addTo(map);
+
+        window.layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+        map.on('overlayadd', function(e) { mclicker.overlayToggledX(e.name, true); });
+        map.on('overlayremove', function(e) { mclicker.overlayToggledX(e.name, false); });
+
+        if (bounds.isValid()) {
+          if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+            map.setView(bounds.getCenter(), 18);
+          } else {
+            map.fitBounds(bounds);
+          }
+        }
+      }
+
+      function setWaypointVisibility(index, show) {
+        if (waypointLayers[index]) {
+          var targetLayer = waypointLayers[index];
+          if (show) {
+            waypointLayerGroup.addLayer(targetLayer);
+          } else {
+            waypointLayerGroup.removeLayer(targetLayer);
+          }
+        }
+      }
+
+      function setAllWaypointsVisibility(show) {
+        if (show) {
+          waypointLayerGroup.addTo(map);
+        } else {
+          map.removeLayer(waypointLayerGroup);
+        }
+      }
+
+      function setAllTracksVisibility(show) {
+        if (show) {
+          trackLayerGroup.addTo(map);
+        } else {
+          map.removeLayer(trackLayerGroup);
+        }
+      }
+
+      function setRouteVisibility(index, show) {
+        if (routesById[index]) {
+          var targetLayer = routesById[index];
+          if (show) {
+            rteGroup.addLayer(targetLayer);
+          } else {
+            rteGroup.removeLayer(targetLayer);
+          }
+        }
+      }
+
+      initialize();
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>leafletbase.html</file>
+        <file>images/layers.png</file>
+        <file>images/layers-2x.png</file>
+    </qresource>
+</RCC>

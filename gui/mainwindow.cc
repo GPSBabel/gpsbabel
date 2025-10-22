@@ -19,6 +19,10 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 #include "mainwindow.h"
 #include <QAbstractButton>     // for QAbstractButton
 #include <QAction>             // for QAction
@@ -54,6 +58,10 @@
 #include <QTime>               // for QTime, operator==
 #include <QUrl>                // for QUrl
 #include <QVariant>            // for QVariant, operator!=
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 #include <Qt>                  // for TransformationMode, DateFormat, CursorShape, GlobalColor
 #include <QtGlobal>            // for QForeachContainer, qMakeForeachContainer, foreach
 #include <cstdlib>             // for exit
@@ -68,6 +76,7 @@
 #ifndef DISABLE_MAPPREVIEW
 #include "gpx.h"               // for Gpx
 #include "gmapdlg.h"           // for GMapDialog
+#include "leafletdlg.h"          // for LeafletMapDialog
 #endif
 #include "help.h"              // for ShowHelp
 #include "optionsdlg.h"        // for OptionsDlg
@@ -158,6 +167,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   babelVersion_ = findBabelVersion();
   fmtChgInterlock_ = false;
   loadDeviceNameCombos();
+babelData_.debugLevel_ = 9;
+babelData_.outputFileName_= "/dev/null";
 
   connect(ui_.inputFileOptBtn,        &QAbstractButton::clicked, this, &MainWindow::inputFileOptBtnClicked);
   connect(ui_.inputDeviceOptBtn,      &QAbstractButton::clicked, this, &MainWindow::inputDeviceOptBtnClicked);
@@ -179,6 +190,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 #else
   ui_.menuHelp->removeAction(ui_.actionUpgradeCheck);
 #endif
+  connect(ui_.actionLeafletMapPreview, &QAction::triggered, this, &MainWindow::leafletMapPreviewActionX);
   connect(ui_.actionPreferences, &QAction::triggered, this, &MainWindow::preferencesActionX);
 
   connect(ui_.inputFormatCombo, &QComboBox::currentIndexChanged,
@@ -229,6 +241,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   //--- Restore from registry
   restoreSettings();
+babelData_.debugLevel_ = 9;
+babelData_.outputFileName_= "/dev/null";
 
 #ifndef DISABLE_UPGRADE_CHECK
   upgrade = new UpgradeCheck(this, formatList_, babelData_);
@@ -244,6 +258,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
   }
+babelData_.debugLevel_ = 9;
+babelData_.outputFileName_= "/dev/null";
 }
 
 void MainWindow::switchTranslator(QTranslator& translator, const QString& filename)
@@ -420,7 +436,7 @@ void MainWindow:: outputDeviceOptBtnClicked()
     QList<int>indices = outputDeviceFormatIndices();
     ui_.outputFormatCombo->clear();
     for (int i=0; i<indices.size(); i++) {
-      int k = indices[i];
+    int k = indices[i];
       if (!formatList_[k].isHidden()) {
         ui_.outputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
       }
@@ -428,7 +444,7 @@ void MainWindow:: outputDeviceOptBtnClicked()
     setComboToFormat(ui_.outputFormatCombo, fmt, false);
   } else {
     ui_.outputStackedWidget->setCurrentWidget(ui_.outputDevicePage);
-    ui_.outputDevicePage->setEnabled(false);
+    ui_.outputFilePage->setEnabled(false);
   }
   fmtChgInterlock_ = false;
 }
@@ -497,7 +513,7 @@ int MainWindow::currentComboFormatIndex(QComboBox* comboBox)
 {
   int idx = comboBox->currentIndex();
   if (idx<0 || idx >= comboBox->count()) {
-    //    QMessageBox::critical(0, appName, "*** Internal Error -- current combo index is invalid!");
+//    QMessageBox::critical(0, appName, "*** Internal Error -- current combo index is invalid!");
     return 0;
   }
   return comboBox->itemData(idx).toInt();
@@ -750,7 +766,8 @@ void MainWindow::outputFormatChanged(int comboIdx)
 
   if (ui_.outputFileOptBtn->isChecked()) {
     babelData_.outputFileFormat_ =formatList_[fidx].getName();
-  } else if (ui_.outputDeviceOptBtn->isChecked()) {
+  }
+  else if (ui_.outputDeviceOptBtn->isChecked()) {
     babelData_.outputDeviceFormat_ = formatList_[fidx].getName();
   }
 
@@ -827,7 +844,7 @@ bool MainWindow::isOkToGo()
   }
 
 #ifndef DISABLE_MAPPREVIEW
-  if (babelData_.outputType_ == BabelData::noType_ && !babelData_.previewGmap_) {
+  if (babelData_.outputType_ == BabelData::noType_ && !babelData_.previewGmap_ && !babelData_.previewLeaflet_) {
 #else
   if (babelData_.outputType_ == BabelData::noType_) {
 #endif
@@ -876,7 +893,10 @@ void MainWindow::applyActionX()
   }
 
   QStringList args;
-
+// RJL
+babelData_.debugLevel_ = 9;
+babelData_.outputFileName_= "/dev/null";
+// end RJL
   if (babelData_.debugLevel_ >=0) {
     args << QString("-D%1").arg(babelData_.debugLevel_);
   }
@@ -927,6 +947,8 @@ void MainWindow::applyActionX()
                                            babelData_.outputFileFormat_ : babelData_.outputDeviceFormat_));
     args << "-o";
     args << (formatList_[fidx].getName() + MakeOptions(formatList_[fidx].getOutputOptions()));
+// RJL
+babelData_.outputFileName_= "/dev/null";
 
     // output file or device option
     if (outIsFile) {
@@ -943,21 +965,24 @@ void MainWindow::applyActionX()
 #ifndef DISABLE_MAPPREVIEW
   // Now output for preview in google maps
   QString mapFileName;
-  if (babelData_.previewGmap_) {
-    if (QTemporaryFile ftemp; ftemp.open()) {
-      mapFileName = ftemp.fileName();
-      ftemp.close();
-  
-      args << "-o";
-      args << "gpx";
-      args << "-F" << mapFileName;
-    } else {
-      // ftemp.fileName() may be empty so display ftemp.fileTemplate().
-      QMessageBox::warning(nullptr, QString(appName),
-        tr("Failed to open temporary file \"%1\" for map preview.  The error was: \"%2\".  The map preview will not be shown.")
-        .arg(ftemp.fileTemplate(), ftemp.errorString()));
-    }
-  }
+  bool useGoogleMaps = babelData_.previewGmap_;
+  bool useLeafletMaps = babelData_.mapPreviewLeafletEnabled_;
+
+        QString gpxTempName;
+
+        if (useGoogleMaps || useLeafletMaps) {
+          if (QTemporaryFile gpxTempFile; gpxTempFile.open()) {
+            gpxTempName = gpxTempFile.fileName();
+            gpxTempFile.close();
+
+            args << "-o" << "gpx" << "-F" << gpxTempName;
+          } else {
+            // gpxTempFile.fileName() may be empty so display gpxTempFile.fileTemplate().
+            QMessageBox::warning(nullptr, QString(appName),
+              tr("Failed to open temporary file \"%1\" for map preview.  The error was: \"%2\".  The map preview will not be shown.")
+              .arg(gpxTempFile.fileTemplate(), gpxTempFile.errorString()));
+          }
+        }
 #endif
 
   ui_.outputWindow->clear();
@@ -973,10 +998,9 @@ void MainWindow::applyActionX()
   if (x) {
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
 #ifndef DISABLE_MAPPREVIEW
-    if (!mapFileName.isEmpty()) {
+    if (!gpxTempName.isEmpty()) {
       Gpx mapData;
-      QString mapStatus = mapData.read(mapFileName);
-      QFile(mapFileName).remove();
+      QString mapStatus = mapData.read(gpxTempName);
       if (!mapStatus.isNull()) {
         QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
         QTextCharFormat errorFormat = defaultFormat;
@@ -988,13 +1012,22 @@ void MainWindow::applyActionX()
         ui_.outputWindow->setCurrentCharFormat(defaultFormat);
       } else {
         this->hide();
-        GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
-        dlg.show();
-        dlg.exec();
+        if (useGoogleMaps) {
+          GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+          dlg.show();
+          dlg.exec();
+        } else if (useLeafletMaps) {
+          QString geojsonData;
+          geojsonData = generateGeoJsonWithIndices(mapData);
+          LeafletMapDialog dlg(nullptr, mapData, geojsonData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+          dlg.show();
+          dlg.exec();
         this->show();
       }
+      QFile(gpxTempName).remove();
     }
 #endif
+    }
   } else {
     QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
     QTextCharFormat errorFormat = defaultFormat;
@@ -1138,11 +1171,16 @@ void MainWindow::resetFormatDefaults()
   }
 }
 
+void MainWindow::leafletMapPreviewActionX()
+{
+  // This slot will be implemented later if needed.
+}
+
 //------------------------------------------------------------------------
 void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(nullptr, babelData_.synthShortNames_,
-                babelData_.mapPreviewEnabled_, babelData_.previewGmap_, babelData_.debugLevel_);
+                babelData_.mapPreviewEnabled_, babelData_.previewGmap_, babelData_.mapPreviewLeafletEnabled_, babelData_.previewLeaflet_, babelData_.debugLevel_);
   connect(advDlg.formatButton(), &QAbstractButton::clicked,
           this, &MainWindow::resetFormatDefaults);
   advDlg.exec();
@@ -1176,7 +1214,7 @@ void MainWindow::preferencesActionX()
   Preferences preferences(nullptr, formatList_, babelData_);
   preferences.exec();
 
-  // The user may have changed the list of displayed formats, and/or
+  // The user may have changed the list of of displayed formats, and/or
   // enabled or disabled the upgrade menu item.
   // Resynchronize.
 
@@ -1215,6 +1253,9 @@ void MainWindow::setWidgetValues()
 #ifndef DISABLE_UPGRADE_CHECK
   ui_.actionUpgradeCheck->setEnabled(babelData_.upgradeMenuEnabled_);
 #endif
+#ifndef DISABLE_LEAFLETMAPPREVIEW
+  ui_.actionLeafletMapPreview->setEnabled(babelData_.mapPreviewLeafletEnabled_);
+#endif
   if (babelData_.inputType_ == BabelData::fileType_) {
     ui_.inputFileOptBtn->setChecked(true);
     inputFileOptBtnClicked();
@@ -1240,7 +1281,8 @@ void MainWindow::setWidgetValues()
     setComboToFormat(ui_.outputFormatCombo, babelData_.outputDeviceFormat_, false);
     loadOutputDeviceNameCombo(babelData_.outputDeviceFormat_);
     ui_.outputStackedWidget->setCurrentWidget(ui_.outputDevicePage);
-  } else {
+  }
+  else {
     ui_.outputFileOptBtn->setChecked(false);
     ui_.outputDeviceOptBtn->setChecked(false);
     setComboToFormat(ui_.outputFormatCombo, babelData_.outputFileFormat_, true);
@@ -1252,7 +1294,7 @@ void MainWindow::setWidgetValues()
 
   ui_.xlateWayPtsCk->setChecked(babelData_.xlateWayPts_);
   ui_.xlateTracksCk->setChecked(babelData_.xlateTracks_);
-  ui_.xlateRoutesCk->setChecked(babelData_.xlateRoutes_);
+  babelData_.xlateRoutes_ = ui_.xlateRoutesCk->isChecked();
 
   crossCheckInOutFormats();
   displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
@@ -1268,7 +1310,8 @@ void MainWindow::getWidgetValues()
   if (ui_.inputFileOptBtn->isChecked()) {
     babelData_.inputType_ = BabelData::fileType_;
     babelData_.inputFileFormat_ =formatList_[fidx].getName();
-  } else {
+  }
+  else {
     babelData_.inputType_ = BabelData::deviceType_;
     babelData_.inputDeviceFormat_ =formatList_[fidx].getName();
   }
@@ -1280,10 +1323,12 @@ void MainWindow::getWidgetValues()
   if (ui_.outputFileOptBtn->isChecked()) {
     babelData_.outputType_ = BabelData::fileType_;
     babelData_.outputFileFormat_ =formatList_[fidx].getName();
-  } else if (ui_.outputDeviceOptBtn->isChecked()) {
+  }
+  else if (ui_.outputDeviceOptBtn->isChecked()) {
     babelData_.outputType_ = BabelData::deviceType_;
     babelData_.outputDeviceFormat_ =formatList_[fidx].getName();
-  } else {
+  }
+  else {
     babelData_.outputType_ = BabelData::noType_;
   }
   babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentData().isValid()?
@@ -1311,4 +1356,264 @@ QString MainWindow::getFormatNameForExtension(const QString& ext)
     }
   }
   return nullptr;
+}
+
+QString
+MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
+{
+  QJsonArray features;
+
+  // Add Waypoints
+  for (int i = 0; i < gpxData.getWaypoints().size(); ++i) {
+    const GpxWaypoint& wpt = gpxData.getWaypoints().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "Point";
+    QJsonArray coordinates;
+    coordinates.append(wpt.getLocation().lng());
+    coordinates.append(wpt.getLocation().lat());
+    geometry["coordinates"] = coordinates;
+
+    QJsonObject properties;
+    properties["name"] = wpt.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  // Add Tracks
+  for (int i = 0; i < gpxData.getTracks().size(); ++i) {
+    const GpxTrack& trk = gpxData.getTracks().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "LineString";
+    QJsonArray coordinatesArray;
+    for (const GpxTrackSegment& seg : trk.getTrackSegments()) {
+      for (const GpxTrackPoint& pt : seg.getTrackPoints()) {
+        QJsonArray coordinate;
+        coordinate.append(pt.getLocation().lng());
+        coordinate.append(pt.getLocation().lat());
+        coordinatesArray.append(coordinate);
+      }
+    }
+    geometry["coordinates"] = coordinatesArray;
+
+    QJsonObject properties;
+    properties["name"] = trk.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  // Add Routes
+  for (int i = 0; i < gpxData.getRoutes().size(); ++i) {
+    const GpxRoute& rte = gpxData.getRoutes().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "LineString"; // Assuming routes are LineString for simplicity, adjust if MultiLineString is needed
+    QJsonArray coordinatesArray;
+    for (const GpxRoutePoint& rpt : rte.getRoutePoints()) {
+      QJsonArray coordinate;
+      coordinate.append(rpt.getLocation().lng());
+      coordinate.append(rpt.getLocation().lat());
+      coordinatesArray.append(coordinate);
+    }
+    geometry["coordinates"] = coordinatesArray;
+
+    QJsonObject properties;
+    properties["name"] = rte.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  QJsonObject geoJsonRoot;
+  geoJsonRoot["type"] = "FeatureCollection";
+  geoJsonRoot["features"] = features;
+
+  QJsonDocument doc(geoJsonRoot);
+  return doc.toJson(QJsonDocument::Compact);
+}
+
+
+QString
+MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
+{
+  QJsonArray features;
+
+  // Add Waypoints
+  for (int i = 0; i < gpxData.getWaypoints().size(); ++i) {
+    const GpxWaypoint& wpt = gpxData.getWaypoints().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "Point";
+    QJsonArray coordinates;
+    coordinates.append(wpt.getLocation().lng());
+    coordinates.append(wpt.getLocation().lat());
+    geometry["coordinates"] = coordinates;
+
+    QJsonObject properties;
+    properties["name"] = wpt.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  // Add Tracks
+  for (int i = 0; i < gpxData.getTracks().size(); ++i) {
+    const GpxTrack& trk = gpxData.getTracks().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "LineString";
+    QJsonArray coordinatesArray;
+    for (const GpxTrackSegment& seg : trk.getTrackSegments()) {
+      for (const GpxTrackPoint& pt : seg.getTrackPoints()) {
+        QJsonArray coordinate;
+        coordinate.append(pt.getLocation().lng());
+        coordinate.append(pt.getLocation().lat());
+        coordinatesArray.append(coordinate);
+      }
+    }
+    geometry["coordinates"] = coordinatesArray;
+
+    QJsonObject properties;
+    properties["name"] = trk.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  // Add Routes
+  for (int i = 0; i < gpxData.getRoutes().size(); ++i) {
+    const GpxRoute& rte = gpxData.getRoutes().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "LineString"; // Assuming routes are LineString for simplicity, adjust if MultiLineString is needed
+    QJsonArray coordinatesArray;
+    for (const GpxRoutePoint& rpt : rte.getRoutePoints()) {
+      QJsonArray coordinate;
+      coordinate.append(rpt.getLocation().lng());
+      coordinate.append(rpt.getLocation().lat());
+      coordinatesArray.append(coordinate);
+    }
+    geometry["coordinates"] = coordinatesArray;
+
+    QJsonObject properties;
+    properties["name"] = rte.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  QJsonObject geoJsonRoot;
+  geoJsonRoot["type"] = "FeatureCollection";
+  geoJsonRoot["features"] = features;
+
+  QJsonDocument doc(geoJsonRoot);
+  return doc.toJson(QJsonDocument::Compact);
+}
+
+
+QString
+MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
+{
+  QJsonArray features;
+
+  // Add Waypoints
+  for (int i = 0; i < gpxData.getWaypoints().size(); ++i) {
+    const GpxWaypoint& wpt = gpxData.getWaypoints().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "Point";
+    QJsonArray coordinates;
+    coordinates.append(wpt.getLocation().lng());
+    coordinates.append(wpt.getLocation().lat());
+    geometry["coordinates"] = coordinates;
+
+    QJsonObject properties;
+    properties["name"] = wpt.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  // Add Tracks
+  for (int i = 0; i < gpxData.getTracks().size(); ++i) {
+    const GpxTrack& trk = gpxData.getTracks().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "LineString";
+    QJsonArray coordinatesArray;
+    for (const GpxTrackSegment& seg : trk.getTrackSegments()) {
+      for (const GpxTrackPoint& pt : seg.getTrackPoints()) {
+        QJsonArray coordinate;
+        coordinate.append(pt.getLocation().lng());
+        coordinate.append(pt.getLocation().lat());
+        coordinatesArray.append(coordinate);
+      }
+    }
+    geometry["coordinates"] = coordinatesArray;
+
+    QJsonObject properties;
+    properties["name"] = trk.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  // Add Routes
+  for (int i = 0; i < gpxData.getRoutes().size(); ++i) {
+    const GpxRoute& rte = gpxData.getRoutes().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "LineString"; // Assuming routes are LineString for simplicity, adjust if MultiLineString is needed
+    QJsonArray coordinatesArray;
+    for (const GpxRoutePoint& rpt : rte.getRoutePoints()) {
+      QJsonArray coordinate;
+      coordinate.append(rpt.getLocation().lng());
+      coordinate.append(rpt.getLocation().lat());
+      coordinatesArray.append(coordinate);
+    }
+    geometry["coordinates"] = coordinatesArray;
+
+    QJsonObject properties;
+    properties["name"] = rte.getName();
+    properties["originalIndex"] = i;
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  QJsonObject geoJsonRoot;
+  geoJsonRoot["type"] = "FeatureCollection";
+  geoJsonRoot["features"] = features;
+
+  QJsonDocument doc(geoJsonRoot);
+  return doc.toJson(QJsonDocument::Compact);
 }
