@@ -213,8 +213,11 @@
             routeLayerGroup.addLayer(pathLayer);
             bounds.extend(pathLayer.getBounds());
 
+            console.log("routepoints " + feature.properties.name + ": " + feature.properties.routepoints);
             if (feature.properties.routepoints) {
+              console.log("Processing routepoints for route: " + feature.properties.name);
               feature.properties.routepoints.forEach(function(pt) {
+                console.log("Creating marker for routepoint: " + pt.name + " at " + pt.lat + ", " + pt.lng);
                 var marker = L.marker([pt.lat, pt.lng], { title: pt.name });
                 routeLayerGroup.addLayer(marker);
               });

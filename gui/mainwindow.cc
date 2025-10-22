@@ -1432,23 +1432,30 @@ MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
     const GpxRoute& rte = gpxData.getRoutes().at(i);
     QJsonObject geometry;
     geometry["type"] = "LineString"; // Assuming routes are LineString for simplicity, adjust if MultiLineString is needed
-    QJsonArray coordinatesArray;
-    for (const GpxRoutePoint& rpt : rte.getRoutePoints()) {
-      QJsonArray coordinate;
-      coordinate.append(rpt.getLocation().lng());
-      coordinate.append(rpt.getLocation().lat());
-      coordinatesArray.append(coordinate);
-    }
-    geometry["coordinates"] = coordinatesArray;
-
-    QJsonObject properties;
-    properties["name"] = rte.getName();
-    properties["originalIndex"] = i;
-    properties["gpsbabel_feature"] = "route";
-
-    QJsonObject feature;
-    feature["type"] = "Feature";
-    feature["geometry"] = geometry;
+        QJsonArray coordinatesArray;
+        QJsonArray routepointsArray; // New array for route points
+        for (const GpxRoutePoint& rpt : rte.getRoutePoints()) {
+          QJsonArray coordinate;
+          coordinate.append(rpt.getLocation().lng());
+          coordinate.append(rpt.getLocation().lat());
+          coordinatesArray.append(coordinate);
+    
+          QJsonObject routePointObject;
+          routePointObject["lat"] = rpt.getLocation().lat();
+          routePointObject["lng"] = rpt.getLocation().lng();
+          routePointObject["name"] = rpt.getName();
+          routepointsArray.append(routePointObject);
+        }
+        geometry["coordinates"] = coordinatesArray;
+    
+        QJsonObject properties;
+        properties["name"] = rte.getName();
+        properties["originalIndex"] = i;
+        properties["gpsbabel_feature"] = "route";
+        properties["routepoints"] = routepointsArray; // Add routepoints array to properties
+    
+        QJsonObject feature;
+        feature["type"] = "Feature";    feature["geometry"] = geometry;
     feature["properties"] = properties;
     features.append(feature);
   }
