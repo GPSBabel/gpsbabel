@@ -214,20 +214,27 @@
             var coords = feature.geometry.coordinates;
             if (coords.length > 0) {
               var latlngs = coords.map(function(c) { return L.latLng(c[1], c[0]); });
-              var polyline = L.polyline(latlngs, { color: '#0000E0', weight: 2, opacity: 0.6 });
-              attachHandler(polyline, new MarkerHandler(1, originalIndex)); // Type 1 for tracks
-              trackLayers[originalIndex] = polyline;
-              trackLayerGroup.addLayer(polyline);
-              bounds.extend(polyline.getBounds());
+              var visibleLine = L.polyline(latlngs, { color: '#0000E0', weight: 2, opacity: 0.6 });
+              var clickLine = L.polyline(latlngs, { opacity: 0, weight: 10 });
+              attachHandler(clickLine, new MarkerHandler(1, originalIndex)); // Type 1 for tracks
+
+              var trackGroup = L.featureGroup([visibleLine, clickLine]);
+              trackLayers[originalIndex] = trackGroup;
+              trackLayerGroup.addLayer(trackGroup);
+              bounds.extend(visibleLine.getBounds());
             } // Close if (coords.length > 0)
           } else if (featureType === 'route') {
             var routeLayerGroup = L.featureGroup().addTo(rteGroup);
-            var pathLayer = L.geoJSON(feature, {
-              style: { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' }
-            });
-            attachHandler(pathLayer, new MarkerHandler(2, originalIndex)); // Type 2 for routes
-            routeLayerGroup.addLayer(pathLayer);
-            bounds.extend(pathLayer.getBounds());
+            var coords = feature.geometry.coordinates;
+            var latlngs = coords.map(function(c) { return L.latLng(c[1], c[0]); });
+
+            var visibleLine = L.polyline(latlngs, { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' });
+            var clickLine = L.polyline(latlngs, { opacity: 0, weight: 10 });
+            attachHandler(clickLine, new MarkerHandler(2, originalIndex)); // Type 2 for routes
+
+            routeLayerGroup.addLayer(visibleLine);
+            routeLayerGroup.addLayer(clickLine);
+            bounds.extend(visibleLine.getBounds());
 
             console.log("routepoints " + feature.properties.name + ": " + feature.properties.routepoints);
             if (feature.properties.routepoints) {
