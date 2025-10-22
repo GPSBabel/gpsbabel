@@ -223,6 +223,7 @@
             var pathLayer = L.geoJSON(feature, {
               style: { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' }
             });
+            attachHandler(pathLayer, new MarkerHandler(2, originalIndex)); // Type 2 for routes
             routeLayerGroup.addLayer(pathLayer);
             bounds.extend(pathLayer.getBounds());
 
