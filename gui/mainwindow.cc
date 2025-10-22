@@ -23,6 +23,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QStyle>              // for QStyle
+#include <QIcon>               // for QIcon
 #include "mainwindow.h"
 #include <QAbstractButton>     // for QAbstractButton
 #include <QAction>             // for QAction
@@ -223,6 +225,9 @@ babelData_.outputFileName_= "/dev/null";
 
   ui_.inputOptionsText->setReadOnly(true);
   ui_.outputOptionsText->setReadOnly(true);
+
+  ui_.inputFileNameBrowseBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogOpenButton));
+  ui_.outputFileNameBrowseBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogSaveButton));
 #if 0
   // 02/28/10  - let's try letting people edit these outside the browse.
   ui.inputFileNameText->setReadOnly(true);
