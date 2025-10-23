@@ -30,7 +30,6 @@
 #include <QLatin1String>          // for QLatin1String
 #include <QList>                  // for QList
 #include <QMessageBox>            // for QMessageBox
-#include <QNetworkAccessManager>  // for QNetworkAccessManager
 #include <QStringLiteral>         // for qMakeStringPrivate, QStringLiteral
 #include <QUrl>                   // for QUrl
 #include <QWebChannel>            // for QWebChannel
@@ -67,7 +66,6 @@ Map::Map(QWidget* parent,
   busyCursor_ = true;
   stopWatch_.start();
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-  manager_ = new QNetworkAccessManager(this);
   this->logTime("Start map constructor");
 
   auto* mclicker = new MarkerClicker(this);
