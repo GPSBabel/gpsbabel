@@ -18,7 +18,6 @@
 //  along with this program; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
-//
 //------------------------------------------------------------------------
 #ifndef GPX_H
 #define GPX_H
@@ -30,32 +29,38 @@
 
 
 //------------------------------------------------------------------------
-class GpxRoutePoint
+// common base for waypoint/track/route points to remove repetition
+class GpxPoint
 {
 public:
-  void setLocation(const LatLng& pt)
-  {
-    location = pt;
-  }
+  void setLocation(const LatLng& pt) { location_ = pt; }
+  LatLng getLocation() const { return location_; }
 
-  LatLng getLocation() const
-  {
-    return location;
-  }
+  void setName(const QString& s) { name_ = s; }
+  QString getName() const { return name_; }
 
-  void setName(const QString& s)
-  {
-    name = s;
-  }
+  void setDescription(const QString& s) { description_ = s; }
+  QString getDescription() const { return description_; }
 
-  QString getName() const
-  {
-    return name;
-  }
+  void setComment(const QString& s) { comment_ = s; }
+  QString getComment() const { return comment_; }
 
-private:
-  LatLng location;
-  QString name;
+  void setElevation(double e) { elevation_ = e; }
+  double getElevation() const { return elevation_; }
+
+protected:
+  LatLng location_;
+  QString name_;
+  QString description_;
+  QString comment_;
+  double elevation_{-1.0E-100};
+};
+
+//------------------------------------------------------------------------
+class GpxRoutePoint : public GpxPoint
+{
+public:
+  // kept as distinct type for API compatibility
 };
 
 //------------------------------------------------------------------------
@@ -64,7 +69,7 @@ class GpxRoute
 public:
   double length() const
   {
-    if (cachedLength >=0.0) {
+    if (cachedLength >= 0.0) {
       return cachedLength;
     }
     LatLng prevPt;
@@ -80,77 +85,31 @@ public:
         prevPt = thisPt;
       }
     }
-    *const_cast<double*>(&cachedLength) = dist;  // big cheat
+    *const_cast<double*>(&cachedLength) = dist;  // preserve previous behavior
     return cachedLength;
   }
 
-  void setName(const QString& s)
-  {
-    name = s;
-  }
+  void setName(const QString& s) { name = s; }
+  QString getName() const { return name; }
 
-  QString getName() const
-  {
-    return name;
-  }
-
-  void clear()
-  {
-    routePoints.clear();
-  }
-
-  void addPoint(const GpxRoutePoint& pt)
-  {
-    routePoints << pt;
-  }
-  const QList<GpxRoutePoint>& getRoutePoints() const
-  {
-    return routePoints;
-  }
+  void clear() { routePoints.clear(); }
+  void addPoint(const GpxRoutePoint& pt) { routePoints << pt; }
+  const QList<GpxRoutePoint>& getRoutePoints() const { return routePoints; }
 
 private:
   QString name;
-  QList <GpxRoutePoint> routePoints;
+  QList<GpxRoutePoint> routePoints;
   double cachedLength{-1.0};
 };
 
 //------------------------------------------------------------------------
-class GpxTrackPoint
+class GpxTrackPoint : public GpxPoint
 {
 public:
-  void setLocation(const LatLng& pt)
-  {
-    location = pt;
-  }
-
-  LatLng getLocation() const
-  {
-    return location;
-  }
-
-  void setElevation(double e)
-  {
-    elevation = e;
-  }
-
-  double getElevation() const
-  {
-    return elevation;
-  }
-
-  void setDateTime(const QDateTime& dt)
-  {
-    dateTime = dt;
-  }
-
-  QDateTime getDateTime() const
-  {
-    return dateTime;
-  }
+  void setDateTime(const QDateTime& dt) { dateTime = dt; }
+  QDateTime getDateTime() const { return dateTime; }
 
 private:
-  LatLng location;
-  double elevation{0.0};
   QDateTime dateTime;
 };
 
@@ -158,84 +117,37 @@ private:
 class GpxTrackSegment
 {
 public:
-  void addPoint(const GpxTrackPoint& pt)
-  {
-    trackPoints << pt;
-  }
-  void clear()
-  {
-    trackPoints.clear();
-  }
-
-  const QList<GpxTrackPoint>& getTrackPoints() const
-  {
-    return trackPoints;
-  }
+  void addPoint(const GpxTrackPoint& pt) { trackPoints << pt; }
+  void clear() { trackPoints.clear(); }
+  const QList<GpxTrackPoint>& getTrackPoints() const { return trackPoints; }
 
 private:
-  QList <GpxTrackPoint> trackPoints;
+  QList<GpxTrackPoint> trackPoints;
 };
+
 //------------------------------------------------------------------------
 class GpxTrack
 {
 public:
-  void setNumber(int n)
-  {
-    number = n;
-  }
+  void setNumber(int n) { number = n; }
+  int getNumber() const { return number; }
 
-  int getNumber() const
-  {
-    return number;
-  }
+  void setName(const QString& s) { name = s; }
+  QString getName() const { return name; }
 
-  void setName(const QString& s)
-  {
-    name = s;
-  }
+  void setComment(const QString& s) { comment = s; }
+  QString getComment() const { return comment; }
 
-  QString getName() const
-  {
-    return name;
-  }
+  void setDescription(const QString& s) { description = s; }
+  QString getDescription() const { return description; }
 
-  void setComment(const QString& s)
-  {
-    comment = s;
-  }
-
-  QString getComment() const
-  {
-    return comment;
-  }
-
-  void setDescription(const QString& s)
-  {
-    description = s;
-  }
-
-  QString getDescription() const
-  {
-    return description;
-  }
-
-  void clear()
-  {
-    trackSegments.clear();
-  }
-
-  void addSegment(const GpxTrackSegment& seg)
-  {
-    trackSegments << seg;
-  }
-  const QList<GpxTrackSegment>& getTrackSegments() const
-  {
-    return trackSegments;
-  }
+  void clear() { trackSegments.clear(); }
+  void addSegment(const GpxTrackSegment& seg) { trackSegments << seg; }
+  const QList<GpxTrackSegment>& getTrackSegments() const { return trackSegments; }
 
   double length() const
   {
-    if (cachedLength >=0.0) {
+    if (cachedLength >= 0.0) {
       return cachedLength;
     }
     LatLng prevPt;
@@ -253,7 +165,7 @@ public:
         }
       }
     }
-    *const_cast<double*>(&cachedLength) = dist;  // big cheat
+    *const_cast<double*>(&cachedLength) = dist;  // big cheat preserved
     return cachedLength;
   }
 
@@ -262,80 +174,18 @@ private:
   QString name;
   QString comment;
   QString description;
-  QList <GpxTrackSegment> trackSegments;
+  QList<GpxTrackSegment> trackSegments;
   double cachedLength{-1.0};
 };
 
 //------------------------------------------------------------------------
-class GpxWaypoint
+class GpxWaypoint : public GpxPoint
 {
 public:
-  void setLocation(const LatLng& pt)
-  {
-    location_ = pt;
-  }
-
-  LatLng getLocation() const
-  {
-    return location_;
-  }
-
-  void setElevation(double e)
-  {
-    elevation_ = e;
-  }
-
-  double getElevation() const
-  {
-    return elevation_;
-  }
-
-  void setName(const QString& s)
-  {
-    name_ = s;
-  }
-
-  QString getName() const
-  {
-    return name_;
-  }
-
-  void setComment(const QString& s)
-  {
-    comment_ = s;
-  }
-
-  QString getComment() const
-  {
-    return comment_;
-  }
-
-  void setDescription(const QString& s)
-  {
-    description_ = s;
-  }
-
-  QString getDescription() const
-  {
-    return description_;
-  }
-
-  void setSymbol(const QString& s)
-  {
-    symbol_ = s;
-  }
-
-  QString getSymbol() const
-  {
-    return symbol_;
-  }
+  void setSymbol(const QString& s) { symbol_ = s; }
+  QString getSymbol() const { return symbol_; }
 
 private:
-  LatLng location_;
-  double elevation_{-1.0E-100};
-  QString name_;
-  QString comment_;
-  QString description_;
   QString symbol_;
 };
 
@@ -345,24 +195,14 @@ class Gpx
 public:
   QString read(const QString& fileName);
 
-  const QList<GpxWaypoint>& getWaypoints() const
-  {
-    return wayPoints;
-  }
-
-  const QList<GpxTrack>& getTracks() const
-  {
-    return tracks;
-  }
-
-  const QList<GpxRoute>& getRoutes() const
-  {
-    return routes;
-  }
+  const QList<GpxWaypoint>& getWaypoints() const { return wayPoints; }
+  const QList<GpxTrack>& getTracks() const { return tracks; }
+  const QList<GpxRoute>& getRoutes() const { return routes; }
 
 private:
-  QList <GpxWaypoint> wayPoints;
-  QList <GpxTrack> tracks;
-  QList <GpxRoute> routes;
+  QList<GpxWaypoint> wayPoints;
+  QList<GpxTrack> tracks;
+  QList<GpxRoute> routes;
 };
-#endif
+
+#endif // GPX_H
