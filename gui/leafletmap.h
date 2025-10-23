@@ -58,7 +58,6 @@ private slots:
 
 private:
   void showGpxData();
-  QNetworkAccessManager* manager_{nullptr};
   const Gpx& gpx_;
   const QString& geojsonData_;
   bool mapPresent_{false};

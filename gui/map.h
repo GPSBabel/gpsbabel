@@ -81,7 +81,6 @@ private:
   QFile* dbgdata_{nullptr};
   QTextStream* dbgout_{nullptr};
 #endif
-  QNetworkAccessManager* manager_{nullptr};
   const Gpx& gpx_;
   bool mapPresent_{false};
   bool busyCursor_{false};

@@ -10,7 +10,6 @@
 #include <QLatin1String>
 #include <QList>
 #include <QMessageBox>
-#include <QNetworkAccessManager>
 #include <QStringLiteral>
 #include <QUrl>
 #include <QWebChannel>
@@ -51,7 +50,6 @@ LeafletMap::LeafletMap(QWidget* parent,
   busyCursor_ = true;
   stopWatch_.start();
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-  manager_ = new QNetworkAccessManager(this);
   this->logTime("Start map constructor");
 
   auto* page = new WebEnginePageWithLogging(this);
