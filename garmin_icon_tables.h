@@ -344,11 +344,11 @@ static const QVector<icon_mapping_t> garmin_icon_table = {
   { 248, -1, "Water Source" },
 
   /* BaseCamp 4.8.13 */
-  { 249, -1, "Dog, running" },
-  { 250, -1, "Dog, pointing" },
-  { 251, -1, "Dog, treed" },
-  { 252, -1, "Dog, sitting" },
-  { 253, -1, "Dog, unknown" },
+  { 249, -1, "Dog Running" },
+  { 250, -1, "Dog Pointing" },
+  { 251, -1, "Dog Treed" },
+  { 252, -1, "Dog Sitting" },
+  { 253, -1, "Dog Unknown" },
   { 254, -1, "Bank, Euro" },
   { 255, -1, "Bank, Pound" },
   { 256, -1, "Bank, Yen" },
