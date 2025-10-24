@@ -74,9 +74,11 @@ compare ${REFERENCE}/track/kalman_complex_zinger_out.gpx ${TMPDIR}/kalman_comple
 cat ${TMPDIR}/kalman_complex_zinger.log
 
 # Test for dt=0 handling
-gpsbabel -i gpx -f ${REFERENCE}/track/kalman_dt_zero_in.gpx -x kalman -o gpx -F ${TMPDIR}/kalman_dt_zero_filtered.gpx > ${TMPDIR}/kalman_dt_zero.log 2>&1
-compare ${REFERENCE}/track/kalman_dt_zero_out.gpx ${TMPDIR}/kalman_dt_zero_filtered.gpx
-cat ${TMPDIR}/kalman_dt_zero.log
+# expecting this to fail so call directly rather than via gpsbabel function
+${VALGRIND} "${PNAME}" -i gpx -f ${REFERENCE}/track/kalman_dt_zero_in.gpx -x kalman > /dev/null 2> ${TMPDIR}/kalman_dt_zero.log && {
+  echo "${PNAME} succeeded! (it shouldn't have with this input...)"
+}
+compare ${REFERENCE}/track/kalman_dt_zero.log ${TMPDIR}/kalman_dt_zero.log
 
 # tests for q_scale_pos and r_scale sensitivity
 # Base case (cycling profile defaults)

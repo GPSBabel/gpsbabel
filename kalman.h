@@ -57,9 +57,6 @@ class Kalman : public Filter {
   // for faster velocity changes.
   static constexpr double VELOCITY_PROCESS_NOISE_SCALE = 0.1;
 
-  // Minimum time delta between points to be considered for processing.
-  static constexpr double MIN_DT = 1e-3; // seconds
-
   static constexpr double COORDINATE_PRECISION_FACTOR = 1e7;
   static constexpr int STATE_SIZE = 6;   // [x,y,z,vx,vy,vz]
   static constexpr int MEAS_SIZE  = 3;   // [x,y,z] measurements

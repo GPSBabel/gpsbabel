@@ -18,7 +18,7 @@
 
 #include "kalman.h"
 
-#include <algorithm>            // for max, nth_element
+#include <algorithm>            // for nth_element
 #include <cmath>                // for round, floor
 #include <iterator>             // for prev
 #include <utility>              // for as_const
@@ -103,26 +103,44 @@ void Kalman::process() {
         // Q_(5, 5) = 1e-1 * q_scale_vel;
 
         // Calculate track statistics for auto-profile inference
+        // Also validate that all points have valid times, and that they increase.
         std::vector<double> speed_samples_for_stats;
         QDateTime prev_time_for_stats;
         gpsbabel::NVector prev_nvector_for_stats;
         bool first_point_for_stats = true;
+        Waypoint* prev_wpt = nullptr;
 
         for (const auto& wpt_stats : std::as_const(rte->waypoint_list)) {
+            if (!wpt_stats->GetCreationTime().isValid()) {
+                gbFatal(FatalMsg() << "Track points must have times.\n"
+                                   << wpt_stats->GetCreationTime().toString() << wpt_stats->shortname
+                                   << Qt::fixed << qSetRealNumberPrecision(7)
+                                   << "lat:" << wpt_stats->latitude << "lon:" << wpt_stats->longitude);
+            }
+
             const QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
             const gpsbabel::NVector cur_nvector_for_stats(wpt_stats->latitude, wpt_stats->longitude);
 
-            // FIXME: Enforce dt > 0 and all points have time?
             if (!first_point_for_stats) {
                 const double dt = prev_time_for_stats.msecsTo(cur_time_for_stats) / 1000.0;
                 if (dt > 0.0) {
                     const double dist = gpsbabel::NVector::euclideanDistance(prev_nvector_for_stats, cur_nvector_for_stats);
                     const double speed = dist / dt;
                     speed_samples_for_stats.push_back(speed);
+                } else {
+                    gbFatal(FatalMsg() << "Time must increase between adjacent points, but the track contains adjacent points were this is not true.\n"
+                                       << prev_wpt->GetCreationTime().toString() << prev_wpt->shortname
+                                       << Qt::fixed << qSetRealNumberPrecision(7)
+                                       << "lat:" << prev_wpt->latitude << "lon:" << prev_wpt->longitude
+                                       << "\n"
+                                       << wpt_stats->GetCreationTime().toString() << wpt_stats->shortname
+                                       << Qt::fixed << qSetRealNumberPrecision(7)
+                                       << "lat:" << wpt_stats->latitude << "lon:" << wpt_stats->longitude);
                 }
             } else {
                 first_point_for_stats = false;
             }
+            prev_wpt = wpt_stats;
             prev_time_for_stats = cur_time_for_stats;
             prev_nvector_for_stats = cur_nvector_for_stats;
         }
@@ -219,9 +237,8 @@ void Kalman::process() {
 
             if (state == PreFilterState::NORMAL) {
                 const double dt = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
-                // FIXME: dt limit violated by subsecond sampling
                 const double speed = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
-                                               gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(MIN_DT, dt);
+                                               gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / dt;
 
                 if (dt >= gap_factor_ || speed > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
@@ -245,18 +262,15 @@ void Kalman::process() {
                     last_accepted_wpt = current_wpt;
                 }
             } else { // RECOVERY or FIRST_GOOD_SEEN_IN_RECOVERY
-                // FIXME: Should an isolated single "Spike: sudden, unrealistic movement" result in 3 points being tossed?
                 const auto* const prev_wpt_in_list = *std::prev(it);
                 const double dt_consecutive = prev_wpt_in_list->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
-                // FIXME: dt limit violated by subsecond sampling
                 const double speed_consecutive = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(prev_wpt_in_list->latitude, prev_wpt_in_list->longitude),
-                                                           gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(MIN_DT, dt_consecutive);
+                                                           gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / dt_consecutive;
 
                 // Recalculate dt from anchor for speed_from_anchor
                 const double dt_from_anchor = last_accepted_wpt->GetCreationTime().msecsTo(current_wpt->GetCreationTime()) / 1000.0;
-                // FIXME: dt limit violated by subsecond sampling
                 const double speed_from_anchor = gpsbabel::NVector::euclideanDistance(gpsbabel::NVector(last_accepted_wpt->latitude, last_accepted_wpt->longitude),
-                                                    gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / std::max(MIN_DT, dt_from_anchor);
+                                                    gpsbabel::NVector(current_wpt->latitude, current_wpt->longitude)) / dt_from_anchor;
                 if (dt_consecutive > gap_factor_ || speed_consecutive > max_speed_ || speed_from_anchor > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
@@ -407,7 +421,10 @@ void Kalman::process() {
 }
 
 void Kalman::kalman_point_cb(Waypoint* wpt) {
-    // FIXME: Quote reference
+    // https://en.wikipedia.org/wiki/Kalman_filter
+    // https://www.mathworks.com/matlabcentral/fileexchange/18628-learning-the-kalman-filter-a-feedback-perspective
+    // https://github.com/mintisan/awesome-kalman-filter
+
     const gpsbabel::NVector current_nvector(wpt->latitude, wpt->longitude);
     const QDateTime current_timestamp = wpt->GetCreationTime();
 
@@ -420,11 +437,6 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     }
 
     const double dt = last_timestamp_.msecsTo(current_timestamp) / 1000.0;
-
-    // If dt is zero, skip this point to avoid division by zero and infinite velocity.
-    if (dt < MIN_DT) {
-        return;
-    }
 
     // Initialize Q_ (process noise covariance) adaptively with dt
     Q_ = Matrix::identity(STATE_SIZE);
