@@ -403,7 +403,6 @@ void Kalman::process() {
         for (const auto& wpt : std::as_const(rte->waypoint_list)) {
             kalman_point_cb(wpt);
         }
-
     }
 }
 
