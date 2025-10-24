@@ -24,7 +24,7 @@ compare ${REFERENCE}/track/kalman_prefilter_edge_out.gpx ${TMPDIR}/kalman_prefil
 cat ${TMPDIR}/kalman_prefilter_edge.log
 
 # Test for configurable parameters (profile=auto)
-gpsbabel -i gpx -f ${REFERENCE}/track/kalman_hyper_realistic_in.gpx -x track,name="Driving Track" -x kalman,profile=auto -o gpx -F ${TMPDIR}/kalman_hyper_realistic_auto_out.gpx > ${TMPDIR}/kalman_auto.log 2>&1
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_hyper_realistic_in.gpx -x track,name="Driving Track" -x kalman,profile=auto -x validate -o gpx -F ${TMPDIR}/kalman_hyper_realistic_auto_out.gpx > ${TMPDIR}/kalman_auto.log 2>&1
 compare ${REFERENCE}/track/kalman_hyper_realistic_auto_out.gpx ${TMPDIR}/kalman_hyper_realistic_auto_out.gpx
 cat ${TMPDIR}/kalman_auto.log
 
@@ -54,7 +54,7 @@ compare ${REFERENCE}/track/kalman_hyper_realistic_flying_out.gpx ${TMPDIR}/kalma
 cat ${TMPDIR}/kalman_flying.log
 
 # Test for interpolation (should interpolate)
-gpsbabel -i gpx -f ${REFERENCE}/track/kalman_interpolation_in.gpx -x kalman,profile=cycling -o gpx -F ${TMPDIR}/kalman_interp_filtered.gpx > ${TMPDIR}/kalman_interp.log 2>&1
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_interpolation_in.gpx -x kalman,profile=cycling -x validate -o gpx -F ${TMPDIR}/kalman_interp_filtered.gpx > ${TMPDIR}/kalman_interp.log 2>&1
 compare ${REFERENCE}/track/kalman_interp_out.gpx ${TMPDIR}/kalman_interp_filtered.gpx
 cat ${TMPDIR}/kalman_interp.log
 
@@ -69,7 +69,7 @@ compare ${REFERENCE}/track/kalman_cycling_maxspeed_override_out.gpx ${TMPDIR}/ka
 cat ${TMPDIR}/kalman_cycling_maxspeed_override.log
 
 # Test for complex zinger sequences and state transitions
-gpsbabel -i gpx -f ${REFERENCE}/track/kalman_complex_zinger_in.gpx -x kalman,profile=walking -o gpx -F ${TMPDIR}/kalman_complex_zinger_filtered.gpx > ${TMPDIR}/kalman_complex_zinger.log 2>&1
+gpsbabel -i gpx -f ${REFERENCE}/track/kalman_complex_zinger_in.gpx -x kalman,profile=walking -x validate -o gpx -F ${TMPDIR}/kalman_complex_zinger_filtered.gpx > ${TMPDIR}/kalman_complex_zinger.log 2>&1
 compare ${REFERENCE}/track/kalman_complex_zinger_out.gpx ${TMPDIR}/kalman_complex_zinger_filtered.gpx
 cat ${TMPDIR}/kalman_complex_zinger.log
 

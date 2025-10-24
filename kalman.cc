@@ -80,7 +80,7 @@ void Kalman::process() {
     interp_max_dt_ = interp_max_dt_option_.get_result();
     interp_min_multiplier_ = interp_min_multiplier_option_.get_result();
 
-    for (const auto& route_it : std::as_const(*global_track_list)) {
+    for (const auto& rte : std::as_const(*global_track_list)) {
         // Per-track state initialization
         is_initialized_ = false;
         initial_velocity_estimated_ = false;
@@ -102,15 +102,13 @@ void Kalman::process() {
         // Q_(4, 4) = 1e-1 * q_scale_vel;
         // Q_(5, 5) = 1e-1 * q_scale_vel;
 
-        WaypointList* wpt_list = &(route_it->waypoint_list);
-
         // Calculate track statistics for auto-profile inference
         std::vector<double> speed_samples_for_stats;
         QDateTime prev_time_for_stats;
         gpsbabel::NVector prev_nvector_for_stats;
         bool first_point_for_stats = true;
 
-        for (const auto& wpt_stats : std::as_const(*wpt_list)) {
+        for (const auto& wpt_stats : std::as_const(rte->waypoint_list)) {
             const QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
             const gpsbabel::NVector cur_nvector_for_stats(wpt_stats->latitude, wpt_stats->longitude);
 
@@ -202,7 +200,7 @@ void Kalman::process() {
         PreFilterState state = PreFilterState::NORMAL;
         Waypoint* last_accepted_wpt = nullptr;
 
-        for (auto it = wpt_list->begin(); it != wpt_list->end(); ++it) {
+        for (auto it = rte->waypoint_list.begin(); it != rte->waypoint_list.end(); ++it) {
             auto* const current_wpt = *it;
 
             // Ensure KalmanExtraData is attached
@@ -306,7 +304,7 @@ void Kalman::process() {
         // Collect dt samples from non-deleted points for median_dt calculation
         std::vector<double> dt_samples;
         Waypoint* last_valid_for_dt = nullptr;
-        for (const auto& current_wpt : std::as_const(*wpt_list)) {
+        for (const auto& current_wpt : std::as_const(rte->waypoint_list)) {
             if (!current_wpt->wpt_flags.marked_for_deletion) {
                 if (last_valid_for_dt) {
                     double dt = last_valid_for_dt->GetCreationTime().msecsTo(current_wpt->GetCreationTime());
@@ -319,12 +317,14 @@ void Kalman::process() {
         double median_dt = dt_samples.empty()? 1000.0 : median(dt_samples);
 
         // Interpolate moderate gaps and build new route
-        route_head* new_route_head = new route_head(); // Temporary route to build the new sequence
+        // Steal all the waypoints.
+        WaypointList orig_wpt_list;
+        track_swap_wpts(rte, orig_wpt_list);
         Waypoint* last_kept_for_interp = nullptr;
 
         int i = -1;
-        // Iterate through the original wpt_list
-        for (const auto& current_original_wpt : std::as_const(*wpt_list)) {
+        // And add them back, with interpolated points interspersed.
+        for (const auto& current_original_wpt : std::as_const(orig_wpt_list)) {
             i++;
 
             if (current_original_wpt->wpt_flags.marked_for_deletion) {
@@ -338,8 +338,8 @@ void Kalman::process() {
                     last_kept_for_interp = nullptr;
                 } else {
                     // This is a marked point but NOT a zinger.
-                    // We simply skip adding it to new_route_head, but keep last_kept_for_interp
-                    // so that the next non-deleted point can be interpolated against the previous one.
+                    // We keep last_kept_for_interp so that the next non-deleted
+                    // point can be interpolated against the previous one.
                 }
             } else {
                 // This is a good point, consider interpolation if there was a previous kept point
@@ -373,7 +373,7 @@ void Kalman::process() {
                                 new_wpt->shortname = "interpolated" + QString::number(i) + "-" + QString::number(k);
                                 new_wpt->extra_data = new KalmanExtraData(); // Default to false
 
-                                track_add_wpt(new_route_head, new_wpt);
+                                track_add_wpt(rte, new_wpt);
                                 if (global_opts.debug_level >= 5) {
                                     qDebug() << "[GEN] interpolated point at" << gen_time.toString() << new_wpt->shortname
                                              << Qt::fixed << qSetRealNumberPrecision(7)
@@ -383,53 +383,27 @@ void Kalman::process() {
                         }
                     }
                 }
-                track_add_wpt(new_route_head, current_original_wpt); // Add current good point
                 last_kept_for_interp = current_original_wpt;
             }
-        }
-
-
-        // Swap the lists. The original route now owns the new interpolated list.
-        // The old wpt_list (containing all original points, including marked ones)
-        // is now held by new_route_head->waypoint_list.
-        wpt_list->swap(new_route_head->waypoint_list);
-
-        // Now, iterate through the old list (which was the original wpt_list)
-        // and delete waypoints that were marked for deletion and their extra_data.
-        // FIXME: use track_del_marked_wpt to forward any track segment markers.
-        //        this requires changes to interpolation so the marked points are added to new_route_head.
-        for (auto& wpt_ptr : new_route_head->waypoint_list) {
-            Waypoint* old_wpt = wpt_ptr;
-            if (old_wpt->wpt_flags.marked_for_deletion) {
-                if (old_wpt->extra_data) {
-                    delete static_cast<KalmanExtraData*>(old_wpt->extra_data);
-                    old_wpt->extra_data = nullptr;
-                }
-                delete old_wpt;
-            } else {
-                // For points that were not marked for deletion, they are now owned by the new wpt_list.
-                // We must set their pointer to nullptr in the old list to prevent double deletion.
-                wpt_ptr = nullptr;
-            }
-        }
-        // Clear the old list (now held by new_route_head) to prevent its destructor from deleting Waypoints
-        // that are now owned by the main wpt_list.
-        WaypointList empty_list_for_cleanup;
-        new_route_head->waypoint_list.swap(empty_list_for_cleanup);
-        delete new_route_head; // Clean up temporary route_head object
-
-        // Now apply Kalman filter to the cleaned and interpolated data
-        for (const auto& wpt_it : std::as_const(*wpt_list)) {
-            kalman_point_cb(wpt_it);
+            track_add_wpt(rte, current_original_wpt); // Add back original point, even if marked for deletion.
         }
 
         // Clean up the extra_data that we allocated.
-        for (const auto& wpt_it : std::as_const(*wpt_list)) {
-            if (wpt_it->extra_data) {
-                delete static_cast<KalmanExtraData*>(wpt_it->extra_data);
-                wpt_it->extra_data = nullptr;
+        for (const auto& wpt : std::as_const(rte->waypoint_list)) {
+            if (wpt->extra_data) {
+                delete static_cast<KalmanExtraData*>(wpt->extra_data);
+                wpt->extra_data = nullptr;
             }
         }
+
+        // Delete any waypoints marked for deletion.
+        track_del_marked_wpts(rte);
+
+        // Now apply Kalman filter to the cleaned and interpolated data
+        for (const auto& wpt : std::as_const(rte->waypoint_list)) {
+            kalman_point_cb(wpt);
+        }
+
     }
 }
 
