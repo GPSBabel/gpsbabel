@@ -342,7 +342,7 @@ void Kalman::process() {
                     // point can be interpolated against the previous one.
                 }
             } else {
-                // This is a good point, consider interpolation if there was a previous kept point
+                // This is a good point, consider interpolation if there was a previously kept point
                 if (last_kept_for_interp) {
                     const qint64 gap = last_kept_for_interp->GetCreationTime().msecsTo(current_original_wpt->GetCreationTime());
 
