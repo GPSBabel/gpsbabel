@@ -36,11 +36,6 @@
 #include "src/core/nvector.h"   // for NVector
 #include "src/core/vector3d.h"  // for Vector3D
 
-// Constants
-
-// static constexpr int debugLevelInfo = 1;
-// static constexpr int debugLevelDebug = 2;
-// static constexpr int debugLevelInterpolate = 7;
 
 extern RouteList* global_track_list;
 
@@ -103,14 +98,7 @@ void Kalman::process() {
         H_(0, 0) = 1.0;
         H_(1, 1) = 1.0;
         H_(2, 2) = 1.0;
-        // Q_ matrix initialization moved to kalman_point_cb()
-        // Q_ = Matrix::identity(STATE_SIZE);
-        // Q_(0, 0) = 1e-3 * q_scale_pos;
-        // Q_(1, 1) = 1e-3 * q_scale_pos;
-        // Q_(2, 2) = 1e-3 * q_scale_pos;
-        // Q_(3, 3) = 1e-1 * q_scale_vel;
-        // Q_(4, 4) = 1e-1 * q_scale_vel;
-        // Q_(5, 5) = 1e-1 * q_scale_vel;
+        // Q_ matrix initialization is done in kalman_point_cb()
 
         // Calculate track statistics for auto-profile inference
         // Also validate that all points have valid times, and that they increase.
@@ -188,7 +176,7 @@ void Kalman::process() {
              gbFatal(FatalMsg() << "profile" << current_profile << "is not recognized.");
         }
 
-        if (global_opts.debug_level >= 1) {
+        if (global_opts.debug_level >= debugLevelInfo) {
             qDebug().nospace() << "Using profile " << current_profile
                                << " with max_speed " << max_speed_ << (max_speed_option_.isDefaulted()? "":"*")
                                << ", r_scale " << r_scale_ << (r_scale_option_.isDefaulted()? "":"*")
@@ -245,7 +233,7 @@ void Kalman::process() {
                 if (dt >= gap_factor_ || speed > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
-                    if (global_opts.debug_level >= 5) {
+                    if (global_opts.debug_level >= debugLevelTrace) {
                         auto dbg = qDebug();
                         dbg << "[DEL0] deleted point at" << *current_wpt
                             << state_name_lambda(state);
@@ -275,7 +263,7 @@ void Kalman::process() {
                 if (dt_consecutive > gap_factor_ || speed_consecutive > max_speed_ || speed_from_anchor > max_speed_) {
                     current_wpt->wpt_flags.marked_for_deletion = true;
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
-                        if (global_opts.debug_level >= 5) {
+                        if (global_opts.debug_level >= debugLevelTrace) {
                             auto dbg = qDebug();
                             dbg << "[DEL1] deleted point at" << *current_wpt
                                 << state_name_lambda(state);
@@ -295,7 +283,7 @@ void Kalman::process() {
                     if (state == PreFilterState::RECOVERY) {
                         current_wpt->wpt_flags.marked_for_deletion = true;
                         extra_data->is_zinger_deletion = true; // Mark as zinger deletion
-                        if (global_opts.debug_level >= 5) {
+                        if (global_opts.debug_level >= debugLevelTrace) {
                             qDebug() << "[DEL2] deleted point at" << *current_wpt
                                      << state_name_lambda(state);
                         }
@@ -387,7 +375,7 @@ void Kalman::process() {
                                 new_wpt->extra_data = new KalmanExtraData(); // Default to false
 
                                 track_add_wpt(rte, new_wpt);
-                                if (global_opts.debug_level >= 5) {
+                                if (global_opts.debug_level >= debugLevelTrace) {
                                     qDebug() << "[GEN] interpolated point at" << *new_wpt;
                                 }
                             }

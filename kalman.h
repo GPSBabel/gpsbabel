@@ -33,12 +33,30 @@
 
 class Kalman : public Filter {
  public:
+  /* Types */
+
   enum class PreFilterState { NORMAL, RECOVERY, FIRST_GOOD_SEEN_IN_RECOVERY };
+
+  /* Constants */
+
+  static constexpr int debugLevelInfo = 1;
+  static constexpr int debugLevelDebug = 3;
+  static constexpr int debugLevelTrace = 5;
+
+  /* Member Functions */
 
   void process() override;
   QVector<arglist_t>* get_args() override;
 
  private:
+  /* Types */
+
+  struct KalmanExtraData {
+    bool is_zinger_deletion = false;
+  };
+
+  /* Constants */
+
   // Constants for Kalman filter tuning
 
   // A high initial uncertainty allows the filter to converge quickly to the measured state.
@@ -61,12 +79,12 @@ class Kalman : public Filter {
   static constexpr int STATE_SIZE = 6;   // [x,y,z,vx,vy,vz]
   static constexpr int MEAS_SIZE  = 3;   // [x,y,z] measurements
 
-  struct KalmanExtraData {
-    bool is_zinger_deletion = false;
-  };
+  /* Member Functions */
 
   void kalman_point_cb(Waypoint* wpt);
   static double median(std::vector<double>& samples);
+
+  /* Data Members */
 
   bool is_initialized_{false};
   bool initial_velocity_estimated_{false};
