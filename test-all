@@ -55,7 +55,7 @@ function try_run() # command line
     local CMD="$*"
     local RES=0
     local SEVERITY=""
-    
+
     [ $vg -ne 0 ] && CMD="valgrind -q $CMD"
 
     ${CMD} > $TEMPDIR/.result 2>&1
@@ -92,19 +92,19 @@ function STAGE_1 () # type format
     local TYP=$1
     local FMT=$2
     local CMD1 CMD2 IFILE OFILE
-    
+
     echo "$CAPS" |
-    
+
     while read type caps format comment; do
-    
+
         for i in $EXCL; do
             if [ "$format" == "$i" ]; then
             caps="------"
             fi
         done
-        
+
         grep "$TYP: $FMT & $format" ${CATALOG} > /dev/null && continue
-        
+
         echo -n "testing "
         case $TYP in
             w)
@@ -122,17 +122,17 @@ function STAGE_1 () # type format
         esac
 
         echo -n ": \"$FMT\" with \"$format\" "
-        
+
         IFILE=$TEMPDIR/$TYP-$FMT
         OFILE=$TEMPDIR/$TYP-$FMT.$format
-        
+
         case $caps in
             -w)
             echo -n "*"
             CMD1="${PNAME} -$TYP -i $FMT -f $IFILE -o $format -F $OFILE"
             try_run "${CMD1}" || continue
             ;;
-            
+
             rw)
             echo -n "*"
             CMD1="${PNAME} -$TYP -i $FMT -f $IFILE -o $format -F $OFILE"
@@ -142,7 +142,7 @@ function STAGE_1 () # type format
             try_run "${CMD2}" || continue
             ;;
         esac
-        
+
         echo "*"
         echo "$TYP: $FMT & $format" >> $CATALOG
     done
@@ -152,15 +152,15 @@ function STAGE_1 () # type format
 function STAGE_0 ()
 {
     echo "$CAPS" |
-    
+
     while read type caps format comment; do
-    
+
     for i in $EXCL; do
         if [ "$format" == "$i" ]; then
             caps="------"
         fi
     done
-    
+
     case ${caps:0:2} in
         rw)
         CMD="${PNAME} -i gpx -f $REFGPX -x nuketypes,routes,tracks -o $format -F $TEMPDIR/w-$format"
