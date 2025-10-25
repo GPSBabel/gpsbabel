@@ -69,6 +69,8 @@
       <trkpt lat="40.772197000" lon="-73.974000000">
         <time>2025-09-25T10:00:19Z</time>
       </trkpt>
+    </trkseg>
+    <trkseg>
       <trkpt lat="40.773129400" lon="-73.974000000">
         <time>2025-09-25T10:01:02Z</time>
       </trkpt>
@@ -102,6 +104,8 @@
       <trkpt lat="40.773945000" lon="-73.974000000">
         <time>2025-09-25T10:01:15Z</time>
       </trkpt>
+    </trkseg>
+    <trkseg>
       <trkpt lat="40.775128200" lon="-73.974000000">
         <time>2025-09-25T10:02:02Z</time>
       </trkpt>
