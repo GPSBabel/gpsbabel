@@ -50,7 +50,30 @@ AdvDlg::AdvDlg(QWidget* parent,
       break;
   }
 
-
+  // If certain previews are disabled at build time, ensure we don't leave the UI in an
+  // unselectable state that wedges Settings.
+#ifdef DISABLE_LEAFLETMAPPREVIEW
+  if (mapPreviewSelection_ == BabelData::LeafletMapsPreview) {
+  #ifdef DISABLE_MAPPREVIEW
+    mapPreviewSelection_ = BabelData::NoMapPreview;
+    ui_.previewDisable->setChecked(true);
+  #else
+    mapPreviewSelection_ = BabelData::GoogleMapsPreview;
+    ui_.previewGmap->setChecked(true);
+  #endif
+  }
+#endif
+#ifdef DISABLE_MAPPREVIEW
+  if (mapPreviewSelection_ == BabelData::GoogleMapsPreview) {
+  #ifdef DISABLE_LEAFLETMAPPREVIEW
+    mapPreviewSelection_ = BabelData::NoMapPreview;
+    ui_.previewDisable->setChecked(true);
+  #else
+    mapPreviewSelection_ = BabelData::LeafletMapsPreview;
+    ui_.previewLeaflet->setChecked(true);
+  #endif
+  }
+#endif
 
   ui_.debugCombo->setCurrentIndex(debugLevel+1);
 #if defined (Q_OS_WIN)
@@ -65,6 +88,10 @@ AdvDlg::AdvDlg(QWidget* parent,
 #endif
 #ifdef DISABLE_LEAFLETMAPPREVIEW
   ui_.previewLeaflet->hide();
+#endif
+#if defined(DISABLE_MAPPREVIEW) && defined(DISABLE_LEAFLETMAPPREVIEW)
+  // If both preview types are disabled, force disable selection.
+  ui_.previewDisable->setChecked(true);
 #endif
 }
 

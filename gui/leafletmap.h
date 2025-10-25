@@ -1,10 +1,24 @@
+//
+//  Copyright (C) 2025  Robert Lipe
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // -*- C++ -*-
 #ifndef LEAFLETMAP_H
 #define LEAFLETMAP_H
 
 #include <QByteArray>
 #include <QElapsedTimer>
-#include <QNetworkAccessManager>
 #include <QObject>
 #include <QPlainTextEdit>
 #include <QResizeEvent>
@@ -24,7 +38,7 @@ class LeafletMap : public QWebEngineView
 
 public:
   LeafletMap(QWidget* parent,
-             const Gpx& gpx, const QString& geojsonData, QPlainTextEdit* te);
+             const Gpx& gpx, const QString& geojsonData, QPlainTextEdit* logSink);
   ~LeafletMap();
 
   void setWaypointVisibility(int i, bool show);
@@ -53,7 +67,7 @@ public slots:
 
 private slots:
   void loadFinishedX(bool f);
-  void markerClicked(int t, int i);
+  void markerClicked(int type, int index);
   void logTime(const QString& s);
 
 private:

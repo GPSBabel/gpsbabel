@@ -1,5 +1,6 @@
 // -*- C++ -*-
 // $Id: gpx.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
+
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -28,56 +29,45 @@
 #include <QString>           // for QString
 #include "latlng.h"          // for LatLng
 
-
 //------------------------------------------------------------------------
-class GpxRoutePoint
+// Common base class for waypoint/route/track points
+class GpxPointBase
 {
 public:
-  void setLocation(const LatLng& pt)
-  {
-    location = pt;
-  }
+  void setLocation(const LatLng& pt) { location_ = pt; }
+  LatLng getLocation() const { return location_; }
 
-  LatLng getLocation() const
-  {
-    return location;
-  }
+  void setElevation(double e) { elevation_ = e; }
+  double getElevation() const { return elevation_; }
 
-  void setName(const QString& s)
-  {
-    name = s;
-  }
+  void setDateTime(const QDateTime& dt) { dateTime_ = dt; }
+  QDateTime getDateTime() const { return dateTime_; }
 
-  QString getName() const
-  {
-    return name;
-  }
+  void setName(const QString& s) { name_ = s; }
+  QString getName() const { return name_; }
 
-  void setDescription(const QString& s)
-  {
-    description = s;
-  }
+  void setComment(const QString& s) { comment_ = s; }
+  QString getComment() const { return comment_; }
 
-  QString getDescription() const
-  {
-    return description;
-  }
+  void setDescription(const QString& s) { description_ = s; }
+  QString getDescription() const { return description_; }
 
-  void setComment(const QString& s)
-  {
-    comment = s;
-  }
+  void setSymbol(const QString& s) { symbol_ = s; }
+  QString getSymbol() const { return symbol_; }
 
-  QString getComment() const
-  {
-    return comment;
-  }
+protected:
+  LatLng location_;
+  double elevation_{-1.0E-100};
+  QDateTime dateTime_;
+  QString name_;
+  QString comment_;
+  QString description_;
+  QString symbol_;
+};
 
-private:
-  LatLng location;
-  QString name;
-  QString description;
-  QString comment;
+//------------------------------------------------------------------------
+class GpxRoutePoint : public GpxPointBase
+{
 };
 
 //------------------------------------------------------------------------
@@ -137,43 +127,8 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxTrackPoint
+class GpxTrackPoint : public GpxPointBase
 {
-public:
-  void setLocation(const LatLng& pt)
-  {
-    location = pt;
-  }
-
-  LatLng getLocation() const
-  {
-    return location;
-  }
-
-  void setElevation(double e)
-  {
-    elevation = e;
-  }
-
-  double getElevation() const
-  {
-    return elevation;
-  }
-
-  void setDateTime(const QDateTime& dt)
-  {
-    dateTime = dt;
-  }
-
-  QDateTime getDateTime() const
-  {
-    return dateTime;
-  }
-
-private:
-  LatLng location;
-  double elevation{0.0};
-  QDateTime dateTime;
 };
 
 //------------------------------------------------------------------------
@@ -289,76 +244,8 @@ private:
 };
 
 //------------------------------------------------------------------------
-class GpxWaypoint
+class GpxWaypoint : public GpxPointBase
 {
-public:
-  void setLocation(const LatLng& pt)
-  {
-    location_ = pt;
-  }
-
-  LatLng getLocation() const
-  {
-    return location_;
-  }
-
-  void setElevation(double e)
-  {
-    elevation_ = e;
-  }
-
-  double getElevation() const
-  {
-    return elevation_;
-  }
-
-  void setName(const QString& s)
-  {
-    name_ = s;
-  }
-
-  QString getName() const
-  {
-    return name_;
-  }
-
-  void setComment(const QString& s)
-  {
-    comment_ = s;
-  }
-
-  QString getComment() const
-  {
-    return comment_;
-  }
-
-  void setDescription(const QString& s)
-  {
-    description_ = s;
-  }
-
-  QString getDescription() const
-  {
-    return description_;
-  }
-
-  void setSymbol(const QString& s)
-  {
-    symbol_ = s;
-  }
-
-  QString getSymbol() const
-  {
-    return symbol_;
-  }
-
-private:
-  LatLng location_;
-  double elevation_{-1.0E-100};
-  QString name_;
-  QString comment_;
-  QString description_;
-  QString symbol_;
 };
 
 //------------------------------------------------------------------------

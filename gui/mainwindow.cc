@@ -169,10 +169,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   babelVersion_ = findBabelVersion();
   fmtChgInterlock_ = false;
   loadDeviceNameCombos();
-// RJL
-babelData_.debugLevel_ = 9;
-babelData_.outputFileName_= "/dev/null";
-// RJL
 
   connect(ui_.inputFileOptBtn,        &QAbstractButton::clicked, this, &MainWindow::inputFileOptBtnClicked);
   connect(ui_.inputDeviceOptBtn,      &QAbstractButton::clicked, this, &MainWindow::inputDeviceOptBtnClicked);
@@ -1228,7 +1224,7 @@ void MainWindow::preferencesActionX()
   Preferences preferences(nullptr, formatList_, babelData_);
   preferences.exec();
 
-  // The user may have changed the list of of displayed formats, and/or
+  // The user may have changed the list of displayed formats, and/or
   // enabled or disabled the upgrade menu item.
   // Resynchronize.
 

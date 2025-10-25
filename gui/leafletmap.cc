@@ -1,3 +1,17 @@
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // -*- C++ -*
 
 #include <QApplication>
@@ -14,8 +28,10 @@
 #include <QUrl>
 #include <QWebChannel>
 #include <QWebEnginePage>
+#include <QWebEngineProfile>
 #include <QWebEngineSettings>
 #include <QWebEngineView>
+#include <QWebEngineUrlRequestInterceptor>
 #include <Qt>
 
 #include <string>
@@ -31,6 +47,29 @@
 using std::string;
 using std::vector;
 
+// Local interceptor to set Referer for specific tile hosts
+class TileRefererInterceptor : public QWebEngineUrlRequestInterceptor {
+public:
+  explicit TileRefererInterceptor(const QString& referer, QObject* parent = nullptr)
+    : QWebEngineUrlRequestInterceptor(parent), referer_(referer) {}
+
+  void interceptRequest(QWebEngineUrlRequestInfo& info) override {
+    const QUrl url = info.requestUrl();
+    const QString host = url.host();
+    const QString scheme = url.scheme();
+    const QByteArray method = info.requestMethod();
+    if ((scheme == QLatin1String("http") || scheme == QLatin1String("https")) && method == QByteArrayLiteral("GET")) {
+      if (host == QLatin1String("tile.openstreetmap.org") ||
+          host.endsWith(QLatin1String(".tile.openstreetmap.org")) ||
+          host == QLatin1String("server.arcgisonline.com")) {
+        info.setHttpHeader("Referer", referer_.toUtf8());
+      }
+    }
+  }
+private:
+  QString referer_;
+};
+
 //------------------------------------------------------------------------
 static QString
 stripDoubleQuotes(const QString& s)
@@ -41,11 +80,11 @@ stripDoubleQuotes(const QString& s)
 
 //------------------------------------------------------------------------
 LeafletMap::LeafletMap(QWidget* parent,
-                       const Gpx& gpx, const QString& geojsonData, QPlainTextEdit* te) :
+                       const Gpx& gpx, const QString& geojsonData, QPlainTextEdit* logSink) :
   QWebEngineView(parent),
   gpx_(gpx),
   geojsonData_(geojsonData),
-  textEdit_(te)
+  textEdit_(logSink)
 {
   busyCursor_ = true;
   stopWatch_.start();
@@ -78,6 +117,19 @@ LeafletMap::LeafletMap(QWidget* parent,
   }
 
   this->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
+
+  // Set User-Agent for OSM tile requests as required by https://operations.osmfoundation.org/policies/tiles/
+  // Include contact URL per policy.
+  QString userAgent = QString("GPSBabel/%1 (+https://www.gpsbabel.org/)").arg(qApp->applicationVersion());
+  QWebEngineProfile* profile = this->page()->profile();
+  profile->setHttpUserAgent(userAgent);
+
+  // Install a Referer interceptor for OSM/Esri tiles (optional but polite)
+  static TileRefererInterceptor* refererInterceptor = nullptr;
+  if (!refererInterceptor) {
+    refererInterceptor = new TileRefererInterceptor(QStringLiteral("https://www.gpsbabel.org/"), profile);
+    profile->setUrlRequestInterceptor(refererInterceptor);
+  }
 
   if (!fileName.isEmpty()) {
     QFile htmlFile(fileName);
@@ -140,47 +192,44 @@ void
 LeafletMap::showGpxData()
 {
   this->logTime("Start defining JS string");
-  QStringList scriptStr;
-  scriptStr
-      << "mclicker.logTimeX(\"Start JS execution\");"
-      << "var bounds = L.latLngBounds();"
-      << "mclicker.logTimeX(\"Done prelim JS definition\");"
-      ;
+
+  QString s;
+  s += "mclicker.logTimeX(\"Start JS execution\");\n"
+       "var bounds = L.latLngBounds();\n"
+       "mclicker.logTimeX(\"Done prelim JS definition\");\n";
 
   mapPresent_ = true;
 
-  scriptStr << "renderGeoJson(" + geojsonData_ + ");";
+  s += "renderGeoJson(" + geojsonData_ + ");\n";
 
-  scriptStr
-      << "if (bounds.isValid()) {"
-      << "    if (bounds.getNorthEast().equals(bounds.getSouthWest())) {"
-      << "        map.setView(bounds.getCenter(), 18);"
-      << "        mclicker.logTimeX('JS: setView on single point. Zoom: 18');"
-      << "    } else {"
-      << "        map.fitBounds(bounds);"
-      << "        mclicker.logTimeX('JS: fitBounds called. Zoom: ' + map.getZoom());"
-      << "    }"
-      << "}"
-      << "mclicker.logTimeX(\"Done setView\");"
-      ;
+  s += "if (bounds.isValid()) {\n"
+       "    if (bounds.getNorthEast().equals(bounds.getSouthWest())) {\n"
+       "        map.setView(bounds.getCenter(), 18);\n"
+       "        mclicker.logTimeX('JS: setView on single point. Zoom: 18');\n"
+       "    } else {\n"
+       "        map.fitBounds(bounds);\n"
+       "        mclicker.logTimeX('JS: fitBounds called. Zoom: ' + map.getZoom());\n"
+       "    }\n"
+       "}\n"
+       "mclicker.logTimeX(\"Done setView\");\n";
 
   this->logTime("Done defining JS string");
-  evaluateJS(scriptStr);
+  evaluateJS(s);
   this->logTime("Done JS evaluation");
   emit mapRendered();
 }
 //------------------------------------------------------------------------
 void
-LeafletMap::markerClicked(int t, int i)
+LeafletMap::markerClicked(int type, int index)
 {
-  if (t == 0) {
-    emit waypointClicked(i);
-  } else if (t == 1) {
-    emit trackClicked(i);
-  } else if (t == 2) {
-    emit routeClicked(i);
-  } else if (t == 3) {
-    emit routePointClicked(i);
+  if (type == 0) {
+    emit waypointClicked(index);
+  } else if (type == 1) {
+    emit trackClicked(index);
+  } else if (type == 2) {
+    emit routeClicked(index);
+  } else if (type == 3) {
+    emit routePointClicked(index);
   }
 }
 
@@ -259,9 +308,7 @@ LeafletMap::setAllRoutesVisibility(bool show)
 void
 LeafletMap::resetBounds()
 {
-  evaluateJS(QStringList{
-    QString("if (bounds.isValid()) {\n    map.fitBounds(bounds);\n}"),
-  });
+  evaluateJS(QString("if (bounds.isValid()) { map.fitBounds(bounds); }"));
 }
 
 //------------------------------------------------------------------------

@@ -1,3 +1,18 @@
+//
+//  Copyright (C) 2025  Robert Lipe
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // -*- C++ -*
 
 #include <QAbstractItemView>
@@ -142,7 +157,6 @@ LeafletMapDialog::LeafletMapDialog(QWidget* parent,
   lay->addWidget(mapWidget_);
 
 
-
   model_ = new QStandardItemModel(this);
   model_->blockSignals(true);
 
@@ -189,7 +203,6 @@ LeafletMapDialog::LeafletMapDialog(QWidget* parent,
     routeIdx++;
   }
   model_->blockSignals(false);
-
 
 
   ui_.treeView->header()->hide();
@@ -456,28 +469,20 @@ LeafletMapDialog::showOnlyThis(QStandardItem* top, int menuRow)
   // Disconnect the signal to prevent re-entrancy during programmatic changes
   disconnect(model_, &QStandardItemModel::itemChanged, this, &LeafletMapDialog::itemChangedX);
 
-    QStandardItem* child = top->child(menuRow);
+  QStandardItem* child = top->child(menuRow);
+  int originalIndex = child->data(OriginalIndexRole).toInt();
 
-    int originalIndex = child->data(OriginalIndexRole).toInt();
+  if (top == wptItem_) {
+    mapWidget_->panTo(gpx_.getWaypoints().at(originalIndex).getLocation());
+  } else if (top == trkItem_) {
+    mapWidget_->frameTrack(originalIndex);
+  } else if (top == rteItem_) {
+    mapWidget_->frameRoute(originalIndex);
+  }
 
-
-
-    if (top == wptItem_) {
-
-      mapWidget_->panTo(gpx_.getWaypoints().at(originalIndex).getLocation());
-
-    } else if (top == trkItem_) {
-
-      mapWidget_->frameTrack(originalIndex);
-
-    } else if (top == rteItem_) {
-
-      mapWidget_->frameRoute(originalIndex);
-
-    }
   for (int row = 0; row < top->rowCount(); ++row) {
     QStandardItem* child = top->child(row);
-    child->setCheckState(row == menuRow? Qt::Checked: Qt::Unchecked);
+    child->setCheckState(row == menuRow ? Qt::Checked : Qt::Unchecked);
   }
   top->setCheckState(Qt::Checked);
 

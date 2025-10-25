@@ -32,6 +32,17 @@
       var waypts = {};         // Changed to object
 
       // Non-Leaflet-dependent helper functions
+      function isFiniteNumber(x) {
+        return Number.isFinite && Number.isFinite(x);
+      }
+      function validLatLng(lat, lng) {
+        return isFiniteNumber(lat) && isFiniteNumber(lng) && lat <= 90 && lat >= -90 && lng <= 180 && lng >= -180;
+      }
+      function clampLatLng(lat, lng) {
+        function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+        return [clamp(lat, -90, 90), clamp(lng, -180, 180)];
+      }
+
       function MarkerHandler(t, i) {
         this.type = t;
         this.number = i;
@@ -114,21 +125,21 @@
         });
 
         RTPolyline = L.FeatureGroup.extend({
-          initialize: function(l, stp, enp, nm, ckobj, parentGroup) {
-            var s = L.marker(stp, {icon: greenDotIcon, title: nm});
-            var e = L.marker(enp, {icon: redDotIcon, title: nm});
+          initialize: function(lineLayer, startLatLng, endLatLng, name, clickHandler, parentGroup) {
+            var startMarker = L.marker(startLatLng, {icon: greenDotIcon, title: name});
+            var endMarker = L.marker(endLatLng, {icon: redDotIcon, title: name});
 
             // Call parent constructor with the layers
-            L.FeatureGroup.prototype.initialize.call(this, [l, s, e]);
+            L.FeatureGroup.prototype.initialize.call(this, [lineLayer, startMarker, endMarker]);
 
-            this.line = l;
-            this.start = s;
-            this.end = e;
+            this.line = lineLayer;
+            this.start = startMarker;
+            this.end = endMarker;
             this.parentGroup = parentGroup;
 
-            attachHandler(l, ckobj);
-            attachHandler(s, ckobj);
-            attachHandler(e, ckobj);
+            attachHandler(lineLayer, clickHandler);
+            attachHandler(startMarker, clickHandler);
+            attachHandler(endMarker, clickHandler);
           },
 
           show: function () {
@@ -225,42 +236,53 @@
           } else if (featureType === 'track') {
             var coords = feature.geometry.coordinates;
             if (coords.length > 0) {
-              var latlngs = coords.map(function(c) { return L.latLng(c[1], c[0]); });
-              var visibleLine = L.polyline(latlngs, { color: '#0000E0', weight: 2, opacity: 0.6 });
-              var clickLine = L.polyline(latlngs, { opacity: 0, weight: 10 });
-              attachHandler(clickLine, new MarkerHandler(1, originalIndex)); // Type 1 for tracks
+              var latlngs = coords
+                .filter(function(c) { return Array.isArray(c) && c.length >= 2 && validLatLng(c[1], c[0]); })
+                .map(function(c) { var cl = clampLatLng(c[1], c[0]); return L.latLng(cl[0], cl[1]); });
+              if (latlngs.length >= 2) {
+                var visibleLine = L.polyline(latlngs, { color: '#0000E0', weight: 2, opacity: 0.6 });
+                var clickLine = L.polyline(latlngs, { opacity: 0, weight: 10 });
+                attachHandler(clickLine, new MarkerHandler(1, originalIndex)); // Type 1 for tracks
 
-              var trackGroup = L.featureGroup([visibleLine, clickLine]);
-              trackLayers[originalIndex] = trackGroup;
-              trackLayerGroup.addLayer(trackGroup);
-              bounds.extend(visibleLine.getBounds());
+                var trackGroup = L.featureGroup([visibleLine, clickLine]);
+                trackLayers[originalIndex] = trackGroup;
+                trackLayerGroup.addLayer(trackGroup);
+                bounds.extend(visibleLine.getBounds());
+              }
             } // Close if (coords.length > 0)
           } else if (featureType === 'route') {
             var routeLayerGroup = L.featureGroup().addTo(rteGroup);
             var coords = feature.geometry.coordinates;
-            var latlngs = coords.map(function(c) { return L.latLng(c[1], c[0]); });
+            var latlngs = coords
+              .filter(function(c) { return Array.isArray(c) && c.length >= 2 && validLatLng(c[1], c[0]); })
+              .map(function(c) { var cl = clampLatLng(c[1], c[0]); return L.latLng(cl[0], cl[1]); });
 
-            var visibleLine = L.polyline(latlngs, { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' });
-            var clickLine = L.polyline(latlngs, { opacity: 0, weight: 10 });
-            attachHandler(clickLine, new MarkerHandler(2, originalIndex)); // Type 2 for routes
+            if (latlngs.length >= 2) {
+              var visibleLine = L.polyline(latlngs, { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' });
+              var clickLine = L.polyline(latlngs, { opacity: 0, weight: 10 });
+              attachHandler(clickLine, new MarkerHandler(2, originalIndex)); // Type 2 for routes
 
-            routeLayerGroup.addLayer(visibleLine);
-            routeLayerGroup.addLayer(clickLine);
-            bounds.extend(visibleLine.getBounds());
+              routeLayerGroup.addLayer(visibleLine);
+              routeLayerGroup.addLayer(clickLine);
+              bounds.extend(visibleLine.getBounds());
+            }
 
             if (feature.properties.routepoints) {
               feature.properties.routepoints.forEach(function(pt) {
-                var marker = L.marker([pt.lat, pt.lng], { icon: routePointIcon, title: pt.name });
-                var popupContent = "<b>" + (pt.name || 'N/A') + "</b><br/>";
-                if (pt.description) {
-                  popupContent += "Description: " + pt.description + "<br/>";
+                if (pt && isFiniteNumber(pt.lat) && isFiniteNumber(pt.lng)) {
+                  var clp = clampLatLng(pt.lat, pt.lng);
+                  var marker = L.marker([clp[0], clp[1]], { icon: routePointIcon, title: pt.name });
+                  var popupContent = "<b>" + (pt.name || 'N/A') + "</b><br/>";
+                  if (pt.description) {
+                    popupContent += "Description: " + pt.description + "<br/>";
+                  }
+                  if (pt.comment) {
+                    popupContent += "Comment: " + pt.comment + "<br/>";
+                  }
+                  marker.bindPopup(popupContent);
+                  attachHandler(marker, new MarkerHandler(3, originalIndex)); // Type 3 for route points
+                  routeLayerGroup.addLayer(marker);
                 }
-                if (pt.comment) {
-                  popupContent += "Comment: " + pt.comment + "<br/>";
-                }
-                marker.bindPopup(popupContent);
-                attachHandler(marker, new MarkerHandler(3, originalIndex)); // Type 3 for route points
-                routeLayerGroup.addLayer(marker);
               });
             }
             routesById[originalIndex] = routeLayerGroup;
@@ -281,9 +303,19 @@
           "Satellite": satelliteMap
         };
 
-        streetMap.addTo(map);
+        // Restore last chosen base layer, defaulting to Street
+        var lastBase = null;
+        try { lastBase = window.localStorage.getItem('gpsbabel_base_layer'); } catch (e) {}
+        if (lastBase === 'Satellite') {
+          satelliteMap.addTo(map);
+        } else {
+          streetMap.addTo(map);
+        }
 
-        L.control.layers(baseMaps).addTo(map);
+        var control = L.control.layers(baseMaps).addTo(map);
+        map.on('baselayerchange', function(e) {
+          try { window.localStorage.setItem('gpsbabel_base_layer', e.name); } catch (ex) {}
+        });
 
         if (bounds.isValid()) {
           if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
