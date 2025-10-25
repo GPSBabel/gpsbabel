@@ -46,6 +46,16 @@ extern RouteList* global_track_list;
 
 #if FILTERS_ENABLED
 
+// define an operator to send Waypoint identification to a QDebug output stream.
+static QDebug& operator<< (QDebug& debug, const Waypoint& wpt)
+{
+  QDebugStateSaver saver(debug);
+  debug << wpt.GetCreationTime().toString() << wpt.shortname
+        << Qt::fixed << qSetRealNumberPrecision(7)
+        << "lat:" << wpt.latitude << "lon:" << wpt.longitude;
+  return debug;
+}
+
 QVector<arglist_t>* Kalman::get_args() {
     return &args;
 }
@@ -113,9 +123,7 @@ void Kalman::process() {
         for (const auto& wpt_stats : std::as_const(rte->waypoint_list)) {
             if (!wpt_stats->GetCreationTime().isValid()) {
                 gbFatal(FatalMsg() << "Track points must have times.\n"
-                                   << wpt_stats->GetCreationTime().toString() << wpt_stats->shortname
-                                   << Qt::fixed << qSetRealNumberPrecision(7)
-                                   << "lat:" << wpt_stats->latitude << "lon:" << wpt_stats->longitude);
+                                   << *wpt_stats);
             }
 
             const QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
@@ -129,13 +137,7 @@ void Kalman::process() {
                     speed_samples_for_stats.push_back(speed);
                 } else {
                     gbFatal(FatalMsg() << "Time must increase between adjacent points, but the track contains adjacent points were this is not true.\n"
-                                       << prev_wpt->GetCreationTime().toString() << prev_wpt->shortname
-                                       << Qt::fixed << qSetRealNumberPrecision(7)
-                                       << "lat:" << prev_wpt->latitude << "lon:" << prev_wpt->longitude
-                                       << "\n"
-                                       << wpt_stats->GetCreationTime().toString() << wpt_stats->shortname
-                                       << Qt::fixed << qSetRealNumberPrecision(7)
-                                       << "lat:" << wpt_stats->latitude << "lon:" << wpt_stats->longitude);
+                                       << *prev_wpt << "\n" << *wpt_stats);
                 }
             } else {
                 first_point_for_stats = false;
@@ -245,9 +247,8 @@ void Kalman::process() {
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                     if (global_opts.debug_level >= 5) {
                         auto dbg = qDebug();
-                        dbg << "[DEL0] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
-                            << Qt::fixed << qSetRealNumberPrecision(7)
-                            << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
+                        dbg << "[DEL0] deleted point at" << *current_wpt
+                            << state_name_lambda(state);
                         dbg.nospace() << qSetRealNumberPrecision(4);
                         if (dt >= gap_factor_) {
                             dbg << "delta t (" << dt << ") >= gap factor (" << gap_factor_ << ") ";
@@ -276,9 +277,8 @@ void Kalman::process() {
                     extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                         if (global_opts.debug_level >= 5) {
                             auto dbg = qDebug();
-                            dbg << "[DEL1] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
-                                << Qt::fixed << qSetRealNumberPrecision(7)
-                                << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
+                            dbg << "[DEL1] deleted point at" << *current_wpt
+                                << state_name_lambda(state);
                             dbg.nospace() << qSetRealNumberPrecision(4);
                             if (dt_consecutive > gap_factor_) {
                                 dbg << "delta t consecutive (" << dt_consecutive << ") > gap factor (" << gap_factor_ << ") ";
@@ -296,9 +296,8 @@ void Kalman::process() {
                         current_wpt->wpt_flags.marked_for_deletion = true;
                         extra_data->is_zinger_deletion = true; // Mark as zinger deletion
                         if (global_opts.debug_level >= 5) {
-                            qDebug() << "[DEL2] deleted point at" << current_wpt->GetCreationTime().toString() << current_wpt->shortname
-                                     << Qt::fixed << qSetRealNumberPrecision(7)
-                                     << "lat:" << current_wpt->latitude << "lon:" << current_wpt->longitude << state_name_lambda(state);
+                            qDebug() << "[DEL2] deleted point at" << *current_wpt
+                                     << state_name_lambda(state);
                         }
                         last_accepted_wpt = current_wpt;
                         state = PreFilterState::FIRST_GOOD_SEEN_IN_RECOVERY;
@@ -389,9 +388,7 @@ void Kalman::process() {
 
                                 track_add_wpt(rte, new_wpt);
                                 if (global_opts.debug_level >= 5) {
-                                    qDebug() << "[GEN] interpolated point at" << gen_time.toString() << new_wpt->shortname
-                                             << Qt::fixed << qSetRealNumberPrecision(7)
-                                             << "lat:" << new_wpt->latitude << "lon:" << new_wpt->longitude;
+                                    qDebug() << "[GEN] interpolated point at" << *new_wpt;
                                 }
                             }
                         }
