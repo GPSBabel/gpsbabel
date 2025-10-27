@@ -81,7 +81,7 @@ jobs:
       id: restore-cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILER }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILER }}
 
     - name: Install Qt setup(aqt)
       if: ( steps.restore-cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
