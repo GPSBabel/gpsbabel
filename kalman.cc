@@ -51,6 +51,22 @@ static QDebug& operator<< (QDebug& debug, const Waypoint& wpt)
   return debug;
 }
 
+static QDebug& operator<< (QDebug& debug, const Matrix& m)
+{
+  QDebugStateSaver saver(debug);
+  debug.nospace();
+  for (int c = 0; c < m.cols(); ++c) {
+      for (int r = 0; r < m.rows(); ++r) {
+          if (!((r == 0) && (c == 0))) {
+              debug << " ";
+          }
+          debug << m(r,c);
+          debug << ((r + 1 < m.rows())? "," : ";");
+      }
+  }
+  return debug;
+}
+
 QVector<arglist_t>* Kalman::get_args() {
     return &args;
 }
@@ -459,6 +475,13 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
         P_ = F_ * P_ * F_.transpose() + Q_;
     }
 
+    if (global_opts.debug_level >= debugLevelVerboseTrace) {
+        qDebug() << "[Q, process noise covariance]" << Q_;
+        qDebug() << "[R, observation noise covariance]" << R_;
+        qDebug() << "[x, a priori predicted state estimate]" << x_;
+        qDebug() << "[P, a priori predicted estimate covariance]" << P_;
+    }
+
     // Update
     Matrix z(3, 1);
     z(0, 0) = current_nvector.getx();
@@ -477,11 +500,27 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     const Matrix d_squared_matrix = y.transpose() * S_inv * y;
     const double d_squared = d_squared_matrix(0, 0);
 
+    if (global_opts.debug_level >= debugLevelVerboseTrace) {
+        qDebug().noquote() << "[t, time]" << current_timestamp.toString(Qt::ISODateWithMs);
+        qDebug() << "[z, observation]" << z;
+        qDebug() << "[y, Innovation]" << y;
+        qDebug() << "[S, Innovation covariance]" << S;
+        qDebug() << "[S^-1, inverse Innovation covariance]" << S_inv;
+        qDebug() << "[NIS]" << d_squared;
+    }
+
     if (d_squared < CHI_SQUARED_THRESHOLD) {
       const Matrix K = P_ * H_.transpose() * S_inv;
 
       x_ = x_ + (K * y);
       P_ = (Matrix::identity(6) - (K * H_)) * P_;
+    }
+
+    if (global_opts.debug_level >= debugLevelVerboseTrace) {
+        qDebug() << "[x, a posteriori state estimate]" << x_;
+        qDebug() << "[P, a posteriori estimate covariance]" << P_;
+        Matrix ypost = z - (H_ * x_);
+        qDebug() << "[y, measurement post-fit residual]" << ypost;
     }
 
     gpsbabel::Vector3D filtered_position(x_(0, 0), x_(1, 0), x_(2, 0));

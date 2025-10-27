@@ -42,6 +42,7 @@ class Kalman : public Filter {
   static constexpr int debugLevelInfo = 1;
   static constexpr int debugLevelDebug = 3;
   static constexpr int debugLevelTrace = 5;
+  static constexpr int debugLevelVerboseTrace = 7;
 
   /* Member Functions */
 
