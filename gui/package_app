@@ -84,14 +84,15 @@ SKIP_UPDATE_RELEASE=
 GPSBABEL=../gpsbabel
 QMAKE=qmake
 SOURCEDIR=.
-while getopts a:g:q:s: name
+while getopts a:g:q:s:c name
 do
   case $name in
     a) APPDIR="$OPTARG";;
     g) GPSBABEL="$OPTARG";;
     q) QMAKE="$OPTARG";;
     s) SOURCEDIR="$OPTARG";;
-    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory]\n" "$0"
+    c) CODESIGN="-codesign=-";;
+    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory] [-c]\n" "$0"
        exit 2;;
   esac
 done
@@ -131,6 +132,6 @@ else # Mac
   rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
   APPBUNDLE="$(basename "$APPDIR")"
-  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2 -fs=APFS
+  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2 -fs=APFS "${CODESIGN}"
   popd
 fi
