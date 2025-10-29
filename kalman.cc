@@ -527,10 +527,16 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     filtered_position.normalize(); // Ensure it's a unit vector
     const gpsbabel::NVector filtered_nvector(filtered_position);
 
+    // estimate speed. note our velocity esitmate is based on the difference between estimated
+    // positions (as represented by n-vectors) / dt,
+    // so this is an estimate based on the euclidean distance.
+    const double speed = gpsbabel::Vector3D(x_(3, 0), x_(4, 0), x_(5, 0)).norm() * gpsbabel::MEAN_EARTH_RADIUS_METERS;
+
     // FIXME: Quit adding quantization noise to the filter output.
     wpt->latitude= std::round(filtered_nvector.latitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
     wpt->longitude = std::round(filtered_nvector.longitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
-
+    wpt->set_speed(speed);
+   
     // Update for next iteration
     last_timestamp_ = current_timestamp;
     last_nvector_ = current_nvector;
