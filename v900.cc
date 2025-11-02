@@ -144,13 +144,13 @@ QList<V900Format::field_id_t> V900Format::parse_header(const QString& line)
 
 QHash<V900Format::field_id_t, QString> V900Format::parse_line(const QStringList& parts, const QList<field_id_t>& ids)
 {
-    /* Build a hash to get the field value from the field type */
-    QHash<field_id_t, QString> field;
-    for (int idx = 0; idx < parts.size(); ++idx) {
-      field_id_t fldid = ids.at(idx);
-      field[fldid] = parts.at(idx).trimmed();
-    }
-    return field;
+  /* Build a hash to get the field value from the field type */
+  QHash<field_id_t, QString> field;
+  for (int idx = 0; idx < parts.size(); ++idx) {
+    field_id_t fldid = ids.at(idx);
+    field[fldid] = parts.at(idx).trimmed();
+  }
+  return field;
 }
 
 void
@@ -200,7 +200,7 @@ V900Format::read()
 
     /* handle date/time fields.  base year is 2000, time zone is UTC. */
     gpsbabel::DateTime dt = QDateTime::fromString(QStringLiteral("20%1%2Z").arg(field.value(field_id_t::date), field.value(field_id_t::time)),
-                                         "yyyyMMddhhmmsst");
+                            "yyyyMMddhhmmsst");
     if (dt.isValid()) {
       wpt->SetCreationTime(dt);
     } else {
@@ -312,7 +312,11 @@ V900Format::read()
         }
         waypt_add(wpt2);
       } else {
-        gbWarning("unrecognized tag \"%s\" at line %d. Skipping waypoint generation.\n", qPrintable(tag), lc);
+        if (!tag.isEmpty()) {
+          gbWarning("unrecognized tag \"%s\" at line %d. Skipping waypoint generation.\n", qPrintable(tag), lc);
+        } else {
+          gbWarning("missing or empty tag at line %d. Skipping waypoint generation.\n", lc);
+        }
       }
     }
   }
