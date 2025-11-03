@@ -73,6 +73,7 @@ for a little more info, see structures:
 
 #include "v900.h"
 
+#include <cassert>             // for assert
 #include <utility>             // for pair
 
 #include <QByteArray>          // for QByteArray
@@ -160,13 +161,14 @@ bool V900Format::isDupe(const V900Map& a, const V900Map& b)
 {
   // While the V900Maps from all the records should have identical keys, the initial
   // previous V900Map won't have any keys.
-  // Unlike QMap, QHash returns keys in arbitrary order making comparision problematic.
-  if (a.keys() != b.keys()) {
+  if (a.size() != b.size()) {
     return false;
   }
   for (auto it = a.cbegin(); it != a.cend(); ++it) {
-    if ((it.key() != field_id_t::index) && (it.key() != field_id_t::tag)) {
-      if (it.value() != b.value(it.key())) {
+    auto key = it.key();
+    assert(b.contains(key));
+    if ((key != field_id_t::index) && (key != field_id_t::tag)) {
+      if (it.value() != b.value(key)) {
         return false;
       }
     }

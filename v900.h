@@ -69,7 +69,7 @@ private:
     unknown,index,tag,date,time,latitude,longitude,height,speed,heading,fix,valid,pdop,hdop,vdop,vox
   };
 
-  using V900Map = QMap<field_id_t, QString>;
+  using V900Map = QHash<field_id_t, QString>;
 
 //  /* This is retained only for documentation of the traditional basic and advanced modes. */
 //  /* the start of each record (line) is common to both advanced and basic mode.
