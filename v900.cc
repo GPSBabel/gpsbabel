@@ -77,17 +77,18 @@ for a little more info, see structures:
 
 #include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar
+#include <QDate>               // for QDate
 #include <QDateTime>           // for QDateTime
 #include <QHash>               // for QHash
 #include <QIODevice>           // for QIODevice
 #include <QList>               // for QList
 #include <QStringList>         // for QStringList
 #include <QStringLiteral>      // for qMakeStringPrivate, QStringLiteral
+#include <QTime>               // for QTime
 #include <QtGlobal>            // for qPrintable
 
 #include "defs.h"
 #include "parse.h"              // for parse_double
-#include "src/core/datetime.h"  // for DateTime
 
 
 void
@@ -95,6 +96,8 @@ V900Format::rd_init(const QString& fname)
 {
   stream = new gpsbabel::TextStream;
   stream->open(fname, QIODevice::ReadOnly);
+
+  utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
 }
 
 void
@@ -142,15 +145,33 @@ QList<V900Format::field_id_t> V900Format::parse_header(const QString& line)
   return ids;
 }
 
-QHash<V900Format::field_id_t, QString> V900Format::parse_line(const QStringList& parts, const QList<field_id_t>& ids)
+V900Format::V900Map V900Format::parse_line(const QStringList& parts, const QList<field_id_t>& ids)
 {
   /* Build a hash to get the field value from the field type */
-  QHash<field_id_t, QString> field;
+  V900Map map;
   for (int idx = 0; idx < parts.size(); ++idx) {
     field_id_t fldid = ids.at(idx);
-    field[fldid] = parts.at(idx).trimmed();
+    map[fldid] = parts.at(idx).trimmed();
   }
-  return field;
+  return map;
+}
+
+bool V900Format::isDupe(const V900Map& a, const V900Map& b)
+{
+  // While the V900Maps from all the records should have identical keys, the initial
+  // previous V900Map won't have any keys.
+  // Unlike QMap, QHash returns keys in arbitrary order making comparision problematic.
+  if (a.keys() != b.keys()) {
+    return false;
+  }
+  for (auto it = a.cbegin(); it != a.cend(); ++it) {
+    if ((it.key() != field_id_t::index) && (it.key() != field_id_t::tag)) {
+      if (it.value() != b.value(it.key())) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 void
@@ -163,7 +184,7 @@ V900Format::read()
   field padding and line endings.
   Basic mode:    INDEX,TAG,DATE,TIME,LATITUDE N/S,LONGITUDE E/W,HEIGHT,SPEED,HEADING,VOX
   Advanced mode: INDEX,TAG,DATE,TIME,LATITUDE N/S,LONGITUDE E/W,HEIGHT,SPEED,HEADING,FIX MODE,VALID,PDOP,HDOP,VDOP,VOX
-  We are now somewhat more relaxed about things.  This allows us to support Columbus "P-1 Mark II GNSS Logger", which
+  We are now somewhat more relaxed about things.  This allows us to support Columbus "P-1 Mark II", which
   is similar to Basic Mode but without VOX, without field padding, and with different length Lat/Lon fields.
   */
 
@@ -181,6 +202,7 @@ V900Format::read()
   track->rte_desc = "V900 GPS tracklog data";
   track_add_head(track);
 
+  V900Map prev;
   while (stream->readLineInto(&line)) {
     ++lc;
     const QStringList parts = line.remove(QChar::Null).split(',');
@@ -191,16 +213,23 @@ V900Format::read()
     }
 
     /* Build a hash to get field value from the field type */
-    const QHash<field_id_t, QString> field = parse_line(parts, ids);
+    const V900Map map = parse_line(parts, ids);
 
     auto* wpt = new Waypoint;
 
     bool ok;
     QString end;
 
-    /* handle date/time fields.  base year is 2000, time zone is UTC. */
-    gpsbabel::DateTime dt = QDateTime::fromString(QStringLiteral("20%1%2Z").arg(field.value(field_id_t::date), field.value(field_id_t::time)),
-                            "yyyyMMddhhmmsst");
+    /* handle date/time fields.  base year is 2000, default time zone is UTC. */
+    QDate date = QDate::fromString(QStringLiteral("20%1").arg(map.value(field_id_t::date)), "yyyyMMdd");
+    QTime time = QTime::fromString(map.value(field_id_t::time), "hhmmss");
+    QDateTime dt; // invalid
+    if (date.isValid() && time.isValid()) {
+      // default to UTC by passing
+      // is_localtime as static_cast<bool>(opt_utc) &
+      // force_utc as static_cast<bool>(opt_utc)
+      dt = make_datetime(date, time, opt_utc, opt_utc, utc_offset);
+    }
     if (dt.isValid()) {
       wpt->SetCreationTime(dt);
     } else {
@@ -209,7 +238,7 @@ V900Format::read()
       continue;
     }
 
-    wpt->latitude = parse_double(field.value(field_id_t::latitude), "", &ok, &end);
+    wpt->latitude = parse_double(map.value(field_id_t::latitude), "", &ok, &end);
     if (!ok || !((end == 'N') || (end == 'S'))) {
       gbWarning("skipping malformed record at line %d.  Failed to parse latitude.\n", lc);
       delete wpt;
@@ -219,7 +248,7 @@ V900Format::read()
       wpt->latitude = -wpt->latitude;
     }
 
-    wpt->longitude = parse_double(field.value(field_id_t::longitude), "", &ok, &end);
+    wpt->longitude = parse_double(map.value(field_id_t::longitude), "", &ok, &end);
     if (!ok || !((end == 'E') || (end == 'W'))) {
       gbWarning("skipping malformed record at line %d.  Failed to parse longitude.\n", lc);
       delete wpt;
@@ -229,29 +258,29 @@ V900Format::read()
       wpt->longitude = -wpt->longitude;
     }
 
-    wpt->altitude = parse_double(field.value(field_id_t::height), "", &ok);
+    wpt->altitude = parse_double(map.value(field_id_t::height), "", &ok);
     if (!ok) {
       gbWarning("skipping malformed record at line %d.  Failed to parse height.\n", lc);
       delete wpt;
       continue;
     }
 
-    wpt->set_speed(KPH_TO_MPS(parse_double(field.value(field_id_t::speed), "", &ok)));
+    wpt->set_speed(KPH_TO_MPS(parse_double(map.value(field_id_t::speed), "", &ok)));
     if (!ok) {
       gbWarning("skipping malformed record at line %d.  Failed to parse speed.\n", lc);
       delete wpt;
       continue;
     }
 
-    wpt->set_course(parse_double(field.value(field_id_t::heading), "", &ok));
+    wpt->set_course(parse_double(map.value(field_id_t::heading), "", &ok));
     if (!ok) {
       gbWarning("skipping malformed record at line %d.  Failed to parse heading.\n", lc);
       delete wpt;
       continue;
     }
 
-    if (field.contains(field_id_t::pdop)) {
-      wpt->pdop = parse_double(field.value(field_id_t::pdop), "", &ok);
+    if (map.contains(field_id_t::pdop)) {
+      wpt->pdop = parse_double(map.value(field_id_t::pdop), "", &ok);
       if (!ok) {
         gbWarning("skipping malformed record at line %d.  Failed to parse pdop.\n", lc);
         delete wpt;
@@ -259,8 +288,8 @@ V900Format::read()
       }
     }
 
-    if (field.contains(field_id_t::hdop)) {
-      wpt->hdop = parse_double(field.value(field_id_t::hdop), "", &ok);
+    if (map.contains(field_id_t::hdop)) {
+      wpt->hdop = parse_double(map.value(field_id_t::hdop), "", &ok);
       if (!ok) {
         gbWarning("skipping malformed record at line %d.  Failed to parse hdop.\n", lc);
         delete wpt;
@@ -268,8 +297,8 @@ V900Format::read()
       }
     }
 
-    if (field.contains(field_id_t::vdop)) {
-      wpt->vdop = parse_double(field.value(field_id_t::vdop), "", &ok);
+    if (map.contains(field_id_t::vdop)) {
+      wpt->vdop = parse_double(map.value(field_id_t::vdop), "", &ok);
       if (!ok) {
         gbWarning("skipping malformed record at line %d.  Failed to parse vdop.\n", lc);
         delete wpt;
@@ -278,11 +307,11 @@ V900Format::read()
     }
 
     /* handle fix mode (2d, 3d, etc.) */
-    if (field.value(field_id_t::valid) == "DGPS") {
+    if (map.value(field_id_t::valid) == "DGPS") {
       wpt->fix = fix_dgps;
-    } else if (field.value(field_id_t::fix) == "3D") {
+    } else if (map.value(field_id_t::fix) == "3D") {
       wpt->fix = fix_3d;
-    } else if (field.value(field_id_t::fix) == "2D") {
+    } else if (map.value(field_id_t::fix) == "2D") {
       wpt->fix = fix_2d;
     } else
       /* possible field: fix_unknown,fix_none,fix_2d,fix_3d,fix_dgps,fix_pps */
@@ -290,9 +319,13 @@ V900Format::read()
       wpt->fix = fix_unknown;
     }
 
-    track_add_wpt(track, wpt);
-
-    QString tag = field.value(field_id_t::tag);
+    /* The Columbus P-10 Pro Quick Start Guide describes some types.
+     * T:Normal point
+     * C:POI
+     * D:Second type of POI
+     * G:Wake-up point
+     */
+    QString tag = map.value(field_id_t::tag);
     if (tag != 'T') {
       // A 'G' tag appears to be a 'T' tag, but generated on the trailing
       // edge of a DGPS fix as it decays to an SPS fix.  See 1/13/13 email
@@ -302,7 +335,7 @@ V900Format::read()
           (tag == 'V')) {
         auto* wpt2 = new Waypoint(*wpt);
         if (tag == 'V') {	// waypoint with voice recording?
-          QString vox = field.value(field_id_t::vox);
+          QString vox = map.value(field_id_t::vox);
           if (!vox.isEmpty()) {
             vox.append(".WAV");
             wpt2->shortname = vox;
@@ -319,5 +352,15 @@ V900Format::read()
         }
       }
     }
+
+    // Some lines may be duplicates except for a different index and tag.
+    // For example on the Columbus "P-1 Mark II" tag 'T' (normal point) lines may be duplicated
+    // as a tag 'C' (POI) line.
+    if (isDupe(map, prev)) {
+      delete wpt;
+    } else {
+      track_add_wpt(track, wpt);
+    }
+    prev = map;
   }
 }

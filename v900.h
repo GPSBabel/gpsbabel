@@ -25,11 +25,15 @@
 #ifndef V900_H_INCLUDED_
 #define V900_H_INCLUDED_
 
+#include <QList>                  // for QList
+#include <QMap>                   // for QMap
 #include <QString>                // for QString
+#include <QStringList>            // for QStringList
 #include <QVector>                // for QVector
 
-#include "defs.h"                 // for ff_cap, ff_type, arglist_t
+#include "defs.h"                 // for ff_cap, ff_type
 #include "format.h"               // for Format
+#include "option.h"               // for OptionInt
 #include "src/core/textstream.h"  // for TextStream
 
 
@@ -37,6 +41,11 @@ class V900Format : public Format
 {
 public:
   using Format::Format;
+
+  QVector<arglist_t>* get_args() override
+  {
+    return &v900_args;
+  }
 
   ff_type get_type() const override
   {
@@ -59,6 +68,8 @@ private:
   enum class field_id_t {
     unknown,index,tag,date,time,latitude,longitude,height,speed,heading,fix,valid,pdop,hdop,vdop,vox
   };
+
+  using V900Map = QMap<field_id_t, QString>;
 
 //  /* This is retained only for documentation of the traditional basic and advanced modes. */
 //  /* the start of each record (line) is common to both advanced and basic mode.
@@ -124,11 +135,22 @@ private:
   /* Member Functions */
 
   static QList<field_id_t> parse_header(const QString& line);
-  static QHash<field_id_t, QString> parse_line(const QStringList& parts, const QList<field_id_t>& ids);
+  static V900Map parse_line(const QStringList& parts, const QList<field_id_t>& ids);
+  static bool isDupe(const V900Map&, const V900Map&);
 
   /* Data Members */
 
   gpsbabel::TextStream* stream{nullptr};
+
+  OptionInt opt_utc;
+  int utc_offset{};
+
+  QVector<arglist_t> v900_args = {
+    {
+      "utc",   &opt_utc,   "offset from UTC in hours",
+      nullptr, ARGTYPE_INT, "-14", "+14", nullptr
+    },
+  };
 };
 
 #endif // V900_H_INCLUDED_
