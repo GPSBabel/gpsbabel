@@ -328,10 +328,8 @@ V900Format::read()
 
     /* Columbus V-1000 has temperature */
     if (map.contains(field_id_t::temp)) {
-      double temp = parse_double(map.value(field_id_t::temp), "", &ok);
-      if (ok) {
-        wpt->set_temperature(temp);
-      } else {
+      wpt->set_temperature(parse_double(map.value(field_id_t::temp), "", &ok));
+      if (!ok) {
         gbWarning("skipping malformed record at line %d.  Failed to parse temp.\n", lc);
         delete wpt;
         continue;
