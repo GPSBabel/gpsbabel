@@ -3,8 +3,8 @@
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="31.765973000" minlon="35.206728000" maxlat="31.766553000" maxlon="35.206901000"/>
   <trk>
-    <name>V900 tracklog</name>
-    <desc>V900 GPS tracklog data</desc>
+    <name>Columbus tracklog v900_basic_mode.csv</name>
+    <desc>Columbus GPS tracklog data v900_basic_mode.csv</desc>
     <trkseg>
       <trkpt lat="31.765973000" lon="35.206901000">
         <ele>827.000</ele>

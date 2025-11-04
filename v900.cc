@@ -80,7 +80,7 @@ for a little more info, see structures:
 #include <QChar>               // for QChar
 #include <QDate>               // for QDate
 #include <QDateTime>           // for QDateTime
-#include <QHash>               // for QHash
+#include <QFileInfo>           // for QFileInfo
 #include <QIODevice>           // for QIODevice
 #include <QList>               // for QList
 #include <QStringList>         // for QStringList
@@ -99,6 +99,7 @@ V900Format::rd_init(const QString& fname)
   stream->open(fname, QIODevice::ReadOnly);
 
   utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
+  fileName = QFileInfo(fname).fileName();
 }
 
 void
@@ -205,8 +206,8 @@ V900Format::read()
   const QList<field_id_t> ids = parse_header(line);
 
   auto* track = new route_head;
-  track->rte_name = "V900 tracklog";
-  track->rte_desc = "V900 GPS tracklog data";
+  track->rte_name = QStringLiteral("Columbus tracklog %1").arg(fileName);
+  track->rte_desc = QStringLiteral("Columbus GPS tracklog data %1").arg(fileName);
   track_add_head(track);
 
   V900Map prev;

@@ -25,8 +25,8 @@
 #ifndef V900_H_INCLUDED_
 #define V900_H_INCLUDED_
 
+#include <QHash>                  // for QHash
 #include <QList>                  // for QList
-#include <QMap>                   // for QMap
 #include <QString>                // for QString
 #include <QStringList>            // for QStringList
 #include <QVector>                // for QVector
@@ -141,6 +141,7 @@ private:
   /* Data Members */
 
   gpsbabel::TextStream* stream{nullptr};
+  QString fileName;
 
   OptionInt opt_utc;
   int utc_offset{};
