@@ -116,17 +116,19 @@ QList<V900Format::field_id_t> V900Format::parse_header(const QString& line)
     {"TAG", field_id_t::tag},
     {"DATE", field_id_t::date},
     {"TIME", field_id_t::time},
-    {"LATITUDE N/S", field_id_t::latitude},
-    {"LONGITUDE E/W", field_id_t::longitude},
+    {"LATITUDEN/S", field_id_t::latitude}, /* Columbus V-1000 has no space before N/S, others do */
+    {"LONGITUDEE/W", field_id_t::longitude}, /* Columbus V-1000 has no space before E/W, others do */
     {"HEIGHT", field_id_t::height},
     {"SPEED", field_id_t::speed},
     {"HEADING", field_id_t::heading},
-    {"FIX MODE", field_id_t::fix},
+    {"FIXMODE", field_id_t::fix}, /* dropped space between FIX and MODE */
     {"VALID", field_id_t::valid},
     {"PDOP", field_id_t::pdop},
     {"HDOP", field_id_t::hdop},
     {"VDOP", field_id_t::vdop},
-    {"VOX", field_id_t::vox}
+    {"VOX", field_id_t::vox},
+    {"PRES", field_id_t::pres}, /* Columbus V-1000, ignored */
+    {"TEMP", field_id_t::temp}  /* Columbus V-1000 */
   };
 
   /* Because at least one field (VOX) can appear in different columns
@@ -134,13 +136,16 @@ QList<V900Format::field_id_t> V900Format::parse_header(const QString& line)
    */
   const QStringList header_parts = line.split(',');
   QList<field_id_t> ids;
+  auto isSpace = [](const QChar &ch)->bool {
+    return ch.isSpace();
+  };
   for (const auto& header_part : header_parts) {
-    QString column_header = header_part.trimmed().toUpper();
+    QString column_header = header_part.toUpper().removeIf(isSpace);
     if (field_idxs.contains(column_header)) {
       ids.append(field_idxs.value(column_header));
     } else {
       ids.append(field_id_t::unknown);
-      gbWarning("Ignoring unrecognized field %s\n", qPrintable(column_header));
+      gbWarning("Ignoring unrecognized field %s\n", qPrintable(header_part));
     }
   }
   return ids;
@@ -319,6 +324,18 @@ V900Format::read()
       /* possible field: fix_unknown,fix_none,fix_2d,fix_3d,fix_dgps,fix_pps */
     {
       wpt->fix = fix_unknown;
+    }
+
+    /* Columbus V-1000 has temperature */
+    if (map.contains(field_id_t::temp)) {
+      double temp = parse_double(map.value(field_id_t::temp), "", &ok);
+      if (ok) {
+        wpt->set_temperature(temp);
+      } else {
+        gbWarning("skipping malformed record at line %d.  Failed to parse temp.\n", lc);
+        delete wpt;
+        continue;
+      }
     }
 
     /* The Columbus P-10 Pro Quick Start Guide describes some types.

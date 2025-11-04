@@ -66,7 +66,7 @@ private:
   /* Types */
 
   enum class field_id_t {
-    unknown,index,tag,date,time,latitude,longitude,height,speed,heading,fix,valid,pdop,hdop,vdop,vox
+    unknown,index,tag,date,time,latitude,longitude,height,speed,heading,fix,valid,pdop,hdop,vdop,vox,pres,temp
   };
 
   using V900Map = QHash<field_id_t, QString>;
