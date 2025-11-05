@@ -73,23 +73,24 @@ for a little more info, see structures:
 
 #include "v900.h"
 
-#include <cassert>             // for assert
-#include <utility>             // for pair
+#include <cassert>         // for assert
+#include <memory>          // for unique_ptr, make_unique
+#include <utility>         // for pair
 
-#include <QByteArray>          // for QByteArray
-#include <QChar>               // for QChar
-#include <QDate>               // for QDate
-#include <QDateTime>           // for QDateTime
-#include <QFileInfo>           // for QFileInfo
-#include <QIODevice>           // for QIODevice
-#include <QList>               // for QList
-#include <QStringList>         // for QStringList
-#include <QStringLiteral>      // for qMakeStringPrivate, QStringLiteral
-#include <QTime>               // for QTime
-#include <QtGlobal>            // for qPrintable
+#include <QByteArray>      // for QByteArray
+#include <QChar>           // for QChar
+#include <QDate>           // for QDate
+#include <QDateTime>       // for QDateTime
+#include <QFileInfo>       // for QFileInfo
+#include <QIODevice>       // for QIODevice
+#include <QList>           // for QList
+#include <QStringList>     // for QStringList
+#include <QStringLiteral>  // for qMakeStringPrivate, QStringLiteral
+#include <QTime>           // for QTime
+#include <QtGlobal>        // for qPrintable
 
 #include "defs.h"
-#include "parse.h"              // for parse_double
+#include "parse.h"         // for parse_double
 
 
 void
@@ -223,7 +224,7 @@ V900Format::read()
     /* Build a hash to get field value from the field type */
     const V900Map map = parse_line(parts, ids);
 
-    auto* wpt = new Waypoint;
+    auto wpt = std::make_unique<Waypoint>();
 
     bool ok;
     QString end;
@@ -242,14 +243,12 @@ V900Format::read()
       wpt->SetCreationTime(dt);
     } else {
       gbWarning("skipping malformed record at line %d.  Failed to parse date and or time.\n", lc);
-      delete wpt;
       continue;
     }
 
     wpt->latitude = parse_double(map.value(field_id_t::latitude), "", &ok, &end);
     if (!ok || !((end == 'N') || (end == 'S'))) {
       gbWarning("skipping malformed record at line %d.  Failed to parse latitude.\n", lc);
-      delete wpt;
       continue;
     }
     if (end == 'S') {
@@ -259,7 +258,6 @@ V900Format::read()
     wpt->longitude = parse_double(map.value(field_id_t::longitude), "", &ok, &end);
     if (!ok || !((end == 'E') || (end == 'W'))) {
       gbWarning("skipping malformed record at line %d.  Failed to parse longitude.\n", lc);
-      delete wpt;
       continue;
     }
     if (end == 'W') {
@@ -269,21 +267,18 @@ V900Format::read()
     wpt->altitude = parse_double(map.value(field_id_t::height), "", &ok);
     if (!ok) {
       gbWarning("skipping malformed record at line %d.  Failed to parse height.\n", lc);
-      delete wpt;
       continue;
     }
 
     wpt->set_speed(KPH_TO_MPS(parse_double(map.value(field_id_t::speed), "", &ok)));
     if (!ok) {
       gbWarning("skipping malformed record at line %d.  Failed to parse speed.\n", lc);
-      delete wpt;
       continue;
     }
 
     wpt->set_course(parse_double(map.value(field_id_t::heading), "", &ok));
     if (!ok) {
       gbWarning("skipping malformed record at line %d.  Failed to parse heading.\n", lc);
-      delete wpt;
       continue;
     }
 
@@ -291,7 +286,6 @@ V900Format::read()
       wpt->pdop = parse_double(map.value(field_id_t::pdop), "", &ok);
       if (!ok) {
         gbWarning("skipping malformed record at line %d.  Failed to parse pdop.\n", lc);
-        delete wpt;
         continue;
       }
     }
@@ -300,7 +294,6 @@ V900Format::read()
       wpt->hdop = parse_double(map.value(field_id_t::hdop), "", &ok);
       if (!ok) {
         gbWarning("skipping malformed record at line %d.  Failed to parse hdop.\n", lc);
-        delete wpt;
         continue;
       }
     }
@@ -309,7 +302,6 @@ V900Format::read()
       wpt->vdop = parse_double(map.value(field_id_t::vdop), "", &ok);
       if (!ok) {
         gbWarning("skipping malformed record at line %d.  Failed to parse vdop.\n", lc);
-        delete wpt;
         continue;
       }
     }
@@ -332,7 +324,6 @@ V900Format::read()
       wpt->set_temperature(parse_double(map.value(field_id_t::temp), "", &ok));
       if (!ok) {
         gbWarning("skipping malformed record at line %d.  Failed to parse temp.\n", lc);
-        delete wpt;
         continue;
       }
     }
@@ -351,17 +342,17 @@ V900Format::read()
       if ((tag == 'C') ||
           (tag == 'G') ||
           (tag == 'V')) {
-        auto* wpt2 = new Waypoint(*wpt);
+        auto wpt2 = std::make_unique<Waypoint>(*wpt);
         if (tag == 'V') {	// waypoint with voice recording?
           QString vox = map.value(field_id_t::vox);
           if (!vox.isEmpty()) {
             vox.append(".WAV");
             wpt2->shortname = vox;
             wpt2->description = vox;
-            waypt_add_url(wpt2, vox, vox);
+            waypt_add_url(wpt2.get(), vox, vox);
           }
         }
-        waypt_add(wpt2);
+        waypt_add(wpt2.release());
       } else {
         if (!tag.isEmpty()) {
           gbWarning("unrecognized tag \"%s\" at line %d. Skipping waypoint generation.\n", qPrintable(tag), lc);
@@ -374,10 +365,8 @@ V900Format::read()
     // Some lines may be duplicates except for a different index and tag.
     // For example on the Columbus "P-1 Mark II" tag 'T' (normal point) lines may be duplicated
     // as a tag 'C' (POI) line.
-    if (isDupe(map, prev)) {
-      delete wpt;
-    } else {
-      track_add_wpt(track, wpt);
+    if (!isDupe(map, prev)) {
+      track_add_wpt(track, wpt.release());
     }
     prev = map;
   }
