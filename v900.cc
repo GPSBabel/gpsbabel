@@ -113,7 +113,7 @@ V900Format::rd_deinit()
 
 QList<V900Format::field_id_t> V900Format::parse_header(const QString& line)
 {
-  const QHash<QString, field_id_t> field_idxs = {
+  static const QHash<QString, field_id_t> field_idxs = {
     {"INDEX", field_id_t::index},
     {"TAG", field_id_t::tag},
     {"DATE", field_id_t::date},
@@ -142,7 +142,7 @@ QList<V900Format::field_id_t> V900Format::parse_header(const QString& line)
     return ch.isSpace();
   };
   for (const auto& header_part : header_parts) {
-    QString column_header = header_part.toUpper().removeIf(isSpace);
+    const QString column_header = header_part.toUpper().removeIf(isSpace);
     if (field_idxs.contains(column_header)) {
       ids.append(field_idxs.value(column_header));
     } else {
@@ -158,7 +158,7 @@ V900Format::V900Map V900Format::parse_line(const QStringList& parts, const QList
   /* Build a hash to get the field value from the field type */
   V900Map map;
   for (int idx = 0; idx < parts.size(); ++idx) {
-    field_id_t fldid = ids.at(idx);
+    const field_id_t fldid = ids.at(idx);
     map[fldid] = parts.at(idx).trimmed();
   }
   return map;
@@ -230,8 +230,8 @@ V900Format::read()
     QString end;
 
     /* handle date/time fields.  base year is 2000, default time zone is UTC. */
-    QDate date = QDate::fromString(QStringLiteral("20%1").arg(map.value(field_id_t::date)), "yyyyMMdd");
-    QTime time = QTime::fromString(map.value(field_id_t::time), "hhmmss");
+    const QDate date = QDate::fromString(QStringLiteral("20%1").arg(map.value(field_id_t::date)), "yyyyMMdd");
+    const QTime time = QTime::fromString(map.value(field_id_t::time), "hhmmss");
     QDateTime dt; // invalid
     if (date.isValid() && time.isValid()) {
       // default to UTC by passing
@@ -334,7 +334,7 @@ V900Format::read()
      * D:Second type of POI
      * G:Wake-up point
      */
-    QString tag = map.value(field_id_t::tag);
+    const QString tag = map.value(field_id_t::tag);
     if (tag != 'T') {
       // A 'G' tag appears to be a 'T' tag, but generated on the trailing
       // edge of a DGPS fix as it decays to an SPS fix.  See 1/13/13 email

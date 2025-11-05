@@ -136,7 +136,7 @@ private:
 
   static QList<field_id_t> parse_header(const QString& line);
   static V900Map parse_line(const QStringList& parts, const QList<field_id_t>& ids);
-  static bool isDupe(const V900Map&, const V900Map&);
+  static bool isDupe(const V900Map& a, const V900Map& b);
 
   /* Data Members */
 
