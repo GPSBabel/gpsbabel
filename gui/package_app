@@ -142,7 +142,7 @@ else # Mac
     echo "Re-signing GPSBabelFE assuming macdeployqt failed to sign it"
     # the options we use to resign are the same as macdeployqt defaults (no hardened runtime, timestamps, extra enttilements)
     codesign --preserve-metadata=identifier,entitlements --force -s - "${APPBUNDLE}/Contents/MacOS/GPSBabelFE"
-    codesign --deep --verify --verbose=3 "${APPBUNDLE}"
+    codesign --deep --verify --verbose=2 "${APPBUNDLE}"
   fi
   # because we might have had to fix codesigning we have to create the dmg instead of letting macdeployqt do it.
   hdiutil create "${DMG}" -srcfolder "${APPBUNDLE}" -format UDZO -fs APFS -volname "${VOLNAME}"
