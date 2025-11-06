@@ -106,7 +106,7 @@ QT_INSTALL_TRANSLATIONS="$(${QMAKE} -query QT_INSTALL_TRANSLATIONS)"
 if [ "${machine}" = "Linux" ]; then
   LANGDIR="${APPDIR}/translations"
 else
-  LANGDIR="${APPDIR}/Contents/MacOS/translations"
+  LANGDIR="${APPDIR}/Contents/Resources/translations"
 fi
 
 rm -fr "${LANGDIR}"
@@ -126,8 +126,8 @@ if [ "${machine}" = "Linux" ]; then
   cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}"
 else # Mac
   cp "${GPSBABEL}" "${APPDIR}/Contents/MacOS/gpsbabel"
-  cp "${SOURCEDIR}/gmapbase.html" "${APPDIR}/Contents/MacOS"
-  cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}/Contents/MacOS"
+  cp "${SOURCEDIR}/gmapbase.html" "${APPDIR}/Contents/Resources"
+  cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}/Contents/Resources"
   pushd "${APPDIR}/.."
   rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.

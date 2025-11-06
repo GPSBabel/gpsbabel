@@ -253,13 +253,18 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
 
   // Set a list of locations to search for the translation file.
   // 1. In the file system in the translations directory relative to the
-  //    location of the executable.
+  //    location of the executable, or on macOS in the Resources
+  //    directory relative to the location of the executable.
   // 2. In the Qt resource system under the translations path.  This is useful
   //    if the resource was compiled into the executable.
   // 3. In the translations path for Qt.  This is useful to find translations
   //    included with Qt.
   const QStringList directories = {
+#ifdef Q_OS_MACOS
+    QApplication::applicationDirPath() + "/../Resources/translations",
+#else
     QApplication::applicationDirPath() + "/translations",
+#endif
     ":/translations",
     QLibraryInfo::path(QLibraryInfo::TranslationsPath)
   };
