@@ -212,10 +212,11 @@ else()
       # codesign doesn't seem to be needed on M1 tahoe for builds done with 6.5.3, XCode 15.4 on macos 14.
       # In the future codesign will run by default QTBUG-138019.
       set(_codesign -c)
+      set(_codesignid tsteven4)
     endif()
     get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR} ${_codesign}
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR} ${_codesign} ${_codesignid}
                       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
                       DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                       VERBATIM
