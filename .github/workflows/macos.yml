@@ -125,7 +125,7 @@ jobs:
     - name: Script
       env:
         XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
-        IDENTITY: ${{ secrets.IDENTITY }}
+        IDENTITY: ${{ env.IDENTITY }}
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
