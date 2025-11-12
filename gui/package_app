@@ -92,7 +92,7 @@ do
     q) QMAKE="$OPTARG";;
     s) SOURCEDIR="$OPTARG";;
     c) CODESIGN="$OPTARG";;
-    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory] [-c]\n" "$0"
+    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory] [-c identity]\n" "$0"
        exit 2;;
   esac
 done

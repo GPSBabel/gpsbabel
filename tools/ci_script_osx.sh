@@ -5,18 +5,22 @@
  
 function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1)" == "$1"; }
 
+while getopts g:i: name
+do
+  case $name in
+    g) GENERATOR[0]=-G; GENERATOR[1]="$OPTARG";;
+    i) IDENTITY=-DGPSBABEL_CODESIGN_IDENTITY="$OPTARG";;
+    ?) printf "Usage: %s: [-G generator] [-i identity] source_directory qt_version\n" "$0"
+       exit 2;;
+  esac
+done
+shift "$((OPTIND - 1))"
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 source_directory qt_version [Generator]"
+  printf "Usage: %s: [-G generator] [-i identity] source_directory qt_version\n" "$0"
   exit 1
 fi
 SOURCE_DIR=$1
 QTVER=$2
-if [ $# -ge 3 ]; then
-  if [ -n "$3" ]; then
-    GENERATOR[0]=-G
-    GENERATOR[1]=$3
-  fi
-fi
 if version_ge "${QTVER}" 6.10.0; then
   DEPLOY_TARGET="13.0"
   ARCHS="x86_64;arm64"
@@ -45,13 +49,13 @@ VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z "$(git show -s --format
 
 case "${GENERATOR[1]}" in
 Xcode | "Ninja Multi-Config")
-  cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} "${GENERATOR[@]}"
+  cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} "${GENERATOR[@]}" "${IDENTITY}"
   cmake --build . --config Release
   ctest -C Release --output-on-failure
   cmake --build . --config Release --target package_app
   ;;
 *)
-  cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} -DCMAKE_BUILD_TYPE=Release "${GENERATOR[@]}"
+  cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} -DCMAKE_BUILD_TYPE=Release "${GENERATOR[@]}" "${IDENTITY}"
   cmake --build .
   ctest --output-on-failure
   cmake --build . --target package_app
