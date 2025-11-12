@@ -100,8 +100,8 @@ jobs:
         P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
         KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       run: |
-        if [ -n "${BUILD_CERTIFICATE_BASE64}" -a
-             -n "${P12_PASSWORD}" -a
+        if [ -n "${BUILD_CERTIFICATE_BASE64}" -a \
+             -n "${P12_PASSWORD}" -a \
              -n "${KEYCHAIN_PASSWORD}" ]; then
           echo "Importing signing certificate"
           # create variables
