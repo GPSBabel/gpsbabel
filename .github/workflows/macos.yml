@@ -120,6 +120,8 @@ jobs:
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
+
+          echo "KEYCHAIN_LOADED=true" >> "$GITHUB_ENV"
         fi
 
     - name: Script
@@ -129,7 +131,12 @@ jobs:
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
-        ID=${IDENTITY:--}
+        if [ -n "${KEYCHAIN_LOADED}" -a \
+             -n "${IDENTITY}" ]; then
+          ID=${IDENTITY}
+        else
+          ID="-"
+        fi
         ./tools/ci_script_osx.sh -g ${{ matrix.GENERATOR }} -i "${ID}" . ${{ matrix.QT_VERSION }}
 
     - name: Generate artifact attestation
