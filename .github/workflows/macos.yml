@@ -125,10 +125,12 @@ jobs:
     - name: Script
       env:
         XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
+        IDENTITY: ${{ secrets.IDENTITY }}
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
-        ./tools/ci_script_osx.sh -g ${{ matrix.GENERATOR }} -i ${{ secrets.IDENTITY }} . ${{ matrix.QT_VERSION }}
+        ID=${IDENTITY:--}
+        ./tools/ci_script_osx.sh -g ${{ matrix.GENERATOR }} -i "${ID}" . ${{ matrix.QT_VERSION }}
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}
