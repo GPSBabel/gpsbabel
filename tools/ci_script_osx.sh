@@ -8,7 +8,7 @@ function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1
 while getopts g:i: name
 do
   case $name in
-    g) CMAKEOPTIONS+=(-G "$OPTARG");;
+    g) CMAKEOPTIONS+=(-G "$OPTARG"); GENERATOR="$OPTARG";;
     i) CMAKEOPTIONS+=(-DGPSBABEL_CODESIGN_IDENTITY="$OPTARG");;
     ?) printf "Usage: %s: [-g generator] [-i identity] source_directory qt_version\n" "$0"
        exit 2;;
@@ -47,7 +47,7 @@ VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z "$(git show -s --format
 # debug tokens
 "$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
 
-case "${GENERATOR[1]}" in
+case "${GENERATOR}" in
 Xcode | "Ninja Multi-Config")
   cmake -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} "${CMAKEOPTIONS[@]}"
   cmake --build . --config Release
