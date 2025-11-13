@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 #
 # this script is run on ci for the script stage of mac builds
 #
@@ -44,9 +44,7 @@ fi
 # we assume we are on macOS, so date is not gnu date.
 VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z "$(git show -s --format="%aI" HEAD | sed 's/:\(..\)$/\1/')" +%Y%m%dT%H%MZ)-$(git rev-parse --short=7 HEAD)}
 
-# debug tokens
-"$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
-
+set -x
 case "${GENERATOR}" in
 Xcode | "Ninja Multi-Config")
   cmake -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} "${CMAKEOPTIONS[@]}"
