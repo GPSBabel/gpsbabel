@@ -100,44 +100,18 @@ jobs:
         P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
         KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       run: |
-        if [ -n "${BUILD_CERTIFICATE_BASE64}" -a \
-             -n "${P12_PASSWORD}" -a \
-             -n "${KEYCHAIN_PASSWORD}" ]; then
-          echo "Importing signing certificate"
-          # create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-
-          # import certificate and provisioning profile from secrets
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-
-          # create temporary keychain
-          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-
-          # import certificate to keychain
-          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
-
-          echo "KEYCHAIN_LOADED=true" >> "$GITHUB_ENV"
-        fi
+        ./tools/ci_load_keychain.sh
 
     - name: Script
       env:
         XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
-        IDENTITY: ${{ vars.IDENTITY }}
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
-        if [ -n "${KEYCHAIN_LOADED}" -a \
-             -n "${IDENTITY}" ]; then
-          ID=${IDENTITY}
-        else
-          ID="-"
+        if [ -z "${IDENTITY}" ]; then
+          IDENTITY="-"
         fi
-        ./tools/ci_script_osx.sh -g ${{ matrix.GENERATOR }} -i "${ID}" . ${{ matrix.QT_VERSION }}
+        ./tools/ci_script_osx.sh -g ${{ matrix.GENERATOR }} -i "${IDENTITY}" . ${{ matrix.QT_VERSION }}
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}
