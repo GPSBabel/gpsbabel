@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 # load keychain for codesigning
 # adapted from
 # https://docs.github.com/en/enterprise-cloud@latest/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
