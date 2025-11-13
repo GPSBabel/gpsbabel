@@ -2,11 +2,12 @@
 # you must be logged into docker for the push to succeed.
 
 args=()
-while getopts "s:mp" opt; do
+while getopts "s:mpl" opt; do
   case $opt in
     s) versuffix="_$OPTARG";;
     m) args+=("--platform"); args+=("linux/amd64,linux/arm64");;
     p) args+=("--push");;
+    l) args+=("--load");;
     *) echo "Usage: $0 [-s suffix] [-m] [-p]"; exit 1;;
   esac
 done
