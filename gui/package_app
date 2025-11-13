@@ -135,7 +135,7 @@ else # Mac
   DMG="${VOLNAME}.dmg"
   rm -f "${DMG}"
   set -x
-  if [ -n "${CODESIGN}" ];
+  if [ -n "${CODESIGN}" ]; then
     deployopt=(-codesign "${CODESIGN}")
   fi
   "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -verbose=2 "${deployopt[@]}"
