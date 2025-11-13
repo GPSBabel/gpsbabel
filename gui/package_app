@@ -135,8 +135,11 @@ else # Mac
   DMG="${VOLNAME}.dmg"
   rm -f "${DMG}"
   set -x
-  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -verbose=2 -codesign="${CODESIGN}"
-  if [ ! -z "${CODESIGN}" ]; then
+  if [ -n "${CODESIGN}" ];
+    deployopt=(-codesign "${CODESIGN}")
+  fi
+  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -verbose=2 "${deployopt[@]}"
+  if [ -n "${CODESIGN}" ]; then
     if ! codesign --deep --verify "${APPBUNDLE}"; then
       # GPSBabelFE ends not being signed due incorrect signing order of gpsbabel in macdeployqt.
       # but QtCore5Compat and gpsbabel are signed belatedly.
