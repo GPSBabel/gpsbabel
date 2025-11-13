@@ -80,7 +80,6 @@ if [ "${machine}" = "Linux" ]; then
 else
   APPDIR=GPSBabelFE.app
 fi
-SKIP_UPDATE_RELEASE=
 GPSBABEL=../gpsbabel
 QMAKE=qmake
 SOURCEDIR=.
@@ -136,9 +135,9 @@ else # Mac
   rm -f "${DMG}"
   set -x
   if [ -n "${CODESIGN}" ]; then
-    deployopt=(-codesign "${CODESIGN}")
+    deployopt=-codesign=${CODESIGN}
   fi
-  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -verbose=2 "${deployopt[@]}"
+  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -verbose=2 "${deployopt}"
   if [ -n "${CODESIGN}" ]; then
     if ! codesign --deep --verify "${APPBUNDLE}"; then
       # GPSBabelFE ends not being signed due incorrect signing order of gpsbabel in macdeployqt.
