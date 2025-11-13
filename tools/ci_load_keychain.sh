@@ -4,8 +4,10 @@
 # https://docs.github.com/en/enterprise-cloud@latest/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications
 
 if [ -n "${BUILD_CERTIFICATE_BASE64}" ] && \
-   [ -n "${P12_PASSWORD}" ] && \
-   [ -n "${KEYCHAIN_PASSWORD}" ]; then
+   [ -n "${P12_PASSWORD}" ]; then
+
+  KEYCHAIN_PASSWORD=$(openssl rand -base64 12)
+
   echo "Importing signing certificate"
   # create variables
   CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
