@@ -82,6 +82,7 @@ class Kalman : public Filter {
 
   /* Member Functions */
 
+  static QString toString(const Waypoint& wpt);
   void kalman_point_cb(Waypoint* wpt);
   static double median(std::vector<double>& samples);
 

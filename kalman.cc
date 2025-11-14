@@ -42,7 +42,7 @@ extern RouteList* global_track_list;
 #if FILTERS_ENABLED
 
 // define an operator to send Waypoint identification to a QDebug output stream.
-static QDebug& operator<< (QDebug& debug, const Waypoint& wpt)
+static QDebug operator<< (QDebug debug, const Waypoint& wpt)
 {
   QDebugStateSaver saver(debug);
   debug << wpt.GetCreationTime().toString() << wpt.shortname
@@ -51,20 +51,17 @@ static QDebug& operator<< (QDebug& debug, const Waypoint& wpt)
   return debug;
 }
 
-static QDebug& operator<< (QDebug& debug, const Matrix& m)
+/* Helper to stream a waypoint to FatalMsg() for use with gbFatal().
+ * This works best with FatalMsg().noquote().
+ * This avoids lost messages due to copies of QDebug created by the out of
+ * class streaming output operator for Waypoints! 
+ */
+QString Kalman::toString(const Waypoint& wpt)
 {
-  QDebugStateSaver saver(debug);
-  debug.nospace();
-  for (int c = 0; c < m.cols(); ++c) {
-      for (int r = 0; r < m.rows(); ++r) {
-          if (!((r == 0) && (c == 0))) {
-              debug << " ";
-          }
-          debug << m(r,c);
-          debug << ((r + 1 < m.rows())? "," : ";");
-      }
-  }
-  return debug;
+  QString str;
+  QDebug dbgstr(&str);
+  dbgstr << wpt;
+  return str;
 }
 
 QVector<arglist_t>* Kalman::get_args() {
@@ -126,8 +123,8 @@ void Kalman::process() {
 
         for (const auto& wpt_stats : std::as_const(rte->waypoint_list)) {
             if (!wpt_stats->GetCreationTime().isValid()) {
-                gbFatal(FatalMsg() << "Track points must have times.\n"
-                                   << *wpt_stats);
+                gbFatal(FatalMsg().noquote() << "Track points must have times.\n"
+                                   << toString(*wpt_stats));
             }
 
             const QDateTime cur_time_for_stats = wpt_stats->GetCreationTime();
@@ -140,8 +137,8 @@ void Kalman::process() {
                     const double speed = dist / dt;
                     speed_samples_for_stats.push_back(speed);
                 } else {
-                    gbFatal(FatalMsg() << "Time must increase between adjacent points, but the track contains adjacent points were this is not true.\n"
-                                       << *prev_wpt << "\n" << *wpt_stats);
+                    gbFatal(FatalMsg().noquote() << "Time must increase between adjacent points, but the track contains adjacent points were this is not true.\n"
+                                       << toString(*prev_wpt) << "\n" << toString(*wpt_stats));
                 }
             } else {
                 first_point_for_stats = false;
