@@ -173,6 +173,7 @@ jobs:
       run: |
         system_profiler SPHardwareDataType
         csrutil status
+        spctl --status
         hdiutil attach ./bld/GPSBabel*.dmg
         ls -l /Volumes
         ls -l /Volumes/GPSBabelFE
