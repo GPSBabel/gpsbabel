@@ -160,12 +160,12 @@ jobs:
         merge-multiple: true
 
     - name: 'Install Artifact'
-      shell: pwsh
+      shell: bash
       run: |
         hdiutil attach ./bld/GPSBabel*.dmg
         cp /Volumes/GPSBabelFE/GPSBabelFE.app bld
         hdiutil detach /Volumes/GPSBabelFE
-        Get-ChildItem bld
+        ls -l bld
 
     - name: 'Test Artifact'
       shell: bash
