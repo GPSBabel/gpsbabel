@@ -163,7 +163,9 @@ jobs:
       shell: bash
       run: |
         hdiutil attach ./bld/GPSBabel*.dmg
-        cp /Volumes/GPSBabelFE/GPSBabelFE.app bld
+        ls -l /Volumes
+        ls -l /Volumes/GPSBabelFE
+        cp -R /Volumes/GPSBabelFE/GPSBabelFE.app bld
         hdiutil detach /Volumes/GPSBabelFE
         ls -l bld
 
