@@ -106,6 +106,7 @@ jobs:
       env:
         XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
       run: |
+        system_profiler SPHardwareDataType
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
         if [ -z "${IDENTITY}" ]; then
@@ -162,6 +163,8 @@ jobs:
     - name: 'Install Artifact'
       shell: bash
       run: |
+        system_profiler SPHardwareDataType
+        csrutil status
         hdiutil attach ./bld/GPSBabel*.dmg
         ls -l /Volumes
         ls -l /Volumes/GPSBabelFE
