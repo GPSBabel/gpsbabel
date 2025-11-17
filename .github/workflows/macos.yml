@@ -132,7 +132,7 @@ jobs:
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v5
       with:
-        name: MacOS_Installer ${{ join(matrix.*) }}
+        name: MacOS_Installer-${{ join(matrix.*) }}
         path: gui/GPSBabel-*.dmg
         retention-days: 7
 
@@ -142,4 +142,35 @@ jobs:
       with:
         path: ~/Cache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
+
+  test_installer:
+    name: 'Test Installer'
+    needs: macos
+    runs-on: macos-15-intel
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+
+    - name: 'Download Artifacts'
+      uses: actions/download-artifact@v6
+      with:
+        path: bld
+        pattern: MacOS_Installer-6.8.3,16.4,Ninja,true,macos-15
+        merge-multiple: true
+
+    - name: 'Install Artifact'
+      shell: pwsh
+      run: |
+        hdiutil attach ./bld/GPSBabel*.dmg
+        cp /Volumes/GPSBabelFE/GPSBabelFE.app bld
+        hdiutil detach /Volumes/GPSBabelFE
+        Get-ChildItem bld
+
+    - name: 'Test Artifact'
+      shell: bash
+      run: |
+        PNAME=./bld/GPSBabelFE.app/Contents/MacOS/gpsbabel GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./bld/GPSBabelFE.app/Contents/MacOS/gpsbabel GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+        ls -l bld
 
