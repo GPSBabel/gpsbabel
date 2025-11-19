@@ -55,7 +55,7 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-2025
-          - QT_VERSION: '6.10.0'
+          - QT_VERSION: '6.10.1'
             TARGET_ARCH: 'arm64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
@@ -63,7 +63,7 @@ jobs:
             METHOD: 'aqt'
             RELEASE: true
             os: windows-2025
-          - QT_VERSION: '6.10.0'
+          - QT_VERSION: '6.10.1'
             ARCH: 'arm64'
             HOST_ARCH: 'arm64'
             COMPILER: 'msvc2022_arm64'
