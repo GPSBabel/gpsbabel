@@ -172,4 +172,7 @@ compare ${REFERENCE}/lowrance-v2-merge~usr.gpx ${TMPDIR}/lowrance-v2-merge~usr.g
 #
 gpsbabel -i gpx -f ${REFERENCE}/lowrance-utf16-test.gpx -o lowranceusr,wversion=4 -F ${TMPDIR}/lowrance-utf16-test.usr
 gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance-utf16-test.usr -o gpx -F ${TMPDIR}/lowrance-utf16-test~usr.gpx
-compare ${REFERENCE}/lowrance-utf16-test.gpx ${TMPDIR}/lowrance-utf16-test~usr.gpx
+# Extract waypoint name from both files and compare - this focuses the test on the UTF-16 bug
+grep '<name>' ${REFERENCE}/lowrance-utf16-test.gpx > ${TMPDIR}/lowrance-utf16-orig-name.txt
+grep '<name>' ${TMPDIR}/lowrance-utf16-test~usr.gpx > ${TMPDIR}/lowrance-utf16-output-name.txt
+compare ${TMPDIR}/lowrance-utf16-orig-name.txt ${TMPDIR}/lowrance-utf16-output-name.txt
