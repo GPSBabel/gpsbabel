@@ -165,3 +165,12 @@ gpsbabel -i gpx -f ${REFERENCE}/lowrance-v2.gpx -o lowranceusr,merge -F ${TMPDIR
 gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance-v2-merge~gpx.usr -o gpx -F ${TMPDIR}/lowrance-v2-merge~usr.gpx
 compare ${REFERENCE}/lowrance-v2-merge~usr.gpx ${TMPDIR}/lowrance-v2-merge~usr.gpx
 
+#
+# Test UTF-16 character corruption bug in USR v4+ formats
+# This test verifies that waypoint names with characters containing 0x01 byte in UTF-16LE 
+# encoding (like "Ā" = U+0100 = 0x00 0x01) are handled correctly without corruption
+#
+gpsbabel -i gpx -f ${REFERENCE}/lowrance-utf16-test.gpx -o lowranceusr,wversion=4 -F ${TMPDIR}/lowrance-utf16-test.usr
+gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance-utf16-test.usr -o gpx -F ${TMPDIR}/lowrance-utf16-test~usr.gpx
+compare ${REFERENCE}/lowrance-utf16-test.gpx ${TMPDIR}/lowrance-utf16-test~usr.gpx
+
