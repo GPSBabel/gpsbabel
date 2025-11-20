@@ -197,19 +197,18 @@ jobs:
     - name: 'Install Artifact'
       shell: pwsh
       run: |
-        $install_path=Join-Path $(Get-Location) install
-        New-Item $install_path -type directory -Force | Out-Null
+        $install_path=Join-Path $(Get-Location) installDir
         .\download\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=download\log.txt /MERGETASKS="!vcredist"
         Start-Sleep -Seconds 60
-        Get-ChildItem install
+        Get-ChildItem $install_path
 
     - name: 'Test Artifact'
       shell: bash
       run: |
-        find ./install -type f -exec file {} \;
-        PNAME=./install/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
-        PNAME=./install/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
-        ls -l install
+        find ./installDir -type f -exec file {} \;
+        PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./installDir/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+        ls -l installDir
 
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v5
