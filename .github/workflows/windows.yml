@@ -191,7 +191,7 @@ jobs:
       uses: actions/download-artifact@v6
       with:
         path: bld
-        pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
+        pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,false,windows-2025
         merge-multiple: true
 
     - name: 'Install Artifact'
