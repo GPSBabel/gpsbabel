@@ -141,7 +141,6 @@ jobs:
       shell: bash
       if: matrix.CROSS_COMPILER == ''
       run: |
-        find ./bld/gui/package -type f -exec file {} \;
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./bld/gui/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
@@ -181,7 +180,15 @@ jobs:
   test_installer:
     name: 'Test Installer'
     needs: windows
-    runs-on: windows-11-arm
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-11-arm
+            installer: Windows_Installer-*,arm64,arm64,msvc2022_arm64,aqt,true,Ninja,windows-11-arm
+          - os: windows-11-arm
+            installer: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,false,windows-2025
 
     steps:
     - name: Checkout repository
@@ -191,7 +198,7 @@ jobs:
       uses: actions/download-artifact@v6
       with:
         path: download
-        pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,false,windows-2025
+        pattern: ${{ matrix.installer }}
         merge-multiple: true
 
     - name: 'Install Artifact'
@@ -207,7 +214,7 @@ jobs:
       run: |
         find ./installDir -type f -exec file {} \;
         PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
-        PNAME=./installDir/package/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
+        PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
         ls -l installDir
 
     - name: 'Upload Artifacts'
