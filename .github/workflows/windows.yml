@@ -61,14 +61,14 @@ jobs:
             COMPILER: 'msvc2022_64'
             CROSS_COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
-            RELEASE: true
+            RELEASE: false
             os: windows-2025
           - QT_VERSION: '6.10.0'
             ARCH: 'arm64'
             HOST_ARCH: 'arm64'
             COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
-            RELEASE: false
+            RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-11-arm
 
