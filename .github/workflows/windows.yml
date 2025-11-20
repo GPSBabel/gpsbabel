@@ -205,7 +205,7 @@ jobs:
     - name: 'Test Artifact'
       shell: bash
       run: |
-        find ./bld/gui/package -type f -exec file {} \;
+        find ./bld -type f -exec file {} \;
         PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
         ls -l bld
