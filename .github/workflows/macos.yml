@@ -164,27 +164,22 @@ jobs:
     - name: 'Download Artifacts'
       uses: actions/download-artifact@v6
       with:
-        path: bld
+        path: download
         pattern: MacOS_Installer-6.8.3,16.4,Ninja,true,macos-15
         merge-multiple: true
 
     - name: 'Install Artifact'
       shell: bash
       run: |
-        system_profiler SPHardwareDataType
-        csrutil status
-        spctl --status
-        hdiutil attach ./bld/GPSBabel*.dmg
-        ls -l /Volumes
-        ls -l /Volumes/GPSBabelFE
-        cp -R /Volumes/GPSBabelFE/GPSBabelFE.app bld
+        hdiutil attach ./download/GPSBabel*.dmg
+        cp -R /Volumes/GPSBabelFE/GPSBabelFE.app installDir
         hdiutil detach /Volumes/GPSBabelFE
-        ls -l bld
 
     - name: 'Test Artifact'
       shell: bash
       run: |
-        PNAME=./bld/GPSBabelFE.app/Contents/MacOS/gpsbabel GBTEMP=./gbtemp ./testo 2>&1
-        PNAME=./bld/GPSBabelFE.app/Contents/MacOS/gpsbabel GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
-        ls -l bld
-
+        system_profiler SPHardwareDataType
+        csrutil status
+        spctl --status
+        PNAME=./installDir/GPSBabelFE.app/Contents/MacOS/gpsbabel GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./installDir/GPSBabelFE.app/Contents/MacOS/gpsbabel GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
