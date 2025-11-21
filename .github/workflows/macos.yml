@@ -172,6 +172,7 @@ jobs:
       shell: bash
       run: |
         hdiutil attach ./download/GPSBabel*.dmg
+        mkdir installDir
         cp -R /Volumes/GPSBabelFE/GPSBabelFE.app installDir
         hdiutil detach /Volumes/GPSBabelFE
 
