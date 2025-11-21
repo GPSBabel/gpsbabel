@@ -61,14 +61,14 @@ jobs:
             COMPILER: 'msvc2022_64'
             CROSS_COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
-            RELEASE: true
+            RELEASE: false
             os: windows-2025
           - QT_VERSION: '6.10.1'
             ARCH: 'arm64'
             HOST_ARCH: 'arm64'
             COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
-            RELEASE: false
+            RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-11-arm
 
@@ -180,7 +180,17 @@ jobs:
   test_installer:
     name: 'Test Installer'
     needs: windows
-    runs-on: windows-11-arm
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-11-arm
+            installer: Windows_Installer-*,arm64,arm64,msvc2022_arm64,aqt,true,Ninja,windows-11-arm
+            name: WoA-native
+          - os: windows-11-arm
+            installer: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,false,windows-2025
+            name: WoA-cross
 
     steps:
     - name: Checkout repository
@@ -189,30 +199,30 @@ jobs:
     - name: 'Download Artifacts'
       uses: actions/download-artifact@v6
       with:
-        path: bld
-        pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
+        path: download
+        pattern: ${{ matrix.installer }}
         merge-multiple: true
 
     - name: 'Install Artifact'
       shell: pwsh
       run: |
-        $install_path=Join-Path $(Get-Location) bld
-        .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=bld\log.txt /MERGETASKS="!vcredist"
+        $install_path=Join-Path $(Get-Location) installDir
+        .\download\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=download\log.txt /MERGETASKS="!vcredist"
         Start-Sleep -Seconds 60
-        Get-ChildItem bld
+        Get-ChildItem -Path $install_path -Recurse -Force
 
     - name: 'Test Artifact'
       shell: bash
       run: |
-        PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
-        PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
-        ls -l bld
+        find ./installDir -type f -exec file {} \;
+        PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v5
       with:
-        name: Test_Installer
+        name: Test_Installer-${{ matrix.name }}
         path: |
-          bld/log.txt
+          download/log.txt
         retention-days: 7
 

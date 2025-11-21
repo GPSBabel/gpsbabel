@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="37.7749" lon="-122.4194">
+    <name>Test_Ā_Point</name>
+    <desc>Point with Ā character</desc>
+  </wpt>
+</gpx>
