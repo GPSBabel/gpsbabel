@@ -74,7 +74,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Cache Qt
       uses: actions/cache/restore@v4
@@ -197,7 +197,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: 'Download Artifacts'
       uses: actions/download-artifact@v6
