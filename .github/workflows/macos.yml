@@ -43,8 +43,8 @@ jobs:
             GENERATOR: 'Ninja'
             RELEASE: true
             os: macos-15
-          - QT_VERSION: '6.10.0'
-            XCODE_VERSION: '26.0.1'
+          - QT_VERSION: '6.10.1'
+            XCODE_VERSION: '26.1'
             GENERATOR: 'Ninja'
             RELEASE: false
             os: macos-26
@@ -64,7 +64,7 @@ jobs:
       if: steps.restore-cache.outputs.cache-hit != 'true'
       uses: actions/setup-python@v6
       with:
-        python-version: '3.12'
+        python-version: '3.13'
 
     - name: Qt install
       if: steps.restore-cache.outputs.cache-hit != 'true'
