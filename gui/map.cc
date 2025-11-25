@@ -78,10 +78,15 @@ Map::Map(QWidget* parent,
   connect(mclicker, &MarkerClicker::logTime, this, &Map::logTime);
 
   // We search the following locations:
-  // 1. In the file system in the same directory as the executable.
+  // 1. In the file system in the same directory as the executable, or on macOS,
+  //    in the Resources directory relative to the location of the executable.
   // 2. In the Qt resource system.  This is useful if the resource was compiled
   //    into the executable.
+#ifdef Q_OS_MACOS
+  QString baseFile = QApplication::applicationDirPath() + "/../Resources/gmapbase.html";
+#else
   QString baseFile = QApplication::applicationDirPath() + "/gmapbase.html";
+#endif
   QString fileName;
   QUrl baseUrl;
   if (QFile(baseFile).exists()) {

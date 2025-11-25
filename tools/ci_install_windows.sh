@@ -63,7 +63,7 @@ else
     # we need https://github.com/miurahr/aqtinstall/pull/941 to install extensions with 6.10.0 for windows arm64.
     # until this is merged and released use a locally generated version of aqt.
     #pip3 install 'aqtinstall>=3.3.0'
-    archive=aqtinstall-3.3.1.dev13-py3-none-any.whl
+    archive=aqtinstall-3.3.1.dev18-py3-none-any.whl
     curl -u "${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}" "${ARTIFACTORY_BASE_URL}/${archive}" -o "/tmp/${archive}"
     pip3 install "/tmp/${archive}"
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" "${HOST}" "${QT_VERSION}" "${PACKAGE_SUFFIX}" "${CACHEDIR}/Qt"
