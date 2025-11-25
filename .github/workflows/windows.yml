@@ -55,7 +55,7 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-2025
-          - QT_VERSION: '6.10.0'
+          - QT_VERSION: '6.10.1'
             TARGET_ARCH: 'arm64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
@@ -63,7 +63,7 @@ jobs:
             METHOD: 'aqt'
             RELEASE: false
             os: windows-2025
-          - QT_VERSION: '6.10.0'
+          - QT_VERSION: '6.10.1'
             ARCH: 'arm64'
             HOST_ARCH: 'arm64'
             COMPILER: 'msvc2022_arm64'
@@ -74,7 +74,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Cache Qt
       uses: actions/cache/restore@v4
@@ -191,10 +191,13 @@ jobs:
           - os: windows-11-arm
             installer: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,false,windows-2025
             name: WoA-cross
+          - os: windows-2025
+            installer: Windows_Installer-*,amd64,amd64,msvc2022_64,aqt,true,Ninja,windows-2025
+            name: x86_64
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: 'Download Artifacts'
       uses: actions/download-artifact@v6
@@ -207,14 +210,14 @@ jobs:
       shell: pwsh
       run: |
         $install_path=Join-Path $(Get-Location) installDir
-        .\download\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=download\log.txt /MERGETASKS="!vcredist"
+        .\download\GPSBabel-*-*-Setup-*.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=download\log.txt /MERGETASKS="!vcredist"
         Start-Sleep -Seconds 60
         Get-ChildItem -Path $install_path -Recurse -Force
 
     - name: 'Test Artifact'
       shell: bash
       run: |
-        find ./installDir -type f -exec file {} \;
+        find ./installDir -type f -exec file {} \; | tee download/files.txt
         PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
         PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
@@ -224,5 +227,6 @@ jobs:
         name: Test_Installer-${{ matrix.name }}
         path: |
           download/log.txt
+          download/files.txt
         retention-days: 7
 
