@@ -10,15 +10,19 @@
       </trkpt>
       <trkpt lat="40.712900000" lon="-74.006100000">
         <time>2025-09-29T10:00:01Z</time>
+        <speed>13.952841</speed>
       </trkpt>
       <trkpt lat="40.713000000" lon="-74.006200000">
         <time>2025-09-29T10:00:02Z</time>
+        <speed>13.954228</speed>
       </trkpt>
       <trkpt lat="40.713492600" lon="-74.006692600">
         <time>2025-09-29T10:00:05Z</time>
+        <speed>21.506420</speed>
       </trkpt>
       <trkpt lat="40.713994000" lon="-74.007194000">
         <time>2025-09-29T10:00:08Z</time>
+        <speed>22.800177</speed>
       </trkpt>
     </trkseg>
   </trk>

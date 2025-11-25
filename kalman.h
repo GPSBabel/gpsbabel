@@ -18,27 +18,46 @@
 #ifndef KALMAN_H_INCLUDED_
 #define KALMAN_H_INCLUDED_
 
-#include <QDateTime>
-#include <QList>
-#include <QString>
-#include <QVector>
+#include <QDateTime>           // for QDateTime
+#include <QList>               // for QList
+#include <QString>             // for QString
+#include <QVector>             // for QVector
 
-#include "defs.h" // for arglist_t, ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_STRING, Waypoint
-#include "filter.h" // for Filter
-#include "option.h" // for OptionDouble, OptionString
-#include "src/core/matrix.h" // for Matrix
-#include "src/core/nvector.h" // for NVector/
-                              //
+#include "defs.h"              // for arglist_t, ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_STRING, Waypoint
+#include "filter.h"            // for Filter
+#include "option.h"            // for OptionDouble, OptionString
+#include "src/core/matrix.h"   // for Matrix
+#include "src/core/nvector.h"  // for NVector
+
 #if FILTERS_ENABLED
 
 class Kalman : public Filter {
  public:
+  /* Types */
+
   enum class PreFilterState { NORMAL, RECOVERY, FIRST_GOOD_SEEN_IN_RECOVERY };
+
+  /* Constants */
+
+  static constexpr int debugLevelInfo = 1;
+  static constexpr int debugLevelDebug = 3;
+  static constexpr int debugLevelTrace = 5;
+  static constexpr int debugLevelVerboseTrace = 7;
+
+  /* Member Functions */
 
   void process() override;
   QVector<arglist_t>* get_args() override;
 
  private:
+  /* Types */
+
+  struct KalmanExtraData {
+    bool is_zinger_deletion = false;
+  };
+
+  /* Constants */
+
   // Constants for Kalman filter tuning
 
   // A high initial uncertainty allows the filter to converge quickly to the measured state.
@@ -57,19 +76,17 @@ class Kalman : public Filter {
   // for faster velocity changes.
   static constexpr double VELOCITY_PROCESS_NOISE_SCALE = 0.1;
 
-  // Minimum time delta between points to be considered for processing.
-  static constexpr double MIN_DT = 1e-3; // seconds
-
   static constexpr double COORDINATE_PRECISION_FACTOR = 1e7;
   static constexpr int STATE_SIZE = 6;   // [x,y,z,vx,vy,vz]
   static constexpr int MEAS_SIZE  = 3;   // [x,y,z] measurements
 
-  struct KalmanExtraData {
-    bool is_zinger_deletion = false;
-  };
+  /* Member Functions */
 
+  static QString toString(const Waypoint& wpt);
   void kalman_point_cb(Waypoint* wpt);
   static double median(std::vector<double>& samples);
+
+  /* Data Members */
 
   bool is_initialized_{false};
   bool initial_velocity_estimated_{false};
