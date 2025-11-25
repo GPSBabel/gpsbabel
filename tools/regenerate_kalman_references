@@ -27,7 +27,8 @@ gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Driving Track" -x ka
 gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Flying Track" -x kalman,profile=flying ${out}/kalman_hyper_realistic_flying_out.gpx
 
 # Test overriding interpolation parameters.
-gpsbabel ${in}/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_min_multiplier=1.0 ${out}/kalman_interp_min_multiplier_override_out.gpx
+gpsbabel ${in}/kalman_interpolation_in.gpx -x kalman,profile=cycling ${out}/kalman_interp_out.gpx
+gpsbabel ${in}/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_min_multiplier=10 ${out}/kalman_interp_none_out.gpx
 
 # Test overriding max_speed parameter.
 gpsbabel ${in}/kalman_hyper_realistic_in.gpx -x track,name="Cycling Track" -x kalman,profile=cycling,max_speed=20.0 ${out}/kalman_cycling_maxspeed_override_out.gpx
@@ -48,6 +49,3 @@ gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,r_scale=10.0
 # Test sensitivity to q_scale_vel (velocity process noise).
 gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_vel=0.01 ${out}/kalman_q_scale_vel_low_out.gpx
 gpsbabel ${in}/kalman_q_scale_test_in.gpx -x kalman,profile=cycling,q_scale_vel=0.1 ${out}/kalman_q_scale_vel_high_out.gpx
-
-# Test overriding interp_max_dt to limit interpolation.
-gpsbabel ${in}/kalman_interpolation_in.gpx -x kalman,profile=cycling,interp_max_dt=10 ${out}/kalman_interp_max_dt_override_out.gpx

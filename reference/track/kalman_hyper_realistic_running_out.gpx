@@ -10,12 +10,14 @@
     <name>Running Track</name>
     <type>running</type>
     <trkseg>
-      <trkpt lat="40.100000000" lon="-122.100000000"/>
+      <trkpt lat="40.100000000" lon="-122.100000000">
+        <time>2010-01-01T00:00:00Z</time>
+      </trkpt>
       <trkpt lat="40.100050000" lon="-122.100050000">
-        <time>1970-01-01T00:00:01Z</time>
+        <time>2010-01-01T00:00:01Z</time>
       </trkpt>
       <trkpt lat="40.100100000" lon="-122.100000100">
-        <time>1970-01-01T00:00:02Z</time>
+        <time>2010-01-01T00:00:02Z</time>
       </trkpt>
     </trkseg>
   </trk>

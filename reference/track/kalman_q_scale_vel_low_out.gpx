@@ -7,42 +7,44 @@
   <trk>
     <name>Q Scale Test Track</name>
     <trkseg>
-      <trkpt lat="34.000000000" lon="-118.000000000"/>
+      <trkpt lat="34.000000000" lon="-118.000000000">
+        <time>2010-01-01T00:00:00Z</time>
+      </trkpt>
       <trkpt lat="34.000050000" lon="-118.000080000">
-        <time>1970-01-01T00:00:01Z</time>
+        <time>2010-01-01T00:00:01Z</time>
       </trkpt>
       <trkpt lat="34.000120000" lon="-118.000150000">
-        <time>1970-01-01T00:00:02Z</time>
+        <time>2010-01-01T00:00:02Z</time>
       </trkpt>
       <trkpt lat="34.000198300" lon="-118.000203300">
-        <time>1970-01-01T00:00:03Z</time>
+        <time>2010-01-01T00:00:03Z</time>
       </trkpt>
       <trkpt lat="34.000256900" lon="-118.000275000">
-        <time>1970-01-01T00:00:04Z</time>
+        <time>2010-01-01T00:00:04Z</time>
       </trkpt>
       <trkpt lat="34.000309800" lon="-118.000346100">
-        <time>1970-01-01T00:00:05Z</time>
+        <time>2010-01-01T00:00:05Z</time>
       </trkpt>
       <trkpt lat="34.000344500" lon="-118.000432900">
-        <time>1970-01-01T00:00:06Z</time>
+        <time>2010-01-01T00:00:06Z</time>
       </trkpt>
       <trkpt lat="34.000351400" lon="-118.000527000">
-        <time>1970-01-01T00:00:07Z</time>
+        <time>2010-01-01T00:00:07Z</time>
       </trkpt>
       <trkpt lat="34.000330200" lon="-118.000611700">
-        <time>1970-01-01T00:00:08Z</time>
+        <time>2010-01-01T00:00:08Z</time>
       </trkpt>
       <trkpt lat="34.000283900" lon="-118.000686600">
-        <time>1970-01-01T00:00:09Z</time>
+        <time>2010-01-01T00:00:09Z</time>
       </trkpt>
       <trkpt lat="34.000217800" lon="-118.000739300">
-        <time>1970-01-01T00:00:10Z</time>
+        <time>2010-01-01T00:00:10Z</time>
       </trkpt>
       <trkpt lat="34.000150000" lon="-118.000749800">
-        <time>1970-01-01T00:00:11Z</time>
+        <time>2010-01-01T00:00:11Z</time>
       </trkpt>
       <trkpt lat="34.000081900" lon="-118.000730400">
-        <time>1970-01-01T00:00:12Z</time>
+        <time>2010-01-01T00:00:12Z</time>
       </trkpt>
     </trkseg>
   </trk>
