@@ -19,7 +19,7 @@ if [ $# -lt 2 ]; then
   printf "Usage: %s: [-g generator] [-i identity] source_directory qt_version\n" "$0"
   exit 1
 fi
-CMAKEOPTIONS+=("$1") # path-to-source
+SOURCE_DIR=$1
 QTVER=$2
 if version_ge "${QTVER}" 6.10.0; then
   DEPLOY_TARGET="13.0"
@@ -40,6 +40,8 @@ else
   DEPLOY_TARGET="10.12"
   ARCHS="x86_64"
 fi
+CMAKEOPTIONS+=(-DCMAKE_OSX_ARCHITECTURES="${ARCHS}")
+CMAKEOPTIONS+=(-DCMAKE_OSX_DEPLOYMENT_TARGET="${DEPLOY_TARGET}")
   
 # we assume we are on macOS, so date is not gnu date.
 VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z "$(git show -s --format="%aI" HEAD | sed 's/:\(..\)$/\1/')" +%Y%m%dT%H%MZ)-$(git rev-parse --short=7 HEAD)}
@@ -47,13 +49,13 @@ VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z "$(git show -s --format
 set -x
 case "${GENERATOR}" in
 Xcode | "Ninja Multi-Config")
-  cmake -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} "${CMAKEOPTIONS[@]}"
+  cmake "${CMAKEOPTIONS[@]}" "${SOURCE_DIR}"
   cmake --build . --config Release
   ctest -C Release --output-on-failure
   cmake --build . --config Release --target package_app
   ;;
 *)
-  cmake -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} -DCMAKE_BUILD_TYPE=Release "${CMAKEOPTIONS[@]}"
+  cmake -DCMAKE_BUILD_TYPE=Release "${CMAKEOPTIONS[@]}" "${SOURCE_DIR}"
   cmake --build .
   ctest --output-on-failure
   cmake --build . --target package_app
