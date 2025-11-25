@@ -98,7 +98,6 @@ jobs:
       env:
         BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
         P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-        KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       run: |
         ./tools/ci_load_keychain.sh
 
