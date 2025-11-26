@@ -1,22 +1,26 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 #
 # this script is run on ci for the script stage of mac builds
 #
  
 function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1)" == "$1"; }
 
+while getopts g:i: name
+do
+  case $name in
+    g) CMAKEOPTIONS+=(-G "$OPTARG"); GENERATOR="$OPTARG";;
+    i) CMAKEOPTIONS+=(-DGPSBABEL_CODESIGN_IDENTITY="$OPTARG");;
+    ?) printf "Usage: %s: [-g generator] [-i identity] source_directory qt_version\n" "$0"
+       exit 2;;
+  esac
+done
+shift "$((OPTIND - 1))"
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 source_directory qt_version [Generator]"
+  printf "Usage: %s: [-g generator] [-i identity] source_directory qt_version\n" "$0"
   exit 1
 fi
 SOURCE_DIR=$1
 QTVER=$2
-if [ $# -ge 3 ]; then
-  if [ -n "$3" ]; then
-    GENERATOR[0]=-G
-    GENERATOR[1]=$3
-  fi
-fi
 if version_ge "${QTVER}" 6.10.0; then
   DEPLOY_TARGET="13.0"
   ARCHS="x86_64;arm64"
@@ -36,22 +40,22 @@ else
   DEPLOY_TARGET="10.12"
   ARCHS="x86_64"
 fi
+CMAKEOPTIONS+=(-DCMAKE_OSX_ARCHITECTURES="${ARCHS}")
+CMAKEOPTIONS+=(-DCMAKE_OSX_DEPLOYMENT_TARGET="${DEPLOY_TARGET}")
   
 # we assume we are on macOS, so date is not gnu date.
 VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z "$(git show -s --format="%aI" HEAD | sed 's/:\(..\)$/\1/')" +%Y%m%dT%H%MZ)-$(git rev-parse --short=7 HEAD)}
 
-# debug tokens
-"$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
-
-case "${GENERATOR[1]}" in
+set -x
+case "${GENERATOR}" in
 Xcode | "Ninja Multi-Config")
-  cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} "${GENERATOR[@]}"
+  cmake "${CMAKEOPTIONS[@]}" "${SOURCE_DIR}"
   cmake --build . --config Release
   ctest -C Release --output-on-failure
   cmake --build . --config Release --target package_app
   ;;
 *)
-  cmake "${SOURCE_DIR}" -DCMAKE_OSX_ARCHITECTURES=${ARCHS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${DEPLOY_TARGET} -DCMAKE_BUILD_TYPE=Release "${GENERATOR[@]}"
+  cmake -DCMAKE_BUILD_TYPE=Release "${CMAKEOPTIONS[@]}" "${SOURCE_DIR}"
   cmake --build .
   ctest --output-on-failure
   cmake --build . --target package_app
