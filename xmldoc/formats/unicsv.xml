@@ -3,6 +3,20 @@
    order and field separator in that file.   On write, it tries to
    figure out what data it has and writes headers and all the data it can.
 </para>
+<note>
+  <para>
+    <emphasis role="strong">Recommended Format:</emphasis> <code>unicsv</code>
+    (Universal CSV) is GPSBabel's recommended CSV format for most
+    users. It intelligently reads and writes CSV files that include a
+    header row, automatically detecting fields and preserving
+    additional data.
+  </para>
+  <para>
+    For a detailed comparison of GPSBabel's CSV formats and help
+    selecting the ideal one for your specific needs, please see the
+    <link linkend="csv_guide">Choosing the Right CSV Format</link> guide.
+  </para>
+</note>
 <para>
    Fields may be enclosed in double quotes.  To include a double quote inside quotes escape it with another double quote.
 </para>
