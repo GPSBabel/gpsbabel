@@ -20,6 +20,7 @@
 //  USA.
 //
 //------------------------------------------------------------------------
+#include "markerclicker.h"
 #include "map.h"
 
 #include <QApplication>           // for QApplication
@@ -186,11 +187,6 @@ void Map::loadFinishedX(bool f)
   busyCursor_ = false;
 }
 
-//------------------------------------------------------------------------
-static QString fmtLatLng(const LatLng& l)
-{
-  return QString("{lat: %1, lng: %3}").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
-}
 
 //------------------------------------------------------------------------
 static QString makePath(const vector <LatLng>& pts)
