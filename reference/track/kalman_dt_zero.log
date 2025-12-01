@@ -1,3 +1,3 @@
-kalman: Time must increase between adjacent points, but the track contains adjacent points were this is not true.
- "Fri Jan 1 00:00:01 2010 GMT" "" lat: 34.0000100 lon: -118.0000100 
- "Fri Jan 1 00:00:01 2010 GMT" "" lat: 34.0000200 lon: -118.0000200
+kalman: Time must increase between adjacent points, but the track contains adjacent points where this is not true.
+ "Fri Jan 1 00:00:01 2010 GMT" "" lat: 34.0000100 lon: -118.0000100  
+ "Fri Jan 1 00:00:01 2010 GMT" "" lat: 34.0000200 lon: -118.0000200 
