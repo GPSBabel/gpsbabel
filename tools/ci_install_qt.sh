@@ -32,6 +32,21 @@ qtshadertools \
 qtvirtualkeyboard \
 qtwaylandcompositor \
 )
+# modules we don't use
+remove+=( \
+qtinsighttracker \ # extension
+qt3d \
+qtactiveqt \
+qtconnectivity \
+qtlanguageserver \
+qtlocation \
+qtmultimedia \
+qtquickeffectmaker \
+qtremoteobjects \
+qtscxml \
+qtsensors \
+qtspeech \
+)
 
 mods=()
 for a in "${available[@]}"
