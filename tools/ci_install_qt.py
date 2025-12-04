@@ -69,9 +69,9 @@ def fetch_installer(verbose):
     """Fetch the appropriate Qt online installer."""
     installer = None
     if platform.system() == "Windows":
-        if platform.machine() == "x86_64":
+        if platform.machine() in ["x86_64", "AMD64"]:
             installer = "qt-online-installer-windows-x64-online.exe"
-        elif platform.machine() == "arm64":
+        elif platform.machine() in ["arm64", "ARM64"]:
             installer = "qt-online-installer-windows-arm64-online.exe"
     elif platform.system() == "Darwin":
         # note this may require rosetta is installed on arm64 macs.
@@ -79,11 +79,11 @@ def fetch_installer(verbose):
     elif platform.system() == "Linux":
         if platform.machine() == "x86_64":
             installer = "qt-online-installer-linux-x64-online.run"
-        elif platform.machine() == "arm64":
+        elif platform.machine() in ["arm64", "ARM64"]:
             installer = "qt-online-installer-linux-arm64-online.run"
     if installer is None:
         sys.exit(
-            f"Error: Unknown installer for system {platform.system} and machine {platform.machine}"
+            f"Error: Unknown installer for system {platform.system()} and machine {platform.machine()}"
         )
     try:
         url = "https://download.qt.io/official_releases/online_installers/" + installer
