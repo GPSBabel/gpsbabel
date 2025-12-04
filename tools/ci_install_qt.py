@@ -88,7 +88,9 @@ def fetch_installer(verbose):
     try:
         url = "https://download.qt.io/official_releases/online_installers/" + installer
         urllib.request.urlretrieve(url, installer)
-        print(f"Fetched installer {installer} for system {platform.system()} and machine {platform.machine()} successfully.")
+        print(
+            f"Fetched installer {installer} for system {platform.system()} and machine {platform.machine()} successfully."
+        )
     except urllib.error.URLError as e:
         sys.exit(f"Failed to download file: {e}")
     if platform.system() == "Darwin":
@@ -128,7 +130,7 @@ def fetch_installer(verbose):
 def get_available_pkgs(installer, ver):
     """Find the available packages for this Qt version."""
     verparts = ver.split(".")
-    output = subprocess.run(
+    command = (
         [
             installer,
             "se",
@@ -137,6 +139,10 @@ def get_available_pkgs(installer, ver):
             "--filter-packages",
             f"Version=^{verparts[0]}\\.{verparts[1]}\\.{verparts[2]}-",
         ],
+    )
+    print("Command is", command)
+    output = subprocess.run(
+        command,
         capture_output=True,
         text=True,
         encoding="UTF-8",
