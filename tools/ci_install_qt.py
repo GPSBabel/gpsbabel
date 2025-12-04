@@ -88,7 +88,7 @@ def fetch_installer(verbose):
     try:
         url = "https://download.qt.io/official_releases/online_installers/" + installer
         urllib.request.urlretrieve(url, installer)
-        print(f"Fetched installer {installer} successfully.")
+        print(f"Fetched installer {installer} for system {platform.system()} and machine {platform.machine()} successfully.")
     except urllib.error.URLError as e:
         sys.exit(f"Failed to download file: {e}")
     if platform.system() == "Darwin":

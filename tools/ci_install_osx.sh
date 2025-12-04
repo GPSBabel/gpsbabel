@@ -76,7 +76,7 @@ else
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   elif [ "$METHOD" = "qtonline" ]; then
-    python3 ${CI_BUILD_DIR}/tools/ci_install_qt.py "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
+    python3 ${CI_BUILD_DIR}/tools/ci_install_qt.py "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt" --verbose
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
     echo "ERROR: unknown installation method ${METHOD}." >&2
