@@ -144,8 +144,13 @@ def get_available_pkgs(installer, ver):
         capture_output=True,
         text=True,
         encoding="UTF-8",
-        check=True,
+        check=False,
     )
+    if output.returncode != 0:
+        sys.exit(
+            f"Error: Failed to run installer {output.returncode} {output.stderr}}"
+        )
+       
     pkgxml = "\n".join(re.findall(r"^(?!\[).*$", output.stdout, flags=re.MULTILINE))
     return pkgxml
 
