@@ -71,7 +71,7 @@ else
       "${CI_BUILD_DIR}/tools/ci_install_qt.sh" "${HOST}" "${QT_VERSION}" "${PACKAGE_SUFFIX_CROSS}" "${CACHEDIR}/Qt"
     fi
   elif [ "${METHOD}" = "qtonline" ]; then
-      python3 "${CI_BUILD_DIR}/tools/ci_install_qt.py" "${QT_VERSION}" "${PACKAGE_SUFFIX}" "${CACHEDIR}/Qt"
+      python3 "${CI_BUILD_DIR}/tools/ci_install_qt.py" "${QT_VERSION}" "${PACKAGE_SUFFIX}" "${CACHEDIR}/Qt" --verbose
   else
     echo "ERROR: unknown installation method ${METHOD}." >&2
     exit 1
