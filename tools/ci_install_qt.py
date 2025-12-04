@@ -130,16 +130,14 @@ def fetch_installer(verbose):
 def get_available_pkgs(installer, ver):
     """Find the available packages for this Qt version."""
     verparts = ver.split(".")
-    command = (
-        [
-            installer,
-            "se",
-            "--type",
-            "package",
-            "--filter-packages",
-            f"Version=^{verparts[0]}\\.{verparts[1]}\\.{verparts[2]}-",
-        ],
-    )
+    command = [
+        installer,
+        "se",
+        "--type",
+        "package",
+        "--filter-packages",
+        f"Version=^{verparts[0]}\\.{verparts[1]}\\.{verparts[2]}-",
+    ]
     print("Command is", command)
     output = subprocess.run(
         command,
