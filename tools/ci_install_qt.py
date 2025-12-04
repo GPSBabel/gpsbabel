@@ -111,11 +111,15 @@ def fetch_installer(verbose):
         app = apps[0].name
         exe = apps[0].stem
         apppath = volume / app / "Contents" / "MacOS" / exe
+        tgtpath = os.path.abspath(os.path.join(app, "Contents", "MacOS", exe))
         if verbose:
-            print("vol is", volume, "app is", app, "app path is", apppath)
+            print("Volume is", volume)
+            print("App is", app)
+            print("App path is", apppath)
+            print("Installed installer is", tgtpath)
         subprocess.run(["cp", "-R", apppath, app], check=True)
         subprocess.run(["hdiutil", "detach", volume, "-quiet"], check=True)
-        return os.path.abspath(os.path.join(app, "Contents", "MacOS", exe))
+        return tgtpath
     st = os.stat(installer)
     os.chmod(installer, st.st_mode | (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH))
     return os.path.abspath(installer)
