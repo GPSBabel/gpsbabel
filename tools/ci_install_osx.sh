@@ -75,6 +75,9 @@ else
     pip3 install 'aqtinstall>=3.1.20'
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
+  elif [ "$METHOD" = "qtonline" ]; then
+    python3 ${CI_BUILD_DIR}/tools/ci_install_qt.py "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
+    echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
     echo "ERROR: unknown installation method ${METHOD}." >&2
     exit 1

@@ -35,7 +35,7 @@ jobs:
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
             TOOLSET: 'v142,version=14.29.30133'
-            METHOD: 'aqt'
+            METHOD: 'qtonline'
             GENERATOR: 'Visual Studio 17 2022'
             RELEASE: false
             os: windows-2022
@@ -43,7 +43,7 @@ jobs:
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2019_64'
-            METHOD: 'aqt'
+            METHOD: 'qtonline'
             RELEASE: false
             GENERATOR: 'Ninja'
             os: windows-2022
@@ -51,7 +51,7 @@ jobs:
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
-            METHOD: 'aqt'
+            METHOD: 'qtonline'
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-2025
@@ -67,7 +67,7 @@ jobs:
             ARCH: 'arm64'
             HOST_ARCH: 'arm64'
             COMPILER: 'msvc2022_arm64'
-            METHOD: 'aqt'
+            METHOD: 'qtonline'
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-11-arm

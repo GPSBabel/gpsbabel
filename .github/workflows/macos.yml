@@ -71,7 +71,7 @@ jobs:
       env:
         CI_BUILD_DIR: ${{ github.workspace }}
       run: |
-        ./tools/ci_install_osx.sh ${{ matrix.QT_VERSION }} aqt
+        ./tools/ci_install_osx.sh ${{ matrix.QT_VERSION }} qtonline
 
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'
