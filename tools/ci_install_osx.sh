@@ -33,7 +33,7 @@ METHOD=${2:-aqt}
 
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache
-if [ "$METHOD" = "aqt" ]; then
+if [ "$METHOD" = "aqt" ] || [ "$METHOD" = "qtonline" ]; then
   if version_ge "${QT_VERSION}" 6.1.2; then
     QTDIR=${CACHEDIR}/Qt/${QT_VERSION}/macos
   else
@@ -77,7 +77,7 @@ else
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   elif [ "$METHOD" = "qtonline" ]; then
     echo -n "$QT_INSTALLER_JWT_TOKEN" | openssl dgst -sha512 | cut -d " " -f 2
-    python3 ${CI_BUILD_DIR}/tools/ci_install_qt.py "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt" --verbose
+    python3 "${CI_BUILD_DIR}/tools/ci_install_qt.py" "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt" --verbose
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
     echo "ERROR: unknown installation method ${METHOD}." >&2
