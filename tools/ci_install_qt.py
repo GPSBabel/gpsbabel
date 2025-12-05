@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 """
 Copyright (C) 2025 Robert Lipe, robertlipe+source@gpsbabel.org
 
