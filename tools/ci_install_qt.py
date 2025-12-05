@@ -112,14 +112,14 @@ def fetch_installer(verbose):
             sys.exit(f"Error: couldn't find macos app in {apps}")
         app = apps[0].name
         exe = apps[0].stem
-        apppath = volume / app / "Contents" / "MacOS" / exe
+        apppath = volume / app
         tgtpath = os.path.abspath(os.path.join(app, "Contents", "MacOS", exe))
         if verbose:
             print("Volume is", volume)
             print("App is", app)
             print("App path is", apppath)
             print("Installed installer is", tgtpath)
-        subprocess.run(["cp", "-R", apppath, app], check=True)
+        shutil.copytree(apppath, app)
         subprocess.run(["hdiutil", "detach", volume, "-quiet"], check=True)
         return tgtpath
     st = os.stat(installer)
@@ -130,27 +130,20 @@ def fetch_installer(verbose):
 def get_available_pkgs(installer, ver):
     """Find the available packages for this Qt version."""
     verparts = ver.split(".")
-    command = [
-        installer,
-        "se",
-        "--type",
-        "package",
-        "--filter-packages",
-        f"Version=^{verparts[0]}\\.{verparts[1]}\\.{verparts[2]}-",
-    ]
-    print("Command is", command)
     output = subprocess.run(
-        command,
+        [
+            installer,
+            "se",
+            "--type",
+            "package",
+            "--filter-packages",
+            f"Version=^{verparts[0]}\\.{verparts[1]}\\.{verparts[2]}-",
+        ],
         capture_output=True,
         text=True,
         encoding="UTF-8",
-        check=False,
+        check=True,
     )
-    if output.returncode != 0:
-        sys.exit(
-            f"Error: Failed to run installer {output.returncode} {output.stderr}"
-        )
-       
     pkgxml = "\n".join(re.findall(r"^(?!\[).*$", output.stdout, flags=re.MULTILINE))
     return pkgxml
 
