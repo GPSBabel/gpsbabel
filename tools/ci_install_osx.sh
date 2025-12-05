@@ -76,6 +76,7 @@ else
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   elif [ "$METHOD" = "qtonline" ]; then
+    echo -n "$QT_INSTALLER_JWT_TOKEN" | openssl dgst -sha512 | cut -d " " -f 2
     python3 ${CI_BUILD_DIR}/tools/ci_install_qt.py "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt" --verbose
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
