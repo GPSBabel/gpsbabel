@@ -27,7 +27,7 @@ import stat
 import subprocess
 import sys
 import urllib.request
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree
 
 rejectlicense = [
     "qtcharts",
@@ -163,7 +163,7 @@ def select_pkgs(packagesxml, hostarch, targetarch, verbose):
     archs = [hostarch]
     if targetarch:
         archs.append(targetarch)
-    tree = ET.fromstring(packagesxml)
+    tree = ElementTree.fromstring(packagesxml)
     names = [pkg.get("name") for pkg in tree.findall("package")]
     if verbose:
         print(sorted(names))
@@ -213,7 +213,7 @@ def select_pkgs(packagesxml, hostarch, targetarch, verbose):
     if others != len(archs):
         sys.exit(f"Error: couldn't find architecture {archs}")
     print(f"Selected packages are {selected}.", flush=True)
-    return " ".join(selected)
+    return selected
 
 
 def install(installer, dest, selected):
@@ -229,7 +229,7 @@ def install(installer, dest, selected):
         "--no-force-installations",
         "install",
     ]
-    installargs.extend(selected.split())
+    installargs.extend(selected)
     subprocess.run(installargs, check=True)
 
 
