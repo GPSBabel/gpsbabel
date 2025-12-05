@@ -130,25 +130,26 @@ def fetch_installer(verbose):
 def get_available_pkgs(installer, ver):
     """Find the available packages for this Qt version."""
     verparts = ver.split(".")
-    output = subprocess.run(
-        [
-            installer,
-            "se",
-            "--type",
-            "package",
-            "--filter-packages",
-            f"Version=^{verparts[0]}\\.{verparts[1]}\\.{verparts[2]}-",
-        ],
-        capture_output=True,
-        text=True,
-        encoding="UTF-8",
-        check=False,
-    )
-    if output.returncode != 0:
-        sys.exit(
-            f"Error: Failed to run installer {output.returncode} {output.stderr}"
+    try:
+        output = subprocess.run(
+            [
+                installer,
+                "se",
+                "--type",
+                "package",
+                "--filter-packages",
+                f"Version=^{verparts[0]}\\.{verparts[1]}\\.{verparts[2]}-",
+            ],
+            capture_output=True,
+            text=True,
+            encoding="UTF-8",
+            check=True,
         )
-       
+    except subprocess.CalledProcessError as e:
+        sys.exit(
+            f"Error: Installer failed, rc: {e.returncode}\\nCommand: {e.cmd}\\nstderr: {e.stderr}\\nstdout: {e.stdout})}"
+        )
+
     pkgxml = "\n".join(re.findall(r"^(?!\[).*$", output.stdout, flags=re.MULTILINE))
     return pkgxml
 
