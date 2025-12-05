@@ -147,7 +147,10 @@ def get_available_pkgs(installer, ver):
         )
     except subprocess.CalledProcessError as e:
         sys.exit(
-            f"Error: Installer failed, rc: {e.returncode}\\nCommand: {e.cmd}\\nstderr: {e.stderr}\\nstdout: {e.stdout}"
+            f"""Error: Installer failed, rc: {e.returncode}
+            Command: {e.cmd}
+            stderr: {e.stderr}
+            stdout: {e.stdout}"""
         )
 
     pkgxml = "\n".join(re.findall(r"^(?!\[).*$", output.stdout, flags=re.MULTILINE))
