@@ -93,7 +93,7 @@ def fetch_installer(verbose):
             flush=True,
         )
     except urllib.error.URLError as e:
-        sys.exit(f"Failed to download file: {e}")
+        sys.exit(f"Error: Failed to download file from {e.url}: HTTP Error {e.code}: {e.reason}")
     if platform.system() == "Darwin":
         output = subprocess.run(
             ["hdiutil", "attach", installer],
@@ -120,7 +120,10 @@ def fetch_installer(verbose):
             print("App is", app)
             print("App path is", apppath)
             print("Installed installer is", tgtpath, flush=True)
-        shutil.copytree(apppath, app)
+        try:
+            shutil.copytree(apppath, app)
+        except FileExistsError:
+            sys.exit(f"Error: Refusing to overwrite existing installer {app}")
         subprocess.run(["hdiutil", "detach", volume, "-quiet"], check=True)
         return tgtpath
     st = os.stat(installer)
@@ -131,6 +134,8 @@ def fetch_installer(verbose):
 def get_available_pkgs(installer, ver):
     """Find the available packages for this Qt version."""
     verparts = ver.split(".")
+    if len(verparts) != 3:
+        sys.exit(f"Error: Expected version string of the form 'major.minor.patch', got '{ver}'.")
     try:
         output = subprocess.run(
             [
@@ -168,7 +173,7 @@ def select_pkgs(packagesxml, hostarch, targetarch, verbose):
     if verbose:
         print(sorted(names))
     namebits = [name.split(".") for name in sorted(names)]
-    prevbits = [None, None, None, None, None]
+    prevbits = [None] * len(max(namebits, key=len))
     leafs = []
     for bits in namebits:
         plen = len(prevbits)
