@@ -214,18 +214,17 @@ def select_pkgs(packagesxml, arch, verbose):
 
 def install(installer, dest, selected):
     """Install the selected packages."""
-    installargs = [installer]
-    installargs.extend(["--root", dest])
-    installargs.extend(
-        [
-            "--accept-licenses",
-            "--accept-obligations",
-            "--default-answer",
-            "--confirm-command",
-            "--no-force-installations",
-        ]
-    )
-    installargs.append("install")
+    installargs = [
+        installer,
+        "--root",
+        dest,
+        "--accept-licenses",
+        "--accept-obligations",
+        "--default-answer",
+        "--confirm-command",
+        "--no-force-installations",
+        "install",
+    ]
     installargs.extend(selected.split())
     subprocess.run(installargs, check=True)
 
