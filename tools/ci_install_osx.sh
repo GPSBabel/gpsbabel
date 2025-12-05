@@ -83,5 +83,6 @@ else
     exit 1
   fi
   validate
-  debug "DEBUG ONLY"
+  # look for extra stuff left behind
+  #find "${CACHEDIR}" -maxdepth 3 -ls
 fi
