@@ -48,7 +48,6 @@ if [ -d "${QTDIR}/bin" ]; then
 else
   rm -fr "${CACHEDIR}"
   mkdir -p "${CACHEDIR}"
-  pushd "${CACHEDIR}"
 
   if [ "$METHOD" = "artifactory" ]; then
     (
@@ -66,7 +65,7 @@ else
       else
         archive=qt-${QT_VERSION}-release-macos.tar.xz
         curl -u "${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}" "${ARTIFACTORY_BASE_URL}/${archive}" -o "/tmp/${archive}"
-        tar -x -J -f "/tmp/${archive}"
+        tar -x -J -f "/tmp/${archive}" -C "${CACHEDIR}"
         echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
         rm -f "/tmp/${archive}"
       fi
@@ -76,13 +75,13 @@ else
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   elif [ "$METHOD" = "qtonline" ]; then
-    echo -n "$QT_INSTALLER_JWT_TOKEN" | openssl dgst -sha512 | cut -d " " -f 2
+    #echo -n "$QT_INSTALLER_JWT_TOKEN" | openssl dgst -sha512 | cut -d " " -f 2
     python3 "${CI_BUILD_DIR}/tools/ci_install_qt.py" "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt" --verbose
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   else
     echo "ERROR: unknown installation method ${METHOD}." >&2
     exit 1
   fi
-  popd
   validate
+  debug "DEBUG ONLY"
 fi

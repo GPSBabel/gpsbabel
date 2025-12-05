@@ -269,7 +269,7 @@ def main():
     )
     args = parser.parse_args()
 
-    jwt = os.getenv('QT_INSTALLER_JWT_TOKEN')
+    jwt = os.getenv("QT_INSTALLER_JWT_TOKEN")
     if jwt is None or len(jwt) == 0:
         print("Warning: QT_INSTALLER_JWT_TOKEN not set")
     installer = fetch_installer(verbose=args.verbose)
