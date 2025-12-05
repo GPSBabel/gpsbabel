@@ -89,7 +89,8 @@ def fetch_installer(verbose):
         url = "https://download.qt.io/official_releases/online_installers/" + installer
         urllib.request.urlretrieve(url, installer)
         print(
-            f"Fetched installer {installer} for system {platform.system()} and machine {platform.machine()} successfully."
+            f"Fetched installer {installer} for system {platform.system()} and machine {platform.machine()} successfully.",
+            flush=True,
         )
     except urllib.error.URLError as e:
         sys.exit(f"Failed to download file: {e}")
@@ -118,7 +119,7 @@ def fetch_installer(verbose):
             print("Volume is", volume)
             print("App is", app)
             print("App path is", apppath)
-            print("Installed installer is", tgtpath)
+            print("Installed installer is", tgtpath, flush=True)
         shutil.copytree(apppath, app)
         subprocess.run(["hdiutil", "detach", volume, "-quiet"], check=True)
         return tgtpath
@@ -157,8 +158,13 @@ def get_available_pkgs(installer, ver):
     return pkgxml
 
 
-def select_pkgs(packagesxml, arch, verbose):
+def select_pkgs(packagesxml, hostarch, targetarch, verbose):
     """Select the packages we want to install."""
+    arch = hostarch
+    numarchs = 1
+    if targetarch:
+        arch.append(targetarch)
+        numarchs += 1
     tree = ET.fromstring(packagesxml)
     names = [pkg.get("name") for pkg in tree.findall("package")]
     if verbose:
@@ -206,9 +212,9 @@ def select_pkgs(packagesxml, arch, verbose):
             else:
                 if verbose:
                     print(f"other {node}")
-    if others != 1:
-        sys.exit(f"Error: couldn't find architecture {arch}")
-    print(f"Selected packages are {selected}.")
+    if others != numarchs:
+        sys.exit(f"Error: couldn't find architecture {hostarch}/{targetarch}")
+    print(f"Selected packages are {selected}.", flush=True)
     return " ".join(selected)
 
 
@@ -248,32 +254,40 @@ def cleanup(dest, ver):
 def main():
     """Install Qt."""
     parser = argparse.ArgumentParser(
-        prog="ci_install_qt",
         description="Install Qt using official online installer",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("ver", help="version, e.g. 6.10.1")
+    parser.add_argument("--ver", required=True, help="version, e.g. 6.10.1")
     parser.add_argument(
-        "arch",
-        help="architecture, e.g. win64_msvc2022_64, win64_msvc2022_arm64, linux_gcc_64, clang_64",
+        "--hostarch",
+        required=True,
+        help="host architecture, e.g. win64_msvc2022_64, win64_msvc2022_arm64, linux_gcc_64, clang_64",
     )
-    parser.add_argument("dest", help="install root, e.g. C:\\Qt")
+    parser.add_argument(
+        "--targetarch",
+        help="target architecture, e.g. win64_msvc2022_arm64",
+    )
+    parser.add_argument("--dest", required=True, help="install root, e.g. C:\\Qt")
     parser.add_argument(
         "--verbose",
         "-v",
         help="verbose",
-        action="store_const",
-        const=True,
+        action="store_true",
         default=False,
     )
     args = parser.parse_args()
 
     jwt = os.getenv("QT_INSTALLER_JWT_TOKEN")
     if jwt is None or len(jwt) == 0:
-        print("Warning: QT_INSTALLER_JWT_TOKEN not set")
+        print("Warning: QT_INSTALLER_JWT_TOKEN not set", flush=True)
     installer = fetch_installer(verbose=args.verbose)
     packagexml = get_available_pkgs(installer=installer, ver=args.ver)
-    selected = select_pkgs(packagesxml=packagexml, arch=args.arch, verbose=args.verbose)
+    selected = select_pkgs(
+        packagesxml=packagexml,
+        hostarch=args.hostarch,
+        targetarch=args.targetarch,
+        verbose=args.verbose,
+    )
     install(installer=installer, dest=args.dest, selected=selected)
     cleanup(dest=args.dest, ver=args.ver)
 
