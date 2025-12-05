@@ -160,11 +160,9 @@ def get_available_pkgs(installer, ver):
 
 def select_pkgs(packagesxml, hostarch, targetarch, verbose):
     """Select the packages we want to install."""
-    arch = hostarch
-    numarchs = 1
+    archs = [hostarch]
     if targetarch:
-        arch.append(targetarch)
-        numarchs += 1
+        archs.append(targetarch)
     tree = ET.fromstring(packagesxml)
     names = [pkg.get("name") for pkg in tree.findall("package")]
     if verbose:
@@ -187,7 +185,7 @@ def select_pkgs(packagesxml, hostarch, targetarch, verbose):
     others = 0
     for node in leafs:
         if node[0] == "extensions":
-            if node[1] in black or node[-1] != arch:
+            if node[1] in black or node[-1] not in archs:
                 if verbose:
                     print(f"extension {node}")
             else:
@@ -204,7 +202,7 @@ def select_pkgs(packagesxml, hostarch, targetarch, verbose):
                     print(f"module {node} *")
                 selected.append(".".join(node))
         else:
-            if node[-1] == arch:
+            if node[-1] in archs:
                 if verbose:
                     print(f"other {node} *")
                 selected.append(".".join(node))
@@ -212,8 +210,8 @@ def select_pkgs(packagesxml, hostarch, targetarch, verbose):
             else:
                 if verbose:
                     print(f"other {node}")
-    if others != numarchs:
-        sys.exit(f"Error: couldn't find architecture {hostarch}/{targetarch}")
+    if others != len(archs):
+        sys.exit(f"Error: couldn't find architecture {archs}")
     print(f"Selected packages are {selected}.", flush=True)
     return " ".join(selected)
 
