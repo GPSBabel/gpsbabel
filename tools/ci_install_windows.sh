@@ -61,7 +61,8 @@ else
 
   if [ "${METHOD}" = "aqt" ]; then
     # we need https://github.com/miurahr/aqtinstall/pull/941 to install extensions with 6.10.0 for windows arm64.
-    # until this is merged and released use a locally generated version of aqt.
+    # we need https://github.com/miurahr/aqtinstall/pull/952 to install the cross compiler with 6.10.1.
+    # until these are merged and released we must use a locally generated version of aqt.
     #pip3 install 'aqtinstall>=3.3.0'
     archive=aqtinstall-3.3.1.dev18-py3-none-any.whl
     curl -u "${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}" "${ARTIFACTORY_BASE_URL}/${archive}" -o "/tmp/${archive}"

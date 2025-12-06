@@ -26,6 +26,7 @@ import shutil
 import stat
 import subprocess
 import sys
+import tempfile
 import urllib.request
 from xml.etree import ElementTree
 
@@ -65,38 +66,45 @@ black.extend(rejectlicense)
 black.extend(unused)
 
 
-def fetch_installer(verbose):
+def fetch_installer(verbose, tmpdir):
     """Fetch the appropriate Qt online installer."""
-    installer = None
+    installer_name = None
     if platform.system() == "Windows":
         if platform.machine() in ["x86_64", "AMD64"]:
-            installer = "qt-online-installer-windows-x64-online.exe"
+            installer_name = "qt-online-installer-windows-x64-online.exe"
         elif platform.machine() in ["arm64", "ARM64"]:
-            installer = "qt-online-installer-windows-arm64-online.exe"
+            installer_name = "qt-online-installer-windows-arm64-online.exe"
     elif platform.system() == "Darwin":
         # note this may require rosetta is installed on arm64 macs.
-        installer = "qt-online-installer-mac-x64-online.dmg"
+        installer_name = "qt-online-installer-mac-x64-online.dmg"
     elif platform.system() == "Linux":
         if platform.machine() == "x86_64":
-            installer = "qt-online-installer-linux-x64-online.run"
+            installer_name = "qt-online-installer-linux-x64-online.run"
         elif platform.machine() in ["arm64", "ARM64"]:
-            installer = "qt-online-installer-linux-arm64-online.run"
-    if installer is None:
+            installer_name = "qt-online-installer-linux-arm64-online.run"
+    if installer_name is None:
         sys.exit(
             f"Error: Unknown installer for system {platform.system()} and machine {platform.machine()}"
         )
+
+    installer_file = Path(tmpdir, installer_name)
+    url = "https://download.qt.io/official_releases/online_installers/" + installer_name
     try:
-        url = "https://download.qt.io/official_releases/online_installers/" + installer
-        urllib.request.urlretrieve(url, installer)
-        print(
-            f"Fetched installer {installer} for system {platform.system()} and machine {platform.machine()} successfully.",
-            flush=True,
+        with urllib.request.urlopen(url) as response:
+            with open(installer_file, "wb") as out_file:
+                shutil.copyfileobj(response, out_file)
+            print(
+                f"Fetched installer {installer_name} for system {platform.system()} and machine {platform.machine()} successfully.",
+                flush=True,
+            )
+    except urllib.error.HTTPError as e:
+        sys.exit(
+            f"Error: Failed to download file from {e.url}: HTTP Error {e.code}: {e.reason}"
         )
-    except urllib.error.URLError as e:
-        sys.exit(f"Error: Failed to download file from {e.url}: HTTP Error {e.code}: {e.reason}")
+
     if platform.system() == "Darwin":
         output = subprocess.run(
-            ["hdiutil", "attach", installer],
+            ["hdiutil", "attach", installer_file],
             capture_output=True,
             text=True,
             encoding="UTF-8",
@@ -114,28 +122,27 @@ def fetch_installer(verbose):
         app = apps[0].name
         exe = apps[0].stem
         apppath = volume / app
-        tgtpath = os.path.abspath(os.path.join(app, "Contents", "MacOS", exe))
+        tgtpath = Path(tmpdir, app)
         if verbose:
             print("Volume is", volume)
             print("App is", app)
             print("App path is", apppath)
             print("Installed installer is", tgtpath, flush=True)
-        try:
-            shutil.copytree(apppath, app)
-        except FileExistsError:
-            sys.exit(f"Error: Refusing to overwrite existing installer {app}")
+        shutil.copytree(apppath, tgtpath)
         subprocess.run(["hdiutil", "detach", volume, "-quiet"], check=True)
-        return tgtpath
-    st = os.stat(installer)
-    os.chmod(installer, st.st_mode | (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH))
-    return os.path.abspath(installer)
+        return tgtpath / "Contents" / "MacOS" / exe
+    st = installer_file.stat()
+    installer_file.chmod(st.st_mode | (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH))
+    return installer_file
 
 
 def get_available_pkgs(installer, ver):
     """Find the available packages for this Qt version."""
     verparts = ver.split(".")
     if len(verparts) != 3:
-        sys.exit(f"Error: Expected version string of the form 'major.minor.patch', got '{ver}'.")
+        sys.exit(
+            f"Error: Expected version string of the form 'major.minor.patch', got '{ver}'."
+        )
     try:
         output = subprocess.run(
             [
@@ -283,16 +290,18 @@ def main():
     jwt = os.getenv("QT_INSTALLER_JWT_TOKEN")
     if jwt is None or len(jwt) == 0:
         print("Warning: QT_INSTALLER_JWT_TOKEN not set", flush=True)
-    installer = fetch_installer(verbose=args.verbose)
-    packagexml = get_available_pkgs(installer=installer, ver=args.ver)
-    selected = select_pkgs(
-        packagesxml=packagexml,
-        hostarch=args.hostarch,
-        targetarch=args.targetarch,
-        verbose=args.verbose,
-    )
-    install(installer=installer, dest=args.dest, selected=selected)
-    cleanup(dest=args.dest, ver=args.ver)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        installer = fetch_installer(verbose=args.verbose, tmpdir=tmpdir)
+        packagexml = get_available_pkgs(installer=installer, ver=args.ver)
+        selected = select_pkgs(
+            packagesxml=packagexml,
+            hostarch=args.hostarch,
+            targetarch=args.targetarch,
+            verbose=args.verbose,
+        )
+        install(installer=installer, dest=args.dest, selected=selected)
+        cleanup(dest=args.dest, ver=args.ver)
 
 
 if __name__ == "__main__":
