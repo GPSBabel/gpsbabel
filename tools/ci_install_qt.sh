@@ -46,6 +46,7 @@ qtremoteobjects \
 qtscxml \
 qtsensors \
 qtspeech \
+qtwebsockets \
 )
 
 mods=()
