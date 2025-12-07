@@ -189,8 +189,8 @@ def select_pkgs(
         print("\n".join(sorted(names)))
         print("")
     namebits = [name.split(".") for name in sorted(names)]
-    prevbits: Optional[List[str]] = None
-    leafs: List[List[str]] = []
+    prevbits = None
+    leafs = []
     for bits in namebits:
         if prevbits:
             plen = len(prevbits)
