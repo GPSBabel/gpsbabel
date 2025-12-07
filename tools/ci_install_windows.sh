@@ -78,7 +78,7 @@ else
       args+=(--targetarch "${PACKAGE_SUFFIX_CROSS}")
     fi
     args+=(--dest "${CACHEDIR}/Qt")
-    args+=(--verbose)
+    args+=(-v -v)
     python3 "${CI_BUILD_DIR}/tools/ci_install_qt.py" "${args[@]}"
   else
     echo "ERROR: unknown installation method ${METHOD}." >&2
