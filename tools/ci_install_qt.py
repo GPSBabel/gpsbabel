@@ -27,6 +27,7 @@ import stat
 import subprocess
 import sys
 import tempfile
+from typing import List, Optional
 import urllib.request
 from xml.etree import ElementTree
 
@@ -66,7 +67,7 @@ black.extend(rejectlicense)
 black.extend(unused)
 
 
-def fetch_installer(verbose, tmpdir):
+def fetch_installer(tmpdir: str, verbose: int) -> str:
     """Fetch the appropriate Qt online installer."""
     installer_name = None
     if platform.system() == "Windows":
@@ -98,9 +99,7 @@ def fetch_installer(verbose, tmpdir):
                 flush=True,
             )
     except urllib.error.HTTPError as e:
-        sys.exit(
-            f"Error: Failed to download file from {e.url}: HTTP Error {e.code}: {e.reason}"
-        )
+        sys.exit(f"Error: Failed to download file from {e.url}: HTTP Error {e.code}: {e.reason}")
 
     if platform.system() == "Darwin":
         output = subprocess.run(
@@ -110,9 +109,7 @@ def fetch_installer(verbose, tmpdir):
             encoding="UTF-8",
             check=True,
         )
-        volumes = re.findall(
-            r"^.*qt-online-installer.*$", output.stdout, flags=re.MULTILINE
-        )
+        volumes = re.findall(r"^.*qt-online-installer.*$", output.stdout, flags=re.MULTILINE)
         if len(volumes) != 1:
             sys.exit(f"Error: couldn't find macos volume in {volumes}")
         volume = Path(volumes[0].split("\t")[2])
@@ -123,26 +120,24 @@ def fetch_installer(verbose, tmpdir):
         exe = apps[0].stem
         apppath = volume / app
         tgtpath = Path(tmpdir, app)
-        if verbose:
+        if verbose > 2:
             print("Volume is", volume)
             print("App is", app)
             print("App path is", apppath)
             print("Installed installer is", tgtpath, flush=True)
         shutil.copytree(apppath, tgtpath)
         subprocess.run(["hdiutil", "detach", volume, "-quiet"], check=True)
-        return tgtpath / "Contents" / "MacOS" / exe
+        return str(tgtpath / "Contents" / "MacOS" / exe)
     st = installer_file.stat()
     installer_file.chmod(st.st_mode | (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH))
-    return installer_file
+    return str(installer_file)
 
 
-def get_available_pkgs(installer, ver):
+def get_available_pkgs(installer: str, ver: str, verbose: int) -> str:
     """Find the available packages for this Qt version."""
     verparts = ver.split(".")
     if len(verparts) != 3:
-        sys.exit(
-            f"Error: Expected version string of the form 'major.minor.patch', got '{ver}'."
-        )
+        sys.exit(f"Error: Expected version string of the form 'major.minor.patch', got '{ver}'.")
     try:
         output = subprocess.run(
             [
@@ -167,68 +162,84 @@ def get_available_pkgs(installer, ver):
         )
 
     pkgxml = "\n".join(re.findall(r"^(?!\[).*$", output.stdout, flags=re.MULTILINE))
+    if verbose > 2:
+        print(pkgxml)
+    print(f"Fetched available packages for {ver}.", flush=True)
     return pkgxml
 
 
-def select_pkgs(packagesxml, hostarch, targetarch, verbose):
+def select_pkgs(
+    packagesxml: str, hostarch: str, targetarch: Optional[str], verbose: int
+) -> List[str]:
     """Select the packages we want to install."""
     archs = [hostarch]
     if targetarch:
         archs.append(targetarch)
-    tree = ElementTree.fromstring(packagesxml)
-    names = [pkg.get("name") for pkg in tree.findall("package")]
-    if verbose:
-        print(sorted(names))
+    names = []
+    for pkg in ElementTree.fromstring(packagesxml).findall("package"):
+        name = pkg.get("name")
+        if name:
+            names.append(name)
+        else:
+            sys.exit(
+                "Error: Failed to parse search results: package elements are expected to have a name attribute."
+            )
+    if verbose > 2:
+        print("Packages (sorted) are:")
+        print("\n".join(sorted(names)))
+        print("")
     namebits = [name.split(".") for name in sorted(names)]
-    prevbits = [None] * len(max(namebits, key=len))
-    leafs = []
+    prevbits: Optional[List[str]] = None
+    leafs: List[List[str]] = []
     for bits in namebits:
-        plen = len(prevbits)
-        blen = len(bits)
-        if blen == plen + 1 and bits[0:plen] == prevbits[0:plen]:
-            if verbose:
-                print("internal node", prevbits)
-            leafs.pop()
+        if prevbits:
+            plen = len(prevbits)
+            blen = len(bits)
+            if blen == plen + 1 and bits[0:plen] == prevbits[0:plen]:
+                if verbose > 1:
+                    print("internal node", prevbits)
+                leafs.pop()
         leafs.append(bits)
         prevbits = bits
-    if verbose:
+    if verbose > 1:
         print(f"found {len(leafs)} leafs from {len(namebits)} nodes.")
     selected = []
     others = 0
     for node in leafs:
         if node[0] == "extensions":
             if node[1] in black or node[-1] not in archs:
-                if verbose:
+                if verbose > 1:
                     print(f"extension {node}")
             else:
-                if verbose:
+                if verbose > 1:
                     print(f"extension {node} *")
                 selected.append(".".join(node))
         # a few modules in 6.2.4, 6.5.3 weren't in addons, e.g. qt5compat
         elif node[-1].startswith("qt"):
             if node[-1] in black:
-                if verbose:
+                if verbose > 1:
                     print(f"module {node}")
             else:
-                if verbose:
+                if verbose > 1:
                     print(f"module {node} *")
                 selected.append(".".join(node))
         else:
-            if node[-1] in archs:
-                if verbose:
+            if node[-1] not in archs:
+                if verbose > 1:
+                    print(f"other {node}")
+            else:
+                if verbose > 1:
                     print(f"other {node} *")
                 selected.append(".".join(node))
                 others += 1
-            else:
-                if verbose:
-                    print(f"other {node}")
     if others != len(archs):
         sys.exit(f"Error: couldn't find architecture {archs}")
-    print(f"Selected packages are {selected}.", flush=True)
+    newline = "\n"
+    print(f"Selected packages:\n{newline.join(selected)}", flush=True)
     return selected
 
 
-def install(installer, dest, selected):
+def install(installer: str, dest: str, selected: List[str]) -> None:
     """Install the selected packages."""
     installargs = [
         installer,
@@ -245,7 +256,7 @@ def install(installer, dest, selected):
     subprocess.run(installargs, check=True)
 
 
-def cleanup(dest, ver):
+def cleanup(dest: str, ver: str) -> None:
     """Delete all the stuff we don't want that the Qt installer insists on installing."""
     dpath = Path(dest)
     vpath = dpath / ver
@@ -261,7 +272,7 @@ def cleanup(dest, ver):
                 print(f"unknown directory entry {entry}")
 
 
-def main():
+def main() -> None:
     """Install Qt."""
     parser = argparse.ArgumentParser(
         description="Install Qt using official online installer",
@@ -282,8 +293,7 @@ def main():
         "--verbose",
         "-v",
         help="verbose",
-        action="store_true",
-        default=False,
+        action="count",
     )
     args = parser.parse_args()
 
@@ -292,8 +302,8 @@ def main():
         print("Warning: QT_INSTALLER_JWT_TOKEN not set", flush=True)
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        installer = fetch_installer(verbose=args.verbose, tmpdir=tmpdir)
-        packagexml = get_available_pkgs(installer=installer, ver=args.ver)
+        installer = fetch_installer(tmpdir=tmpdir, verbose=args.verbose)
+        packagexml = get_available_pkgs(installer=installer, ver=args.ver, verbose=args.verbose)
         selected = select_pkgs(
             packagesxml=packagexml,
             hostarch=args.hostarch,
