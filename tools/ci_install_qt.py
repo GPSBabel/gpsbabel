@@ -161,9 +161,11 @@ def get_available_pkgs(installer: str, ver: str, verbose: int) -> str:
             stderr: {e.stderr}
             stdout: {e.stdout}"""
         )
-    pkgxml = "\n".join(re.findall(r"^(?!\[).*$", output.stdout, flags=re.MULTILINE))
-    if len(pkgxml) == 0:
+    xmlre = r"^(?:<\?xml.*?\?>[ \t\r\n]*)?<availablepackages>.*?</availablepackages>"
+    xmlmatch = re.search(xmlre, output.stdout, flags=re.MULTILINE | re.DOTALL)
+    if not xmlmatch:
         sys.exit(output.stdout)
+    pkgxml = xmlmatch.group()
     if verbose > 2:
         print(pkgxml)
     print(f"Fetched available packages for {ver}.", flush=True)
