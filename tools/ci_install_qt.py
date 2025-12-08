@@ -138,6 +138,7 @@ def get_available_pkgs(installer: str, ver: str, verbose: int) -> str:
     verparts = ver.split(".")
     if len(verparts) != 3:
         sys.exit(f"Error: Expected version string of the form 'major.minor.patch', got '{ver}'.")
+    print(f"Searching for packages for version {ver}.", flush=True)
     try:
         output = subprocess.run(
             [
@@ -160,8 +161,9 @@ def get_available_pkgs(installer: str, ver: str, verbose: int) -> str:
             stderr: {e.stderr}
             stdout: {e.stdout}"""
         )
-
     pkgxml = "\n".join(re.findall(r"^(?!\[).*$", output.stdout, flags=re.MULTILINE))
+    if len(pkgxml) == 0:
+        sys.exit(output.stdout)
     if verbose > 2:
         print(pkgxml)
     print(f"Fetched available packages for {ver}.", flush=True)
@@ -294,6 +296,7 @@ def main() -> None:
         "-v",
         help="verbose",
         action="count",
+        default=0,
     )
     args = parser.parse_args()
 
