@@ -32,6 +32,7 @@ import urllib.request
 from xml.etree import ElementTree
 
 rejectlicense = [
+    "qtcanvaspainter",
     "qtcharts",
     "qtdatavis3d",
     "qtgraphs",
@@ -60,11 +61,24 @@ unused = [
     "qtscxml",
     "qtsensors",
     "qtspeech",
+    "qttasktree",
     "qtwebsockets",
 ]
-black = []
-black.extend(rejectlicense)
-black.extend(unused)
+blacklist = []
+blacklist.extend(rejectlicense)
+blacklist.extend(unused)
+
+whitelist = [
+    "qt5compat",
+    "qtimageformats",
+    "qtpdf",
+    "qtpositioning",
+    "qtserialbus",
+    "qtserialport",
+    "qtwebchannel",
+    "qtwebengine",
+    "qtwebview",
+]
 
 
 def fetch_installer(tmpdir: str, verbose: int) -> str:
@@ -173,7 +187,7 @@ def get_available_pkgs(installer: str, ver: str, verbose: int) -> str:
 
 
 def select_pkgs(
-    packagesxml: str, hostarch: str, targetarch: Optional[str], verbose: int
+    packagesxml: str, hostarch: str, targetarch: Optional[str], verbose: int, usewhite: bool
 ) -> List[str]:
     """Select the packages we want to install."""
     archs = [hostarch]
@@ -211,7 +225,11 @@ def select_pkgs(
     others = 0
     for node in leafs:
         if node[0] == "extensions":
-            if node[1] in black or node[-1] not in archs:
+            if (
+                (node[-1] not in archs)
+                or (not usewhite and node[1] in blacklist)
+                or (usewhite and node[1] not in whitelist)
+            ):
                 if verbose > 1:
                     print(f"extension {node}")
             else:
@@ -220,7 +238,7 @@ def select_pkgs(
                 selected.append(".".join(node))
         # a few modules in 6.2.4, 6.5.3 weren't in addons, e.g. qt5compat
         elif node[-1].startswith("qt"):
-            if node[-1] in black:
+            if (not usewhite and node[-1] in blacklist) or (usewhite and node[-1] not in whitelist):
                 if verbose > 1:
                     print(f"module {node}")
             else:
@@ -238,6 +256,15 @@ def select_pkgs(
                 others += 1
     if others != len(archs):
         sys.exit(f"Error: couldn't find architecture {archs}")
+    if usewhite:
+        for witem in whitelist:
+            found = False
+            for sitem in selected:
+                if witem in sitem:
+                    found = True
+                    break
+            if not found:
+                print(f"Warning: module {witem} not available.")
     newline = "\n"
     print(f"Selected packages:\n{newline.join(selected)}", flush=True)
     return selected
@@ -300,6 +327,7 @@ def main() -> None:
         action="count",
         default=0,
     )
+    parser.add_argument("--black", help="select all modules not on black list", action="store_true")
     args = parser.parse_args()
 
     jwt = os.getenv("QT_INSTALLER_JWT_TOKEN")
@@ -314,6 +342,7 @@ def main() -> None:
             hostarch=args.hostarch,
             targetarch=args.targetarch,
             verbose=args.verbose,
+            usewhite=not args.black,
         )
         install(installer=installer, dest=args.dest, selected=selected)
         cleanup(dest=args.dest, ver=args.ver)
