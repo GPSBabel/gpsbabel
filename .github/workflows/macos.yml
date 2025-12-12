@@ -70,6 +70,7 @@ jobs:
       if: steps.restore-cache.outputs.cache-hit != 'true'
       env:
         CI_BUILD_DIR: ${{ github.workspace }}
+        QT_INSTALLER_JWT_TOKEN: ${{secrets.QT_INSTALLER_JWT_TOKEN}}
       run: |
         ./tools/ci_install_osx.sh ${{ matrix.QT_VERSION }} aqt
 

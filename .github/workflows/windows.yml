@@ -96,6 +96,7 @@ jobs:
         ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
         ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
         ARTIFACTORY_BASE_URL: ${{ secrets.ARTIFACTORY_BASE_URL }}
+        QT_INSTALLER_JWT_TOKEN: ${{secrets.QT_INSTALLER_JWT_TOKEN}}
       shell: bash
       run: |
         if [ -n "${{ matrix.CROSS_COMPILER }}" ]; then
@@ -186,13 +187,13 @@ jobs:
       matrix:
         include:
           - os: windows-11-arm
-            installer: Windows_Installer-*,arm64,arm64,msvc2022_arm64,aqt,true,Ninja,windows-11-arm
+            installer: Windows_Installer-*,arm64,arm64,msvc2022_arm64,*,true,Ninja,windows-11-arm
             name: WoA-native
           - os: windows-11-arm
-            installer: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,false,windows-2025
+            installer: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,*,false,windows-2025
             name: WoA-cross
           - os: windows-2025
-            installer: Windows_Installer-*,amd64,amd64,msvc2022_64,aqt,true,Ninja,windows-2025
+            installer: Windows_Installer-*,amd64,amd64,msvc2022_64,*,true,Ninja,windows-2025
             name: x86_64
 
     steps:

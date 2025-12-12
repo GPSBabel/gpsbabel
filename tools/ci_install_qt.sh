@@ -17,6 +17,7 @@ available=( $(aqt list-qt "$host" desktop --modules "$version" "$arch") )
 # remove commercial/GPLv3 modules, see https://doc-snapshots.qt.io/qt6-dev/qtmodules.html
 remove=( \
 debug_info \
+qtcanvaspainter \
 qtcharts \
 qtdatavis3d \
 qtgraphs \
@@ -46,6 +47,7 @@ qtremoteobjects \
 qtscxml \
 qtsensors \
 qtspeech \
+qttasktree \
 qtwebsockets \
 )
 
