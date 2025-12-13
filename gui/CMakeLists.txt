@@ -208,10 +208,11 @@ else()
   if(APPLE)
     # avoid macdeployqt issues with -executable and -codesign QTBUG-118075
     if(${Qt6Core_VERSION} VERSION_GREATER_EQUAL 6.7)
+      set(GPSBABEL_CODESIGN_IDENTITY "-" CACHE STRING "codesign identity.")
       # codesign seems to be needed on M1 tahoe for builds done with 6.5.3, XCode 16.4 on macos 15.
       # codesign doesn't seem to be needed on M1 tahoe for builds done with 6.5.3, XCode 15.4 on macos 14.
       # In the future codesign will run by default QTBUG-138019.
-      set(_codesign -c)
+      set(_codesign -c ${GPSBABEL_CODESIGN_IDENTITY})
     endif()
     get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
@@ -246,10 +247,10 @@ else()
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" _win_binary_path)
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" _win_source_path)
       # for cross compiles we need to tell windeployqt about the target qt paths.
-      if(CMAKE_TOOLCHAIN_FILE)
-        get_filename_component(_qt_toolchain_dir ${CMAKE_TOOLCHAIN_FILE} DIRECTORY)
-        get_filename_component(_qt_target_bin_dir ${_qt_toolchain_dir}/../../../bin ABSOLUTE)
-        file(TO_NATIVE_PATH "${_qt_target_bin_dir}/qtpaths.bat" _qtpaths_file)
+      if(CMAKE_CROSSCOMPILING)
+        find_file(_target_qtpath NAMES qtpaths6.bat qtpaths.bat host-qtpaths6.bat host-qtpaths.bat
+                  PATHS ${CMAKE_FIND_ROOT_PATH} PATH_SUFFIXES bin REQUIRED NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+        file(TO_NATIVE_PATH "${_target_qtpath}" _qtpaths_file)
         set(_qtpaths_option --qtpaths "${_qtpaths_file}")
         message(STATUS "Deploying with target qtpaths \"${_qtpaths_file}\".")
       endif()

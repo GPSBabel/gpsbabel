@@ -210,8 +210,8 @@ LowranceusrFormat::lowranceusr4_readstr(gbfile* file, int bytes_per_char) const
     buf.resize(len);
     int bytesread = gbfread(buf.data(), 1, len, file);
     buf.truncate(bytesread);
-    buf.replace((char)0x01, '*');  // IWay 350C puts 0x01 for the accented o in the street name of the Montreal Holiday Inn.
     if (bytes_per_char == 1) {
+      buf.replace((char)0x01, '*');  // IWay 350C puts 0x01 for the accented o in the street name of the Montreal Holiday Inn.
       retval = QString(buf);
     } else {
       retval = utf16le_codec->toUnicode(buf);
