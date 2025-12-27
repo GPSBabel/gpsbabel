@@ -4,6 +4,7 @@
 <!ENTITY chap_use SYSTEM "use.xml">
 <!ENTITY chap_formats SYSTEM "formats.xml">
 <!ENTITY chap_filters SYSTEM "filters.xml">
+<!ENTITY chap_csv_guide SYSTEM "csv_guide.xml">
 <!ENTITY app_datums  SYSTEM "datums.xml">
 <!ENTITY app_garmin_icons  SYSTEM "garmin_icons.xml">
 <!ENTITY app_styles  SYSTEM "styles.xml">
