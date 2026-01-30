@@ -137,7 +137,7 @@ void Kalman::process() {
                     const double speed = dist / dt;
                     speed_samples_for_stats.push_back(speed);
                 } else {
-                    gbFatal(FatalMsg().noquote() << "Time must increase between adjacent points, but the track contains adjacent points were this is not true.\n"
+                    gbFatal(FatalMsg().noquote() << "Time must increase between adjacent points, but the track contains adjacent points where this is not true.\n"
                                        << toString(*prev_wpt) << "\n" << toString(*wpt_stats));
                 }
             } else {

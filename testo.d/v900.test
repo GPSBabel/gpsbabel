@@ -6,4 +6,12 @@ gpsbabel -i v900 -f ${REFERENCE}/v900_basic_mode.csv -o gpx -F ${TMPDIR}/v900_ba
 compare ${REFERENCE}/v900_basic_mode.gpx ${TMPDIR}/v900_basic_mode.gpx
 gpsbabel -i v900 -f ${REFERENCE}/v900_advanced_mode.csv -o gpx -F ${TMPDIR}/v900_advanced_mode.gpx
 compare ${REFERENCE}/v900_advanced_mode.gpx ${TMPDIR}/v900_advanced_mode.gpx
+# 24173415.CSV from Columbus P-1 Mark II
+# The format differs from the V900: it isn't padded with nulls, has slightly different field lengths,
+# and doesn't have the VOX field.
+# It does contains 'T' and 'C' tags.  The dupe check should keep the 'C' tags from being duplicated 
+# in the track becasue they are at identical times/positions/etc. to 'T' tags.
+# We also exercises the time zone option.
+gpsbabel -i v900,utc=-7 -f ${REFERENCE}/track/24173415.CSV -o gpx -F ${TMPDIR}/24173415.gpx
+compare ${REFERENCE}/track/24173415.gpx ${TMPDIR}/24173415.gpx
 

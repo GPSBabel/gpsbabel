@@ -1,0 +1,15 @@
+<para>
+  This option specifies the time zone to be used when reading timestamps in the CSV file.
+</para>
+<para>
+  By default timestamps in the CSV file are assumed to be in Coordinated Universal Time (UTC).  However, by using this option an offset from UTC may be specified.  The value is an integer representing the offset in hours.  If you have configured your device to use a non-zero offset from UTC you should set this option correspondingly.  For example, if you configured your device settings with a timezone of "+01:00" you would use an option "utc=1" with this format.
+</para>
+<para>
+  Valid values range from -14 to +14.
+</para>
+<example xml:id="v900_utc_example">
+  <title>Read a CSV file from a device configure with timezone "+01:00"</title>
+  <para>
+    <userinput>gpsbabel -i v900,utc=1 -f my_data.csv -o gpx -F my_track.gpx</userinput>
+  </para>
+</example>
