@@ -1,0 +1,13 @@
+diff --git a/strptime/strptime_l.c b/strptime/strptime_l.c
+index 1a647079..5d2e6b21 100644
+--- a/strptime/strptime_l.c
++++ b/strptime/strptime_l.c
+@@ -382,7 +382,7 @@ __strptime_internal (const char *rp, const char *fmt, struct tm *tmp,
+ 	      if (s.decided != loc
+ 		  && (((trp = rp, match_string (weekday_name[cnt], trp))
+ 		       && trp > rp_longest)
+-		      || ((trp = rp, match_string (ab_weekday_name[cnt], rp))
++		      || ((trp = rp, match_string (ab_weekday_name[cnt], trp))
+ 			  && trp > rp_longest)))
+ 		{
+ 		  rp_longest = trp;
