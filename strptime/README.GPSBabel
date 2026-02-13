@@ -11,3 +11,6 @@ README
 
 The modified files from glibc.git are:
 strptime_l.c
+
+strptime_l.c.patch is a patch for our standalone version of strptime.
+bug33858.patch is for a strptime bug reported but not fixed in glibc.  see https://sourceware.org/bugzilla/show_bug.cgi?id=33853
