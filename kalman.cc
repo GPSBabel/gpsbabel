@@ -342,7 +342,7 @@ void Kalman::process() {
             i++;
 
             if (current_original_wpt->wpt_flags.marked_for_deletion) {
-                auto extra_data = static_cast<KalmanExtraData*>(current_original_wpt->extra_data);
+                auto* extra_data = static_cast<KalmanExtraData*>(current_original_wpt->extra_data);
                 // FIXME: marked_for_deletion <==> is_zinger deletion.
                 // Interpolate to estimate missing data, or alternatively just
                 // let the kalman filter predict across the gap.
