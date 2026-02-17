@@ -1743,7 +1743,7 @@ LowranceusrFormat::lowranceusr_merge_trail_hdr(const route_head* trk)
 void
 LowranceusrFormat::lowranceusr_merge_trail_tlr(const route_head* /*unused*/)
 {
-  if (trail_count == (int)track_count()) {  /* last trail */
+  if (trail_count == track_count()) {  /* last trail */
     short num_trail_points = trail_point_count;
     short max_trail_size = MAX_TRAIL_POINTS;
     if (num_trail_points > max_trail_size) {
