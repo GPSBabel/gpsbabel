@@ -106,6 +106,7 @@ jobs:
       env:
         XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
       run: |
+        system_profiler SPHardwareDataType
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
         if [ -z "${IDENTITY}" ]; then
@@ -132,7 +133,7 @@ jobs:
     - name: 'Upload Artifacts'
       uses: actions/upload-artifact@v6
       with:
-        name: MacOS_Installer ${{ join(matrix.*) }}
+        name: MacOS_Installer-${{ join(matrix.*) }}
         path: gui/GPSBabel-*.dmg
         retention-days: 7
 
@@ -143,3 +144,43 @@ jobs:
         path: ~/Cache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
+  test_installer:
+    name: 'Test Installer'
+    needs: macos
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+          - os: macos-15
+          - os: macos-15-intel
+          - os: macos-26
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+
+    - name: 'Download Artifacts'
+      uses: actions/download-artifact@v6
+      with:
+        path: download
+        pattern: MacOS_Installer-6.8.3,16.4,Ninja,true,macos-15
+        merge-multiple: true
+
+    - name: 'Install Artifact'
+      shell: bash
+      run: |
+        hdiutil attach ./download/GPSBabel*.dmg
+        mkdir installDir
+        cp -R /Volumes/GPSBabelFE/GPSBabelFE.app installDir
+        hdiutil detach /Volumes/GPSBabelFE
+
+    - name: 'Test Artifact'
+      shell: bash
+      run: |
+        system_profiler SPHardwareDataType
+        csrutil status
+        spctl --status
+        PNAME=./installDir/GPSBabelFE.app/Contents/MacOS/gpsbabel GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./installDir/GPSBabelFE.app/Contents/MacOS/gpsbabel GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
