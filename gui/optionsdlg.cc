@@ -58,7 +58,7 @@ FileDlgManager::FileDlgManager(QObject* parent,
 }
 
 //------------------------------------------------------------------------
-QVariant getOptionValue(QList<FormatOption> opts, int k)
+QVariant getOptionValue(const QList<FormatOption>& opts, int k)
 {
   if (!opts[k].getValue().toString().isEmpty()) {
     return opts[k].getValue();
@@ -86,11 +86,11 @@ void FileDlgManager::buttonClicked()
 }
 
 //------------------------------------------------------------------------
-OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOption>* opts,
+OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOption>& opts,
                        const QString& htmlArg):
   QDialog(parent),
   fmtName_(fmtName),
-  options_(*opts),
+  options_(opts),
   html_(htmlArg)
 {
   if (htmlArg.isEmpty()) {

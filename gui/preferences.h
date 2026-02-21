@@ -20,6 +20,7 @@
 //  USA.
 
 #include <QDialog>           // for QDialog
+#include <QButtonGroup>      // for QButtonGroup
 #include <QList>             // for QList
 #include <QObject>           // for Q_OBJECT, slots
 #include <QWidget>           // for QWidget

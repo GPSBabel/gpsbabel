@@ -131,10 +131,6 @@
                <property name="text">
                 <string>File Name(s)</string>
                </property>
-               <property name="icon">
-                <iconset resource="app.qrc">
-                 <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
-               </property>
               </widget>
              </item>
              <item>
@@ -551,10 +547,6 @@
                <property name="text">
                 <string>File Name</string>
                </property>
-               <property name="icon">
-                <iconset resource="app.qrc">
-                 <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
-               </property>
               </widget>
              </item>
              <item>
@@ -695,6 +687,7 @@
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionUpgradeCheck"/>
+    <addaction name="actionLeafletMapPreview"/>
     <addaction name="separator"/>
     <addaction name="actionVisit_Website"/>
     <addaction name="actionMake_a_Donation"/>
@@ -739,6 +732,14 @@
   <action name="actionMake_a_Donation">
    <property name="text">
     <string>Make a Donation...</string>
+   </property>
+  </action>
+  <action name="actionLeafletMapPreview">
+   <property name="text">
+    <string>Leaflet Map Preview</string>
+   </property>
+   <property name="toolTip">
+    <string>Enable this is the File Menu, Preferences Item, Privacy tab.</string>
    </property>
   </action>
  </widget>

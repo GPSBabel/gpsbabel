@@ -30,12 +30,9 @@
 #include <QLabel>           // for QLabel
 #include <QLineEdit>        // for QLineEdit
 #include <QList>            // for QList
-#include <QMainWindow>      // for QMainWindow
-#include <QObject>          // for Q_OBJECT, slots
-#include <QPixmap>          // for QPixmap
-#include <QString>          // for QString
-#include <QStringList>      // for QStringList
-#include <QTranslator>      // for QTranslator
+#include "gpx.h"
+#include <QMainWindow>
+#include <QTranslator>
 #include <QWidget>          // for QWidget
 
 #include "babeldata.h"      // for BabelData
@@ -114,6 +111,8 @@ protected:
   void closeEvent(QCloseEvent*) override;
   void changeEvent(QEvent*) override;
 
+  QString generateGeoJsonWithIndices(const Gpx& gpxData);
+
 private slots:
   void aboutActionX();
   void applyActionX();
@@ -139,6 +138,7 @@ private slots:
   void preferencesActionX();
   void visitWebsiteActionX();
   void resetFormatDefaults();
+  void leafletMapPreviewActionX();
 #ifndef DISABLE_UPGRADE_CHECK
   void upgradeCheckActionX();
 #endif

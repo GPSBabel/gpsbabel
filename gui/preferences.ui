@@ -88,13 +88,39 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="mapPreviewCheck">
+        <widget class="QRadioButton" name="mapPreviewCheck">
          <property name="toolTip">
           <string>&lt;html&gt;When selected, this feature uses the Google Maps API(s) per &lt;a href=&quot;http://www.google.com/intl/en/policies/terms&quot;&gt;Google’s Terms of Service&lt;/a&gt; and the &lt;a href=&quot;http://www.google.com/policies/privacy&quot;&gt;Google Privacy Policy&lt;/a&gt;.&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>Enable map preview feature.</string>
+          <string>Enable Google map preview feature.</string>
          </property>
+         <attribute name="buttonGroup">
+          <string notr="true">mapPreviewButtonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="leafletMapPreviewCheck">
+         <property name="toolTip">
+          <string>&lt;html&gt;When selected, this feature uses the Leaflet Maps API(s) per &lt;a href=&quot;https://leafletjs.com/&quot;&gt;Leaflet’s Terms of Service&lt;/a&gt; and the &lt;a href=&quot;https://leafletjs.com/privacy.html&quot;&gt;Leaflet Privacy Policy&lt;/a&gt;.&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Enable Leaflet map preview feature.</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">mapPreviewButtonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="disableMapPreviewCheck">
+         <property name="text">
+          <string>Disable map preview feature.</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">mapPreviewButtonGroup</string>
+         </attribute>
         </widget>
        </item>
        <item>

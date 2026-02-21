@@ -57,7 +57,7 @@ class OptionsDlg: public QDialog
 {
   Q_OBJECT
 public:
-  OptionsDlg(QWidget* parent, const QString& fmtName_, QList<FormatOption>* options_,
+  OptionsDlg(QWidget* parent, const QString& fmtName_, QList<FormatOption>& options_,
              const QString& html_);
 
 private:

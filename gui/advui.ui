@@ -25,13 +25,42 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="previewGmap">
+    <widget class="QRadioButton" name="previewGmap">
      <property name="toolTip">
       <string>Enable this is the File Menu, Preferences Item, Privacy tab.</string>
      </property>
      <property name="text">
       <string>Preview in Google Maps</string>
      </property>
+     <attribute name="buttonGroup">
+      <string notr="true">advMapPreviewButtonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="previewLeaflet">
+     <property name="toolTip">
+      <string>Enable this is the File Menu, Preferences Item, Privacy tab.</string>
+     </property>
+     <property name="text">
+      <string>Preview in Leaflet Maps</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">advMapPreviewButtonGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="previewDisable">
+     <property name="toolTip">
+      <string>Disable map preview.</string>
+     </property>
+     <property name="text">
+      <string>Disable map preview</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">advMapPreviewButtonGroup</string>
+     </attribute>
     </widget>
    </item>
    <item>

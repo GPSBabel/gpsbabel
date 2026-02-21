@@ -71,3 +71,8 @@ double LatLng::haversineDistance(const LatLng& other) const
 {
   return DistanceInMeters(*this, other);
 }
+
+QString fmtLatLng(const LatLng& l)
+{
+  return QString("[%1, %2]").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
+}
