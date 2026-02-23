@@ -92,11 +92,11 @@ GtrnctrFormat::wr_init(const QString& fname)
       for (int i = 0; i < gtc_sportlist.size(); ++i) {
         const auto& item = gtc_sportlist.at(i);
         if (item.startsWith(opt_sport, Qt::CaseInsensitive)) {
-        gtc_sport = i;
-        break;
+          gtc_sport = i;
+          break;
+        }
       }
     }
-  }
     if (gtc_sport < 0) {
       gbFatal(FatalMsg().nospace() << "Invalid sport: " << opt_sport.get() <<
               ".  Valid sports are : " << gtc_sportlist.join(u", "));
@@ -340,7 +340,8 @@ GtrnctrFormat::write()
   // See other comment "mimic our <= 1.10.0 writer which declared a new default namespace ..."
   //fout->writeNamespace(activity_extension_ns_uri);
   fout->writeStartElement(QStringLiteral("TrainingCenterDatabase"));
-  fout->writeAttribute(QStringLiteral("xsi:schemaLocation"), QStringLiteral("http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd"));
+  fout->writeAttribute(QStringLiteral("xsi:schemaLocation"),
+                       QStringLiteral("http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd"));
 
   auto gtc_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
     gtc_waypt_pr(waypointp);
