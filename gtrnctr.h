@@ -75,7 +75,8 @@ private:
 
   static constexpr int kGtcMaxNameLen = 15;
   static const QStringList gtc_sportlist;
-  static const QString activity_extension_uri;
+  static const QString activity_extension_ns_uri;
+  static const QString xsi_ns_uri;
 
   /* Member Functions */
 

@@ -42,7 +42,8 @@
 #include "xmlgeneric.h"          // for XmlGenericReader
 
 
-const QString GtrnctrFormat::activity_extension_uri = QStringLiteral("http://www.garmin.com/xmlschemas/ActivityExtension/v2");
+const QString GtrnctrFormat::activity_extension_ns_uri = QStringLiteral("http://www.garmin.com/xmlschemas/ActivityExtension/v2");
+const QString GtrnctrFormat::xsi_ns_uri = QStringLiteral("http://www.w3.org/2001/XMLSchema-instance");
 
 const QStringList GtrnctrFormat::gtc_tags_to_ignore = {
   "TrainingCenterDatabase",
@@ -181,9 +182,9 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
   // TODO: find a schema extension to include wpt->course and wpt->temperature
   // TODO: find a way to include DistanceMeters from odometer information
   if (wpt->heartrate) {
-    //gtc_write_xml(0, "<HeartRateBpm>%d</HeartRateBpm>\n", wpt->heartrate);
-    // FIXME need type?
     fout->writeStartElement(QStringLiteral("HeartRateBpm"));
+    // mimic gpsbabel <= 1.10.0 writing of xsi:type attribute.
+    fout->writeAttribute(xsi_ns_uri, QStringLiteral("type"), QStringLiteral("HeartRateInBeatsPerMinute_t"));
     //gtc_write_xml(1, "<HeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
     fout->writeTextElement(QStringLiteral("Value"), QString::number(wpt->heartrate));
     fout->writeEndElement(); // HeartRateBpm
@@ -196,15 +197,15 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
     // mimic our <= 1.10.0 writer which declared a new default namespace with the TPX element,
     // as opposed to more modern Garmin writers that use a prefix corresponding to an initially
     // declared non-default namespace.
-    //fout->writeStartElement(activity_extension_uri, QStringLiteral("TPX"));
+    //fout->writeStartElement(activity_extension_ns_uri, QStringLiteral("TPX"));
     fout->writeStartElement(QStringLiteral("TPX"));
-    fout->writeDefaultNamespace(activity_extension_uri);
+    fout->writeDefaultNamespace(activity_extension_ns_uri);
     /* see http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd */
     if (wpt->speed_has_value()) {
-      fout->writeTextElement(activity_extension_uri, QStringLiteral("Speed"), QString::number(wpt->speed_value(), 'f', 3));
+      fout->writeTextElement(activity_extension_ns_uri, QStringLiteral("Speed"), QString::number(wpt->speed_value(), 'f', 3));
     }
     if (wpt->power) {
-      fout->writeTextElement(activity_extension_uri, QStringLiteral("Watts"), QString::number(wpt->power, 'f', 0));
+      fout->writeTextElement(activity_extension_ns_uri, QStringLiteral("Watts"), QString::number(wpt->power, 'f', 0));
     }
     fout->writeEndElement(); // TPX
     fout->writeEndElement(); // Extensions
@@ -245,16 +246,16 @@ GtrnctrFormat::gtc_fake_hdr(const computed_trkdata& tdata)
     fout->writeTextElement(QStringLiteral("Calories"), QStringLiteral("0")); /* element is required */
   }
   if (tdata.avg_hrt) {
-    // FIXME need type attribute?
-    //gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
     fout->writeStartElement(QStringLiteral("AverageHeartRateBpm"));
+    // mimic gpsbabel <= 1.10.0 writing of xsi:type attribute.
+    fout->writeAttribute(xsi_ns_uri, QStringLiteral("type"), QStringLiteral("HeartRateInBeatsPerMinute_t"));
     fout->writeTextElement(QStringLiteral("Value"), QString::number(qRound(*tdata.avg_hrt)));
     fout->writeEndElement(); // AverageHeartRateBpm
   }
   if (tdata.max_hrt) {
-    // FIXME need type attribute?
-    //gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
     fout->writeStartElement(QStringLiteral("MaximumHeartRateBpm"));
+    // mimic gpsbabel <= 1.10.0 writing of xsi:type attribute.
+    fout->writeAttribute(xsi_ns_uri, QStringLiteral("type"), QStringLiteral("HeartRateInBeatsPerMinute_t"));
     fout->writeTextElement(QStringLiteral("Value"), QString::number(*tdata.max_hrt));
     fout->writeEndElement(); // MaximumHeartRateBpm
   }
@@ -337,13 +338,11 @@ GtrnctrFormat::write()
 {
   fout->writeStartDocument(QStringLiteral("1.0"), false);
   fout->writeDefaultNamespace(QStringLiteral("http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2"));
-  fout->writeNamespace(QStringLiteral("http://www.w3.org/2001/XMLSchema-instance"), QStringLiteral("xsi"));
-  // See other comment "mimic our <= 1.10.0 writer ..."
-  //fout->writeNamespace(activity_extension_uri);
+  fout->writeNamespace(xsi_ns_uri, QStringLiteral("xsi"));
+  // See other comment "mimic our <= 1.10.0 writer which declared a new default namespace ..."
+  //fout->writeNamespace(activity_extension_ns_uri);
   fout->writeStartElement(QStringLiteral("TrainingCenterDatabase"));
   fout->writeAttribute(QStringLiteral("xsi:schemaLocation"), QStringLiteral("http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd"));
-  // FIXME change ok?
-  //gtc_write_xml(1, "<TrainingCenterDatabase xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\">\n");
 
   auto gtc_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
     gtc_waypt_pr(waypointp);
