@@ -156,12 +156,12 @@ GtrnctrFormat::gtc_study_lap(const Waypoint* wpt)
 void
 GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
 {
-  if (wpt->wpt_flags.is_split != 0) {
-    fout->writeStartElement(QStringLiteral("Trackpoint"));
-    fout->writeAttribute(QStringLiteral("split"), QStringLiteral("yes"));
-  } else {
-    fout->writeStartElement(QStringLiteral("Trackpoint"));
-  }
+  fout->writeStartElement(QStringLiteral("Trackpoint"));
+  // gpsbabel <= 1.10.0 conditionally wrote the split attribute, but
+  // it violates the schema.
+  //if (wpt->wpt_flags.is_split != 0) {
+  //  fout->writeAttribute(QStringLiteral("split"), QStringLiteral("yes"));
+  //}
 
   if (wpt->creation_time.isValid()) {
     QString time_string = wpt->CreationTimeXML();
