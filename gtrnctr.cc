@@ -193,9 +193,12 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
   }
   if (wpt->speed_has_value() || wpt->power) {
     fout->writeStartElement(QStringLiteral("Extensions"));
-    // FIXME namespace
-    fout->writeStartElement(activity_extension_uri, QStringLiteral("TPX"));
-    //gtc_write_xml(1, "<TPX xmlns=\"http://www.garmin.com/xmlschemas/ActivityExtension/v2\">\n");
+    // mimic our <= 1.10.0 writer which declared a new default namespace with the TPX element,
+    // as opposed to more modern Garmin writers that use a prefix corresponding to an initially
+    // declared non-default namespace.
+    //fout->writeStartElement(activity_extension_uri, QStringLiteral("TPX"));
+    fout->writeStartElement(QStringLiteral("TPX"));
+    fout->writeDefaultNamespace(activity_extension_uri);
     /* see http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd */
     if (wpt->speed_has_value()) {
       fout->writeTextElement(activity_extension_uri, QStringLiteral("Speed"), QString::number(wpt->speed_value(), 'f', 3));
@@ -335,7 +338,8 @@ GtrnctrFormat::write()
   fout->writeStartDocument(QStringLiteral("1.0"), false);
   fout->writeDefaultNamespace(QStringLiteral("http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2"));
   fout->writeNamespace(QStringLiteral("http://www.w3.org/2001/XMLSchema-instance"), QStringLiteral("xsi"));
-  fout->writeNamespace(activity_extension_uri);
+  // See other comment "mimic our <= 1.10.0 writer ..."
+  //fout->writeNamespace(activity_extension_uri);
   fout->writeStartElement(QStringLiteral("TrainingCenterDatabase"));
   fout->writeAttribute(QStringLiteral("xsi:schemaLocation"), QStringLiteral("http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd"));
   // FIXME change ok?
