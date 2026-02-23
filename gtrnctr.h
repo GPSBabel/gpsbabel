@@ -26,18 +26,19 @@
 #ifndef GTRNCTR_H_INCLUDED_
 #define GTRNCTR_H_INCLUDED_
 
-#include <QList>                 // for QList
-#include <QString>               // for QString
-#include <QStringList>           // for QStringList
-#include <QVector>               // for QVector
-#include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QList>                       // for QList
+#include <QString>                     // for QString
+#include <QStringList>                 // for QStringList
+#include <QVector>                     // for QVector
+#include <QXmlStreamAttributes>        // for QXmlStreamAttributes
 
-#include "defs.h"                // for arglist_t, ff_cap, route_head, Waypoint, computed_trkdata, ARG_NOMINMAX, ff_cap_read, ARGTYPE_BOOL, ARGTYPE_STRING, ff_cap_none, ff_cap_write, ff_type, ff_type_file
-#include "format.h"              // for Format
-#include "gbfile.h"              // for gbfile
-#include "option.h"              // for OptionBool, OptionString
-#include "src/core/datetime.h"   // for DateTime
-#include "xmlgeneric.h"          // for cb_cdata, xg_functor_map_entry, cb_start, cb_end
+#include "defs.h"                      // for arglist_t, ff_cap, route_head, Waypoint, ARG_NOMINMAX, computed_trkdata, ff_type, ARGTYPE_BOOL, ARGTYPE_STRING
+#include "format.h"                    // for Format
+#include "option.h"                    // for OptionBool, OptionString
+#include "src/core/datetime.h"         // for DateTime
+#include "src/core/file.h"             // for File
+#include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
+#include "xmlgeneric.h"                // for xg_cb_type, XmlGenericReader
 
 
 class GtrnctrFormat : public Format
@@ -73,12 +74,11 @@ private:
   /* Constants */
 
   static constexpr int kGtcMaxNameLen = 15;
-  static constexpr const char* gtc_sportlist[] = { "Biking", "Running", "MultiSport", "Other" };
+  static constexpr const char* gtc_sportlist[] = { "Biking", "Running", "Other" };
+  static const QString activity_extension_uri;
 
   /* Member Functions */
 
-  [[gnu::format(printf, 3, 4)]] void gtc_write_xml(int indent, const char* fmt, ...);
-  void gtc_write_xml(int indent, const QString& s);
   void gtc_lap_start(const route_head*  /* unused */);
   static computed_trkdata gtc_new_study_lap(const route_head* rte);
   void gtc_study_lap(const Waypoint* wpt);
@@ -117,7 +117,8 @@ private:
   /* Data Members */
 
   static const QStringList gtc_tags_to_ignore;
-  gbfile* ofd{};
+  gpsbabel::File* ofile{nullptr};
+  gpsbabel::XmlStreamWriter* fout{nullptr};
   int lap_ct = 0;
   int lap_s = 0;
   Waypoint* wpt_tmp{};
@@ -214,6 +215,5 @@ private:
   };
   XmlGenericReader* xml_reader{nullptr};
 
-  int gtc_indent_level{};
 };
 #endif // GTRNCTR_H_INCLUDED_

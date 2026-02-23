@@ -26,20 +26,22 @@
 
 #include "gtrnctr.h"
 
-#include <QByteArray>            // for QByteArray
-#include <QDateTime>             // for QDateTime
-#include <QtGlobal>              // for qRound, qPrintable
+#include <QChar>                 // for QChar
+#include <QDateTime>             // for operator>, QDateTime
+#include <QIODevice>             // for QIODevice, operator|
+#include <QLatin1Char>           // for QLatin1Char
+#include <QStringLiteral>        // for qMakeStringPrivate, QStringLiteral
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <QtGlobal>              // for qRound
 
-#include <cstdarg>               // for va_end, va_list, va_start
-#include <cstdio>                // for snprintf
 #include <iterator>              // for size
 #include <optional>              // for optional
-#include <type_traits>           // for add_const<>::type
 
-#include "defs.h"                // for Waypoint, route_head, computed_trkdata, waypt_add, route_disp, track_disp_all, case_ignore_strncmp, track_add_head, track_add_wpt, track_recompute, xml_parse_time, CSTR, wp_flags, WAYPT_SET, unknown_alt
-#include "xmlgeneric.h"          // for xml_deinit, xml_init, xml_read
+#include "defs.h"                // for Waypoint, route_head, computed_trkdata, waypt_add, route_disp, track_disp_all, case_ignore_strncmp, track_add_head, track_add_wpt, track_recompute, xml_parse_time, unknown_alt, wp_flags
+#include "xmlgeneric.h"          // for XmlGenericReader
 
+
+const QString GtrnctrFormat::activity_extension_uri = "http://www.garmin.com/xmlschemas/ActivityExtension/v2";
 
 const QStringList GtrnctrFormat::gtc_tags_to_ignore = {
   "TrainingCenterDatabase",
@@ -73,7 +75,12 @@ GtrnctrFormat::rd_deinit()
 void
 GtrnctrFormat::wr_init(const QString& fname)
 {
-  ofd = gbfopen(fname, "w");
+  ofile = new gpsbabel::File(fname);
+  ofile->open(QIODevice::WriteOnly | QIODevice::Text);
+
+  fout = new gpsbabel::XmlStreamWriter(ofile);
+  fout->setAutoFormatting(true);
+  fout->setAutoFormattingIndent(2);
 
   if (opt_sport) {
     for (unsigned int i = 0; i < std::size(gtc_sportlist); i++) {
@@ -89,43 +96,12 @@ GtrnctrFormat::wr_init(const QString& fname)
 void
 GtrnctrFormat::wr_deinit()
 {
-  gbfclose(ofd);
-}
-
-void
-GtrnctrFormat::gtc_write_xml(int indent, const char* fmt, ...)
-{
-  va_list args;
-
-  va_start(args, fmt);
-
-  if (indent < 0) {
-    gtc_indent_level--;
-  }
-
-  gbfprintf(ofd, "%*s", gtc_indent_level * 2, "");
-  gbvfprintf(ofd, fmt, args);
-
-  if (indent > 0) {
-    gtc_indent_level++;
-  }
-
-  va_end(args);
-}
-
-void
-GtrnctrFormat::gtc_write_xml(int indent, const QString& s)
-{
-  if (indent < 0) {
-    gtc_indent_level--;
-  }
-  gbfprintf(ofd, "%*s", gtc_indent_level * 2, "");
-  gbfputs(s, ofd);
-  if (indent > 0) {
-    gtc_indent_level++;
-  }
-
-
+  fout->writeEndDocument();
+  delete fout;
+  fout = nullptr;
+  ofile->close();
+  delete ofile;
+  ofile = nullptr;
 }
 
 void
@@ -166,56 +142,58 @@ void
 GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
 {
   if (wpt->wpt_flags.is_split != 0) {
-    gtc_write_xml(1, "<Trackpoint split=\"yes\">\n");
+    fout->writeStartElement("Trackpoint");
+    fout->writeAttribute("split", "yes");
   } else {
-    gtc_write_xml(1, "<Trackpoint>\n");
+    fout->writeStartElement("Trackpoint");
   }
 
   if (wpt->creation_time.isValid()) {
     QString time_string = wpt->CreationTimeXML();
-    if (!time_string.isEmpty()) {
-      gtc_write_xml(0, "<Time>%s</Time>\n",
-                    qPrintable(time_string));
-    }
+    fout->writeOptionalTextElement("Time", time_string);
   }
   if (wpt->latitude && wpt->longitude) {
-    gtc_write_xml(1, "<Position>\n");
-    gtc_write_xml(0, "<LatitudeDegrees>%.7f</LatitudeDegrees>\n", wpt->latitude);
-    gtc_write_xml(0, "<LongitudeDegrees>%.7f</LongitudeDegrees>\n", wpt->longitude);
-    gtc_write_xml(-1, "</Position>\n");
+    fout->writeStartElement("Position");
+    fout->writeTextElement("LatitudeDegrees", QString::number(wpt->latitude, 'f', 7));
+    fout->writeTextElement("LongitudeDegrees", QString::number(wpt->longitude, 'f', 7));
+    fout->writeEndElement(); // Position
   }
   if (wpt->altitude != unknown_alt) {
-    gtc_write_xml(0, "<AltitudeMeters>%.1f</AltitudeMeters>\n", wpt->altitude);
+    fout->writeTextElement("AltitudeMeters", QString::number(wpt->altitude, 'f', 1));
   }
   if (wpt->odometer_distance) {
-    gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n", wpt->odometer_distance);
+    fout->writeTextElement("DistanceMeters", QString::number(wpt->odometer_distance, 'f', 2));
   }
   // TODO: find a schema extension to include wpt->course and wpt->temperature
   // TODO: find a way to include DistanceMeters from odometer information
   if (wpt->heartrate) {
     //gtc_write_xml(0, "<HeartRateBpm>%d</HeartRateBpm>\n", wpt->heartrate);
-    gtc_write_xml(1, "<HeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0,"<Value>%d</Value>\n", wpt->heartrate);
-    gtc_write_xml(-1,"</HeartRateBpm>\n");
+    // FIXME need type?
+    fout->writeStartElement("HeartRateBpm");
+    //gtc_write_xml(1, "<HeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
+    fout->writeTextElement("Value", QString::number(wpt->heartrate));
+    fout->writeEndElement(); // HeartRateBpm
   }
   if (wpt->cadence) {
-    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", wpt->cadence);
+    fout->writeTextElement("Cadence", QString::number(wpt->cadence));
   }
   if (wpt->speed_has_value() || wpt->power) {
-    gtc_write_xml(1, "<Extensions>\n");
-    gtc_write_xml(1, "<TPX xmlns=\"http://www.garmin.com/xmlschemas/ActivityExtension/v2\">\n");
+    fout->writeStartElement("Extensions");
+    // FIXME namespace
+    fout->writeStartElement(activity_extension_uri, "TPX");
+    //gtc_write_xml(1, "<TPX xmlns=\"http://www.garmin.com/xmlschemas/ActivityExtension/v2\">\n");
     /* see http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd */
     if (wpt->speed_has_value()) {
-      gtc_write_xml(0, "<Speed>%.3f</Speed>\n", wpt->speed_value());
+      fout->writeTextElement(activity_extension_uri, "Speed", QString::number(wpt->speed_value(), 'f', 3));
     }
     if (wpt->power) {
-      gtc_write_xml(0, "<Watts>%.0f</Watts>\n", wpt->power);
+      fout->writeTextElement("Watts", QString::number(wpt->power, 'f', 0));
     }
-    gtc_write_xml(-1, "</TPX>\n");
-    gtc_write_xml(-1, "</Extensions>\n");
+    fout->writeEndElement(); // TPX
+    fout->writeEndElement(); // Extensions
   }
 
-  gtc_write_xml(-1, "</Trackpoint>\n");
+  fout->writeEndElement(); // Trackpoint
 }
 
 void
@@ -231,41 +209,45 @@ GtrnctrFormat::gtc_fake_hdr(const computed_trkdata& tdata)
   }
 
   /* write these in either case, course or activity format */
-  gtc_write_xml(0, "<TotalTimeSeconds>%lld</TotalTimeSeconds>\n", secs);
-  gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n", tdata.distance_meters);
+  fout->writeTextElement("TotalTimeSeconds", QString::number(secs));
+  fout->writeTextElement("DistanceMeters", QString::number(tdata.distance_meters, 'f', 2));
   if (gtc_course_flag) { /* course format */
-    gtc_write_xml(1, "<BeginPosition>\n");
-    gtc_write_xml(0, "<LatitudeDegrees>%lf</LatitudeDegrees>\n", gtc_start_lat);
-    gtc_write_xml(0, "<LongitudeDegrees>%lf</LongitudeDegrees>\n", gtc_start_long);
-    gtc_write_xml(-1,"</BeginPosition>\n");
-    gtc_write_xml(1, "<EndPosition>\n");
-    gtc_write_xml(0, "<LatitudeDegrees>%lf</LatitudeDegrees>\n", gtc_end_lat);
-    gtc_write_xml(0, "<LongitudeDegrees>%lf</LongitudeDegrees>\n", gtc_end_long);
-    gtc_write_xml(-1,"</EndPosition>\n");
+    fout->writeStartElement("BeginPosition");
+    fout->writeTextElement("LatitudeDegrees", QString::number(gtc_start_lat, 'f'));
+    fout->writeTextElement("LongitudeDegrees", QString::number(gtc_start_long, 'f'));
+    fout->writeEndElement(); // BeginPosition
+    fout->writeStartElement("EndPosition");
+    fout->writeTextElement("LatitudeDegrees", QString::number(gtc_end_lat, 'f'));
+    fout->writeTextElement("LongitudeDegrees", QString::number(gtc_end_long, 'f'));
+    fout->writeEndElement(); // EndPosition
 
   } else {  /* activity (history) format */
     if (tdata.max_spd) {
-      gtc_write_xml(0, "<MaximumSpeed>%.3f</MaximumSpeed>\n", *tdata.max_spd);
+      fout->writeTextElement("MaximumSpeed", QString::number(*tdata.max_spd, 'f', 3));
     }
-    gtc_write_xml(0, "<Calories>0</Calories>\n"); /* element is required */
+    fout->writeTextElement("Calories", "0"); /* element is required */
   }
   if (tdata.avg_hrt) {
-    gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", qRound(*tdata.avg_hrt));
-    gtc_write_xml(-1,"</AverageHeartRateBpm>\n");
+    // FIXME need type attribute?
+    //gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
+    fout->writeStartElement("AverageHeartRateBpm");
+    fout->writeTextElement("Value", QString::number(qRound(*tdata.avg_hrt)));
+    fout->writeEndElement(); // AverageHeartRateBpm
   }
   if (tdata.max_hrt) {
-    gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", *tdata.max_hrt);
-    gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
+    // FIXME need type attribute?
+    //gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
+    fout->writeStartElement("MaximumHeartRateBpm");
+    fout->writeTextElement("Value", QString::number(*tdata.max_hrt));
+    fout->writeEndElement(); // MaximumHeartRateBpm
   }
-  gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
+  fout->writeTextElement("Intensity", "Active");
   if (tdata.avg_cad) {
-    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", qRound(*tdata.avg_cad));
+    fout->writeTextElement("Cadence", QString::number(qRound(*tdata.avg_cad)));
   }
 
   if (!gtc_course_flag) { /* activity (history) format */
-    gtc_write_xml(0, "<TriggerMethod>Manual</TriggerMethod>\n");
+    fout->writeTextElement("TriggerMethod", "Manual");
   }
 
 }
@@ -273,7 +255,8 @@ GtrnctrFormat::gtc_fake_hdr(const computed_trkdata& tdata)
 void
 GtrnctrFormat::gtc_act_hdr(const route_head* rte)
 {
-  gtc_write_xml(1, "<Activity Sport=\"%s\">\n", gtc_sportlist[gtc_sport]);
+  fout->writeStartElement("Activity");
+  fout->writeAttribute("Sport", gtc_sportlist[gtc_sport]);
   gtc_lap_start(nullptr);
   computed_trkdata tdata = gtc_new_study_lap(rte);
   auto gtc_study_lap_lambda = [this](const Waypoint* waypointp)->void {
@@ -281,30 +264,29 @@ GtrnctrFormat::gtc_act_hdr(const route_head* rte)
   };
   route_disp(rte, gtc_study_lap_lambda);
   if (gtc_least_time.isValid()) {
-    gtc_write_xml(0, "<Id>%s</Id>\n",
-                  CSTR(gtc_least_time.toPrettyString()));
-    gtc_write_xml(1, "<Lap StartTime=\"%s\">\n",
-                  CSTR(gtc_least_time.toPrettyString()));
+    fout->writeTextElement("Id", gtc_least_time.toPrettyString());
+    fout->writeStartElement("Lap");
+    fout->writeAttribute("StartTime", gtc_least_time.toPrettyString());
   } else {
-    gtc_write_xml(1, "<Lap>\n");
+    fout->writeStartElement("Lap");
   }
   gtc_fake_hdr(tdata);
-  gtc_write_xml(1,"<Track>\n");
+  fout->writeStartElement("Track");
 }
 
 void
 GtrnctrFormat::gtc_act_ftr(const route_head* /*unused*/)
 {
-  gtc_write_xml(-1, "</Track>\n");
-  gtc_write_xml(-1, "</Lap>\n");
-  gtc_write_xml(-1, "</Activity>\n");
+  fout->writeEndElement(); // Track
+  fout->writeEndElement(); // Lap
+  fout->writeEndElement(); // Activity
 }
 
 void
 GtrnctrFormat::gtc_crs_hdr(const route_head* rte)
 {
 
-  gtc_write_xml(1, "<Course>\n");
+  fout->writeStartElement("Course");
   gtc_lap_start(nullptr);
   computed_trkdata tdata = gtc_new_study_lap(rte);
   auto gtc_study_lap_lambda = [this](const Waypoint* waypointp)->void {
@@ -314,36 +296,42 @@ GtrnctrFormat::gtc_crs_hdr(const route_head* rte)
 
   if (!rte->rte_name.isEmpty()) {
     QString name = rte->rte_name.left(kGtcMaxNameLen);
-    gtc_write_xml(0, QStringLiteral("<Name>%1</Name>\n").arg(name));
+    fout->writeTextElement("Name", name);
   } else {
-    gtc_write_xml(0, "<Name>New Course</Name>\n");
+    fout->writeTextElement("Name", "New Course");
   }
   /* write_optional_xml_entity(ofd, "      ", "Name", rte->rte_name); */
-  gtc_write_xml(1, "<Lap>\n");
+  fout->writeStartElement("Lap");
   gtc_fake_hdr(tdata);
-  gtc_write_xml(-1, "</Lap>\n");
-  gtc_write_xml(1,"<Track>\n");
+  fout->writeEndElement(); // Lap
+  fout->writeStartElement("Track");
 }
 
 void
 GtrnctrFormat::gtc_crs_ftr(const route_head* /*unused*/)
 {
-  gtc_write_xml(-1,"</Track>\n");
-  gtc_write_xml(-1, "</Course>\n");
+  fout->writeEndElement(); // Track
+  fout->writeEndElement(); // Course
 
 }
 
 void
 GtrnctrFormat::write()
 {
-  gtc_write_xml(0, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n");
-  gtc_write_xml(1, "<TrainingCenterDatabase xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\">\n");
+  fout->writeStartDocument("1.0", false);
+  fout->writeDefaultNamespace("http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2");
+  fout->writeNamespace("http://www.w3.org/2001/XMLSchema-instance", "xsi");
+  fout->writeNamespace(activity_extension_uri);
+  fout->writeStartElement("TrainingCenterDatabase");
+  fout->writeAttribute("xsi:schemaLocation", "http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd");
+  // FIXME change ok?
+  //gtc_write_xml(1, "<TrainingCenterDatabase xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\">\n");
 
   auto gtc_waypt_pr_lambda = [this](const Waypoint* waypointp)->void {
     gtc_waypt_pr(waypointp);
   };
   if (gtc_course_flag) {
-    gtc_write_xml(1, "<Courses>\n");
+    fout->writeStartElement("Courses");
     auto gtc_crs_hdr_lambda = [this](const route_head* rte)->void {
       gtc_crs_hdr(rte);
     };
@@ -351,9 +339,9 @@ GtrnctrFormat::write()
       gtc_crs_ftr(rte);
     };
     track_disp_all(gtc_crs_hdr_lambda, gtc_crs_ftr_lambda, gtc_waypt_pr_lambda);
-    gtc_write_xml(-1, "</Courses>\n");
+    fout->writeEndElement(); // Courses
   } else {
-    gtc_write_xml(1, "<Activities>\n");
+    fout->writeStartElement("Activities");
     auto gtc_act_hdr_lambda = [this](const route_head* rte)->void {
       gtc_act_hdr(rte);
     };
@@ -361,10 +349,10 @@ GtrnctrFormat::write()
       gtc_act_ftr(rte);
     };
     track_disp_all(gtc_act_hdr_lambda, gtc_act_ftr_lambda, gtc_waypt_pr_lambda);
-    gtc_write_xml(-1, "</Activities>\n");
+    fout->writeEndElement(); // Activities
   }
 
-  gtc_write_xml(-1, "</TrainingCenterDatabase>\n");
+  fout->writeEndElement(); // TrainingCenterDatabase
 }
 
 void
@@ -406,10 +394,8 @@ GtrnctrFormat::gtc_trk_pnt_e(const QString& /*unused*/, const QXmlStreamAttribut
     if (lap_s) {
       /* Add the first point of an ActivityLap as
       a waypoint as well as a trackpoint. */
-      char cbuf[10];
       auto* wpt_lap_s = new Waypoint(*wpt_tmp);
-      snprintf(cbuf, sizeof(cbuf), "LAP%03d", lap_ct);
-      wpt_lap_s->shortname = cbuf;
+      wpt_lap_s->shortname = QStringLiteral("LAP%1").arg(lap_ct, 3, 10, QLatin1Char('0'));
       waypt_add(wpt_lap_s);
       lap_s = 0;
     }

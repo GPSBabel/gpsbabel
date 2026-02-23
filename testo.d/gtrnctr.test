@@ -19,6 +19,9 @@ gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDI
 compare ${REFERENCE}/track/tcxtest~gpx-course.tcx ${TMPDIR}/tcxtest~gpx-course.tcx
 gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0 -F ${TMPDIR}/tcxtest~gpx-history.tcx
 compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history.tcx
+# writing with the sport option
+gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0,sport="Other" -F ${TMPDIR}/tcxtest~gpx-history2.tcx
+compare ${REFERENCE}/track/tcxtest~gpx-history2.tcx ${TMPDIR}/tcxtest~gpx-history2.tcx
 
 # Reading coursepoints
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr-readcp.tcx -o gpx -F ${TMPDIR}/tcxtest-readcp.gpx
@@ -32,6 +35,5 @@ compare ${REFERENCE}/track/bike~gpx.gpx ${TMPDIR}/bike~gpx.gpx
 # compare ${REFERENCE}/track/bike~unicsv.csv ${TMPDIR}/bike~unicsv.csv
 
 # prove we recover power and speed from http://www.garmin.com/xmlschemas/ActivityExtension/v2
-gpsbabel -t -i gtrnctr,sport=Biking -f ${REFERENCE}/track/kona2013.tcx -o unicsv,utc=-6  -F ${TMPDIR}/kona2013~tcx.csv
+gpsbabel -t -i gtrnctr -f ${REFERENCE}/track/kona2013.tcx -o unicsv,utc=-6  -F ${TMPDIR}/kona2013~tcx.csv
 compare ${REFERENCE}/track/kona2013~tcx.csv ${TMPDIR}/kona2013~tcx.csv
-
