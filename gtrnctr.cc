@@ -28,16 +28,17 @@
 
 #include <QChar>                 // for QChar
 #include <QDateTime>             // for operator>, QDateTime
+#include <QDebug>                // for QDebug
 #include <QIODevice>             // for QIODevice, operator|
 #include <QLatin1Char>           // for QLatin1Char
 #include <QStringLiteral>        // for qMakeStringPrivate, QStringLiteral
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
 #include <QtGlobal>              // for qRound
 
-#include <iterator>              // for size
 #include <optional>              // for optional
 
-#include "defs.h"                // for Waypoint, route_head, computed_trkdata, waypt_add, route_disp, track_disp_all, case_ignore_strncmp, track_add_head, track_add_wpt, track_recompute, xml_parse_time, unknown_alt, wp_flags
+#include "defs.h"                // for Waypoint, route_head, computed_trkdata, waypt_add, route_disp, track_disp_all, gbFatal, track_add_head, track_add_wpt, track_recompute, xml_parse_time, unknown_alt, wp_flags
+#include "src/core/logging.h"    // for FatalMsg
 #include "xmlgeneric.h"          // for XmlGenericReader
 
 
@@ -51,6 +52,8 @@ const QStringList GtrnctrFormat::gtc_tags_to_ignore = {
   "Other",
   "Multisport"
 };
+
+const QStringList GtrnctrFormat::gtc_sportlist = { "Biking", "Running", "Other" };
 
 void
 GtrnctrFormat::rd_init(const QString& fname)
@@ -83,13 +86,24 @@ GtrnctrFormat::wr_init(const QString& fname)
   fout->setAutoFormattingIndent(2);
 
   if (opt_sport) {
-    for (unsigned int i = 0; i < std::size(gtc_sportlist); i++) {
-      if (0 == case_ignore_strncmp(opt_sport, gtc_sportlist[i], 2)) {
+    gtc_sport = -1;
+    if (!opt_sport.isEmpty()) {
+      for (int i = 0; i < gtc_sportlist.size(); ++i) {
+        const auto& item = gtc_sportlist.at(i);
+        if (item.startsWith(opt_sport, Qt::CaseInsensitive)) {
         gtc_sport = i;
         break;
       }
     }
   }
+    if (gtc_sport < 0) {
+      gbFatal(FatalMsg().nospace() << "Invalid sport: " << opt_sport.get() <<
+              ".  Valid sports are : " << gtc_sportlist.join(", "));
+    }
+  } else {
+    gtc_sport = 0;
+  }
+
   gtc_course_flag = opt_course;
 }
 

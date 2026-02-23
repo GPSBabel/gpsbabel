@@ -74,7 +74,7 @@ private:
   /* Constants */
 
   static constexpr int kGtcMaxNameLen = 15;
-  static constexpr const char* gtc_sportlist[] = { "Biking", "Running", "Other" };
+  static const QStringList gtc_sportlist;
   static const QString activity_extension_uri;
 
   /* Member Functions */
@@ -124,7 +124,7 @@ private:
   Waypoint* wpt_tmp{};
   route_head* trk_head{};
 
-  unsigned int gtc_sport = 0;
+  int gtc_sport{};
   int gtc_course_flag{};
 
   gpsbabel::DateTime gtc_least_time;
@@ -143,7 +143,7 @@ private:
       "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {
-      "sport", &opt_sport, "Sport: Biking (deflt), Running, MultiSport, Other",
+      "sport", &opt_sport, "Sport: Biking (deflt), Running, Other",
       "Biking", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
   };
