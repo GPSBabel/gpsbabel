@@ -306,7 +306,7 @@ file	r-rw--	gtrnctr	tcx/crs/hst/xml	Garmin Training Center (.tcx/.crs/.hst/.xml)
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html
 option	gtrnctr	course	Write course rather than history, default yes	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_course
 
-option	gtrnctr	sport	Sport: Biking (deflt), Running, MultiSport, Other	string	Biking			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_sport
+option	gtrnctr	sport	Sport: Biking (deflt), Running, Other	string	Biking			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_sport
 
 file	rw----	geo	loc	Geocaching.com .loc	geo
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html
