@@ -164,8 +164,7 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
   //}
 
   if (wpt->creation_time.isValid()) {
-    QString time_string = wpt->CreationTimeXML();
-    fout->writeOptionalTextElement(QStringLiteral("Time"), time_string);
+    fout->writeOptionalTextElement(QStringLiteral("Time"), wpt->CreationTimeXML());
   }
   if (wpt->latitude && wpt->longitude) {
     fout->writeStartElement(QStringLiteral("Position"));
@@ -185,7 +184,6 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
     fout->writeStartElement(QStringLiteral("HeartRateBpm"));
     // mimic gpsbabel <= 1.10.0 writing of xsi:type attribute.
     fout->writeAttribute(xsi_ns_uri, QStringLiteral("type"), QStringLiteral("HeartRateInBeatsPerMinute_t"));
-    //gtc_write_xml(1, "<HeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
     fout->writeTextElement(QStringLiteral("Value"), QString::number(wpt->heartrate));
     fout->writeEndElement(); // HeartRateBpm
   }
