@@ -23,11 +23,7 @@
   file, to get a track (<filename>.ht</filename> file), use the
   "humminbird-track" format.
 </para>
-<para>
-  <informalfigure><mediaobject><imageobject>
-    <imagedata fileref="humminbird.png" format="PNG"/>
-  </imageobject> </mediaobject> </informalfigure>
-</para>
+
 <para>
 Note:<filename>.dat</filename> files are read-only, they only make sense
 together with their images.
