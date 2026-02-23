@@ -201,7 +201,7 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
       fout->writeTextElement(activity_extension_uri, QStringLiteral("Speed"), QString::number(wpt->speed_value(), 'f', 3));
     }
     if (wpt->power) {
-      fout->writeTextElement(QStringLiteral("Watts"), QString::number(wpt->power, 'f', 0));
+      fout->writeTextElement(activity_extension_uri, QStringLiteral("Watts"), QString::number(wpt->power, 'f', 0));
     }
     fout->writeEndElement(); // TPX
     fout->writeEndElement(); // Extensions
