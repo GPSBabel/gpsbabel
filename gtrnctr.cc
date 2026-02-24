@@ -274,12 +274,14 @@ GtrnctrFormat::gtc_act_hdr(const route_head* rte)
 {
   fout->writeStartElement(QStringLiteral("Activity"));
   fout->writeAttribute(QStringLiteral("Sport"), gtc_sportlist[gtc_sport]);
+
   gtc_lap_start(nullptr);
   computed_trkdata tdata = gtc_new_study_lap(rte);
   auto gtc_study_lap_lambda = [this](const Waypoint* waypointp)->void {
     gtc_study_lap(waypointp);
   };
   route_disp(rte, gtc_study_lap_lambda);
+
   // FIXME: Id is required!
   if (gtc_least_time.isValid()) {
     fout->writeTextElement(QStringLiteral("Id"), gtc_least_time.toPrettyString());
@@ -303,8 +305,8 @@ GtrnctrFormat::gtc_act_ftr(const route_head* /*unused*/)
 void
 GtrnctrFormat::gtc_crs_hdr(const route_head* rte)
 {
-
   fout->writeStartElement(QStringLiteral("Course"));
+
   gtc_lap_start(nullptr);
   computed_trkdata tdata = gtc_new_study_lap(rte);
   auto gtc_study_lap_lambda = [this](const Waypoint* waypointp)->void {

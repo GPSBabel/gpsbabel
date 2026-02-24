@@ -37,3 +37,19 @@ compare ${REFERENCE}/track/bike~gpx.gpx ${TMPDIR}/bike~gpx.gpx
 # prove we recover power and speed from http://www.garmin.com/xmlschemas/ActivityExtension/v2
 gpsbabel -t -i gtrnctr -f ${REFERENCE}/track/kona2013.tcx -o unicsv,utc=-6  -F ${TMPDIR}/kona2013~tcx.csv
 compare ${REFERENCE}/track/kona2013~tcx.csv ${TMPDIR}/kona2013~tcx.csv
+
+# exercise all the fields on write
+echo 'DATATYPE TRACK' > ${TMPDIR}/tcxdata.style
+echo 'FIELD_DELIMITER COMMA' >> ${TMPDIR}/tcxdata.style
+echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD ISO_TIME,"","%s"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD LAT_DECIMAL,"","%f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD ALT_METERS,"","%.0f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD HEART_RATE,"","%d"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD CADENCE,"","%d"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD POWER,"","%.1f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD PATH_DISTANCE_METERS,"","%f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD PATH_SPEED,"","%f"' >> ${TMPDIR}/tcxdata.style
+gpsbabel -i xcsv,style=${TMPDIR}/tcxdata.style -f ${REFERENCE}/track/tcxdata.csv -o gtrnctr,course=0 -F ${TMPDIR}/tcxdata.tcx
+compare ${REFERENCE}/track/tcxdata.tcx ${TMPDIR}/tcxdata.tcx
