@@ -135,27 +135,29 @@ GtrnctrFormat::gtc_new_study_lap(const route_head* rte)
 void
 GtrnctrFormat::gtc_study_lap(const Waypoint* wpt)
 {
-  if (wpt->creation_time.isValid() && (!gtc_least_time.isValid())) {
-    gtc_least_time = wpt->GetCreationTime();
-    gtc_start_lat = wpt->latitude;
-    gtc_start_long = wpt->longitude;
-  }
-
-  if (wpt->creation_time.isValid() && (gtc_least_time > wpt->GetCreationTime())) {
-    gtc_least_time = wpt->GetCreationTime();
-    gtc_start_lat = wpt->latitude;
-    gtc_start_long = wpt->longitude;
-  }
-  if (wpt->creation_time > gtc_most_time)  {
-    gtc_most_time = wpt->GetCreationTime();
-    gtc_end_lat = wpt->latitude;
-    gtc_end_long = wpt->longitude;
+  if (wpt->creation_time.isValid()) {
+    if (!gtc_least_time.isValid() || gtc_least_time > wpt->creation_time) {
+      gtc_least_time = wpt->creation_time;
+      gtc_start_lat = wpt->latitude;
+      gtc_start_long = wpt->longitude;
+    }
+    if (!gtc_most_time.isValid() || wpt->creation_time > gtc_most_time)  {
+      gtc_most_time = wpt->creation_time;
+      gtc_end_lat = wpt->latitude;
+      gtc_end_long = wpt->longitude;
+    }
   }
 }
 
 void
 GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
 {
+  // Time is a required element of the Trackpoint element.
+  if (!wpt->creation_time.isValid()) {
+    gbWarning("Skipping track point at %f,%f without time!\n", wpt->latitude, wpt->longitude);
+    return;
+  }
+
   fout->writeStartElement(QStringLiteral("Trackpoint"));
   // gpsbabel <= 1.10.0 conditionally wrote the split attribute, but
   // it violates the schema.
@@ -179,7 +181,6 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
     fout->writeTextElement(QStringLiteral("DistanceMeters"), QString::number(wpt->odometer_distance, 'f', 2));
   }
   // TODO: find a schema extension to include wpt->course and wpt->temperature
-  // TODO: find a way to include DistanceMeters from odometer information
   if (wpt->heartrate) {
     fout->writeStartElement(QStringLiteral("HeartRateBpm"));
     // mimic gpsbabel <= 1.10.0 writing of xsi:type attribute.
@@ -279,6 +280,7 @@ GtrnctrFormat::gtc_act_hdr(const route_head* rte)
     gtc_study_lap(waypointp);
   };
   route_disp(rte, gtc_study_lap_lambda);
+  // FIXME: Id is required!
   if (gtc_least_time.isValid()) {
     fout->writeTextElement(QStringLiteral("Id"), gtc_least_time.toPrettyString());
     fout->writeStartElement(QStringLiteral("Lap"));
