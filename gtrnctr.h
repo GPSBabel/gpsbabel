@@ -118,6 +118,7 @@ private:
   /* Data Members */
 
   static const QStringList gtc_tags_to_ignore;
+  QString gtc_fname;
   gpsbabel::File* ofile{nullptr};
   gpsbabel::XmlStreamWriter* fout{nullptr};
   int lap_ct = 0;
@@ -134,6 +135,8 @@ private:
   double gtc_start_long{};
   double gtc_end_lat{};
   double gtc_end_long{};
+  bool oops_point_without_time{};
+  bool oops_track_without_times{};
 
   OptionString opt_sport;
   OptionBool opt_course;

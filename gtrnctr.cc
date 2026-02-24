@@ -33,12 +33,13 @@
 #include <QLatin1Char>           // for QLatin1Char
 #include <QStringLiteral>        // for qMakeStringPrivate, QStringLiteral
 #include <QXmlStreamAttributes>  // for QXmlStreamAttributes
+#include <Qt>                    // for CaseSensitivity
 #include <QtGlobal>              // for qRound
 
 #include <optional>              // for optional
 
 #include "defs.h"                // for Waypoint, route_head, computed_trkdata, waypt_add, route_disp, track_disp_all, gbFatal, track_add_head, track_add_wpt, track_recompute, xml_parse_time, unknown_alt, wp_flags
-#include "src/core/logging.h"    // for FatalMsg
+#include "src/core/logging.h"    // for Warning, FatalMsg
 #include "xmlgeneric.h"          // for XmlGenericReader
 
 
@@ -79,6 +80,10 @@ GtrnctrFormat::rd_deinit()
 void
 GtrnctrFormat::wr_init(const QString& fname)
 {
+  oops_point_without_time = false;
+  oops_track_without_times = false;
+
+  gtc_fname = fname;
   ofile = new gpsbabel::File(fname);
   ofile->open(QIODevice::WriteOnly | QIODevice::Text);
 
@@ -117,6 +122,18 @@ GtrnctrFormat::wr_deinit()
   ofile->close();
   delete ofile;
   ofile = nullptr;
+
+  if (oops_point_without_time) {
+    Warning() << "The output" << gtc_fname <<
+              "violates the schema as a Trackpoint element without a Time element was written." <<
+              "This occurred because a track had at least one point without a valid time.";
+  }
+  if (oops_track_without_times) {
+    Warning() << "The output" << gtc_fname <<
+              "violates the schema as an Activity element without an Id element was written" <<
+              "and a Lap element without a StartTime attribute was written." <<
+              "This occurred because a track didn't have any points with a valid time.";
+  }
 }
 
 void
@@ -152,12 +169,6 @@ GtrnctrFormat::gtc_study_lap(const Waypoint* wpt)
 void
 GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
 {
-  // Time is a required element of the Trackpoint element.
-  if (!wpt->creation_time.isValid()) {
-    gbWarning("Skipping track point at %f,%f without time!\n", wpt->latitude, wpt->longitude);
-    return;
-  }
-
   fout->writeStartElement(QStringLiteral("Trackpoint"));
   // gpsbabel <= 1.10.0 conditionally wrote the split attribute, but
   // it violates the schema.
@@ -165,8 +176,11 @@ GtrnctrFormat::gtc_waypt_pr(const Waypoint* wpt)
   //  fout->writeAttribute(QStringLiteral("split"), QStringLiteral("yes"));
   //}
 
+  // FIXME: Time is a required child of Trackpoint.
   if (wpt->creation_time.isValid()) {
     fout->writeOptionalTextElement(QStringLiteral("Time"), wpt->CreationTimeXML());
+  } else {
+    oops_point_without_time = true;
   }
   if (wpt->latitude && wpt->longitude) {
     fout->writeStartElement(QStringLiteral("Position"));
@@ -282,12 +296,14 @@ GtrnctrFormat::gtc_act_hdr(const route_head* rte)
   };
   route_disp(rte, gtc_study_lap_lambda);
 
-  // FIXME: Id is required!
+  // FIXME: Id is required child of Activity.
+  // FIXME: Lap must have a StartTime attribute.
   if (gtc_least_time.isValid()) {
     fout->writeTextElement(QStringLiteral("Id"), gtc_least_time.toPrettyString());
     fout->writeStartElement(QStringLiteral("Lap"));
     fout->writeAttribute(QStringLiteral("StartTime"), gtc_least_time.toPrettyString());
   } else {
+    oops_track_without_times = true;
     fout->writeStartElement(QStringLiteral("Lap"));
   }
   gtc_fake_hdr(tdata);
