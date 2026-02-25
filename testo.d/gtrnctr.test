@@ -19,9 +19,6 @@ gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDI
 compare ${REFERENCE}/track/tcxtest~gpx-course.tcx ${TMPDIR}/tcxtest~gpx-course.tcx
 gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0 -F ${TMPDIR}/tcxtest~gpx-history.tcx
 compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history.tcx
-# writing with the sport option
-gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0,sport="Other" -F ${TMPDIR}/tcxtest~gpx-history2.tcx
-compare ${REFERENCE}/track/tcxtest~gpx-history2.tcx ${TMPDIR}/tcxtest~gpx-history2.tcx
 
 # Reading coursepoints
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr-readcp.tcx -o gpx -F ${TMPDIR}/tcxtest-readcp.gpx
@@ -38,7 +35,7 @@ compare ${REFERENCE}/track/bike~gpx.gpx ${TMPDIR}/bike~gpx.gpx
 gpsbabel -t -i gtrnctr -f ${REFERENCE}/track/kona2013.tcx -o unicsv,utc=-6  -F ${TMPDIR}/kona2013~tcx.csv
 compare ${REFERENCE}/track/kona2013~tcx.csv ${TMPDIR}/kona2013~tcx.csv
 
-# exercise all the fields on write
+# exercise all the fields on write, and sport option.
 echo 'DATATYPE TRACK' > ${TMPDIR}/tcxdata.style
 echo 'FIELD_DELIMITER COMMA' >> ${TMPDIR}/tcxdata.style
 echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/tcxdata.style
@@ -51,5 +48,5 @@ echo 'IFIELD CADENCE,"","%d"' >> ${TMPDIR}/tcxdata.style
 echo 'IFIELD POWER,"","%.1f"' >> ${TMPDIR}/tcxdata.style
 echo 'IFIELD PATH_DISTANCE_METERS,"","%f"' >> ${TMPDIR}/tcxdata.style
 echo 'IFIELD PATH_SPEED,"","%f"' >> ${TMPDIR}/tcxdata.style
-gpsbabel -i xcsv,style=${TMPDIR}/tcxdata.style -f ${REFERENCE}/track/tcxdata.csv -o gtrnctr,course=0 -F ${TMPDIR}/tcxdata.tcx
+gpsbabel -i xcsv,style=${TMPDIR}/tcxdata.style -f ${REFERENCE}/track/tcxdata.csv -o gtrnctr,course=0,sport=ot -F ${TMPDIR}/tcxdata.tcx
 compare ${REFERENCE}/track/tcxdata.tcx ${TMPDIR}/tcxdata.tcx
