@@ -158,7 +158,7 @@ File Types (-i and -o options):
 	  codec                 override codec to use for device
 	gtrnctr               Garmin Training Center (.tcx/.crs/.hst/.xml)
 	  course                (0/1) Write course rather than history, default yes
-	  sport                 Sport: Biking (deflt), Running, MultiSport, Other
+	  sport                 Sport: Biking (deflt), Running, Other
 	geo                   Geocaching.com .loc
 	  deficon               Default icon name
 	geojson               GeoJson
