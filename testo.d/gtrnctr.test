@@ -39,14 +39,23 @@ compare ${REFERENCE}/track/kona2013~tcx.csv ${TMPDIR}/kona2013~tcx.csv
 echo 'DATATYPE TRACK' > ${TMPDIR}/tcxdata.style
 echo 'FIELD_DELIMITER COMMA' >> ${TMPDIR}/tcxdata.style
 echo 'RECORD_DELIMITER NEWLINE' >> ${TMPDIR}/tcxdata.style
+echo 'PROLOGUE time,lat,lon,alt,bpm,cadence,power,odo,speed' >> ${TMPDIR}/tcxdata.style
 echo 'IFIELD ISO_TIME,"","%s"' >> ${TMPDIR}/tcxdata.style
-echo 'IFIELD LAT_DECIMAL,"","%f"' >> ${TMPDIR}/tcxdata.style
-echo 'IFIELD LON_DECIMAL,"","%f"' >> ${TMPDIR}/tcxdata.style
-echo 'IFIELD ALT_METERS,"","%.0f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD LAT_DECIMAL,"","%.7f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD LON_DECIMAL,"","%.7f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD ALT_METERS,"","%.1f"' >> ${TMPDIR}/tcxdata.style
 echo 'IFIELD HEART_RATE,"","%d"' >> ${TMPDIR}/tcxdata.style
 echo 'IFIELD CADENCE,"","%d"' >> ${TMPDIR}/tcxdata.style
-echo 'IFIELD POWER,"","%.1f"' >> ${TMPDIR}/tcxdata.style
-echo 'IFIELD PATH_DISTANCE_METERS,"","%f"' >> ${TMPDIR}/tcxdata.style
-echo 'IFIELD PATH_SPEED,"","%f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD POWER,"","%.0f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD PATH_DISTANCE_METERS,"","%.2f"' >> ${TMPDIR}/tcxdata.style
+echo 'IFIELD PATH_SPEED,"","%.3f"' >> ${TMPDIR}/tcxdata.style
 gpsbabel -i xcsv,style=${TMPDIR}/tcxdata.style -f ${REFERENCE}/track/tcxdata.csv -o gtrnctr,course=0,sport=ot -F ${TMPDIR}/tcxdata.tcx
 compare ${REFERENCE}/track/tcxdata.tcx ${TMPDIR}/tcxdata.tcx
+# write extensions using a global namespace declaration
+gpsbabel -i xcsv,style=${TMPDIR}/tcxdata.style -f ${REFERENCE}/track/tcxdata.csv -o gtrnctr,course=0,sport=ot,globalns=1 -F ${TMPDIR}/tcxdatagns.tcx
+compare ${REFERENCE}/track/tcxdatagns.tcx ${TMPDIR}/tcxdatagns.tcx
+# read extensions with and without a global namespace declaration
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/tcxdata.tcx -o xcsv,style=${TMPDIR}/tcxdata.style -F ${TMPDIR}/tcxdata~tcx.csv
+compare ${REFERENCE}/track/tcxdata.csv ${TMPDIR}/tcxdata~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/tcxdatagns.tcx -o xcsv,style=${TMPDIR}/tcxdata.style -F ${TMPDIR}/tcxdatagns~tcx.csv
+compare ${REFERENCE}/track/tcxdata.csv ${TMPDIR}/tcxdatagns~tcx.csv

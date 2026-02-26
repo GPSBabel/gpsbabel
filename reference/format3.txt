@@ -308,6 +308,8 @@ option	gtrnctr	course	Write course rather than history, default yes	boolean	1			
 
 option	gtrnctr	sport	Sport: Biking (deflt), Running, Other	string	Biking			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_sport
 
+option	gtrnctr	globalns	Write global extension namespace declarations	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_globalns
+
 file	rw----	geo	loc	Geocaching.com .loc	geo
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html
 option	geo	deficon	Default icon name	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html#fmt_geo_o_deficon
