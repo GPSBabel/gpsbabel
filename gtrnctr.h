@@ -140,6 +140,7 @@ private:
 
   OptionString opt_sport;
   OptionBool opt_course;
+  OptionBool opt_global_ns;
 
   QVector<arglist_t> gtc_args = {
     {
@@ -149,6 +150,9 @@ private:
     {
       "sport", &opt_sport, "Sport: Biking (deflt), Running, Other",
       "Biking", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
+    { "globalns", &opt_global_ns, "Write global extension namespace declarations",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
   };
 
@@ -189,6 +193,7 @@ private:
     { &GtrnctrFormat::gtc_trk_hr, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/HeartRateBpm" },
     { &GtrnctrFormat::gtc_trk_cad, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Cadence" },
     { &GtrnctrFormat::gtc_trk_pwr, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/ns3:TPX/ns3:Watts" },
+    { &GtrnctrFormat::gtc_trk_spd, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/ns3:TPX/ns3:Speed" },
     // Sample from Marcelo Kittlein 5/2014 declares a default namespace with the start tag of the TPX element,
     // and thus doesn't use prefixes.
     { &GtrnctrFormat::gtc_trk_pwr, xg_cb_type::cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Watts" },
