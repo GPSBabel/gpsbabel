@@ -159,6 +159,7 @@ File Types (-i and -o options):
 	gtrnctr               Garmin Training Center (.tcx/.crs/.hst/.xml)
 	  course                (0/1) Write course rather than history, default yes
 	  sport                 Sport: Biking (deflt), Running, Other
+	  globalns              (0/1) Write global extension namespace declarations
 	geo                   Geocaching.com .loc
 	  deficon               Default icon name
 	geojson               GeoJson
