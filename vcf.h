@@ -20,15 +20,15 @@
 #ifndef VCF_H_INCLUDED_
 #define VCF_H_INCLUDED_
 
-#include <QList>       // for QList
-#include <QString>     // for QString
-#include <QVector>     // for QVector
+#include <QList>                  // for QList
+#include <QString>                // for QString
+#include <QVector>                // for QVector
 
-#include "defs.h"
-#include "format.h"    // for Format
-#include "gbfile.h"    // for gbfile
-#include "geocache.h"  // for Geocache
-#include "option.h"    // for OptionBool
+#include "defs.h"                 // for arglist_t, ff_cap, ff_type, ARGTYPE_BOOL, ARG_NOMINMAX, Waypoint
+#include "format.h"               // for Format
+#include "geocache.h"             // for Geocache
+#include "option.h"               // for OptionBool
+#include "src/core/textstream.h"  // for TextStream
 
 
 class VcfFormat : public Format
@@ -59,14 +59,13 @@ private:
 
   /* Member Functions */
 
-  void vcf_print_utf(const Geocache::UtfString* s);
-  void vcf_print(const char* s);
+  void vcf_print_utf(const Geocache::UtfString& s);
   void vcf_print(const QString& s);
   void vcf_disp(const Waypoint* wpt);
 
   /* Data Members */
 
-  gbfile* file_out{};
+  gpsbabel::TextStream* file_out{nullptr};
 
   OptionBool vcf_encrypt;
 
