@@ -39,7 +39,7 @@ void
 VcfFormat::wr_init(const QString& fname)
 {
   file_out = new gpsbabel::TextStream;
-  file_out->open(fname, QIODevice::WriteOnly);
+  file_out->open(fname, QIODevice::WriteOnly | QIODeviceBase::Text);
 }
 
 void
