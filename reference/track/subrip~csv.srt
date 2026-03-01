@@ -1,0 +1,55 @@
+1
+00:00:00,000 --> 00:00:00,200
+speed: 49.8
+elevation:  289
+vertical speed: --.--
+timestamp: 17:47:25
+coordinates: Lat=49.79469 Lon=9.83402
+pedal cadence:  90
+heart rate:  91
+gradient --.-%
+
+2
+00:00:00,200 --> 00:00:00,400
+speed: --.-
+elevation:  289
+vertical speed:  0.50
+timestamp: 17:47:25
+coordinates: Lat=49.79471 Lon=9.83400
+pedal cadence:  95
+heart rate:  96
+gradient  3.6%
+
+3
+00:00:00,400 --> 00:00:00,600
+speed: 51.0
+elevation:    -
+vertical speed: --.--
+timestamp: 17:47:25
+coordinates: Lat=49.79473 Lon=9.83398
+pedal cadence: 100
+heart rate: 101
+gradient --.-%
+
+4
+00:00:00,600 --> 00:00:00,800
+speed: 50.7
+elevation:  289
+vertical speed: --.--
+timestamp: 17:47:25
+coordinates: Lat=49.79476 Lon=9.83395
+pedal cadence:   -
+heart rate:   -
+gradient --.-%
+
+5
+00:00:00,800 --> 00:00:01,000
+speed: 51.0
+elevation:  290
+vertical speed:  0.50
+timestamp: 17:47:26
+coordinates: Lat=49.79478 Lon=9.83393
+pedal cadence: 110
+heart rate: 111
+gradient  3.3%
+

@@ -313,42 +313,34 @@ waypt_speed(const Waypoint* A, const Waypoint* B)
  * the result comes in meters per second and can be negative.
  */
 
-double
+std::optional<double>
 waypt_vertical_speed(const Waypoint* A, const Waypoint* B)
 {
-  double altitude = A->altitude - B->altitude;
-  if (altitude == 0) {
-    return 0;
+  if ((A->altitude != unknown_alt) && (B->altitude != unknown_alt) && 
+     A->creation_time.isValid() && B->creation_time.isValid()) {
+    double altitude = A->altitude - B->altitude;
+    double time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
+    if (time > 0.0) {
+      return (altitude / time);
+    }
   }
-
-  double time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
-  if (time > 0) {
-    return (altitude / time);
-  } else {
-    return 0;
-  }
+  return std::optional<double>(); // infinite or undefined
 }
 
 /*
  * Returns "Road Gradient" between A and B as a percentage of slope.
- * If there is no distance or either A or B have unknown altitude, return 0.
  */
-double
+std::optional<double>
 waypt_gradient(const Waypoint* A, const Waypoint* B)
 {
-  double dist = waypt_distance(A, B);
-  if (dist == 0) {
-    return 0;
+  if ((A->altitude != unknown_alt) && (B->altitude != unknown_alt)) {
+    double dist = waypt_distance(A, B);
+    double altitude = A->altitude - B->altitude;
+    if (dist != 0.0) {
+      return (altitude / dist) * 100.0;
+    }
   }
-
-  double altitude = A->altitude - B->altitude;
-  if (altitude == 0 ||
-      A->altitude == unknown_alt || B->altitude == unknown_alt) {
-    return 0;
-  }
-
-  double gradient = (altitude / dist) * 100;
-  return (gradient);
+  return std::optional<double>(); // infinite or undefined
 }
 
 /*

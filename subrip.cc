@@ -88,7 +88,7 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
       switch (*it) {
       case 's':
         if (prevwpp->speed_has_value()) {
-          gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed_value()));
+          gbfprintf(fout, "%4.1f", MPS_TO_KPH(prevwpp->speed_value()));
         } else {
           gbfprintf(fout, "--.-");
         }
@@ -101,10 +101,18 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
         }
         break;
       case 'v':
-        gbfprintf(fout, "%2.2f", vspeed);
+        if (vspeed.has_value()) {
+          gbfprintf(fout, "%5.2f", *vspeed);
+        } else {
+          gbfprintf(fout, "--.--");
+        }
         break;
       case 'g':
-        gbfprintf(fout, "%2.1f%%", gradient);
+        if (gradient.has_value()) {
+          gbfprintf(fout, "%4.1f%%", *gradient);
+        } else {
+          gbfprintf(fout, "--.-%%");
+        }
         break;
       case 't': {
         QTime t = prevwpp->GetCreationTime().toUTC().time();
@@ -200,8 +208,8 @@ SubripFormat::wr_init(const QString& fname)
 {
   stnum = 1;
   prevwpp = nullptr;
-  vspeed = 0;
-  gradient = 0;
+  vspeed.reset();
+  gradient.reset();
 
   if (opt_gpstime != opt_gpsdate) {
     gbFatal(FatalMsg() << "Either both or neither of the gps_date and gps_time options must be supplied!");
