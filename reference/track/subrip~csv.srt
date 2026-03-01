@@ -3,7 +3,7 @@
 speed: 49.8
 elevation:  289
 vertical speed: --.--
-timestamp: 23:47:25
+timestamp: 17:47:25
 coordinates: Lat=49.79469 Lon=9.83402
 pedal cadence:  90
 heart rate:  91
@@ -14,7 +14,7 @@ gradient --.-%
 speed: --.-
 elevation:  289
 vertical speed:  0.50
-timestamp: 23:47:25
+timestamp: 17:47:25
 coordinates: Lat=49.79471 Lon=9.83400
 pedal cadence:  95
 heart rate:  96
@@ -25,7 +25,7 @@ gradient  3.6%
 speed: 51.0
 elevation:    -
 vertical speed: --.--
-timestamp: 23:47:25
+timestamp: 17:47:25
 coordinates: Lat=49.79473 Lon=9.83398
 pedal cadence: 100
 heart rate: 101
@@ -36,7 +36,7 @@ gradient --.-%
 speed: 50.7
 elevation:  289
 vertical speed: --.--
-timestamp: 23:47:25
+timestamp: 17:47:25
 coordinates: Lat=49.79476 Lon=9.83395
 pedal cadence:   -
 heart rate:   -
@@ -47,7 +47,7 @@ gradient --.-%
 speed: 51.0
 elevation:  290
 vertical speed:  0.50
-timestamp: 23:47:26
+timestamp: 17:47:26
 coordinates: Lat=49.79478 Lon=9.83393
 pedal cadence: 110
 heart rate: 111

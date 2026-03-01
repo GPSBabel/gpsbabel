@@ -1,4 +1,4 @@
-No,Latitude,Longitude,Name,Altitude,Speed,Date,Time,heart,caden
+No,Latitude,Longitude,Name,Altitude,Speed,utc_d,utc_t,heart,caden
 1,49.794688,9.834015,"trkpt-2011-07-02T17:47:25.000Z",289.2,13.82,2011/07/02,17:47:25.200,91,90
 2,49.794710,9.833996,"trkpt-2011-07-02T17:47:25.000Z",289.3,,2011/07/02,17:47:25.400,96,95
 3,49.794734,9.833976,"trkpt-2011-07-02T17:47:25.000Z",,14.16,2011/07/02,17:47:25.600,101,100
