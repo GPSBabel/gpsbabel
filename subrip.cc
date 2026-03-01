@@ -28,7 +28,6 @@
 
 #include "defs.h"
 #include "subrip.h"
-#include "gbfile.h"             // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for Fatal
 
@@ -57,7 +56,7 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
     return;
   }
 
-  gbfprintf(fout, "%d\n", stnum++);
+  *fout << QString::number(stnum++) << "\n";
 
   /* Writes start and end time for subtitle display to file. */
   QDateTime end_datetime;
@@ -72,92 +71,91 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
   }
   QTime starttime = video_time(prevwpp->GetCreationTime());
   QTime endtime = video_time(end_datetime);
-  gbfprintf(fout, "%02d:%02d:%02d,%03d --> %02d:%02d:%02d,%03d\n",
-            starttime.hour(), starttime.minute(), starttime.second(), starttime.msec(),
-            endtime.hour(), endtime.minute(), endtime.second(), endtime.msec());
+  *fout << QStringLiteral("%1:%2:%3,%4 --> %5:%6:%7,%8\n")
+            .arg(starttime.hour(), 2, 10, QChar('0')).arg(starttime.minute(), 2, 10, QChar('0')).arg(starttime.second(), 2, 10, QChar('0')).arg(starttime.msec(), 3, 10, QChar('0'))
+            .arg(endtime.hour(), 2, 10, QChar('0')).arg(endtime.minute(), 2, 10, QChar('0')).arg(endtime.second(), 2, 10, QChar('0')).arg(endtime.msec(), 3, 10, QChar('0'));
 
-  const QByteArray format = opt_format.get().toUtf8();
-  for (auto it = format.cbegin(), end = format.cend(); it != end; ++it) {
+  for (auto it = opt_format.get().cbegin(), end = opt_format.get().cend(); it != end; ++it) {
 
-    switch (*it) {
-    case '%':
+    switch (it->unicode()) {
+    case u'%':
       if (++it == end) {
         gbFatal("No character after %% in subrip format.\n");
       }
 
-      switch (*it) {
-      case 's':
+      switch (it->unicode()) {
+      case u's': // speed in km/h
         if (prevwpp->speed_has_value()) {
-          gbfprintf(fout, "%4.1f", MPS_TO_KPH(prevwpp->speed_value()));
+          *fout << QStringLiteral("%1").arg(MPS_TO_KPH(prevwpp->speed_value()), 4, 'f', 1);
         } else {
-          gbfprintf(fout, "--.-");
+          *fout << "--.-";
         }
         break;
-      case 'e':
+      case u'e': // elevation in meters
         if (prevwpp->altitude != unknown_alt) {
-          gbfprintf(fout, "%4.0f", prevwpp->altitude);
+          *fout << QStringLiteral("%1").arg(prevwpp->altitude, 4, 'f', 0);
         } else {
-          gbfprintf(fout, "   -");
+          *fout << "   -";
         }
         break;
-      case 'v':
+      case u'v': // vertical speed in m/s
         if (vspeed.has_value()) {
-          gbfprintf(fout, "%5.2f", *vspeed);
+          *fout << QStringLiteral("%1").arg(*vspeed, 5, 'f', 2);
         } else {
-          gbfprintf(fout, "--.--");
+          *fout << "--.--";
         }
         break;
-      case 'g':
+      case u'g': // road gradient
         if (gradient.has_value()) {
-          gbfprintf(fout, "%4.1f%%", *gradient);
+          *fout << QStringLiteral("%1%").arg(*gradient, 4, 'f', 1);
         } else {
-          gbfprintf(fout, "--.-%%");
+          *fout << "--.-%";
         }
         break;
-      case 't': {
+      case u't': { // timestamp
         QTime t = prevwpp->GetCreationTime().toUTC().time();
-        gbfprintf(fout, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
+        *fout << QStringLiteral("%1:%2:%3").arg(t.hour(), 2, 10, QChar('0')).arg(t.minute(), 2, 10, QChar('0')).arg(t.second(), 2, 10, QChar('0'));
         break;
       }
-      case 'l':
-        gbfprintf(fout, "Lat=%0.5lf Lon=%0.5lf",
-                  prevwpp->latitude, prevwpp->longitude);
+      case u'l': // coordinates
+        *fout << QStringLiteral("Lat=%1 Lon=%2")
+                  .arg(prevwpp->latitude, 0, 'f', 5).arg(prevwpp->longitude, 0, 'f', 5);
         break;
-      case 'c':
+      case u'c': // pedal cadence
         if (prevwpp->cadence != 0) {
-          gbfprintf(fout, "%3u", prevwpp->cadence);
+          *fout << QStringLiteral("%1").arg(prevwpp->cadence, 3);
         } else {
-          gbfprintf(fout, "  -");
+          *fout << "  -";
         }
         break;
-      case 'h':
+      case u'h': // heart rate
         if (prevwpp->heartrate != 0) {
-          gbfprintf(fout, "%3u", prevwpp->heartrate);
+          *fout << QStringLiteral("%1").arg(prevwpp->heartrate, 3);
         } else {
-          gbfprintf(fout, "  -");
+          *fout << "  -";
         }
         break;
       }
 
       break;
 
-    case '\\':
+    case u'\\':
       if (++it == end) {
         gbFatal("No character after \\ in subrip format.\n");
       }
 
-      switch (*it) {
-      case 'n':
-        gbfprintf(fout, "\n");
+      switch (it->unicode()) {
+      case u'n': // newline
+        *fout << "\n";
         break;
       }
       break;
 
     default:
-      gbfputc(*it, fout);
+      *fout << *it;
     }
   }
-  gbfprintf(fout, "\n\n");
+  *fout << "\n\n";
 }
 
 /* callback functions */
@@ -244,13 +242,16 @@ SubripFormat::wr_init(const QString& fname)
 
   video_datetime = QDateTime();
 
-  fout = gbfopen(fname, "wb");
+  fout = new gpsbabel::TextStream;
+  fout->open(fname, QIODevice::WriteOnly);
 }
 
 void
 SubripFormat::wr_deinit()
 {
-  gbfclose(fout);
+  fout->close();
+  delete fout;
+  fout = nullptr;
 }
 
 void
