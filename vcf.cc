@@ -94,8 +94,8 @@ VcfFormat::vcf_disp(const Waypoint* wpt)
   *file_out << "BEGIN:VCARD\nVERSION:3.0\n";
   *file_out << "N:" << wpt->description << ";" << wpt->shortname << ";;;\n";
   *file_out << QStringLiteral("ADR:%1%2 %3 %4%5 %6\n")
-            .arg(wpt->latitude < 0 ? 'S' : 'N').arg(abs(latint)).arg(60.0 * (fabs(wpt->latitude) - latint), 6, 'f', 3, u'0')
-            .arg(wpt->longitude < 0 ? 'W' : 'E').arg(abs(lonint)).arg(60.0 * (fabs(wpt->longitude) - lonint), 6, 'f', 3, u'0');
+            .arg(wpt->latitude < 0 ? 'S' : 'N').arg(abs(latint)).arg(60.0 * (fabs(wpt->latitude) - latint), 6, 'f', 3, QChar('0'))
+            .arg(wpt->longitude < 0 ? 'W' : 'E').arg(abs(lonint)).arg(60.0 * (fabs(wpt->longitude) - lonint), 6, 'f', 3, QChar('0'));
 
   if (wpt->HasUrlLink()) {
     const UrlLink& link = wpt->GetUrlLink();
