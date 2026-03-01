@@ -32,8 +32,8 @@
 
 #include "defs.h"
 #include "format.h"   // for Format
-#include "gbfile.h"   // for gbfprintf, gbfclose, gbfopen, gbfwrite, gbfile
 #include "option.h"   // for OptionString
+#include "src/core/textstream.h"  // for TextStream
 
 
 class SubripFormat : public Format
@@ -75,7 +75,7 @@ private:
   QDateTime video_datetime;  // Date time corresponding to video time 00:00:00,000.
   int video_offset_ms{0};
   int stnum{1};
-  gbfile* fout{nullptr};
+  gpsbabel::TextStream* fout{nullptr};
   const Waypoint* prevwpp{nullptr};
   std::optional<double> vspeed;
   std::optional<double> gradient;
