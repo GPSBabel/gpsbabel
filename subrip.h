@@ -22,6 +22,8 @@
 #ifndef SUBRIP_H_INCLUDED_
 #define SUBRIP_H_INCLUDED_
 
+#include <optional>   // for optional
+
 #include <QList>      // for QList
 #include <QDateTime>  // for QDateTime, operator<<
 #include <QString>    // for QString
@@ -75,8 +77,8 @@ private:
   int stnum{1};
   gbfile* fout{nullptr};
   const Waypoint* prevwpp{nullptr};
-  double vspeed{0.0};
-  double gradient{0.0};
+  std::optional<double> vspeed;
+  std::optional<double> gradient;
 
   QVector<arglist_t> subrip_args = {
     {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss[.sss], default is 00:00:00,000)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
