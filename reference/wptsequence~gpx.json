@@ -1,0 +1,22 @@
+{
+    "features": [
+        {
+            "geometry": {
+                "coordinates": [
+                    9.834015,
+                    49.794688,
+                    289.2
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "description": "this is the wpt cmt",
+                "name": "trkpt-2011-07-02T17:47:25.000Z",
+                "url": "http://www.gpsbabel.org",
+                "urlname": "gpsbabel.org"
+            },
+            "type": "Feature"
+        }
+    ],
+    "type": "FeatureCollection"
+}
