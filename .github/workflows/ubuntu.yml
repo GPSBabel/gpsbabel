@@ -142,7 +142,7 @@ jobs:
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation }}
-      uses: actions/attest-build-provenance@v3
+      uses: actions/attest-build-provenance@v4
       with:
         subject-path: ${{ steps.build-snap.outputs.snap }}
 
