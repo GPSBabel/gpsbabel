@@ -163,7 +163,7 @@ jobs:
         ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup-*.exe
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: Windows_Installer-${{ join(matrix.*) }}
         path: |
@@ -223,7 +223,7 @@ jobs:
         PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: Test_Installer-${{ matrix.name }}
         path: |
