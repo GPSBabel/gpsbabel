@@ -242,7 +242,7 @@ else()
       message(WARNING "windeployqt not found, application cannot be packaged.")
     endif()
 
-    find_program(POWERSHELL NAMES powershell)
+    find_program(POWERSHELL NAMES pwsh)
     if (POWERSHELL STREQUAL "POWERSHELL-NOTFOUND")
       message(WARNING "powershell not found, application cannot be packaged.")
     endif()
