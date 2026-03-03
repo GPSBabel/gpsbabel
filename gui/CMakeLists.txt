@@ -266,12 +266,13 @@ else()
       message(STATUS "CMAKE_CXX_COMPILER_ARCHITECTURE_ID is \"${CMAKE_CXX_COMPILER_ARCHITECTURE_ID}\".  Building installer for architecture identifier \"${_installer_arch}\".")
       add_custom_target(package_app
                         # deploy to a clean directory as different build systems create differently named debris in release.
-                        COMMAND ${CMAKE_COMMAND} -E remove_directory package
+                        COMMAND ${CMAKE_COMMAND} -E rm -rf package
                         COMMAND ${CMAKE_COMMAND} -E make_directory package
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabelfe> package
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> package
                         # use --plugindir option to locate the plugins.
                         COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe ${_qtpaths_option}
+                        COMMAND ${CMAKE_COMMAND} -DPACKAGEDIR=package -P "${CMAKE_CURRENT_SOURCE_DIR}/ci_win_deploy_fixup_package.cmake"
                         # set location to location of generated setup.iss file.
                         COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} /Darch=${_installer_arch} setup.iss
                         DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
