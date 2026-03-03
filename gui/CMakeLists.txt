@@ -242,7 +242,12 @@ else()
       message(WARNING "windeployqt not found, application cannot be packaged.")
     endif()
 
-    if((NOT WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND") AND (NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND"))
+    find_program(POWERSHELL NAMES powershell)
+    if (POWERSHELL STREQUAL "POWERSHELL-NOTFOUND")
+      message(WARNING "powershell not found, application cannot be packaged.")
+    endif()
+
+    if((NOT WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND") AND (NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND") AND (NOT POWERSHELL STREQUAL "POWERSHELL-NOTFOUND"))
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" _win_binary_path)
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" _win_source_path)
       # for cross compiles we need to tell windeployqt about the target qt paths.
@@ -272,6 +277,7 @@ else()
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> package
                         # use --plugindir option to locate the plugins.
                         COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe ${_qtpaths_option}
+                        COMMAND ${POWERSHELL} -ExecutionPolicy Unrestricted -File "${CMAKE_SOURCE_DIR}/tools/ci_win_deploy_fixup_package.ps1" -packagedir package
                         # set location to location of generated setup.iss file.
                         COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} /Darch=${_installer_arch} setup.iss
                         DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
