@@ -52,6 +52,14 @@ jobs:
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
             METHOD: 'aqt'
+            RELEASE: false
+            GENERATOR: 'Ninja'
+            os: windows-2025
+          - QT_VERSION: '6.10.2'
+            ARCH: 'amd64'
+            HOST_ARCH: 'amd64'
+            COMPILER: 'msvc2022_64'
+            METHOD: 'aqt'
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-2025
