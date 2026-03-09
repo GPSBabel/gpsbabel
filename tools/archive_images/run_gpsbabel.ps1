@@ -119,6 +119,7 @@ if (-not $list -and -not $clean) {
     else {
         # Run the gpsbabel CLI
         $babelargs = $cli -split ' '
+        Write-Output "gpsbabel $babelargs"
         docker exec --interactive --tty ${ContainerName} gpsbabel @babelargs
     }
 }
