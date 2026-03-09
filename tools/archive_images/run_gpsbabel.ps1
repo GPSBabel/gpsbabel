@@ -118,9 +118,7 @@ if (-not $list -and -not $clean) {
     }
     else {
         # Run the gpsbabel CLI
-        write-host "cli $cli"
         $babelargs = $cli -split ' '
-        write-host "gpsbabel" $args
         docker exec --interactive --tty ${ContainerName} gpsbabel @babelargs
     }
 }
