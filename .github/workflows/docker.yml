@@ -1,15 +1,27 @@
-name: "docker"
+name: "build docker archive"
 permissions: {}
 
-on:
-  push:
-    branches: [ master ]
-  workflow_dispatch: ~
+on: 
+  workflow_call:
+    inputs:
+      version:
+        description: 'verison to archive'
+        required: false
+        default: dev
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'verison to archive'
+        required: true
+        type: string
 
 jobs:
   docker:
     name: docker Build
     runs-on: ubuntu-latest
+    env:
+      docker_repository: tsteven4/testing
     steps:
     - name: Login to Docker Hub
       uses: docker/login-action@v4
@@ -22,21 +34,23 @@ jobs:
       uses: docker/build-push-action@v7
       with:
         context: "{{defaultContext}}:tools/archive_images"
-        file: Dockerfile_gpsbabel_dev
+        file: "Dockerfile_gpsbabel_${{ inputs.version }}"
         load: true
-        tags: tsteven4/gpsbabel:test_dev
+        tags: "${{ env.docker_repository }}:test_${{ inputs.version }}"
     - name: Test
       run: |
-        container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "tsteven4/gpsbabel:test_dev")
-        trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
-        docker start "${container}" >/dev/null
-        docker exec "${container}" setup_user.sh "$(id -u)" "$(id -g)"
-        docker exec -u "$(id -u):$(id -g)" -w /home/gpsbabel/gpsbabel-build "${container}" ./testo -p /usr/local/bin/gpsbabel
+        # tests failed before 1.6.0 (and repository structure was different)
+        if [[ "${{ inputs.version }}" == "dev" || $(echo -e "${{ inputs.version }}\n1.6.0" | sort -V | head -n1) == "1.6.0" ]]; then
+          container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "${{ env.docker_repository }}:test_${{ inputs.version }}")
+          trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
+          docker start "${container}" >/dev/null
+          docker exec "${container}" setup_user.sh "$(id -u)" "$(id -g)"
+          docker exec -u "$(id -u):$(id -g)" -w /home/gpsbabel/gpsbabel-build -e PNAME=/usr/local/bin/gpsbabel "${container}" ./testo
+        fi
     - name: Build and push
-      if: ( github.event_name == 'push' ) && ( github.ref == 'refs/heads/master' )
       uses: docker/build-push-action@v7
       with:
         context: "{{defaultContext}}:tools/archive_images"
-        file: Dockerfile_gpsbabel_dev
+        file: "Dockerfile_gpsbabel_${{ inputs.version }}"
         push: true
-        tags: tsteven4/gpsbabel:dev
+        tags: "${{ env.docker_repository }}:${{ inputs.version }}"

@@ -1,0 +1,14 @@
+name: build docker dev archive
+permissions: {}
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  call-docker-archive:
+    name: build docker dev archive
+    uses: ./.github/workflows/docker.yml
+    with:
+      version: dev
+    secrets: inherit
