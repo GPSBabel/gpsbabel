@@ -11,4 +11,5 @@ jobs:
     uses: ./.github/workflows/docker.yml
     with:
       version: dev
+      latest: false
     secrets: inherit
