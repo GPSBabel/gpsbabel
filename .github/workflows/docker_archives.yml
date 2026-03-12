@@ -1,0 +1,18 @@
+name: build docker archives
+permissions: {}
+
+on:
+  workflow_dispatch: ~
+
+jobs:
+  rebuild_all_archives:
+    name: build docker archives
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [1.5.0, 1.5.1, 1.5.2, 1.5.3, 1.5.4, 1.6.0, 1.7.0, 1.8.0, 1.9.0, 1.10.0]
+
+    uses: ./.github/workflows/docker.yml
+    with:
+      version: ${{ matrix.version }}
+    secrets: inherit
