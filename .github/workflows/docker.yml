@@ -51,11 +51,7 @@ jobs:
       run: |
         # tests failed before 1.6.0 (and repository structure was different)
         if [[ "${{ inputs.version }}" == "dev" || $(echo -e "${{ inputs.version }}\n1.6.0" | sort -V | head -n1) == "1.6.0" ]]; then
-          container=$(docker create -q -i -t -w /app -v "$(pwd):/app" "${{ env.docker_repository }}:test_${{ inputs.version }}")
-          trap 'docker rm -f "${container}" >/dev/null' 0 1 2 3 15
-          docker start "${container}" >/dev/null
-          docker exec "${container}" setup_user.sh "$(id -u)" "$(id -g)"
-          docker exec -u "$(id -u):$(id -g)" -w /home/gpsbabel/gpsbabel-build -e PNAME=/usr/local/bin/gpsbabel "${container}" ./testo
+          docker run -i -t --rm -w /home/gpsbabel/gpsbabel-build -e PNAME=/usr/local/bin/gpsbabel "${{ env.docker_repository }}:test_${{ inputs.version }}" ./testo
         fi
     - name: Docker Metadata
       id: meta

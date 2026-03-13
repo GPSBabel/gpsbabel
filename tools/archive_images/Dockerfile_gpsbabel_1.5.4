@@ -71,3 +71,6 @@ RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
  && ln -s $(pwd)/gui/GPSBabel1.5.4/gpsbabelfe /usr/local/bin 
 
 COPY setup_user.sh /usr/local/bin
+RUN useradd ubuntu -m -s /bin/bash
+USER ubuntu:ubuntu
+WORKDIR /app
