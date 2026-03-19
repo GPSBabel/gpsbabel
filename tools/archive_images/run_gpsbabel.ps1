@@ -103,8 +103,7 @@ if (-not $list -and -not $clean) {
             --env LANG=${cultureName} `
             --workdir /app `
             --volume ${DesktopPath}:/app `
-            --user 1000:1000 `
-            "tsteven4/gpsbabel:${version}" | Out-Null
+            "${ImageName}" | Out-Null
     }
 
     # If necessary, start the container
