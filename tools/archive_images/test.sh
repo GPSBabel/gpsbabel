@@ -18,10 +18,10 @@ for ver in "${versions[@]}"; do
   # some tests failed before 1.6.0
   if [[ "${ver}" == "dev" || $(echo -e "${ver}\n1.6.0" | sort -V | head -n1) == "1.6.0" ]]; then
     # ver = dev, or ver >= 1.6.0
-    docker run -it --rm -v "$(pwd):/app" "tsteven4/testing:${ver}" /bin/bash -c 'PNAME=/usr/local/bin/gpsbabel ./testo'
+    docker run -it --rm -v "$(pwd):/app" "tsteven4/gpsbabel:${ver}" /bin/bash -c 'PNAME=/usr/local/bin/gpsbabel ./testo'
   else
     # ver < 1.6.0
-    docker run -it --rm -v "$(pwd):/app" "tsteven4/testing:${ver}" /bin/bash -c 'PNAME=/usr/local/bin/gpsbabel ./testo || true'
+    docker run -it --rm -v "$(pwd):/app" "tsteven4/gpsbabel:${ver}" /bin/bash -c 'PNAME=/usr/local/bin/gpsbabel ./testo || true'
   fi
   popd
   rm -fr "${TMPDIR}"
