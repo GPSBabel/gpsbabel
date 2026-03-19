@@ -121,7 +121,7 @@ GeoJsonFormat::waypoint_from_coordinates(const QJsonArray& coordinates)
   waypoint->latitude = coordinates.at(1).toDouble();
   waypoint->longitude = coordinates.at(0).toDouble();
   if (coordinates.size() > 2) {
-    waypoint->altitude = coordinates.at(3).toDouble();
+    waypoint->altitude = coordinates.at(2).toDouble();
   }
   return waypoint;
 }

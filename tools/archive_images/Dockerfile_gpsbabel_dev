@@ -1,10 +1,6 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM ubuntu:noble
-
-LABEL maintainer="https://github.com/tsteven4"
-
-WORKDIR /app
+FROM ubuntu:noble AS stage
 
 # update environment.
 ARG DEBIAN_FRONTEND=noninteractive
@@ -59,23 +55,59 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && locale-gen \
  && locale -a
 
-WORKDIR /home/gpsbabel
-
-COPY gpsbabel_dev.patch /home/gpsbabel
-
-RUN git clone https://github.com/GPSBabel/gpsbabel.git gpsbabel-build\
- && cd gpsbabel-build \
- && git apply /home/gpsbabel/gpsbabel_dev.patch \
+RUN --mount=type=bind,target=/home/gpsbabel/gpsbabel-build,rw cd /home/gpsbabel/gpsbabel-build \
  && rm -fr zlib \
  && rm -fr shapelib \
- && rm -f testo.d/serialization.test \
  && sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake \
- && mkdir bld \
- && cd bld \
- && cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6 -DGPSBABEL_WITH_ZLIB=pkgconfig -DGPSBABEL_WITH_SHAPELIB=pkgconfig -DGB.PACKAGE_RELEASE="+$(git log -1 --format=%h)" .. \
- && cmake --build . --target package_app \
- && cmake --build . --target check \
- && ln -s $(pwd)/gui/GPSBabelFE/gpsbabel /usr/local/bin \
- && ln -s $(pwd)/gui/GPSBabelFE/gpsbabelfe /usr/local/bin 
+ && cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6 -DGPSBABEL_WITH_ZLIB=pkgconfig -DGPSBABEL_WITH_SHAPELIB=pkgconfig -DGB.PACKAGE_RELEASE="+$(git log -1 --format=%h)" -B bld \
+ && cmake --build bld --target package_app \
+ && cmake --build bld --target check \
+ && mkdir -p /usr/local/cellar \
+ && cp -pr bld/gui/GPSBabelFE /usr/local/cellar \
+ && ln -s /usr/local/cellar/GPSBabelFE/gpsbabel /usr/local/bin \
+ && ln -s /usr/local/cellar/GPSBabelFE/gpsbabelfe /usr/local/bin \
+ && cp tools/archive_images/setup_user.sh /usr/local/bin
 
-COPY setup_user.sh /usr/local/bin
+FROM ubuntu:noble
+
+LABEL maintainer="https://github.com/tsteven4"
+
+# update environment.
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+ && apt-get upgrade -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# the trick here is finding all the packages that we, and the plugins we
+# use need.  Note we had to figure this out for  snapcraft, but it
+# changes for different flavors of ubuntu.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    tzdata \
+    libusb-1.0-0 \
+    libudev1 \
+    libshp4 \
+    zlib1g \
+    libqt6core6 \
+    libqt6core5compat6 \
+    libqt6gui6 \
+    libqt6network6 \
+    libqt6serialport6 \
+    libqt6widgets6 \
+    libqt6xml6 \
+    libqt6webenginewidgets6 \
+    libqt6webenginecore6 \
+    libqt6webenginecore6-bin \
+    qt6-translations-l10n \
+    qt6-qpa-plugins \
+    qt6-wayland \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=stage /usr/local/cellar /usr/local/cellar
+COPY --from=stage /usr/local/bin/setup_user.sh /usr/local/bin
+
+RUN ln -s /usr/local/cellar/GPSBabelFE/gpsbabel /usr/local/bin \
+ && ln -s /usr/local/cellar/GPSBabelFE/gpsbabelfe /usr/local/bin
+
+USER ubuntu:ubuntu
+WORKDIR /app
