@@ -460,8 +460,6 @@ set(TESTS
 list(SORT TESTS)
 
 if(UNIX)
-  # This test only works if the pwd is top level source dir due to the
-  # file name getting embedded in the file nonexistent.err.
   enable_testing()
   foreach(TESTNAME IN LISTS TESTS)
     add_test(NAME test-${TESTNAME}
@@ -472,8 +470,6 @@ if(UNIX)
 endif()
 
 if(UNIX)
-  # This test only works if the pwd is top level source dir due to the
-  # file name getting embedded in the file nonexistent.err.
   add_custom_target(check
                     ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
@@ -482,8 +478,6 @@ if(UNIX)
                     USES_TERMINAL)
 endif()
 if(UNIX AND NOT APPLE)
-  # This test only works if the pwd is top level source dir due to the
-  # file name getting embedded in the file nonexistent.err.
   file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/testo.d)
   list(JOIN TESTS "\\n" VTESTS)
   add_custom_target(check-vtesto
