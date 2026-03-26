@@ -74,5 +74,6 @@ double LatLng::haversineDistance(const LatLng& other) const
 
 QString fmtLatLng(const LatLng& l)
 {
-  return QString("[%1, %2]").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
+  // This needs to work for Google Maps AND Leaflet.
+  return QString("{lat: %1, lng: %2}").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
 }

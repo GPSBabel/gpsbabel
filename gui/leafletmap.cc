@@ -170,23 +170,6 @@ LeafletMap::loadFinishedX(bool f)
   busyCursor_ = false;
 }
 
-
-//------------------------------------------------------------------------
-static QString
-makePath(const vector <LatLng>& pts)
-{
-  QString path;
-  bool first = true;
-  for (const auto& ll : pts) {
-    if (!first) {
-      path.append(", ");
-    }
-    path.append(fmtLatLng(ll));
-    first = false;
-  }
-  return path;
-}
-
 //------------------------------------------------------------------------
 void
 LeafletMap::showGpxData()

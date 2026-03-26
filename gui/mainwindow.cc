@@ -1031,12 +1031,12 @@ qDebug() << "useGoogleMaps" << useGoogleMaps << "useLeafletMaps" << useLeafletMa
           LeafletMapDialog dlg(nullptr, mapData, geojsonData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
           dlg.show();
           dlg.exec();
+        }
         this->show();
       }
       QFile(gpxTempName).remove();
     }
 #endif
-    }
   } else {
     QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
     QTextCharFormat errorFormat = defaultFormat;
