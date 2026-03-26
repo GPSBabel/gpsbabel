@@ -18,10 +18,13 @@
 
 #include "matrix.h"
 
-#include "defs.h"       // For gbFatal
-#include <cmath>        // For std::abs
-#include <algorithm>    // For std::swap
-#include <utility>      // For std::move
+#include <cmath>             // For std::abs
+#include <algorithm>         // For std::move
+#include <utility>           // For std::swap
+
+#include <QDebugStateSaver>  // for QDebugStateSaver
+
+#include "defs.h"            // For gbFatal
 
 Matrix::Matrix(int rows, int cols) : rows_(rows), cols_(cols), data_(rows * cols, 0.0) {}
 
@@ -191,4 +194,20 @@ Matrix& Matrix::operator*=(double scalar) {
 
 Matrix operator*(double scalar, const Matrix& matrix) {
     return matrix * scalar;
+}
+
+QDebug operator<< (QDebug debug, const Matrix& m)
+{
+  QDebugStateSaver saver(debug);
+  debug.nospace();
+  for (int c = 0; c < m.cols(); ++c) {
+      for (int r = 0; r < m.rows(); ++r) {
+          if (!((r == 0) && (c == 0))) {
+              debug << " ";
+          }
+          debug << m(r,c);
+          debug << ((r + 1 < m.rows())? "," : ";");
+      }
+  }
+  return debug;
 }

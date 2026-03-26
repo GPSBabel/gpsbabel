@@ -262,7 +262,6 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     timer.start();
   }
   start_session(ivecs.fmtname, fname);
-  qInstallMessageHandler(MessageHandler);
   setMessagePattern(ivecs.fmtname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
@@ -784,6 +783,7 @@ main(int argc, char* argv[])
 #error Visual Studio 2017 and earlier are not supported. Please use Visual Studio 2019 or 2022.
 #endif
 
+  qInstallMessageHandler(MessageHandler);
   setMessagePattern();
 
   if constexpr (DEBUG_LOCALE) {

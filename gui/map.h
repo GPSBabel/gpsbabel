@@ -25,7 +25,6 @@
 
 #include <QByteArray>             // for QByteArray
 #include <QElapsedTimer>          // for QElapsedTimer
-#include <QNetworkAccessManager>  // for QNetworkAccessManager
 #include <QObject>                // for QObject, emit, Q_OBJECT, signals, slots
 #include <QPlainTextEdit>         // for QPlainTextEdit
 #include <QResizeEvent>           // for QResizeEvent

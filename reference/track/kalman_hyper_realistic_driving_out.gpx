@@ -10,7 +10,9 @@
     <name>Driving Track</name>
     <type>driving</type>
     <trkseg>
-      <trkpt lat="40.300000000" lon="-122.300000000"/>
+      <trkpt lat="40.300000000" lon="-122.300000000">
+        <time>2010-01-01T00:00:00Z</time>
+      </trkpt>
     </trkseg>
   </trk>
 </gpx>

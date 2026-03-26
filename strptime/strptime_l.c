@@ -382,7 +382,7 @@ __strptime_internal (const char *rp, const char *fmt, struct tm *tmp,
 	      if (s.decided != loc
 		  && (((trp = rp, match_string (weekday_name[cnt], trp))
 		       && trp > rp_longest)
-		      || ((trp = rp, match_string (ab_weekday_name[cnt], rp))
+		      || ((trp = rp, match_string (ab_weekday_name[cnt], trp))
 			  && trp > rp_longest)))
 		{
 		  rp_longest = trp;
