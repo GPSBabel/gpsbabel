@@ -444,20 +444,10 @@ LeafletMapDialog::showHideAll(QStandardItem* top, bool ck)
 {
   trace("showHideAll", top);
 
-  // Disconnect the signal to prevent re-entrancy during programmatic changes
-  disconnect(model_, &QStandardItemModel::itemChanged, this, &LeafletMapDialog::itemChangedX);
-
   if (ck) {
     mapWidget_->resetBounds();
   }
   top->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
-  for (int row = 0; row < top->rowCount(); ++row) {
-    QStandardItem* child = top->child(row);
-    child->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
-  }
-
-  // Reconnect the signal
-  connect(model_, &QStandardItemModel::itemChanged, this, &LeafletMapDialog::itemChangedX);
 }
 
 //------------------------------------------------------------------------
@@ -466,28 +456,37 @@ LeafletMapDialog::showOnlyThis(QStandardItem* top, int menuRow)
 {
   trace("showOnlyThis", top->child(menuRow));
 
-  // Disconnect the signal to prevent re-entrancy during programmatic changes
-  disconnect(model_, &QStandardItemModel::itemChanged, this, &LeafletMapDialog::itemChangedX);
+  model_->blockSignals(true);
 
   QStandardItem* child = top->child(menuRow);
   int originalIndex = child->data(OriginalIndexRole).toInt();
 
   if (top == wptItem_) {
     mapWidget_->panTo(gpx_.getWaypoints().at(originalIndex).getLocation());
+    mapWidget_->setAllWaypointsVisibility(false);
+    mapWidget_->setWaypointVisibility(originalIndex, true);
   } else if (top == trkItem_) {
     mapWidget_->frameTrack(originalIndex);
+    mapWidget_->setAllTracksVisibility(false);
+    mapWidget_->setTrackVisibility(originalIndex, true);
   } else if (top == rteItem_) {
     mapWidget_->frameRoute(originalIndex);
+    mapWidget_->setAllRoutesVisibility(false);
+    mapWidget_->setRouteVisibility(originalIndex, true);
   }
 
   for (int row = 0; row < top->rowCount(); ++row) {
-    QStandardItem* child = top->child(row);
-    child->setCheckState(row == menuRow ? Qt::Checked : Qt::Unchecked);
+    QStandardItem* c = top->child(row);
+    c->setCheckState(row == menuRow ? Qt::Checked : Qt::Unchecked);
   }
-  top->setCheckState(Qt::Checked);
 
-  // Reconnect the signal
-  connect(model_, &QStandardItemModel::itemChanged, this, &LeafletMapDialog::itemChangedX);
+  if (top->rowCount() > 1) {
+    top->setCheckState(Qt::PartiallyChecked);
+  } else {
+    top->setCheckState(Qt::Checked);
+  }
+
+  model_->blockSignals(false);
 }
 
 void

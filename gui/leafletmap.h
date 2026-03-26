@@ -79,6 +79,7 @@ private:
   QElapsedTimer stopWatch_;
   QPlainTextEdit* textEdit_{nullptr};
   QString mapContainerId_;
+  const bool debug_{false};
 
   void evaluateJS(const QString& s, bool update = true);
   void evaluateJS(const QStringList& s, bool update = true);

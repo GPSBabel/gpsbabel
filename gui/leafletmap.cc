@@ -235,7 +235,7 @@ LeafletMap::logTime(const QString& s)
 void
 LeafletMap::setWaypointVisibility(int i, bool show)
 {
-  qDebug() << "LeafletMap::setWaypointVisibility called for index:" << i << "show:" << show;
+  if (debug_) qDebug() << "LeafletMap::setWaypointVisibility called for index:" << i << "show:" << show;
   evaluateJS(QString("if (%2) { if (waypointLayers[%1]) { waypointLayerGroup.addLayer(waypointLayers[%1]); } } else { if (waypointLayers[%1]) { waypointLayerGroup.removeLayer(waypointLayers[%1]); } }")
              .arg(i).arg(show?"true": "false"));
 }
@@ -244,7 +244,7 @@ LeafletMap::setWaypointVisibility(int i, bool show)
 void
 LeafletMap::setTrackVisibility(int i, bool show)
 {
-  qDebug() << "LeafletMap::setTrackVisibility called for index:" << i << "show:" << show;
+  if (debug_) qDebug() << "LeafletMap::setTrackVisibility called for index:" << i << "show:" << show;
   evaluateJS(QString("if (%2) { if (trackLayers[%1]) { trackLayerGroup.addLayer(trackLayers[%1]); } } else { if (trackLayers[%1]) { trackLayerGroup.removeLayer(trackLayers[%1]); } }")
              .arg(i).arg(show ? "true" : "false"));
 }
@@ -253,7 +253,7 @@ LeafletMap::setTrackVisibility(int i, bool show)
 void
 LeafletMap::setRouteVisibility(int i, bool show)
 {
-  qDebug() << "LeafletMap::setRouteVisibility called for index:" << i << "show:" << show;
+  if (debug_) qDebug() << "LeafletMap::setRouteVisibility called for index:" << i << "show:" << show;
   evaluateJS(QString("setRouteVisibility(%1, %2);").arg(i).arg(show ? "true" : "false"));
 }
 
@@ -261,10 +261,10 @@ LeafletMap::setRouteVisibility(int i, bool show)
 void
 LeafletMap::setAllWaypointsVisibility(bool show)
 {
-  qDebug() << "LeafletMap::setAllWaypointsVisibility called with:" << show;
+  if (debug_) qDebug() << "LeafletMap::setAllWaypointsVisibility called with:" << show;
   QString jsString = QString("setAllWaypointsVisibility(%1);")
                      .arg(show ? "true" : "false");
-  qDebug() << "Executing JS:" << jsString;
+  if (debug_) qDebug() << "Executing JS:" << jsString;
   evaluateJS(jsString);
 }
 
@@ -272,10 +272,10 @@ LeafletMap::setAllWaypointsVisibility(bool show)
 void
 LeafletMap::setAllTracksVisibility(bool show)
 {
-  qDebug() << "LeafletMap::setAllTracksVisibility called with:" << show;
+  if (debug_) qDebug() << "LeafletMap::setAllTracksVisibility called with:" << show;
   QString jsString = QString("setAllTracksVisibility(%1);")
                      .arg(show ? "true" : "false");
-  qDebug() << "Executing JS:" << jsString;
+  // qDebug() << "Executing JS:" << jsString;
   evaluateJS(jsString);
 }
 
@@ -283,7 +283,7 @@ LeafletMap::setAllTracksVisibility(bool show)
 void
 LeafletMap::setAllRoutesVisibility(bool show)
 {
-  qDebug() << "LeafletMap::setAllRoutesVisibility called with:" << show;
+  if (debug_) qDebug() << "LeafletMap::setAllRoutesVisibility called with:" << show;
   evaluateJS(QString("setAllRoutesVisibility(%1);").arg(show ? "true" : "false"));
 }
 
