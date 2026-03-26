@@ -418,7 +418,7 @@ UnicsvFormat::unicsv_fondle_header(QString header)
         gbWarning("Unhandled column \"%s\".\n", gbLogCStr(value));
       }
     } else { // found
-      const field_t f = *it;
+      const field_t& f = *it;
       unicsv_fields_tab.last() = f.type;
 
       if (global_opts.debug_level) {

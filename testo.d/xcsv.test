@@ -426,3 +426,11 @@ if command -v tzselect >/dev/null 2>&1 ; then
 
   unset -v TZ
 fi
+
+# test for strptime bug https://sourceware.org/bugzilla/show_bug.cgi?id=33853
+echo 'FIELD_DELIMITER    COMMA' > ${TMPDIR}/strptime.style
+echo 'IFIELD GMT_TIME,"","%a %b %d %H:%M:%S%z %Y"' >> ${TMPDIR}/strptime.style
+echo 'IFIELD LAT_DECIMAL,"","%f"' >> ${TMPDIR}/strptime.style
+echo 'IFIELD LON_DECIMAL,"","%f"' >> ${TMPDIR}/strptime.style
+gpsbabel -i xcsv,style=${TMPDIR}/strptime.style -f ${REFERENCE}/strptime.csv -o gpx -F ${TMPDIR}/strptime.gpx
+compare ${REFERENCE}/strptime.gpx ${TMPDIR}/strptime.gpx

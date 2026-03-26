@@ -68,7 +68,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: build_and_test
       run: |
@@ -111,7 +111,7 @@ jobs:
       snap-file: ${{ steps.build-snap.outputs.snap }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
         fetch-tags: true
@@ -157,7 +157,7 @@ jobs:
         ./tools/uploadtool/upload_github.sh ${{ steps.build-snap.outputs.snap }}
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ steps.build-snap.outputs.snap }}
         path: ${{ steps.build-snap.outputs.snap }}

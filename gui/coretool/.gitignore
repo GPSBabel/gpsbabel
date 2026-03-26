@@ -1,2 +1,4 @@
-/objects/
 /Makefile
+/coretool
+/gpsbabel
+/objects/

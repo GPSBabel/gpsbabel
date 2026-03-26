@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://www.garmin.com/xmlschemas/ActivityExtension/v2" xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd">
+  <Activities>
+    <Activity Sport="Other">
+      <Id>2026-02-23T23:40:52Z</Id>
+      <Lap StartTime="2026-02-23T23:40:52Z">
+        <TotalTimeSeconds>3</TotalTimeSeconds>
+        <DistanceMeters>33.49</DistanceMeters>
+        <MaximumSpeed>11.166</MaximumSpeed>
+        <Calories>0</Calories>
+        <AverageHeartRateBpm xsi:type="HeartRateInBeatsPerMinute_t">
+          <Value>115</Value>
+        </AverageHeartRateBpm>
+        <MaximumHeartRateBpm xsi:type="HeartRateInBeatsPerMinute_t">
+          <Value>130</Value>
+        </MaximumHeartRateBpm>
+        <Intensity>Active</Intensity>
+        <Cadence>92</Cadence>
+        <TriggerMethod>Manual</TriggerMethod>
+        <Track>
+          <Trackpoint>
+            <Time>2026-02-23T23:40:52Z</Time>
+            <Position>
+              <LatitudeDegrees>40.0000000</LatitudeDegrees>
+              <LongitudeDegrees>-105.0000000</LongitudeDegrees>
+            </Position>
+            <AltitudeMeters>1000.1</AltitudeMeters>
+            <HeartRateBpm xsi:type="HeartRateInBeatsPerMinute_t">
+              <Value>100</Value>
+            </HeartRateBpm>
+            <Cadence>90</Cadence>
+            <Extensions>
+              <ns3:TPX>
+                <ns3:Speed>11.163</ns3:Speed>
+                <ns3:Watts>150</ns3:Watts>
+              </ns3:TPX>
+            </Extensions>
+          </Trackpoint>
+          <Trackpoint>
+            <Time>2026-02-23T23:40:53Z</Time>
+            <Position>
+              <LatitudeDegrees>40.0001000</LatitudeDegrees>
+              <LongitudeDegrees>-105.0000100</LongitudeDegrees>
+            </Position>
+            <AltitudeMeters>1001.1</AltitudeMeters>
+            <DistanceMeters>11.16</DistanceMeters>
+            <HeartRateBpm xsi:type="HeartRateInBeatsPerMinute_t">
+              <Value>110</Value>
+            </HeartRateBpm>
+            <Cadence>91</Cadence>
+            <Extensions>
+              <ns3:TPX>
+                <ns3:Speed>11.164</ns3:Speed>
+                <ns3:Watts>151</ns3:Watts>
+              </ns3:TPX>
+            </Extensions>
+          </Trackpoint>
+          <Trackpoint>
+            <Time>2026-02-23T23:40:54Z</Time>
+            <Position>
+              <LatitudeDegrees>40.0002000</LatitudeDegrees>
+              <LongitudeDegrees>-105.0000200</LongitudeDegrees>
+            </Position>
+            <AltitudeMeters>1002.1</AltitudeMeters>
+            <DistanceMeters>22.33</DistanceMeters>
+            <HeartRateBpm xsi:type="HeartRateInBeatsPerMinute_t">
+              <Value>120</Value>
+            </HeartRateBpm>
+            <Cadence>92</Cadence>
+            <Extensions>
+              <ns3:TPX>
+                <ns3:Speed>11.165</ns3:Speed>
+                <ns3:Watts>152</ns3:Watts>
+              </ns3:TPX>
+            </Extensions>
+          </Trackpoint>
+          <Trackpoint>
+            <Time>2026-02-23T23:40:55Z</Time>
+            <Position>
+              <LatitudeDegrees>40.0003000</LatitudeDegrees>
+              <LongitudeDegrees>-105.0000300</LongitudeDegrees>
+            </Position>
+            <AltitudeMeters>1003.1</AltitudeMeters>
+            <DistanceMeters>33.49</DistanceMeters>
+            <HeartRateBpm xsi:type="HeartRateInBeatsPerMinute_t">
+              <Value>130</Value>
+            </HeartRateBpm>
+            <Cadence>93</Cadence>
+            <Extensions>
+              <ns3:TPX>
+                <ns3:Speed>11.166</ns3:Speed>
+                <ns3:Watts>153</ns3:Watts>
+              </ns3:TPX>
+            </Extensions>
+          </Trackpoint>
+        </Track>
+      </Lap>
+    </Activity>
+  </Activities>
+</TrainingCenterDatabase>

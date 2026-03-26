@@ -1,7 +1,9 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include <vector>
+#include <vector>  // for vector
+
+#include <QDebug>  // for QDebug
 
 class Matrix {
 public:
@@ -35,5 +37,6 @@ private:
 };
 
 Matrix operator*(double scalar, const Matrix& matrix);
+QDebug operator<<(QDebug debug, const Matrix& m);
 
 #endif // MATRIX_H

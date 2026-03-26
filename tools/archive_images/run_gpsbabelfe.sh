@@ -31,7 +31,7 @@ if [ -z "$(docker ps -a -q -f "name=^${container_name}$")" ]; then
   docker start "${container_name}" >/dev/null
 
 # make sure the users uid/gid exist in the container.
-  docker exec -i -t "${container_name}" setup_user.sh "$(id -u)" "$(id -g)"
+  docker exec -i -t -u 0:0 "${container_name}" setup_user.sh "$(id -u)" "$(id -g)"
 fi
 
 # if necessary start the container.

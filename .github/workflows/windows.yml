@@ -55,47 +55,48 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-2025
-          - QT_VERSION: '6.10.0'
+          - QT_VERSION: '6.10.2'
             TARGET_ARCH: 'arm64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
             CROSS_COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
-            RELEASE: true
+            RELEASE: false
             os: windows-2025
-          - QT_VERSION: '6.10.0'
+          - QT_VERSION: '6.10.2'
             ARCH: 'arm64'
             HOST_ARCH: 'arm64'
             COMPILER: 'msvc2022_arm64'
             METHOD: 'aqt'
-            RELEASE: false
+            RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-11-arm
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Cache Qt
-      uses: actions/cache@v4
-      id: cache
+      uses: actions/cache/restore@v5
+      id: restore-cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILER }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ matrix.COMPILER }}-${{ matrix.CROSS_COMPILER }}
 
     - name: Install Qt setup(aqt)
-      if: ( steps.cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
+      if: ( steps.restore-cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
       uses: actions/setup-python@v6
       with:
         python-version: '3.13'
 
     - name: Install Qt
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.restore-cache.outputs.cache-hit != 'true'
       env:
         CI_BUILD_DIR: ${{ github.workspace }}
         ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
         ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
         ARTIFACTORY_BASE_URL: ${{ secrets.ARTIFACTORY_BASE_URL }}
+        QT_INSTALLER_JWT_TOKEN: ${{secrets.QT_INSTALLER_JWT_TOKEN}}
       shell: bash
       run: |
         if [ -n "${{ matrix.CROSS_COMPILER }}" ]; then
@@ -162,7 +163,7 @@ jobs:
         ./tools/uploadtool/upload_github.sh bld/gui/GPSBabel-*-Setup-*.exe
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: Windows_Installer-${{ join(matrix.*) }}
         path: |
@@ -170,42 +171,63 @@ jobs:
           bld/gui/GPSBabel-*-Manifest-*.txt
         retention-days: 7
 
+    - name: Save Cache Qt
+      if: ( steps.restore-cache.outputs.cache-hit != 'true' ) && ( github.ref == 'refs/heads/master' )
+      uses: actions/cache/save@v5
+      with:
+        path: ~/Cache
+        key: ${{ steps.restore-cache.outputs.cache-primary-key }}
+
   test_installer:
     name: 'Test Installer'
     needs: windows
-    runs-on: windows-11-arm
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-11-arm
+            installer: Windows_Installer-*,arm64,arm64,msvc2022_arm64,*,true,Ninja,windows-11-arm
+            name: WoA-native
+          - os: windows-11-arm
+            installer: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,*,false,windows-2025
+            name: WoA-cross
+          - os: windows-2025
+            installer: Windows_Installer-*,amd64,amd64,msvc2022_64,*,true,Ninja,windows-2025
+            name: x86_64
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: 'Download Artifacts'
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v8
       with:
-        path: bld
-        pattern: Windows_Installer-*,arm64,amd64,msvc2022_64,msvc2022_arm64,aqt,true,windows-2025
+        path: download
+        pattern: ${{ matrix.installer }}
         merge-multiple: true
 
     - name: 'Install Artifact'
       shell: pwsh
       run: |
-        $install_path=Join-Path $(Get-Location) bld
-        .\bld\GPSBabel-*-*-Setup-arm64.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=bld\log.txt /MERGETASKS="!vcredist"
+        $install_path=Join-Path $(Get-Location) installDir
+        .\download\GPSBabel-*-*-Setup-*.exe /SILENT /NORESTART /DIR="${install_path}" /LOG=download\log.txt /MERGETASKS="!vcredist"
         Start-Sleep -Seconds 60
-        Get-ChildItem bld
+        Get-ChildItem -Path $install_path -Recurse -Force
 
     - name: 'Test Artifact'
       shell: bash
       run: |
-        PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
-        PNAME=./bld/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
-        ls -l bld
+        find ./installDir -type f -exec file {} \; | tee download/files.txt
+        PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./testo 2>&1
+        PNAME=./installDir/gpsbabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
-        name: Test_Installer
+        name: Test_Installer-${{ matrix.name }}
         path: |
-          bld/log.txt
+          download/log.txt
+          download/files.txt
         retention-days: 7
 

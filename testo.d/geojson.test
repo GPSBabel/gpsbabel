@@ -11,3 +11,10 @@ compare ${REFERENCE}/track/segmented_tracks~geojson.json ${TMPDIR}/track.json
 
 gpsbabel -i geojson -f ${REFERENCE}/track/geojson.geojson -o gpx -F ${TMPDIR}/geojson.gpx
 compare ${REFERENCE}/track/geojson.gpx  ${TMPDIR}/geojson.gpx
+
+# exercise elevation
+gpsbabel -i gpx -f ${REFERENCE}/wptsequence.gpx -x nuketypes,routes,tracks -o geojson -F ${TMPDIR}/wptsequence~gpx.json
+compare ${REFERENCE}/wptsequence~gpx.json ${TMPDIR}/wptsequence~gpx.json
+gpsbabel -i geojson -f ${REFERENCE}/wptsequence~gpx.json -o gpx -F ${TMPDIR}/wptsequence~gpx~json.gpx
+compare ${REFERENCE}/wptsequence~gpx~json.gpx ${TMPDIR}/wptsequence~gpx~json.gpx
+
