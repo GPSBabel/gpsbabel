@@ -41,10 +41,10 @@ class GMapDialog: public QDialog
 {
   Q_OBJECT
 public:
-  GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te);
+  GMapDialog(QWidget* parent, const Gpx& mapData, int debugLevel, QPlainTextEdit* te);
 
 private:
-  static constexpr bool debug_ = false;
+  int debugLevel_;
 
   Ui_GMapDlg ui_;
   Map* mapWidget_;
@@ -60,7 +60,7 @@ private:
 
   static QString formatLength(double l);
 
-  static void trace(const QString& label, const QStandardItem* it);
+  void trace(const QString& label, const QStandardItem* it);
   void expandCollapseAll(QStandardItem* top, bool exp);
   void showHideAll(QStandardItem* top, bool ck);
   void showHideChild(const QStandardItem* child);

@@ -40,11 +40,11 @@ class LeafletMapDialog: public QDialog
   Q_OBJECT
 
 public:
-  LeafletMapDialog(QWidget* parent, const Gpx& mapData, const QString& geojsonData, QPlainTextEdit* te);
+  LeafletMapDialog(QWidget* parent, const Gpx& mapData, const QString& geojsonData, int debugLevel, QPlainTextEdit* te);
 
 
 private:
-  static constexpr bool debug_ = false;
+  int debugLevel_;
   Ui::LeafletMapDlg ui_;
   LeafletMap* mapWidget_;
   QStandardItemModel* model_;

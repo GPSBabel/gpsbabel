@@ -32,9 +32,9 @@
 #include <QtGlobal>
 #include "appname.h"
 #include "gpx.h"
+#include "latlng.h"
 #include "leafletdlg.h"
 #include "leafletmap.h"
-#include "latlng.h"
 #include "ui_leafletdlg.h"
 
 //------------------------------------------------------------------------
@@ -144,8 +144,9 @@ LeafletMapDialog::appendRouteInfo(QStandardItem* it, const GpxRoute& rte)
 
 //------------------------------------------------------------------------
 LeafletMapDialog::LeafletMapDialog(QWidget* parent,
-                                   const Gpx& mapData, const QString& geojsonData, QPlainTextEdit* te) :
+                                   const Gpx& mapData, const QString& geojsonData, int debugLevel, QPlainTextEdit* te) :
   QDialog(parent),
+  debugLevel_(debugLevel),
   gpx_(mapData)
 {
   ui_.setupUi(this);
@@ -269,7 +270,7 @@ void LeafletMapDialog::trackClicked(int i)
 void
 LeafletMapDialog::trace(const QString& label, const QStandardItem* it)
 {
-  if constexpr(debug_) {
+  if (debugLevel_ > 0) {
     QDebug qdb(QtDebugMsg);
     qdb.nospace().noquote() << label + ": ";
     qdb.quote();

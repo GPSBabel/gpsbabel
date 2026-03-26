@@ -19,12 +19,6 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
-#include <QStyle>              // for QStyle
-#include <QIcon>               // for QIcon
 #include "mainwindow.h"
 #include <QAbstractButton>     // for QAbstractButton
 #include <QAction>             // for QAction
@@ -42,6 +36,7 @@
 #include <QFileDialog>         // for QFileDialog
 #include <QFileInfo>           // for QFileInfo
 #include <QGradientStop>       // for QBrush
+#include <QIcon>               // for QIcon
 #include <QImage>              // for QImage
 #include <QLibraryInfo>        // for QLibraryInfo
 #include <QLocale>             // for QLocale
@@ -53,6 +48,7 @@
 #include <QRadioButton>        // for QRadioButton
 #include <QSettings>           // for QSettings
 #include <QStackedWidget>      // for QStackedWidget
+#include <QStyle>              // for QStyle
 #include <QString>             // for QString, operator+, operator==, operator!=
 #include <QStringList>         // for QStringList
 #include <QTemporaryFile>      // for QTemporaryFile
@@ -78,7 +74,7 @@
 #ifndef DISABLE_MAPPREVIEW
 #include "gpx.h"               // for Gpx
 #include "gmapdlg.h"           // for GMapDialog
-#include "leafletdlg.h"          // for LeafletMapDialog
+#include "leafletdlg.h"        // for LeafletMapDialog
 #endif
 #include "help.h"              // for ShowHelp
 #include "optionsdlg.h"        // for OptionsDlg
@@ -244,10 +240,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   //--- Restore from registry
   restoreSettings();
-// RJL
-babelData_.debugLevel_ = 9;
-babelData_.outputFileName_= "/dev/null";
-// RJL
+
 
 #ifndef DISABLE_UPGRADE_CHECK
   upgrade = new UpgradeCheck(this, formatList_, babelData_);
@@ -263,10 +256,7 @@ babelData_.outputFileName_= "/dev/null";
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
   }
-// RJL
-babelData_.debugLevel_ = 9;
-babelData_.outputFileName_= "/dev/null";
-// RJL
+
 }
 
 void MainWindow::switchTranslator(QTranslator& translator, const QString& filename)
@@ -905,10 +895,7 @@ void MainWindow::applyActionX()
   }
 
   QStringList args;
-// RJL
-babelData_.debugLevel_ = 9;
-babelData_.outputFileName_= "/dev/null";
-// end RJL
+
   if (babelData_.debugLevel_ >=0) {
     args << QString("-D%1").arg(babelData_.debugLevel_);
   }
@@ -959,8 +946,7 @@ babelData_.outputFileName_= "/dev/null";
                                            babelData_.outputFileFormat_ : babelData_.outputDeviceFormat_));
     args << "-o";
     args << (formatList_[fidx].getName() + MakeOptions(formatList_[fidx].getOutputOptions()));
-// RJL
-babelData_.outputFileName_= "/dev/null";
+
 
     // output file or device option
     if (outIsFile) {
@@ -1024,7 +1010,7 @@ qDebug() << "useGoogleMaps" << useGoogleMaps << "useLeafletMaps" << useLeafletMa
       } else {
         this->hide();
         if (useGoogleMaps) {
-          GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+          GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
           dlg.show();
           dlg.exec();
         } else if (useLeafletMaps) {
@@ -1033,7 +1019,7 @@ qDebug() << "useGoogleMaps" << useGoogleMaps << "useLeafletMaps" << useLeafletMa
           // This uses MainWindow::generateGeoJsonWithIndices to include GUI-specific properties
           // like 'originalIndex' which are not present in the CLI's geojson writer output.
           geojsonData = generateGeoJsonWithIndices(mapData);
-          LeafletMapDialog dlg(nullptr, mapData, geojsonData, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+          LeafletMapDialog dlg(nullptr, mapData, geojsonData, babelData_.debugLevel_, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
           dlg.show();
           dlg.exec();
         }

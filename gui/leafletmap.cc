@@ -30,8 +30,8 @@
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
-#include <QWebEngineView>
 #include <QWebEngineUrlRequestInterceptor>
+#include <QWebEngineView>
 #include <Qt>
 
 #include <string>
@@ -39,8 +39,8 @@
 
 #include "appname.h"
 #include "gpx.h"
-#include "leafletmap.h"
 #include "latlng.h"
+#include "leafletmap.h"
 #include "markerclicker.h"
 #include "webenginepage.h"
 
