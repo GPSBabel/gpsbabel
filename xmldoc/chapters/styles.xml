@@ -1279,7 +1279,8 @@ IFIELD GMT_TIME,"","%H:%M:%S"
 # Format: Garmin POI
 # Author: Robert Lipe
 # Date: 10/07/2005
-# Reference: https://forums.geocaching.com/GC/index.php?/topic/110641-garmin-streetpilot-csv-format/#entry1752204
+# Reference: https://forums.geocaching.com/GC/index.php?
+#   /topic/110641-garmin-streetpilot-csv-format/#entry1752204
 #
 DESCRIPTION Garmin POI database
 #

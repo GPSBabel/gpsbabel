@@ -65,8 +65,7 @@
                 Use this format when you want GPSBabel to automatically
                 figure out the CSV structure for you.
               </para>
-              <para>Example: <code>Name,Lat,Lon,Description
-                Home,34.000,-118.000,My House</code></para>
+              <para>Example: <code>Name,Lat,Lon,...</code></para>
             </entry>
           </row>
           <row>
