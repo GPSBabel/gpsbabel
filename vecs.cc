@@ -146,7 +146,7 @@ struct Vecs::Impl {
     {
       nullptr,
       "xcsv",
-      "? Character Separated Values",
+      "Character Separated Values",
       nullptr,
       nullptr,
       &fmtfactory<XcsvFormat>

@@ -12,7 +12,12 @@
      the XSL generate an fo bookmark-tree, which fop translates into bookmarks
      in the PDF.   RLP -->
 <xsl:param name="fop1.extensions" select="1" />
-<xsl:param name="title.font.family" select="'sans-serif'" />
+<xsl:param name="title.font.family">sans-serif</xsl:param>
+<xsl:param name="body.font.family">serif</xsl:param>
+<xsl:param name="sans.font.family">sans-serif</xsl:param>
+<xsl:param name="monospace.font.family">monospace</xsl:param>
+<xsl:param name="symbol.font.family">sans-serif</xsl:param>
+<xsl:param name="dingbat.font.family">sans-serif</xsl:param>
 
 <!-- This template formats userinput as a block-level element and adds the
      background and border we use in the HTML doc, for consistency.  RLP -->
