@@ -94,9 +94,8 @@
  *
  * UP is used to remember which way we were going in case we encounter a
  * limbo state.
- *
- *  --  RLP
- */
+  *
+  */
 
 #define OUTSIDE     0
 #define INSIDE      1
