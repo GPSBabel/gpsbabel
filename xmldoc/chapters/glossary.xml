@@ -41,7 +41,7 @@
           Examples include simplifying tracks, nuking certain data
           types, or adding timestamps. For more details, see the
           <link linkend="Advanced_Usage">Advanced Usage section</link>
-          and the <link linkend="Filters">Filters chapter</link>.
+          and the <link linkend="Data_Filters">Filters chapter</link>.
         </para>
       </glossdef>
     </glossentry>
