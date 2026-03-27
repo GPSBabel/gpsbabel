@@ -340,7 +340,7 @@ Additional targets are available for special purposes.
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>gpsbabel.hmtl</term>
+          <term>gpsbabel.html</term>
           <listitem>
             <para>Create the html documentation.</para>
           </listitem>

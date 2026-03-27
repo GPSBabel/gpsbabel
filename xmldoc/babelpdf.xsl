@@ -19,6 +19,7 @@
 <xsl:param name="monospace.font.family">monospace</xsl:param>
 <xsl:param name="symbol.font.family">sans-serif</xsl:param>
 <xsl:param name="dingbat.font.family">sans-serif</xsl:param>
+<xsl:param name="gpsbabel.icon.path" select="gui/images"/>
 
 <!-- Branding Colors -->
 <xsl:variable name="gpsbabel.blue">#0054a6</xsl:variable>
@@ -26,7 +27,7 @@
 <!-- Title Page Customization -->
 <xsl:template name="book.titlepage.before.recto">
   <fo:block text-align="center" space-after="2in" space-before="1in">
-    <fo:external-graphic src="url(gui/images/appicon.png)" content-width="3in" content-height="3in" scaling="uniform"/>
+    <fo:external-graphic src="url({$gpsbabel.icon.path}/appicon.png)" content-width="3in" content-height="3in" scaling="uniform"/>
   </fo:block>
 </xsl:template>
 
