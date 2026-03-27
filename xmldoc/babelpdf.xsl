@@ -2,6 +2,7 @@
 		xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:exsl="http://exslt.org/common"
     xmlns:db="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
 		version="1.0"
                 exclude-result-prefixes="exsl">
 
@@ -22,6 +23,17 @@
 <!-- Branding Colors -->
 <xsl:variable name="gpsbabel.blue">#0054a6</xsl:variable>
 
+<!-- Title Page Customization -->
+<xsl:template name="book.titlepage.before.recto">
+  <fo:block text-align="center" space-after="2in" space-before="1in">
+    <fo:external-graphic src="url(gui/images/appicon.png)" content-width="3in" content-height="3in" scaling="uniform"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:attribute-set name="book.titlepage.recto.style">
+  <xsl:attribute name="text-align">center</xsl:attribute>
+</xsl:attribute-set>
+
 <!-- Title Styling -->
 <xsl:attribute-set name="section.title.properties">
   <xsl:attribute name="color"><xsl:value-of select="$gpsbabel.blue"/></xsl:attribute>
@@ -40,6 +52,13 @@
   <xsl:attribute name="color"><xsl:value-of select="$gpsbabel.blue"/></xsl:attribute>
   <xsl:attribute name="font-weight">bold</xsl:attribute>
 </xsl:attribute-set>
+
+<!-- External Link Styling -->
+<xsl:template match="db:uri|db:link[@xlink:href]">
+  <fo:inline color="{$gpsbabel.blue}" font-weight="bold">
+    <xsl:apply-imports/>
+  </fo:inline>
+</xsl:template>
 
 <!-- Table Styling -->
 <xsl:template name="table.cell.properties">
