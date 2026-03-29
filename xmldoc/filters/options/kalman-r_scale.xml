@@ -4,8 +4,9 @@
   incoming GPS data points?"
 </para>
 <mediaobject>
+  <alt>Effect of r_scale on GPS Track Smoothing</alt>
   <imageobject>
-    <imagedata fileref="xmldoc/images/kalman_r_scale.png" format="PNG" width="100%" scalefit="1"/>
+    <imagedata fileref="kalman_r_scale.png" format="PNG" width="100%" scalefit="1"/>
   </imageobject>
 </mediaobject>
 <para>

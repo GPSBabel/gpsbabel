@@ -90,7 +90,7 @@ Targets:
 check: Run the basic test suite.
 check-vtesto: Run valgrind memcheck.
 gpsbabel: Build the command line tool.
-gpsbabel.hmtl: Create the html documentation.
+gpsbabel.html: Create the html documentation.
 gpsbabel.org: Create documentation for use on www.gpsbabel.org.
 gpsbabel.pdf: Create the pdf documentation.
 gpsbabelfe: Build the graphical user interface.
