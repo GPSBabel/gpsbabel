@@ -7,6 +7,6 @@
   <userinput>gpsbabel -i gpx -f holiday.gpx -o exif,frame=60 -F IMG0784.JPG</userinput>
 </para>
 <para>
-   If the camera time wasn't adjusted, you should use the offset option.  You may also need to use the frame option, or 
+   If the camera time wasn't adjusted, you should use the offset option.  You may also need to use the frame option, or
    the interpolate filter.
 </para>

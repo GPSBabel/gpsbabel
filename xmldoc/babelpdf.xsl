@@ -11,7 +11,7 @@
 
 <!-- turn on extensions for newer versions of fop.  In particular, this makes
      the XSL generate an fo bookmark-tree, which fop translates into bookmarks
-     in the PDF.   RLP -->
+     in the PDF. -->
 <xsl:param name="fop1.extensions" select="1" />
 <xsl:param name="title.font.family">sans-serif</xsl:param>
 <xsl:param name="body.font.family">serif</xsl:param>
@@ -83,7 +83,7 @@
 </xsl:attribute-set>
 
 <!-- This template formats userinput as a block-level element and adds the
-     background and border we use in the HTML doc, for consistency.  RLP -->
+     background and border we use in the HTML doc, for consistency. -->
 <xsl:template match="db:userinput">
   <fo:block background-color="#E5E9EB" padding="4pt"
 		break-after="auto" border="1.5pt solid #cccccc">
@@ -101,7 +101,7 @@
 
 <!-- This template is used to get rid of a lot of warnings we were getting
      from fop due to the fact that it doesn't support table-layout="auto".
-     Auto is apparently the default if no table layout is specified. RLP -->
+     Auto is apparently the default if no table layout is specified. -->
 <xsl:template match="db:simplelist">
   <!-- with no type specified, the default is 'vert' -->
   <xsl:variable name="explicit.table.width">
