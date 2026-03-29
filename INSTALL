@@ -42,10 +42,15 @@ GPSBABEL_WITH_ZLIB:STRING=no|pkgconfig|included*|custom
     set with GPSBABEL_EXTRA_LINK_LIBRARIES and
     GPSBABEL_EXTRA_INCLUDE_DIRECTORIES.
 
-GPSBABEL_MAPPREVIEW=ON*|OFF
-  This options enables the map preview feature.  With the feature disabled
-  QtWebEngine and QtWebEngineWidgets are not used. Note that QtWebKit and
-  QtWebKitWidgets are no longer supported.
+GPSBABEL_GOOGLE_MAPPREVIEW=ON*|OFF
+  This option enables the map preview feature using the google map API.
+  If both this and GPSBABEL_LEAFLET_MAPPREVIEW are disabled then QtWebEngine and
+  QtWebEngineWidgets are not used.
+
+GPSBABEL_LEAFLET_MAPPREVIEW=ON*|OFF
+  This option enables the map preview feature using leaflet.
+  If both this and GPSBABEL_GOOGLE_MAPPREVIEW are disabled then QtWebEngine and
+  QtWebEngineWidgets are not used.
 
 GPSBABEL_EMBED_MAP:BOOL=ON|OFF
   Embed gmapbase.html for map preview.  When using this option gmapbase.html

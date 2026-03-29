@@ -82,7 +82,7 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   noUpgradeMenuLabel->setObjectName("noUpgradeMenuLabel");
   ui_.verticalLayout_5->insertWidget(2, noUpgradeMenuLabel);
 #endif
-#ifdef DISABLE_MAPPREVIEW
+#ifdef DISABLE_GOOGLEMAPPREVIEW
   ui_.mapPreviewCheck->hide();
 
   QLabel* noPreviewLabel = new QLabel(tr("The version does not include the map preview feature."), ui_.privacy_tab);
@@ -96,6 +96,10 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   QLabel* noLeafletPreviewLabel = new QLabel(tr("The version does not include the Leaflet map preview feature."), ui_.privacy_tab);
   noLeafletPreviewLabel->setObjectName("noLeafletPreviewLabel");
   ui_.verticalLayout_5->insertWidget(4, noLeafletPreviewLabel);
+#endif
+
+#if defined(DISABLE_GOOGLEMAPPREVIEW) && defined(DISABLE_LEAFLETMAPPREVIEW)
+  ui_.disableMapPreviewCheck->hide();
 #endif
 
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &Preferences::acceptClicked);
