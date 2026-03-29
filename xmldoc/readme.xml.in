@@ -3,7 +3,7 @@
 [
   <!ENTITY % parts SYSTEM "autogen/_parts.xml">
   %parts;
-  <!ENTITY % chaps SYSTEM "chapters/_chapters.xml">
+  <!ENTITY % chaps SYSTEM "@doc_src_path@/chapters/_chapters.xml">
   %chaps;
 ]
 >

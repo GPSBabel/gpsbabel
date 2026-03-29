@@ -16,6 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Do this after we set up common variables but before creating other
 # variables that will be inherited.
 add_subdirectory(gui)
+add_subdirectory(xmldoc)
 
 # FIXME: When we rearrange the project directory structure everything
 # below here should be in it's own CMakeList.txt
@@ -488,28 +489,4 @@ if(UNIX AND NOT APPLE)
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     VERBATIM
                     USES_TERMINAL)
-endif()
-
-get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if((CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR) AND NOT _isMultiConfig)
-  set(GPSBABEL_WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
-  add_custom_target(gpsbabel.org
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${GPSBABEL_WEB} ${GPSBABEL_DOCVERSION}
-                    DEPENDS gpsbabel gpsbabel.pdf
-                    VERBATIM
-                    USES_TERMINAL)
-
-  add_custom_target(gpsbabel.html
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
-                    DEPENDS gpsbabel
-                    VERBATIM
-                    USES_TERMINAL)
-
-  add_custom_target(gpsbabel.pdf
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
-                    DEPENDS gpsbabel
-                    VERBATIM
-                    USES_TERMINAL)
-else()
-  message(WARNING "Document generation is only supported for in-source builds with single configuration generators.")
 endif()

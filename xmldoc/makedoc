@@ -3,10 +3,14 @@
 use strict;
 use warnings;
 
+use Cwd;
 use File::Basename;
+use Getopt::Long;
 
 my %options;
-my $dir;
+my $sourcedir;
+my $binarydir;
+my $pname;
 my $parts;
 my $formats;
 my $file;
@@ -79,17 +83,17 @@ sub include {
 
     #print $parts qq(<!ENTITY inc_$name2 SYSTEM "../$dir2/$name.xml">\n);
     #print $file "\&inc_$name2;\n";
-    if ( !-e "$dir/$dir2/$name.xml" ) {
-        open my $tmp, '>:encoding(UTF-8)', "$dir/$dir2/$name.xml" or die $!;
+    if ( !-e "$sourcedir/$dir2/$name.xml" ) {
+        open my $tmp, '>:encoding(UTF-8)', "$sourcedir/$dir2/$name.xml" or die $!;
         print $tmp "\n";
         close $tmp;
     }
-    open my $tmp2, '<:encoding(UTF-8)', "$dir/$dir2/$name.xml" or die $!;
-    print $file qq(<!-- BEGIN inclusion of $dir/$dir2/$name.xml -->\n);
+    open my $tmp2, '<:encoding(UTF-8)', "$sourcedir/$dir2/$name.xml" or die $!;
+    print $file qq(<!-- BEGIN inclusion of $sourcedir/$dir2/$name.xml -->\n);
     while (<$tmp2>) {
         print $file $_;
     }
-    print $file qq(<!-- END inclusion of $dir/$dir2/$name.xml -->\n);
+    print $file qq(<!-- END inclusion of $sourcedir/$dir2/$name.xml -->\n);
     close $tmp2;
 }
 
@@ -102,21 +106,27 @@ sub includef {
     print $formats "\&inc_$name2;\n";
 }
 
-$dir = dirname($0);
+$sourcedir = dirname($0);
+$binarydir = getcwd();
+$pname = "./gpsbabel";
 
-qx(mkdir -p $dir/autogen);
+GetOptions ('pname=s' => \$pname,
+            'sourcedir=s' => \$sourcedir,
+            'binarydir=s' => \$binarydir);
+
+qx(mkdir -p "$binarydir/autogen");
 if ( $? != 0 ) {
     die "error creating autogen directory: $?";
 }
-open $parts, '>:encoding(UTF-8)', "$dir/autogen/_parts.xml" or die $!;
+open $parts, '>:encoding(UTF-8)', "$binarydir/autogen/_parts.xml" or die $!;
 print $parts qq(<!-- This document is automatically generated. -->\n);
 print $parts qq(<!ENTITY formats SYSTEM "_formats.xml">\n);
 print $parts qq(<!ENTITY filters SYSTEM "_filters.xml">\n);
 
-open $formats, '>:encoding(UTF-8)', "$dir/autogen/_formats.xml" or die $!;
+open $formats, '>:encoding(UTF-8)', "$binarydir/autogen/_formats.xml" or die $!;
 print $formats qq(<!-- This document is automatically generated. -->\n);
 
-my @formats = qx(./gpsbabel -^3);
+my @formats = qx("$pname" -^3);
 if ( $? != 0 ) {
     die "error running gpsbabel: $?";
 }
@@ -194,7 +204,7 @@ for (@formats) {
             $fmts{$id} = 1;
         }
         includef( 'fmt_' . $id );
-        open $file, '>:encoding(UTF-8)', "$dir/autogen/fmt_$id.xml" or die $!;
+        open $file, '>:encoding(UTF-8)', "$binarydir/autogen/fmt_$id.xml" or die $!;
         print $file <<END;
 <!-- This document is automatically generated. -->
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="fmt_$id">
@@ -241,10 +251,10 @@ if ($going) {
 }
 
 close $formats;
-open $formats, '>:encoding(UTF-8)', "$dir/autogen/_filters.xml" or die $!;
+open $formats, '>:encoding(UTF-8)', "$binarydir/autogen/_filters.xml" or die $!;
 print $formats qq(<!-- This document is automatically generated. -->\n);
 
-my @filters = qx(./gpsbabel -%1);
+my @filters = qx("$pname" -%1);
 if ( $? != 0 ) {
     die "error running gpsbabel: $?";
 }
@@ -277,7 +287,7 @@ END
             close $file;
         }
         includef( 'filter_' . $line[0] );
-        open $file, '>:encoding(UTF-8)', "$dir/autogen/filter_$line[0].xml" or die $!;
+        open $file, '>:encoding(UTF-8)', "$binarydir/autogen/filter_$line[0].xml" or die $!;
         print $file <<END;
 <!-- This document is automatically generated. -->
 <section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="filter_$line[0]">
