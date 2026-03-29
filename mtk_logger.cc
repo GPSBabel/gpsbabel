@@ -734,7 +734,7 @@ void MtkLoggerBase::mtk_csv_init(const QString& csv_fname, unsigned long bitmask
   // can't use gbfopen here - it will gbFatal() if file doesn't exist
   if ((cf = ufopen(csv_fname, "r")) != nullptr) {
     fclose(cf);
-    Warning() << "CSV file " << gbLogCStr(csv_fname) << 
+    Warning() << "CSV file " << gbLogCStr(csv_fname) <<
                  "already exists ! Cowardly refusing to overwrite";
     return;
   }

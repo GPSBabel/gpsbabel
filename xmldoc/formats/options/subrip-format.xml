@@ -52,5 +52,5 @@
 </table>
 <para>
 	Default format (used when option isn't specified) is "%s km/h %e m\n%t %l".
-	Suggested format for bicycle video is "'%s km/h   %h ❤\n      %e m  %c rpm".
+	Suggested format for bicycle video is "'%s km/h   %h bpm\n      %e m  %c rpm".
 </para>

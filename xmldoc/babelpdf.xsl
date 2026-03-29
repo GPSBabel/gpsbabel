@@ -2,6 +2,7 @@
 		xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:exsl="http://exslt.org/common"
     xmlns:db="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
 		version="1.0"
                 exclude-result-prefixes="exsl">
 
@@ -10,14 +11,81 @@
 
 <!-- turn on extensions for newer versions of fop.  In particular, this makes
      the XSL generate an fo bookmark-tree, which fop translates into bookmarks
-     in the PDF.   RLP -->
+     in the PDF. -->
 <xsl:param name="fop1.extensions" select="1" />
+<xsl:param name="title.font.family">sans-serif</xsl:param>
+<xsl:param name="body.font.family">serif</xsl:param>
+<xsl:param name="sans.font.family">sans-serif</xsl:param>
+<xsl:param name="monospace.font.family">monospace</xsl:param>
+<xsl:param name="symbol.font.family">sans-serif</xsl:param>
+<xsl:param name="dingbat.font.family">sans-serif</xsl:param>
+
+<!-- Branding Colors -->
+<xsl:variable name="gpsbabel.blue">#0054a6</xsl:variable>
+
+<!-- Title Page Customization -->
+<xsl:template name="book.titlepage.before.recto">
+  <fo:block text-align="center" space-after="2in" space-before="1in">
+    <fo:external-graphic src="url(gui/images/appicon.png)" content-width="3in" content-height="3in" scaling="uniform"/>
+  </fo:block>
+</xsl:template>
+
+<xsl:attribute-set name="book.titlepage.recto.style">
+  <xsl:attribute name="text-align">center</xsl:attribute>
+</xsl:attribute-set>
+
+<!-- Title Styling -->
+<xsl:attribute-set name="section.title.properties">
+  <xsl:attribute name="color"><xsl:value-of select="$gpsbabel.blue"/></xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="chapter.title.properties">
+  <xsl:attribute name="color"><xsl:value-of select="$gpsbabel.blue"/></xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="component.title.properties">
+  <xsl:attribute name="color"><xsl:value-of select="$gpsbabel.blue"/></xsl:attribute>
+</xsl:attribute-set>
+
+<!-- Link and Xref Styling -->
+<xsl:attribute-set name="xref.properties">
+  <xsl:attribute name="color"><xsl:value-of select="$gpsbabel.blue"/></xsl:attribute>
+  <xsl:attribute name="font-weight">bold</xsl:attribute>
+</xsl:attribute-set>
+
+<!-- External Link Styling -->
+<xsl:template match="db:uri|db:link[@xlink:href]">
+  <fo:inline color="{$gpsbabel.blue}" font-weight="bold">
+    <xsl:apply-imports/>
+  </fo:inline>
+</xsl:template>
+
+<!-- Table Styling -->
+<xsl:template name="table.cell.properties">
+  <xsl:if test="ancestor::db:thead">
+    <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
+  </xsl:if>
+</xsl:template>
+
+<!-- Admonition Styling (Notes, Warnings, etc) -->
+<xsl:attribute-set name="admonition.properties">
+    <xsl:attribute name="border">1pt solid #cccccc</xsl:attribute>
+    <xsl:attribute name="background-color">#f9f9f9</xsl:attribute>
+    <xsl:attribute name="padding">6pt</xsl:attribute>
+    <xsl:attribute name="margin-left">0pt</xsl:attribute>
+    <xsl:attribute name="margin-right">0pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="admonition.title.properties">
+    <xsl:attribute name="color"><xsl:value-of select="$gpsbabel.blue"/></xsl:attribute>
+    <xsl:attribute name="font-weight">bold</xsl:attribute>
+</xsl:attribute-set>
 
 <!-- This template formats userinput as a block-level element and adds the
-     background and border we use in the HTML doc, for consistency.  RLP -->
+     background and border we use in the HTML doc, for consistency. -->
 <xsl:template match="db:userinput">
   <fo:block background-color="#E5E9EB" padding="4pt"
-		break-after="auto" border="1pt dashed #000000">
+		break-after="auto" border="1.5pt solid #cccccc">
     <xsl:call-template name="inline.boldmonoseq"/>
   </fo:block>
 </xsl:template>
@@ -32,7 +100,7 @@
 
 <!-- This template is used to get rid of a lot of warnings we were getting
      from fop due to the fact that it doesn't support table-layout="auto".
-     Auto is apparently the default if no table layout is specified. RLP -->
+     Auto is apparently the default if no table layout is specified. -->
 <xsl:template match="db:simplelist">
   <!-- with no type specified, the default is 'vert' -->
   <xsl:variable name="explicit.table.width">
