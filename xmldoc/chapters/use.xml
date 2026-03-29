@@ -123,24 +123,20 @@ name of a file to be read or written.</para>
         <userinput>gpsbabel -i magellan -f com1 -o geo -F mag.loc</userinput>
       </para>
     </example>
-    <para>Optionally, you may specify
-      <parameter>-s</parameter>
-      in any command line.  This
-         causes the program to ignore any "short" names that may be
-         present in the source data format and synthesize one from the
-         long name.  This is particularly useful if you're writing to
-         a target format that isn't the lowest common denominator but
-         the source data was written for the lowest common
-         denominator.  This is useful for writing data from geocaching.com
-         to a GPS so my waypoints have "real" names instead of
-         the 'GC1234' ones that are optimized for receivers of the lowest
-  common denominator.
-         A geocacher using Linux with a Magellan receiver may thus find commands
-         like this useful.</para>
     <para>
-      <userinput>gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0  </userinput>
+      Optionally, you may specify <parameter>-s</parameter> in any command
+      line. This causes the program to synthesize "smart" names from the
+      source data's long names, ignoring any pre-existing short names. This
+      is particularly useful when writing to devices with limited display
+      capabilities (the "lowest common denominator") while the source data
+      contains rich, descriptive names (e.g., geocaching.com waypoints). By
+      using <parameter>-s</parameter>, waypoints on your GPS can show
+      meaningful names instead of cryptic IDs like 'GC1234'.
     </para>
-    <para>His counterpart on Windows will find this equivalent</para>
+    <para>
+      <userinput>gpsbabel -s -i geo -f geocaching.loc -o magellan -F /dev/ttyS0</userinput>
+    </para>
+    <para>His counterpart on Windows will find this equivalent:</para>
     <para>
       <userinput>gpsbabel -s -i geo -f geocaching.loc -o magellan -F com1</userinput>
     </para>
@@ -479,7 +475,7 @@ merged data to multiple destinations.
       specifying <option>-r</option>, <option>-t</option>, or
       <option>-w</option> is generally only necessary if you
       explicitly wish to <emphasis>restrict</emphasis> the data being
-      processed to *only* routes, tracks, or waypoints respectively,
+      processed to <emphasis>only</emphasis> routes, tracks, or waypoints respectively,
       or when interacting with older serial devices or specific
       formats that require these flags (such as
       <link linkend="fmt_garmin">garmin</link> for tracks/routes).
