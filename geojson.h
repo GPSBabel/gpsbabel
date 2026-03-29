@@ -66,6 +66,9 @@ private:
   void geojson_track_hdr(const route_head* track);
   void geojson_track_disp(const Waypoint* trackpoint) const;
   void geojson_track_tlr(const route_head* unused);
+  void geojson_route_hdr(const route_head* route);
+  void geojson_route_disp(const Waypoint* routepoint) const;
+  void geojson_route_tlr(const route_head* unused);
 
   /* Data Members */
 
@@ -76,6 +79,8 @@ private:
   OptionString desc_opt;
   QJsonObject* track_object = nullptr;
   QJsonArray* track_coords = nullptr;
+  QJsonObject* route_object = nullptr;
+  QJsonArray* route_coords = nullptr;
 
   const QString FEATURE_COLLECTION = QStringLiteral("FeatureCollection");
   const QString FEATURE = QStringLiteral("Feature");

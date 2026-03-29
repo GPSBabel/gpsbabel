@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Leaflet Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"/>
+    <style>
+      #map { height: 100%; width: 100%; }
+      .red-route-point-icon {
+        filter: hue-rotate(200deg) saturate(300%) brightness(70%) contrast(150%); /* Adjust these values to get the desired red shade */
+      }
+    </style>
+  </head>
+  <body style="height: 100%; margin: 0">
+    <div id="map"></div>
+    <script>
+
+      // Global variables that will be shared with C++ generated code
+      var map;
+      var mclicker = {};
+      var greenDotIcon, redDotIcon, routePointIcon;
+      var RTPolyline;
+      var baseMaps;
+      var waypointLayers = {}; // Changed to object
+      var trackLayers = {};    // Changed to object
+      var routesById = {};     // New object for routes by ID
+      var waypointLayerGroup;
+      var trackLayerGroup;
+      var rteGroup;
+      var waypts = {};         // Changed to object
+
+      // Non-Leaflet-dependent helper functions
+      function isFiniteNumber(x) {
+        return Number.isFinite && Number.isFinite(x);
+      }
+      function validLatLng(lat, lng) {
+        return isFiniteNumber(lat) && isFiniteNumber(lng) && lat <= 90 && lat >= -90 && lng <= 180 && lng >= -180;
+      }
+      function clampLatLng(lat, lng) {
+        function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+        return [clamp(lat, -90, 90), clamp(lng, -180, 180)];
+      }
+
+      function MarkerHandler(t, i) {
+        this.type = t;
+        this.number = i;
+      }
+
+      MarkerHandler.prototype.clicked = function () {
+        mclicker.clickedX(this.type, this.number);
+      };
+
+      function attachHandler(object, handler) {
+        object.on("click", function () {
+          // console.log("Object clicked! Type: " + handler.type + ", Index: " + handler.number);
+          handler.clicked();
+        });
+      }
+
+      // Script loading functions
+      function loadScript(src) {
+        return new Promise(function(resolve, reject) {
+          const s = document.createElement("script");
+          s.src = src;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+
+      async function setupWebChannel() {
+        await loadScript("qrc:///qtwebchannel/qwebchannel.js");
+        const channel = await new Promise(function(resolve) {
+          new QWebChannel(qt.webChannelTransport, resolve);
+        });
+        return channel.objects.mclicker;
+      }
+
+      // Main initialization function
+      async function initialize() {
+        map = null; // Explicitly set map to null
+        const webChannelPromise = setupWebChannel();
+        await loadScript("https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js");
+        await loadScript("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js");
+
+        mclicker = await webChannelPromise;
+        var mapContainer = document.getElementById('map');
+        map = L.map(mapContainer, { maxZoom: 19 }).setView([0, 0], 2); // Default view
+
+        waypointLayerGroup = L.markerClusterGroup();
+        trackLayerGroup = L.layerGroup();
+        rteGroup = L.layerGroup();
+        waypts = {}; // Initialize as object
+        waypointLayers = {}; // Initialize as object
+        trackLayers = {};    // Initialize as object
+        routesById = {};     // Initialize as object
+
+        // Add layer groups to the map permanently.
+        waypointLayerGroup.addTo(map);
+        trackLayerGroup.addTo(map);
+        rteGroup.addTo(map);
+
+        // --- Define Leaflet-dependent variables and classes here ---
+        greenDotIcon = L.icon({
+          iconUrl:
+`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFEQAuF1F01CYAAABhSURBVAjXVc07EYNgFAXh7/41WhCAjLigjgBKTDA4SIeDJD4igjqXgvc2p9jZOQE+aqlDgx96YYpNfFEJV9rw9sLjEIlAmguaWxHHVmX7WIsr6V/Q34qTsQgTWsx7IQ14LpGFGBx6omuVAAAAAElFTkSuQmCC`,
+          iconSize: [7, 7],
+          iconAnchor: [4, 4]
+        });
+        redDotIcon = L.icon({
+          iconUrl:
+`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kFEQEfHu83AQcAAABjSURBVAjXVc0xEYNQFETR836NFgQgAxfUCEiJiUwc0GGBOpGACOo8isDks80Wd+5uwIc2eaDDhilY4gQrmnDLB/m9BdIxK/3gq424t9NOT/kfVLyLZhqo8qrBAsG7JeRPDEes/UYQBcqkmIAAAAASUVORK5CYII=`,
+          iconSize: [7, 7],
+          iconAnchor: [4, 4]
+        });
+        // Define a custom red icon for route points using the default Leaflet marker structure
+        // and applying a CSS filter to color it red.
+        routePointIcon = new L.Icon.Default({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+            iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            className: 'red-route-point-icon' // Add a custom class for CSS targeting
+        });
+
+        RTPolyline = L.FeatureGroup.extend({
+          initialize: function(lineLayer, startLatLng, endLatLng, name, clickHandler, parentGroup) {
+            var startMarker = L.marker(startLatLng, {icon: greenDotIcon, title: name});
+            var endMarker = L.marker(endLatLng, {icon: redDotIcon, title: name});
+
+            // Call parent constructor with the layers
+            L.FeatureGroup.prototype.initialize.call(this, [lineLayer, startMarker, endMarker]);
+
+            this.line = lineLayer;
+            this.start = startMarker;
+            this.end = endMarker;
+            this.parentGroup = parentGroup;
+
+            attachHandler(lineLayer, clickHandler);
+            attachHandler(startMarker, clickHandler);
+            attachHandler(endMarker, clickHandler);
+          },
+
+          show: function () {
+            // console.log("RTPolyline.show() called for line: " + this.line);
+            if (this.parentGroup) {
+              this.parentGroup.addLayer(this);
+            } else {
+              this.line.addTo(map);
+              this.start.addTo(map);
+              this.end.addTo(map);
+            }
+          },
+
+          hide: function () {
+            // console.log("RTPolyline.hide() called for line: " + this.line);
+            if (this.parentGroup) {
+              this.parentGroup.removeLayer(this);
+            } else {
+              this.line.remove();
+              this.start.remove();
+              this.end.remove();
+            }
+          }
+        });
+
+        map.whenReady(function() {
+          mclicker.logTimeX("Start renderGeoJson");
+          mclicker.loadedX();
+          mclicker.logTimeX("Done renderGeoJson");
+        });
+      }
+
+      function renderGeoJson(geojsonData) {
+        var bounds = L.latLngBounds();
+
+        // Clear existing layers and groups
+        // Iterate through objects and remove layers
+        for (var key in waypointLayers) {
+          if (waypointLayers.hasOwnProperty(key)) {
+            map.removeLayer(waypointLayers[key]);
+          }
+        }
+        for (var key in trackLayers) {
+          if (trackLayers.hasOwnProperty(key)) {
+            map.removeLayer(trackLayers[key]);
+          }
+        }
+        rteGroup.clearLayers(); // Clear rteGroup
+
+        waypts = {};         // Clear waypts object
+        waypointLayers = {}; // Clear waypointLayers object
+        trackLayers = {};    // Clear trackLayers object
+        routesById = {};     // Clear routesById object
+        waypointLayerGroup.clearLayers();
+        trackLayerGroup.clearLayers();
+
+        // Fix for distorted icons by using Leaflet's default icon
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+          iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+          iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        });
+
+        geojsonData.features.forEach(function(feature) {
+          var originalIndex = feature.properties.originalIndex; // Assuming originalIndex is passed in properties
+          var layer = L.geoJSON(feature, {
+            pointToLayer: function(feature, latlng) {
+              var marker = L.marker(latlng, {
+                title: feature.properties.name || 'Waypoint',
+              });
+              var popupContent = "<b>" + (feature.properties.name || 'N/A') + "</b><br/>";
+              if (feature.properties.description) {
+                popupContent += "Description: " + feature.properties.description + "<br/>";
+              }
+              if (feature.properties.comment) {
+                popupContent += "Comment: " + feature.properties.comment + "<br/>";
+              }
+              marker.bindPopup(popupContent);
+              attachHandler(marker, new MarkerHandler(0, originalIndex)); // Use originalIndex
+              waypts[originalIndex] = marker; // Populate waypts object
+              return marker;
+            },
+            style: function(feature) {
+              var color = (feature.geometry.type === 'LineString') ? '#0000E0' : '#8000B0';
+              return { color: color, weight: 2, opacity: 0.6 };
+            }
+          });
+
+          var featureType = feature.properties.gpsbabel_feature;
+          if (featureType === 'waypoint') {
+            waypointLayers[originalIndex] = layer; // Store by originalIndex
+            waypointLayerGroup.addLayer(layer);
+          } else if (featureType === 'track') {
+            var coords = feature.geometry.coordinates;
+            if (coords.length > 0) {
+              var latlngs = coords
+                .filter(function(c) { return Array.isArray(c) && c.length >= 2 && validLatLng(c[1], c[0]); })
+                .map(function(c) { var cl = clampLatLng(c[1], c[0]); return L.latLng(cl[0], cl[1]); });
+              if (latlngs.length >= 2) {
+                var visibleLine = L.polyline(latlngs, { color: '#0000E0', weight: 2, opacity: 0.6 });
+                var clickLine = L.polyline(latlngs, { opacity: 0, weight: 10 });
+                attachHandler(clickLine, new MarkerHandler(1, originalIndex)); // Type 1 for tracks
+
+                var trackGroup = L.featureGroup([visibleLine, clickLine]);
+                trackLayers[originalIndex] = trackGroup;
+                trackLayerGroup.addLayer(trackGroup);
+                bounds.extend(visibleLine.getBounds());
+              }
+            } // Close if (coords.length > 0)
+          } else if (featureType === 'route') {
+            var routeLayerGroup = L.featureGroup().addTo(rteGroup);
+            var coords = feature.geometry.coordinates;
+            var latlngs = coords
+              .filter(function(c) { return Array.isArray(c) && c.length >= 2 && validLatLng(c[1], c[0]); })
+              .map(function(c) { var cl = clampLatLng(c[1], c[0]); return L.latLng(cl[0], cl[1]); });
+
+            if (latlngs.length >= 2) {
+              var visibleLine = L.polyline(latlngs, { color: '#FF0000', weight: 3, opacity: 0.8, dashArray: '5, 5' });
+              var clickLine = L.polyline(latlngs, { opacity: 0, weight: 10 });
+              attachHandler(clickLine, new MarkerHandler(2, originalIndex)); // Type 2 for routes
+
+              routeLayerGroup.addLayer(visibleLine);
+              routeLayerGroup.addLayer(clickLine);
+              bounds.extend(visibleLine.getBounds());
+            }
+
+            if (feature.properties.routepoints) {
+              feature.properties.routepoints.forEach(function(pt) {
+                if (pt && isFiniteNumber(pt.lat) && isFiniteNumber(pt.lng)) {
+                  var clp = clampLatLng(pt.lat, pt.lng);
+                  var marker = L.marker([clp[0], clp[1]], { icon: routePointIcon, title: pt.name });
+                  var popupContent = "<b>" + (pt.name || 'N/A') + "</b><br/>";
+                  if (pt.description) {
+                    popupContent += "Description: " + pt.description + "<br/>";
+                  }
+                  if (pt.comment) {
+                    popupContent += "Comment: " + pt.comment + "<br/>";
+                  }
+                  marker.bindPopup(popupContent);
+                  attachHandler(marker, new MarkerHandler(3, originalIndex)); // Type 3 for route points
+                  routeLayerGroup.addLayer(marker);
+                }
+              });
+            }
+            routesById[originalIndex] = routeLayerGroup;
+          }
+        });
+
+        var streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        });
+
+        var satelliteMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        });
+
+        baseMaps = {
+          "Street": streetMap,
+          "Satellite": satelliteMap
+        };
+
+        // Restore last chosen base layer, defaulting to Street
+        var lastBase = null;
+        try { lastBase = window.localStorage.getItem('gpsbabel_base_layer'); } catch (e) {}
+        if (lastBase === 'Satellite') {
+          satelliteMap.addTo(map);
+        } else {
+          streetMap.addTo(map);
+        }
+
+        var control = L.control.layers(baseMaps).addTo(map);
+        map.on('baselayerchange', function(e) {
+          try { window.localStorage.setItem('gpsbabel_base_layer', e.name); } catch (ex) {}
+        });
+
+        if (bounds.isValid()) {
+          if (bounds.getNorthEast().equals(bounds.getSouthWest())) {
+            map.setView(bounds.getCenter(), 18);
+          } else {
+            map.fitBounds(bounds);
+          }
+        }
+      }
+
+      function setWaypointVisibility(index, show) {
+        if (waypointLayers[index]) {
+          var targetLayer = waypointLayers[index];
+          if (show) {
+            waypointLayerGroup.addLayer(targetLayer);
+          } else {
+            waypointLayerGroup.removeLayer(targetLayer);
+          }
+        }
+      }
+
+      function setAllWaypointsVisibility(show) {
+        for (var key in waypointLayers) {
+          if (waypointLayers.hasOwnProperty(key)) {
+            setWaypointVisibility(key, show);
+          }
+        }
+      }
+
+      function setTrackVisibility(index, show) {
+        if (trackLayers[index]) {
+          var targetLayer = trackLayers[index];
+          if (show) {
+            trackLayerGroup.addLayer(targetLayer);
+          } else {
+            trackLayerGroup.removeLayer(targetLayer);
+          }
+        }
+      }
+
+      function setAllTracksVisibility(show) {
+        for (var key in trackLayers) {
+          if (trackLayers.hasOwnProperty(key)) {
+            setTrackVisibility(key, show);
+          }
+        }
+      }
+
+      function setRouteVisibility(index, show) {
+        if (routesById[index]) {
+          var targetLayer = routesById[index];
+          if (show) {
+            rteGroup.addLayer(targetLayer);
+          } else {
+            rteGroup.removeLayer(targetLayer);
+          }
+        }
+      }
+
+      function setAllRoutesVisibility(show) {
+        for (var key in routesById) {
+          if (routesById.hasOwnProperty(key)) {
+            setRouteVisibility(key, show);
+          }
+        }
+      }
+
+      initialize();
+
+    </script>
+  </body>
+</html>
