@@ -965,7 +965,6 @@ void MainWindow::applyActionX()
   bool useLeafletMaps = (babelData_.mapPreviewSelection_ == BabelData::LeafletMapsPreview);
 
   QString gpxTempName;
-  qDebug() << "useGoogleMaps" << useGoogleMaps << "useLeafletMaps" << useLeafletMaps;
   if (babelData_.mapPreviewSelection_ != BabelData::NoMapPreview) {
     if (QTemporaryFile gpxTempFile; gpxTempFile.open()) {
       gpxTempName = gpxTempFile.fileName();
