@@ -35,12 +35,12 @@ do
   echo -e "<fake>\n$(cat $file)" > "$file"
   echo "</fake>" >> "$file"
   xsltproc -o "$file".trademark ../tmissue.xsl "$file"
-  head --lines=-1 "$file".trademark | tail --lines=+2 > "$file" 
+  head --lines=-1 "$file".trademark | tail --lines=+2 > "$file"
   rm "$file".trademark
 done
 pushd options
 # for some reason the upgrade wants to insert a ^L character in gpx-urlbase.xml unless we
-sed -e 's|\\|\\\\|g' -i  gpx-urlbase.xml 
+sed -e 's|\\|\\\\|g' -i  gpx-urlbase.xml
 sed -e 's|\\|\\\\|g' -i  subrip-format.xml
 sed -e 's|\\|\\\\|g' -i  exif-filename.xml
 fixem yes

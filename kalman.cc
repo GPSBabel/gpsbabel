@@ -54,7 +54,7 @@ static QDebug operator<< (QDebug debug, const Waypoint& wpt)
 /* Helper to stream a waypoint to FatalMsg() for use with gbFatal().
  * This works best with FatalMsg().noquote().
  * This avoids lost messages due to copies of QDebug created by the out of
- * class streaming output operator for Waypoints! 
+ * class streaming output operator for Waypoints!
  */
 QString Kalman::toString(const Waypoint& wpt)
 {
@@ -533,7 +533,7 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     wpt->latitude= std::round(filtered_nvector.latitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
     wpt->longitude = std::round(filtered_nvector.longitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
     wpt->set_speed(speed);
-   
+
     // Update for next iteration
     last_timestamp_ = current_timestamp;
     last_nvector_ = current_nvector;

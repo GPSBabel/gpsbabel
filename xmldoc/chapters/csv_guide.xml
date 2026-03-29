@@ -55,7 +55,7 @@
             <entry><para><link linkend="fmt_unicsv"><code>unicsv</code></link></para></entry>
             <entry>
               <para>
-                **Recommended for most users.** <code>unicsv</code>
+                <emphasis role="bold">Recommended for most users.</emphasis> <code>unicsv</code>
                 intelligently examines the header row to automatically
                 determine field order and data types. It can read many
                 common GPS fields and preserves additional data during
