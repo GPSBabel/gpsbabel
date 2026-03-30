@@ -54,7 +54,7 @@ AdvDlg::AdvDlg(QWidget* parent,
   // unselectable state that wedges Settings.
 #ifdef DISABLE_LEAFLETMAPPREVIEW
   if (mapPreviewSelection_ == BabelData::LeafletMapsPreview) {
-  #ifdef DISABLE_MAPPREVIEW
+  #ifdef DISABLE_GOOGLEMAPPREVIEW
     mapPreviewSelection_ = BabelData::NoMapPreview;
     ui_.previewDisable->setChecked(true);
   #else
@@ -63,7 +63,7 @@ AdvDlg::AdvDlg(QWidget* parent,
   #endif
   }
 #endif
-#ifdef DISABLE_MAPPREVIEW
+#ifdef DISABLE_GOOGLEMAPPREVIEW
   if (mapPreviewSelection_ == BabelData::GoogleMapsPreview) {
   #ifdef DISABLE_LEAFLETMAPPREVIEW
     mapPreviewSelection_ = BabelData::NoMapPreview;
@@ -83,15 +83,16 @@ AdvDlg::AdvDlg(QWidget* parent,
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &AdvDlg::acceptClicked);
   connect(ui_.buttonBox, &QDialogButtonBox::rejected, this, &AdvDlg::rejectClicked);
 
-#ifdef DISABLE_MAPPREVIEW
+#ifdef DISABLE_GOOGLEMAPPREVIEW
   ui_.previewGmap->hide();
 #endif
 #ifdef DISABLE_LEAFLETMAPPREVIEW
   ui_.previewLeaflet->hide();
 #endif
-#if defined(DISABLE_MAPPREVIEW) && defined(DISABLE_LEAFLETMAPPREVIEW)
+#if defined(DISABLE_GOOGLEMAPPREVIEW) && defined(DISABLE_LEAFLETMAPPREVIEW)
   // If both preview types are disabled, force disable selection.
   ui_.previewDisable->setChecked(true);
+  ui_.previewDisable->hide();
 #endif
 }
 
