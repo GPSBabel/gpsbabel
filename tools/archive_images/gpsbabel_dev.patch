@@ -1,8 +1,8 @@
 diff --git a/gui/babeldata.h b/gui/babeldata.h
-index 50d6d1e3..4a7a5736 100644
+index 1792f7a6..edd00268 100644
 --- a/gui/babeldata.h
 +++ b/gui/babeldata.h
-@@ -152,7 +152,7 @@ public:
+@@ -181,7 +181,7 @@ enum MapPreviewType {
    int runCount_{0};
  
    // Global preferences.
@@ -10,7 +10,7 @@ index 50d6d1e3..4a7a5736 100644
 +  bool startupVersionCheck_{false};
    bool reportStatistics_{true};
    bool upgradeMenuEnabled_{true};
-   bool mapPreviewEnabled_{true};
+   bool allowBetaUpgrades_{false};
 diff --git a/testo.d/serialization.test b/testo.d/serialization.test
 deleted file mode 100644
 index 3eadff6a..00000000
