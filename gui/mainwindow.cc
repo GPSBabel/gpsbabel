@@ -780,14 +780,14 @@ void MainWindow::outputFormatChanged(int comboIdx)
 void MainWindow::inputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui_.inputFormatCombo);
-  if (formatList_[fidx].getInputOptionsRef()->empty()) {
+  if (formatList_[fidx].getInputOptionsRef().empty()) {
     QMessageBox::information
     (nullptr, appName,
      tr("There are no input options for format \"%1\"").arg(formatList_[fidx].getDescription()));
   } else {
     OptionsDlg optionDlg(nullptr,
                          formatList_[fidx].getName(),
-                         *formatList_[fidx].getInputOptionsRef(), // Dereference here
+                         formatList_[fidx].getInputOptionsRef(),
                          formatList_[fidx].getHtml());
     optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList_[fidx].getName()));
     optionDlg.exec();
@@ -799,14 +799,14 @@ void MainWindow::inputOptionButtonClicked()
 void MainWindow::outputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui_.outputFormatCombo);
-  if (formatList_[fidx].getOutputOptionsRef()->empty()) {
+  if (formatList_[fidx].getOutputOptionsRef().empty()) {
     QMessageBox::information
     (nullptr, appName,
      tr("There are no output options for format \"%1\"").arg(formatList_[fidx].getDescription()));
   } else {
     OptionsDlg optionDlg(nullptr,
                          formatList_[fidx].getName(),
-                         *formatList_[fidx].getOutputOptionsRef(), // Dereference here
+                         formatList_[fidx].getOutputOptionsRef(),
                          formatList_[fidx].getHtml());
     optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList_[fidx].getName()));
     optionDlg.exec();
