@@ -232,13 +232,23 @@ GPSBABEL_EXTRA_INCLUDE_DIRECTORIES.</para>
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>GPSBABEL_MAPPREVIEW</term>
+          <term>GPSBABEL_GOOGLE_MAPPREVIEW</term>
           <listitem>
             <para>
-This option enables the map preview feature. With the feature disabled
-QtWebEngine and QtWebEngineWidgets are not used. Note that QtWebKit and
-QtWebKitWidgets are no longer supported.
-	</para>
+This option enables the map preview feature using the google map API.
+If both this and GPSBABEL_LEAFLET_MAPPREVIEW are disabled then QtWebEngine and
+QtWebEngineWidgets are not used.
+          	</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>GPSBABEL_LEAFLET_MAPPREVIEW</term>
+          <listitem>
+            <para>
+This option enables the map preview feature using leaflet.
+If both this and GPSBABEL_GOOGLE_MAPPREVIEW are disabled then QtWebEngine and
+QtWebEngineWidgets are not used.
+            </para>
           </listitem>
         </varlistentry>
         <varlistentry>

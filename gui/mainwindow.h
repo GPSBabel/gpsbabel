@@ -138,7 +138,6 @@ private slots:
   void preferencesActionX();
   void visitWebsiteActionX();
   void resetFormatDefaults();
-  void leafletMapPreviewActionX();
 #ifndef DISABLE_UPGRADE_CHECK
   void upgradeCheckActionX();
 #endif
