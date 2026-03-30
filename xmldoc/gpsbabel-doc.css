@@ -1,0 +1,96 @@
+/* Modern Styles for GPSBabel Documentation */
+
+:root {
+  --gpsbabel-blue: #0054a6;
+  --bg-light: #f9f9f9;
+  --border-color: #cccccc;
+  --header-bg: #f0f0f0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--gpsbabel-blue);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+a {
+  color: var(--gpsbabel-blue);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+th, td {
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+th {
+  background-color: var(--header-bg);
+  font-weight: bold;
+}
+
+/* Admonitions (Notes, Warnings, etc.) */
+.note, .warning, .tip, .important, .caution {
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-light);
+  padding: 15px;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+.note p, .warning p, .tip p, .important p, .caution p {
+  margin: 0;
+}
+
+.note > h3, .warning > h3, .tip > h3, .important > h3, .caution > h3 {
+  margin-top: 0;
+  font-size: 1.1em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Code Blocks */
+pre, code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  background-color: #f4f4f4;
+  border-radius: 3px;
+}
+
+pre {
+  padding: 15px;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+}
+
+code {
+  padding: 0.2em 0.4em;
+}
+
+/* User Input */
+.userinput {
+  background-color: #E5E9EB;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  display: block;
+}

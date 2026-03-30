@@ -102,7 +102,6 @@ static void LegacyLogMessageHandler(QtMsgType type, const QString& msg)
     fprintf(stderr, "%s", qPrintable(message));
   }
   fflush(stderr);
-  
   lineInProgress = !msg.endsWith('\n');
 }
 
