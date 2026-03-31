@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>2024-05-11T14:26:54Z</time>
+  <bounds minlat="34.400668800" minlon="-78.710905600" maxlat="34.974806400" maxlon="-78.364281600"/>
+  <wpt lat="34.974806400" lon="-78.364281600">
+    <ele>39.500</ele>
+    <time>2024-05-11T14:57:17Z</time>
+    <name>WPT-001</name>
+  </wpt>
+  <trk>
+    <name>DG-388 Track</name>
+    <trkseg>
+      <trkpt lat="34.400668800" lon="-78.710905600">
+        <ele>1039.100</ele>
+        <time>2024-05-11T14:26:54Z</time>
+        <course>19.780000</course>
+        <speed>44.133333</speed>
+      </trkpt>
+      <trkpt lat="34.401334400" lon="-78.710624000">
+        <ele>1032.100</ele>
+        <time>2024-05-11T14:26:56Z</time>
+        <course>20.450000</course>
+        <speed>44.550000</speed>
+      </trkpt>
+      <trkpt lat="34.401705600" lon="-78.710457600">
+        <ele>1031.800</ele>
+        <time>2024-05-11T14:26:57Z</time>
+        <course>20.950000</course>
+        <speed>44.605556</speed>
+      </trkpt>
+      <trkpt lat="34.402080000" lon="-78.710278400">
+        <ele>1031.100</ele>
+        <time>2024-05-11T14:26:58Z</time>
+        <course>21.520000</course>
+        <speed>44.575000</speed>
+      </trkpt>
+      <trkpt lat="34.402454400" lon="-78.710105600">
+        <ele>1030.100</ele>
+        <time>2024-05-11T14:26:59Z</time>
+        <course>22.470000</course>
+        <speed>44.744444</speed>
+      </trkpt>
+      <trkpt lat="34.974806400" lon="-78.364281600">
+        <ele>39.500</ele>
+        <time>2024-05-11T14:57:15Z</time>
+        <course>259.070000</course>
+        <speed>0.000000</speed>
+      </trkpt>
+      <trkpt lat="34.974806400" lon="-78.364281600">
+        <ele>39.500</ele>
+        <time>2024-05-11T14:57:16Z</time>
+        <course>259.070000</course>
+        <speed>0.000000</speed>
+      </trkpt>
+      <trkpt lat="34.974806400" lon="-78.364281600">
+        <ele>39.500</ele>
+        <time>2024-05-11T14:57:18Z</time>
+        <course>259.070000</course>
+        <speed>0.000000</speed>
+      </trkpt>
+      <trkpt lat="34.974806400" lon="-78.364281600">
+        <ele>39.500</ele>
+        <time>2024-05-11T14:57:19Z</time>
+        <course>259.070000</course>
+        <speed>0.000000</speed>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
