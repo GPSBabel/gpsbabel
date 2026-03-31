@@ -91,6 +91,7 @@ set(MINIMAL_FMTS
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
   dg-100.cc
+  dg-388.cc
   exif.cc
   garmin_fit.cc
   garmin_gpi.cc

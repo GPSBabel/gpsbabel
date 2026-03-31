@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
-  <time>2024-05-11T14:26:54Z</time>
+  <time>2026-03-31T00:54:28.970Z</time>
   <bounds minlat="34.400668800" minlon="-78.710905600" maxlat="34.974806400" maxlon="-78.364281600"/>
   <wpt lat="34.974806400" lon="-78.364281600">
     <ele>39.500</ele>
     <time>2024-05-11T14:57:17Z</time>
     <name>WPT-001</name>
+    <cmt>WPT-001</cmt>
+    <desc>WPT-001</desc>
   </wpt>
   <trk>
     <name>DG-388 Track</name>
@@ -13,55 +15,55 @@
       <trkpt lat="34.400668800" lon="-78.710905600">
         <ele>1039.100</ele>
         <time>2024-05-11T14:26:54Z</time>
-        <course>19.780000</course>
-        <speed>44.133333</speed>
+        <course>19.780001</course>
+        <speed>44.133335</speed>
       </trkpt>
       <trkpt lat="34.401334400" lon="-78.710624000">
         <ele>1032.100</ele>
         <time>2024-05-11T14:26:56Z</time>
-        <course>20.450000</course>
-        <speed>44.550000</speed>
+        <course>20.450001</course>
+        <speed>44.549999</speed>
       </trkpt>
       <trkpt lat="34.401705600" lon="-78.710457600">
         <ele>1031.800</ele>
         <time>2024-05-11T14:26:57Z</time>
-        <course>20.950000</course>
+        <course>20.950001</course>
         <speed>44.605556</speed>
       </trkpt>
       <trkpt lat="34.402080000" lon="-78.710278400">
         <ele>1031.100</ele>
         <time>2024-05-11T14:26:58Z</time>
         <course>21.520000</course>
-        <speed>44.575000</speed>
+        <speed>44.575001</speed>
       </trkpt>
       <trkpt lat="34.402454400" lon="-78.710105600">
         <ele>1030.100</ele>
         <time>2024-05-11T14:26:59Z</time>
-        <course>22.470000</course>
-        <speed>44.744444</speed>
+        <course>22.469999</course>
+        <speed>44.744446</speed>
       </trkpt>
       <trkpt lat="34.974806400" lon="-78.364281600">
         <ele>39.500</ele>
         <time>2024-05-11T14:57:15Z</time>
-        <course>259.070000</course>
+        <course>259.070007</course>
         <speed>0.000000</speed>
       </trkpt>
       <trkpt lat="34.974806400" lon="-78.364281600">
         <ele>39.500</ele>
         <time>2024-05-11T14:57:16Z</time>
-        <course>259.070000</course>
+        <course>259.070007</course>
         <speed>0.000000</speed>
       </trkpt>
       <trkpt lat="34.974806400" lon="-78.364281600">
         <ele>39.500</ele>
         <time>2024-05-11T14:57:18Z</time>
-        <course>259.070000</course>
+        <course>259.070007</course>
         <speed>0.000000</speed>
       </trkpt>
       <trkpt lat="34.974806400" lon="-78.364281600">
         <ele>39.500</ele>
         <time>2024-05-11T14:57:19Z</time>
-        <course>259.070000</course>
+        <course>259.070007</course>
         <speed>0.000000</speed>
       </trkpt>
     </trkseg>

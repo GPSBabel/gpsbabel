@@ -41,6 +41,7 @@
 
 #include "defs.h"              // for arglist_t, CSTR, gbFatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, case_ignore_strcmp, gpsdata_type, gbWarning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
+#include "dg-388.h"            // for Dg388Format
 #include "exif.h"              // for ExifFormat
 #include "format.h"            // for Format
 #include "garmin.h"            // for GarminFormat
@@ -128,6 +129,7 @@ struct Vecs::Impl {
   Dg100FileFormat dg100_ffmt;
   Dg200SerialFormat dg200_fmt;
   Dg200FileFormat dg200_ffmt;
+  Dg388Format dg388_fmt;
   OsmFormat osm_fmt;
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
@@ -364,6 +366,13 @@ struct Vecs::Impl {
       "dg-200-bin",
       "GlobalSat DG-200 Binary File",
       nullptr,
+      nullptr,
+    },
+    {
+      &dg388_fmt,
+      "dg-388",
+      "GlobalSat DG-388 Binary File",
+      "gpl",
       nullptr,
     },
     {
