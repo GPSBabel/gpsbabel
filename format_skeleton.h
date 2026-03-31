@@ -33,11 +33,14 @@ public:
 
   /* Member Functions */
 
+// This is needed only if you have command line options for your
+// format.
   QVector<arglist_t>* get_args() override
   {
     return &format_skeleton_args;
   }
 
+// This is required.
   ff_type get_type() const override
   {
     return ff_type_file;
@@ -46,6 +49,7 @@ public:
 // capabilities below means: we can only read and write waypoints
 // please change this depending on your new module
 
+// This is required.
   QVector<ff_cap> get_cap() const override
   {
     return {
@@ -55,6 +59,8 @@ public:
     };
   }
 
+// These are all optional, but you will need at least one of them
+// to do anything.
   void rd_init(const QString& fname) override;
   void read() override;
   void rd_deinit() override;
