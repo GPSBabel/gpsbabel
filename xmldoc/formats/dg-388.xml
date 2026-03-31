@@ -1,29 +1,23 @@
+<para>Read-only support for <trademark>GlobalSat DG-388</trademark> GPS data logger .gpl binary track log files.</para>
 <para>
-  The GlobalSat DG-388 is a USB mass-storage GPS data logger built around the
-  Airoha AG3335M multi-GNSS chipset.  It records track logs to its internal
-  flash memory as .gpl files containing fixed 28-byte binary records with no
-  file header.
+The DG-388 is a USB mass-storage GPS data logger built around the
+Airoha AG3335M multi-GNSS chipset.  It records track logs to its internal
+flash memory as .gpl files containing fixed 28-byte binary records with no
+file header.
 </para>
 <para>
-  Each record stores date, time (UTC), latitude, longitude, altitude,
-  speed, heading, and a record-type flag.  Coordinates are stored as
-  signed 32-bit integers in units of 1e-7 degrees (the same convention
-  used by Garmin FIT files).  Altitude is in decimeters, speed in
-  hundredths of km/h, and heading in hundredths of degrees.
+Each record stores date, time (UTC), latitude, longitude, altitude,
+speed, heading, and a record-type flag.  The record-type flag distinguishes
+automatic track log entries (flag=2) from manual waypoints recorded by
+pressing the device's button (flag=3).  Manual waypoints have no name field;
+GPSBabel assigns sequential names (WPT-001, WPT-002, etc.).
 </para>
+<example xml:id="dg-388-read">
+  <title>Command showing DG-388 .gpl to GPX conversion</title>
+  <para><userinput>gpsbabel -i dg-388 -f tracklog.gpl -o gpx -F output.gpx</userinput></para>
+</example>
 <para>
-  The record-type flag distinguishes automatic track log entries (flag=2)
-  from manual waypoints recorded by pressing the device's button (flag=3).
-  Manual waypoints have no name field; GPSBabel assigns sequential names
-  (WPT-001, WPT-002, etc.).
-</para>
-<para>
-  This format is read-only.  The DG-388 presents its flash storage as a
-  standard USB mass-storage device, so .gpl files can be copied directly
-  from the device.  The device can also output live NMEA sentences at
-  4800 baud via its USB-serial interface, which can be read using the
-  NMEA format with a serial connection.
-</para>
-<para>
-  This format has no configurable options.
+The DG-388 presents its flash storage as a standard USB mass-storage device,
+so .gpl files can be copied directly.  The device can also output live NMEA
+sentences at 4800 baud via its USB-serial interface.
 </para>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
-  <time>2026-03-31T00:54:28.970Z</time>
+  <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="34.400668800" minlon="-78.710905600" maxlat="34.974806400" maxlon="-78.364281600"/>
   <wpt lat="34.974806400" lon="-78.364281600">
     <ele>39.500</ele>

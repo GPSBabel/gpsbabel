@@ -3,7 +3,7 @@
     Support for GlobalSat DG-388 .gpl binary track log files.
 
     Copyright (C) 2026 Jack Irby, jbirby@gmail.com
-    Copyright (C) 2001-2026 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2026 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,15 +26,18 @@
 
 #include <cstdint>       // for uint8_t, uint16_t, int32_t
 
+#include <QChar>         // for QChar
 #include <QDate>         // for QDate
 #include <QDateTime>     // for QDateTime
+#include <QLatin1Char>   // for QLatin1Char
 #include <QString>       // for QString
+#include <QStringLiteral> // for QStringLiteral
 #include <QTime>         // for QTime
-#include <QTimeZone>     // for QTimeZone
 
 #include "defs.h"        // for Waypoint, route_head, waypt_add,
                          //     track_add_head, track_add_wpt,
-                         //     le_read32, le_readu16, KPH_TO_MPS
+                         //     le_read32, le_readu16, KPH_TO_MPS,
+                         //     QtUTC
 
 
 void
@@ -54,11 +57,11 @@ Dg388Format::rd_deinit()
  * Validate a 28-byte record buffer.
  *
  * Rejects uninitialized flash (all zeros or garbage) by checking that
- * the date is in a plausible GPS-era range, the time is a valid HMS
- * triple, and coordinates fall within valid bounds.
+ * the date and time fields form a valid QDateTime and that coordinates
+ * fall within valid bounds.
  */
 bool
-Dg388Format::is_valid_record(const uint8_t* buf) const
+Dg388Format::is_valid_record(const uint8_t* buf)
 {
   int32_t date_int = le_read32(buf + 0);
   int32_t time_int = le_read32(buf + 4);
@@ -70,25 +73,22 @@ Dg388Format::is_valid_record(const uint8_t* buf) const
     return false;
   }
 
-  /* Date: YYYYMMDD, must be in 2000-2099 range */
-  int year  = date_int / 10000;
-  int month = (date_int / 100) % 100;
-  int day   = date_int % 100;
-  if (year < 2000 || year > 2099 ||
-      month < 1 || month > 12 ||
-      day < 1 || day > 31) {
-    return false;
-  }
-
-  /* Time: HHMMSS */
+  /* Validate date and time via QDateTime */
+  int year   = date_int / 10000;
+  int month  = (date_int / 100) % 100;
+  int day    = date_int % 100;
   int hour   = time_int / 10000;
   int minute = (time_int / 100) % 100;
   int second = time_int % 100;
-  if (hour > 23 || minute > 59 || second > 59) {
+
+  QDate date(year, month, day);
+  QTime time(hour, minute, second);
+  QDateTime dt(date, time, QtUTC);
+  if (!dt.isValid()) {
     return false;
   }
 
-  /* Coordinates: 1e-7 degrees, ±90 lat, ±180 lon */
+  /* Coordinates: 1e-7 degrees, +/-90 lat, +/-180 lon */
   if (lat_raw < -900000000 || lat_raw > 900000000) {
     return false;
   }
@@ -104,7 +104,7 @@ Dg388Format::is_valid_record(const uint8_t* buf) const
  * Caller must have validated the record with is_valid_record() first.
  */
 Waypoint*
-Dg388Format::record_to_waypoint(const uint8_t* buf) const
+Dg388Format::record_to_waypoint(const uint8_t* buf)
 {
   int32_t date_int    = le_read32(buf + 0);
   int32_t time_int    = le_read32(buf + 4);
@@ -124,7 +124,7 @@ Dg388Format::record_to_waypoint(const uint8_t* buf) const
 
   QDate date(year, month, day);
   QTime time(hour, minute, second);
-  QDateTime dt(date, time, QTimeZone::utc());
+  QDateTime dt(date, time, QtUTC);
 
   auto* wpt = new Waypoint;
 

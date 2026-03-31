@@ -19,7 +19,7 @@
       Offset 26-27: uint16  Record flag 2=auto log, 3=manual waypoint
 
     Copyright (C) 2026 Jack Irby, jbirby@gmail.com
-    Copyright (C) 2001-2026 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2026 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,22 +40,19 @@
 #ifndef DG388_H_INCLUDED_
 #define DG388_H_INCLUDED_
 
-#include <QDateTime>     // for QDateTime
+#include <cstdint>       // for uint8_t, uint16_t
+
 #include <QString>       // for QString
-#include <QTimeZone>     // for QTimeZone
 #include <QVector>       // for QVector
 
-#include "defs.h"        // for arglist_t, ff_cap, ff_type, route_head, Waypoint
+#include "defs.h"        // for ff_cap, ff_type, Waypoint
 #include "format.h"      // for Format
 #include "gbfile.h"      // for gbfile
 
 class Dg388Format : public Format
 {
 public:
-  QVector<arglist_t>* get_args() override
-  {
-    return &dg388_args;
-  }
+  using Format::Format;
 
   ff_type get_type() const override
   {
@@ -82,14 +79,11 @@ private:
   static constexpr uint16_t FLAG_WAYPOINT = 3;
 
   /* Helpers */
-  bool is_valid_record(const uint8_t* buf) const;
-  Waypoint* record_to_waypoint(const uint8_t* buf) const;
+  static bool is_valid_record(const uint8_t* buf);
+  static Waypoint* record_to_waypoint(const uint8_t* buf);
 
   /* State */
   gbfile* fin{nullptr};
-
-  /* No user-configurable options for this format */
-  QVector<arglist_t> dg388_args = {};
 };
 
 #endif // DG388_H_INCLUDED_
