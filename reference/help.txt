@@ -172,6 +172,7 @@ File Types (-i and -o options):
 	dg-200                GlobalSat DG-200 Download
 	  erase                 (0/1) Erase device data after download
 	  erase_only            (0/1) Only erase device data, do not download anything
+	dg-388                GlobalSat DG-388 Binary File
 	globalsat             GlobalSat GH625XT GPS training watch
 	  showlist              (0/1) list tracks
 	  dump-file             Dump raw data to this file
