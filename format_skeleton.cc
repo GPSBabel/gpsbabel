@@ -119,6 +119,20 @@ void FormatSkeletonFormat::write()
 // waypt_disp_all(waypt)
 // route_disp_all(head, tail, rtept);
 // track_disp_all(head, tail, trkpt);
+// You can use lambdas to connect to non-static member functions.
+// For example, if track_hdr, track_tlr, and track_disp
+// are non-static member functions of your format, you can utilize them
+// like this:
+//  auto track_hdr_lambda = [this](const route_head* rte)->void {
+//    track_hdr(rte);
+//  };
+//  auto track_tlr_lambda = [this](const route_head* rte)->void {
+//    track_tlr(rte);
+//  };
+//  auto track_disp_lambda = [this](const Waypoint* waypointp)->void {
+//    track_disp(waypointp);
+//  };
+//  track_disp_all(track_hdr_lambda, track_tlr_lambda, track_disp_lambda);
 }
 
 void
