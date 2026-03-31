@@ -4,13 +4,16 @@
 
     Steps to create a new format.
 
-    1) Copy this file to <your_format_name>.c
+    1) Copy format_skeleton.h, format_skeleton.cc to <your_format_name>.h,
+       <your_format_name>.cc
     2) Rename all format_skeleton tokens to <your_format_name>.
     3) Replace the fictional name and address in the Copyright section below.
        ** As your work is likely built on the work of others, please retain
        the original line. **
-    4) Create a new section in vecs.c.
-    5) Add compilation instructions to Makefile.
+    4) Create a new entry in vec_list in vecs.cc. You are strongly encouraged to use
+       a dynamic format, i.e. one that uses &fmtfactory<FormatSkeletonFormat>.
+       Add the include for your .h file.
+    5) Add entries to SOURCES, HEADERS and TESTS in CMakeLists.txt
     6) Add sample files (it's better when they're created by the "real"
        application and not our own output) to reference/ along with
        files in a well supported (preferably non-binary) format and
@@ -36,37 +39,28 @@
 
  */
 
+#include "format_skeleton.h"
+
+#include <QString>
+
 #include "defs.h"
 
-
-// Any arg in this list will appear in command line help and will be
-// populated for you.
-// Values for ARGTYPE_xxx can be found in defs.h and are used to
-// select the type of option.
-static
-QVector<arglist_t> format_skeleton_args = {
-// {"foo", &fooopt, "The text of the foo option in help",
-//   "default", ARGYTPE_STRING, ARG_NOMINMAX} ,
-};
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-format_skeleton_rd_init(const char* fname)
+void FormatSkeletonFormat::rd_init(const QString& fname)
 {
 //	fin = gbfopen(fname, "r");
 }
 
-static void
-format_skeleton_rd_deinit()
+void FormatSkeletonFormat::rd_deinit()
 {
 //	gbfclose(fin);
 }
 
-static void
-format_skeleton_read()
+void FormatSkeletonFormat::read()
 {
 //	your special code to extract waypoint, route and track
 //	information from gbfile "fin"
@@ -100,20 +94,17 @@ format_skeleton_read()
 //
 }
 
-static void
-format_skeleton_wr_init(const char* fname)
+void FormatSkeletonFormat::wr_init(const QString& fname)
 {
 //	fout = gbfopen(fname, "w");
 }
 
-static void
-format_skeleton_wr_deinit()
+void FormatSkeletonFormat::wr_deinit()
 {
 //	gbfclose(fout);
 }
 
-static void
-format_skeleton_write()
+void FormatSkeletonFormat::write()
 {
 // Here is how you register callbacks for all waypoints, routes, tracks.
 // waypt_disp_all(waypt)
@@ -121,32 +112,7 @@ format_skeleton_write()
 // track_disp_all(head, tail, trkpt);
 }
 
-static void
-format_skeleton_exit(void)		/* optional */
+void
+FormatSkeletonFormat::exit(void)		/* optional */
 {
 }
-
-/**************************************************************************/
-
-// capabilities below means: we can only read and write waypoints
-// please change this depending on your new module
-
-ff_vecs_t format_skeleton_vecs = {
-  ff_type_file,
-  {
-    (ff_cap)(ff_cap_read | ff_cap_write) 	/* waypoints */,
-    ff_cap_none 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  format_skeleton_rd_init,
-  format_skeleton_wr_init,
-  format_skeleton_rd_deinit,
-  format_skeleton_wr_deinit,
-  format_skeleton_read,
-  format_skeleton_write,
-  format_skeleton_exit,
-  &format_skeleton_args,
-  NULL_POS_OPS // Unless you do realtime positioning
-
-};
-/**************************************************************************/
