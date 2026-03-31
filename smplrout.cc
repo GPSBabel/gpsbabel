@@ -21,7 +21,7 @@
 
 /* The following comments are from an email I wrote to Paul Fox in November
  * 2005 in an attempt to explain how the cross track error minimization method
- * works  (RLP 2005):
+ * works:
  *
  * It's pretty simple, really: for each triplet of vertices A-B-C, we compute
  * how much cross-track error we'd introduce by going straight from A to C

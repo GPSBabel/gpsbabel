@@ -40,33 +40,7 @@
 //#define DEBUG_JS_GENERATION
 
 
-class MarkerClicker: public QObject
-{
-  Q_OBJECT
-
-public:
-  MarkerClicker(QObject* parent): QObject(parent) {}
-
-public slots:
-  void clickedX(int t, int i)
-  {
-    emit markerClicked(t, i);
-  }
-  void logTimeX(const QString& s)
-  {
-    emit logTime(s);
-  }
-  void loadedX()
-  {
-    emit loadFinished(true);
-  }
-
-signals:
-  void markerClicked(int t, int i);
-  void logTime(const QString& s);
-  void loadFinished(bool b);
-};
-
+#include "markerclicker.h"                  // for MarkerClicker
 
 class Map : public QWebEngineView
 {

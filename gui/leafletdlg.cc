@@ -1,13 +1,9 @@
-// -*- C++ -*-
-// $Id: gmapdlg.cpp,v 1.3 2009-11-02 20:38:02 robertl Exp $
-//------------------------------------------------------------------------
 //
-//  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
-//
-//  This program is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU General Public License as
-//  published by the Free Software Foundation; either version 2 of the
-//  License, or (at your option) any later version.
+//  Copyright (C) 2025  Robert Lipe
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,42 +12,45 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
-//  USA.
-//
-//------------------------------------------------------------------------
+//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+// -*- C++ -*
 
-#include "gmapdlg.h"
-#include <QAbstractItemView>    // for QAbstractItemView
-#include <QDateTime>            // for QDateTime, operator<, operator>
-#include <QDebug>               // for QDebug
-#include <QFrame>               // for QFrame
-#include <QHBoxLayout>          // for QHBoxLayout
-#include <QHeaderView>          // for QHeaderView
-#include <QItemSelectionModel>  // for QItemSelectionModel
-#include <QList>                // for QList
-#include <QMenu>                // for QMenu
-#include <QModelIndexList>      // for QModelIndexList
-#include <QStandardItemModel>   // for QStandardItemModel
-#include <QTreeView>            // for QTreeView
-#include <Qt>                   // for CheckState, ContextMenuPolicy
-#include <QtGlobal>             // for qDebug
-#include "appname.h"            // for appName
-#include "gpx.h"                // for GpxWaypoint, GpxTrack, GpxRoute, Gpx, GpxItem, GpxTrackPoint, GpxTrackSegment
-#include "latlng.h"             // for LatLn
+#include <QAbstractItemView>
+#include <QDateTime>
+#include <QDebug>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QItemSelectionModel>
+#include <QList>
+#include <QMenu>
+#include <QMetaObject>
+#include <QModelIndexList>
+#include <QStandardItemModel>
+#include <QTreeView>
+#include <Qt>
+#include <QtGlobal>
+#include "appname.h"
+#include "gpx.h"
+#include "latlng.h"
+#include "leafletdlg.h"
+#include "leafletmap.h"
+#include "ui_leafletdlg.h"
 
 //------------------------------------------------------------------------
 class StandardItem: public QStandardItem
 {
 public:
-  StandardItem(const QString& text): QStandardItem(text)
+  StandardItem(const QString& text) :
+    QStandardItem(text)
   {
     this->setEditable(false);
   }
 };
 
 //------------------------------------------------------------------------
-QString GMapDialog::formatLength(double l)
+QString
+LeafletMapDialog::formatLength(double l)
 {
   double metricLength = l;
   QString metricUnit = tr("meters");
@@ -78,7 +77,8 @@ QString GMapDialog::formatLength(double l)
 
 }
 //------------------------------------------------------------------------
-void GMapDialog::appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt)
+void
+LeafletMapDialog::appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt)
 {
   it->appendRow(new StandardItem(tr("Lat: %1").arg(wpt.getLocation().lat(), 0, 'f', 7)));
   it->appendRow(new StandardItem(tr("Lng: %1").arg(wpt.getLocation().lng(), 0, 'f', 7)));
@@ -95,7 +95,8 @@ void GMapDialog::appendWaypointInfo(QStandardItem* it, const GpxWaypoint& wpt)
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::appendTrackInfo(QStandardItem* it, const GpxTrack& trk)
+void
+LeafletMapDialog::appendTrackInfo(QStandardItem* it, const GpxTrack& trk)
 {
   QDateTime startTime;
   QDateTime stopTime;
@@ -135,86 +136,139 @@ void GMapDialog::appendTrackInfo(QStandardItem* it, const GpxTrack& trk)
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::appendRouteInfo(QStandardItem* it, const GpxRoute& rte)
+void
+LeafletMapDialog::appendRouteInfo(QStandardItem* it, const GpxRoute& rte)
 {
   it->appendRow(new StandardItem(formatLength(rte.length())));
 }
 
 //------------------------------------------------------------------------
-GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, int debugLevel, QPlainTextEdit* te): QDialog(parent), debugLevel_(debugLevel), gpx_(mapData)
+LeafletMapDialog::LeafletMapDialog(QWidget* parent,
+                                   const Gpx& mapData, const QString& geojsonData, int debugLevel, QPlainTextEdit* te) :
+  QDialog(parent),
+  debugLevel_(debugLevel),
+  gpx_(mapData)
 {
   ui_.setupUi(this);
-  this->setWindowTitle(QString(appName) + " " + QString("Google Maps"));
+  this->setWindowTitle(QString(appName) + " " + QString("Leaflet Maps"));
 
-  mapWidget_ = new Map(this, gpx_, te);
+  mapWidget_ = new LeafletMap(this, gpx_, geojsonData, te);
   auto* lay = new QHBoxLayout(ui_.frame);
   lay->setContentsMargins(0, 0, 0, 0);
   lay->addWidget(mapWidget_);
 
+
   model_ = new QStandardItemModel(this);
+  model_->blockSignals(true);
 
   wptItem_ = new StandardItem(tr("Waypoints"));
   wptItem_->setCheckable(true);
-  wptItem_->setCheckState(Qt::Checked);
   model_->appendRow(wptItem_);
+  int waypointIdx = 0;
   for (const auto& wpt : gpx_.getWaypoints()) {
     QStandardItem* it = new StandardItem(wpt.getName());
+    it->setData(waypointIdx, OriginalIndexRole);
     wptItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
     appendWaypointInfo(it, wpt);
+    waypointIdx++;
   }
 
   trkItem_ = new StandardItem(tr("Tracks"));
   trkItem_->setCheckable(true);
-  trkItem_->setCheckState(Qt::Checked);
   model_->appendRow(trkItem_);
+  int trackIdx = 0;
   for (const auto& trk : gpx_.getTracks()) {
     QStandardItem* it = new StandardItem(trk.getName());
+    it->setData(trackIdx, OriginalIndexRole);
     trkItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
     appendTrackInfo(it, trk);
+    trackIdx++;
   }
 
   rteItem_ = new StandardItem(tr("Routes"));
   rteItem_->setCheckable(true);
   rteItem_->setCheckState(Qt::Checked);
   model_->appendRow(rteItem_);
+  int routeIdx = 0;
   for (const auto& rte : gpx_.getRoutes()) {
     QStandardItem* it = new StandardItem(rte.getName());
+    it->setData(routeIdx, OriginalIndexRole);
     rteItem_->appendRow(it);
     it->setCheckable(true);
     it->setCheckState(Qt::Checked);
     appendRouteInfo(it, rte);
+    routeIdx++;
   }
+  model_->blockSignals(false);
+
 
   ui_.treeView->header()->hide();
   ui_.treeView->setModel(model_);
   ui_.treeView->setExpandsOnDoubleClick(false);
   connect(model_, &QStandardItemModel::itemChanged,
-          this, &GMapDialog::itemChangedX);
-  connect(mapWidget_, &Map::waypointClicked, this, [this](int i)->void {
-    itemClickedX(wptItem_->child(i));
+          this, &LeafletMapDialog::itemChangedX);
+  connect(mapWidget_, &LeafletMap::waypointClicked, this, [this](int i)->void {
+    QStandardItem* item = wptItem_->child(i);
+    if (item) itemClickedX(item);
   });
-  connect(mapWidget_, &Map::routeClicked, this, [this](int i)->void {
-    itemClickedX(rteItem_->child(i));
+  connect(mapWidget_, &LeafletMap::routeClicked, this, [this](int i)->void {
+    QStandardItem* item = rteItem_->child(i);
+    if (item) itemClickedX(item);
   });
-  connect(mapWidget_, &Map::trackClicked, this, [this](int i)->void {
-    itemClickedX(trkItem_->child(i));
+  connect(mapWidget_, &LeafletMap::routePointClicked, this, &LeafletMapDialog::routePointClicked);
+  connect(mapWidget_, &LeafletMap::trackClicked, this, [this](int i)->void {
+    QStandardItem* item = trkItem_->child(i);
+    if (item) itemClickedX(item);
   });
   connect(ui_.treeView, &QAbstractItemView::doubleClicked,
-          this, &GMapDialog::treeDoubleClicked);
+          this, &LeafletMapDialog::treeDoubleClicked);
   connect(ui_.treeView->selectionModel(), &QItemSelectionModel::selectionChanged,
-          this, &GMapDialog::selectionChangedX);
+          this, &LeafletMapDialog::selectionChangedX);
 
   ui_.treeView->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui_.treeView, &QWidget::customContextMenuRequested,
-          this, &GMapDialog::showContextMenu);
+          this, &LeafletMapDialog::showContextMenu);
+  connect(mapWidget_, &LeafletMap::mapRendered, this, &LeafletMapDialog::onMapLoadedAndRendered);
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::trace(const QString& label, const QStandardItem* it)
+void
+LeafletMapDialog::onMapLoadedAndRendered()
+{
+
+  model_->blockSignals(true);
+  mapWidget_->setAllWaypointsVisibility(true);
+  mapWidget_->setAllTracksVisibility(true);
+  mapWidget_->setAllRoutesVisibility(true);
+  model_->blockSignals(false);
+  // Explicitly set check states after map visibility is handled
+  wptItem_->setCheckState(Qt::Checked);
+  trkItem_->setCheckState(Qt::Checked);
+  rteItem_->setCheckState(Qt::Checked);
+  ui_.treeView->update(wptItem_->index());
+  ui_.treeView->update(trkItem_->index());
+  ui_.treeView->update(rteItem_->index());
+}
+
+void LeafletMapDialog::routePointClicked(int i)
+{
+  QStandardItem* item = rteItem_->child(i);
+  if (item) itemClickedX(item);
+}
+
+void LeafletMapDialog::trackClicked(int i)
+{
+  QStandardItem* item = trkItem_->child(i);
+  if (item) itemClickedX(item);
+}
+
+//------------------------------------------------------------------------
+void
+LeafletMapDialog::trace(const QString& label, const QStandardItem* it)
 {
   if (debugLevel_ > 0) {
     QDebug qdb(QtDebugMsg);
@@ -233,25 +287,28 @@ void GMapDialog::trace(const QString& label, const QStandardItem* it)
     }
   }
 }
-  
+
 //------------------------------------------------------------------------
-void GMapDialog::showHideChild(const QStandardItem* child)
+void
+LeafletMapDialog::showHideChild(const QStandardItem* child)
 {
+
   const QStandardItem* top = child->parent();
-  bool showTop = (top->checkState() == Qt::Checked);
+  bool showTop = (top->checkState() == Qt::Checked || top->checkState() == Qt::PartiallyChecked);
   bool show = showTop && (child->checkState() == Qt::Checked);
-  int row = child->row();
+  int originalIndex = child->data(OriginalIndexRole).toInt();
   if (top == wptItem_) {
-    mapWidget_->setWaypointVisibility(row, show);
+    mapWidget_->setWaypointVisibility(originalIndex, show);
   } else if (top == trkItem_) {
-    mapWidget_->setTrackVisibility(row, show);
+    mapWidget_->setTrackVisibility(originalIndex, show);
   } else if (top == rteItem_) {
-    mapWidget_->setRouteVisibility(row, show);
+    mapWidget_->setRouteVisibility(originalIndex, show);
   }
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::showHideChildren(const QStandardItem* top)
+void
+LeafletMapDialog::showHideChildren(const QStandardItem* top)
 {
   for (int row = 0; row < top->rowCount(); ++row) {
     const QStandardItem* child = top->child(row);
@@ -259,44 +316,86 @@ void GMapDialog::showHideChildren(const QStandardItem* top)
   }
 }
 
-//-------------------------------------------------------------------------
-void GMapDialog::itemChangedX(QStandardItem* it)
+void
+LeafletMapDialog::itemChangedX(QStandardItem* it)
 {
-  trace("itemChangedX", it);
-  if ((it == wptItem_) || (it == trkItem_) || (it == rteItem_)) {
-    showHideChildren(it);
-  } else {
-    const QStandardItem* parent = it->parent();
-    if ((parent == wptItem_) || (parent == trkItem_) || (parent == rteItem_)) {
-      showHideChild(it);
+  if (itemChangedActive_) {
+    return; // Prevent re-entrancy
+  }
+  itemChangedActive_ = true;
+
+  if (it->isCheckable()) {
+    Qt::CheckState newState = it->checkState();
+
+    if (it == wptItem_ || it == trkItem_ || it == rteItem_) {
+      // A parent item was clicked.
+      if (newState == Qt::PartiallyChecked) {
+        newState = Qt::Checked;
+        it->setCheckState(newState); // This will re-enter, but be guarded.
+      }
+      // Propagate state to all children.
+      for (int row = 0; row < it->rowCount(); ++row) {
+        it->child(row)->setCheckState(newState);
+      }
+      // Update the map.
+      if (it == wptItem_) mapWidget_->setAllWaypointsVisibility(newState != Qt::Unchecked);
+      else if (it == trkItem_) mapWidget_->setAllTracksVisibility(newState != Qt::Unchecked);
+      else if (it == rteItem_) mapWidget_->setAllRoutesVisibility(newState != Qt::Unchecked);
+
+    } else {
+      // A child item was clicked.
+      QStandardItem* parent = it->parent();
+      if (parent) {
+        // Recalculate the parent's state based on its children.
+        int checkedCount = 0;
+        int childCount = parent->rowCount();
+        for (int row = 0; row < childCount; ++row) {
+          if (parent->child(row)->checkState() == Qt::Checked) {
+            checkedCount++;
+          }
+        }
+
+        if (checkedCount == 0) {
+          parent->setCheckState(Qt::Unchecked);
+        } else if (checkedCount == childCount) {
+          parent->setCheckState(Qt::Checked);
+        } else {
+          parent->setCheckState(Qt::PartiallyChecked);
+        }
+        showHideChild(it); // Update this item's visibility on the map.
+      }
     }
   }
+
+  itemChangedActive_ = false; // Reset the guard.
 }
 
-//-------------------------------------------------------------------------
-void GMapDialog::treeDoubleClicked(const QModelIndex& idx)
+//------------------------------------------------------------------------
+void
+LeafletMapDialog::treeDoubleClicked(const QModelIndex& idx)
 {
   QStandardItem* it = model_->itemFromIndex(idx);
   trace("treeDoubleClicked", it);
   QStandardItem* parent = it->parent();
-  int row = it->row();
+  int originalIndex = it->data(OriginalIndexRole).toInt();
   if (parent == wptItem_) {
     parent->setCheckState(Qt::Checked);
     it->setCheckState(Qt::Checked);
-    mapWidget_->panTo(gpx_.getWaypoints().at(row).getLocation());
+    mapWidget_->panTo(gpx_.getWaypoints().at(originalIndex).getLocation());
   } else if (parent == trkItem_) {
     parent->setCheckState(Qt::Checked);
     it->setCheckState(Qt::Checked);
-    mapWidget_->frameTrack(row);
+    mapWidget_->frameTrack(originalIndex);
   } else if (parent == rteItem_) {
     parent->setCheckState(Qt::Checked);
     it->setCheckState(Qt::Checked);
-    mapWidget_->frameRoute(row);
+    mapWidget_->frameRoute(originalIndex);
   }
 }
 
-//-------------------------------------------------------------------------
-void GMapDialog::itemClickedX(const QStandardItem* it)
+//------------------------------------------------------------------------
+void
+LeafletMapDialog::itemClickedX(const QStandardItem* it)
 {
   trace("itemXClicked", it);
   if (it != nullptr) {
@@ -306,32 +405,32 @@ void GMapDialog::itemClickedX(const QStandardItem* it)
   }
 }
 
-//-------------------------------------------------------------------------
-void GMapDialog::selectionChangedX(const QItemSelection& sel, const QItemSelection& desel)
+//------------------------------------------------------------------------
+void
+LeafletMapDialog::selectionChangedX(const QItemSelection& sel, const QItemSelection& desel)
 {
-  if (debugLevel_ > 0) {
-    qDebug() << "selectionChangedX";
-  }
+
   for (const QModelIndexList idxs = desel.indexes(); const auto& idx : idxs) {
     const QStandardItem* it = model_->itemFromIndex(idx);
     const QStandardItem* parent = it->parent();
     if (parent == wptItem_) {
-      int row = it->row();
-      mapWidget_->setWaypointColorBlue(row);
+      int originalIndex = it->data(OriginalIndexRole).toInt();
+      // mapWidget_->setWaypointColorBlue(originalIndex);
     }
   }
   for (const QModelIndexList idxs = sel.indexes(); const auto& idx : idxs) {
     const QStandardItem* it = model_->itemFromIndex(idx);
     const QStandardItem* parent = it->parent();
     if (parent == wptItem_) {
-      int row = it->row();
-      mapWidget_->setWaypointColorRed(row);
+      int originalIndex = it->data(OriginalIndexRole).toInt();
+      // mapWidget_->setWaypointColorRed(originalIndex);
     }
   }
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::expandCollapseAll(QStandardItem* top, bool exp)
+void
+LeafletMapDialog::expandCollapseAll(QStandardItem* top, bool exp)
 {
   ui_.treeView->setExpanded(model_->indexFromItem(top), exp);
   for (int row = 0; row < top->rowCount(); ++row) {
@@ -341,38 +440,58 @@ void GMapDialog::expandCollapseAll(QStandardItem* top, bool exp)
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::showHideAll(QStandardItem* top, bool ck)
+void
+LeafletMapDialog::showHideAll(QStandardItem* top, bool ck)
 {
   trace("showHideAll", top);
+
   if (ck) {
     mapWidget_->resetBounds();
   }
   top->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
-  for (int row = 0; row < top->rowCount(); ++row) {
-    QStandardItem* child = top->child(row);
-    child->setCheckState(ck ? Qt::Checked: Qt::Unchecked);
-  }
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::showOnlyThis(QStandardItem* top, int menuRow)
+void
+LeafletMapDialog::showOnlyThis(QStandardItem* top, int menuRow)
 {
   trace("showOnlyThis", top->child(menuRow));
+
+  model_->blockSignals(true);
+
+  QStandardItem* child = top->child(menuRow);
+  int originalIndex = child->data(OriginalIndexRole).toInt();
+
   if (top == wptItem_) {
-    mapWidget_->panTo(gpx_.getWaypoints().at(menuRow).getLocation());
+    mapWidget_->panTo(gpx_.getWaypoints().at(originalIndex).getLocation());
+    mapWidget_->setAllWaypointsVisibility(false);
+    mapWidget_->setWaypointVisibility(originalIndex, true);
   } else if (top == trkItem_) {
-    mapWidget_->frameTrack(menuRow);
+    mapWidget_->frameTrack(originalIndex);
+    mapWidget_->setAllTracksVisibility(false);
+    mapWidget_->setTrackVisibility(originalIndex, true);
   } else if (top == rteItem_) {
-    mapWidget_->frameRoute(menuRow);
+    mapWidget_->frameRoute(originalIndex);
+    mapWidget_->setAllRoutesVisibility(false);
+    mapWidget_->setRouteVisibility(originalIndex, true);
   }
+
   for (int row = 0; row < top->rowCount(); ++row) {
-    QStandardItem* child = top->child(row);
-    child->setCheckState(row == menuRow? Qt::Checked: Qt::Unchecked);
+    QStandardItem* c = top->child(row);
+    c->setCheckState(row == menuRow ? Qt::Checked : Qt::Unchecked);
   }
-  top->setCheckState(Qt::Checked);
+
+  if (top->rowCount() > 1) {
+    top->setCheckState(Qt::PartiallyChecked);
+  } else {
+    top->setCheckState(Qt::Checked);
+  }
+
+  model_->blockSignals(false);
 }
 
-void GMapDialog::showTopContextMenu(const QStringList& text, QStandardItem* top, const QPoint& pt)
+void
+LeafletMapDialog::showTopContextMenu(const QStringList& text, QStandardItem* top, const QPoint& pt)
 {
   QMenu menu(this);
   menu.addAction(text.at(0), this, [this, &top]()->void {
@@ -390,7 +509,8 @@ void GMapDialog::showTopContextMenu(const QStringList& text, QStandardItem* top,
   menu.exec(ui_.treeView->mapToGlobal(pt));
 }
 
-void GMapDialog::showChildContextMenu(const QString& text, const QStandardItem* child, const QPoint& pt)
+void
+LeafletMapDialog::showChildContextMenu(const QString& text, const QStandardItem* child, const QPoint& pt)
 {
   QStandardItem* parent = child->parent();
   int row = child->row();
@@ -402,11 +522,10 @@ void GMapDialog::showChildContextMenu(const QString& text, const QStandardItem* 
 }
 
 //------------------------------------------------------------------------
-void GMapDialog::showContextMenu(const QPoint& pt)
+void
+LeafletMapDialog::showContextMenu(const QPoint& pt)
 {
-  if (debugLevel_ > 0) {
-    qDebug() << "showContextMenu";
-  }
+
   QModelIndex idx = ui_.treeView->indexAt(pt);
   if (idx.isValid()) {
     QStandardItem* it = model_->itemFromIndex(idx);

@@ -52,6 +52,17 @@
     </xsl:call-template>
       <xsl:call-template name="body.attributes"/>
   {block name=body}{literal}
+    <style>
+      h1, h2, h3, h4, h5, h6 { color: #0054a6; }
+      a { color: #0054a6; font-weight: bold; text-decoration: none; }
+      .note, .warning, .tip, .important, .caution {
+        border: 1px solid #cccccc;
+        background-color: #f9f9f9;
+        padding: 10px;
+        margin: 1em 0;
+      }
+      th { background-color: #f0f0f0; }
+    </style>
                       <xsl:call-template name="user.header.navigation"/>
 
                       <xsl:call-template name="header.navigation">
