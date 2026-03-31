@@ -129,8 +129,6 @@ struct Vecs::Impl {
   Dg100FileFormat dg100_ffmt;
   Dg200SerialFormat dg200_fmt;
   Dg200FileFormat dg200_ffmt;
-  Dg388Format dg388_fmt;
-  OsmFormat osm_fmt;
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
@@ -369,11 +367,12 @@ struct Vecs::Impl {
       nullptr,
     },
     {
-      &dg388_fmt,
+      nullptr,
       "dg-388",
       "GlobalSat DG-388 Binary File",
       "gpl",
       nullptr,
+      &fmtfactory<Dg388Format>
     },
     {
       &osm_fmt,
