@@ -27,7 +27,20 @@
        application and not our own output) to reference/ along with
        files in a well supported (preferably non-binary) format and
        entries in our 'testo' program.   This allows users of different
-       OSes and hardware to exercise your module.
+       OSes and hardware to exercise your module.  You can either run
+       testo directly or build the check target. If you did an out of source
+       build and you use the testo script you will need to use the -p
+       option to tell it where the gpsbabel executable you built is.
+    7) It will be necessary to update some of the reference files of the
+       serailization.test for your format and any options your format defined.
+       If you pass testo the -d flag it will save the test output which can
+       be useful to update the associated reference file.
+    8) Add documentation in xmldoc/formats/<your_format_name>.xml and
+       for each option in your format
+       xmldoc/formats/options/<your_format_name>-<option-name>.xml.
+       You can build the target gpsbabel.pdf and check the assembled document.
+       If you build gpsbabel.pdf it will create properly named empty files
+       for each option if they don't already exist that you can fill in.
 
     Copyright (C) YYYY John Doe, anybody@wherever.com
     Copyright (C) 2001-YYYY Robert Lipe, robertlipe+source@gpsbabel.org
