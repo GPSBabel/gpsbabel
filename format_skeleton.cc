@@ -13,6 +13,15 @@
     4) Create a new entry in vec_list in vecs.cc. You are strongly encouraged to use
        a dynamic format, i.e. one that uses &fmtfactory<FormatSkeletonFormat>.
        Add the include for your .h file.
+     An example entry in vec_list would be:
+    {
+      nullptr,
+      "skel",
+      ".skel",
+      "Format Skeleton",
+      nullptr,
+      &fmtfactory<FormatSkeletonFormat>
+    },
     5) Add entries to SOURCES, HEADERS and TESTS in CMakeLists.txt
     6) Add sample files (it's better when they're created by the "real"
        application and not our own output) to reference/ along with
