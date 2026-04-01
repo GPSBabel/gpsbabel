@@ -25,6 +25,8 @@
 
 
 //------------------------------------------------------------------------
+#include <QString> // Added for QString
+
 class LatLng
 {
 public:
@@ -44,6 +46,8 @@ private:
   double _lat{0.0};
   double _lng{0.0};
 };
+
+QString fmtLatLng(const LatLng& l); // Declaration of fmtLatLng
 
 
 #endif

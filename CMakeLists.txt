@@ -16,6 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Do this after we set up common variables but before creating other
 # variables that will be inherited.
 add_subdirectory(gui)
+add_subdirectory(xmldoc)
 
 # FIXME: When we rearrange the project directory structure everything
 # below here should be in it's own CMakeList.txt
@@ -375,7 +376,7 @@ message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
 message(STATUS "Include Directores are: \"${IncDirs}\"")
 
-# In case we ever update the garmin_icons mkicondoc helps 
+# In case we ever update the garmin_icons mkicondoc helps
 # update the related document table.
 add_executable(mkicondoc EXCLUDE_FROM_ALL mkicondoc.cc)
 target_link_libraries(mkicondoc PRIVATE ${QT_LIBRARIES})
@@ -460,8 +461,6 @@ set(TESTS
 list(SORT TESTS)
 
 if(UNIX)
-  # This test only works if the pwd is top level source dir due to the
-  # file name getting embedded in the file nonexistent.err.
   enable_testing()
   foreach(TESTNAME IN LISTS TESTS)
     add_test(NAME test-${TESTNAME}
@@ -472,8 +471,6 @@ if(UNIX)
 endif()
 
 if(UNIX)
-  # This test only works if the pwd is top level source dir due to the
-  # file name getting embedded in the file nonexistent.err.
   add_custom_target(check
                     ${CMAKE_SOURCE_DIR}/testo -p $<TARGET_FILE:gpsbabel>
                     DEPENDS gpsbabel
@@ -482,8 +479,6 @@ if(UNIX)
                     USES_TERMINAL)
 endif()
 if(UNIX AND NOT APPLE)
-  # This test only works if the pwd is top level source dir due to the
-  # file name getting embedded in the file nonexistent.err.
   file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/testo.d)
   list(JOIN TESTS "\\n" VTESTS)
   add_custom_target(check-vtesto
@@ -494,28 +489,4 @@ if(UNIX AND NOT APPLE)
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     VERBATIM
                     USES_TERMINAL)
-endif()
-
-get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if((CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR) AND NOT _isMultiConfig)
-  set(GPSBABEL_WEB "gpsbabel.org" CACHE PATH "Path where the documentation will be stored for www.gpsbabel.org.")
-  add_custom_target(gpsbabel.org
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_org.sh ${GPSBABEL_WEB} ${GPSBABEL_DOCVERSION}
-                    DEPENDS gpsbabel gpsbabel.pdf
-                    VERBATIM
-                    USES_TERMINAL)
-
-  add_custom_target(gpsbabel.html
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_html.sh
-                    DEPENDS gpsbabel
-                    VERBATIM
-                    USES_TERMINAL)
-
-  add_custom_target(gpsbabel.pdf
-                    ${CMAKE_SOURCE_DIR}/tools/make_gpsbabel_pdf.sh
-                    DEPENDS gpsbabel
-                    VERBATIM
-                    USES_TERMINAL)
-else()
-  message(WARNING "Document generation is only supported for in-source builds with single configuration generators.")
 endif()

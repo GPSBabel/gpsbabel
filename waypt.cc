@@ -316,7 +316,7 @@ waypt_speed(const Waypoint* A, const Waypoint* B)
 std::optional<double>
 waypt_vertical_speed(const Waypoint* A, const Waypoint* B)
 {
-  if ((A->altitude != unknown_alt) && (B->altitude != unknown_alt) && 
+  if ((A->altitude != unknown_alt) && (B->altitude != unknown_alt) &&
      A->creation_time.isValid() && B->creation_time.isValid()) {
     double altitude = A->altitude - B->altitude;
     double time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;

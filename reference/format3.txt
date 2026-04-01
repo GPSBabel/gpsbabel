@@ -1,6 +1,24 @@
 file	--r---	70mai	txt	70mai Dash Cam	70mai
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_70mai.html
-internal	rw----	xcsv		? Character Separated Values	xcsv
+internal	rw----	tabsep		All database fields on one tab-separated line	xcsv
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html
+option	tabsep	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snlen
+
+option	tabsep	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snwhite
+
+option	tabsep	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snupper
+
+option	tabsep	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snunique
+
+option	tabsep	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_urlbase
+
+option	tabsep	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_prefer_shortnames
+
+option	tabsep	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_datum
+
+option	tabsep	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_utc
+
+internal	rw----	xcsv		Character Separated Values	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html
 option	xcsv	style	Full path to XCSV style file	file				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_style
 
@@ -19,24 +37,6 @@ option	xcsv	prefer_shortnames	Use shortname instead of description	boolean				ht
 option	xcsv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_datum
 
 option	xcsv	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_utc
-
-internal	rw----	tabsep		All database fields on one tab-separated line	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html
-option	tabsep	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snlen
-
-option	tabsep	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snwhite
-
-option	tabsep	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snupper
-
-option	tabsep	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snunique
-
-option	tabsep	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_urlbase
-
-option	tabsep	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_prefer_shortnames
-
-option	tabsep	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_datum
-
-option	tabsep	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_utc
 
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)	v900
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_v900.html
