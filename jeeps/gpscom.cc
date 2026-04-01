@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include <QByteArray>
 
 /* @func GPS_Command_Off ***********************************************
 **
@@ -1194,8 +1195,8 @@ int32_t GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int3
     }
 
     crs[n_crs]->index = Unique_Course_Index(crs, n_crs);
-    strncpy(crs[n_crs]->course_name, trk[i]->trk_ident,
-            sizeof(crs[n_crs]->course_name)-1);
+    qstrncpy(crs[n_crs]->course_name, trk[i]->trk_ident,
+            sizeof(crs[n_crs]->course_name));
 
     crs[n_crs]->track_index = Unique_Track_Index(crs, n_crs);
 
@@ -1268,8 +1269,8 @@ int32_t GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int3
       gbFatal("Internal error in GPS_Command_Send_Track_As_Course: no wpt\n");
     }
     cpt[i+n_cpt] = GPS_Course_Point_New();
-    strncpy(cpt[i+n_cpt]->name, wpt[i]->cmnt,
-            sizeof(cpt[i+n_cpt]->name) - 1);
+    qstrncpy(cpt[i+n_cpt]->name, wpt[i]->cmnt,
+            sizeof(cpt[i+n_cpt]->name));
     for (j=0; j<n_crs; j++)
       if (crs[j]->track_index == min_dist_trk_idx) {
         cpt[i+n_cpt]->course_index = crs[j]->index;

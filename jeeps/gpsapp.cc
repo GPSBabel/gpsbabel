@@ -30,6 +30,7 @@
 #include <cstring>
 #include <ctime>
 
+#include <QByteArray>
 #include <QDateTime>
 
 /*
@@ -2040,7 +2041,7 @@ void GPS_D120_Get(int cat_num, char* s)
   }
 
   if (*s) {
-    strncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
+    qstrncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
   } else {
     snprintf(gps_categories[cat_num], sizeof(gps_categories[0]),
              "Category %d", cat_num+1);
