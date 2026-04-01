@@ -10,10 +10,11 @@
     3) Replace the fictional name and address in the Copyright section below.
        ** As your work is likely built on the work of others, please retain
        the original line. **
-    4) Create a new entry in vec_list in vecs.cc. You are strongly encouraged to use
+    4) Create a new entry in vec_list in vecs.cc. You are strongly encouraged
+       to use
        a dynamic format, i.e. one that uses &fmtfactory<FormatSkeletonFormat>.
        Add the include for your .h file.
-     An example entry in vec_list would be:
+       An example entry in vec_list would be:
     {
       nullptr,
       "skel",
@@ -23,14 +24,17 @@
       &fmtfactory<FormatSkeletonFormat>
     },
     5) Add entries to SOURCES, HEADERS and TESTS in CMakeLists.txt
-    6) Add sample files (it's better when they're created by the "real"
-       application and not our own output) to reference/ along with
-       files in a well supported (preferably non-binary) format and
-       entries in our 'testo' program.   This allows users of different
-       OSes and hardware to exercise your module.  You can either run
-       testo directly or build the check target. If you did an out of source
-       build and you use the testo script you will need to use the -p
-       option to tell it where the gpsbabel executable you built is.
+    6) Add a small test script for your format to
+       testo.d/<your_format_name>.test.  Add sample files (it's better when
+       they're created by the "real" application and not our own output) to
+       reference/ along with files of expected output in a well supported
+       (preferably non-binary) format.  Note that 'now' timestamps are
+       suppressed or locked to Jan 1, 1970 so they're reproducible.  This
+       allows users of different OSes and hardware to exercise your module.
+       You can either run testo directly or build the check target (cmake
+       --build <dir> --target check).  If you did an out of source build
+       and you use the testo script you will need to use the -p option to
+       tell it where the gpsbabel executable you built is.
     7) It will be necessary to update some of the reference files of the
        serailization.test for your format and any options your format defined.
        If you pass testo the -d flag it will save the test output which can
@@ -38,9 +42,13 @@
     8) Add documentation in xmldoc/formats/<your_format_name>.xml and
        for each option in your format
        xmldoc/formats/options/<your_format_name>-<option-name>.xml.
-       You can build the target gpsbabel.pdf and check the assembled document.
-       If you build gpsbabel.pdf it will create properly named empty files
-       for each option if they don't already exist that you can fill in.
+       You can build the target gpsbabel.pdf (cmake --build <dir> --target
+       gpsbabel.pdf) and check the assembled document.  If you build
+       gpsbabel.pdf the build will create properly named empty files for
+       your format in the source tree xmldoc/formats and each option in
+       xmldoc/format/options if they don't already exist, then you can
+       fill them in.  Make sure your information appears in the document.
+       If you create a file with an unexpected name it will not be used!
 
     Copyright (C) YYYY John Doe, anybody@wherever.com
     Copyright (C) 2001-YYYY Robert Lipe, robertlipe+source@gpsbabel.org

@@ -80,21 +80,26 @@ private:
 
   /* Data Members */
 
-  OptionString opt_icon;
-  OptionInt opt_utc;
-  OptionBool opt_white;
-  OptionDouble opt_lat;
+//  If you have any options you will need a data member of the appropriate type for each.
+//  Notice these are referred to in format_skeleton_args below.
+//  These variables will be set for you before your format methods are called based on
+//  what the user enters on the command line and your defaults.
+//  These are just examples.
+//    OptionString opt_icon;
+//    OptionInt opt_utc;
+//    OptionBool opt_white;
+//    OptionDouble opt_lat;
 
-// Any arg in this list will appear in command line help and will be
-// populated for you.
-// Values for ARGTYPE_xxx can be found in defs.h and are used to
-// select the type of option.
 
-  QVector<arglist_t> format_skeleton_args = {
-    {"icon", &opt_icon, "Icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-    {"utc", &opt_utc, "Offset from UTC in hours", nullptr, ARGTYPE_INT, "-14", "+14", nullptr},
-    {"white", &opt_white, "Allow whitespace synth. shortnames", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
-    {"lat", &opt_lat, "Latitude for center point (D.DDDDD)", nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr},
-  };
+// Add entries for each option to a vector.  If you don't have any options you don't
+// need this at all. These are just examples.
+// Any element in this vector will appear in command line help.
+// Values for ARGTYPE_xxx can be found in defs.h and are used to select the type of option.
+//  QVector<arglist_t> format_skeleton_args = {
+//    {"icon", &opt_icon, "Icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+//    {"utc", &opt_utc, "Offset from UTC in hours", nullptr, ARGTYPE_INT, "-14", "+14", nullptr},
+//    {"white", &opt_white, "Allow whitespace synth. shortnames", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
+//    {"lat", &opt_lat, "Latitude for center point (D.DDDDD)", nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr},
+//  };
 };
 #endif // FORMAT_SKELETON_H_INCLUDED_
