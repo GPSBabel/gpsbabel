@@ -1,1 +1,15 @@
-
+<para>
+  Specifies the time zone for the timestamps recorded by the GlobalSat sport device. The device records time without any timezone information, so GPSBabel must be told how to interpret the timestamps.
+</para>
+<para>
+  If this option is not provided, GPSBabel will assume the timestamps are in the system's local time zone. If the device was used in a different time zone than the computer processing the data, this option is required for accurate time conversion to UTC.
+</para>
+<para>
+  The value for this option should be a valid IANA Time Zone ID, such as <userinput>America/New_York</userinput>, <userinput>Europe/London</userinput>, or <userinput>Asia/Tokyo</userinput>. If an invalid ID is provided, GPSBabel will list all available time zone IDs.
+</para>
+<example xml:id="globalsat_timezone_example">
+  <title>Download data from a device used in the US Pacific time zone</title>
+  <para>
+    <userinput>gpsbabel -i globalsat,timezone=America/Los_Angeles -f /dev/ttyUSB0 -o gpx -F my_run.gpx</userinput>
+  </para>
+</example>

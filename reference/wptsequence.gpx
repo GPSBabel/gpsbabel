@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="49.794688000" minlon="9.834015000" maxlat="49.794688000" maxlon="9.834015000"/>
+  <wpt lat="49.794688000" lon="9.834015000">
+    <ele>289.200</ele>
+    <time>2011-07-02T17:47:25.200Z</time>
+    <magvar>33.333</magvar>
+    <geoidheight>111.1</geoidheight>
+    <name>trkpt-2011-07-02T17:47:25.000Z</name>
+    <cmt>this is the wpt cmt</cmt>
+    <desc>this is the wpt desc</desc>
+    <src>this is the wpt src</src>
+    <url>http://www.gpsbabel.org</url>
+    <urlname>gpsbabel.org</urlname>
+    <sym>Campground</sym>
+    <type>T</type>
+    <fix>3d</fix>
+    <sat>4</sat>
+    <hdop>1.100000</hdop>
+    <vdop>2.200000</vdop>
+    <pdop>3.300000</pdop>
+    <ageofdgpsdata>4.4</ageofdgpsdata>
+    <dgpsid>55</dgpsid>
+  </wpt>
+  <rte>
+    <rtept lat="49.794688000" lon="9.834015000">
+      <ele>289.200</ele>
+      <time>2011-07-02T17:47:25.200Z</time>
+      <magvar>33.333</magvar>
+      <geoidheight>111.1</geoidheight>
+      <name>trkpt-2011-07-02T17:47:25.000Z</name>
+      <cmt>this is the rte cmt</cmt>
+      <desc>this is the rte desc</desc>
+      <src>this is the rte src</src>
+      <url>http://www.gpsbabel.org</url>
+      <urlname>gpsbabel.org</urlname>
+      <sym>Campground</sym>
+      <type>T</type>
+      <fix>3d</fix>
+      <sat>4</sat>
+      <hdop>1.100000</hdop>
+      <vdop>2.200000</vdop>
+      <pdop>3.300000</pdop>
+      <ageofdgpsdata>4.4</ageofdgpsdata>
+      <dgpsid>55</dgpsid>
+    </rtept>
+  </rte>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.794688000" lon="9.834015000">
+        <ele>289.200</ele>
+        <time>2011-07-02T17:47:25.200Z</time>
+        <course>12.120000</course>
+        <speed>13.818100</speed>
+        <magvar>33.333</magvar>
+        <geoidheight>111.1</geoidheight>
+        <name>trkpt-2011-07-02T17:47:25.000Z</name>
+        <cmt>this is the trk cmt</cmt>
+        <desc>this is the trk desc</desc>
+        <src>this is the trk src</src>
+        <url>http://www.gpsbabel.org</url>
+        <urlname>gpsbabel.org</urlname>
+        <sym>Campground</sym>
+        <type>T</type>
+        <fix>3d</fix>
+        <sat>4</sat>
+        <hdop>1.100000</hdop>
+        <vdop>2.200000</vdop>
+        <pdop>3.300000</pdop>
+        <ageofdgpsdata>4.4</ageofdgpsdata>
+        <dgpsid>55</dgpsid>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

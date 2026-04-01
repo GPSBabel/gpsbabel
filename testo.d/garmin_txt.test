@@ -13,3 +13,10 @@ gpsbabel -i garmin_txt -f ${TMPDIR}/garmin_txt-2.txt -o garmin_txt,prec=9 -F ${T
 # test can fail because of localtime/gmtime differences
 # 
 ## compare ${TMPDIR}/garmin_txt-2.txt ${TMPDIR}/garmin_txt-3.txt
+
+# garmin_txt_reorder has columsn 2 and 3 interchanged compared to garmin_txt.txt.
+# The reader should bind the headers so the writer gets the correct data.
+gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -o garmin_txt,prec=9 -F ${TMPDIR}/garmin_txt-4.txt
+gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt_reorder.txt -o garmin_txt,prec=9 -F ${TMPDIR}/garmin_txt-5.txt
+compare ${REFERENCE}/garmin_txt.txt ${TMPDIR}/garmin_txt-4.txt
+compare ${REFERENCE}/garmin_txt.txt ${TMPDIR}/garmin_txt-5.txt

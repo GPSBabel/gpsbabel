@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="http://www.garmin.com/xmlschemas/GpxExtensions/v3"
+  elementFormDefault="qualified"
+  xmlns="http://www.garmin.com/xmlschemas/GpxExtensions/v3"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:annotation><xsd:documentation>
+  This schema defines the Garmin extensions to be used with the GPX 1.1 schema.
+  The root elements defined by this schema are intended to be used as child
+  elements of the "extensions" elements in the GPX 1.1 schema. The GPX 1.1
+  schema is available at http://www.topografix.com/GPX/1/1/gpx.xsd.
+  </xsd:documentation></xsd:annotation>
+
+  <xsd:element name="WaypointExtension" type="WaypointExtension_t" />
+
+  <xsd:element name="RouteExtension" type="RouteExtension_t" />
+  
+  <xsd:element name="RoutePointExtension" type="RoutePointExtension_t" />
+
+  <xsd:element name="TrackExtension" type="TrackExtension_t" />
+
+  <xsd:element name="TrackPointExtension" type="TrackPointExtension_t" />
+
+  <xsd:complexType name="WaypointExtension_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains data fields available in Garmin GDB waypoints that cannot
+    be represented in waypoints in GPX 1.1 instances.
+    </xsd:documentation></xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Proximity" type="Meters_t" minOccurs="0" />
+      <xsd:element name="Temperature" type="DegreesCelsius_t" minOccurs="0" />
+      <xsd:element name="Depth" type="Meters_t" minOccurs="0" />
+      <xsd:element name="DisplayMode" type="DisplayMode_t" minOccurs="0" />
+      <xsd:element name="Categories" type="Categories_t" minOccurs="0" />
+      <xsd:element name="Address" type="Address_t" minOccurs="0"/>
+      <xsd:element name="PhoneNumber" type="PhoneNumber_t" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Categories_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains a list of categories to which a waypoint has been assigned.
+    Note that this list may contain categories which do not exist for a particular
+    application installation.
+    </xsd:documentation></xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Category" type="xsd:string" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Address_t">
+    <xsd:sequence>
+      <xsd:element name="StreetAddress" type="xsd:token" minOccurs="0" maxOccurs="2"/>
+      <xsd:element name="City" type="xsd:token" minOccurs="0"/>
+      <xsd:element name="State" type="xsd:token" minOccurs="0"/>
+      <xsd:element name="Country" type="xsd:token" minOccurs="0"/>
+      <xsd:element name="PostalCode" type="xsd:token" minOccurs="0"/>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="PhoneNumber_t">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:token">
+        <xsd:attribute name="Category" type="xsd:token">
+        <xsd:annotation>
+        <xsd:documentation>Category provides the ability to specify the type of a 
+        phone number. For example, a phone number can be categorized as
+        "Home", "Work", "Mobile" e.t.c</xsd:documentation>
+        </xsd:annotation>
+        </xsd:attribute>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="RouteExtension_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains data fields available in Garmin GDB routes that cannot
+    be represented in routes in GPX 1.1 instances.
+    </xsd:documentation></xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="IsAutoNamed" type="xsd:boolean" />
+      <xsd:element name="DisplayColor" type="DisplayColor_t" minOccurs="0"/>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="RoutePointExtension_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains data fields available in Garmin GDB routes that cannot
+    be represented in routes in GPX 1.1 instances.
+    </xsd:documentation></xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Subclass" type="Subclass_t" minOccurs="0"/>
+      <xsd:element name="rpt" type="AutoroutePoint_t" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TrackExtension_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains data fields available in Garmin GDB tracks that cannot
+    be represented in routes in GPX 1.1 instances.
+    </xsd:documentation></xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="DisplayColor" type="DisplayColor_t" minOccurs="0"/>
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="TrackPointExtension_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains data fields available in Garmin GDB track points that cannot
+    be represented in track points in GPX 1.1 instances.
+    </xsd:documentation></xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Temperature" type="DegreesCelsius_t" minOccurs="0" />
+      <xsd:element name="Depth" type="Meters_t" minOccurs="0" />
+      <xsd:element name="Extensions" type="Extensions_t" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="DegreesCelsius_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains a temperature value measured in degrees Celsius.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:double"/>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Meters_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains a distance value measured in meters.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:double"/>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="DisplayMode_t">
+    <xsd:annotation><xsd:documentation>
+    This type contains a string that specifies how a waypoint should be
+    displayed on a map.
+    </xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="SymbolOnly"/>
+      <xsd:enumeration value="SymbolAndName"/>
+      <xsd:enumeration value="SymbolAndDescription"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="DisplayColor_t">
+    <xsd:restriction base="xsd:token">
+      <xsd:enumeration value="Black"/>
+      <xsd:enumeration value="DarkRed"/>
+      <xsd:enumeration value="DarkGreen"/>
+      <xsd:enumeration value="DarkYellow"/>
+      <xsd:enumeration value="DarkBlue"/>
+      <xsd:enumeration value="DarkMagenta"/>
+      <xsd:enumeration value="DarkCyan"/>
+      <xsd:enumeration value="LightGray"/>
+      <xsd:enumeration value="DarkGray"/>
+      <xsd:enumeration value="Red"/>
+      <xsd:enumeration value="Green"/>
+      <xsd:enumeration value="Yellow"/>
+      <xsd:enumeration value="Blue"/>
+      <xsd:enumeration value="Magenta"/>
+      <xsd:enumeration value="Cyan"/>
+      <xsd:enumeration value="White"/>
+      <xsd:enumeration value="Transparent"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="AutoroutePoint_t">
+    <xsd:sequence>
+      <xsd:element name="Subclass" type="Subclass_t" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute name="lat" type="Latitude_t" use="required"/>
+    <xsd:attribute name="lon" type="Longitude_t" use="required"/>
+  </xsd:complexType>
+  
+  <xsd:simpleType name="Subclass_t">
+    <xsd:restriction base="xsd:hexBinary">
+      <xsd:length value="18"/>
+    </xsd:restriction>    
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Latitude_t">
+	<xsd:annotation><xsd:documentation>
+    The latitude of the point.  Decimal degrees, WGS84 datum.
+	</xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minInclusive value="-90.0"/>
+      <xsd:maxInclusive value="90.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="Longitude_t">
+	<xsd:annotation><xsd:documentation>
+    The longitude of the point.  Decimal degrees, WGS84 datum.
+	</xsd:documentation></xsd:annotation>
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minInclusive value="-180.0"/>
+      <xsd:maxExclusive value="180.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+    
+  <xsd:complexType name="Extensions_t">
+    <xsd:annotation>
+    <xsd:documentation>This type provides the ability to extend any data type that includes it.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+    <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

@@ -21,9 +21,11 @@
 ** Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ** Boston, MA  02110-1301, USA.
 ********************************************************************/
-#include "jeeps/gps.h"
-#include <cmath>
-#include <cstring>
+#include "jeeps/gpsproj.h"
+
+#include <cmath>            // for sin, pow, cos, fabs, log, tan, asin, atan, atan2, sqrt, exp, acos, sinh
+
+#include "jeeps/gpsmath.h"  // for GPS_Math_Deg_To_Rad, GPS_PI, GPS_Math_Rad_To_Deg, GPS_Math_EN_To_LatLon, GPS_Math_LatLon_To_EN, GPS_Math_Cassini_EN_To_LatLon, GPS_Math_Cassini_LatLon_To_EN, GPS_Math_Swiss_EN_To_LatLon, GPS_Math_Swiss_LatLon_To_EN
 
 
 /* @func GPS_Math_Albers_LatLon_To_EN **********************************

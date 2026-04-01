@@ -8,55 +8,71 @@ on:
     branches: [ master ]
   schedule:
     - cron: '27 4 * * 2'
-  workflow_dispatch: ~
+  workflow_dispatch:
+    inputs:
+      attestation:
+        description: 'Generate attestation for binary artifacts'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   macos:
     name: macOS Build
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - QT_VERSION: '5.15.2'
-            XCODE_VERSION: '12.5.1'
+          - QT_VERSION: '6.5.3'
+            XCODE_VERSION: '15.4'
             GENERATOR: 'Ninja'
             RELEASE: false
-            os: macos-11
-          - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '13.4.1'
+            os: macos-14
+          - QT_VERSION: '6.8.3'
+            XCODE_VERSION: '16.4'
             GENERATOR: 'Xcode'
             RELEASE: false
-            os: macos-12
-          - QT_VERSION: '6.2.4'
-            XCODE_VERSION: '13.4.1'
+            os: macos-15
+          - QT_VERSION: '6.8.3'
+            XCODE_VERSION: '16.4'
             GENERATOR: 'Ninja'
             RELEASE: true
-            os: macos-12
+            os: macos-15
+          - QT_VERSION: '6.10.2'
+            XCODE_VERSION: '26.2'
+            GENERATOR: 'Ninja'
+            RELEASE: false
+            os: macos-26
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
 
     - name: Cache Qt
-      uses: actions/cache@v3
-      id: cache
+      uses: actions/cache/restore@v5
+      id: restore-cache
       with:
         path: ~/Cache
-        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}-${{ secrets.CACHE_VERSION }}
+        key: ${{ runner.os }}-${{ matrix.QT_VERSION }}
 
     - name: Qt install setup
-      if: steps.cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v4
+      if: steps.restore-cache.outputs.cache-hit != 'true'
+      uses: actions/setup-python@v6
       with:
-        python-version: '3.9'
+        python-version: '3.13'
 
     - name: Qt install
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.restore-cache.outputs.cache-hit != 'true'
       env:
-        TRAVIS_BUILD_DIR: ${{ github.workspace }}
+        CI_BUILD_DIR: ${{ github.workspace }}
+        QT_INSTALLER_JWT_TOKEN: ${{secrets.QT_INSTALLER_JWT_TOKEN}}
       run: |
-        ./tools/travis_install_osx ${{ matrix.QT_VERSION }} aqt
+        ./tools/ci_install_osx.sh ${{ matrix.QT_VERSION }} aqt
 
     - name: Brew install
       if: matrix.GENERATOR == 'Ninja'
@@ -68,17 +84,40 @@ jobs:
         # https://github.com/actions/runner-images/issues/6507
         # https://github.com/actions/runner-images/issues/2322
         # brew update # skip update for now to avoid link issues AND many slow dependency upGRADES.
-        brew install ninja
+        brew list -1 | grep python
+        ls -l $(brew --prefix)/bin | grep -i python
+        # workaround for https://github.com/actions/setup-python/issues/577
+        brew list -1 | grep python | while read formula; do brew unlink $formula; brew link --overwrite $formula; done
+        brew list -1 | grep python
+        ls -l $(brew --prefix)/bin | grep -i python
         brew install docbook docbook-xsl fop gnu-sed
-        brew install jing-trang
+        # brew install is taking forever on macos-11, skip jing-trang and all it's dependencies.
+        # jing 20241231 is failing with "Unknown XPath version 0", https://github.com/relaxng/jing-trang/issues/284
+        #brew install jing-trang
+
+    - name: Install the Apple certificate
+      env:
+        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+        P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+      run: |
+        ./tools/ci_load_keychain.sh
 
     - name: Script
       env:
-        XML_CATALOG_FILES: /usr/local/etc/xml/catalog
+        XML_CATALOG_FILES: ${{  runner.arch == 'ARM64' && '/opt/homebrew/etc/xml/catalog' || '/usr/local/etc/xml/catalog' }}
       run: |
         source ${HOME}/Cache/qt-${{ matrix.QT_VERSION }}.env
         sudo xcode-select --switch /Applications/Xcode_${{ matrix.XCODE_VERSION }}.app
-        ./tools/ci_script_osx.sh . ${{ matrix.QT_VERSION }} ${{ matrix.GENERATOR }}
+        if [ -z "${IDENTITY}" ]; then
+          IDENTITY="-"
+        fi
+        ./tools/ci_script_osx.sh -g ${{ matrix.GENERATOR }} -i "${IDENTITY}" . ${{ matrix.QT_VERSION }}
+
+    - name: Generate artifact attestation
+      if: ${{ inputs.attestation && matrix.RELEASE }}
+      uses: actions/attest@v4
+      with:
+        subject-path: 'gui/GPSBabel-*.dmg'
 
     - name: Deploy
       # This only handles continous releases now, for other events artifacts may be saved in
@@ -88,12 +127,19 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_NAME: Continuous-${{ runner.os }}
       run: |
-        echo GITHUB_REF: $GITHUB_REF
         ./tools/uploadtool/upload_github.sh gui/GPSBabel-*.dmg
 
     - name: 'Upload Artifacts'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v7
       with:
         name: MacOS_Installer ${{ join(matrix.*) }}
         path: gui/GPSBabel-*.dmg
         retention-days: 7
+
+    - name: Save Cache Qt
+      if: ( steps.restore-cache.outputs.cache-hit != 'true' ) && ( github.ref == 'refs/heads/master' )
+      uses: actions/cache/save@v5
+      with:
+        path: ~/Cache
+        key: ${{ steps.restore-cache.outputs.cache-primary-key }}
+

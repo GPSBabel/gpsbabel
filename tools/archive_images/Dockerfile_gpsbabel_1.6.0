@@ -1,0 +1,106 @@
+# this file is used to build the image gpsbabel_build_environment used by travis.
+
+FROM ubuntu:focal AS stage
+
+# update environment.
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+ && apt-get upgrade -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# install packages needed for gpsbabel build
+# split into multiple commands to limit layer size
+
+# basic build and test tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    g++ \
+    make \
+    autoconf \
+    gperf \
+    git \
+    expat \
+    libxml2-utils \
+    cmake \
+    ninja-build \
+    curl \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+# pkgs with libraries needed by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libusb-dev \
+    pkg-config \
+    libudev-dev \
+    zlib1g-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+# pkgs with qt used by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    qt5-default \
+    qttools5-dev \
+    qttools5-dev-tools \
+    qttranslations5-l10n \
+    qtwebengine5-dev \
+    libqt5serialport5-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+# install environment for locale test
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    locales \
+ && rm -rf /var/lib/apt/lists/* \
+ && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
+ && locale-gen \
+ && locale -a
+
+RUN --mount=type=bind,target=/home/gpsbabel/gpsbabel-build,rw cd /home/gpsbabel/gpsbabel-build \
+ && rm -fr zlib \
+ && ./configure --with-zlib=system && make -j 10 linux-gui && make check \
+ && mkdir -p /usr/local/cellar \
+ && cp -pr gui/GPSBabelFE /usr/local/cellar \
+ && ln -s /usr/local/cellar/GPSBabelFE/gpsbabel /usr/local/bin \
+ && ln -s /usr/local/cellar/GPSBabelFE/gpsbabelfe /usr/local/bin \
+ && cp tools/archive_images/setup_user.sh /usr/local/bin
+
+FROM ubuntu:focal
+
+LABEL maintainer="https://github.com/tsteven4"
+
+# update environment.
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+ && apt-get upgrade -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# HINTS
+# apt-cache depends gpsbabel
+# apt-cache depends gpsbabel-gui
+# focal shipped gpsbabel 1.6.0 using webengine
+# note our early builds didn't use system shapelib (delete libshp2)
+# note our early builds used webkit instead of webengine (add libqt5webkit5, delete libqt5webenginewidgets5)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libc6 \
+    libgcc-s1 \
+    libqt5core5a \
+    libqt5gui5 \
+    libqt5network5 \
+    libqt5webchannel5 \
+    libqt5webenginewidgets5 \
+    libqt5widgets5 \
+    libqt5xml5 \
+    libshp2 \
+    libstdc++6 \
+    libusb-0.1-4 \
+    zlib1g \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=stage /usr/local/cellar /usr/local/cellar
+COPY --from=stage /usr/local/bin/setup_user.sh /usr/local/bin
+
+RUN ln -s /usr/local/cellar/GPSBabel*/gpsbabel /usr/local/bin \
+ && ln -s /usr/local/cellar/GPSBabel*/gpsbabelfe /usr/local/bin
+
+RUN useradd ubuntu -m -s /bin/bash
+USER ubuntu:ubuntu
+WORKDIR /app

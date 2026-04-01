@@ -20,14 +20,16 @@
 #ifndef RANDOM_H_INCLUDED_
 #define RANDOM_H_INCLUDED_
 
-#include <random>            // for mt19937
+#include <random>     // for mt19937
 
-#include <QDateTime>         // for QDateTime
-#include <QString>           // for QString
-#include <QVector>           // for QVector
+#include <QList>      // for QList
+#include <QDateTime>  // for QDateTime
+#include <QString>    // for QString
+#include <QVector>    // for QVector
 
 #include "defs.h"
-#include "format.h"
+#include "format.h"   // for Format
+#include "option.h"   // for OptionString, OptionBool
 
 
 class RandomFormat : public Format
@@ -73,18 +75,18 @@ private:
 
   /* Member Functions */
 
-  double rand_dbl(double);
-  float rand_flt(float);
-  int rand_int(int);
-  QString rand_str(int, const char*);
+  double rand_dbl(double max);
+  float rand_flt(float max);
+  int rand_int(int max);
+  QString rand_str(int maxlen, const char* fmt);
   void random_set_generator();
-  Waypoint* random_generate_wpt(int, const QDateTime&, const Waypoint*);
+  Waypoint* random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev);
 
   /* Data Members */
 
-  char* opt_points{nullptr};
-  char* opt_seed{nullptr};
-  char* opt_nodelay{nullptr};
+  OptionInt opt_points;
+  OptionInt opt_seed;
+  OptionBool opt_nodelay;
 
   QVector<arglist_t> random_args = {
     {

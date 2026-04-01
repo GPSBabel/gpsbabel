@@ -29,3 +29,13 @@ compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v3.gpx
 # don't choke if autoroute information is present.
 gpsbabel -i gdb,dropwpt -f ${REFERENCE}/gdb-sample-v3-autoroute.gdb -o gpx -F ${TMPDIR}/gdb-sample-v3-autoroute.gpx
 compare ${REFERENCE}/gdb-sample-v3-autoroute.gpx ${TMPDIR}/gdb-sample-v3-autoroute.gpx
+
+# test that the Route point Point names from the 'R' records match the Waypoint names from the 'W' records.
+# the names in the csv input are all identical which forces the gdb writer to uniquify them.
+gpsbabel -r  -i unicsv -f ${REFERENCE}/route/gdbroutenametest.csv -o gdb -F ${TMPDIR}/gdbroutenametest.gdb
+# if we don't match the names we will get a fatal error:
+# gdb: Route point mismatch!
+#   "RoutePoint" from waypoints differs to "RoutePoint"
+#   from route table by more than 1113.2 meters!
+gpsbabel -r -i gdb -f ${TMPDIR}/gdbroutenametest.gdb -o unicsv -F ${TMPDIR}/gdbroutenametest.csv
+compare ${REFERENCE}/route/gdbroutenametest~csv.csv ${TMPDIR}/gdbroutenametest.csv

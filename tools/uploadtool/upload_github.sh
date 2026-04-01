@@ -79,7 +79,7 @@ echo "release_url: $release_url"
 target_commit_sha=$(echo "$release_infos" | grep '"target_commitish":' | head -n 1 | cut -d '"' -f 4 | cut -d '{' -f 1)
 echo "target_commit_sha: $target_commit_sha"
 
-if [ "{$GITHUB_SHA}" != "$target_commit_sha" ] ; then
+if [ "${GITHUB_SHA}" != "$target_commit_sha" ] ; then
 
   echo "GITHUB_SHA != target_commit_sha, hence deleting $RELEASE_NAME..."
 
@@ -132,9 +132,11 @@ echo "Upload binaries to the release..."
 for FILE in "$@" ; do
   FULLNAME="${FILE}"
   BASENAME="$(basename "${FILE}")"
+  # use -http1.1 to avoid https://github.com/actions/runner-images/issues/7329
   curl -H "Authorization: token ${GITHUB_TOKEN}" \
        -H "Accept: application/vnd.github.manifold-preview" \
        -H "Content-Type: application/octet-stream" \
+       --http1.1 \
        --data-binary @$FULLNAME \
        "$upload_url?name=$BASENAME"
   echo ""

@@ -1,5 +1,6 @@
 <para>
-This option specifies the local time zone to use when writing times.  It
-is specified as an offset from Universal Coordinated Time (UTC) in hours.
-Valid values are from -23 to +23.
+This option specifies the local time zone to use when reading and writing times.  It
+specifies a Universal Coordinated Time (UTC) offset in hours.  For example, in the
+winter in Sweden the UTC offset is UTC+1, which corresponds to an option utc=1.
+Valid values are from -14 to +14.
 </para>

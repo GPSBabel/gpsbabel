@@ -4,18 +4,51 @@
 
     Steps to create a new format.
 
-    1) Copy this file to <your_format_name>.c
+    1) Copy format_skeleton.h, format_skeleton.cc to <your_format_name>.h,
+       <your_format_name>.cc
     2) Rename all format_skeleton tokens to <your_format_name>.
     3) Replace the fictional name and address in the Copyright section below.
        ** As your work is likely built on the work of others, please retain
        the original line. **
-    4) Create a new section in vecs.c.
-    5) Add compilation instructions to Makefile.
-    6) Add sample files (it's better when they're created by the "real"
-       application and not our own output) to reference/ along with
-       files in a well supported (preferably non-binary) format and
-       entries in our 'testo' program.   This allows users of different
-       OSes and hardware to exercise your module.
+    4) Create a new entry in vec_list in vecs.cc. You are strongly encouraged
+       to use
+       a dynamic format, i.e. one that uses &fmtfactory<FormatSkeletonFormat>.
+       Add the include for your .h file.
+       An example entry in vec_list would be:
+    {
+      nullptr,
+      "skel",
+      ".skel",
+      "Format Skeleton",
+      nullptr,
+      &fmtfactory<FormatSkeletonFormat>
+    },
+    5) Add entries to SOURCES, HEADERS and TESTS in CMakeLists.txt
+    6) Add a small test script for your format to
+       testo.d/<your_format_name>.test.  Add sample files (it's better when
+       they're created by the "real" application and not our own output) to
+       reference/ along with files of expected output in a well supported
+       (preferably non-binary) format.  Note that 'now' timestamps are
+       suppressed or locked to Jan 1, 1970 so they're reproducible.  This
+       allows users of different OSes and hardware to exercise your module.
+       You can either run testo directly or build the check target (cmake
+       --build <dir> --target check).  If you did an out of source build
+       and you use the testo script you will need to use the -p option to
+       tell it where the gpsbabel executable you built is.
+    7) It will be necessary to update some of the reference files of the
+       serailization.test for your format and any options your format defined.
+       If you pass testo the -d flag it will save the test output which can
+       be useful to update the associated reference file.
+    8) Add documentation in xmldoc/formats/<your_format_name>.xml and
+       for each option in your format
+       xmldoc/formats/options/<your_format_name>-<option-name>.xml.
+       You can build the target gpsbabel.pdf (cmake --build <dir> --target
+       gpsbabel.pdf) and check the assembled document.  If you build
+       gpsbabel.pdf the build will create properly named empty files for
+       your format in the source tree xmldoc/formats and each option in
+       xmldoc/format/options if they don't already exist, then you can
+       fill them in.  Make sure your information appears in the document.
+       If you create a file with an unexpected name it will not be used!
 
     Copyright (C) YYYY John Doe, anybody@wherever.com
     Copyright (C) 2001-YYYY Robert Lipe, robertlipe+source@gpsbabel.org
@@ -36,39 +69,28 @@
 
  */
 
+#include "format_skeleton.h"
+
+#include <QString>
+
 #include "defs.h"
 
-#define MYNAME "format_skeleton"
-
-
-// Any arg in this list will appear in command line help and will be
-// populated for you.
-// Values for ARGTYPE_xxx can be found in defs.h and are used to
-// select the type of option.
-static
-QVector<arglist_t> format_skeleton_args = {
-// {"foo", &fooopt, "The text of the foo option in help",
-//   "default", ARGYTPE_STRING, ARG_NOMINMAX} ,
-};
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-format_skeleton_rd_init(const char* fname)
+void FormatSkeletonFormat::rd_init(const QString& fname)
 {
-//	fin = gbfopen(fname, "r", MYNAME);
+//	fin = gbfopen(fname, "r");
 }
 
-static void
-format_skeleton_rd_deinit()
+void FormatSkeletonFormat::rd_deinit()
 {
 //	gbfclose(fin);
 }
 
-static void
-format_skeleton_read()
+void FormatSkeletonFormat::read()
 {
 //	your special code to extract waypoint, route and track
 //	information from gbfile "fin"
@@ -102,53 +124,39 @@ format_skeleton_read()
 //
 }
 
-static void
-format_skeleton_wr_init(const char* fname)
+void FormatSkeletonFormat::wr_init(const QString& fname)
 {
-//	fout = gbfopen(fname, "w", MYNAME);
+//	fout = gbfopen(fname, "w");
 }
 
-static void
-format_skeleton_wr_deinit()
+void FormatSkeletonFormat::wr_deinit()
 {
 //	gbfclose(fout);
 }
 
-static void
-format_skeleton_write()
+void FormatSkeletonFormat::write()
 {
 // Here is how you register callbacks for all waypoints, routes, tracks.
 // waypt_disp_all(waypt)
 // route_disp_all(head, tail, rtept);
 // track_disp_all(head, tail, trkpt);
+// You can use lambdas to connect to non-static member functions.
+// For example, if track_hdr, track_tlr, and track_disp
+// are non-static member functions of your format, you can utilize them
+// like this:
+//  auto track_hdr_lambda = [this](const route_head* rte)->void {
+//    track_hdr(rte);
+//  };
+//  auto track_tlr_lambda = [this](const route_head* rte)->void {
+//    track_tlr(rte);
+//  };
+//  auto track_disp_lambda = [this](const Waypoint* waypointp)->void {
+//    track_disp(waypointp);
+//  };
+//  track_disp_all(track_hdr_lambda, track_tlr_lambda, track_disp_lambda);
 }
 
-static void
-format_skeleton_exit(void)		/* optional */
+void
+FormatSkeletonFormat::exit(void)		/* optional */
 {
 }
-
-/**************************************************************************/
-
-// capabilities below means: we can only read and write waypoints
-// please change this depending on your new module
-
-ff_vecs_t format_skeleton_vecs = {
-  ff_type_file,
-  {
-    (ff_cap)(ff_cap_read | ff_cap_write) 	/* waypoints */,
-    ff_cap_none 			/* tracks */,
-    ff_cap_none 			/* routes */
-  },
-  format_skeleton_rd_init,
-  format_skeleton_wr_init,
-  format_skeleton_rd_deinit,
-  format_skeleton_wr_deinit,
-  format_skeleton_read,
-  format_skeleton_write,
-  format_skeleton_exit,
-  &format_skeleton_args,
-  NULL_POS_OPS // Unless you do realtime positioning
-
-};
-/**************************************************************************/

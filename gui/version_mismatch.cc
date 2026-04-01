@@ -21,6 +21,8 @@
 
 #include "version_mismatch.h"
 
+#include <QLabel>  // for QLabel
+
 VersionMismatch::VersionMismatch(QWidget* parent, const QString& ver1,
                                  const QString& ver2): QDialog(parent)
 {

@@ -18,6 +18,14 @@
 
 
 #include "preferences.h"
+#include <QAbstractButton>   // for QAbstractButton
+#include <QCheckBox>         // for QCheckBox
+#include <QButtonGroup>      // for QButtonGroup
+#include <QDialogButtonBox>  // for QDialogButtonBox
+#include <QListWidget>       // for QListWidget
+#include <QListWidgetItem>   // for QListWidgetItem
+#include <QPushButton>       // for QPushButton
+#include <Qt>                // for CheckState
 
 class FormatListEntry : public QListWidgetItem
 {
@@ -42,7 +50,57 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
 
   ui_.startupCheck->setChecked(babelData_.startupVersionCheck_);
   ui_.reportStatisticsCheck->setChecked(babelData_.reportStatistics_);
+  ui_.upgradeMenuCheck->setChecked(babelData_.upgradeMenuEnabled_);
+  switch (babelData_.mapPreviewSelection_) {
+    case BabelData::GoogleMapsPreview:
+      ui_.mapPreviewCheck->setChecked(true);
+      break;
+    case BabelData::LeafletMapsPreview:
+      ui_.leafletMapPreviewCheck->setChecked(true);
+      break;
+    case BabelData::NoMapPreview:
+    default:
+      ui_.disableMapPreviewCheck->setChecked(true);
+      break;
+  }
   ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
+
+#ifdef DISABLE_UPGRADE_CHECK
+  ui_.startupCheck->hide();
+  ui_.reportStatisticsCheck->hide();
+  ui_.upgradeMenuCheck->hide();
+
+  QLabel* noStartupCheckLabel = new QLabel(tr("This version never checks for a newer version on start."), ui_.privacy_tab);
+  noStartupCheckLabel->setObjectName("noStartupCheckLabel");
+  ui_.verticalLayout_5->insertWidget(0, noStartupCheckLabel);
+ 
+  QLabel* noReportStatisticsLabel = new QLabel(tr("This version never reports usage data."), ui_.privacy_tab);
+  noReportStatisticsLabel->setObjectName("noReportStatisticsLabel");
+  ui_.verticalLayout_5->insertWidget(1, noReportStatisticsLabel);
+ 
+  QLabel* noUpgradeMenuLabel = new QLabel(tr("This version does not include the ability to check for an upgrade."), ui_.privacy_tab);
+  noUpgradeMenuLabel->setObjectName("noUpgradeMenuLabel");
+  ui_.verticalLayout_5->insertWidget(2, noUpgradeMenuLabel);
+#endif
+#ifdef DISABLE_GOOGLEMAPPREVIEW
+  ui_.mapPreviewCheck->hide();
+
+  QLabel* noPreviewLabel = new QLabel(tr("The version does not include the map preview feature."), ui_.privacy_tab);
+  noPreviewLabel->setObjectName("noPreviewLabel");
+  ui_.verticalLayout_5->insertWidget(3, noPreviewLabel);
+#endif
+
+#ifdef DISABLE_LEAFLETMAPPREVIEW
+  ui_.leafletMapPreviewCheck->hide();
+
+  QLabel* noLeafletPreviewLabel = new QLabel(tr("The version does not include the Leaflet map preview feature."), ui_.privacy_tab);
+  noLeafletPreviewLabel->setObjectName("noLeafletPreviewLabel");
+  ui_.verticalLayout_5->insertWidget(4, noLeafletPreviewLabel);
+#endif
+
+#if defined(DISABLE_GOOGLEMAPPREVIEW) && defined(DISABLE_LEAFLETMAPPREVIEW)
+  ui_.disableMapPreviewCheck->hide();
+#endif
 
   connect(ui_.buttonBox, &QDialogButtonBox::accepted, this, &Preferences::acceptClicked);
   connect(ui_.buttonBox, &QDialogButtonBox::rejected, this, &Preferences::rejectClicked);
@@ -82,6 +140,14 @@ void Preferences::acceptClicked()
 
   babelData_.startupVersionCheck_ = ui_.startupCheck->isChecked();
   babelData_.reportStatistics_ = ui_.reportStatisticsCheck->isChecked();
+  babelData_.upgradeMenuEnabled_ = ui_.upgradeMenuCheck->isChecked();
+  if (ui_.mapPreviewCheck->isChecked()) {
+    babelData_.mapPreviewSelection_ = BabelData::GoogleMapsPreview;
+  } else if (ui_.leafletMapPreviewCheck->isChecked()) {
+    babelData_.mapPreviewSelection_ = BabelData::LeafletMapsPreview;
+  } else {
+    babelData_.mapPreviewSelection_ = BabelData::NoMapPreview;
+  }
   babelData_.ignoreVersionMismatch_ = ui_.ignoreVersionMismatchCheck->isChecked();
   accept();
 }

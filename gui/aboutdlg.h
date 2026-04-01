@@ -23,16 +23,17 @@
 #ifndef ABOUTDLG_H
 #define ABOUTDLG_H
 
-#include <QString>            // for QString
-#include <QDialog>            // for QDialog
-#include <QWidget>            // for QWidget
-#include "ui_aboutui.h"       // for Ui_AboutDlg
+#include <QDialog>       // for QDialog
+#include <QString>       // for QString
+#include <QWidget>       // for QWidget
+#include "ui_aboutui.h"  // for Ui_AboutDlg
 
 class AboutDlg: public QDialog
 {
 public:
   AboutDlg(QWidget* parent,  const QString& ver1,
            const QString& ver2, const QString& ver3,
+           const QString& date,
            const QString& installationId);
 
 private:

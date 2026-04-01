@@ -3,6 +3,16 @@ This option specifies the minimum allowable distance between two points.  If
 two points are closer than this distance, only one of them is kept.
 </para>
 <para>
-Distances may be expressed in feet (30f) or meters (10m).  If no unit is
-specified, the distance is assumed to be in feet.
+The units may be specified by appending a suffix to the supplied number:
+</para>
+<simplelist type="vert">
+<member>'m' for meters, e.g. 3500.0m</member>
+<member>'ft' or 'feet' for feet, e.g. 11483ft</member>
+<member>'k' or 'km' for kilometers, e.g 3.5000km</member>
+<member>'nm' for nautical miles, e.g. 1.8898nm</member>
+<member>'mi' for miles, e.g. 2.1748mi</member>
+<member>'fa' for fathoms, e.g. 1913.82fa</member>
+</simplelist>
+<para>
+If no units are specified, the units are assumed to be feet.
 </para>

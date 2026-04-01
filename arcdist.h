@@ -22,10 +22,13 @@
 #ifndef ARCDIST_H_INCLUDED_
 #define ARCDIST_H_INCLUDED_
 
-#include <QVector>         // for QVector
+#include <QList>     // for QList
+#include <QString>   // for QString
+#include <QVector>   // for QVector
 
 #include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_BOOL, Waypoint (ptr only)
 #include "filter.h"  // for Filter
+#include "option.h"  // for OptionBool, OptionString
 
 #if FILTERS_ENABLED
 
@@ -40,27 +43,35 @@ public:
   void process() override;
 
 private:
-  double pos_dist{};
-  char* distopt = nullptr;
-  char* arcfileopt = nullptr;
-  char* rteopt = nullptr;
-  char* trkopt = nullptr;
-  char* exclopt = nullptr;
-  char* ptsopt = nullptr;
-  char* projectopt = nullptr;
+  /* Types */
 
   struct extra_data {
     double distance;
-    double prjlatitude;
-    double prjlongitude;
+    PositionDeg prjpos;
     double frac;
     const Waypoint* arcpt1;
     const Waypoint* arcpt2;
   };
 
+  /* Member Functions */
+
+  void arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2);
+  void arcdist_arc_disp_hdr_cb(const route_head* /*unused*/);
+
+  /* Data Members */
+
+  double pos_dist{};
+  OptionDouble distopt{true};
+  OptionString arcfileopt;
+  OptionBool rteopt;
+  OptionBool trkopt;
+  OptionBool exclopt;
+  OptionBool ptsopt;
+  OptionBool projectopt;
+
   QVector<arglist_t> args = {
     {
-      "file", &arcfileopt,  "File containing vertices of arc",
+      "file", &arcfileopt, "File containing vertices of arc",
       nullptr, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
     },
     {
@@ -73,7 +84,7 @@ private:
     },
     {
       "distance", &distopt, "Maximum distance from arc",
-      nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+      nullptr, ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
     },
     {
       "exclude", &exclopt, "Exclude points close to the arc", nullptr,
@@ -88,9 +99,6 @@ private:
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
   };
-
-  void arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2);
-  void arcdist_arc_disp_hdr_cb(const route_head*);
 
 };
 #endif // FILTERS_ENABLED

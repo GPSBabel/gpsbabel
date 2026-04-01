@@ -131,10 +131,6 @@
                <property name="text">
                 <string>File Name(s)</string>
                </property>
-               <property name="icon">
-                <iconset resource="app.qrc">
-                 <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
-               </property>
               </widget>
              </item>
              <item>
@@ -551,10 +547,6 @@
                <property name="text">
                 <string>File Name</string>
                </property>
-               <property name="icon">
-                <iconset resource="app.qrc">
-                 <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
-               </property>
               </widget>
              </item>
              <item>
@@ -674,7 +666,7 @@
      <x>0</x>
      <y>0</y>
      <width>675</width>
-     <height>26</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -687,6 +679,9 @@
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>true</bool>
     </property>
     <addaction name="actionHelp"/>
     <addaction name="separator"/>
@@ -723,6 +718,9 @@
   <action name="actionUpgradeCheck">
    <property name="text">
     <string>Check for Upgrade</string>
+   </property>
+   <property name="toolTip">
+    <string>Enable this is the File Menu, Preferences Item, Privacy tab.</string>
    </property>
   </action>
   <action name="actionVisit_Website">

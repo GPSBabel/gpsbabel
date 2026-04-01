@@ -1,0 +1,15 @@
+<para>
+  This option controls whether to include the Fix Accuracy (FXA) data from the IGC file. This value represents the Estimated Position Error (EPE) in meters, typically with a 2-Sigma (95.45%) probability.
+</para>
+<para>
+  This is a boolean option that is enabled by default. Including this data provides information about the quality and reliability of the GPS fix at each point in the track. It can be useful for detailed analysis or for filtering out low-quality data.
+</para>
+<para>
+  To exclude this data, use <userinput>FXA=0</userinput>.
+</para>
+<example xml:id="igc_fxa_example">
+  <title>Convert an IGC file while excluding the Fix Accuracy data</title>
+  <para>
+    <userinput>gpsbabel -i igc,FXA=0 -f my_flight.igc -o gpx -F my_flight.gpx</userinput>
+  </para>
+</example>

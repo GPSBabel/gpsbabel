@@ -22,12 +22,12 @@
 //------------------------------------------------------------------------
 #include "help.h"
 
-#include <QRegularExpression>         // for QRegularExpression
-#include <QString>                    // for QString
-#include <QUrl>                       // for QUrl
-#include <QDesktopServices>           // for QDesktopServices
+#include <QDesktopServices>    // for QDesktopServices
+#include <QRegularExpression>  // for QRegularExpression
+#include <QString>             // for QString, operator+
+#include <QUrl>                // for QUrl
 
-#include "format.h"                   // for Format
+#include "format.h"            // for Format
 
 //------------------------------------------------------------------------
 void ShowHelp(const QString& urlIn)

@@ -1,0 +1,18 @@
+# test detection of invalid option values
+# this should cover static and dynamic filters and functions.
+${VALGRIND} "${PNAME}" -i geo -f ${REFERENCE}/geocaching.loc -x radius,lat=44x -o gpx -F /dev/null 2> ${TMPDIR}/badopt1.txt && {
+  echo "${PNAME} succeeded! (it shouldn't have with this input...)"
+}
+compare ${REFERENCE}/badopt1.txt ${TMPDIR}/badopt1.txt
+${VALGRIND} "${PNAME}" -i geo -f ${REFERENCE}/geocaching.loc -x stack,depth=b -o gpx -F /dev/null 2> ${TMPDIR}/badopt2.txt && {
+  echo "${PNAME} succeeded! (it shouldn't have with this input...)"
+}
+compare ${REFERENCE}/badopt2.txt ${TMPDIR}/badopt2.txt
+${VALGRIND} "${PNAME}" -i gdb,bitscategory=0x2z -f ${REFERENCE}/gdb-sample.gdb -o xcsv -F /dev/null 2> ${TMPDIR}/badopt3.txt && {
+  echo "${PNAME} succeeded! (it shouldn't have with this input...)"
+}
+compare ${REFERENCE}/badopt3.txt ${TMPDIR}/badopt3.txt
+${VALGRIND} "${PNAME}" -i gdb,bitscategory=0x2 -f ${REFERENCE}/gdb-sample.gdb -o csv,snlen=a -F /dev/null 2> ${TMPDIR}/badopt4.txt && {
+  echo "${PNAME} succeeded! (it shouldn't have with this input...)"
+}
+compare ${REFERENCE}/badopt4.txt ${TMPDIR}/badopt4.txt

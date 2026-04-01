@@ -1,1 +1,15 @@
-
+<para>
+  This option controls the size of the data blocks, in kilobytes, requested from an MTK-based device (including the Holux M-241) during a data download.
+</para>
+<para>
+  The value must be an integer between 1 and 64. The default value is 1 KB.
+</para>
+<para>
+  In general, a larger block size can result in a faster download. However, on some less reliable serial or USB connections, a smaller block size may be more stable. If you experience timeouts or errors during download, you may want to try a smaller value.
+</para>
+<example xml:id="m241_block_size_kb_example">
+  <title>Download data from an MTK device using a 16 KB block size</title>
+  <para>
+    <userinput>gpsbabel -i mtk,block_size_kb=16 -f /dev/ttyUSB0 -o gpx -F my_track.gpx</userinput>
+  </para>
+</example>

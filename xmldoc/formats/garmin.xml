@@ -251,10 +251,10 @@ GPX files from the mass storage device as mounted on your computer.
 
 <para>
 	To communicate with a Garmin GPS serially, use the name of that
-	serial port such as <filename>COM1</filename> or  <filename>/dev/cu.serial</filename>.
+	serial port such as <filename>COM1</filename> or <filename>/dev/cu.serial</filename>.
 </para>
 <para>
-	To communicate via USB use <filename>usb:</filename> as the filename on all OSes.
+	To communicate via USB use <code>usb:</code> as the filename on all OSes.
 	Thus, to read the waypoints from a Garmin USB receiver and write
 	them to a GPX file:
 </para>
@@ -283,7 +283,7 @@ Custom icons are supported on units that support that.
 Neither GPSBabel nor your firmware know what is associated with any
 given slot number.  They don't know that the picture you placed in the
 first slot is a happy face, they only know they're in the lowest
-numbered slot.  GPSBabel names the them consistently with Mapsource,
+numbered slot.  GPSBabel names them consistently with MapSource,
 so they are named 'Custom 0' through 'Custom 511'.
 </para>
 <para>

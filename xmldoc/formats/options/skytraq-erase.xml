@@ -1,1 +1,15 @@
-
+<para>
+  This option erases all track log data from the Skytraq-based device after a successful download.
+</para>
+<para>
+  This is a boolean option. Use it to automatically clear the device's memory after you have retrieved the tracks. This is useful for ensuring you have a clean log for your next activity without having to manually erase the device.
+</para>
+<para>
+  For safety, the erase operation is only performed after the data has been successfully read.
+</para>
+<example xml:id="skytraq_erase_example">
+  <title>Download tracks from a Skytraq device and erase it afterward</title>
+  <para>
+    <userinput>gpsbabel -i skytraq,erase -f /dev/ttyUSB0 -o gpx -F my_track.gpx</userinput>
+  </para>
+</example>

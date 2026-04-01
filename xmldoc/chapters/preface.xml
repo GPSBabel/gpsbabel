@@ -6,7 +6,7 @@
 to hold waypoint, track, and route information in various programs
 used by computers and GPS receivers.
 
-         <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.topografix.com/gpx.asp">GPX</link>
+         <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.topografix.com/gpx.asp">GPX</link>
          defines a
 standard in XML to contain all the data, but there are too many
 programs that don't understand it yet and too much data in

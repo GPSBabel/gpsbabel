@@ -26,9 +26,7 @@
 #include "height.h"
 #include <cmath>    // for floor
 #include <cstdint>  // for int8_t
-#include <cstdlib>  // for strtod
 
-#define MYNAME "height"
 
 #if FILTERS_ENABLED
 
@@ -54,10 +52,10 @@ double HeightFilter::wgs84_separation(double lat, double lon)
 {
   /* sanity checks to prevent segfault on bad data */
   if ((lat > 90.0) || (lat < -90.0)) {
-    fatal(MYNAME ": Invalid latitude value (%f)\n", lat);
+    gbFatal("Invalid latitude value (%f)\n", lat);
   }
   if ((lon > 180.0) || (lon < -180.0)) {
-    fatal(MYNAME ": Invalid longitude value (%f)\n", lon);
+    gbFatal("Invalid longitude value (%f)\n", lon);
   }
 
   auto ilat = static_cast<int>(floor((90.0+lat)/geoid_grid_deg));
@@ -84,11 +82,11 @@ void HeightFilter::correct_height(const Waypoint* wpt)
   auto* waypointp = const_cast<Waypoint*>(wpt);
 
   if (waypointp->altitude != unknown_alt) {
-    if (addopt != nullptr) {
+    if (addopt) {
       waypointp->altitude += addf;
     }
 
-    if (wgs84tomslopt != nullptr) {
+    if (wgs84tomslopt) {
       waypointp->altitude -= wgs84_separation(waypointp->latitude, waypointp->longitude);
     }
   }
@@ -96,18 +94,11 @@ void HeightFilter::correct_height(const Waypoint* wpt)
 
 void HeightFilter::init()
 {
-  char* unit;
-
-  if (addopt != nullptr) {
-    addf = strtod(addopt, &unit);
-
-    if (*unit == 'f' || *unit== 'F') {
-      addf = FEET_TO_METERS(addf);
-    } else if ((*unit != 'm') && (*unit != 'M') && (*unit != '\0'))  {
-      fatal(MYNAME ": Invalid unit (\"%c\")! Please use \"m\" for meter or \"f\" for feet.\n", *unit);
+  addf = 0.0;
+  if (addopt) {
+    if (parse_distance(addopt, &addf, 1.0) == 0) {
+      gbFatal("No height specified with add option.\n");
     }
-  } else {
-    addf = 0.0;
   }
 }
 

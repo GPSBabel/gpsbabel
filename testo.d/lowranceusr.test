@@ -152,3 +152,27 @@ gpsbabel -i lowranceusr -f ${REFERENCE}/lowrance-v6.usr -o unicsv,utc=0 -F ${TMP
 tail -n +2 ${TMPDIR}/lowrance-v6-unicsv.txt | sed "s/[0-9]*,//" | sort -t , -k 3 > ${TMPDIR}/lowrance-v6-unicsv-sorted.txt
 compare ${TMPDIR}/lowrance-v4-unicsv-sorted.txt ${TMPDIR}/lowrance-v6-unicsv-sorted.txt
 
+# test translation of version 2, 3 continuous flag to new track segments.
+# 1. when reading usr files can we translate the contiuous flag in a usr file to track segments?
+gpsbabel -i lowranceusr -f ${REFERENCE}/lowrance-v2.usr -o gpx -F ${TMPDIR}/lowrance-v2.gpx
+compare ${REFERENCE}/lowrance-v2.gpx ${TMPDIR}/lowrance-v2.gpx 
+# 2. if so, when writing a usr file can we translate a track segment to the continuous flag in the usr file?
+gpsbabel -i gpx -f ${REFERENCE}/lowrance-v2.gpx -o lowranceusr -F ${TMPDIR}/lowrance-v2~gpx.usr
+gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance-v2~gpx.usr -o gpx -F ${TMPDIR}/lowrance-v2~usr.gpx
+compare ${REFERENCE}/lowrance-v2.gpx ${TMPDIR}/lowrance-v2~usr.gpx
+# 3. can we get the track segments correct when we do a merge?
+gpsbabel -i gpx -f ${REFERENCE}/lowrance-v2.gpx -o lowranceusr,merge -F ${TMPDIR}/lowrance-v2-merge~gpx.usr
+gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance-v2-merge~gpx.usr -o gpx -F ${TMPDIR}/lowrance-v2-merge~usr.gpx
+compare ${REFERENCE}/lowrance-v2-merge~usr.gpx ${TMPDIR}/lowrance-v2-merge~usr.gpx
+
+#
+# Test UTF-16 character corruption bug in USR v4+ formats
+# This test verifies that waypoint names with characters containing 0x01 byte in UTF-16LE 
+# encoding (like "Ā" = U+0100 = 0x00 0x01) are handled correctly without corruption
+#
+gpsbabel -i gpx -f ${REFERENCE}/lowrance-utf16-test.gpx -o lowranceusr,wversion=4 -F ${TMPDIR}/lowrance-utf16-test.usr
+gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance-utf16-test.usr -o gpx -F ${TMPDIR}/lowrance-utf16-test~usr.gpx
+# Extract waypoint name from both files and compare - this focuses the test on the UTF-16 bug
+grep '<name>' ${REFERENCE}/lowrance-utf16-test.gpx > ${TMPDIR}/lowrance-utf16-orig-name.txt
+grep '<name>' ${TMPDIR}/lowrance-utf16-test~usr.gpx > ${TMPDIR}/lowrance-utf16-output-name.txt
+compare ${TMPDIR}/lowrance-utf16-orig-name.txt ${TMPDIR}/lowrance-utf16-output-name.txt

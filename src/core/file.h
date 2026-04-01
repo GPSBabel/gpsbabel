@@ -53,7 +53,7 @@ public:
     }
 
     if (!status) {
-      fatal(FatalMsg().noquote() << "Cannot open '" %
+      gbFatal(FatalMsg().noquote() << "Cannot open '" %
         (gpsbabel_testmode() ?
           QFileInfo(*this).fileName() :
           QFileInfo(*this).absoluteFilePath()) %

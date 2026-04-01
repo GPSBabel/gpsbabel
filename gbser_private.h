@@ -24,7 +24,7 @@
 #define MYMAGIC 0x91827364
 #define BUFSIZE 512
 
-void gbser_db(int l, const char* msg, ...);
+[[gnu::format(printf, 2, 3)]] void gbser_db(int l, const char* msg, ...);
 int gbser_fill_buffer(void* handle, unsigned want, unsigned* ms);
 unsigned gbser_read_buffer(void* handle, void** buf, unsigned* len);
 #endif // GBSER_PRIVATE_H_

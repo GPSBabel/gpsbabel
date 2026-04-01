@@ -27,20 +27,19 @@ and the associated attribute file (.dbf).<p>
 <h2>What is a Shapefile?</h2>
 
 If you don't know, you probably don't need this library.  The Shapefile
-format is a working and interchange format promulagated by 
+format is a working and interchange format promulgated by
 <a href="http://www.esri.com/">ESRI</a> for simple vector data with attributes.
 <p>
 
-An excellent <a href="dl/shapefile.pdf">white paper</a> on the shapefile format 
-is available from ESRI,
-but it is .pdf format, so you will need Adobe Acrobat to browse it.<p>
+An excellent <a href="https://www.esri.com/content/dam/esrisites/sitecore-archive/Files/Pdfs/library/whitepapers/pdfs/shapefile.pdf">white paper</a>
+on the shapefile format is available from ESRI.<p>
 
 The file format actually consists of three files.<p>
 
 <pre>
 XXX.shp - holds the actual vertices.
 XXX.shx - hold index data pointing to the structures in the .shp file.
-XXX.dbf - holds the attributes in xBase (dBase) format.  
+XXX.dbf - holds the attributes in xBase (dBase) format.
 </pre>
 
 <h2>Download</h2>
@@ -48,27 +47,22 @@ XXX.dbf - holds the attributes in xBase (dBase) format.
 Source code, and some other odds and ends can be downloaded from
 <a href="http://download.osgeo.org/shapelib">http://download.osgeo.org/shapelib</a>.<p>
 
-Shapelib is available for anonymous CVS access:
-
-<pre>
-  cvs -d :pserver:cvsanon@cvs.maptools.org:/cvs/maptools/cvsroot login
-  Password: (hit enter)
-  cvs -d :pserver:cvsanon@cvs.maptools.org:/cvs/maptools/cvsroot co shapelib
-</pre>
+Shapelib repository is at
+<a href="https://github.com/OSGeo/shapelib">https://github.com/OSGeo/shapelib</a><p>
 
 <h2>Bugs, Maintainance and Support</h2>
 
-This library is maintained by <a href="http://pobox.com/~warmerdam">Frank 
-Warmerdam</a>.  Please send me bug reports, patches and suggestions for the 
+This library is maintained by <a href="http://pobox.com/~warmerdam">Frank
+Warmerdam</a>.  Please send me bug reports, patches and suggestions for the
 library via the <a href="http://bugzilla.maptools.org/enter_bug.cgi?product=Shapelib">maptools.org Bugzilla</a>.  Shapelib bugs can also be
 <a href="http://bugzilla.maptools.org/query.cgi?product=Shapelib">queried</a>.
 <p>
 
-Shapelib is hosted at 
+Shapelib is hosted at
 <a href="http://shapelib.maptools.org">shapelib.maptools.org</a>.   A mailing
-list for discussion of how to use shapelib, and announcing new releases 
-<a href="http://lists.maptools.org/mailman/listinfo/shapelib/">is 
-available</a>. To get notification of new releases of Shapelib <i>subscribe</i> to 
+list for discussion of how to use shapelib, and announcing new releases
+<a href="http://lists.maptools.org/mailman/listinfo/shapelib/">is
+available</a>. To get notification of new releases of Shapelib <i>subscribe</i> to
 the project mailing list at https://lists.osgeo.org/pipermail/shapelib/.<p>
 
 <h2>Credits</h2>
@@ -78,7 +72,7 @@ contributors to Shapelib are lost in pre-history.
 
 <ul>
 <li> Bill Miller (NY-DOT) for shputils.c
-<li> Carl Anderson for the contents of the contrib directory, and 
+<li> Carl Anderson for the contents of the contrib directory, and
 the "tuple" additions to dbfopen.c.
 <li> Andrea Giacomelli for patches for dbfopen.c.
 <li> Doug Matthews for portability improvements.
@@ -96,10 +90,10 @@ who hosted shapelib for years.
 <h2>In Memorium</h2>
 
 I would like to dedicate Shapelib to the memory of Sol Katz.  While I never
-met him in person, his generous contributions to the GIS community took 
+met him in person, his generous contributions to the GIS community took
 many forms, including free distribution of a variety of GIS translators
-with source.  The fact that he used this Shapelib in some of his utilities, 
-and thanked me was a great encouragement to me.  I hope I can do his memory 
+with source.  The fact that he used this Shapelib in some of his utilities,
+and thanked me was a great encouragement to me.  I hope I can do his memory
 honour by trying to contribute in a similar fashion.<p>
 
 <h2>Portability</h2>
@@ -114,7 +108,7 @@ such as MSDOS.<p>
 The shputils.c module is contributed, and may not take the same approach
 to portability as the rest of the package.<p>
 
-On Linux, and most unix systems it should be possible to build and 
+On Linux, and most unix systems it should be possible to build and
 install shapefile support as a shared library using the "lib" and "lib_install"
 targets of the Makefile.  Note that this Makefile doesn't use autoconf
 mechanisms and will generally require some hand tailoring for your environment.
@@ -123,11 +117,11 @@ mechanisms and will generally require some hand tailoring for your environment.
 
 <ul>
 
-<li> You can't modify the vertices of existing structures (though you 
-   can update the attributes of existing structures, and create new 
+<li> You can't modify the vertices of existing structures (though you
+   can update the attributes of existing structures, and create new
    structures).<p>
 
-<li> Not written in such a way as to be particularly fast.  This is 
+<li> Not written in such a way as to be particularly fast.  This is
 particularly true of the 1.2 API.  For applications more concerned with
 speed it may be worth using the V1.1 API.<p>
 
@@ -159,32 +153,32 @@ files through appropriate use of the DBF and SHP APIs.<p>
 
 <li> <a href="codepage.html">Language ID / Code Page mappings</a><p>
 
-<li> Shapelib is used within the multiformat 
-<a href="http://ogr.maptools.org/">OGR</a> library.  If you are looking for a 
+<li> Shapelib is used within the multiformat
+<a href="http://ogr.maptools.org/">OGR</a> library.  If you are looking for a
 high level C++ library with support for many geospatial vector formats you
 might want to check it out.<p>
 
-<li> Ari Jolma has produced an initial <b>perl</b> binding on top of shapelib, 
-which can be found at CPAN as Geo::ShapeFile under the 
+<li> Ari Jolma has produced an initial <b>perl</b> binding on top of shapelib,
+which can be found at CPAN as Geo::ShapeFile under the
 <a href="http://www.cpan.org/modules/by-module/Geo/">Geo</a> module.
 <p>
 
-<li> Bernhard Herzog has produced <b>python</b> bindings for Shapelib with 
-SWIG, available at <a href="http://ftp.intevation.de/users/bh/pyshapelib/">http://ftp.intevation.de/users/bh/pyshapelib</a>.  A new version not using swig is 
+<li> Bernhard Herzog has produced <b>python</b> bindings for Shapelib with
+SWIG, available at <a href="http://ftp.intevation.de/users/bh/pyshapelib/">http://ftp.intevation.de/users/bh/pyshapelib</a>.  A new version not using swig is
 available as <a href="http://wald.intevation.org/plugins/scmsvn/viewcvs.php/trunk/thuban/libraries/pyshapelib/?root=thuban">part of Thuban</a>.<p>
 
 <li> <a href="http://www.triplexware.huckfinn.de/shpapi.html">Delphi</a>
 bindings for Shapelib courtesy of Alexander Weidauer.<p>
 
-<li> Miguel Filgueiras has implemented 
+<li> Miguel Filgueiras has implemented
 <a href="http://www.ncc.up.pt/gpsmanshp/">Tcl</a> bindings for Shapelib
 as part of <a href="http://www.ncc.up.pt/gpsman/">GPSMan</a>.<p>
 
 <li> David Gancarz has implemented a Microsoft
 <a href="dl/contrib/DotNetArchive.zip">.NET wrapper</a> for
-Shapelib.   An example of using shapelib with VB6 is also icluded in the .NET wrapper project file.<p>
+Shapelib.   An example of using shapelib with VB6 is also included in the .NET wrapper project file.<p>
 
-<li> Andrey Hristov (php at hristov dot com) has developed a PHP extension 
+<li> Andrey Hristov (php at hristov dot com) has developed a PHP extension
 based on Shapelib.  It can be found in CVS at http://cvs.php.net/pecl/shp.<p>
 
 <li> Toyoda Eizi has developed Ruby bindings found at
@@ -200,11 +194,11 @@ files.  He maintains a <a href="http://intevation.de/~jan/gen2shp">web page</a> 
 
 <li> Tom Russo has implemented a shpcs2cs program, which reprojects shapefiles
 using arguments similar to the PROJ.4 cs2cs program including datum conversion.
-Use as an alternate to the contrib/shpproj which doesn't do datums.  It is 
+Use as an alternate to the contrib/shpproj which doesn't do datums.  It is
 available at the bottom of Tom's <a href="http://www.swcp.com/~russo/shape_web/">Xastir Shapefile Resources</a> page. <p>
 
-<li> 
-Andrew Williamson's 
+<li>
+Andrew Williamson's
 <a href="http://www.geocities.com/SiliconValley/Haven/2295/useful.html">Useful
 Scripts and Stuff</a> page for ArcView, which includes ShapeChecker.<p>
 
@@ -216,13 +210,13 @@ VB access to Shapefiles.  Also available <a href="http://shapelib.maptools.org/d
 
 <li> The <a href="http://arcscripts.esri.com/details.asp?dbid=11810">ShapeFile Read/Write OCX</a> is another option for Visual Basic programmers.<p>
 
-<li> <a href="http://www.casa.ucl.ac.uk/sanjay/software_isovistanalyst.htm">Isovist Analyst</a> is a sort-of-free isovist generating extension for 
+<li> <a href="http://www.casa.ucl.ac.uk/sanjay/software_isovistanalyst.htm">Isovist Analyst</a> is a sort-of-free isovist generating extension for
 ArcView using shapelib.<p>
 
-<li> <a href="http://www.obviously.com/gis/shpdiff/">shpdiff</a> utility 
+<li> <a href="http://www.obviously.com/gis/shpdiff/">shpdiff</a> utility
 by Bryce Nesbitt.<p>
 
-<li> <a href="http://www.aequometer.de/">Aequometer</a>: a program for 
+<li> <a href="http://www.aequometer.de/">Aequometer</a>: a program for
 MS Excel to calculate the area of polygons and export as shapefiles.<p>
 
 </ul>

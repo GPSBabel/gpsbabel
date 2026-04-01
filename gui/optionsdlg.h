@@ -24,13 +24,16 @@
 #ifndef OPTIONSDLG_H
 #define OPTIONSDLG_H
 
-#include <QDialog>
-#include <QDialogButtonBox>
-#include <QCheckBox>
-#include <QLineEdit>
-#include <QToolButton>
-
-#include "format.h"
+#include <QCheckBox>         // for QCheckBox
+#include <QDialog>           // for QDialog
+#include <QDialogButtonBox>  // for QDialogButtonBox
+#include <QLineEdit>         // for QLineEdit
+#include <QList>             // for QList
+#include <QObject>           // for QObject, Q_OBJECT, slots
+#include <QString>           // for QString
+#include <QToolButton>       // for QToolButton
+#include <QWidget>           // for QWidget
+#include "format.h"          // for FormatOptio
 
 class FileDlgManager: public QObject
 {
@@ -54,7 +57,7 @@ class OptionsDlg: public QDialog
 {
   Q_OBJECT
 public:
-  OptionsDlg(QWidget* parent, const QString& fmtName_, QList<FormatOption>* options_,
+  OptionsDlg(QWidget* parent, const QString& fmtName_, QList<FormatOption>& options_,
              const QString& html_);
 
 private:

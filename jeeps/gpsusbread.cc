@@ -1,7 +1,7 @@
 /*
     Decompose an incoming USB packet to make it look like a serial one.
 
-    Copyright (C) 2004, 2006, 2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2004, 2006, 2006 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,10 +28,10 @@
  * Negative on error.
  * 1 if read success - even if empty packet.
  */
-int32 GPS_Packet_Read_usb(gpsdevh*, GPS_PPacket* packet, int eat_bulk)
+int32_t GPS_Packet_Read_usb(gpsdevh* /*unused*/, GPS_Packet* packet, int eat_bulk)
 {
-  int32  n;
-  int32 payload_size;
+	int32_t n;
+	int32_t payload_size;
 
   garmin_usb_packet pkt;
 

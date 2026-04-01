@@ -19,68 +19,76 @@
 //  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
 //  USA.
 //
-#include <QByteArray>                  // for QByteArray
-#include <QDate>                       // for QDate
-#include <QDateTime>                   // for QDateTime
-#include <QDir>                        // for QDir
-#include <QEvent>                      // for QEvent (& QEvent::LanguageChange, QEvent::LocaleChange)
-#include <QFile>                       // for QFile
-#include <QFileInfo>                   // for QFileInfo
-#include <QLibraryInfo>                // for QLibraryInfo, QLibraryInfo::TranslationsPath
-#include <QLocale>                     // for QLocale
-#include <QMimeData>                   // for QMimeData
-#include <QProcess>                    // for QProcess, QProcess::NotRunning
-#include <QSettings>                   // for QSettings
-#include <QString>                     // for QString
-#include <QStringList>                 // for QStringList
-#include <QTemporaryFile>              // for QTemporaryFile
-#include <QTime>                       // for QTime
-#include <QUrl>                        // for QUrl
-#include <QVariant>                    // for QVariant
-#include <Qt>                          // for SmoothTransformation, WaitCursor
-#include <QtGlobal>                    // for foreach
-#include <QCursor>                     // for QCursor
-#include <QDesktopServices>            // for QDesktopServices
-#include <QIcon>                       // for QIcon
-#include <QImage>                      // for QImage
-#include <QTextCharFormat>             // for QTextCharFormat
-#include <QAbstractButton>             // for QAbstractButton
-#include <QApplication>                // for QApplication, qApp
-#include <QCheckBox>                   // for QCheckBox
-#include <QDialogButtonBox>            // for QDialogButtonBox
-#include <QFileDialog>                 // for QFileDialog
-#include <QMessageBox>                 // for QMessageBox, operator|, QMessageBox::Yes, QMessageBox::No
-#include <QPlainTextEdit>              // for QPlainTextEdit
-#include <QPushButton>                 // for QPushButton
-#include <QRadioButton>                // for QRadioButton
-#include <QStackedWidget>              // for QStackedWidget
-
-#include <cstdlib>                     // for exit
-
 #include "mainwindow.h"
-#include "gbversion.h"                 // for VERSION
-#include "aboutdlg.h"                  // for AboutDlg
-#include "advdlg.h"                    // for AdvDlg
-#include "appname.h"                   // for appName
-#include "babeldata.h"                 // for BabelData
-#include "donate.h"                    // for Donate
-#include "filterdlg.h"                 // for FilterDialog
-#include "formatload.h"                // for FormatLoad
-#ifndef DISABLE_MAPPREVIEW
-#include "gmapdlg.h"                   // for GMapDialog
+#include <QAbstractButton>     // for QAbstractButton
+#include <QAction>             // for QAction
+#include <QApplication>        // for QApplication, qApp
+#include <QByteArray>          // for QByteArray
+#include <QCheckBox>           // for QCheckBox
+#include <QCursor>             // for QCursor
+#include <QDate>               // for QDate
+#include <QDateTime>           // for QDateTime
+#include <QDesktopServices>    // for QDesktopServices
+#include <QDialogButtonBox>    // for QDialogButtonBox
+#include <QDir>                // for QDir
+#include <QEvent>              // for QEvent
+#include <QFile>               // for QFile
+#include <QFileDialog>         // for QFileDialog
+#include <QFileInfo>           // for QFileInfo
+#include <QGradientStop>       // for QBrush
+#include <QIcon>               // for QIcon
+#include <QImage>              // for QImage
+#include <QLibraryInfo>        // for QLibraryInfo
+#include <QLocale>             // for QLocale
+#include <QMessageBox>         // for QMessageBox, operator|
+#include <QMimeData>           // for QMimeData
+#include <QPlainTextEdit>      // for QPlainTextEdit
+#include <QProcess>            // for QProcess
+#include <QPushButton>         // for QPushButton
+#include <QRadioButton>        // for QRadioButton
+#include <QSettings>           // for QSettings
+#include <QStackedWidget>      // for QStackedWidget
+#include <QStyle>              // for QStyle
+#include <QString>             // for QString, operator+, operator==, operator!=
+#include <QStringList>         // for QStringList
+#include <QTemporaryFile>      // for QTemporaryFile
+#include <QTextCharFormat>     // for QTextCharFormat
+#include <QTime>               // for QTime, operator==
+#include <QUrl>                // for QUrl
+#include <QVariant>            // for QVariant, operator!=
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <Qt>                  // for TransformationMode, DateFormat, CursorShape, GlobalColor
+#include <QtGlobal>            // for QForeachContainer, qMakeForeachContainer, foreach
+#include <cstdlib>             // for exit
+#include "aboutdlg.h"          // for AboutDlg
+#include "advdlg.h"            // for AdvDlg
+#include "appname.h"           // for appName
+#include "babeldata.h"         // for BabelData
+#include "donate.h"            // for Donate
+#include "filterdlg.h"         // for FilterDialog
+#include "formatload.h"        // for FormatLoad
+#include "gbversion.h"         // for VERSION, kVersionDate, kVersionSHA
+#if !defined(DISABLE_GOOGLEMAPPREVIEW) || !defined(DISABLE_LEAFLETMAPPREVIEW)
+#include "gpx.h"               // for Gpx
 #endif
-#include "help.h"                      // for ShowHelp
-#include "optionsdlg.h"                // for OptionsDlg
-#include "preferences.h"               // for Preferences
-#include "runmachine.h"                // for RunMachine
-#include "upgrade.h"                   // for UpgradeCheck
-#include "version_mismatch.h"          // for VersionMismatch
+#ifndef DISABLE_GOOGLEMAPPREVIEW
+#include "gmapdlg.h"           // for GMapDialog
+#endif
+#ifndef DISABLE_LEAFLETMAPPREVIEW
+#include "leafletdlg.h"        // for LeafletMapDialog
+#endif
+#include "help.h"              // for ShowHelp
+#include "optionsdlg.h"        // for OptionsDlg
+#include "preferences.h"       // for Preferences
+#include "runmachine.h"        // for RunMachine
+#ifndef DISABLE_UPGRADE_CHECK
+#include "upgrade.h"           // for UpgradeCheck
+#endif
+#include "version_mismatch.h"  // for VersionMismatch
 
-
-
-const int BabelData::noType_ = -1;
-const int BabelData::fileType_ = 0;
-const int BabelData::deviceType_ = 1;
 
 //------------------------------------------------------------------------
 QString MainWindow::findBabelVersion()
@@ -103,6 +111,7 @@ QString MainWindow::findBabelVersion()
   return str;
 }
 
+#ifndef DISABLE_UPGRADE_CHECK
 //------------------------------------------------------------------------
 // Decides whether available beta upgrades are suggested to user for download.
 bool MainWindow::allowBetaUpgrades()
@@ -112,6 +121,7 @@ bool MainWindow::allowBetaUpgrades()
   // 'suggest beta upgrade' box, allow betas to be suggested for installation.
   return isBeta_ || babelData_.allowBetaUpgrades_;
 }
+#endif
 
 //------------------------------------------------------------------------
 static QString MakeOptions(const QList<FormatOption>& options)
@@ -147,7 +157,7 @@ static QString MakeOptions(const QList<FormatOption>& options)
 static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 {
   QString str = MakeOptions(options);
-  return (str.length()) != 0 ? str.mid(1) : str;
+  return !str.isEmpty() ? str.mid(1) : str;
 
 }
 
@@ -175,16 +185,16 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui_.actionAbout, &QAction::triggered, this, &MainWindow::aboutActionX);
   connect(ui_.actionVisit_Website, &QAction::triggered, this, &MainWindow::visitWebsiteActionX);
   connect(ui_.actionMake_a_Donation, &QAction::triggered, this, &MainWindow::donateActionX);
+#ifndef DISABLE_UPGRADE_CHECK
   connect(ui_.actionUpgradeCheck, &QAction::triggered, this, &MainWindow::upgradeCheckActionX);
+#else
+  ui_.menuHelp->removeAction(ui_.actionUpgradeCheck);
+#endif
   connect(ui_.actionPreferences, &QAction::triggered, this, &MainWindow::preferencesActionX);
 
-// TODO: Qt6 deleted the obsolete overloaded signal QComboBox::currentIndexChanged(const QString &text)
-// that required using qOverload.
-  connect(ui_.inputFormatCombo,  qOverload<int>(&QComboBox::currentIndexChanged),
+  connect(ui_.inputFormatCombo, &QComboBox::currentIndexChanged,
           this,                 &MainWindow::inputFormatChanged);
-// TODO: Qt6 deleted the obsolete overloaded signal QComboBox::currentIndexChanged(const QString &text)
-// that required using qOverload.
-  connect(ui_.outputFormatCombo, qOverload<int>(&QComboBox::currentIndexChanged),
+  connect(ui_.outputFormatCombo, &QComboBox::currentIndexChanged,
           this,                 &MainWindow::outputFormatChanged);
   connect(ui_.inputOptionsBtn,   &QAbstractButton::clicked,
           this,                 &MainWindow::inputOptionButtonClicked);
@@ -210,6 +220,9 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   ui_.inputOptionsText->setReadOnly(true);
   ui_.outputOptionsText->setReadOnly(true);
+
+  ui_.inputFileNameBrowseBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogOpenButton));
+  ui_.outputFileNameBrowseBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogSaveButton));
 #if 0
   // 02/28/10  - let's try letting people edit these outside the browse.
   ui.inputFileNameText->setReadOnly(true);
@@ -231,27 +244,19 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
+#ifndef DISABLE_UPGRADE_CHECK
   upgrade = new UpgradeCheck(this, formatList_, babelData_);
   if (babelData_.startupVersionCheck_) {
     upgrade->checkForUpgrade(babelVersion_, babelData_.upgradeCheckTime_,
                              allowBetaUpgrades());
   }
+#endif
 
   if (!babelData_.ignoreVersionMismatch_ && babelVersion_ != VERSION) {
     VersionMismatch vm(nullptr, babelVersion_, QString(VERSION));
 
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
-  }
-}
-
-//------------------------------------------------------------------------
-// Called every time, when a menu entry of the language menu is called
-void MainWindow::slotLanguageChanged(QAction* action)
-{
-  if (nullptr != action) {
-    // load the language dependant on the action content.
-    loadLanguage(action->data().toString());
   }
 }
 
@@ -262,19 +267,20 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
 
   // Set a list of locations to search for the translation file.
   // 1. In the file system in the translations directory relative to the
-  //    location of the executable.
+  //    location of the executable, or on macOS in the Resources
+  //    directory relative to the location of the executable.
   // 2. In the Qt resource system under the translations path.  This is useful
   //    if the resource was compiled into the executable.
   // 3. In the translations path for Qt.  This is useful to find translations
   //    included with Qt.
   const QStringList directories = {
-    QApplication::applicationDirPath() + "/translations",
-    ":/translations",
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+#ifdef Q_OS_MACOS
+    QApplication::applicationDirPath() + "/../Resources/translations",
 #else
-    QLibraryInfo::path(QLibraryInfo::TranslationsPath)
+    QApplication::applicationDirPath() + "/translations",
 #endif
+    ":/translations",
+    QLibraryInfo::path(QLibraryInfo::TranslationsPath)
   };
 
   // Load the new translator.
@@ -484,7 +490,7 @@ QString MainWindow::filterForFormat(int idx)
 QString MainWindow::ensureExtensionPresent(const QString& name, int idx)
 {
   QString outname = name;
-  if (QFileInfo(name).suffix().length() == 0) {
+  if (QFileInfo(name).suffix().isEmpty()) {
     QStringList extensions = formatList_[idx].getExtensions();
     if (!extensions.empty() && !extensions[0].isEmpty()) {
       outname += "." + extensions[0];
@@ -510,7 +516,7 @@ int MainWindow::currentComboFormatIndex(QComboBox* comboBox)
 {
   int idx = comboBox->currentIndex();
   if (idx<0 || idx >= comboBox->count()) {
-    //    QMessageBox::critical(0, appName, "*** Internal Error -- current combo index is invalid!");
+//    QMessageBox::critical(0, appName, "*** Internal Error -- current combo index is invalid!");
     return 0;
   }
   return comboBox->itemData(idx).toInt();
@@ -547,7 +553,7 @@ void MainWindow::browseInputFile()
 void MainWindow::browseOutputFile()
 {
   int idx = currentComboFormatIndex(ui_.outputFormatCombo);
-  QString startFile = babelData_.outputFileName_.length() == 0 ? babelData_.outputBrowse_ : babelData_.outputFileName_;
+  QString startFile = babelData_.outputFileName_.isEmpty() ? babelData_.outputBrowse_ : babelData_.outputFileName_;
   QFileInfo finfo(startFile);
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
     startFile = finfo.dir().absolutePath();
@@ -557,7 +563,7 @@ void MainWindow::browseOutputFile()
     QFileDialog::getSaveFileName(nullptr, tr("Output File Name"),
                                  startFile,
                                  filterForFormat(idx));
-  if (str.length() != 0) {
+  if (!str.isEmpty()) {
     str = ensureExtensionPresent(str, idx);
     babelData_.outputBrowse_ = str;
     babelData_.outputFileName_ = str;
@@ -774,7 +780,7 @@ void MainWindow::outputFormatChanged(int comboIdx)
 void MainWindow::inputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui_.inputFormatCombo);
-  if (formatList_[fidx].getInputOptionsRef()->empty()) {
+  if (formatList_[fidx].getInputOptionsRef().empty()) {
     QMessageBox::information
     (nullptr, appName,
      tr("There are no input options for format \"%1\"").arg(formatList_[fidx].getDescription()));
@@ -793,7 +799,7 @@ void MainWindow::inputOptionButtonClicked()
 void MainWindow::outputOptionButtonClicked()
 {
   int fidx = currentComboFormatIndex(ui_.outputFormatCombo);
-  if (formatList_[fidx].getOutputOptionsRef()->empty()) {
+  if (formatList_[fidx].getOutputOptionsRef().empty()) {
     QMessageBox::information
     (nullptr, appName,
      tr("There are no output options for format \"%1\"").arg(formatList_[fidx].getDescription()));
@@ -828,7 +834,7 @@ bool MainWindow::isOkToGo()
     babelData_.inputFileNames_ << ui_.inputFileNameText->text();
   }
   if ((babelData_.outputType_ == BabelData::fileType_) &&
-      (babelData_.outputFileName_.size() == 0) &&
+      (babelData_.outputFileName_.isEmpty()) &&
       (!ui_.outputFileNameText->text().isEmpty())) {
     babelData_.outputFileName_ = ui_.outputFileNameText->text();
   }
@@ -839,8 +845,8 @@ bool MainWindow::isOkToGo()
     return false;
   }
 
-#ifndef DISABLE_MAPPREVIEW
-  if (babelData_.outputType_ == BabelData::noType_ && !babelData_.previewGmap_) {
+#if !defined(DISABLE_GOOGLEMAPPREVIEW) || !defined(DISABLE_LEAFLETMAPPREVIEW)
+  if (babelData_.outputType_ == BabelData::noType_ && babelData_.mapPreviewSelection_ == BabelData::NoMapPreview) {
 #else
   if (babelData_.outputType_ == BabelData::noType_) {
 #endif
@@ -848,7 +854,7 @@ bool MainWindow::isOkToGo()
     return false;
   }
   if (babelData_.outputType_ == BabelData::fileType_ &&
-      babelData_.outputFileName_.length() == 0) {
+      babelData_.outputFileName_.isEmpty()) {
     QMessageBox::information(nullptr, QString(appName), tr("No output file specified"));
     return false;
   }
@@ -943,7 +949,7 @@ void MainWindow::applyActionX()
 
     // output file or device option
     if (outIsFile) {
-      if (babelData_.outputFileName_ != "") {
+      if (!babelData_.outputFileName_.isEmpty()) {
         args << "-F" << babelData_.outputFileName_;
       }
     } else if (babelData_.outputType_ == BabelData::deviceType_) {
@@ -953,23 +959,24 @@ void MainWindow::applyActionX()
     formatList_[fidx].bumpWriteUseCount(1);
   }
 
-#ifndef DISABLE_MAPPREVIEW
+#if !defined(DISABLE_GOOGLEMAPPREVIEW) || !defined(DISABLE_LEAFLETMAPPREVIEW)
   // Now output for preview in google maps
-  QString tempName;
-  if (babelData_.previewGmap_) {
-    QTemporaryFile ftemp;
-    ftemp.open();
-    tempName = ftemp.fileName();
-    ftemp.close();
+  bool useGoogleMaps = (babelData_.mapPreviewSelection_ == BabelData::GoogleMapsPreview);
+  bool useLeafletMaps = (babelData_.mapPreviewSelection_ == BabelData::LeafletMapsPreview);
 
-    // Ideally, expost this in the UI.  For now, just split the track
-    // if we've no recorded fixes for > 5 mins and we've moved > 300 meters.
-    //args << "-x";
-    //args << "track,pack,sdistance=0.3k,split=5m";
+  QString gpxTempName;
+  if (babelData_.mapPreviewSelection_ != BabelData::NoMapPreview) {
+    if (QTemporaryFile gpxTempFile; gpxTempFile.open()) {
+      gpxTempName = gpxTempFile.fileName();
+      gpxTempFile.close();
 
-    args << "-o";
-    args << "gpx";
-    args << "-F" << tempName;
+      args << "-o" << "gpx" << "-F" << gpxTempName;
+    } else {
+      // gpxTempFile.fileName() may be empty so display gpxTempFile.fileTemplate().
+      QMessageBox::warning(nullptr, QString(appName),
+                           tr("Failed to open temporary file \"%1\" for map preview.  The error was: \"%2\".  The map preview will not be shown.")
+                           .arg(gpxTempFile.fileTemplate(), gpxTempFile.errorString()));
+    }
   }
 #endif
 
@@ -985,14 +992,43 @@ void MainWindow::applyActionX()
   ui_.outputWindow->appendPlainText(outputString);
   if (x) {
     ui_.outputWindow->appendPlainText(tr("Translation successful"));
-#ifndef DISABLE_MAPPREVIEW
-    if (babelData_.previewGmap_) {
-      this->hide();
-      GMapDialog dlg(nullptr, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
-      dlg.show();
-      dlg.exec();
-      QFile(tempName).remove();
-      this->show();
+#if !defined(DISABLE_GOOGLEMAPPREVIEW) || !defined(DISABLE_LEAFLETMAPPREVIEW)
+    if (!gpxTempName.isEmpty()) {
+      Gpx mapData;
+      QString mapStatus = mapData.read(gpxTempName);
+      if (!mapStatus.isNull()) {
+        QTextCharFormat defaultFormat = ui_.outputWindow->currentCharFormat();
+        QTextCharFormat errorFormat = defaultFormat;
+        errorFormat.setForeground(Qt::red);
+        errorFormat.setFontItalic(true);
+
+        ui_.outputWindow->setCurrentCharFormat(errorFormat);
+        ui_.outputWindow->appendPlainText(tr("Error preparing map: %1\n").arg(mapStatus));
+        ui_.outputWindow->setCurrentCharFormat(defaultFormat);
+      } else {
+        this->hide();
+#ifndef DISABLE_GOOGLEMAPPREVIEW
+        if (useGoogleMaps) {
+          GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+          dlg.show();
+          dlg.exec();
+        }
+#endif
+#ifndef DISABLE_LEAFLETMAPPREVIEW
+        if (useLeafletMaps) {
+          QString geojsonData;
+          // Generate GeoJSON internally for Leaflet map preview.
+          // This uses MainWindow::generateGeoJsonWithIndices to include GUI-specific properties
+          // like 'originalIndex' which are not present in the CLI's geojson writer output.
+          geojsonData = generateGeoJsonWithIndices(mapData);
+          LeafletMapDialog dlg(nullptr, mapData, geojsonData, babelData_.debugLevel_, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+          dlg.show();
+          dlg.exec();
+        }
+#endif
+        this->show();
+      }
+      QFile(gpxTempName).remove();
     }
 #endif
   } else {
@@ -1010,10 +1046,12 @@ void MainWindow::applyActionX()
 //------------------------------------------------------------------------
 void MainWindow::closeActionX()
 {
+#ifndef DISABLE_UPGRADE_CHECK
   QDateTime wt= upgrade->getUpgradeWarningTime();
   if (wt.isValid()) {
     babelData_.upgradeCheckTime_ = wt;
   }
+#endif
   babelData_.runCount_++;
 
   QDateTime now = QDateTime::currentDateTime();
@@ -1081,7 +1119,7 @@ void MainWindow::setComboToDevice(QComboBox* comboBox, const QString& name)
 {
   for (int i=0; i<comboBox->count(); i++) {
     QString value = comboBox->itemData(i).isValid()?
-      comboBox->itemData(i).toString() : comboBox->itemText(i);
+                    comboBox->itemData(i).toString() : comboBox->itemText(i);
     if (value == name) {
       comboBox->setCurrentIndex(i);
       break;
@@ -1140,7 +1178,8 @@ void MainWindow::resetFormatDefaults()
 void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(nullptr, babelData_.synthShortNames_,
-                babelData_.previewGmap_, babelData_.debugLevel_);
+                babelData_.mapPreviewSelection_,
+                babelData_.debugLevel_);
   connect(advDlg.formatButton(), &QAbstractButton::clicked,
           this, &MainWindow::resetFormatDefaults);
   advDlg.exec();
@@ -1148,11 +1187,17 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), kVersionSHA, babelData_.installationUuid_);
+  QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
+  QString utcdate;
+  if (date.isValid()) {
+    utcdate = date.toUTC().toString(Qt::ISODate);
+  }
+  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), kVersionSHA, utcdate, babelData_.installationUuid_);
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }
 
+#ifndef DISABLE_UPGRADE_CHECK
 //------------------------------------------------------------------------
 void MainWindow::upgradeCheckActionX()
 {
@@ -1160,6 +1205,7 @@ void MainWindow::upgradeCheckActionX()
                            QDateTime(QDate(2000, 1, 1), QTime(0, 0)),
                            allowBetaUpgrades());
 }
+#endif
 
 //------------------------------------------------------------------------
 void MainWindow::preferencesActionX()
@@ -1167,7 +1213,10 @@ void MainWindow::preferencesActionX()
   Preferences preferences(nullptr, formatList_, babelData_);
   preferences.exec();
 
-  // We may have changed the list of displayed formats.  Resynchronize.
+  // The user may have changed the list of displayed formats, and/or
+  // enabled or disabled the upgrade menu item.
+  // Resynchronize.
+
   setWidgetValues();
 }
 
@@ -1200,6 +1249,9 @@ void MainWindow::updateFilterStatus()
 //------------------------------------------------------------------------
 void MainWindow::setWidgetValues()
 {
+#ifndef DISABLE_UPGRADE_CHECK
+  ui_.actionUpgradeCheck->setEnabled(babelData_.upgradeMenuEnabled_);
+#endif
   if (babelData_.inputType_ == BabelData::fileType_) {
     ui_.inputFileOptBtn->setChecked(true);
     inputFileOptBtnClicked();
@@ -1258,7 +1310,7 @@ void MainWindow::getWidgetValues()
     babelData_.inputDeviceFormat_ =formatList_[fidx].getName();
   }
   babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentData().isValid()?
-    ui_.inputDeviceNameCombo->currentData().toString() : ui_.inputDeviceNameCombo->currentText();
+                                ui_.inputDeviceNameCombo->currentData().toString() : ui_.inputDeviceNameCombo->currentText();
 
   comboIdx = ui_.outputFormatCombo->currentIndex();
   fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
@@ -1272,7 +1324,7 @@ void MainWindow::getWidgetValues()
     babelData_.outputType_ = BabelData::noType_;
   }
   babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentData().isValid()?
-    ui_.outputDeviceNameCombo->currentData().toString() : ui_.outputDeviceNameCombo->currentText();
+                                 ui_.outputDeviceNameCombo->currentData().toString() : ui_.outputDeviceNameCombo->currentText();
 
   babelData_.xlateWayPts_ = ui_.xlateWayPtsCk->isChecked();
   babelData_.xlateTracks_ = ui_.xlateTracksCk->isChecked();
@@ -1296,4 +1348,110 @@ QString MainWindow::getFormatNameForExtension(const QString& ext)
     }
   }
   return nullptr;
+}
+
+QString
+MainWindow::generateGeoJsonWithIndices(const Gpx& gpxData)
+{
+  // This function generates GeoJSON specifically for the Leaflet map preview in the GUI.
+  // It is used instead of the CLI's geojson writer because it adds GUI-specific properties
+  // like 'originalIndex', which is crucial for linking map elements back to the GUI's
+  // internal data structures for interactive features (e.g., click handling, synchronization
+  // with the tree view). The CLI geojson writer does not include these GUI-specific properties.
+  QJsonArray features;
+
+  // Add Waypoints
+  for (int i = 0; i < gpxData.getWaypoints().size(); ++i) {
+    const GpxWaypoint& wpt = gpxData.getWaypoints().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "Point";
+    QJsonArray coordinates;
+    coordinates.append(wpt.getLocation().lng());
+    coordinates.append(wpt.getLocation().lat());
+    geometry["coordinates"] = coordinates;
+
+    QJsonObject properties;
+    properties["name"] = wpt.getName();
+    properties["description"] = wpt.getDescription();
+    properties["comment"] = wpt.getComment();
+    properties["originalIndex"] = i;
+    properties["gpsbabel_feature"] = "waypoint";
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  // Add Tracks
+  for (int i = 0; i < gpxData.getTracks().size(); ++i) {
+    const GpxTrack& trk = gpxData.getTracks().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "LineString";
+    QJsonArray coordinatesArray;
+    for (const GpxTrackSegment& seg : trk.getTrackSegments()) {
+      for (const GpxTrackPoint& pt : seg.getTrackPoints()) {
+        QJsonArray coordinate;
+        coordinate.append(pt.getLocation().lng());
+        coordinate.append(pt.getLocation().lat());
+        coordinatesArray.append(coordinate);
+      }
+    }
+    geometry["coordinates"] = coordinatesArray;
+
+    QJsonObject properties;
+    properties["name"] = trk.getName();
+    properties["originalIndex"] = i;
+    properties["gpsbabel_feature"] = "track";
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  // Add Routes
+  for (int i = 0; i < gpxData.getRoutes().size(); ++i) {
+    const GpxRoute& rte = gpxData.getRoutes().at(i);
+    QJsonObject geometry;
+    geometry["type"] = "LineString"; // Assuming routes are LineString for simplicity, adjust if MultiLineString is needed
+    QJsonArray coordinatesArray;
+    QJsonArray routepointsArray; // New array for route points
+    for (const GpxRoutePoint& rpt : rte.getRoutePoints()) {
+      QJsonArray coordinate;
+      coordinate.append(rpt.getLocation().lng());
+      coordinate.append(rpt.getLocation().lat());
+      coordinatesArray.append(coordinate);
+
+      QJsonObject routePointObject;
+      routePointObject["lat"] = rpt.getLocation().lat();
+      routePointObject["lng"] = rpt.getLocation().lng();
+      routePointObject["name"] = rpt.getName();
+      routePointObject["description"] = rpt.getDescription();
+      routePointObject["comment"] = rpt.getComment();
+      routepointsArray.append(routePointObject);
+    }
+    geometry["coordinates"] = coordinatesArray;
+
+    QJsonObject properties;
+    properties["name"] = rte.getName();
+    properties["originalIndex"] = i;
+    properties["gpsbabel_feature"] = "route";
+    properties["routepoints"] = routepointsArray; // Add routepoints array to properties
+
+    QJsonObject feature;
+    feature["type"] = "Feature";
+    feature["geometry"] = geometry;
+    feature["properties"] = properties;
+    features.append(feature);
+  }
+
+  QJsonObject geoJsonRoot;
+  geoJsonRoot["type"] = "FeatureCollection";
+  geoJsonRoot["features"] = features;
+
+  QJsonDocument doc(geoJsonRoot);
+  return doc.toJson(QJsonDocument::Compact);
 }

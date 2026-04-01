@@ -67,13 +67,13 @@ GeoJsonFormat::geojson_waypt_pr(const Waypoint* waypoint) const
   // Build up the properties.
   QJsonObject properties;
   if (!waypoint->shortname.isEmpty()) {
-    properties[NAME] = waypoint->shortname;
+    properties[name_opt] = waypoint->shortname;
   }
   if (!waypoint->description.isEmpty()) {
-    properties[DESCRIPTION] = waypoint->description;
+    properties[desc_opt] = waypoint->description;
   }
   if (waypoint->HasUrlLink()) {
-    UrlLink link = waypoint->GetUrlLink();
+    const UrlLink& link = waypoint->GetUrlLink();
     if (!link.url_.isEmpty()) {
       properties[URL] = link.url_;
     }
@@ -121,7 +121,7 @@ GeoJsonFormat::waypoint_from_coordinates(const QJsonArray& coordinates)
   waypoint->latitude = coordinates.at(1).toDouble();
   waypoint->longitude = coordinates.at(0).toDouble();
   if (coordinates.size() > 2) {
-    waypoint->altitude = coordinates.at(3).toDouble();
+    waypoint->altitude = coordinates.at(2).toDouble();
   }
   return waypoint;
 }
@@ -147,7 +147,7 @@ GeoJsonFormat::read()
   QJsonParseError error{};
   QJsonDocument document = QJsonDocument::fromJson(file_content.toUtf8(), &error);
   if (error.error != QJsonParseError::NoError) {
-    fatal(FatalMsg().nospace() << MYNAME << ": GeoJSON parse error in " << ifd->fileName() << ": " << error.errorString());
+    gbFatal(FatalMsg().nospace() << "GeoJSON parse error in " << ifd->fileName() << ": " << error.errorString());
   }
   QJsonObject rootObject = document.object();
 
@@ -161,11 +161,11 @@ GeoJsonFormat::read()
     QString name;
     QString description;
     if (!properties.empty()) {
-      if (properties.contains(NAME)) {
-        name = properties[NAME].toString();
+      if (properties.contains(name_opt)) {
+        name = properties[name_opt].toString();
       }
-      if (properties.contains(DESCRIPTION)) {
-        description = properties[DESCRIPTION].toString();
+      if (properties.contains(desc_opt)) {
+        description = properties[desc_opt].toString();
       }
     }
 
@@ -215,6 +215,7 @@ GeoJsonFormat::read()
       for (auto&& line_string : line_strings) {
         QJsonArray coordinates = line_string.toArray();
         auto* route = new route_head;
+        route->rte_name = name;
         track_add_head(route);
         for (auto&& coordinate : coordinates) {
           auto* waypoint = waypoint_from_coordinates(coordinate.toArray());
@@ -235,8 +236,9 @@ void GeoJsonFormat::geojson_track_hdr(const route_head* track)
 
   QJsonObject properties;
   if (!track->rte_name.isEmpty()) {
-    properties[NAME] = track->rte_name;
+    properties[name_opt] = track->rte_name;
   }
+  properties["gpsbabel_feature"] = "track";
   (*track_object)[PROPERTIES] = properties;
 }
 
@@ -249,7 +251,7 @@ void GeoJsonFormat::geojson_track_disp(const Waypoint* trackpoint) const
   if (trackpoint->altitude != unknown_alt && trackpoint->altitude != 0) {
     coords.append(trackpoint->altitude);
   }
-  (*track_coords).append(coords);
+  track_coords->append(coords);
 }
 
 void GeoJsonFormat::geojson_track_tlr(const route_head* /*unused*/)
@@ -263,6 +265,54 @@ void GeoJsonFormat::geojson_track_tlr(const route_head* /*unused*/)
   track_object = nullptr;
   delete track_coords;
   track_coords = nullptr;
+}
+
+void GeoJsonFormat::geojson_route_hdr(const route_head* route)
+{
+  route_object = new QJsonObject();
+  (*route_object)[TYPE] = FEATURE;
+  route_coords = new QJsonArray();
+
+  QJsonObject properties;
+  if (!route->rte_name.isEmpty()) {
+    properties[name_opt] = route->rte_name;
+  }
+  properties["gpsbabel_feature"] = "route";
+  (*route_object)[PROPERTIES] = properties;
+}
+
+void GeoJsonFormat::geojson_route_disp(const Waypoint* routepoint) const
+{
+  QJsonArray coords;
+  coords.append(routepoint->longitude);
+  coords.append(routepoint->latitude);
+  if (routepoint->altitude != unknown_alt && routepoint->altitude != 0) {
+    coords.append(routepoint->altitude);
+  }
+  route_coords->append(coords);
+
+  QJsonObject props = (*route_object)[PROPERTIES].toObject();
+  QJsonArray routepoints_array = props["routepoints"].toArray();
+  QJsonObject pt_obj;
+  pt_obj["lat"] = routepoint->latitude;
+  pt_obj["lng"] = routepoint->longitude;
+  pt_obj["name"] = routepoint->shortname;
+  routepoints_array.append(pt_obj);
+  props["routepoints"] = routepoints_array;
+  (*route_object)[PROPERTIES] = props;
+}
+
+void GeoJsonFormat::geojson_route_tlr(const route_head* /*unused*/)
+{
+  QJsonObject geometry;
+  geometry[TYPE] = LINESTRING;
+  geometry[COORDINATES] = *route_coords;
+  (*route_object)[GEOMETRY] = geometry;
+  feature_collection->append(*route_object);
+  delete route_object;
+  route_object = nullptr;
+  delete route_coords;
+  route_coords = nullptr;
 }
 
 void
@@ -283,5 +333,15 @@ GeoJsonFormat::write()
     geojson_track_disp(waypointp);
   };
   track_disp_all(geojson_track_hdr_lambda, geojson_track_tlr_lambda, geojson_track_disp_lambda);
-}
 
+  auto geojson_route_hdr_lambda = [this](const route_head* rte)->void {
+    geojson_route_hdr(rte);
+  };
+  auto geojson_route_tlr_lambda = [this](const route_head* rte)->void {
+    geojson_route_tlr(rte);
+  };
+  auto geojson_route_disp_lambda = [this](const Waypoint* waypointp)->void {
+    geojson_route_disp(waypointp);
+  };
+  route_disp_all(geojson_route_hdr_lambda, geojson_route_tlr_lambda, geojson_route_disp_lambda);
+}

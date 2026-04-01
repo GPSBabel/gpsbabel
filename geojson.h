@@ -19,14 +19,16 @@
 #ifndef GEOJSON_H_INCLUDED_
 #define GEOJSON_H_INCLUDED_
 
-#include <QJsonArray>                // for QJsonArray
-#include <QJsonObject>               // for QJsonObject
-#include <QString>                   // for QString, QStringLiteral
-#include <QVector>                   // for QVector
+#include <QList>            // for QList
+#include <QJsonArray>       // for QJsonArray
+#include <QJsonObject>      // for QJsonObject
+#include <QString>          // for QString, QStringLiteral
+#include <QVector>          // for QVector
 
 #include "defs.h"
-#include "format.h"                  // for Format
-#include "src/core/file.h"
+#include "format.h"         // for Format
+#include "option.h"         // for OptionBool
+#include "src/core/file.h"  // for File
 
 class GeoJsonFormat : public Format
 {
@@ -64,15 +66,21 @@ private:
   void geojson_track_hdr(const route_head* track);
   void geojson_track_disp(const Waypoint* trackpoint) const;
   void geojson_track_tlr(const route_head* unused);
+  void geojson_route_hdr(const route_head* route);
+  void geojson_route_disp(const Waypoint* routepoint) const;
+  void geojson_route_tlr(const route_head* unused);
 
   /* Data Members */
 
   gpsbabel::File* ifd{nullptr};
   gpsbabel::File* ofd{nullptr};
-  const char* MYNAME = "geojson";
-  char* compact_opt = nullptr;
+  OptionBool compact_opt;
+  OptionString name_opt;
+  OptionString desc_opt;
   QJsonObject* track_object = nullptr;
   QJsonArray* track_coords = nullptr;
+  QJsonObject* route_object = nullptr;
+  QJsonArray* route_coords = nullptr;
 
   const QString FEATURE_COLLECTION = QStringLiteral("FeatureCollection");
   const QString FEATURE = QStringLiteral("Feature");
@@ -87,15 +95,21 @@ private:
   const QString COORDINATES = QStringLiteral("coordinates");
   const QString GEOMETRY = QStringLiteral("geometry");
   const QString PROPERTIES = QStringLiteral("properties");
-  const QString NAME = QStringLiteral("name");
-  const QString DESCRIPTION = QStringLiteral("description");
   const QString URL = QStringLiteral("url");
   const QString URLNAME = QStringLiteral("urlname");
 
   QVector<arglist_t> geojson_args = {
     {
-      "compact", &compact_opt, "Compact Output. Default is off.",
+      "compact", &compact_opt, "Compact Output. Default is off",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "name", &name_opt, "Property key to use for name",
+      "name", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    },
+    {
+      "desc", &desc_opt, "Property key to use for description",
+      "description", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
     },
   };
 

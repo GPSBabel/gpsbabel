@@ -1,0 +1,16 @@
+<para>
+This lets you override the default codec used for your device when reading or writing
+strings from or to your Garmin device.  The default codec is device dependent, you can see
+what codec is being used with your device by adding the -vs option to the command line.
+</para>
+<para>
+  <userinput>
+    gpsbabel -vs -w -i garmin -f usb: -o gpx -F garmin.gpx
+  </userinput>
+  <userinput>
+    gpsbabel -w -i garmin,codec=windows-1251 -f usb: -o gpx -F garmin.gpx
+  </userinput>
+  <userinput>
+    gpsbabel -w -i gpx -f garmin.gpx -o garmin,codec=windows-1251 -F usb:
+  </userinput>
+</para>

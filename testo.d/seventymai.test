@@ -1,0 +1,3 @@
+gpsbabel -i 70mai -f ${REFERENCE}/GPSData000001-A810-Doriel.txt -o kml,points=0,units=m -F ${TMPDIR}/GPSData000001-A810-Doriel.kml
+compare ${REFERENCE}/GPSData000001-A810-Doriel.kml ${TMPDIR}/GPSData000001-A810-Doriel.kml
+

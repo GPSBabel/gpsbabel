@@ -3,7 +3,8 @@ This option specifies the maximum allowable error that may be introduced
 by removing a single point. Used with the <option>length</option>
 and <option>crosstrack</option> methods, the value of this option is a distance,
 specified in miles by default.  You may also specify the distance in
-kilometers by adding a 'k' to the end of the number.
+kilometers by adding a 'k' to the end of the number, meters by adding a 'm', or
+feet by adding 'ft'.
 For the <option>relative</option> method it is a dimensionless quantity.
 </para>
 <para>

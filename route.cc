@@ -20,6 +20,7 @@
 #include <cassert>              // for assert
 #include <cstddef>              // for nullptr_t
 #include <optional>             // for optional, operator>, operator<
+#include <utility>              // for as_const
 
 #include <QDateTime>            // for operator>, QDateTime, operator<
 #include <QList>                // for QList<>::const_iterator
@@ -38,8 +39,6 @@
 RouteList* global_route_list;
 RouteList* global_track_list;
 
-extern void update_common_traits(const Waypoint* wpt);
-
 void
 route_init()
 {
@@ -47,27 +46,27 @@ route_init()
   global_track_list = new RouteList;
 }
 
-unsigned int
+int
 route_waypt_count()
 {
   /* total waypoint count -- all routes */
   return global_route_list->waypt_count();
 }
 
-unsigned int
+int
 route_count()
 {
   return global_route_list->count();	/* total # of routes */
 }
 
-unsigned int
+int
 track_waypt_count()
 {
   /* total waypoint count -- all tracks */
   return global_track_list->waypt_count();
 }
 
-unsigned int
+int
 track_count()
 {
   return global_track_list->count();	/* total # of tracks */
@@ -144,6 +143,30 @@ track_del_wpt(route_head* rte, Waypoint* wpt)
 }
 
 void
+route_del_marked_wpts(route_head* rte)
+{
+  global_route_list->del_marked_wpts(rte);
+}
+
+void
+track_del_marked_wpts(route_head* rte)
+{
+  global_track_list->del_marked_wpts(rte);
+}
+
+void
+route_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_route_list->swap_wpts(rte, other);
+}
+
+void
+track_swap_wpts(route_head* rte, WaypointList& other)
+{
+  global_track_list->swap_wpts(rte, other);
+}
+
+void
 route_disp(const route_head* /* rh */, std::nullptr_t /* wc */)
 {
 // wc == nullptr
@@ -183,13 +206,13 @@ route_deinit()
 }
 
 void
-route_append(RouteList* src)
+route_append(const RouteList* src)
 {
   src->copy(&global_route_list);
 }
 
 void
-track_append(RouteList* src)
+track_append(const RouteList* src)
 {
   src->copy(&global_track_list);
 }
@@ -255,16 +278,12 @@ computed_trkdata track_recompute(const route_head* trk)
       /*
        * gcdist and heading want radians, not degrees.
        */
-      double tlat = RAD(thisw->latitude);
-      double tlon = RAD(thisw->longitude);
-      double plat = RAD(prev->latitude);
-      double plon = RAD(prev->longitude);
       if (!thisw->course_has_value()) {
         // Only recompute course if the waypoint
         // didn't already have a course.
-        thisw->set_course(heading_true_degrees(plat, plon, tlat, tlon));
+        thisw->set_course(heading_true_degrees(prev->position(), thisw->position()));
       }
-      double dist = radtometers(gcdist(plat, plon, tlat, tlon));
+      double dist = radtometers(gcdist(prev->position(), thisw->position()));
       tdata.distance_meters += dist;
 
       /*
@@ -422,9 +441,6 @@ RouteList::add_wpt(route_head* rte, Waypoint* wpt, bool synth, QStringView namep
 {
   ++waypt_ct;
   rte->waypoint_list.add_rte_waypt(waypt_ct, wpt, synth, namepart, number_digits);
-  if ((this == global_route_list) || (this == global_track_list)) {
-    update_common_traits(wpt);
-  }
 }
 
 void
@@ -432,6 +448,31 @@ RouteList::del_wpt(route_head* rte, Waypoint* wpt)
 {
   rte->waypoint_list.del_rte_waypt(wpt);
   --waypt_ct;
+}
+
+void
+RouteList::del_marked_wpts(route_head* rte)
+{
+  // For lineary complexity build a new list from the points we keep.
+  WaypointList oldlist;
+  swap_wpts(rte, oldlist);
+
+  // mimic trkseg handling from WaypointList::del_rte_waypt
+  bool inherit_new_trkseg = false;
+  for (Waypoint* wpt : std::as_const(oldlist)) {
+    if (wpt->wpt_flags.marked_for_deletion) {
+      if (wpt->wpt_flags.new_trkseg) {
+        inherit_new_trkseg = true;
+      }
+      delete wpt;
+    } else {
+      if (inherit_new_trkseg) {
+        wpt->wpt_flags.new_trkseg = 1;
+        inherit_new_trkseg = false;
+      }
+      add_wpt(rte, wpt, false, u"RPT", 3);
+    }
+  }
 }
 
 void
@@ -503,4 +544,11 @@ void RouteList::swap(RouteList& other)
   const RouteList tmp_list = *this;
   *this = other;
   other = tmp_list;
+}
+
+void RouteList::swap_wpts(route_head* rte, WaypointList& other)
+{
+  this->waypt_ct -= rte->rte_waypt_ct();
+  this->waypt_ct += other.count();
+  rte->waypoint_list.swap(other);
 }

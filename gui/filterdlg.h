@@ -23,10 +23,16 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-#include <QStackedWidget>
-#include "ui_filterui.h"
-#include "filterdata.h"
-#include "filterwidgets.h"
+#include <QDialog>          // for QDialog
+#include <QList>            // for QList
+#include <QListWidgetItem>  // for QListWidgetItem
+#include <QObject>          // for Q_OBJECT, slots
+#include <QStackedWidget>   // for QStackedWidget
+#include <QString>          // for QString
+#include <QWidget>          // for QWidget
+#include "filterdata.h"     // for AllFiltersData
+#include "filterwidgets.h"  // for FilterWidget
+#include "ui_filterui.h"    // for Ui_FilterDlg
 
 class FilterDialog: public QDialog
 {

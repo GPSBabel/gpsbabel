@@ -3,8 +3,14 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Google Maps JavaScript</title>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3&amp;key=APIKEY"></script>
-    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <script>
+(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+    key: "APIKEY",
+    v: "quarterly"
+    // Add other bootstrap parameters as needed, using camel case.
+    // Use the 'v' parameter to indicate the version to load (alpha, beta, weekly, etc.)
+  });
+    </script>
     <script>
 /*jslint
     this, for
@@ -13,7 +19,17 @@ var greenDotIcon = {};
 var redDotIcon = {};
 var blueIcon = {};
 var redIcon = {};
-function initialize() {
+var mclicker = {};
+
+async function initialize() {
+    const webChannelPromise = setupWebChannel();
+    const mapsMarkerPromise = google.maps.importLibrary("marker");
+    const mapsCorePromise = google.maps.importLibrary("core");
+    const [clicker, , ] =
+            await Promise.all([webChannelPromise, mapsMarkerPromise, mapsCorePromise]);
+    mclicker = clicker;
+    mclicker.logTimeX("google maps imported");
+
     greenDotIcon.url =
             "data:image/png;base64," +
             "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A" +
@@ -93,7 +109,7 @@ function initialize() {
     redIcon.size = new google.maps.Size(32, 32);
     redIcon.anchor = new google.maps.Point(4, 32);
 
-    setupWebChannel();
+    mclicker.loadedX();
 }
 
 
@@ -106,9 +122,9 @@ MarkerHandler.prototype.clicked = function () {
     mclicker.clickedX(this.type, this.number);
 };
 
-function RTPolyline(map, l, stp, enp, nm, ckobj) {
-    var s = new google.maps.Marker({map: map, position: stp, title: nm, icon: greenDotIcon});
-    var e = new google.maps.Marker({map: map, position: enp, title: nm, icon: redDotIcon});
+function RTPolyline(mp, l, stp, enp, nm, ckobj) {
+    const s = new google.maps.Marker({icon: greenDotIcon, map: mp, position: stp, title: nm});
+    const e = new google.maps.Marker({icon: redDotIcon, map: mp, position: enp, title: nm});
 
     this.line = l;
     this.start = s;
@@ -136,8 +152,8 @@ RTPolyline.prototype.getBounds = function () {
 };
 
 function calcBounds(path) {
-    var bounds = new google.maps.LatLngBounds();
-    path.forEach(function (e,n) {
+    const bounds = new google.maps.LatLngBounds();
+    path.forEach(function (e) {
         bounds.extend(e);
     });
     return bounds;
@@ -149,13 +165,25 @@ function attachHandler(object, handler) {
     });
 }
 
-function setupWebChannel() {
-    if (typeof qt != "undefined") {
-        new QWebChannel(qt.webChannelTransport, function (channel) {mclicker = channel.objects.mclicker;});
-    }
+function loadScript(src) {
+    return new Promise(function(resolve, reject) {
+        const s = document.createElement("script");
+        s.src = src;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+    });
 }
 
-window.addEventListener("load", initialize);
+async function setupWebChannel() {
+    await loadScript("qrc:///qtwebchannel/qwebchannel.js");
+    const channel = await new Promise(function(resolve) {
+        new QWebChannel(qt.webChannelTransport, resolve);
+    });
+    return channel.objects.mclicker;
+}
+
+initialize();
 
     </script>
 

@@ -22,6 +22,7 @@
 #include <QComboBox>        // for QComboBox
 #include <QList>            // for QList
 #include <QSerialPortInfo>  // for QSerialPortInfo
+#include <QString>          // for QString
 
 #include "mainwindow.h"     // for MainWindow
 

@@ -37,15 +37,17 @@
 #ifndef GLOBALSATSPORT_H_INCLUDED_
 #define GLOBALSATSPORT_H_INCLUDED_
 
-#include <cstdint>           // for uint32_t, uint8_t, uint16_t, int16_t
+#include <cstdint>    // for uint32_t, uint8_t, uint16_t, int16_t
 
-#include <QString>           // for QString
-#include <QTimeZone>         // for QTimeZone
-#include <QVector>           // for QVector
+#include <QList>      // for QList
+#include <QString>    // for QString
+#include <QTimeZone>  // for QTimeZone
+#include <QVector>    // for QVector
 
 #include "defs.h"
-#include "format.h"          // for Format
-#include "gbfile.h"          // for gbfclose, gbfopen, gbfread, gbfwrite, gbfile
+#include "format.h"   // for Format
+#include "gbfile.h"   // for gbfclose, gbfopen, gbfread, gbfwrite, gbfile
+#include "option.h"   // for OptionString, OptionBool
 
 
 class GlobalsatSportFormat : public Format
@@ -211,7 +213,7 @@ private:
   void serial_init(const char* fname);
   void serial_deinit();
   int serial_recv_byte() const;
-  void serial_write_byte(uint8_t byte) const;
+  void serial_write_byte(uint8_t byte);
   int recv_byte();
   void write_byte(uint8_t byte);
   void globalsat_write_package(uint8_t* payload, uint32_t size);
@@ -227,19 +229,17 @@ private:
   void* serial_handle{nullptr};
   bool isSizeSwapped{false};
 
-  char* showlist{nullptr};               // if true show a list instead of download tracks
-  char* track{nullptr};                  // if not 0 only download this track, if 0 download all
+  OptionBool showlist;                  // if true show a list instead of download tracks
 
-  char* opt_dump_file{nullptr};          // dump raw data to this file (optional)
-  char* opt_input_dump_file{nullptr};    // if true input is from a dump-file instead of serial console
-  char* opt_timezone{nullptr};
+  OptionString opt_dump_file;          // dump raw data to this file (optional)
+  OptionBool opt_input_dump_file;       // if true input is from a dump-file instead of serial console
+  OptionString opt_timezone;
   gbfile* dumpfile{nullptr};             // used for creating bin/RAW datadump files, useful for testing
   gbfile* in_file{nullptr};              // used for reading from bin/RAW datadump files, useful for testing
   QTimeZone* timezn{nullptr};
 
   QVector<arglist_t> globalsat_args = {
     {"showlist", &showlist, "list tracks", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
-    {"track", &track, "get track", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
     {"dump-file", &opt_dump_file, "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr},
     {"input-is-dump-file", &opt_input_dump_file, "Dump raw data to this file", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
     {"timezone", &opt_timezone, "Time zone ID", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},

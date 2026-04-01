@@ -1,0 +1,2770 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="37.395656500" minlon="-122.391944800" maxlat="51.794387600" maxlon="-94.358078000"/>
+  <wpt lat="37.485071100" lon="-122.147424200">
+    <time>2013-05-09T01:24:28.883Z</time>
+    <name>Facebook</name>
+    <cmt>1 Hacker Way, Menlo Park, California 94025, United States</cmt>
+    <desc>1 Hacker Way, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.485071100" lon="-122.147424200">
+    <time>2013-05-09T18:34:15.144Z</time>
+    <name>Facebook</name>
+    <cmt>1 Hacker Way, Menlo Park, California 94025, United States</cmt>
+    <desc>1 Hacker Way, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-09T20:58:54.448Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-11T00:02:46.884Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.449772100" lon="-122.176515200">
+    <time>2013-05-11T17:15:08.247Z</time>
+    <name>The UPS Store</name>
+    <cmt>405 El Camino Real, Menlo Park, California 94025, United States</cmt>
+    <desc>405 El Camino Real, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-11T17:58:51.797Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.398405100" lon="-121.975156700">
+    <time>2013-05-12T18:11:49.770Z</time>
+    <name>California's Great America</name>
+    <cmt>4701 Great America Parkway, Santa Clara, California 95054, United States</cmt>
+    <desc>4701 Great America Parkway, Santa Clara, California 95054, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-13T16:10:37.703Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-14T14:53:40.149Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-16T14:52:10.663Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-17T14:50:20.849Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-18T00:28:49.065Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-18T18:16:59.197Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-18T19:06:58.548Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.401756500" lon="-122.111817400">
+    <time>2013-05-18T22:17:48.551Z</time>
+    <name>Safeway</name>
+    <cmt>645 San Antonio Road, Mountain View, California 94040, United States</cmt>
+    <desc>645 San Antonio Road, Mountain View, California 94040, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-18T22:51:20.577Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.485071100" lon="-122.147424200">
+    <time>2013-05-20T15:14:23.971Z</time>
+    <name>Facebook</name>
+    <cmt>1 Hacker Way, Menlo Park, California 94025, United States</cmt>
+    <desc>1 Hacker Way, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-20T16:30:45.206Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-21T00:06:37.463Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-21T14:51:55.435Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-21T22:38:18.286Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-22T14:51:15.746Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-23T00:03:45.880Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-23T01:03:35.723Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-23T04:01:57.786Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-23T14:56:08.813Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.428875100" lon="-122.143403600">
+    <time>2013-05-23T23:55:08.082Z</time>
+    <name>Mollie Stone's Markets</name>
+    <cmt>164 California Ave, Palo Alto, California 94306-1621, United States</cmt>
+    <desc>164 California Ave, Palo Alto, California 94306-1621, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-24T00:09:19.277Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-24T14:08:54.393Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-24T14:33:15.539Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.421522900" lon="-122.155310900">
+    <time>2013-05-24T23:29:33.282Z</time>
+    <name>Escondido Elementary School</name>
+    <cmt>890 Escondido Road, Stanford, California 94305-7101, United States</cmt>
+    <desc>890 Escondido Road, Stanford, California 94305-7101, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-25T00:00:20.365Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-25T00:19:24.481Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-25T17:53:56.930Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.428875100" lon="-122.143403600">
+    <time>2013-05-25T18:49:58.414Z</time>
+    <name>Mollie Stone's Markets</name>
+    <cmt>164 California Ave, Palo Alto, California 94306-1621, United States</cmt>
+    <desc>164 California Ave, Palo Alto, California 94306-1621, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-25T19:06:23.230Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-27T19:10:37.634Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-27T19:30:38.754Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-27T20:31:06.694Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-27T21:27:27.003Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.401617500" lon="-122.112967400">
+    <time>2013-05-27T22:16:28.155Z</time>
+    <name>Jared</name>
+    <cmt>685 San Antonio Road Suite 19, Mountain View, California 94040, United States</cmt>
+    <desc>685 San Antonio Road Suite 19, Mountain View, California 94040, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-27T22:37:46.367Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-28T14:53:31.546Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-28T23:34:33.743Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-29T14:51:23.435Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-30T00:57:26.531Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.485071100" lon="-122.147424200">
+    <time>2013-05-30T15:06:59.413Z</time>
+    <name>Facebook</name>
+    <cmt>1 Hacker Way, Menlo Park, California 94025, United States</cmt>
+    <desc>1 Hacker Way, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-30T20:12:05.033Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-30T22:57:24.727Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.485071100" lon="-122.147424200">
+    <time>2013-05-31T14:49:18.856Z</time>
+    <name>Facebook</name>
+    <cmt>1 Hacker Way, Menlo Park, California 94025, United States</cmt>
+    <desc>1 Hacker Way, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-05-31T15:36:46.094Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-01T16:21:54.644Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427474500" lon="-122.169719000">
+    <time>2013-06-01T17:43:26.262Z</time>
+    <name>Stanford University</name>
+    <cmt>450 Serra Mall, Stanford, California 94305, United States</cmt>
+    <desc>450 Serra Mall, Stanford, California 94305, United States</desc>
+  </wpt>
+  <wpt lat="37.443701000" lon="-122.162086000">
+    <time>2013-06-01T18:09:09.851Z</time>
+    <name>LYFE Kitchen</name>
+    <cmt>167 Hamilton Ave, Palo Alto, CA 94301, USA</cmt>
+    <desc>167 Hamilton Ave, Palo Alto, CA 94301, USA</desc>
+  </wpt>
+  <wpt lat="37.438477900" lon="-122.157618800">
+    <time>2013-06-01T19:54:30.604Z</time>
+    <name>Trader Joe's</name>
+    <cmt>855 El Camino Real, Palo Alto, California 94301, United States</cmt>
+    <desc>855 El Camino Real, Palo Alto, California 94301, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-01T20:22:37.047Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.426354200" lon="-122.144503700">
+    <time>2013-06-02T16:07:01.748Z</time>
+    <name>Joanie's Cafe</name>
+    <cmt>405 California Avenue, Palo Alto, California 94306, United States</cmt>
+    <desc>405 California Avenue, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-02T16:29:21.689Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.450532100" lon="-122.179157200">
+    <time>2013-06-02T19:52:14.958Z</time>
+    <name>Safeway</name>
+    <cmt>525 El Camino Real, Menlo Park, California 94025, United States</cmt>
+    <desc>525 El Camino Real, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-02T20:19:07.253Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.407619300" lon="-122.111303500">
+    <time>2013-06-03T16:20:20.960Z</time>
+    <name>230 San Antonio Circle, Mountain View, California 94040-1276, United States</name>
+    <cmt>230 San Antonio Circle, Mountain View, California 94040-1276, United States</cmt>
+    <desc>230 San Antonio Circle, Mountain View, California 94040-1276, United States</desc>
+  </wpt>
+  <wpt lat="37.398951000" lon="-122.110810500">
+    <time>2013-06-03T16:48:30.892Z</time>
+    <name>Whole Foods Market</name>
+    <cmt>4800 El Camino Real, Los Altos, California 94022, United States</cmt>
+    <desc>4800 El Camino Real, Los Altos, California 94022, United States</desc>
+  </wpt>
+  <wpt lat="37.400997800" lon="-122.109596400">
+    <time>2013-06-03T17:22:17.443Z</time>
+    <name>Walmart</name>
+    <cmt>600 Showers Drive, Mountain View, California 94040, United States</cmt>
+    <desc>600 Showers Drive, Mountain View, California 94040, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-03T17:49:17.986Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-03T20:08:46.044Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.485071100" lon="-122.147424200">
+    <time>2013-06-04T14:56:47.682Z</time>
+    <name>Facebook</name>
+    <cmt>1 Hacker Way, Menlo Park, California 94025, United States</cmt>
+    <desc>1 Hacker Way, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-04T16:21:47.537Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.400997800" lon="-122.109596400">
+    <time>2013-06-04T23:15:47.347Z</time>
+    <name>Walmart</name>
+    <cmt>600 Showers Drive, Mountain View, California 94040, United States</cmt>
+    <desc>600 Showers Drive, Mountain View, California 94040, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-04T23:37:41.070Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.485071100" lon="-122.147424200">
+    <time>2013-06-05T15:15:42.862Z</time>
+    <name>Facebook</name>
+    <cmt>1 Hacker Way, Menlo Park, California 94025, United States</cmt>
+    <desc>1 Hacker Way, Menlo Park, California 94025, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-05T23:18:55.092Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.402919600" lon="-122.113737200">
+    <time>2013-06-06T14:10:00.355Z</time>
+    <name>Sprouts Farmers Market</name>
+    <cmt>630 San Antonio Road, Mountain View, California 94040, United States</cmt>
+    <desc>630 San Antonio Road, Mountain View, California 94040, United States</desc>
+  </wpt>
+  <wpt lat="37.430969400" lon="-122.114409600">
+    <time>2013-06-06T14:44:29.310Z</time>
+    <name>Palo Verde Elementary School</name>
+    <cmt>3450 Louis Road, Palo Alto, California 94303-4403, United States</cmt>
+    <desc>3450 Louis Road, Palo Alto, California 94303-4403, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-06T15:10:04.361Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.423215000" lon="-122.096604600">
+    <time>2013-06-07T00:08:56.576Z</time>
+    <name>REI</name>
+    <cmt>2450 Charleston Road, Mountain View, California 94043-1622, United States</cmt>
+    <desc>2450 Charleston Road, Mountain View, California 94043-1622, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-07T01:18:10.149Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.427716900" lon="-122.140173700">
+    <time>2013-06-07T15:09:53.578Z</time>
+    <name>134-248 Oregon Expy, Palo Alto, California 94306, United States</name>
+    <cmt>134-248 Oregon Expy, Palo Alto, California 94306, United States</cmt>
+    <desc>134-248 Oregon Expy, Palo Alto, California 94306, United States</desc>
+  </wpt>
+  <wpt lat="37.430969400" lon="-122.114409600">
+    <time>2013-06-07T20:54:20.732Z</time>
+    <name>Palo Verde Elementary School</name>
+    <cmt>3450 Louis Road, Palo Alto, California 94303-4403, United States</cmt>
+    <desc>3450 Louis Road, Palo Alto, California 94303-4403, United States</desc>
+  </wpt>
+  <wpt lat="39.587995800" lon="-119.717107300">
+    <time>2013-06-08T02:59:05.127Z</time>
+    <name>5285 Santa Anita Drive, Sparks, Nevada 89436-0803, United States</name>
+    <cmt>5285 Santa Anita Drive, Sparks, Nevada 89436-0803, United States</cmt>
+    <desc>5285 Santa Anita Drive, Sparks, Nevada 89436-0803, United States</desc>
+  </wpt>
+  <wpt lat="39.531701500" lon="-119.722948700">
+    <time>2013-06-08T03:51:48.182Z</time>
+    <name>Galaxy Sparks IMAX Luxury+ Theatre</name>
+    <cmt>1170 Scheels Dr, Sparks, Nevada 89434, United States</cmt>
+    <desc>1170 Scheels Dr, Sparks, Nevada 89434, United States</desc>
+  </wpt>
+  <wpt lat="39.587995800" lon="-119.717107300">
+    <time>2013-06-08T05:04:43.176Z</time>
+    <name>5285 Santa Anita Drive, Sparks, Nevada 89436-0803, United States</name>
+    <cmt>5285 Santa Anita Drive, Sparks, Nevada 89436-0803, United States</cmt>
+    <desc>5285 Santa Anita Drive, Sparks, Nevada 89436-0803, United States</desc>
+  </wpt>
+  <wpt lat="39.530695500" lon="-119.721709400">
+    <time>2013-06-08T16:33:48.651Z</time>
+    <name>SCHEELS</name>
+    <cmt>1200 Scheels Drive, Sparks, Nevada 89434, United States</cmt>
+    <desc>1200 Scheels Drive, Sparks, Nevada 89434, United States</desc>
+  </wpt>
+  <wpt lat="40.973540000" lon="-117.735309000">
+    <time>2013-06-08T19:38:13.640Z</time>
+    <name>Winnemucca Convention &amp; Visitors Center</name>
+    <cmt>50 W Winnemucca Blvd # 1, Winnemucca, NV 89445-3174, United States</cmt>
+    <desc>50 W Winnemucca Blvd # 1, Winnemucca, NV 89445-3174, United States</desc>
+  </wpt>
+  <wpt lat="40.767708600" lon="-111.887062500">
+    <time>2013-06-09T16:19:33.174Z</time>
+    <name>Harmons Grocery - City Creek</name>
+    <cmt>135 East 100 South, Salt Lake City, Utah 84111, United States</cmt>
+    <desc>135 East 100 South, Salt Lake City, Utah 84111, United States</desc>
+  </wpt>
+  <wpt lat="39.694895500" lon="-105.078778300">
+    <time>2013-06-12T00:56:52.103Z</time>
+    <name>O'Connell Middle School</name>
+    <cmt>1275 S Teller St, Lakewood, CO 80232, USA</cmt>
+    <desc>1275 S Teller St, Lakewood, CO 80232, USA</desc>
+  </wpt>
+  <wpt lat="39.694236000" lon="-105.077376500">
+    <time>2013-06-12T02:52:03.380Z</time>
+    <name>Lakewood Link Recreation Center</name>
+    <cmt>1295 S Reed St, Lakewood, Colorado 80232-5520, United States</cmt>
+    <desc>1295 S Reed St, Lakewood, Colorado 80232-5520, United States</desc>
+  </wpt>
+  <wpt lat="39.628663400" lon="-104.841804400">
+    <time>2013-06-12T12:31:07.568Z</time>
+    <name>Cherry Creek State Park</name>
+    <cmt>4201 South Parker Road, Aurora, Colorado 80014-4203, United States</cmt>
+    <desc>4201 South Parker Road, Aurora, Colorado 80014-4203, United States</desc>
+  </wpt>
+  <wpt lat="39.674020000" lon="-104.794000000">
+    <time>2013-06-12T16:43:27.032Z</time>
+    <name>Treads Bicycle Outfitters</name>
+    <cmt>16701 East Iliff Avenue, Aurora, Colorado 80013, United States</cmt>
+    <desc>16701 East Iliff Avenue, Aurora, Colorado 80013, United States</desc>
+  </wpt>
+  <wpt lat="43.933324100" lon="-103.575614800">
+    <time>2013-06-14T16:18:50.973Z</time>
+    <name>Museum @ Black Hills Institute</name>
+    <cmt>117 Main St, Hill City, SD 57745-5106, United States</cmt>
+    <desc>117 Main St, Hill City, SD 57745-5106, United States</desc>
+  </wpt>
+  <wpt lat="43.612120900" lon="-96.951246300">
+    <time>2013-06-15T20:46:04.591Z</time>
+    <name>Coffee Cup Fuel Stop</name>
+    <cmt>1001 S Western Ave, Hartford, South Dakota 57033-2012, United States</cmt>
+    <desc>1001 S Western Ave, Hartford, South Dakota 57033-2012, United States</desc>
+  </wpt>
+  <wpt lat="45.723137500" lon="-94.950432500">
+    <time>2013-06-16T16:36:53.562Z</time>
+    <name>McDonald's</name>
+    <cmt>1210 Timberlane Drive, Sauk Centre, Minnesota 56378, United States</cmt>
+    <desc>1210 Timberlane Drive, Sauk Centre, Minnesota 56378, United States</desc>
+  </wpt>
+  <wpt lat="46.850532000" lon="-96.798943000">
+    <time>2013-06-16T18:39:40.033Z</time>
+    <name>Loaf 'N Jug</name>
+    <cmt>1833 University Dr S, Fargo, ND 58103-4941, United States</cmt>
+    <desc>1833 University Dr S, Fargo, ND 58103-4941, United States</desc>
+  </wpt>
+  <wpt lat="49.343173800" lon="-97.367577600">
+    <time>2013-06-16T21:55:35.563Z</time>
+    <name>Morris Husky</name>
+    <cmt>Anderson Street, Morris, Manitoba R0G 1K0, Canada</cmt>
+    <desc>Anderson Street, Morris, Manitoba R0G 1K0, Canada</desc>
+  </wpt>
+  <wpt lat="49.894934000" lon="-97.142349600">
+    <time>2013-06-16T23:00:31.090Z</time>
+    <name>The Marlborough Hotel</name>
+    <cmt>331 Smith Street, Winnipeg, Manitoba R3B 2G9, Canada</cmt>
+    <desc>331 Smith Street, Winnipeg, Manitoba R3B 2G9, Canada</desc>
+  </wpt>
+  <wpt lat="49.895822600" lon="-97.143639000">
+    <time>2013-06-17T01:13:41.340Z</time>
+    <name>Burton Cummings Theatre</name>
+    <cmt>364 Smith Street, Winnipeg, Manitoba R3B 2H2, Canada</cmt>
+    <desc>364 Smith Street, Winnipeg, Manitoba R3B 2H2, Canada</desc>
+  </wpt>
+  <wpt lat="49.895535100" lon="-97.139019000">
+    <time>2013-06-17T14:39:04.140Z</time>
+    <name>WPT096</name>
+    <cmt>WPT096</cmt>
+    <desc>WPT096</desc>
+  </wpt>
+  <wpt lat="49.895028600" lon="-97.142497800">
+    <time>2013-06-17T14:53:32.271Z</time>
+    <name>Regal Beagle Pub</name>
+    <cmt>331 Smith Street, Winnipeg, Manitoba R3B 2H6, Canada</cmt>
+    <desc>331 Smith Street, Winnipeg, Manitoba R3B 2H6, Canada</desc>
+  </wpt>
+  <wpt lat="49.899427000" lon="-97.137168000">
+    <time>2013-06-17T15:37:13.411Z</time>
+    <name>Centennial Concert Hall</name>
+    <cmt>555 Main Street, Winnipeg, MB R3B 1C3, Canada</cmt>
+    <desc>555 Main Street, Winnipeg, MB R3B 1C3, Canada</desc>
+  </wpt>
+  <wpt lat="49.893738700" lon="-97.133995700">
+    <time>2013-06-17T18:08:22.760Z</time>
+    <name>Shaw Park</name>
+    <cmt>1 Portage Avenue East, Winnipeg, Manitoba R3B 0Y3, Canada</cmt>
+    <desc>1 Portage Avenue East, Winnipeg, Manitoba R3B 0Y3, Canada</desc>
+  </wpt>
+  <wpt lat="49.898984500" lon="-97.125334300">
+    <time>2013-06-17T18:38:41.244Z</time>
+    <name>Fort Gibraltar</name>
+    <cmt>866 Rue Saint Joseph, Winnipeg, Manitoba R2H 0G4, Canada</cmt>
+    <desc>866 Rue Saint Joseph, Winnipeg, Manitoba R2H 0G4, Canada</desc>
+  </wpt>
+  <wpt lat="49.891728300" lon="-97.122865300">
+    <time>2013-06-17T19:23:23.972Z</time>
+    <name>Le Garage</name>
+    <cmt>166 Provencher Boulevard, Winnipeg, Manitoba R2H 1Z2, Canada</cmt>
+    <desc>166 Provencher Boulevard, Winnipeg, Manitoba R2H 1Z2, Canada</desc>
+  </wpt>
+  <wpt lat="49.895822600" lon="-97.143639000">
+    <time>2013-06-17T22:43:16.919Z</time>
+    <name>Burton Cummings Theatre</name>
+    <cmt>364 Smith Street, Winnipeg, Manitoba R3B 2H2, Canada</cmt>
+    <desc>364 Smith Street, Winnipeg, Manitoba R3B 2H2, Canada</desc>
+  </wpt>
+  <wpt lat="49.897909800" lon="-97.140740400">
+    <time>2013-06-18T01:29:56.111Z</time>
+    <name>Winnipeg International Writers Festival</name>
+    <cmt>100 Arthur St, Winnipeg, MB R3B 1H3, Canada</cmt>
+    <desc>100 Arthur St, Winnipeg, MB R3B 1H3, Canada</desc>
+  </wpt>
+  <wpt lat="49.897997400" lon="-97.137253500">
+    <time>2013-06-18T02:11:00.566Z</time>
+    <name>Hermanos South American Steakhouse</name>
+    <cmt>179 Bannatyne Avenue, Winnipeg, Manitoba R3B 0R5, Canada</cmt>
+    <desc>179 Bannatyne Avenue, Winnipeg, Manitoba R3B 0R5, Canada</desc>
+  </wpt>
+  <wpt lat="49.895028600" lon="-97.142497800">
+    <time>2013-06-18T02:45:46.829Z</time>
+    <name>Regal Beagle Pub</name>
+    <cmt>331 Smith Street, Winnipeg, Manitoba R3B 2H6, Canada</cmt>
+    <desc>331 Smith Street, Winnipeg, Manitoba R3B 2H6, Canada</desc>
+  </wpt>
+  <wpt lat="49.887303800" lon="-97.130946300">
+    <time>2013-06-18T16:00:44.493Z</time>
+    <name>The Original Pancake House</name>
+    <cmt>1 Forks Market Road, Winnipeg, Manitoba R3C 4L9, Canada</cmt>
+    <desc>1 Forks Market Road, Winnipeg, Manitoba R3C 4L9, Canada</desc>
+  </wpt>
+  <wpt lat="49.882758600" lon="-97.288419600">
+    <time>2013-06-18T16:48:01.386Z</time>
+    <name>Real Canadian Superstore</name>
+    <cmt>3193 Portage Avenue, Winnipeg, Manitoba R3K 0W4, Canada</cmt>
+    <desc>3193 Portage Avenue, Winnipeg, Manitoba R3K 0W4, Canada</desc>
+  </wpt>
+  <wpt lat="50.704885800" lon="-99.809547100">
+    <time>2013-06-18T22:02:16Z</time>
+    <name>Whirlpool Lake Campground</name>
+    <cmt>Division No. 17, Unorganized, Manitoba R0J 2H0, Canada</cmt>
+    <desc>Division No. 17, Unorganized, Manitoba R0J 2H0, Canada</desc>
+  </wpt>
+  <wpt lat="50.704885800" lon="-99.809547100">
+    <time>2013-06-19T03:37:25Z</time>
+    <name>Whirlpool Lake Campground</name>
+    <cmt>Division No. 17, Unorganized, Manitoba R0J 2H0, Canada</cmt>
+    <desc>Division No. 17, Unorganized, Manitoba R0J 2H0, Canada</desc>
+  </wpt>
+  <wpt lat="50.653920500" lon="-99.968067600">
+    <time>2013-06-19T15:40:18.571Z</time>
+    <name>Mooswa Resort</name>
+    <cmt>Mooswa Dr, Onanole, Manitoba R0J 1N0, Canada</cmt>
+    <desc>Mooswa Dr, Onanole, Manitoba R0J 1N0, Canada</desc>
+  </wpt>
+  <wpt lat="50.771482900" lon="-101.369137600">
+    <time>2013-06-19T19:24:35.698Z</time>
+    <name>The Russell Inn</name>
+    <cmt>MB-16, Manitoba, Canada</cmt>
+    <desc>MB-16, Manitoba, Canada</desc>
+  </wpt>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.485969500" lon="-122.146293600"/>
+      <trkpt lat="37.484748800" lon="-122.147628700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.485931300" lon="-122.148033100"/>
+      <trkpt lat="37.485961900" lon="-122.150451600"/>
+      <trkpt lat="37.481353700" lon="-122.150642300"/>
+      <trkpt lat="37.465442600" lon="-122.157218900"/>
+      <trkpt lat="37.454925500" lon="-122.164535500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.454925500" lon="-122.164535500"/>
+      <trkpt lat="37.442256900" lon="-122.152778600"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.442256900" lon="-122.152778600"/>
+      <trkpt lat="37.440357200" lon="-122.149749700"/>
+      <trkpt lat="37.438812200" lon="-122.150428700"/>
+      <trkpt lat="37.437007900" lon="-122.147560100"/>
+      <trkpt lat="37.433567000" lon="-122.138870200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.432608500" lon="-122.139104400">
+        <time>2013-05-10T22:55:36.464Z</time>
+      </trkpt>
+      <trkpt lat="37.432608500" lon="-122.139104400">
+        <time>2013-05-10T23:01:52.925Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.422515800" lon="-122.156593300"/>
+      <trkpt lat="37.421199700" lon="-122.154464700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.421169200" lon="-122.154487600"/>
+      <trkpt lat="37.413734400" lon="-122.141311600"/>
+      <trkpt lat="37.416347500" lon="-122.137046800"/>
+      <trkpt lat="37.433589900" lon="-122.138839700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.425711700" lon="-122.147439100">
+        <time>2013-05-11T16:57:13.361Z</time>
+      </trkpt>
+      <trkpt lat="37.425838400" lon="-122.147262500"/>
+      <trkpt lat="37.425373000" lon="-122.147422700"/>
+      <trkpt lat="37.425393000" lon="-122.147407400">
+        <time>2013-05-11T16:58:22.182Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.425711700" lon="-122.147439100">
+        <time>2013-05-11T16:58:22.182Z</time>
+      </trkpt>
+      <trkpt lat="37.425868900" lon="-122.147216700"/>
+      <trkpt lat="37.423091800" lon="-122.149131700"/>
+      <trkpt lat="37.423196800" lon="-122.149484400">
+        <time>2013-05-11T17:03:36.257Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Unknown Activity Type</name>
+    <trkseg>
+      <trkpt lat="37.423196800" lon="-122.149484400">
+        <time>2013-05-11T17:03:36.257Z</time>
+      </trkpt>
+      <trkpt lat="37.448770000" lon="-122.176120000">
+        <time>2013-05-11T17:15:08.247Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.438190700" lon="-122.158273600">
+        <time>2013-05-11T17:53:28.791Z</time>
+      </trkpt>
+      <trkpt lat="37.438194200" lon="-122.158271700"/>
+      <trkpt lat="37.433486900" lon="-122.138870200"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-11T17:58:51.797Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-12T09:03:46.323Z</time>
+      </trkpt>
+      <trkpt lat="37.432624800" lon="-122.139091400"/>
+      <trkpt lat="37.434833500" lon="-122.139060900"/>
+      <trkpt lat="37.434670700" lon="-122.138795300">
+        <time>2013-05-12T13:52:53.712Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.400798700" lon="-121.971049400">
+        <time>2013-05-12T18:27:56.655Z</time>
+      </trkpt>
+      <trkpt lat="37.400646200" lon="-121.970878600"/>
+      <trkpt lat="37.401519700" lon="-121.968154900"/>
+      <trkpt lat="37.395690900" lon="-121.969963000"/>
+      <trkpt lat="37.395683400" lon="-121.969964000">
+        <time>2013-05-12T18:44:35.769Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.395683400" lon="-121.969964000">
+        <time>2013-05-12T18:44:35.769Z</time>
+      </trkpt>
+      <trkpt lat="37.395656500" lon="-121.969963000"/>
+      <trkpt lat="37.427673300" lon="-122.140090900"/>
+      <trkpt lat="37.427677200" lon="-122.140201800">
+        <time>2013-05-12T19:25:09.731Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427753400" lon="-122.140174800"/>
+      <trkpt lat="37.426162700" lon="-122.148635800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.426132200" lon="-122.148658700"/>
+      <trkpt lat="37.427730500" lon="-122.140220600"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-14T14:43:03.783Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.421772000" lon="-122.154594400"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-14T14:53:40.149Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-16T14:40:30.881Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.424850400" lon="-122.145294100"/>
+      <trkpt lat="37.427394800" lon="-122.141212400"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-16T14:52:10.663Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.434478700" lon="-122.140281600"/>
+      <trkpt lat="37.419357200" lon="-122.134742700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.419395400" lon="-122.134712200"/>
+      <trkpt lat="37.427494000" lon="-122.139816200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-18T18:49:26.198Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.425792600" lon="-122.149711600"/>
+      <trkpt lat="37.419139800" lon="-122.160202000"/>
+      <trkpt lat="37.422321300" lon="-122.150856000"/>
+      <trkpt lat="37.427742000" lon="-122.140129000"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-18T19:06:58.548Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.426563200" lon="-122.143188400"/>
+      <trkpt lat="37.419143600" lon="-122.160110400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.419143600" lon="-122.160110400"/>
+      <trkpt lat="37.425354000" lon="-122.151237400"/>
+      <trkpt lat="37.401760100" lon="-122.112373300"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.401756500" lon="-122.111817400">
+        <time>2013-05-18T22:40:46.472Z</time>
+      </trkpt>
+      <trkpt lat="37.401905000" lon="-122.112258900"/>
+      <trkpt lat="37.428016600" lon="-122.140449500"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-18T22:51:20.577Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427818200" lon="-122.140243500"/>
+      <trkpt lat="37.426033000" lon="-122.143630900"/>
+      <trkpt lat="37.421310400" lon="-122.154571500"/>
+      <trkpt lat="37.433654700" lon="-122.155792200"/>
+      <trkpt lat="37.443916300" lon="-122.164733800"/>
+      <trkpt lat="37.485546100" lon="-122.149566600"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.485435400" lon="-122.149696300"/>
+      <trkpt lat="37.485176000" lon="-122.149597100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.485071100" lon="-122.147424200">
+        <time>2013-05-20T16:11:41.995Z</time>
+      </trkpt>
+      <trkpt lat="37.484092700" lon="-122.147789000"/>
+      <trkpt lat="37.485637600" lon="-122.149429300"/>
+      <trkpt lat="37.444717400" lon="-122.164863500"/>
+      <trkpt lat="37.427791500" lon="-122.140228200"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-20T16:30:45.206Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-20T23:34:50.283Z</time>
+      </trkpt>
+      <trkpt lat="37.427619900" lon="-122.140090900"/>
+      <trkpt lat="37.425678200" lon="-122.143920800"/>
+      <trkpt lat="37.438629100" lon="-122.159683200"/>
+      <trkpt lat="37.420875500" lon="-122.157203600"/>
+      <trkpt lat="37.421581200" lon="-122.149459800"/>
+      <trkpt lat="37.428333200" lon="-122.142982400"/>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-21T00:06:37.463Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-21T14:39:27.896Z</time>
+      </trkpt>
+      <trkpt lat="37.427814400" lon="-122.140243500"/>
+      <trkpt lat="37.425525600" lon="-122.144050500"/>
+      <trkpt lat="37.421772000" lon="-122.154594400"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-21T14:51:55.435Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.404369300" lon="-122.109580900"/>
+      <trkpt lat="37.404476100" lon="-122.109756400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.404476100" lon="-122.109756400"/>
+      <trkpt lat="37.424503300" lon="-122.151947000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.424522300" lon="-122.151985100"/>
+      <trkpt lat="37.420783900" lon="-122.157714800"/>
+      <trkpt lat="37.420585600" lon="-122.156272800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.420585600" lon="-122.156272800"/>
+      <trkpt lat="37.424350700" lon="-122.146446200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427745800" lon="-122.140235900"/>
+      <trkpt lat="37.425941400" lon="-122.143379200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.425910900" lon="-122.143409700"/>
+      <trkpt lat="37.421772000" lon="-122.154594400"/>
+      <trkpt lat="37.427772500" lon="-122.140205300"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.428035700" lon="-122.140472400"/>
+      <trkpt lat="37.420635200" lon="-122.156372000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.420635200" lon="-122.156372000"/>
+      <trkpt lat="37.421878800" lon="-122.153953500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.421909300" lon="-122.153930600"/>
+      <trkpt lat="37.427989900" lon="-122.140403700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-23T00:57:27.597Z</time>
+      </trkpt>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.429782800" lon="-122.147613500"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-23T01:03:35.723Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-23T03:56:57.626Z</time>
+      </trkpt>
+      <trkpt lat="37.429805700" lon="-122.147544800"/>
+      <trkpt lat="37.427753400" lon="-122.140182400"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-23T04:01:57.786Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-23T14:44:38.576Z</time>
+      </trkpt>
+      <trkpt lat="37.427818200" lon="-122.140243500"/>
+      <trkpt lat="37.421241700" lon="-122.154632500"/>
+      <trkpt lat="37.426898900" lon="-122.144355700"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-23T14:56:08.813Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427818200" lon="-122.140243500"/>
+      <trkpt lat="37.420635200" lon="-122.156372000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.420635200" lon="-122.156372000"/>
+      <trkpt lat="37.420570300" lon="-122.157295200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.420635200" lon="-122.156372000"/>
+      <trkpt lat="37.428848200" lon="-122.143562300"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.428875100" lon="-122.143403600">
+        <time>2013-05-24T00:07:16.556Z</time>
+      </trkpt>
+      <trkpt lat="37.428916900" lon="-122.144104000"/>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-24T00:09:19.277Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-24T14:02:59.475Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.429077100" lon="-122.142944300"/>
+      <trkpt lat="37.429767600" lon="-122.147575300"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-24T14:08:54.393Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-24T14:29:14.561Z</time>
+      </trkpt>
+      <trkpt lat="37.429813300" lon="-122.147590600"/>
+      <trkpt lat="37.427711400" lon="-122.140151900"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-24T14:33:15.539Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.419387800" lon="-122.134704500"/>
+      <trkpt lat="37.414455400" lon="-122.138656600"/>
+      <trkpt lat="37.422195400" lon="-122.153800900"/>
+      <trkpt lat="37.420635200" lon="-122.156372000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.421522900" lon="-122.155310900">
+        <time>2013-05-24T23:51:20.094Z</time>
+      </trkpt>
+      <trkpt lat="37.422317500" lon="-122.155647200"/>
+      <trkpt lat="37.420635200" lon="-122.156372000"/>
+      <trkpt lat="37.421325600" lon="-122.151687600"/>
+      <trkpt lat="37.426208400" lon="-122.147598200"/>
+      <trkpt lat="37.425815500" lon="-122.146919200"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-25T00:00:20.365Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-25T00:14:42.483Z</time>
+      </trkpt>
+      <trkpt lat="37.425506500" lon="-122.146789500"/>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-25T00:19:24.481Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.401222200" lon="-122.106750400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.401222200" lon="-122.106750400"/>
+      <trkpt lat="37.400783500" lon="-122.106521600"/>
+      <trkpt lat="37.401794400" lon="-122.108100800"/>
+      <trkpt lat="37.404312100" lon="-122.109619100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.404914800" lon="-122.108642500"/>
+      <trkpt lat="37.427791500" lon="-122.140228200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-25T18:46:27.080Z</time>
+      </trkpt>
+      <trkpt lat="37.427993700" lon="-122.140411300"/>
+      <trkpt lat="37.428829100" lon="-122.143531700"/>
+      <trkpt lat="37.428875100" lon="-122.143403600">
+        <time>2013-05-25T18:49:58.414Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.428875100" lon="-122.143403600">
+        <time>2013-05-25T19:00:18.975Z</time>
+      </trkpt>
+      <trkpt lat="37.428829100" lon="-122.143531700"/>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-25T19:06:23.230Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.428020400" lon="-122.140449500"/>
+      <trkpt lat="37.427825900" lon="-122.141021700"/>
+      <trkpt lat="37.427261300" lon="-122.143508900"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-27T19:21:36.449Z</time>
+      </trkpt>
+      <trkpt lat="37.425678200" lon="-122.146759000"/>
+      <trkpt lat="37.426643300" lon="-122.144508300"/>
+      <trkpt lat="37.427806800" lon="-122.140281600"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-27T19:30:38.754Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427993700" lon="-122.140403700"/>
+      <trkpt lat="37.425720200" lon="-122.146675100"/>
+      <trkpt lat="37.424503300" lon="-122.144622800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.424537600" lon="-122.144584600"/>
+      <trkpt lat="37.427742000" lon="-122.140228200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-27T21:09:25.522Z</time>
+      </trkpt>
+      <trkpt lat="37.427764800" lon="-122.140197700"/>
+      <trkpt lat="37.411022100" lon="-122.123695300"/>
+      <trkpt lat="37.428112000" lon="-122.140594400"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-27T21:27:27.003Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-27T21:43:39.881Z</time>
+      </trkpt>
+      <trkpt lat="37.427806800" lon="-122.140281600"/>
+      <trkpt lat="37.426681500" lon="-122.139907800"/>
+      <trkpt lat="37.426538300" lon="-122.140020700">
+        <time>2013-05-27T21:46:23.765Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.426538300" lon="-122.140020700">
+        <time>2013-05-27T21:46:23.765Z</time>
+      </trkpt>
+      <trkpt lat="37.424299300" lon="-122.114751200">
+        <time>2013-05-27T21:50:46.753Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.424278200" lon="-122.114776600"/>
+      <trkpt lat="37.428440000" lon="-122.105606000"/>
+      <trkpt lat="37.427005700" lon="-122.109542800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.426975200" lon="-122.109519900"/>
+      <trkpt lat="37.402385700" lon="-122.112541100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.401617500" lon="-122.112967400">
+        <time>2013-05-27T22:31:36.896Z</time>
+      </trkpt>
+      <trkpt lat="37.402385700" lon="-122.112541100"/>
+      <trkpt lat="37.428325600" lon="-122.140670700"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-27T22:37:46.367Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-28T14:39:53.448Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.421772000" lon="-122.154594400"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-28T14:53:31.546Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427818200" lon="-122.140243500"/>
+      <trkpt lat="37.427593200" lon="-122.141586300"/>
+      <trkpt lat="37.424842800" lon="-122.145278900"/>
+      <trkpt lat="37.420890800" lon="-122.157234100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.420890800" lon="-122.157234100"/>
+      <trkpt lat="37.420509300" lon="-122.156120300"/>
+      <trkpt lat="37.427528300" lon="-122.149475000"/>
+      <trkpt lat="37.425170800" lon="-122.145889200"/>
+      <trkpt lat="37.428829100" lon="-122.143531700"/>
+      <trkpt lat="37.428718500" lon="-122.142822200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.428676800" lon="-122.142737700">
+        <time>2013-05-28T23:31:11.748Z</time>
+      </trkpt>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-28T23:34:33.743Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-29T14:37:40.859Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.425834600" lon="-122.143798800"/>
+      <trkpt lat="37.421901700" lon="-122.155288600"/>
+      <trkpt lat="37.421833000" lon="-122.148529000"/>
+      <trkpt lat="37.426990500" lon="-122.144218400"/>
+      <trkpt lat="37.427776300" lon="-122.140213000"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-29T14:51:23.435Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.427894500" lon="-122.142074500"/>
+      <trkpt lat="37.426193200" lon="-122.147666900"/>
+      <trkpt lat="37.421039500" lon="-122.157516400"/>
+      <trkpt lat="37.422763800" lon="-122.153541500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.422733300" lon="-122.153564400"/>
+      <trkpt lat="37.416988300" lon="-122.130226100"/>
+      <trkpt lat="37.421333300" lon="-122.136390600"/>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-30T14:40:29.145Z</time>
+      </trkpt>
+      <trkpt lat="37.427764800" lon="-122.140197700"/>
+      <trkpt lat="37.426033000" lon="-122.143630900"/>
+      <trkpt lat="37.421707100" lon="-122.154251000"/>
+      <trkpt lat="37.450927700" lon="-122.158699000"/>
+      <trkpt lat="37.468048000" lon="-122.156570400"/>
+      <trkpt lat="37.486190700" lon="-122.147384600"/>
+      <trkpt lat="37.485071100" lon="-122.147424200">
+        <time>2013-05-30T15:06:59.413Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.485931300" lon="-122.148033100"/>
+      <trkpt lat="37.454895000" lon="-122.178184500"/>
+      <trkpt lat="37.451877500" lon="-122.179473800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.451984400" lon="-122.179672200"/>
+      <trkpt lat="37.427902200" lon="-122.144882200"/>
+      <trkpt lat="37.428382800" lon="-122.139526300"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-30T22:37:14.768Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.426635700" lon="-122.143127400"/>
+      <trkpt lat="37.425090700" lon="-122.148544300"/>
+      <trkpt lat="37.420635200" lon="-122.156372000"/>
+      <trkpt lat="37.421314200" lon="-122.148956200"/>
+      <trkpt lat="37.427818200" lon="-122.143615700"/>
+      <trkpt lat="37.427822100" lon="-122.140243500"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-30T22:57:24.727Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427829700" lon="-122.140289300"/>
+      <trkpt lat="37.427410100" lon="-122.139816200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427417700" lon="-122.139984100"/>
+      <trkpt lat="37.486190700" lon="-122.147384600"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.485071100" lon="-122.147424200">
+        <time>2013-05-31T15:07:55.210Z</time>
+      </trkpt>
+      <trkpt lat="37.486240300" lon="-122.147224400"/>
+      <trkpt lat="37.486690500" lon="-122.142509400"/>
+      <trkpt lat="37.455081900" lon="-122.163795400"/>
+      <trkpt lat="37.449337000" lon="-122.160247800"/>
+      <trkpt lat="37.437633500" lon="-122.159957800"/>
+      <trkpt lat="37.428382800" lon="-122.139526300"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-05-31T15:36:46.094Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-01T16:06:54.349Z</time>
+      </trkpt>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.426898900" lon="-122.144401500"/>
+      <trkpt lat="37.427459700" lon="-122.141250600"/>
+      <trkpt lat="37.428417200" lon="-122.139617900"/>
+      <trkpt lat="37.427738100" lon="-122.140228200"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-01T16:21:54.644Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.429706500" lon="-122.143989500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.429706500" lon="-122.143989500"/>
+      <trkpt lat="37.432682000" lon="-122.152069000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.432651500" lon="-122.152099600"/>
+      <trkpt lat="37.442771900" lon="-122.161308200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.444011600" lon="-122.161796500"/>
+      <trkpt lat="37.447002400" lon="-122.160469000"/>
+      <trkpt lat="37.444549500" lon="-122.163032500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.438274300" lon="-122.157981800"/>
+      <trkpt lat="37.435089100" lon="-122.152061400"/>
+      <trkpt lat="37.432491300" lon="-122.151916500"/>
+      <trkpt lat="37.429412800" lon="-122.143463100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-02T15:57:14.614Z</time>
+      </trkpt>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.426265700" lon="-122.145324700"/>
+      <trkpt lat="37.426354200" lon="-122.144503700">
+        <time>2013-06-02T16:07:01.748Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.426354200" lon="-122.144503700">
+        <time>2013-06-02T16:17:45.347Z</time>
+      </trkpt>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-02T16:28:51.495Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427989900" lon="-122.140403700"/>
+      <trkpt lat="37.616069700" lon="-122.391944800"/>
+      <trkpt lat="37.614734600" lon="-122.390113800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.615776000" lon="-122.390480000"/>
+      <trkpt lat="37.616127000" lon="-122.391868500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.616092600" lon="-122.391860900"/>
+      <trkpt lat="37.454734800" lon="-122.177986100"/>
+      <trkpt lat="37.454200700" lon="-122.182189900"/>
+      <trkpt lat="37.451457900" lon="-122.179000800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.450450800" lon="-122.178710900"/>
+      <trkpt lat="37.449954900" lon="-122.177558800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.449974000" lon="-122.177597000"/>
+      <trkpt lat="37.428028100" lon="-122.140464700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427795400" lon="-122.141044600"/>
+      <trkpt lat="37.415679900" lon="-122.102615300"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.415679900" lon="-122.102615300"/>
+      <trkpt lat="37.407997100" lon="-122.108963000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.407619300" lon="-122.111303500">
+        <time>2013-06-03T16:32:29.462Z</time>
+      </trkpt>
+      <trkpt lat="37.406349100" lon="-122.109359700"/>
+      <trkpt lat="37.399475000" lon="-122.109985300"/>
+      <trkpt lat="37.398951000" lon="-122.110810500">
+        <time>2013-06-03T16:48:30.892Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.398951000" lon="-122.110810500">
+        <time>2013-06-03T17:18:50.606Z</time>
+      </trkpt>
+      <trkpt lat="37.399356800" lon="-122.110305700"/>
+      <trkpt lat="37.401065800" lon="-122.109085000"/>
+      <trkpt lat="37.400997800" lon="-122.109596400">
+        <time>2013-06-03T17:22:17.443Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.401065800" lon="-122.109085000"/>
+      <trkpt lat="37.399768800" lon="-122.110023400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.399768800" lon="-122.110023400"/>
+      <trkpt lat="37.427448200" lon="-122.142448400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427429100" lon="-122.142410200"/>
+      <trkpt lat="37.427715300" lon="-122.140907200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-03T19:42:37.891Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.425395900" lon="-122.137397700"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-03T20:08:46.044Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.478069300" lon="-122.154357900"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.478084500" lon="-122.154396000"/>
+      <trkpt lat="37.485664300" lon="-122.147003100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.474647500" lon="-122.153594900"/>
+      <trkpt lat="37.476016900" lon="-122.154273900"/>
+      <trkpt lat="37.478454500" lon="-122.171745300"/>
+      <trkpt lat="37.431339200" lon="-122.113616900"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.431350700" lon="-122.113632200"/>
+      <trkpt lat="37.429695100" lon="-122.121765100"/>
+      <trkpt lat="37.427276600" lon="-122.143615700"/>
+      <trkpt lat="37.425872800" lon="-122.146980200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-04T22:54:13.094Z</time>
+      </trkpt>
+      <trkpt lat="37.428428600" lon="-122.140045100"/>
+      <trkpt lat="37.431301100" lon="-122.113555900"/>
+      <trkpt lat="37.401374800" lon="-122.113609300"/>
+      <trkpt lat="37.401546400" lon="-122.108772200"/>
+      <trkpt lat="37.401103900" lon="-122.110366800"/>
+      <trkpt lat="37.400997800" lon="-122.109596400">
+        <time>2013-06-04T23:15:47.347Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.400997800" lon="-122.109596400">
+        <time>2013-06-04T23:29:17.938Z</time>
+      </trkpt>
+      <trkpt lat="37.401657100" lon="-122.109367300"/>
+      <trkpt lat="37.427509300" lon="-122.141426000"/>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-04T23:37:41.070Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-05T14:55:19.636Z</time>
+      </trkpt>
+      <trkpt lat="37.428066200" lon="-122.140525800"/>
+      <trkpt lat="37.432834600" lon="-122.128227200"/>
+      <trkpt lat="37.433109200" lon="-122.116508400"/>
+      <trkpt lat="37.436679800" lon="-122.122077900"/>
+      <trkpt lat="37.485195100" lon="-122.149879400"/>
+      <trkpt lat="37.485301900" lon="-122.146423300"/>
+      <trkpt lat="37.485071100" lon="-122.147424200">
+        <time>2013-06-05T15:15:42.862Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.485774900" lon="-122.148918100"/>
+      <trkpt lat="37.438339200" lon="-122.124702400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.438365900" lon="-122.124671900"/>
+      <trkpt lat="37.431678700" lon="-122.114082300"/>
+      <trkpt lat="37.431621500" lon="-122.114143300"/>
+      <trkpt lat="37.432319600" lon="-122.115242000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.432341600" lon="-122.115222900">
+        <time>2013-06-05T22:57:25.719Z</time>
+      </trkpt>
+      <trkpt lat="37.432246900" lon="-122.127580800">
+        <time>2013-06-05T22:59:48.989Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.432693400" lon="-122.127525300"/>
+      <trkpt lat="37.433578400" lon="-122.133071800"/>
+      <trkpt lat="37.428428600" lon="-122.140045100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.428016600" lon="-122.140449500"/>
+      <trkpt lat="37.412021600" lon="-122.124732900"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.404132800" lon="-122.116256700"/>
+      <trkpt lat="37.402305600" lon="-122.113601600"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.402343700" lon="-122.113021800"/>
+      <trkpt lat="37.429313600" lon="-122.106063800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.430042200" lon="-122.114707900"/>
+      <trkpt lat="37.427722900" lon="-122.140953000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427768700" lon="-122.140930100"/>
+      <trkpt lat="37.428298900" lon="-122.140197700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427716900" lon="-122.140173700">
+        <time>2013-06-06T23:42:28.643Z</time>
+      </trkpt>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.429367000" lon="-122.122283900"/>
+      <trkpt lat="37.432003000" lon="-122.114669700"/>
+      <trkpt lat="37.422847700" lon="-122.096824600"/>
+      <trkpt lat="37.423215000" lon="-122.096604600">
+        <time>2013-06-07T00:08:34.339Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.423215000" lon="-122.096604600">
+        <time>2013-06-07T00:34:30.996Z</time>
+      </trkpt>
+      <trkpt lat="37.423004100" lon="-122.097106900"/>
+      <trkpt lat="37.421897800" lon="-122.101425100"/>
+      <trkpt lat="37.406047000" lon="-122.109375200">
+        <time>2013-06-07T00:44:32.436Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.406047000" lon="-122.109375200">
+        <time>2013-06-07T00:44:32.436Z</time>
+      </trkpt>
+      <trkpt lat="37.406349100" lon="-122.109359700"/>
+      <trkpt lat="37.399265200" lon="-122.110031100"/>
+      <trkpt lat="37.399267000" lon="-122.110061600">
+        <time>2013-06-07T00:53:28.300Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.399265200" lon="-122.110031100"/>
+      <trkpt lat="37.428016600" lon="-122.140449500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.428462900" lon="-122.140449500"/>
+      <trkpt lat="37.427719100" lon="-122.140197700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427761000" lon="-122.140190100"/>
+      <trkpt lat="37.431652000" lon="-122.114112800"/>
+      <trkpt lat="37.428428600" lon="-122.140045100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427734300" lon="-122.140220600"/>
+      <trkpt lat="37.427970800" lon="-122.140373200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.427970800" lon="-122.140373200"/>
+      <trkpt lat="37.431316300" lon="-122.113578700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.431312500" lon="-122.113578700"/>
+      <trkpt lat="38.456996900" lon="-121.842567400"/>
+      <trkpt lat="38.497459400" lon="-121.794342000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="38.535659300" lon="-121.742448900">
+        <time>2013-06-08T00:05:05.787Z</time>
+      </trkpt>
+      <trkpt lat="38.535137100" lon="-121.741737300"/>
+      <trkpt lat="38.548210100" lon="-121.718940700"/>
+      <trkpt lat="38.548233400" lon="-121.718945400">
+        <time>2013-06-08T00:10:50.611Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="38.555117400" lon="-121.684334300">
+        <time>2013-06-08T00:20:25.869Z</time>
+      </trkpt>
+      <trkpt lat="38.555137600" lon="-121.684341400"/>
+      <trkpt lat="38.633251100" lon="-121.490570000"/>
+      <trkpt lat="38.797771400" lon="-121.214569000"/>
+      <trkpt lat="39.328742900" lon="-120.170059200"/>
+      <trkpt lat="39.556320100" lon="-119.785545300"/>
+      <trkpt lat="39.587810500" lon="-119.716911300"/>
+      <trkpt lat="39.587995800" lon="-119.717107300">
+        <time>2013-06-08T02:59:05.127Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.587997400" lon="-119.716819700"/>
+      <trkpt lat="39.532299000" lon="-119.721984800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.587520500" lon="-119.721328700"/>
+      <trkpt lat="39.530590000" lon="-119.723190300"/>
+      <trkpt lat="39.531436900" lon="-119.722824000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.531673400" lon="-119.721504200"/>
+      <trkpt lat="39.534755700" lon="-119.753631500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.534790000" lon="-119.753639200"/>
+      <trkpt lat="39.550796500" lon="-119.717445300"/>
+      <trkpt lat="39.587863900" lon="-119.716880700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.587995800" lon="-119.717107300">
+        <time>2013-06-08T16:16:32.318Z</time>
+      </trkpt>
+      <trkpt lat="39.587909600" lon="-119.716865500"/>
+      <trkpt lat="39.530101700" lon="-119.721351600"/>
+      <trkpt lat="39.530695500" lon="-119.721709400">
+        <time>2013-06-08T16:33:48.651Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.530158900" lon="-119.721153200"/>
+      <trkpt lat="40.174789400" lon="-118.478462200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.179950700" lon="-118.476104700"/>
+      <trkpt lat="40.973079600" lon="-117.734176600"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.973297100" lon="-117.734481800"/>
+      <trkpt lat="40.972801200" lon="-117.735710100"/>
+      <trkpt lat="40.972965200" lon="-117.734016400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.972885100" lon="-117.733901900"/>
+      <trkpt lat="40.951721100" lon="-115.593254000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.955471800" lon="-115.561645500">
+        <time>2013-06-08T22:38:59.831Z</time>
+      </trkpt>
+      <trkpt lat="40.955440500" lon="-115.564483600"/>
+      <trkpt lat="40.738521500" lon="-114.077667200"/>
+      <trkpt lat="40.740493500" lon="-114.073697100">
+        <time>2013-06-09T00:07:27.752Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.740493500" lon="-114.073697100">
+        <time>2013-06-09T00:07:27.752Z</time>
+      </trkpt>
+      <trkpt lat="40.738521500" lon="-114.077667200"/>
+      <trkpt lat="40.739322600" lon="-114.077285700"/>
+      <trkpt lat="40.739389200" lon="-114.077667800">
+        <time>2013-06-09T00:11:57.463Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Unknown Activity Type</name>
+    <trkseg>
+      <trkpt lat="40.739389200" lon="-114.077667800">
+        <time>2013-06-09T00:11:57.463Z</time>
+      </trkpt>
+      <trkpt lat="40.740381500" lon="-114.073525400">
+        <time>2013-06-09T00:25:37.086Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.739322600" lon="-114.077285700"/>
+      <trkpt lat="40.716625200" lon="-112.122230500"/>
+      <trkpt lat="40.991367300" lon="-111.896728500"/>
+      <trkpt lat="40.995880100" lon="-111.904731700"/>
+      <trkpt lat="41.051052000" lon="-112.247009200"/>
+      <trkpt lat="41.040451000" lon="-112.259819000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.043051200" lon="-112.251335700">
+        <time>2013-06-09T13:31:55.421Z</time>
+      </trkpt>
+      <trkpt lat="41.043087000" lon="-112.251281700"/>
+      <trkpt lat="41.087463300" lon="-112.030204700"/>
+      <trkpt lat="41.087816400" lon="-112.030206400">
+        <time>2013-06-09T14:44:54.189Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.086212100" lon="-111.983924800"/>
+      <trkpt lat="40.716617500" lon="-111.917388900"/>
+      <trkpt lat="40.724102000" lon="-111.908691400"/>
+      <trkpt lat="40.760009700" lon="-111.916824300"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.760009700" lon="-111.916778500"/>
+      <trkpt lat="40.759918200" lon="-111.893409700"/>
+      <trkpt lat="40.768852200" lon="-111.885391200"/>
+      <trkpt lat="40.767963400" lon="-111.889358500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.767963400" lon="-111.889358500"/>
+      <trkpt lat="40.766147600" lon="-111.893920800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.766311600" lon="-111.893692000"/>
+      <trkpt lat="40.768356300" lon="-111.890998800"/>
+      <trkpt lat="40.765010800" lon="-111.881172100"/>
+      <trkpt lat="40.755439700" lon="-111.576812700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.982842300" lon="-111.416545300">
+        <time>2013-06-09T18:24:26.892Z</time>
+      </trkpt>
+      <trkpt lat="40.983188600" lon="-111.416839500"/>
+      <trkpt lat="41.726722700" lon="-107.728340100"/>
+      <trkpt lat="41.726700500" lon="-107.728454600">
+        <time>2013-06-09T21:44:07.529Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.784196000" lon="-107.368583500">
+        <time>2013-06-09T21:50:49.410Z</time>
+      </trkpt>
+      <trkpt lat="41.783252700" lon="-107.369567800"/>
+      <trkpt lat="41.146465300" lon="-104.769157400"/>
+      <trkpt lat="41.146465300" lon="-104.769130600">
+        <time>2013-06-10T00:41:06.215Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.146465300" lon="-104.769157400"/>
+      <trkpt lat="41.293128900" lon="-105.533905000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.293045000" lon="-105.534209000">
+        <time>2013-06-10T01:46:50.705Z</time>
+      </trkpt>
+      <trkpt lat="41.293128900" lon="-105.533905000"/>
+      <trkpt lat="41.295734400" lon="-105.544555600"/>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T02:07:44.121Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T14:58:34.512Z</time>
+      </trkpt>
+      <trkpt lat="41.295734400" lon="-105.544555600"/>
+      <trkpt lat="41.255233700" lon="-105.420898400"/>
+      <trkpt lat="41.189121200" lon="-105.211791900"/>
+      <trkpt lat="41.111110600" lon="-104.801643300"/>
+      <trkpt lat="41.110958700" lon="-104.801646900">
+        <time>2013-06-10T15:53:53.555Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.110958700" lon="-104.801646900">
+        <time>2013-06-10T15:53:53.555Z</time>
+      </trkpt>
+      <trkpt lat="41.111110600" lon="-104.801643300"/>
+      <trkpt lat="41.146465300" lon="-104.769157400"/>
+      <trkpt lat="41.158382400" lon="-104.803245500"/>
+      <trkpt lat="41.157758600" lon="-104.803323200">
+        <time>2013-06-10T16:44:07.677Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.157758600" lon="-104.803323200">
+        <time>2013-06-10T16:45:52.207Z</time>
+      </trkpt>
+      <trkpt lat="41.159320800" lon="-104.803581200"/>
+      <trkpt lat="41.295734400" lon="-105.544555600"/>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T18:09:40.466Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.249472900" lon="-105.444440300">
+        <time>2013-06-10T19:17:02.822Z</time>
+      </trkpt>
+      <trkpt lat="41.250782000" lon="-105.438102700"/>
+      <trkpt lat="41.252044600" lon="-105.415184000"/>
+      <trkpt lat="41.252125800" lon="-105.415066000">
+        <time>2013-06-10T19:29:39.236Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.252281600" lon="-105.415200400">
+        <time>2013-06-10T19:37:37.898Z</time>
+      </trkpt>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T19:44:31.221Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T19:44:31.221Z</time>
+      </trkpt>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T19:55:32.523Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T19:55:32.523Z</time>
+      </trkpt>
+      <trkpt lat="41.295734400" lon="-105.544555600"/>
+      <trkpt lat="41.250568300" lon="-105.437950100"/>
+      <trkpt lat="41.249116200" lon="-105.443600500">
+        <time>2013-06-10T20:03:17.504Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T21:54:16.965Z</time>
+      </trkpt>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T22:17:00.774Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T22:22:32.878Z</time>
+      </trkpt>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-10T22:48:24.976Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.295823600" lon="-105.544503900">
+        <time>2013-06-11T13:54:13.492Z</time>
+      </trkpt>
+      <trkpt lat="41.295734400" lon="-105.544555600"/>
+      <trkpt lat="41.298183400" lon="-105.553222600"/>
+      <trkpt lat="41.299869700" lon="-105.555548600">
+        <time>2013-06-11T14:27:16.710Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.299827200" lon="-105.556103200">
+        <time>2013-06-11T14:54:23.553Z</time>
+      </trkpt>
+      <trkpt lat="41.298183400" lon="-105.553222600"/>
+      <trkpt lat="40.581504800" lon="-105.060531600"/>
+      <trkpt lat="40.580089500" lon="-105.075073200"/>
+      <trkpt lat="40.585433900" lon="-105.076934800"/>
+      <trkpt lat="40.585433000" lon="-105.076996500">
+        <time>2013-06-11T16:46:48.680Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.585485700" lon="-105.075112400">
+        <time>2013-06-11T16:57:08.697Z</time>
+      </trkpt>
+      <trkpt lat="40.585609400" lon="-105.075111300"/>
+      <trkpt lat="40.592914500" lon="-105.057716300"/>
+      <trkpt lat="40.592935800" lon="-105.058433200">
+        <time>2013-06-11T17:19:04.305Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.592935800" lon="-105.058433200">
+        <time>2013-06-11T17:19:04.305Z</time>
+      </trkpt>
+      <trkpt lat="40.592914500" lon="-105.057777400"/>
+      <trkpt lat="40.594379400" lon="-105.057624800"/>
+      <trkpt lat="40.594378300" lon="-105.057502900">
+        <time>2013-06-11T17:31:43.401Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.594379400" lon="-105.057685800"/>
+      <trkpt lat="40.522655400" lon="-104.987350400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.361225000" lon="-104.985930400">
+        <time>2013-06-11T18:33:48.245Z</time>
+      </trkpt>
+      <trkpt lat="40.361389100" lon="-104.985519400"/>
+      <trkpt lat="39.775119700" lon="-104.859748800"/>
+      <trkpt lat="39.657939900" lon="-104.841926500"/>
+      <trkpt lat="39.651557500" lon="-104.850437300">
+        <time>2013-06-11T19:29:27.072Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.655954700" lon="-104.850681900">
+        <time>2013-06-11T23:47:37.753Z</time>
+      </trkpt>
+      <trkpt lat="39.656005800" lon="-104.850708000"/>
+      <trkpt lat="39.661689700" lon="-104.843437100"/>
+      <trkpt lat="39.653518600" lon="-105.050849900"/>
+      <trkpt lat="39.654834700" lon="-105.053199700"/>
+      <trkpt lat="39.695774000" lon="-105.077613800"/>
+      <trkpt lat="39.695746500" lon="-105.077104900">
+        <time>2013-06-12T00:47:30.345Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.695811500" lon="-105.076667800">
+        <time>2013-06-12T02:37:08.634Z</time>
+      </trkpt>
+      <trkpt lat="39.696220300" lon="-105.076545700"/>
+      <trkpt lat="39.695774000" lon="-105.077613800"/>
+      <trkpt lat="39.694236000" lon="-105.077376500">
+        <time>2013-06-12T02:52:03.380Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.682720100" lon="-105.064552300"/>
+      <trkpt lat="39.682308100" lon="-105.070014900"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.682265300" lon="-105.070015900">
+        <time>2013-06-12T03:12:28.981Z</time>
+      </trkpt>
+      <trkpt lat="39.682258600" lon="-105.070014900"/>
+      <trkpt lat="39.687393100" lon="-105.081405600"/>
+      <trkpt lat="39.701301500" lon="-105.078613200"/>
+      <trkpt lat="39.656780200" lon="-104.844276400"/>
+      <trkpt lat="39.655814600" lon="-104.843499700">
+        <time>2013-06-12T03:45:14.118Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Unknown Activity Type</name>
+    <trkseg>
+      <trkpt lat="39.655814600" lon="-104.843499700">
+        <time>2013-06-12T03:45:14.118Z</time>
+      </trkpt>
+      <trkpt lat="39.655670000" lon="-104.851040400">
+        <time>2013-06-12T05:07:57.646Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.655670000" lon="-104.851040400">
+        <time>2013-06-12T05:07:57.646Z</time>
+      </trkpt>
+      <trkpt lat="39.654773700" lon="-104.850875800"/>
+      <trkpt lat="39.656326200" lon="-104.838005000"/>
+      <trkpt lat="39.656103000" lon="-104.838230200">
+        <time>2013-06-12T05:43:38.921Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Unknown Activity Type</name>
+    <trkseg>
+      <trkpt lat="39.655670000" lon="-104.851040400">
+        <time>2013-06-12T05:43:38.921Z</time>
+      </trkpt>
+      <trkpt lat="39.655954700" lon="-104.850681900">
+        <time>2013-06-12T07:18:52.700Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.654880500" lon="-104.850273100"/>
+      <trkpt lat="39.659706100" lon="-104.839782700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.659427600" lon="-104.836158700"/>
+      <trkpt lat="39.673061300" lon="-104.788627600"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.685434900" lon="-104.762416800">
+        <time>2013-06-12T16:12:15.580Z</time>
+      </trkpt>
+      <trkpt lat="39.685434900" lon="-104.762416800">
+        <time>2013-06-12T16:27:43.584Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.682455200" lon="-104.756649200">
+        <time>2013-06-12T16:38:50.290Z</time>
+      </trkpt>
+      <trkpt lat="39.673893500" lon="-104.793751100">
+        <time>2013-06-12T16:43:27.032Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.682125500" lon="-104.763982500">
+        <time>2013-06-12T17:19:23.360Z</time>
+      </trkpt>
+      <trkpt lat="39.682094500" lon="-104.763977000"/>
+      <trkpt lat="39.673751800" lon="-104.769401500"/>
+      <trkpt lat="39.673695200" lon="-104.769876000">
+        <time>2013-06-12T17:32:22.357Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.696828200" lon="-104.771848800">
+        <time>2013-06-12T17:50:17.643Z</time>
+      </trkpt>
+      <trkpt lat="39.696834500" lon="-104.771842900"/>
+      <trkpt lat="39.600166300" lon="-104.709983800"/>
+      <trkpt lat="39.600123900" lon="-104.709899900">
+        <time>2013-06-12T18:11:21.105Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.609431500" lon="-104.705711200">
+        <time>2013-06-12T19:43:34.167Z</time>
+      </trkpt>
+      <trkpt lat="39.609214700" lon="-104.705780000"/>
+      <trkpt lat="39.674842800" lon="-104.794258100"/>
+      <trkpt lat="39.674838500" lon="-104.794340400">
+        <time>2013-06-12T20:02:56.823Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.680552300" lon="-104.768781000">
+        <time>2013-06-12T20:42:24.544Z</time>
+      </trkpt>
+      <trkpt lat="39.680541900" lon="-104.768798800"/>
+      <trkpt lat="39.673248200" lon="-104.787162700"/>
+      <trkpt lat="38.776561700" lon="-104.814872700"/>
+      <trkpt lat="38.830219200" lon="-104.821792600"/>
+      <trkpt lat="39.268230400" lon="-103.709060600"/>
+      <trkpt lat="39.268306200" lon="-103.709025200">
+        <time>2013-06-13T00:36:21.936Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="39.268306200" lon="-103.709025200">
+        <time>2013-06-13T00:52:55.220Z</time>
+      </trkpt>
+      <trkpt lat="39.268230400" lon="-103.709060600"/>
+      <trkpt lat="40.502246800" lon="-103.261695800"/>
+      <trkpt lat="40.501756200" lon="-103.263251800">
+        <time>2013-06-13T02:38:00.829Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.593334100" lon="-103.227569500"/>
+      <trkpt lat="41.116775500" lon="-102.948249800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="41.116722900" lon="-102.948249300">
+        <time>2013-06-13T16:07:12.553Z</time>
+      </trkpt>
+      <trkpt lat="41.116775500" lon="-102.948249800"/>
+      <trkpt lat="43.755271900" lon="-103.611900300"/>
+      <trkpt lat="43.704990300" lon="-103.603958100"/>
+      <trkpt lat="43.705238000" lon="-103.604923700">
+        <time>2013-06-13T20:00:58.727Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="43.705238000" lon="-103.604923700">
+        <time>2013-06-13T20:00:58.727Z</time>
+      </trkpt>
+      <trkpt lat="43.705238000" lon="-103.604923700">
+        <time>2013-06-13T20:13:13.288Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="43.828887900" lon="-103.631637500"/>
+      <trkpt lat="43.828792500" lon="-103.631736700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="43.828693300" lon="-103.631843500"/>
+      <trkpt lat="43.905910400" lon="-103.591049100"/>
+      <trkpt lat="43.875217400" lon="-103.452346800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="43.875236000" lon="-103.452382100">
+        <time>2013-06-13T22:17:12.333Z</time>
+      </trkpt>
+      <trkpt lat="43.875217400" lon="-103.452346800"/>
+      <trkpt lat="43.934020900" lon="-103.558509800"/>
+      <trkpt lat="43.933958400" lon="-103.557913500">
+        <time>2013-06-13T23:25:27.729Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="44.344738400" lon="-103.776535500">
+        <time>2013-06-14T15:37:20.500Z</time>
+      </trkpt>
+      <trkpt lat="43.937797700" lon="-103.575189700">
+        <time>2013-06-14T16:10:35.835Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="43.937797700" lon="-103.575189700">
+        <time>2013-06-14T16:10:35.835Z</time>
+      </trkpt>
+      <trkpt lat="43.933324100" lon="-103.575614800">
+        <time>2013-06-14T16:18:50.973Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="43.933704300" lon="-103.575370700"/>
+      <trkpt lat="43.611808700" lon="-96.950965800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="43.611938400" lon="-96.951087900"/>
+      <trkpt lat="43.781135500" lon="-96.212539600"/>
+      <trkpt lat="44.853801700" lon="-95.483612000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="44.960361400" lon="-95.355903600"/>
+      <trkpt lat="45.134021700" lon="-94.914154000"/>
+      <trkpt lat="45.048835700" lon="-94.408096300"/>
+      <trkpt lat="44.970123200" lon="-94.422554000"/>
+      <trkpt lat="45.104045800" lon="-94.549667300"/>
+      <trkpt lat="45.277744200" lon="-94.438362100"/>
+      <trkpt lat="45.308345700" lon="-94.393653800"/>
+      <trkpt lat="45.515975900" lon="-94.495468100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="45.457854600" lon="-94.524295600">
+        <time>2013-06-16T03:26:20.273Z</time>
+      </trkpt>
+      <trkpt lat="45.457854600" lon="-94.524295600">
+        <time>2013-06-16T03:36:50.793Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="45.372323900" lon="-94.539415100">
+        <time>2013-06-16T13:51:14.732Z</time>
+      </trkpt>
+      <trkpt lat="45.371788000" lon="-94.537643400"/>
+      <trkpt lat="45.454021400" lon="-94.520027100"/>
+      <trkpt lat="45.187522800" lon="-94.542854300"/>
+      <trkpt lat="45.135433100" lon="-94.528190600"/>
+      <trkpt lat="45.096557600" lon="-94.410583400"/>
+      <trkpt lat="45.096544100" lon="-94.410581800">
+        <time>2013-06-16T14:53:12.037Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="45.009764900" lon="-94.359263300">
+        <time>2013-06-16T15:12:35.099Z</time>
+      </trkpt>
+      <trkpt lat="45.009769400" lon="-94.358078000"/>
+      <trkpt lat="45.124847400" lon="-94.520782400"/>
+      <trkpt lat="45.138248400" lon="-94.551933200"/>
+      <trkpt lat="45.152545900" lon="-94.604629500"/>
+      <trkpt lat="45.377914400" lon="-94.728652900"/>
+      <trkpt lat="45.727874700" lon="-94.951797400"/>
+      <trkpt lat="45.727890300" lon="-94.951645600">
+        <time>2013-06-16T16:23:54.357Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="45.727874700" lon="-94.951728800"/>
+      <trkpt lat="45.723075800" lon="-94.950744600"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="45.723137500" lon="-94.950432500">
+        <time>2013-06-16T16:48:53.763Z</time>
+      </trkpt>
+      <trkpt lat="45.723075800" lon="-94.950744600"/>
+      <trkpt lat="46.850719400" lon="-96.798866200"/>
+      <trkpt lat="46.850532000" lon="-96.798943000">
+        <time>2013-06-16T18:39:40.033Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="46.850532000" lon="-96.798943000">
+        <time>2013-06-16T18:53:47.491Z</time>
+      </trkpt>
+      <trkpt lat="46.850719400" lon="-96.798866200"/>
+      <trkpt lat="49.266620600" lon="-97.342506400"/>
+      <trkpt lat="49.343570700" lon="-97.367401100"/>
+      <trkpt lat="49.343173800" lon="-97.367577600">
+        <time>2013-06-16T21:55:35.563Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.396728500" lon="-97.326591400"/>
+      <trkpt lat="49.895103400" lon="-97.142799300"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.894390100" lon="-97.143188400"/>
+      <trkpt lat="49.893383000" lon="-97.144836400"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.895822600" lon="-97.143639000">
+        <time>2013-06-17T14:34:48.832Z</time>
+      </trkpt>
+      <trkpt lat="49.894878300" lon="-97.142669600"/>
+      <trkpt lat="49.895851100" lon="-97.138679500"/>
+      <trkpt lat="49.895535100" lon="-97.139019000">
+        <time>2013-06-17T14:39:04.140Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.895535100" lon="-97.139019000">
+        <time>2013-06-17T14:50:53.361Z</time>
+      </trkpt>
+      <trkpt lat="49.895042400" lon="-97.138313200"/>
+      <trkpt lat="49.895168300" lon="-97.142837500"/>
+      <trkpt lat="49.895028600" lon="-97.142497800">
+        <time>2013-06-17T14:53:32.271Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.895028600" lon="-97.142497800">
+        <time>2013-06-17T15:28:13.664Z</time>
+      </trkpt>
+      <trkpt lat="49.895973200" lon="-97.142066900"/>
+      <trkpt lat="49.900581300" lon="-97.136703400"/>
+      <trkpt lat="49.899427000" lon="-97.137168000">
+        <time>2013-06-17T15:37:13.411Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.899427000" lon="-97.137168000">
+        <time>2013-06-17T17:54:26.354Z</time>
+      </trkpt>
+      <trkpt lat="49.900573700" lon="-97.136680600"/>
+      <trkpt lat="49.900928400" lon="-97.136367700"/>
+      <trkpt lat="49.897628700" lon="-97.133491500"/>
+      <trkpt lat="49.894161200" lon="-97.135421700"/>
+      <trkpt lat="49.895256000" lon="-97.132690400"/>
+      <trkpt lat="49.894508300" lon="-97.132278400"/>
+      <trkpt lat="49.893738700" lon="-97.133995700">
+        <time>2013-06-17T18:08:22.760Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.894508300" lon="-97.132278400"/>
+      <trkpt lat="49.894996600" lon="-97.126541100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.894996600" lon="-97.126541100"/>
+      <trkpt lat="49.897422700" lon="-97.128616300"/>
+      <trkpt lat="49.898525200" lon="-97.126380900"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.898984500" lon="-97.125334300">
+        <time>2013-06-17T19:11:27.392Z</time>
+      </trkpt>
+      <trkpt lat="49.898525200" lon="-97.126380900"/>
+      <trkpt lat="49.894165000" lon="-97.114471400"/>
+      <trkpt lat="49.891891400" lon="-97.122779800"/>
+      <trkpt lat="49.891728300" lon="-97.122865300">
+        <time>2013-06-17T19:23:23.972Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.891891400" lon="-97.122779800"/>
+      <trkpt lat="49.891036900" lon="-97.128082200"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.895343700" lon="-97.142875600"/>
+      <trkpt lat="49.894084900" lon="-97.142578100"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.897909800" lon="-97.140740400">
+        <time>2013-06-18T02:09:59.602Z</time>
+      </trkpt>
+      <trkpt lat="49.897997400" lon="-97.137253500">
+        <time>2013-06-18T02:11:00.566Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.897997400" lon="-97.137253500">
+        <time>2013-06-18T02:29:12.825Z</time>
+      </trkpt>
+      <trkpt lat="49.897846200" lon="-97.137771600"/>
+      <trkpt lat="49.894004800" lon="-97.139251700"/>
+      <trkpt lat="49.890960600" lon="-97.140556300"/>
+      <trkpt lat="49.894031500" lon="-97.140762300"/>
+      <trkpt lat="49.894672300" lon="-97.142547600"/>
+      <trkpt lat="49.895359000" lon="-97.142814600"/>
+      <trkpt lat="49.895028600" lon="-97.142497800">
+        <time>2013-06-18T02:45:46.829Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.894390100" lon="-97.143188400"/>
+      <trkpt lat="49.893539400" lon="-97.140495300"/>
+      <trkpt lat="49.887516000" lon="-97.134017900"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.887516000" lon="-97.134017900"/>
+      <trkpt lat="49.887046800" lon="-97.130691500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.886760700" lon="-97.131095800"/>
+      <trkpt lat="49.889289800" lon="-97.131690900"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.889289800" lon="-97.131690900"/>
+      <trkpt lat="49.891185700" lon="-97.132446200"/>
+      <trkpt lat="49.889289800" lon="-97.135238600"/>
+      <trkpt lat="49.877395600" lon="-97.270591700"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="49.881710000" lon="-97.288383400"/>
+      <trkpt lat="49.883499100" lon="-97.295814500"/>
+      <trkpt lat="49.905082700" lon="-97.760185200"/>
+      <trkpt lat="50.226261100" lon="-99.476432800"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="50.226031000" lon="-99.476464300">
+        <time>2013-06-18T19:45:55.425Z</time>
+      </trkpt>
+      <trkpt lat="50.226261100" lon="-99.476463300"/>
+      <trkpt lat="50.651439600" lon="-99.966766300"/>
+      <trkpt lat="50.651973200" lon="-99.967434000">
+        <time>2013-06-18T21:02:48.525Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="50.651973200" lon="-99.967434000">
+        <time>2013-06-18T21:33:40.351Z</time>
+      </trkpt>
+      <trkpt lat="50.651973200" lon="-99.967434000">
+        <time>2013-06-18T21:56:07.656Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Unknown Activity Type</name>
+    <trkseg>
+      <trkpt lat="50.652657200" lon="-99.965409200">
+        <time>2013-06-18T22:17:51Z</time>
+      </trkpt>
+      <trkpt lat="50.651973200" lon="-99.967434000">
+        <time>2013-06-19T03:37:25Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="50.651973200" lon="-99.967434000">
+        <time>2013-06-19T17:42:44.305Z</time>
+      </trkpt>
+      <trkpt lat="50.651439600" lon="-99.966766300"/>
+      <trkpt lat="50.772254900" lon="-101.281158400"/>
+      <trkpt lat="50.772498300" lon="-101.281019500">
+        <time>2013-06-19T19:22:11.715Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="50.772270200" lon="-101.281234700"/>
+      <trkpt lat="50.974746700" lon="-102.083053500"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="50.974741100" lon="-102.083063500">
+        <time>2013-06-19T20:41:34.505Z</time>
+      </trkpt>
+      <trkpt lat="50.974746700" lon="-102.083053500"/>
+      <trkpt lat="51.794361100" lon="-104.686210600"/>
+      <trkpt lat="51.794387600" lon="-104.686213800">
+        <time>2013-06-19T22:52:34.023Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

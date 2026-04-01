@@ -67,8 +67,7 @@ gpsbabel -i gpx -f points.gpx -x stack,push -x polygon,file=mycounty.txt
 -x duplicate,shortname -o gpx -F nearmycounty.gpx
 </userinput></para>
 <para>
-This command makes a copy of the points, finds the ones that are in your
-your county, swaps that result with the copy of the original set of points,
+This command makes a copy of the points, finds the ones that are in your county, swaps that result with the copy of the original set of points,
 finds the ones from that set that are within 1 km of the border of the county,
 puts the two lists together, and then filters out any points that appear twice
 (This step is necessary because points inside the county but near the county

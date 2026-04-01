@@ -25,17 +25,13 @@
 #include <QString>         // for QString
 
 class InifileSection;
-struct inifile_t {
-  QHash<QString, InifileSection> sections;
-  QString source;
-};
+struct inifile_t; // forward declare, opaque to users.
 
 /*
 	inifile_init:
 	  reads inifile filename into memory
-	  myname represents the calling module
  */
-inifile_t* inifile_init(const QString& filename, const char* myname);
+inifile_t* inifile_init(const QString& filename);
 void inifile_done(inifile_t* inifile);
 
 bool inifile_has_section(const inifile_t* inifile, const QString& section);

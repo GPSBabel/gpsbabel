@@ -1,0 +1,15 @@
+<para>
+  This option controls whether to include the Total Energy Variometer (VAT) data from the IGC file.
+</para>
+<para>
+  This is a boolean option that is enabled by default. A total energy variometer indicates the rate of change of the total energy of the aircraft (kinetic plus potential), which corresponds to the rate of climb or descent of the airmass the glider is in, independent of stick-induced climbs or dives. It is a crucial instrument for soaring flight. GPSBabel assumes the value is in meters per second.
+</para>
+<para>
+  To exclude this data, use <userinput>VAT=0</userinput>.
+</para>
+<example xml:id="igc_vat_example">
+  <title>Convert an IGC file while excluding the Total Energy Variometer data</title>
+  <para>
+    <userinput>gpsbabel -i igc,VAT=0 -f my_flight.igc -o gpx -F my_flight.gpx</userinput>
+  </para>
+</example>

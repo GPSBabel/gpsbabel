@@ -21,7 +21,7 @@ compare ${REFERENCE}/track/trackfilter3.gpx ${TMPDIR}/trackfilter3.gpx
 
 # Exercise the 'faketime' filter.  The middle of the three points has
 # time so we can exercise the 'forced' option, too.
-gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=20100506060000+5 -o gpx -F ${TMPDIR}/ft.gpx 
+gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=20100506060000+5 -o gpx -F ${TMPDIR}/ft.gpx
 compare ${REFERENCE}/track/trackfilter_faketime.gpx ${TMPDIR}/ft.gpx
 gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=f20100506060000+5 -o gpx -F ${TMPDIR}/ftf.gpx
 compare ${REFERENCE}/track/trackfilter_faketime_forced.gpx ${TMPDIR}/ftf.gpx
@@ -77,4 +77,7 @@ compare ${REFERENCE}/track/simint250m.csv ${TMPDIR}/simint250m_2.csv
 gpsbabel -t -i unicsv -f ${REFERENCE}/track/simint.csv -x track,faketime=f2022+1 -o unicsv,utc -F ${TMPDIR}/simint1000m.csv
 compare ${REFERENCE}/track/simint1000m.csv ${TMPDIR}/simint1000m.csv
 
+# segment
+gpsbabel -t -i unicsv,utc -f ${REFERENCE}/track/trackfilter_segment.csv -x track,segment -o gpx -F ${TMPDIR}/trackfilter_segment~csv.gpx
+compare ${REFERENCE}/track/trackfilter_segment~csv.gpx ${TMPDIR}/trackfilter_segment~csv.gpx
 

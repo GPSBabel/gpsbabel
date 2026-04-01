@@ -5,11 +5,11 @@
     <LookAt>
       <gx:TimeSpan>
         <begin>2002-08-15T07:00:00Z</begin>
-        <end>2003-06-29T07:00:00Z</end>
+        <end>2003-06-29T00:00:00Z</end>
       </gx:TimeSpan>
-      <longitude>-79.930833</longitude>
+      <longitude>-79.930834</longitude>
       <latitude>41.027500</latitude>
-      <range>2109328.437865</range>
+      <range>2109328.427385</range>
     </LookAt>
     <!-- Normal waypoint style -->
     <Style id="waypoint_n">
@@ -309,7 +309,7 @@ PICTURES of points and of the panels will follow soon. YOU CAN ONLY LOG ONE POIN
 Good luck!]]></value>
           </Data>
           <Data name="gc_logs">
-            <value><![CDATA[<p><b>Found it</b> by Christopher R & Pooh B 2005-07-12<br />This marker is not in Quebec but it is a Geodesic marker in Clarenville, Newfoundland, Canada!
+            <value><![CDATA[<p><b>Found it</b> by Christopher R & Pooh B2005-07-12<br />This marker is not in Quebec but it is a Geodesic marker in Clarenville, Newfoundland, Canada!
 
 Found this one while hunting a traditional cache and thought of this cache right away! 
 
@@ -319,7 +319,7 @@ Smiles Pooh Bear
 
 Ce marqueur n'est pas au Québec mais c'est un marqueur géodésique dans Clarenville, Terre-Neuve, Canada!  
 
-A trouvé celui-ci tandis que chasse une cachette traditionnelle et pensé à cette cachette tout de suite!  Elle est située sur la montagne nue dans Clarenville - il y a aactually deux marqueurs à moins de 15 pieds d'un des autres sur la montagne nue...  Ours De Pooh De Sourires</p><p><b>Found it</b> by TravelBen 2005-06-26<br />[:D] 14h22
+A trouvé celui-ci tandis que chasse une cachette traditionnelle et pensé à cette cachette tout de suite!  Elle est située sur la montagne nue dans Clarenville - il y a aactually deux marqueurs à moins de 15 pieds d'un des autres sur la montagne nue...  Ours De Pooh De Sourires</p><p><b>Found it</b> by TravelBen2005-06-26<br />[:D] 14h22
 
 Marqueur du Service de la Géodégie (c'est bien un &quot;g&quot; pas un &quot;s&quot;) du Québec.
 
@@ -329,7 +329,7 @@ UTM: 18T E 582877 N 5033250
 
 Ce marqueur se trouve dans le ville de Senneville, sur un monument décrivant une page d'histoire du Québec, sur le bas côté avant droit.
 
-Près de la cache:  Exo-07 La Jumelle de Loudiver (GCP3VE)</p><p><b>Found it</b> by etasse 2005-06-03<br />MRN marker 94K4731 in Gatineau, QC. corner of Du Rhone and Gatineau Ave.
+Près de la cache:  Exo-07 La Jumelle de Loudiver (GCP3VE)</p><p><b>Found it</b> by etasse2005-06-03<br />MRN marker 94K4731 in Gatineau, QC. corner of Du Rhone and Gatineau Ave.
 
 Position Average
 N 45° 29.5247  W 075° 43.0049  59.49m
@@ -341,7 +341,7 @@ UTM 18T 0443996 5037868
 
 This pole has everything:  An underground cable warning, a geodesic mark, a bus stop and a garage sale sign.
 
-Judging by the coordinates it looks like the coords should be 45°29'31.5&quot; -75°43'0&quot;  I placed the GPS antenna right against the marker, to no avail.</p><p><b>Found it</b> by Katou 2005-06-03<br />Un bo point géodésique a Lotbinière..en allant faire une nouvelle cache a l'île richelieu ;-)</p><p><b>Found it</b> by Gps_Gulliver&DauphinBleu 2005-05-29<br />Point Geodesique situe near Port de Plaisance de Longueuil
+Judging by the coordinates it looks like the coords should be 45°29'31.5&quot; -75°43'0&quot;  I placed the GPS antenna right against the marker, to no avail.</p><p><b>Found it</b> by Katou2005-06-03<br />Un bo point géodésique a Lotbinière..en allant faire une nouvelle cache a l'île richelieu ;-)</p><p><b>Found it</b> by Gps_Gulliver&DauphinBleu2005-05-29<br />Point Geodesique situe near Port de Plaisance de Longueuil
 sur le bord du fleuve st-laurent.
 Il y a des sentiers et une grande piste cyclable
 Enjoy !</p>]]></value>
@@ -354,7 +354,7 @@ Enjoy !</p>]]></value>
       <Placemark>
         <name><![CDATA[Oozy rat in a sanitary zoo]]></name>
         <TimeStamp>
-          <when>2003-06-29T07:00:00Z</when>
+          <when>2003-06-29T00:00:00Z</when>
         </TimeStamp>
         <styleUrl>#geocache</styleUrl>
         <Style>
@@ -390,7 +390,8 @@ Enjoy !</p>]]></value>
             <value>not_chosen</value>
           </Data>
           <Data name="gc_issues">
-            <value></value>
+            <value>&amp;lt;font color=&quot;red&quot;&amp;gt;This cache has been archived.&amp;lt;/font&amp;gt;&amp;lt;br/&amp;gt;
+</value>
           </Data>
           <Data name="gc_lat">
             <value>35.921667</value>
@@ -405,28 +406,41 @@ Enjoy !</p>]]></value>
             <value>https://www.geocaching.com/images/kml/8.png</value>
           </Data>
           <Data name="gc_short_desc">
-            <value><![CDATA[The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.]]></value>
+            <value><![CDATA[The cache is not at the coordinates above. These coords will get
+you to the correct park and within 1/2 mile of the cache. The cache
+is within 35 feet of the trail. It is not handicapped accessible.
+It is a nice walk in the woods that is practical for all ages.
+There is no space in the container for trading items. You should
+bring a writing stick and bug spray is recommended.]]></value>
           </Data>
           <Data name="gc_long_desc">
-            <value><![CDATA[So if the cache isn't at the above coordinates, where is it?  
-
+            <value><![CDATA[So if the cache isn't at the above coordinates, where is it? 
 <ul>
-
-<li>Too bad I hid a boot
-<li>Too hot to hoot
-<li>Never odd or even
-<li>Do geese see God?
-<li>"Do nine men interpret?" "Nine men," I nod
-<li>Rats live on no evil star
-<li>Go hang a salami, I'm a lasagna hog
-</ul>
-
-Now that it's intuitively obvious to even the most casual observer where the cache is, turn on your geo-mojo and go find it.
-<br>
-<img SRC="http://www.mtgc.org/mtgc_member-banner.gif" WIDTH="500" HEIGHT="40" ALT="Member of Middle Tennessee GeoCachers Club [www.mtgc.org]" BORDER="0"></a></p>]]></value>
+<li>Too bad I hid a boot</li>
+<li>Too hot to hoot</li>
+<li>Never odd or even</li>
+<li>Do geese see God?</li>
+<li>"Do nine men interpret?" "Nine men," I nod</li>
+<li>Rats live on no evil star</li>
+<li>Go hang a salami, I'm a lasagna hog</li></ul>
+Now that it's intuitively obvious to even the most casual observer
+where the cache is, turn on your geo-mojo and go find it. <br>
+<img src="http://www.mtgc.org/mtgc_member-banner.gif" width="500"
+height="40" alt=
+"Member of Middle Tennessee GeoCachers Club [www.mtgc.org]"
+     border="0"><br>
+<br>]]></value>
           </Data>
           <Data name="gc_logs">
-            <value><![CDATA[<p><b>Found it</b> by littlepod 2005-07-03<br />Enjoyed the puzzle. We seemed to be about 50ft off though. TFTC.</p><p><b>Write note</b> by robertlipe 2005-04-29<br />TB Drop to show he's hanging out in Nashville until we blast off for Geowoodstock in a few weeks.</p><p><b>Found it</b> by Big Bumblebee 2005-04-18<br />Found it a while ago.  Thanks.</p><p><b>Write note</b> by robertlipe 2005-03-27<br />I had to renew my permit with the CDC and in doing so, I trolled out here verified that the infectious ooze is fully within specification and industry accepted tolerance.   Ooze On!</p><p><b>Found it</b> by Virtual Babe 2004-12-27<br />This was a great cache, however on this day I considered it a FIFM cache (Fun, Invigorating, Frustrating and Maddening), especially when the cache was not replaced in the proper spot by the previous cacher!  Thanks anyway!!</p><p><b>Write note</b> by robertlipe 2004-01-12<br />I got a complaint from the CDC about oozy rat this weekend.     I went out tonight in the dark and verified that the infectious ooze is fully within specification and industry accepted tolerance. (Although I realize now I did misstate the cache container to the reporting officer when confronted.   It's, uuuuh, smaller than I said.)</p><p><b>Write note</b> by robertlipe 2003-10-04<br />In the expectation that this cache will get some traffic in the next 48 hours, Ryan and I checked it earlier today.   The Rat is Oozing just as we planned it.</p><p><b>Write note</b> by robertlipe 2003-07-03<br />It won't earn him a smiley face, but I've confirmed that rickrich would have indeed sunk the battleship!      Thanx for playing. You get a copy of the home game and some rice-a-roni...</p>]]></value>
+            <value><![CDATA[<p><b>Archive</b> by robertlipe2017-11-11<br />Removed the container from the final location. Enough construction has occurred since this was placed to make it much less of an adventure than is used to be, so I'm archiving.
+
+Thanx to all that hunted it.</p><p><b>Temporarily Disable Listing</b> by robertlipe2017-11-09<br />Bye.</p><p><b>Owner Maintenance</b> by robertlipe2017-11-09<br />Upon a tip from the CDC, confirmed that the ooze has exceeded code. Will archive when I'm near a real computer</p><p><b>Didn't find it</b> by Abiectio2017-10-08<br />Spent some time hunting this one today but came up empty. Loved the puzzle though!</p><p><b>Didn't find it</b> by Siamese Retriever2017-09-09<br />Most of my mom's side of the family still lives in the McEwen and Dickson areas, so I am down this way quite a bit.  Yesterday (and the day before), my sister and I spent some time (again) in Clarksville, experiencing more government incompetence.  Today, I started the trip home with a stop at a cache I had tried nine years ago (!).  We found that one, and one other that I had also previously DNFed, and then I dropped her off and started the drive from Dickson to Nashville...  Funny story - Nashville is a little bit out of the way on that drive.  I am (still) trying to complete a Charter Member challenge, and Mr. Lipe is on that rarefied list.  Since he only has a few caches currently active, I targeted a puzzle that I was able to solve.  I DNFed that one last time I was in the area (yes, this one), and I DNFed it again today (yes, still this one).  I do that a lot.  In my defense, I was able to solve the puzzle, and I think I found the original hiding spot and the hiding spot other finders mentioned.  I really hope this one is not gone, as I think I have an idea on the container, and I enjoyed both of my visits here.  This one more than the last one, as last time it was pouring down rain.</p><p><b>Didn't find it</b> by Siamese Retriever2017-04-23<br />I was down for another fun filled weekend of dealing with family issues, so I needed a break from the crazy before I went back home to deal with my own family issues.  I left Dickson this morning, and was hoping the rain wouldn't be too bad as I was trying to grab some very specific caches on the way home.  This was specific cache number 1.  I am currently 98.89% sure I solved this one correctly...  That said, my Oregon was pointing in a direction that was clearly marked as not the right spot.  I read a few old logs, and decided to try moving the search 65' NE/NNE.  I came up with a great new location, but the rain was starting in earnest, and I still had a lot of windshield time ahead of me.  I got wetter than I wanted to, and could not make the find.  On the plus side, I will be down this way a lot over the next several months to next several years, so I will have to try again.  I have a few other ideas that I was pondering as I drove, so I am going to poke at them next.  The find rate on this one for me was 00.00%.  HA!</p><p><b>Found it</b> by surena2017-04-23<br />Found it with a help of a friend. Couldn't sign the log as it was soaked. I'll s no picture as proof. TFTC.</p><p><b>Found it</b> by maxlahoda2017-03-23<br />thanks</p><p><b>Write note</b> by Beanercacher2017-01-16<br />It got dark on me. I'll try again later.</p><p><b>Found it</b> by TheLizards2017-01-02<br />Holy crap we actually found it. We aren't very good at this puzzle type of cache, but managed to solve and find it!</p><p><b>Found it</b> by Uncle Fuzzy2016-10-23<br />After taking a nice walk with Gal to this one, we didn't have any luck right away. We searched all over the place, until she read a hint that sure helped out a lot. [:D] TFTF</p><p><b>Found it</b> by GuentherGal2016-10-23<br />Fuzzy and I were off for a quick getaway to see some of the highlights of the area and score a few caches in Tennessee and Alabama. This was one of a handful of Mystery caches I solved back home. 
+
+Chuck and I were halfway to this one after completing a nearby Challenge, so we continued on to check out, “Oozy rat in a sanitary zoo.” Along the way we spied two deer and a lion, making this a real animal adventure.
+
+After poking around Ground Zero for a couple of minutes we read the logs. After going the 65’ NE as others have stated, we found the container in the first place we checked. We signed in and replaced as found. 
+
+We really enjoyed the hike to this one. The views from the boardwalk were just lovely. As we stood there, we saw several hot air balloons take off in the distance. Thanks for the fantastic Fall faraway fun!</p><p><b>Found it</b> by kateandwill2016-07-31<br />Found after like an hour</p><p><b>Found it</b> by seit42016-07-07<br />I've had this one solved for a long time - or so I thought. Went hunting for it and found nada. Used a PAF and found out I had clearly solved the puzzle wrong - although I sort of had the right idea. LOL. Found the right spot and signed the log this time. Thanks for the puzzle fun.</p><p><b>Found it</b> by ricky7412016-04-09<br />catching up on logs thanks for the fun</p><p><b>Found it</b> by Walker Stalker 762016-04-09<br />Found on our 2nd attempt while in town for the little ones birthday dinner at Chuck E Cheese!!Cool puzzle,thanks for the fun!!!Found with ricky741,Zombie Slayer &amp; DD#2.TFTH!!</p><p><b>Found it</b> by carterkylefamily2016-03-05<br />Whew...3 tries over a year and finally found it.  Great one and we are going for celebratory BBQ.  Log was missing so we put a long piece of paper in there for the time being.  Good luck!</p><p><b>Found it</b> by jrtoken2016-01-31<br />TFTC!</p><p><b>Found it</b> by momndad2boys2015-09-19<br />Finally! We worked on this for a while! Everything is in great shape! TFTC ACT</p><p><b>Found it</b> by Brotherseldom2015-09-14<br />Fixed my DNF from a couple years back. Was a little creeper out by cache container when I finally found it though.</p><p><b>Write note</b> by robertlipe2005-04-29<br />TB Drop to show he's hanging out in Nashville until we blast off for Geowoodstock in a few weeks.</p><p><b>Write note</b> by robertlipe2005-03-27<br />I had to renew my permit with the CDC and in doing so, I trolled out here verified that the infectious ooze is fully within specification and industry accepted tolerance.   Ooze On!</p><p><b>Write note</b> by robertlipe2004-01-12<br />I got a complaint from the CDC about oozy rat this weekend.     I went out tonight in the dark and verified that the infectious ooze is fully within specification and industry accepted tolerance. (Although I realize now I did misstate the cache container to the reporting officer when confronted.   It's, uuuuh, smaller than I said.)</p><p><b>Write note</b> by robertlipe2003-10-04<br />In the expectation that this cache will get some traffic in the next 48 hours, Ryan and I checked it earlier today.   The Rat is Oozing just as we planned it.</p><p><b>Write note</b> by robertlipe2003-07-03<br />It won't earn him a smiley face, but I've confirmed that rickrich would have indeed sunk the battleship!      Thanx for playing. You get a copy of the home game and some rice-a-roni...</p>]]></value>
           </Data>
         </ExtendedData>
         <Point>

@@ -1,1 +1,12 @@
-
+<para>
+  This option specifies the starting sector number when reading data from a Skytraq binary log file. The logger's memory is organized in sectors, starting from sector 0.
+</para>
+<para>
+  By default, reading starts at sector 0. This option is primarily useful for data recovery. For example, if a device is erased, often only the initial sectors are cleared. You can use this option to skip those empty sectors and attempt to read any remaining data from the rest of the flash memory.
+</para>
+<example xml:id="skytraq_bin_first_sector_example">
+  <title>Attempt to recover data from an erased log file by starting at sector 2</title>
+  <para>
+    <userinput>gpsbabel -i skytraq-bin,first-sector=2 -f my_track.bin -o gpx -F recovered_track.gpx</userinput>
+  </para>
+</example>

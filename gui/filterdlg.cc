@@ -21,10 +21,16 @@
 //
 //------------------------------------------------------------------------
 
-#include <QMessageBox>
 #include "filterdlg.h"
-#include "help.h"
-#include "appname.h"
+#include <QAbstractButton>  // for QAbstractButton
+#include <QFrame>           // for QFrame
+#include <QHBoxLayout>      // for QHBoxLayout
+#include <QListWidget>      // for QListWidget
+#include <QMessageBox>      // for QMessageBox, operator|
+#include <QPushButton>      // for QPushButton
+#include <Qt>               // for CheckState
+#include "appname.h"        // for appName
+#include "help.h"           // for ShowHelp
 
 int FilterDialog::lastPage_ = 0;
 

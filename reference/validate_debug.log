@@ -1,13 +1,13 @@
-
-Processing waypts
-point ct: 2, waypt_count: 2
-
-Processing routes
-route 0 ct: 2, waypt_count: 2
-route head ct: 1, route_count: 1
-total route point ct: 2, route_waypt_count: 2
-
-Processing tracks
-track 0 ct: 2, waypt_count: 2
-track head ct: 1, track_count: 1
-total track point ct: 2, track_waypt_count: 2
+validate: 
+validate: Processing waypts
+validate: point ct: 2, waypt_count: 2
+validate: 
+validate: Processing routes
+validate: route 0 ct: 2, waypt_count: 2, segments 1
+validate: route head ct: 1, route_count: 1, total segment count: 1
+validate: total route point ct: 2, route_waypt_count: 2
+validate: 
+validate: Processing tracks
+validate: track 0 ct: 2, waypt_count: 2, segments 1
+validate: track head ct: 1, track_count: 1, total segment count: 1
+validate: total track point ct: 2, track_waypt_count: 2

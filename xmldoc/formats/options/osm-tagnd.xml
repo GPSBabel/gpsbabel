@@ -1,5 +1,5 @@
 <para>
-  With this option you can preset OSM <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wiki.openstreetmap.org/index.php/Map_Features">features</link> (tags) on every written nodes.
+  With this option you can preset OSM <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wiki.openstreetmap.org/index.php/Map_Features">features</link> (tags) on every written node.
 </para>
 <para>
   <userinput>gpsbabel -i gdb -f nodes.gdb -o osm,tagnd="amenity:pub;building:yes" -F nodes.osm</userinput>

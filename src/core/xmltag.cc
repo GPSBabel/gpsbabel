@@ -91,7 +91,7 @@ free_xml_tag(XmlTag* tag)
 
 // FIXME: at some point, this becomes a plain ole copy constructor.
 static void
-copy_xml_tag(XmlTag** copy, XmlTag* src, XmlTag* parent)
+copy_xml_tag(XmlTag** copy, const XmlTag* src, XmlTag* parent)
 {
   if (!src) {
     *copy = nullptr;

@@ -10,6 +10,11 @@
     <cmt>Birch Harbor</cmt>
     <desc>Birch Harbor</desc>
     <sym>City (Small)</sym>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
   </wpt>
   <wpt lat="44.477913380" lon="-68.038501740">
     <time>2020-06-08T18:35:58Z</time>
@@ -17,6 +22,11 @@
     <cmt>Gouldsboro</cmt>
     <desc>Gouldsboro</desc>
     <sym>City (Small)</sym>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
   </wpt>
   <wpt lat="44.409549236" lon="-68.025605679">
     <time>2020-06-10T22:00:50Z</time>
@@ -24,6 +34,11 @@
     <cmt>Prospect Harbor</cmt>
     <desc>Prospect Harbor</desc>
     <sym>City (Small)</sym>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
   </wpt>
   <wpt lat="44.380860329" lon="-68.068499565">
     <time>2020-06-08T11:09:27Z</time>
@@ -37,6 +52,19 @@ Schoodic Loop Rd
 Winter Harbor Twn, Maine, 04693, United States
 207-288-1300</desc>
     <sym>Campground</sym>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+        <gpxx:Address>
+          <gpxx:StreetAddress>Schoodic Loop Rd</gpxx:StreetAddress>
+          <gpxx:City>Winter Harbor Twn</gpxx:City>
+          <gpxx:State>Maine</gpxx:State>
+          <gpxx:Country>United States</gpxx:Country>
+          <gpxx:PostalCode>04693</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>207-288-1300</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
   </wpt>
   <wpt lat="44.520120621" lon="-68.195464611">
     <time>2019-04-29T21:00:49Z</time>
@@ -44,6 +72,11 @@ Winter Harbor Twn, Maine, 04693, United States
     <cmt>Sullivan Twn</cmt>
     <desc>Sullivan Twn</desc>
     <sym>City (Small)</sym>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
   </wpt>
   <rte>
     <name>Trip to Schoodic Woods Campground - Day 1</name>

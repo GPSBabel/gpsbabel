@@ -1,0 +1,26 @@
+<para>
+  This option, along with
+  <link linkend="g-filter-kalman-interp_max_dt">interp_max_dt</link>, controls
+  when the filter will attempt to fill gaps in your track by creating
+  new, interpolated points.
+</para>
+<para>
+  The filter calculates the median time difference between points in
+  your track. This option is a multiplier for that median time. A gap
+  will only be considered for interpolation if its duration is longer
+  than (<option>interp_min_multiplier</option> * median_time). This
+  prevents the filter from adding unnecessary points to an already
+  dense track.
+</para>
+<para>
+  For example, if your GPS records a point every second on average,
+  and <option>interp_min_multiplier</option> is 1.5, the filter will
+  only consider filling gaps that are longer than 1.5 seconds.
+</para>
+<para>
+  The pre-defined profiles use the following values: 'walking' (2.0), 'running' (1.8), 'cycling' (1.5), 'driving' (1.2), and 'flying' (1.1). A lower value results in more interpolation, while a higher value results in less. If you are using a profile, you do not need to set this option unless you want to override the profile's default.
+</para>
+<para>
+  If you are using a <link linkend="g-filter-kalman-profile">profile</link>,
+  this value is set automatically, but you can override it here.
+</para>

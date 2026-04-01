@@ -23,10 +23,11 @@
 #ifndef FORMAT_H
 #define FORMAT_H
 
-#include <QString>
-#include <QVariant>
-#include <QStringList>
-#include <QSettings>
+#include <QList>        // for QList
+#include <QSettings>    // for QSettings
+#include <QString>      // for QString
+#include <QStringList>  // for QStringList
+#include <QVariant>     // for QVariant
 
 class FormatOption
 {
@@ -250,14 +251,14 @@ public:
     return outputOptions_;
   }
 
-  QList<FormatOption>* getInputOptionsRef()
+  QList<FormatOption>& getInputOptionsRef()
   {
-    return &inputOptions_;
+    return inputOptions_;
   }
 
-  QList<FormatOption>* getOutputOptionsRef()
+  QList<FormatOption>& getOutputOptionsRef()
   {
-    return &outputOptions_;
+    return outputOptions_;
   }
 
   bool isDeviceFormat() const

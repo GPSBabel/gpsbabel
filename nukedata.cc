@@ -24,17 +24,16 @@
 #include "nukedata.h"
 
 #if FILTERS_ENABLED
-#define MYNAME "nukedata"
 
 void NukeDataFilter::process()
 {
-  if (*nukewpts != '0') {
+  if (nukewpts) {
     waypt_flush_all();
   }
-  if (*nuketrks != '0') {
+  if (nuketrks) {
     route_flush_all_tracks();
   }
-  if (*nukertes != '0') {
+  if (nukertes) {
     route_flush_all_routes();
   }
 }

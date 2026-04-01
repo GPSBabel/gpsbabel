@@ -22,7 +22,12 @@
 #ifndef DONATE_H
 #define DONATE_H
 
-#include "ui_donate.h"
+#include <QCheckBox>    // for QCheckBox
+#include <QDialog>      // for QDialog
+#include <QLabel>       // for QLabel
+#include <QObject>      // for Q_OBJECT, slots
+#include <QWidget>      // for QWidget
+#include "ui_donate.h"  // for Ui_Donate
 
 class Donate: public QDialog
 {

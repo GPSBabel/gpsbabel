@@ -7,17 +7,18 @@ function convert_qt_translations()
 {
 # Combine the Qt translation files we use into local qt_??.qm files.
 #
-# It is recommended to combine Qts .qm files, this script does that for
+# It is recommended to combine Qt's .qm files, this script does that for
 # linux and macos, windeployqt does this for windows.
-# https://doc.qt.io/qt-5/linguist-programmers.html#deploying-translations
+# https://doc.qt.io/qt-6/localization.html#deploy-translations
 #
-# This script is created from the log of the windows build from windeployqt
-# with Qt 5.12.1.
+# This script is created from the log of the windows build
+# with Qt 6.5.3 using windeployqt with the --verbose 2 option.
 # From the log you can see which translation files are used which depends on
 # which Qt modules we use.
-# In our case these are qtbase_*.qm, qtdeclarative_*qm and qtserialport_*.qm.
+# In our case these are qtbase_*.qm, qtdeclarative_*qm and qtserialport_*.qm,
+# and qtwebengine_*.qm.
 #
-# Note with Qt5 the Qt distributed qt_xx.qm files are metacatalogs, and just
+# Note with Qt6 the Qt distributed qt_xx.qm files are metacatalogs, and just
 # copying or converting them won't copy the dependencies.
 
   if [ "${machine}" = "Mac" ]; then
@@ -50,6 +51,7 @@ function convert_qt_translations()
     inputs+=("qtbase_${language}.qm")
     if [ -e "qtdeclarative_${language}.qm" ]; then inputs+=("qtdeclarative_${language}.qm"); fi
     if [ -e "qtserialport_${language}.qm" ]; then inputs+=("qtserialport_${language}.qm"); fi
+    if [ -e "qtwebengine_${language}.qm" ]; then inputs+=("qtwebengine_${language}.qm"); fi
     "${LCONVERT}" -o "${LANGDIR}/qt_${language}.qm" "${inputs[@]}"
 
     if [ "${machine}" = "Mac" ]; then
@@ -78,18 +80,18 @@ if [ "${machine}" = "Linux" ]; then
 else
   APPDIR=GPSBabelFE.app
 fi
-SKIP_UPDATE_RELEASE=
 GPSBABEL=../gpsbabel
 QMAKE=qmake
 SOURCEDIR=.
-while getopts a:g:q:s: name
+while getopts a:g:q:s:c: name
 do
   case $name in
     a) APPDIR="$OPTARG";;
     g) GPSBABEL="$OPTARG";;
     q) QMAKE="$OPTARG";;
     s) SOURCEDIR="$OPTARG";;
-    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory]\n" "$0"
+    c) CODESIGN="$OPTARG";;
+    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory] [-c identity]\n" "$0"
        exit 2;;
   esac
 done
@@ -103,7 +105,7 @@ QT_INSTALL_TRANSLATIONS="$(${QMAKE} -query QT_INSTALL_TRANSLATIONS)"
 if [ "${machine}" = "Linux" ]; then
   LANGDIR="${APPDIR}/translations"
 else
-  LANGDIR="${APPDIR}/Contents/MacOS/translations"
+  LANGDIR="${APPDIR}/Contents/Resources/translations"
 fi
 
 rm -fr "${LANGDIR}"
@@ -123,12 +125,31 @@ if [ "${machine}" = "Linux" ]; then
   cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}"
 else # Mac
   cp "${GPSBABEL}" "${APPDIR}/Contents/MacOS/gpsbabel"
-  cp "${SOURCEDIR}/gmapbase.html" "${APPDIR}/Contents/MacOS"
-  cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}/Contents/MacOS"
+  cp "${SOURCEDIR}/gmapbase.html" "${APPDIR}/Contents/Resources"
+  cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}/Contents/Resources"
   pushd "${APPDIR}/.."
-  rm -f GPSBabelFE.dmg
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
   APPBUNDLE="$(basename "$APPDIR")"
-  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -dmg -verbose=2
+  VOLNAME="$(basename "$APPBUNDLE" .app)"
+  DMG="${VOLNAME}.dmg"
+  rm -f "${DMG}"
+  set -x
+  if [ -n "${CODESIGN}" ]; then
+    deployopt=-codesign=${CODESIGN}
+  fi
+  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -verbose=2 "${deployopt}"
+  if [ -n "${CODESIGN}" ]; then
+    if ! codesign --deep --verify "${APPBUNDLE}"; then
+      # GPSBabelFE ends not being signed due incorrect signing order of gpsbabel in macdeployqt.
+      # but QtCore5Compat and gpsbabel are signed belatedly.
+      echo "Re-signing GPSBabelFE assuming macdeployqt failed to sign it"
+      # the options we use to resign are the same as macdeployqt defaults (no hardened runtime, timestamps, extra enttilements)
+      codesign --preserve-metadata=identifier,entitlements --force -s "${CODESIGN}" "${APPBUNDLE}/Contents/MacOS/GPSBabelFE"
+      codesign --deep --verify --verbose=2 "${APPBUNDLE}"
+    fi
+  fi
+  # because we might have had to fix codesigning we have to create the dmg instead of letting macdeployqt do it.
+  hdiutil create "${DMG}" -srcfolder "${APPBUNDLE}" -format UDZO -fs APFS -volname "${VOLNAME}"
+  set +x
   popd
 fi

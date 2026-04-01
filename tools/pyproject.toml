@@ -1,0 +1,19 @@
+[project]
+name = "gpsbabel-tools"
+requires-python = ">= 3.9"
+dynamic = ["version"]
+license = "GPL-2.0-or-later"
+
+[project.urls]
+Homepage = "https://www.gpsbabel.org"
+Repository = "https://github.com/GPSBabel/gpsbabel"
+
+[tool.black]
+line-length = 100
+
+# flake8 doesn't support pyproject.toml
+# configuration is in .flake8
+
+[tool.mypy]
+strict = true
+

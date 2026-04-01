@@ -28,7 +28,7 @@
 #include "defs.h"
 #include "random.h"
 #include "formspec.h"           // for FormatSpecificDataList
-#include "garmin_fs.h"          // for garmin_fs_t, GMSD_SET, garmin_fs_flags_t, garmin_fs_alloc
+#include "garmin_fs.h"          // for garmin_fs_t, GMSD_SET, garmin_fs_flags_t
 #include "src/core/datetime.h"  // for DateTime
 
 
@@ -80,14 +80,14 @@ RandomFormat::random_set_generator()
 {
   generator = new std::mt19937;
   if (opt_seed) {
-    generator->seed(xstrtoi(opt_seed, nullptr, 10));
+    generator->seed(opt_seed.get_result());
   } else {
     generator->seed(gpsbabel_time);
   }
 }
 
 void
-RandomFormat::rd_init(const QString&)
+RandomFormat::rd_init(const QString& /*unused*/)
 {
   random_set_generator();
 }
@@ -104,7 +104,7 @@ Waypoint*
 RandomFormat::random_generate_wpt(int i, const QDateTime& time, const Waypoint* prev)
 {
   auto* wpt = new Waypoint;
-  garmin_fs_t* gmsd = garmin_fs_alloc(-1);
+  auto* gmsd = new garmin_fs_t(-1);
   wpt->fs.FsChainAdd(gmsd);
 
   do {
@@ -205,7 +205,7 @@ RandomFormat::read()
   Waypoint* prev = nullptr;
   QDateTime time = current_time().toUTC();
 
-  int points = (opt_points) ? xstrtoi(opt_points, nullptr, 10) : rand_int(128) + 1;
+  int points = opt_points? opt_points.get_result() : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
     head = new route_head;
     if (doing_trks) {
@@ -239,12 +239,12 @@ RandomFormat::read()
 }
 
 void
-RandomFormat::rd_position_init(const QString&)
+RandomFormat::rd_position_init(const QString& /*unused*/)
 {
   random_set_generator();
   realtime = new realtime_data;
   if (opt_points) {
-    realtime->points = xstrtoi(opt_points, nullptr, 10);
+    realtime->points = opt_points.get_result();
   }
   realtime->time = current_time().toUTC();
 }

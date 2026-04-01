@@ -25,10 +25,12 @@
 
 
 //------------------------------------------------------------------------
+#include <QString> // Added for QString
+
 class LatLng
 {
 public:
-  LatLng(): _lat(0), _lng(0) {}
+  LatLng() = default;
   LatLng(double lat, double lng): _lat(lat), _lng(lng) {}
   double lat() const
   {
@@ -41,9 +43,11 @@ public:
   double haversineDistance(const LatLng& other) const;
 
 private:
-  double _lat;
-  double _lng;
+  double _lat{0.0};
+  double _lng{0.0};
 };
+
+QString fmtLatLng(const LatLng& l); // Declaration of fmtLatLng
 
 
 #endif

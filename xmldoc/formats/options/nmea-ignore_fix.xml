@@ -1,1 +1,15 @@
-
+<para>
+  This option forces GPSBabel to accept and process GPGGA sentences that are marked as having an invalid fix.
+</para>
+<para>
+  The NMEA GPGGA sentence contains a "fix quality" indicator. A value of '0' means the fix is invalid, and by default, GPSBabel will discard such points. However, some GPS devices may output valid coordinate data but incorrectly set the fix quality flag to '0'.
+</para>
+<para>
+  Use this option if you have an NMEA file with valid data that is being discarded because the fix quality indicator is consistently marked as invalid.
+</para>
+<example xml:id="nmea_ignore_fix_example">
+  <title>Process an NMEA file while accepting invalid GPGGA fixes</title>
+  <para>
+    <userinput>gpsbabel -i nmea,ignore_fix -f my_track.nmea -o gpx -F my_track.gpx</userinput>
+  </para>
+</example>

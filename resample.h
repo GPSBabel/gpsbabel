@@ -1,7 +1,7 @@
 /*
     Track resampling filter
 
-    Copyright (C) 2021 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2021,2023 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,10 +24,13 @@
 
 #include <tuple>               // for tuple
 
+#include <QList>               // for QList
+#include <QString>             // for QString
 #include <QVector>             // for QVector
 
 #include "defs.h"              // for arglist_t, ARGTYPE_INT, Waypoint, route_head
 #include "filter.h"            // for Filter
+#include "option.h"            // for OptionString
 #include "src/core/nvector.h"  // for NVector
 
 
@@ -46,7 +49,13 @@ public:
 
 private:
 
+  /* Member Functions */
+
   void average_waypoint(Waypoint* wpt, bool zero_stuffed);
+  void interpolate_rte(route_head* rte);
+  void decimate_rte(const route_head* rte);
+
+  /* Data Members */
 
   QVector<std::tuple<gpsbabel::NVector, int, double>> history;
   gpsbabel::NVector accumulated_position;
@@ -60,9 +69,9 @@ private:
   int decimate_count{0};
   int interpolate_count{0};
 
-  char* decimateopt{nullptr};
-  char* interpolateopt{nullptr};
-  char* averageopt{nullptr};
+  OptionInt decimateopt;
+  OptionInt interpolateopt;
+  OptionInt averageopt;
 
   QVector<arglist_t> args = {
     {
