@@ -131,10 +131,6 @@
                <property name="text">
                 <string>File Name(s)</string>
                </property>
-               <property name="icon">
-                <iconset resource="app.qrc">
-                 <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
-               </property>
               </widget>
              </item>
              <item>
@@ -550,10 +546,6 @@
                </property>
                <property name="text">
                 <string>File Name</string>
-               </property>
-               <property name="icon">
-                <iconset resource="app.qrc">
-                 <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
                </property>
               </widget>
              </item>

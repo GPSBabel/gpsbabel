@@ -2,8 +2,9 @@
 #
 capabilitiesdir=$1
 htmldocdir=$2
+gpsbabel=$3
 
-./gpsbabel -^2 | sed 's/\&/\&amp;/' | awk  -F'\t' '
+"${gpsbabel}" -^2 | sed 's/\&/\&amp;/' | awk  -F'\t' '
 function getcap(type, cap, sname, lname) {
 	if (type == "internal") return
 	print "<tr>"
@@ -23,7 +24,7 @@ function getcap(type, cap, sname, lname) {
 getcap($1, $2, $3, $5)
 ' > "${capabilitiesdir}/capabilities.inc"
 
-FMTS=$(./gpsbabel -^2 | grep -v '^internal' | sed 's/\&/\&amp;/' | awk  -F'\t' '{print $3}')
+FMTS=$("${gpsbabel}" -^2 | grep -v '^internal' | sed 's/\&/\&amp;/' | awk  -F'\t' '{print $3}')
 for f in $FMTS
 do
 	[ ! -f "${htmldocdir}/fmt_${f}.html" ] && echo Missing doc for "$f"

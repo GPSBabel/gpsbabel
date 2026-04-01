@@ -22,31 +22,32 @@
 #ifndef ADVDLG_H
 #define ADVDLG_H
 
-#include <QDialog>      // for QDialog
-#include <QObject>      // for Q_OBJECT, slots
+#include <QDialog>
+#include <QButtonGroup>
+#include <QObject>
 #include <QPushButton>  // for QPushButton
 #include <QWidget>      // for QWidget
+#include "babeldata.h"  // for BabelData::MapPreviewType
 #include "ui_advui.h"   // for Ui_AdvUi
 
 class AdvDlg: public QDialog
 {
   Q_OBJECT
+  Q_DISABLE_COPY(AdvDlg)
 
 public:
   AdvDlg(QWidget* parent,
          bool& synthShortNames,
-         bool mapPreviewEnabled,
-         bool& previewGmap,
+         BabelData::MapPreviewType& mapPreviewSelection,
          int&   debugLevel);
   QPushButton* formatButton()
   {
     return ui_.formatButton;
   }
-
 private:
   Ui_AdvUi ui_;
   bool& synthShortNames_;
-  bool& previewGmap_;
+  BabelData::MapPreviewType& mapPreviewSelection_;
   int&  debugLevel_;
 
 protected:

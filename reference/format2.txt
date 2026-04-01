@@ -1,6 +1,6 @@
 file	--r---	70mai	txt	70mai Dash Cam
-internal	rw----	xcsv		? Character Separated Values
 internal	rw----	tabsep		All database fields on one tab-separated line
+internal	rw----	xcsv		Character Separated Values
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)
 file	rw----	csv		Comma separated values
 internal	rw----	custom		Custom "Everything" Style

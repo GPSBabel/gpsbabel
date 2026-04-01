@@ -251,14 +251,14 @@ public:
     return outputOptions_;
   }
 
-  QList<FormatOption>* getInputOptionsRef()
+  QList<FormatOption>& getInputOptionsRef()
   {
-    return &inputOptions_;
+    return inputOptions_;
   }
 
-  QList<FormatOption>* getOutputOptionsRef()
+  QList<FormatOption>& getOutputOptionsRef()
   {
-    return &outputOptions_;
+    return outputOptions_;
   }
 
   bool isDeviceFormat() const
