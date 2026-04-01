@@ -129,6 +129,7 @@ struct Vecs::Impl {
   Dg100FileFormat dg100_ffmt;
   Dg200SerialFormat dg200_fmt;
   Dg200FileFormat dg200_ffmt;
+  OsmFormat osm_fmt;
   ExifFormat exif_fmt;
   HumminbirdFormat humminbird_fmt;
   HumminbirdHTFormat humminbird_ht_fmt;
