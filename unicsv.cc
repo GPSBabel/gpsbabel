@@ -1674,13 +1674,8 @@ void
 UnicsvFormat::wr_init(const QString& fname)
 {
   if (opt_fields) {
-<<<<<<< HEAD
-    fatal(FatalMsg() << MYNAME <<
-          ": option 'fields' is not supported on output");
-=======
     gbFatal(FatalMsg() <<
           "option 'fields' is not supported on output");
->>>>>>> 4baa2b035d2f7b32baddd4dc5397c6d7ec35cc27
   }
   fout = new gpsbabel::TextStream;
   fout->open(fname, QIODevice::WriteOnly, opt_codec.get().toUtf8());
