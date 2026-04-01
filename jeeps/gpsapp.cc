@@ -2030,6 +2030,11 @@ void GPS_D120_Get(int cat_num, char* s)
    * so mimic the behaviour of the 276/296.
    */
 
+  // Ignore packets beyond maximum number of categories.
+  if ( cat_num < 0 || cat_num >= 16) {
+    return;
+  }
+
   if (*s) {
     strncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
   } else {
