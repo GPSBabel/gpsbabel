@@ -2031,6 +2031,10 @@ void GPS_D120_Get(int cat_num, char* s)
    */
 
   // Ignore packets beyond maximum number of categories.
+  static_assert(sizeof(gps_categories)/sizeof(gps_categories[0]) == 16);
+  // g++ 13 isn't smart enough to take advantage of the static assertion
+  // when evaluting for Wformat-truncation=, so we use a matching
+  // literal in the check below.
   if ( cat_num < 0 || cat_num >= 16) {
     return;
   }
