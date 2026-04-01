@@ -24,32 +24,35 @@
 
 #include "dg-388.h"
 
-#include <cstdint>       // for uint8_t, uint16_t, int32_t
+#include <QChar>               // for QChar
+#include <QDate>               // for QDate
+#include <QDataStream>         // for QDataStream
+#include <QDateTime>           // for QDateTime
+#include <QIODevice>           // for QIODevice
+#include <QLatin1Char>         // for QLatin1Char
+#include <QString>             // for QString
+#include <QStringLiteral>      // for QStringLiteral
+#include <QTime>               // for QTime
 
-#include <QChar>         // for QChar
-#include <QDate>         // for QDate
-#include <QDateTime>     // for QDateTime
-#include <QLatin1Char>   // for QLatin1Char
-#include <QString>       // for QString
-#include <QStringLiteral> // for QStringLiteral
-#include <QTime>         // for QTime
-
-#include "defs.h"        // for Waypoint, route_head, waypt_add,
-                         //     track_add_head, track_add_wpt,
-                         //     le_read32, le_readu16, KPH_TO_MPS,
-                         //     QtUTC
+#include "defs.h"              // for Waypoint, route_head, waypt_add,
+                               //     track_add_head, track_add_wpt,
+                               //     KPH_TO_MPS, QtUTC
+#include "src/core/file.h"     // for File
+#include "src/core/logging.h"  // for Warning
 
 
 void
 Dg388Format::rd_init(const QString& fname)
 {
-  fin = gbfopen(fname, "rb");
+  fin = new gpsbabel::File(fname);
+  fin->open(QIODevice::ReadOnly);
 }
 
 void
 Dg388Format::rd_deinit()
 {
-  gbfclose(fin);
+  fin->close();
+  delete fin;
   fin = nullptr;
 }
 
@@ -61,25 +64,20 @@ Dg388Format::rd_deinit()
  * fall within valid bounds.
  */
 bool
-Dg388Format::is_valid_record(const uint8_t* buf)
+Dg388Format::is_valid_record(const Dg388Format::record& buf)
 {
-  int32_t date_int = le_read32(buf + 0);
-  int32_t time_int = le_read32(buf + 4);
-  int32_t lat_raw  = le_read32(buf + 8);
-  int32_t lon_raw  = le_read32(buf + 12);
-
   /* Reject null records */
-  if (date_int == 0 || (lat_raw == 0 && lon_raw == 0)) {
+  if (buf.date_int == 0 || (buf.lat_raw == 0 && buf.lon_raw == 0)) {
     return false;
   }
 
   /* Validate date and time via QDateTime */
-  int year   = date_int / 10000;
-  int month  = (date_int / 100) % 100;
-  int day    = date_int % 100;
-  int hour   = time_int / 10000;
-  int minute = (time_int / 100) % 100;
-  int second = time_int % 100;
+  int year   = buf.date_int / 10000;
+  int month  = (buf.date_int / 100) % 100;
+  int day    = buf.date_int % 100;
+  int hour   = buf.time_int / 10000;
+  int minute = (buf.time_int / 100) % 100;
+  int second = buf.time_int % 100;
 
   QDate date(year, month, day);
   QTime time(hour, minute, second);
@@ -89,10 +87,10 @@ Dg388Format::is_valid_record(const uint8_t* buf)
   }
 
   /* Coordinates: 1e-7 degrees, +/-90 lat, +/-180 lon */
-  if (lat_raw < -900000000 || lat_raw > 900000000) {
+  if (buf.lat_raw < -900000000 || buf.lat_raw > 900000000) {
     return false;
   }
-  if (lon_raw < -1800000000 || lon_raw > 1800000000) {
+  if (buf.lon_raw < -1800000000 || buf.lon_raw > 1800000000) {
     return false;
   }
 
@@ -104,23 +102,15 @@ Dg388Format::is_valid_record(const uint8_t* buf)
  * Caller must have validated the record with is_valid_record() first.
  */
 Waypoint*
-Dg388Format::record_to_waypoint(const uint8_t* buf)
+Dg388Format::record_to_waypoint(const Dg388Format::record& buf)
 {
-  int32_t date_int    = le_read32(buf + 0);
-  int32_t time_int    = le_read32(buf + 4);
-  int32_t lat_raw     = le_read32(buf + 8);
-  int32_t lon_raw     = le_read32(buf + 12);
-  int32_t alt_raw     = le_read32(buf + 16);
-  int32_t speed_raw   = le_read32(buf + 20);
-  uint16_t hdg_raw    = le_readu16(buf + 24);
-
   /* Decode date and time */
-  int year   = date_int / 10000;
-  int month  = (date_int / 100) % 100;
-  int day    = date_int % 100;
-  int hour   = time_int / 10000;
-  int minute = (time_int / 100) % 100;
-  int second = time_int % 100;
+  int year   = buf.date_int / 10000;
+  int month  = (buf.date_int / 100) % 100;
+  int day    = buf.date_int % 100;
+  int hour   = buf.time_int / 10000;
+  int minute = (buf.time_int / 100) % 100;
+  int second = buf.time_int % 100;
 
   QDate date(year, month, day);
   QTime time(hour, minute, second);
@@ -128,14 +118,14 @@ Dg388Format::record_to_waypoint(const uint8_t* buf)
 
   auto* wpt = new Waypoint;
 
-  wpt->latitude  = lat_raw / 1.0e7;
-  wpt->longitude = lon_raw / 1.0e7;
-  wpt->altitude  = alt_raw / 10.0;          /* decimeters -> meters */
+  wpt->latitude  = buf.lat_raw / 1.0e7;
+  wpt->longitude = buf.lon_raw / 1.0e7;
+  wpt->altitude  = buf.alt_raw / 10.0;          /* decimeters -> meters */
 
   wpt->SetCreationTime(dt);
 
-  wpt->set_speed(KPH_TO_MPS(speed_raw / 100.0));   /* cm-kph -> m/s */
-  wpt->set_course(hdg_raw / 100.0);                 /* centi-degrees -> degrees */
+  wpt->set_speed(KPH_TO_MPS(buf.speed_raw / 100.0));   /* cm-kph -> m/s */
+  wpt->set_course(buf.hdg_raw / 100.0);                 /* centi-degrees -> degrees */
 
   return wpt;
 }
@@ -152,20 +142,39 @@ void
 Dg388Format::read()
 {
   route_head* track = nullptr;
-  uint8_t buf[RECORD_SIZE];
+  record buf;
   int waypoint_count = 0;
 
-  while (gbfread(buf, 1, RECORD_SIZE, fin) == RECORD_SIZE) {
+  QDataStream stream(fin);
+  stream.setByteOrder(QDataStream::LittleEndian);
+
+  while (!stream.atEnd()) {
+    stream >> buf.date_int;
+    stream >> buf.time_int;
+    stream >> buf.lat_raw;
+    stream >> buf.lon_raw;
+    stream >> buf.alt_raw;
+    stream >> buf.speed_raw;
+    stream >> buf.hdg_raw;
+    stream >> buf.flag;
+
+    // Make sure we didn't read passed the end.
+    if (auto sts = stream.status(); sts != QDataStream::Ok) {
+      if (sts == QDataStream::ReadPastEnd) {
+        Warning() << "Warning: Partial record at end of input ignored!";
+      } else {
+        Warning() << "Read Error!";
+      }
+      break;
+    }
 
     if (!is_valid_record(buf)) {
       continue;
     }
 
-    uint16_t flag = le_readu16(buf + 26);
-
     Waypoint* wpt = record_to_waypoint(buf);
 
-    if (flag == FLAG_WAYPOINT) {
+    if (buf.flag == FLAG_WAYPOINT) {
       /* Manual waypoint: give it a sequential name */
       waypoint_count++;
       wpt->shortname = QStringLiteral("WPT-%1")

@@ -40,14 +40,13 @@
 #ifndef DG388_H_INCLUDED_
 #define DG388_H_INCLUDED_
 
-#include <cstdint>       // for uint8_t, uint16_t
+#include <QString>          // for QString
+#include <QVector>          // for QVector
+#include <QtGlobal>         // for qint32, quint16
 
-#include <QString>       // for QString
-#include <QVector>       // for QVector
-
-#include "defs.h"        // for ff_cap, ff_type, Waypoint
-#include "format.h"      // for Format
-#include "gbfile.h"      // for gbfile
+#include "defs.h"           // for ff_cap, ff_type, Waypoint
+#include "format.h"         // for Format
+#include "src/core/file.h"  // for File
 
 class Dg388Format : public Format
 {
@@ -73,17 +72,30 @@ public:
   void rd_deinit() override;
 
 private:
+  /* Types */
+
+  struct record {
+    qint32 date_int{};
+    qint32 time_int{};
+    qint32 lat_raw{};
+    qint32 lon_raw{};
+    qint32 alt_raw{};
+    qint32 speed_raw{};
+    quint16 hdg_raw{};
+    quint16 flag{};
+  };
+
   /* Binary record constants */
-  static constexpr int RECORD_SIZE = 28;
-  static constexpr uint16_t FLAG_AUTO = 2;
-  static constexpr uint16_t FLAG_WAYPOINT = 3;
+  static constexpr quint16 FLAG_AUTO = 2;
+  static constexpr quint16 FLAG_WAYPOINT = 3;
 
   /* Helpers */
-  static bool is_valid_record(const uint8_t* buf);
-  static Waypoint* record_to_waypoint(const uint8_t* buf);
+  static bool is_valid_record(const record& buf);
+  static Waypoint* record_to_waypoint(const record& buf);
 
   /* State */
-  gbfile* fin{nullptr};
+  gpsbabel::File* fin{nullptr};
+
 };
 
 #endif // DG388_H_INCLUDED_
