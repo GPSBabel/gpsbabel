@@ -203,4 +203,7 @@
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="mapPreviewButtonGroup"/>
+ </buttongroups>
 </ui>
