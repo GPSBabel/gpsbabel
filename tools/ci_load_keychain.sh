@@ -32,5 +32,5 @@ if [ -n "${GITHUB_ENV}" ]; then
     IDENTITY="-"
   fi
   echo "Loaded identity \"$IDENTITY\" for codesigning."
-  echo IDENTITY="${IDENTITY}" >> "$GITHUB_ENV"
+  echo "IDENTITY=${IDENTITY}" >> "$GITHUB_ENV"
 fi
