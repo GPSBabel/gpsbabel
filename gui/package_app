@@ -154,8 +154,8 @@ else # Mac
   # If we are signing with a developer id notarize the dmg.
   if [ -n "${CODESIGN}" ]; then
     if [ "${CODESIGN}" != "-" ]; then
-      xcrun notarytool submit "${DMG}"
-        --keychain-profile "notarytool-password"
+      xcrun notarytool submit "${DMG}" \
+        --keychain-profile "notarytool-password" \
         --wait
       xcrun stapler staple "${DMG}"
     fi
