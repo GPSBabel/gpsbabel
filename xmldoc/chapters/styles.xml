@@ -329,7 +329,7 @@ processing functions of GPSBabel.
       </section>
       <section xml:id="style_layout_badchars">
          <title>BADCHARS</title>
-         <para>Bad characters are things that should *never* be written into the XCSV
+         <para>Bad characters are things that should <emphasis>never</emphasis> be written into the XCSV
    file as data on output.  GPSBabel automatically includes any non-blank
    FIELD_DELIMITER and FIELD_ENCLOSER and RECORD_DELIMITER characters as
    BADCHARS by default.
@@ -1279,7 +1279,8 @@ IFIELD GMT_TIME,"","%H:%M:%S"
 # Format: Garmin POI
 # Author: Robert Lipe
 # Date: 10/07/2005
-# Reference: https://forums.geocaching.com/GC/index.php?/topic/110641-garmin-streetpilot-csv-format/#entry1752204
+# Reference: https://forums.geocaching.com/GC/index.php?
+#   /topic/110641-garmin-streetpilot-csv-format/#entry1752204
 #
 DESCRIPTION Garmin POI database
 #

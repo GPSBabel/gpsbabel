@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>leafletbase.html</file>
+    </qresource>
+</RCC>

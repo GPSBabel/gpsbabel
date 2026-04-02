@@ -1,0 +1,7 @@
+# Test reading GlobalSat DG-388 .gpl binary track log files.
+# Reference file contains 10 records: 9 track points + 1 manual waypoint.
+
+# Basic read test: convert .gpl to GPX and compare against golden output.
+rm -f ${TMPDIR}/dg-388.gpx
+gpsbabel -i dg-388 -f ${REFERENCE}/dg-388.gpl -o gpx -F ${TMPDIR}/dg-388.gpx
+compare ${REFERENCE}/dg-388.gpx ${TMPDIR}/dg-388.gpx

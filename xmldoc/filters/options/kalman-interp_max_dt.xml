@@ -3,8 +3,9 @@
   gap that the filter will fill with interpolated points.
 </para>
 <mediaobject>
+  <alt>Interpolation of a Gap in a GPS Track</alt>
   <imageobject>
-    <imagedata fileref="xmldoc/images/kalman_interpolation.png" format="PNG" width="100%" scalefit="1"/>
+    <imagedata fileref="kalman_interpolation.png" format="PNG" width="100%" scalefit="1"/>
   </imageobject>
 </mediaobject>
 <para>

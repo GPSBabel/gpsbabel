@@ -568,10 +568,13 @@ mtk_retry:
   }
   if (dout != nullptr) {
 #if __WIN32__
-    _chsize(fileno(dout), addr_max);
+    int sts = _chsize(fileno(dout), addr_max);
 #else
-    ftruncate(fileno(dout), addr_max);
+    int sts = ftruncate(fileno(dout), addr_max);
 #endif
+    if (sts != 0) {
+      Warning() << "Failed to truncate temporary file" << TEMP_DATA_BIN;
+    }
     fclose(dout);
   }
   if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
@@ -734,7 +737,7 @@ void MtkLoggerBase::mtk_csv_init(const QString& csv_fname, unsigned long bitmask
   // can't use gbfopen here - it will gbFatal() if file doesn't exist
   if ((cf = ufopen(csv_fname, "r")) != nullptr) {
     fclose(cf);
-    Warning() << "CSV file " << gbLogCStr(csv_fname) << 
+    Warning() << "CSV file " << gbLogCStr(csv_fname) <<
                  "already exists ! Cowardly refusing to overwrite";
     return;
   }

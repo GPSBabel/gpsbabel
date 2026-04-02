@@ -404,7 +404,7 @@ GarminTxtFormat::write_waypt(const Waypoint* wpt)
   if (!((i >= 0) && (i < gt_display_mode_names.size()))) {
     i = 0;
   }
-  QString dspl_mode = gt_display_mode_names[i];
+  const QString& dspl_mode = gt_display_mode_names[i];
 
   int wpt_class = garmin_fs_t::get_wpt_class(gmsd, 0);
   if ((wpt_class >= 0) && (wpt_class < gt_waypt_class_names.size())) {
@@ -980,7 +980,7 @@ GarminTxtFormat::parse_grid(const QStringList& lineparts)
     gbFatal("Missing grid headline!\n");
   }
 
-  const QString str = lineparts.at(0);
+  const QString& str = lineparts.at(0);
   if (str.contains("dd.ddddd")) {
     grid_index = grid_lat_lon_ddd;
   } else if (str.contains("mm.mmm")) {

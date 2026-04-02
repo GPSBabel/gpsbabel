@@ -1,6 +1,6 @@
 file	70mai	txt	70mai Dash Cam
-internal	xcsv		? Character Separated Values
 internal	tabsep		All database fields on one tab-separated line
+internal	xcsv		Character Separated Values
 file	v900		Columbus/Visiontac V900 files (.csv)
 file	csv		Comma separated values
 internal	custom		Custom "Everything" Style
@@ -24,6 +24,7 @@ internal	dg-100-bin		GlobalSat DG-100/BT-335 Binary File
 serial	dg-100		GlobalSat DG-100/BT-335 Download
 internal	dg-200-bin		GlobalSat DG-200 Binary File
 serial	dg-200		GlobalSat DG-200 Download
+file	dg-388	gpl	GlobalSat DG-388 Binary File
 serial	globalsat		GlobalSat GH625XT GPS training watch
 file	kml	kml	Google Earth (Keyhole) Markup Language
 file	googletakeout	json	Google Takeout Location History

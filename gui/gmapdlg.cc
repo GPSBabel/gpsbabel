@@ -141,7 +141,7 @@ void GMapDialog::appendRouteInfo(QStandardItem* it, const GpxRoute& rte)
 }
 
 //------------------------------------------------------------------------
-GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te): QDialog(parent), gpx_(mapData)
+GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, int debugLevel, QPlainTextEdit* te): QDialog(parent), debugLevel_(debugLevel), gpx_(mapData)
 {
   ui_.setupUi(this);
   this->setWindowTitle(QString(appName) + " " + QString("Google Maps"));
@@ -216,7 +216,7 @@ GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, QPlainTextEdit* te):
 //------------------------------------------------------------------------
 void GMapDialog::trace(const QString& label, const QStandardItem* it)
 {
-  if constexpr(debug_) {
+  if (debugLevel_ > 0) {
     QDebug qdb(QtDebugMsg);
     qdb.nospace().noquote() << label + ": ";
     qdb.quote();
@@ -309,7 +309,7 @@ void GMapDialog::itemClickedX(const QStandardItem* it)
 //-------------------------------------------------------------------------
 void GMapDialog::selectionChangedX(const QItemSelection& sel, const QItemSelection& desel)
 {
-  if constexpr(debug_) {
+  if (debugLevel_ > 0) {
     qDebug() << "selectionChangedX";
   }
   for (const QModelIndexList idxs = desel.indexes(); const auto& idx : idxs) {
@@ -404,7 +404,7 @@ void GMapDialog::showChildContextMenu(const QString& text, const QStandardItem* 
 //------------------------------------------------------------------------
 void GMapDialog::showContextMenu(const QPoint& pt)
 {
-  if constexpr(debug_) {
+  if (debugLevel_ > 0) {
     qDebug() << "showContextMenu";
   }
   QModelIndex idx = ui_.treeView->indexAt(pt);

@@ -49,12 +49,11 @@ jobs:
 
     - name: 'Upload Artifacts'
       if: matrix.RELEASE
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       with:
         name: Documents
         path: |
-          gpsbabel.org/
-          gpsbabel.pdf
-          gpsbabel.html
-          docbook.css
+          xmldoc/gpsbabel.org/
+          xmldoc/gpsbabel.pdf
+          xmldoc/gpsbabel.html/
         retention-days: 7

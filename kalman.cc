@@ -54,7 +54,7 @@ static QDebug operator<< (QDebug debug, const Waypoint& wpt)
 /* Helper to stream a waypoint to FatalMsg() for use with gbFatal().
  * This works best with FatalMsg().noquote().
  * This avoids lost messages due to copies of QDebug created by the out of
- * class streaming output operator for Waypoints! 
+ * class streaming output operator for Waypoints!
  */
 QString Kalman::toString(const Waypoint& wpt)
 {
@@ -137,7 +137,7 @@ void Kalman::process() {
                     const double speed = dist / dt;
                     speed_samples_for_stats.push_back(speed);
                 } else {
-                    gbFatal(FatalMsg().noquote() << "Time must increase between adjacent points, but the track contains adjacent points were this is not true.\n"
+                    gbFatal(FatalMsg().noquote() << "Time must increase between adjacent points, but the track contains adjacent points where this is not true.\n"
                                        << toString(*prev_wpt) << "\n" << toString(*wpt_stats));
                 }
             } else {
@@ -342,7 +342,7 @@ void Kalman::process() {
             i++;
 
             if (current_original_wpt->wpt_flags.marked_for_deletion) {
-                auto extra_data = static_cast<KalmanExtraData*>(current_original_wpt->extra_data);
+                auto* extra_data = static_cast<KalmanExtraData*>(current_original_wpt->extra_data);
                 // FIXME: marked_for_deletion <==> is_zinger deletion.
                 // Interpolate to estimate missing data, or alternatively just
                 // let the kalman filter predict across the gap.
@@ -533,7 +533,7 @@ void Kalman::kalman_point_cb(Waypoint* wpt) {
     wpt->latitude= std::round(filtered_nvector.latitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
     wpt->longitude = std::round(filtered_nvector.longitude() * COORDINATE_PRECISION_FACTOR) / COORDINATE_PRECISION_FACTOR;
     wpt->set_speed(speed);
-   
+
     // Update for next iteration
     last_timestamp_ = current_timestamp;
     last_nvector_ = current_nvector;

@@ -37,7 +37,7 @@ You can grab a release from the <link xmlns:xlink="http://www.w3.org/1999/xlink"
 Qt version 6.2 or newer is required for all builds.
 You may download directly from Qt using the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://doc.qt.io/qt-6/get-and-install-qt.html">Qt supplied directions</link>.
 Alternatively, macOS users can download binaries from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://formulae.brew.sh/formula/qt">Homebrew</link>.
-Fedora or CentOS users may need to 'dnf install qt6-qtbase-devel qt6-qt5compat-devel'.  When in doubt, 'dnf search qt' or 'dnf search qt6' may help you find the correct package name. Ubuntu users may need to 'apt-get install qt6-base-dev qt6-5compat-dev'. Additional qt6 packages are required to build the GUI.  Package names
+Fedora or CentOS users may need to <code>dnf install qt6-qtbase-devel qt6-qt5compat-devel</code>. When in doubt, <code>dnf search qt</code> or <code>dnf search qt6</code> may help you find the correct package name. Ubuntu users may need to <code>apt-get install qt6-base-dev qt6-5compat-dev</code>. Additional qt6 packages are required to build the GUI. Package names
 and versions in Linux frequently change, so you may need to ask your Linux vendor
 for help or look in our <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://github.com/GPSBabel/gpsbabel/tree/master/tools">Docker files</link> for inspiration from our automated builds that
 use Docker.
@@ -52,8 +52,8 @@ use Docker.
           <para>
 is needed to communicate with use with older USB Garmins.
 For macOS, we use an included copy.
-Fedora users may need to 'dnf install libusb1-devel'.  Ubuntu users may
-need to 'apt-get install libusb-1.0-0-dev' or look in tools/Docker* for inspiration
+Fedora users may need to <code>dnf install libusb1-devel</code>. Ubuntu users may
+need to <code>apt-get install libusb-1.0-0-dev</code> or look in tools/Docker* for inspiration
 from our automated Docker builds.</para>
         </listitem>
       </varlistentry>
@@ -61,16 +61,17 @@ from our automated Docker builds.</para>
     <section xml:id="Internal_History">
       <title>Brief history of internals</title>
       <para>
-    Parts of GPSBabel have been public since 2002, with some of the original
-    design and original code came from 2001. It was originally in C89, not C++,
-    and while we strongly encourage modern C++ code where we can use it, we've
-    not gone back to those older formats - some of which we don't have
-    the hardware to test and have fallen out of touch with original authors - and
-    rewritten them in Modern C++ style. There are this void*'s everywhere, C String
-    use, gross buffer abuse, and other things that look more like a C program from the 80's than a C++ program of modern date.  Code that's earned its own wings can
+    Parts of GPSBabel have been public since 2002, while some of the original
+    design and original code came from 2001. It was originally in C89, not C++.
+    We strongly encourage modern C++ where we can use it. We have made
+    many passes at modernizing the code base, but there are inevitably examples
+    of older styles of coding.  There are <code>void*</code>s in places, C String
+    use, mild buffer abuse, and other things that look more like a C program from
+    the 80s than a C++ program of modern date, but we've been aggressively modernizing
+    code that we have other reasons to touch.  Generally, code that's earned its own wings can
     continue to fly with us as long as it passes the tests we have. We've additionally
     not enforced style rules as strongly across modules as we could have. Fixing
-    both of these is a goal for us in 2020.
+    both of these is a goal for us.
   </para>
     </section>
     <section xml:id="Qt">
@@ -231,13 +232,23 @@ GPSBABEL_EXTRA_INCLUDE_DIRECTORIES.</para>
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>GPSBABEL_MAPPREVIEW</term>
+          <term>GPSBABEL_GOOGLE_MAPPREVIEW</term>
           <listitem>
             <para>
-This options enables the map preview feature.  With the feature disabled
-QtWebEngine and QtWebEngineWidgets are not used. Note that QtWebKit and
-QtWebKitWidgets are no longer supported.
-	</para>
+This option enables the map preview feature using the google map API.
+If both this and GPSBABEL_LEAFLET_MAPPREVIEW are disabled then QtWebEngine and
+QtWebEngineWidgets are not used.
+          	</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>GPSBABEL_LEAFLET_MAPPREVIEW</term>
+          <listitem>
+            <para>
+This option enables the map preview feature using leaflet.
+If both this and GPSBABEL_GOOGLE_MAPPREVIEW are disabled then QtWebEngine and
+QtWebEngineWidgets are not used.
+            </para>
           </listitem>
         </varlistentry>
         <varlistentry>
@@ -340,9 +351,9 @@ Additional targets are available for special purposes.
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>gpsbabel.hmtl</term>
+          <term>gpsbabel.html</term>
           <listitem>
-            <para>Create the html documentation.</para>
+            <para>Create the HTML documentation.</para>
           </listitem>
         </varlistentry>
         <varlistentry>
@@ -362,12 +373,12 @@ Additional targets are available for special purposes.
           <listitem>
             <para>
 Collect the components for distribution.
-On Linux the gpsbabel generated components will be under
+On Linux the GPSBabel generated components will be under
 gui/GPSBabelFE, any dynamically linked required libraries are not included.
-On macOS an app bundle will be created at gui/GPSBabelFE.app and an apple disk
+On macOS an app bundle will be created at gui/GPSBabelFE.app and an Apple disk
 image will be created at gui/GPSBabelFE.dmg.
-On windows an image will be created in the directory gui/package, and an
-installer will be created gui/Setup-x.y.z-Setup.exe.
+On Windows an image will be created in the directory gui/package, and an
+installer will be created as gui/Setup-x.y.z-Setup.exe.
             </para>
           </listitem>
         </varlistentry>

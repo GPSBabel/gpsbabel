@@ -142,7 +142,7 @@ jobs:
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation }}
-      uses: actions/attest-build-provenance@v3
+      uses: actions/attest@v4
       with:
         subject-path: ${{ steps.build-snap.outputs.snap }}
 
@@ -157,7 +157,7 @@ jobs:
         ./tools/uploadtool/upload_github.sh ${{ steps.build-snap.outputs.snap }}
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ steps.build-snap.outputs.snap }}
         path: ${{ steps.build-snap.outputs.snap }}

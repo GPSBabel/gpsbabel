@@ -12,3 +12,7 @@ compare  ${REFERENCE}/track/gpx_subsecond-sample-shifted~subrip.srt ${TMPDIR}/su
 
 gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,format="%s km/h %e m\n%t %l" -F ${TMPDIR}/subrip5.srt
 compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip5.srt
+
+# test all output fields
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/subrip.csv -o subrip,format="speed: %s\nelevation: %e\nvertical speed: %v\ntimestamp: %t\ncoordinates: %l\npedal cadence: %c\nheart rate: %h\ngradient %g" -F ${TMPDIR}/subrip~csv.srt
+compare ${REFERENCE}/track/subrip~csv.srt ${TMPDIR}/subrip~csv.srt

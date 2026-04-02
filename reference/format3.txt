@@ -1,6 +1,24 @@
 file	--r---	70mai	txt	70mai Dash Cam	70mai
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_70mai.html
-internal	rw----	xcsv		? Character Separated Values	xcsv
+internal	rw----	tabsep		All database fields on one tab-separated line	xcsv
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html
+option	tabsep	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snlen
+
+option	tabsep	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snwhite
+
+option	tabsep	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snupper
+
+option	tabsep	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snunique
+
+option	tabsep	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_urlbase
+
+option	tabsep	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_prefer_shortnames
+
+option	tabsep	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_datum
+
+option	tabsep	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_utc
+
+internal	rw----	xcsv		Character Separated Values	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html
 option	xcsv	style	Full path to XCSV style file	file				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_style
 
@@ -20,26 +38,10 @@ option	xcsv	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB
 
 option	xcsv	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_xcsv.html#fmt_xcsv_o_utc
 
-internal	rw----	tabsep		All database fields on one tab-separated line	xcsv
-	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html
-option	tabsep	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snlen
-
-option	tabsep	snwhite	Allow whitespace synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snwhite
-
-option	tabsep	snupper	UPPERCASE synth. shortnames	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snupper
-
-option	tabsep	snunique	Make synth. shortnames unique	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_snunique
-
-option	tabsep	urlbase	Basename prepended to URL on output	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_urlbase
-
-option	tabsep	prefer_shortnames	Use shortname instead of description	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_prefer_shortnames
-
-option	tabsep	datum	GPS datum (def. WGS 84)	string				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_datum
-
-option	tabsep	utc	Write timestamps with offset x to UTC time	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_tabsep.html#fmt_tabsep_o_utc
-
 file	r-r---	v900		Columbus/Visiontac V900 files (.csv)	v900
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_v900.html
+option	v900	utc	offset from UTC in hours	integer		-14	+14	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_v900.html#fmt_v900_o_utc
+
 file	rw----	csv		Comma separated values	xcsv
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html
 option	csv	snlen	Max synthesized shortname length	integer		1		https://www.gpsbabel.org/WEB_DOC_DIR/fmt_csv.html#fmt_csv_o_snlen
@@ -304,7 +306,9 @@ file	r-rw--	gtrnctr	tcx/crs/hst/xml	Garmin Training Center (.tcx/.crs/.hst/.xml)
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html
 option	gtrnctr	course	Write course rather than history, default yes	boolean	1			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_course
 
-option	gtrnctr	sport	Sport: Biking (deflt), Running, MultiSport, Other	string	Biking			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_sport
+option	gtrnctr	sport	Sport: Biking (deflt), Running, Other	string	Biking			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_sport
+
+option	gtrnctr	globalns	Write global extension namespace declarations	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_gtrnctr.html#fmt_gtrnctr_o_globalns
 
 file	rw----	geo	loc	Geocaching.com .loc	geo
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_geo.html
@@ -342,6 +346,8 @@ option	dg-200	erase	Erase device data after download	boolean	0			https://www.gps
 
 option	dg-200	erase_only	Only erase device data, do not download anything	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-200.html#fmt_dg-200_o_erase_only
 
+file	r-r---	dg-388	gpl	GlobalSat DG-388 Binary File	dg-388
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-388.html
 serial	--r---	globalsat		GlobalSat GH625XT GPS training watch	globalsat
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html
 option	globalsat	showlist	list tracks	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_showlist
