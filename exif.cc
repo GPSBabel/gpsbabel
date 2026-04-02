@@ -471,10 +471,7 @@ ExifFormat::exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t of
     }
   }
 
-  gbsize_t next_ifd_offs;
-  if (global_opts.debug_level >= 3) {
-    next_ifd_offs = gbftell(fin);
-  }
+  gbsize_t next_ifd_offs = gbftell(fin);
   ifd->next_ifd = gbfgetuint32(fin);
 
   for (auto& tag_instance : ifd->tags) {
