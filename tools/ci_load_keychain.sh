@@ -27,10 +27,11 @@ if [ -n "${BUILD_CERTIFICATE_BASE64}" ] && \
   security list-keychain -d user -s "$KEYCHAIN_PATH"
 fi
 if [ -n "${GITHUB_ENV}" ]; then
-  IDENTITY=$(security find-identity -p codesigning "$KEYCHAIN_PATH" | grep '1)' | cut -d '"' -f 2)
+  security find-identity -p codesigning "$KEYCHAIN_PATH"
+  IDENTITY=$(security find-identity -p codesigning "$KEYCHAIN_PATH" | grep '1)' | head -1 | cut -d '"' -f 2)
   if [ -z "${IDENTITY}" ]; then
     IDENTITY="-"
   fi
   echo "Loaded identity \"$IDENTITY\" for codesigning."
-  echo IDENTITY="${IDENTITY}" >> "$GITHUB_ENV"
+  echo "IDENTITY=${IDENTITY}" >> "$GITHUB_ENV"
 fi
