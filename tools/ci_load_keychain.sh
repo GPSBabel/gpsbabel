@@ -27,7 +27,7 @@ if [ -n "${BUILD_CERTIFICATE_BASE64}" ] && \
   security list-keychain -d user -s "$KEYCHAIN_PATH"
 
   # load notarytool password to keychain
-set -x
+set +x
 if [ -n "${APPLE_ID:+x}" ] ; then
   echo -n "APPLE_ID hash: "
   echo -n "$APPLE_ID" | openssl dgst -sha512 | cut -d " " -f 2
@@ -46,7 +46,7 @@ if [ -n "${APPLE_NOTARY_PASSWORD:+x}" ] ; then
 else
   echo APPLE_NOTARY_PASSWORD null or not set.
 fi
-set +x
+set -x
   xcrun notarytool store-credentials "notarytool-password" \
                --apple-id "${APPLE_ID}" \
                --team-id  "${APPLE_TEAM_ID}" \
