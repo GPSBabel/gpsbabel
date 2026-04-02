@@ -91,6 +91,7 @@ set(MINIMAL_FMTS
 # ALL_FMTS
 set(ALL_FMTS ${MINIMAL_FMTS}
   dg-100.cc
+  dg-388.cc
   exif.cc
   garmin_fit.cc
   garmin_gpi.cc
@@ -211,6 +212,7 @@ set(HEADERS
   csv_util.h
   defs.h
   dg-100.h
+  dg-388.h
   exif.h
   filter.h
   filter_vecs.h
@@ -389,6 +391,7 @@ set(TESTS
   classic-2
   classic-3
   dg100
+  dg-388
   dop_filter
   duplicate
   exif
