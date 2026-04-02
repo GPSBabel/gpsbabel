@@ -30,7 +30,7 @@ if [ -n "${GITHUB_ENV}" ]; then
 set -x
 security find-identity -p codesigning "$KEYCHAIN_PATH"
 set +x
-  IDENTITY=$(security find-identity -p codesigning "$KEYCHAIN_PATH" | grep '1)' | cut -d '"' -f 2)
+  IDENTITY=$(security find-identity -p codesigning "$KEYCHAIN_PATH" | grep '1)' | head -1 | cut -d '"' -f 2)
   if [ -z "${IDENTITY}" ]; then
     IDENTITY="-"
   fi
