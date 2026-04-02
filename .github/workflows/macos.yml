@@ -100,9 +100,9 @@ jobs:
       env:
         BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE }}
         P12_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
-        APPLE_ID: $${{ secrets.APPLE_ID }}
-        APPLE_TEAM_ID: $${ secrets.APPLE_TEAM_ID }}
-        APPLE_NOTARY_PASSWORD: $${ secrets.APPLE_NOTARY_PASSWORD }}
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        APPLE_NOTARY_PASSWORD: ${{ secrets.APPLE_NOTARY_PASSWORD }}
       run: |
         ./tools/ci_load_keychain.sh
 

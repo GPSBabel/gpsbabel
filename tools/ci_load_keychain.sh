@@ -49,7 +49,7 @@ fi
 set -x
   xcrun notarytool store-credentials "notarytool-password" \
                --apple-id "${APPLE_ID}" \
-               --team-id  "${APPLE_TEAM_ID}" \
+               --team-id "${APPLE_TEAM_ID}" \
                --password "${APPLE_NOTARY_PASSWORD}"
 fi
 if [ -n "${GITHUB_ENV}" ]; then
