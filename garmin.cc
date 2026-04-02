@@ -374,9 +374,9 @@ GarminFormat::waypt_read()
      * all the cases here.     Yes, libjeeps should probably
      * do this and not us...
      */
-    if ((way[i]->alt == (float)(1U<<31)) ||
-        (way[i]->alt == INT_MAX) ||
-        (way[i]->alt >= (float) 1.0e20)
+    if ((way[i]->alt == static_cast<float>(1U<<31)) ||
+        (way[i]->alt == static_cast<float>(INT_MAX)) ||
+        (way[i]->alt >= 1.0e20F)
        ) {
       wpt_tmp->altitude = unknown_alt;
     } else {

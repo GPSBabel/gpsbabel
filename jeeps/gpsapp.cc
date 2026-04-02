@@ -30,6 +30,7 @@
 #include <cstring>
 #include <ctime>
 
+#include <QByteArray>
 #include <QDateTime>
 
 /*
@@ -2030,11 +2031,20 @@ void GPS_D120_Get(int cat_num, char* s)
    * so mimic the behaviour of the 276/296.
    */
 
+  // Ignore packets beyond maximum number of categories.
+  // g++ 13 isn't smart enough to take advantage of the range check
+  // when evaluting for Wformat-truncation= unless a literal is used in
+  // the range check.  But using a length modifier, or casting the argument of
+  // snprinft both work as recommended in the gcc manual on Wformat-overflow=2.
+  if ( cat_num < 0 || cat_num >= std::ssize(gps_categories)) {
+    return;
+  }
+
   if (*s) {
-    strncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
+    qstrncpy(gps_categories[cat_num], s, sizeof(gps_categories[0]));
   } else {
     snprintf(gps_categories[cat_num], sizeof(gps_categories[0]),
-             "Category %d", cat_num+1);
+             "Category %hd", static_cast<short>(cat_num+1));
   }
 }
 
