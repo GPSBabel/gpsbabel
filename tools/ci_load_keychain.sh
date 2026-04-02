@@ -27,6 +27,9 @@ if [ -n "${BUILD_CERTIFICATE_BASE64}" ] && \
   security list-keychain -d user -s "$KEYCHAIN_PATH"
 fi
 if [ -n "${GITHUB_ENV}" ]; then
+set -x
+security find-identity -p codesigning "$KEYCHAIN_PATH"
+set +x
   IDENTITY=$(security find-identity -p codesigning "$KEYCHAIN_PATH" | grep '1)' | cut -d '"' -f 2)
   if [ -z "${IDENTITY}" ]; then
     IDENTITY="-"
