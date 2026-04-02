@@ -568,10 +568,13 @@ mtk_retry:
   }
   if (dout != nullptr) {
 #if __WIN32__
-    _chsize(fileno(dout), addr_max);
+    int sts = _chsize(fileno(dout), addr_max);
 #else
-    ftruncate(fileno(dout), addr_max);
+    int sts = ftruncate(fileno(dout), addr_max);
 #endif
+    if (sts != 0) {
+      Warning() << "Failed to truncate temporary file" << TEMP_DATA_BIN;
+    }
     fclose(dout);
   }
   if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>288</width>
-    <height>196</height>
+    <height>206</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -191,4 +191,7 @@ Higher number provides more detailed diagnostics.</string>
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="advMapPreviewButtonGroup"/>
+ </buttongroups>
 </ui>
