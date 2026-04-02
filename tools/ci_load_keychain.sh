@@ -25,6 +25,12 @@ if [ -n "${BUILD_CERTIFICATE_BASE64}" ] && \
   security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
   security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
   security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+  # load notarytool password to keychain
+  xcrun notarytool store-credentials "notarytool-password" \
+               --apple-id "${APPLE_ID}" \
+               --team-id  "${APPLE_TEAM_ID}" \
+               --password "${APPLE_NOTARY_PASSWORD}"
 fi
 if [ -n "${GITHUB_ENV}" ]; then
   security find-identity -p codesigning "$KEYCHAIN_PATH"

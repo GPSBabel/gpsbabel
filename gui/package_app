@@ -151,6 +151,15 @@ else # Mac
   fi
   # because we might have had to fix codesigning we have to create the dmg instead of letting macdeployqt do it.
   hdiutil create "${DMG}" -srcfolder "${APPBUNDLE}" -format UDZO -fs APFS -volname "${VOLNAME}"
+  # If we are signing with a developer id notarize the dmg.
+  if [ -n "${CODESIGN}" ]; then
+    if [ "${CODESIGN}" != "-" ]; then
+      xcrun notarytool submit "${DMG}"
+        --keychain-profile "notarytool-password"
+        --wait
+      xcrun stapler staple "${DMG}"
+    fi
+  fi
   set +x
   popd
 fi
