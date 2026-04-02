@@ -346,6 +346,8 @@ option	dg-200	erase	Erase device data after download	boolean	0			https://www.gps
 
 option	dg-200	erase_only	Only erase device data, do not download anything	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-200.html#fmt_dg-200_o_erase_only
 
+file	r-r---	dg-388	gpl	GlobalSat DG-388 Binary File	dg-388
+	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_dg-388.html
 serial	--r---	globalsat		GlobalSat GH625XT GPS training watch	globalsat
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html
 option	globalsat	showlist	list tracks	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_globalsat.html#fmt_globalsat_o_showlist
