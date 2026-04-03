@@ -5,7 +5,7 @@
  
 function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1)" == "$1"; }
 
-while getopts g:i: name
+while getopts g:i:n: name
 do
   case $name in
     g) CMAKEOPTIONS+=(-G "$OPTARG"); GENERATOR="$OPTARG";;

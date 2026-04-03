@@ -83,7 +83,7 @@ fi
 GPSBABEL=../gpsbabel
 QMAKE=qmake
 SOURCEDIR=.
-while getopts a:g:q:s:c: name
+while getopts a:g:q:s:c:n: name
 do
   case $name in
     a) APPDIR="$OPTARG";;
