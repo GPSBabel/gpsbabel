@@ -83,7 +83,7 @@ fi
 GPSBABEL=../gpsbabel
 QMAKE=qmake
 SOURCEDIR=.
-while getopts a:g:q:s:c: name
+while getopts a:g:q:s:c:n: name
 do
   case $name in
     a) APPDIR="$OPTARG";;
@@ -91,7 +91,8 @@ do
     q) QMAKE="$OPTARG";;
     s) SOURCEDIR="$OPTARG";;
     c) CODESIGN="$OPTARG";;
-    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory] [-c identity]\n" "$0"
+    n) NOTARY="$OPTARG";;
+    ?) printf "Usage: %s: [-a package_directory] [-g gpsbabel] [-q qmake] [-s source_directory] [-c identity] [-n notary_keychain_profile]\n" "$0"
        exit 2;;
   esac
 done
@@ -127,6 +128,7 @@ else # Mac
   cp "${GPSBABEL}" "${APPDIR}/Contents/MacOS/gpsbabel"
   cp "${SOURCEDIR}/gmapbase.html" "${APPDIR}/Contents/Resources"
   cp "${SOURCEDIR}/COPYING.txt" "${APPDIR}/Contents/Resources"
+  cp "${SOURCEDIR}/GPSBabelFE.entitlements" "${APPDIR}/Contents/Resources"
   pushd "${APPDIR}/.."
   # macdeploytqt likes relative paths or else the dmg mount points get funky.
   APPBUNDLE="$(basename "$APPDIR")"
@@ -135,21 +137,30 @@ else # Mac
   rm -f "${DMG}"
   set -x
   if [ -n "${CODESIGN}" ]; then
-    deployopt=-codesign=${CODESIGN}
+    deployopt=(-codesign="${CODESIGN}" -hardened-runtime -timestamp)
   fi
-  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -verbose=2 "${deployopt}"
+  "${MACDEPLOYQT}" "${APPBUNDLE}" -executable="${APPBUNDLE}/Contents/MacOS/gpsbabel" -verbose=2 "${deployopt[@]}"
   if [ -n "${CODESIGN}" ]; then
     if ! codesign --deep --verify "${APPBUNDLE}"; then
       # GPSBabelFE ends not being signed due incorrect signing order of gpsbabel in macdeployqt.
       # but QtCore5Compat and gpsbabel are signed belatedly.
       echo "Re-signing GPSBabelFE assuming macdeployqt failed to sign it"
       # the options we use to resign are the same as macdeployqt defaults (no hardened runtime, timestamps, extra enttilements)
-      codesign --preserve-metadata=identifier,entitlements --force -s "${CODESIGN}" "${APPBUNDLE}/Contents/MacOS/GPSBabelFE"
+      codesign --preserve-metadata=identifier,entitlements --force -s "${CODESIGN}" "${APPBUNDLE}/Contents/MacOS/GPSBabelFE" -o runtime --timestamp --entitlements "${APPBUNDLE}/Contents/Resources/GPSBabelFE.entitlements"
       codesign --deep --verify --verbose=2 "${APPBUNDLE}"
     fi
   fi
   # because we might have had to fix codesigning we have to create the dmg instead of letting macdeployqt do it.
   hdiutil create "${DMG}" -srcfolder "${APPBUNDLE}" -format UDZO -fs APFS -volname "${VOLNAME}"
+  # If we are signing with a developer id and we have a notarization keychain profile notarize the dmg.
+  if [ -n "${CODESIGN}" ] && \
+     [ "${CODESIGN}" != "-" ] && \
+     [ -n "${NOTARY}" ]; then
+    xcrun notarytool submit "${DMG}" \
+      --keychain-profile "${NOTARY}" \
+      --wait
+    xcrun stapler staple "${DMG}"
+  fi
   set +x
   popd
 fi

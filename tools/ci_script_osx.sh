@@ -5,18 +5,19 @@
  
 function version_ge() { test "$(printf "%s\n%s" "$1" "$2" | sort -rV | head -n 1)" == "$1"; }
 
-while getopts g:i: name
+while getopts g:i:n: name
 do
   case $name in
     g) CMAKEOPTIONS+=(-G "$OPTARG"); GENERATOR="$OPTARG";;
     i) CMAKEOPTIONS+=(-DGPSBABEL_CODESIGN_IDENTITY="$OPTARG");;
-    ?) printf "Usage: %s: [-g generator] [-i identity] source_directory qt_version\n" "$0"
+    n) CMAKEOPTIONS+=(-DGPSBABEL_NOTARY_PROFILE="$OPTARG");;
+    ?) printf "Usage: %s: [-g generator] [-i identity] [-n notary_keychain_profile] source_directory qt_version\n" "$0"
        exit 2;;
   esac
 done
 shift "$((OPTIND - 1))"
 if [ $# -lt 2 ]; then
-  printf "Usage: %s: [-g generator] [-i identity] source_directory qt_version\n" "$0"
+  printf "Usage: %s: [-g generator] [-i identity] [-n notary_keychain_profile] source_directory qt_version\n" "$0"
   exit 1
 fi
 SOURCE_DIR=$1

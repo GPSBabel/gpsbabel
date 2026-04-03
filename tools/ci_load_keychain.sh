@@ -25,12 +25,24 @@ if [ -n "${BUILD_CERTIFICATE_BASE64}" ] && \
   security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
   security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
   security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+  # load notarytool password to keychain
+  if [ -n "${APPLE_ID}" ] && \
+     [ -n "${APPLE_TEAM_ID}" ] && \
+     [ -n "${APPLE_NOTARY_PASSWORD}" ]; then
+    xcrun notarytool store-credentials "notarytool-password" \
+                 --apple-id "${APPLE_ID}" \
+                 --team-id "${APPLE_TEAM_ID}" \
+                 --password "${APPLE_NOTARY_PASSWORD}"
+    echo "NOTARY_PROFILE=notarytool-password" >> "$GITHUB_ENV"
+  fi
 fi
 if [ -n "${GITHUB_ENV}" ]; then
-  IDENTITY=$(security find-identity -p codesigning "$KEYCHAIN_PATH" | grep '1)' | cut -d '"' -f 2)
+  security find-identity -p codesigning "$KEYCHAIN_PATH"
+  IDENTITY=$(security find-identity -p codesigning "$KEYCHAIN_PATH" | grep '1)' | head -1 | cut -d '"' -f 2)
   if [ -z "${IDENTITY}" ]; then
     IDENTITY="-"
   fi
   echo "Loaded identity \"$IDENTITY\" for codesigning."
-  echo IDENTITY="${IDENTITY}" >> "$GITHUB_ENV"
+  echo "IDENTITY=${IDENTITY}" >> "$GITHUB_ENV"
 fi
