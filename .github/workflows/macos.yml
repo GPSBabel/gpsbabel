@@ -118,7 +118,7 @@ jobs:
           IDENTITY="-"
         fi
         args+=(-i "${IDENTITY}")
-        if [ -n "${NOTARY_PROFILE}" ];
+        if [ -n "${NOTARY_PROFILE}" ]; then
           args+=(-n "${NOTARY_PROFILE}")
         fi
         ./tools/ci_script_osx.sh "${args[@]}" . ${{ matrix.QT_VERSION }}
