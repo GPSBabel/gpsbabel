@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Qt libraries have a different identifier. -->
+	<key>com.apple.security.cs.disable-library-validation</key>
+	<true/>
+	<!-- QRegularExpression uses PCRE2, which may have JIT enabled. -->
+	<key>com.apple.security.cs.allow-jit</key>
+	<true/>
+	<!-- Additional entitlments for QtWebEngine
+	     https://doc.qt.io/qt-6.10/qtwebengine-deploying.html#macos-specific-deployment-steps
+	     QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app/Contents/Resources/QtWebEngineProcess.entitlements -->
+	<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+	<true/>
+	<!-- Already included
+	<key>com.apple.security.cs.disable-library-validation</key>
+	<true/>
+	<key>com.apple.security.cs.allow-jit</key>
+	<true/>
+	-->
+	<key>com.apple.security.cs.disable-executable-page-protection</key>
+	<true/>
+</dict>
+</plist>
