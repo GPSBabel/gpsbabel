@@ -8,8 +8,18 @@
 	<!-- QRegularExpression uses PCRE2, which may have JIT enabled. -->
 	<key>com.apple.security.cs.allow-jit</key>
 	<true/>
-	<!--  Connection to GPS devices -->
-	<key>com.apple.security.device.usb</key>
+	<!-- Additional entitlments for QtWebEngine
+	     https://doc.qt.io/qt-6.10/qtwebengine-deploying.html#macos-specific-deployment-steps
+	     QtWebEngineCore.framework/Helpers/QtWebEngineProcess.app/Contents/Resources/QtWebEngineProcess.entitlements -->
+	<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+	<true/>
+	<!-- Already included
+	<key>com.apple.security.cs.disable-library-validation</key>
+	<true/>
+	<key>com.apple.security.cs.allow-jit</key>
+	<true/>
+	-->
+	<key>com.apple.security.cs.disable-executable-page-protection</key>
 	<true/>
 </dict>
 </plist>
