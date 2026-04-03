@@ -116,7 +116,7 @@ jobs:
         if [ -z "${IDENTITY}" ]; then
           IDENTITY="-"
         fi
-        ./tools/ci_script_osx.sh -g ${{ matrix.GENERATOR }} -i "${IDENTITY}" . ${{ matrix.QT_VERSION }}
+        ./tools/ci_script_osx.sh -g ${{ matrix.GENERATOR }} -i "${IDENTITY}" -n "${NOTARY_PROFILE}" . ${{ matrix.QT_VERSION }}
 
     - name: Generate artifact attestation
       if: ${{ inputs.attestation && matrix.RELEASE }}

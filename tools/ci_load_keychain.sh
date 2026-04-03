@@ -34,6 +34,7 @@ if [ -n "${BUILD_CERTIFICATE_BASE64}" ] && \
                  --apple-id "${APPLE_ID}" \
                  --team-id "${APPLE_TEAM_ID}" \
                  --password "${APPLE_NOTARY_PASSWORD}"
+    echo "NOTARY_PROFILE=notarytool-password" >> "$GITHUB_ENV"
   fi
 fi
 if [ -n "${GITHUB_ENV}" ]; then
