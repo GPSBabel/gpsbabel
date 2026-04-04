@@ -149,7 +149,6 @@ elseif ($PSCmdlet.ParameterSetName -eq 'CliSet' -or $PSCmdlet.ParameterSetName -
             $baseArgs = @('exec', '--interactive', '--tty', $ContainerName, 'gpsbabel')
             $allArgs = $baseArgs + $ProgramArgs
     
-            # Run and stream output (recommended)
             Write-Output ('gpsbabel ' + ($ProgramArgs | ForEach-Object { if ($_ -match '\s') { '"{0}"' -f $_ } else { $_ } }) -join ' ')
             & docker @allArgs
             break
