@@ -19,7 +19,7 @@ Specify the version of GPSBabel.  This is only used with the -cli, -gui, and
 
 .PARAMETER cli
 Run the gpsbabel CLI, passing all the remaining arguments.  
-This option is exlusive with the -gui, -list and -clean options.
+This option is exclusive with the -gui, -list and -clean options.
 
 .PARAMETER gui
 Run the gpsbabel GUI, passing all remaining arguments.
@@ -27,7 +27,7 @@ This option is exclusive with the -cli, -list and -clean options.
 
 .PARAMETER list
 This option will list the related containers and images for all versions
-that existlocally.  This option is exclusive with the -cli, -gui and -clean
+that exist locally.  This option is exclusive with the -cli, -gui and -clean
 options.
 
 .PARAMETER clean
@@ -42,7 +42,7 @@ Runs the gpsbabel GUI.
 
 .EXAMPLE
 .\run_gpsbabel.ps1 -cli -- -D 1 -i gpx -f cp.gpx -o kml -F "cp converted.kml"
-Runs the gpsbabel CLI with the command line parameters pass as the -cli option.
+Runs the gpsbabel CLI with the command line parameters passed as the -cli option.
 
 .EXAMPLE
 .\run_gpsbabel.ps1 -list
