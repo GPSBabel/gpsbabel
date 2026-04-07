@@ -238,7 +238,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   ui_.outputWindow->setReadOnly(true);
 
   // Start up in the current system language.
-  loadLanguage(QLocale::system().name());
+  loadLanguage(QLocale::system());
   loadFormats();
 
   //--- Restore from registry
@@ -260,7 +260,7 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   }
 }
 
-void MainWindow::switchTranslator(QTranslator& translator, const QString& filename)
+void MainWindow::switchTranslator(QTranslator& translator, const QString& filename, const QLocale& locale)
 {
   // remove the old translator
   qApp->removeTranslator(&translator);
@@ -283,26 +283,25 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
     QLibraryInfo::path(QLibraryInfo::TranslationsPath)
   };
 
+  const QString prefix = QStringLiteral("_");
+  const QString suffix = QStringLiteral(".qm");
   // Load the new translator.
   for (const auto& directory : directories) {
-    if (translator.load(filename, directory)) {
+    if (translator.load(locale, filename, prefix, directory, suffix)) {
       qApp->installTranslator(&translator);
       break;
     }
   }
 }
 
-void MainWindow::loadLanguage(const QString& rLanguage)
+void MainWindow::loadLanguage(const QLocale& rLocale)
 {
-  if (currLang_ != rLanguage) {
-    currLang_ = rLanguage;
-    QLocale locale = QLocale(currLang_);
-    QLocale::setDefault(locale);
+  //qDebug() << "requested locale" << rLocale.name() << "uiLanguages" << rLocale.uiLanguages();
+  QLocale::setDefault(rLocale);
 
-    switchTranslator(translator_, QString("gpsbabelfe_%1.qm").arg(rLanguage));
-    switchTranslator(translatorCore_, QString("gpsbabel_%1.qm").arg(rLanguage));
-    switchTranslator(translatorQt_, QString("qt_%1.qm").arg(rLanguage));
-  }
+  switchTranslator(translator_, QStringLiteral("gpsbabelfe"), rLocale);
+  switchTranslator(translatorCore_, QStringLiteral("gpsbabel"), rLocale);
+  switchTranslator(translatorQt_, QStringLiteral("qt"), rLocale);
 }
 
 void MainWindow::changeEvent(QEvent* event)
@@ -315,9 +314,7 @@ void MainWindow::changeEvent(QEvent* event)
       break;
     // This event is sent if the system language changes.
     case QEvent::LocaleChange: {
-      QString locale = QLocale::system().name();
-      locale.truncate(locale.lastIndexOf('_'));
-      loadLanguage(locale);
+      loadLanguage(QLocale::system());
     }
     break;
     default:

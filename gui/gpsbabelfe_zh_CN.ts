@@ -762,17 +762,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">捐赠...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="535"/>
+        <location filename="mainwindow.cc" line="532"/>
         <source>Select one or more input files</source>
         <translation type="unfinished">选择一个或多个输入文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="563"/>
+        <location filename="mainwindow.cc" line="560"/>
         <source>Output File Name</source>
         <translation type="unfinished">输出文件名</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="627"/>
+        <location filename="mainwindow.cc" line="624"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -781,7 +781,7 @@ This program cannot continue.</source>
 此程序无法继续。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="638"/>
+        <location filename="mainwindow.cc" line="635"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -790,115 +790,115 @@ This program cannot continue.</source>
 此程序无法继续。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="656"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished">输入和输出格式均不支持%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">输入不支持%1；输出格式支持%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">输入格式支持%1；输出格式不支持%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="668"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished">输入和输出格式均支持%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="689"/>
+        <location filename="mainwindow.cc" line="686"/>
         <source>waypoints</source>
         <translation type="unfinished">航点</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="690"/>
+        <location filename="mainwindow.cc" line="687"/>
         <source>tracks</source>
         <translation type="unfinished">轨迹</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="691"/>
+        <location filename="mainwindow.cc" line="688"/>
         <source>routes</source>
         <translation type="unfinished">路线</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="786"/>
+        <location filename="mainwindow.cc" line="783"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished">格式“%1”没有输入选项</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="792"/>
-        <location filename="mainwindow.cc" line="811"/>
+        <location filename="mainwindow.cc" line="789"/>
+        <location filename="mainwindow.cc" line="808"/>
         <source>Options for %1</source>
         <translation type="unfinished">%1的选项</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="805"/>
+        <location filename="mainwindow.cc" line="802"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished">格式“%1”没有输出选项</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="825"/>
+        <location filename="mainwindow.cc" line="822"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished">未指定有效的航点/路线/轨迹转换</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="844"/>
+        <location filename="mainwindow.cc" line="841"/>
         <source>No input file specified</source>
         <translation type="unfinished">未指定输入文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="853"/>
+        <location filename="mainwindow.cc" line="850"/>
         <source>No valid output specified</source>
         <translation type="unfinished">未指定有效输出</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="858"/>
+        <location filename="mainwindow.cc" line="855"/>
         <source>No output file specified</source>
         <translation type="unfinished">未指定输出文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="977"/>
+        <location filename="mainwindow.cc" line="974"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">无法打开临时文件“%1”以预览地图。错误为：“%2”。地图预览将不会显示。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="994"/>
+        <location filename="mainwindow.cc" line="991"/>
         <source>Translation successful</source>
         <translation type="unfinished">翻译成功</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1006"/>
+        <location filename="mainwindow.cc" line="1003"/>
         <source>Error preparing map: %1
 </source>
         <translation type="unfinished">准备地图时出错：%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1041"/>
+        <location filename="mainwindow.cc" line="1038"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished">运行gpsbabel时出错：%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1166"/>
+        <location filename="mainwindow.cc" line="1163"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished">您确定要将所有格式选项重置为默认值吗？</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1196"/>
+        <location filename="mainwindow.cc" line="1193"/>
         <source>About %1</source>
         <translation type="unfinished">关于 %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1244"/>
+        <location filename="mainwindow.cc" line="1241"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished">一个或多个数据过滤器处于活动状态</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1246"/>
+        <location filename="mainwindow.cc" line="1243"/>
         <source>No data filters are active</source>
         <translation type="unfinished">没有数据过滤器处于活动状态</translation>
     </message>
