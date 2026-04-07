@@ -634,17 +634,17 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">default</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="537"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation>eine oder mehrere Originaldateien markieren</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="565"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation>Zieldatei-Name</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="629"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -653,7 +653,7 @@ This program cannot continue.</source>
 Das Programm muss abgebrochen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="640"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -662,7 +662,7 @@ This program cannot continue.</source>
 Das Prgramm muss abgebrochen werden.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="661"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation>Keine Unterstützung für %1 im Ein- oder Ausgabeformat</translation>
     </message>
@@ -675,73 +675,73 @@ Das Prgramm muss abgebrochen werden.</translation>
         <translation type="vanished">Eingabeformat  unterstützt %1. Keine Unterstützung für %2 im Ausgabeformat</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="664"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Keine Unterstützung für %1 im Eingabeformat; Ausgabeformat unterstützt %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="667"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">Eingabeformat  unterstützt %1. Keine Unterstützung für %1 im Ausgabeformat {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="670"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation>Ein- und Ausgabeformat unterstützen %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="691"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation>Wegpunkte</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="692"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation>tracks</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="693"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation>Routen</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="788"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Es gibt keine Eingabeoptionen für das Format &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="794"/>
-        <location filename="mainwindow.cc" line="813"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation>Optionen für %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="807"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Es gibt keine Ausgabeoptionen für das Format &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="827"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>keine gültige Angabe von Wegpunkt-/Routen-/Trackfiltern</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="846"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation>keine Quelldatei angegeben</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation>keine gültiges Ziel angegeben</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="860"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation>keine Zieldatei angegeben</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="979"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">Fehler beim Öffnen der temporären Datei &quot;%1&quot; für die Kartenansicht. Der Fehler lautete: &quot;%2&quot;. Die Kartenansicht wird nicht angezeigt.</translation>
     </message>
@@ -754,39 +754,39 @@ Das Prgramm muss abgebrochen werden.</translation>
         <translation type="vanished">Prozess endete mit code %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="996"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation>Konvertierung erfolgreich</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1008"/>
+        <location filename="mainwindow.cc" line="1006"/>
         <source>Error preparing map: %1
 </source>
         <translation type="unfinished">Fehler bei der Vorbereitung der Karte: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1043"/>
+        <location filename="mainwindow.cc" line="1041"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Fehler beim Aufruf von gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1168"/>
+        <location filename="mainwindow.cc" line="1166"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Sind Sie sicher, dass Sie alle Formatoptionen auf die Vorgaben stellen wollen?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1198"/>
+        <location filename="mainwindow.cc" line="1196"/>
         <source>About %1</source>
         <translation>Über %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1246"/>
+        <location filename="mainwindow.cc" line="1244"/>
         <source>One or more data filters are active</source>
         <translation>Einer oder mehrere Datenfilter sind aktiviert</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1248"/>
+        <location filename="mainwindow.cc" line="1246"/>
         <source>No data filters are active</source>
         <translation>Keine Datenfilter sind aktiv</translation>
     </message>

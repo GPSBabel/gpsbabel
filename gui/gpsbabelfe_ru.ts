@@ -928,17 +928,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="obsolete">по умолчанию</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="537"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation>Выберите один или несколько файлов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="565"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation>Имя выходного файла</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="629"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -947,7 +947,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="640"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -956,7 +956,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="661"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation>Входной и выходной форматы не поддерживают %1</translation>
     </message>
@@ -969,73 +969,73 @@ This program cannot continue.</source>
         <translation type="vanished">Входной формат поддерживает %1; выходной формат не поддерживаетt %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="664"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation>Входной формат не поддерживает %1; выходной формат поддерживает %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="667"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation>Входной формат поддерживает %1; выходной формат не поддерживаетt %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="670"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation>Входной и выходной формат поддерживают %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="691"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation>маршрутные точки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="692"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation>треки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="693"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation>маршруты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="788"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Нет входных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="794"/>
-        <location filename="mainwindow.cc" line="813"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation>Параметры %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="807"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Нет выходных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="827"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Не выбрано преобразование маршрутных точек/маршрутов/треков</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="846"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation>Не выбран входной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="860"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="979"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">Не удалось открыть временный файл &quot;%1&quot; для предварительного просмотра карты. Ошибка: &quot;%2&quot;. Предварительный просмотр карты не будет показан.</translation>
     </message>
@@ -1048,39 +1048,39 @@ This program cannot continue.</source>
         <translation type="vanished">Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="996"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation>Конвертация выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1008"/>
+        <location filename="mainwindow.cc" line="1006"/>
         <source>Error preparing map: %1
 </source>
         <translation type="unfinished">Ошибка подготовки карты: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1043"/>
+        <location filename="mainwindow.cc" line="1041"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Ошибка запуска gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1168"/>
+        <location filename="mainwindow.cc" line="1166"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Вы действительно желаете сбросить все параметры формата в значения по умолчанию?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1198"/>
+        <location filename="mainwindow.cc" line="1196"/>
         <source>About %1</source>
         <translation>О %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1246"/>
+        <location filename="mainwindow.cc" line="1244"/>
         <source>One or more data filters are active</source>
         <translation>Один или более фильтров данных активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1248"/>
+        <location filename="mainwindow.cc" line="1246"/>
         <source>No data filters are active</source>
         <translation>Фильтры данных не активны</translation>
     </message>
