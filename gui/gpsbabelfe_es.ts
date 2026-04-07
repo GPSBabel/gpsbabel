@@ -9,54 +9,6 @@
         <translation>Acerca de GPSBabel</translation>
     </message>
     <message>
-        <location filename="aboutui.ui" line="80"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2024 Robert Lipe&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GUI designed and contributed by S. Khai Mong&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Using backend $babelversion$)&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$hash$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$date$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$upgradetestmode$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Installation ID: $installationId$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <oldsource>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;$appname$&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$babelfeversion$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Copyright (C) 2009-2023 Robert Lipe&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GUI designed and contributed by S. Khai Mong&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LGPL Crystal Icons by Elvarado Coehlo&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;(Using backend $babelversion$)&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$hash$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$date$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$upgradetestmode$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Installation ID: $installationId$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -177,8 +129,9 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="advui.ui" line="30"/>
+        <location filename="advui.ui" line="43"/>
         <source>Enable this is the File Menu, Preferences Item, Privacy tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Habilitar este es el menú Archivo, elemento Preferencias, pestaña Privacidad.</translation>
     </message>
     <message>
         <location filename="advui.ui" line="33"/>
@@ -186,72 +139,87 @@ p, li { white-space: pre-wrap; }
         <translation>Ver en Google Maps</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="47"/>
+        <location filename="advui.ui" line="46"/>
+        <source>Preview in Leaflet Maps</source>
+        <translation type="unfinished">Vista previa en Leaflet Maps</translation>
+    </message>
+    <message>
+        <location filename="advui.ui" line="56"/>
+        <source>Disable map preview.</source>
+        <translation type="unfinished">Deshabilitar vista previa del mapa.</translation>
+    </message>
+    <message>
+        <location filename="advui.ui" line="59"/>
+        <source>Disable map preview</source>
+        <translation type="unfinished">Deshabilitar vista previa del mapa</translation>
+    </message>
+    <message>
+        <location filename="advui.ui" line="76"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="52"/>
+        <location filename="advui.ui" line="81"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="57"/>
+        <location filename="advui.ui" line="86"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="62"/>
+        <location filename="advui.ui" line="91"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="67"/>
+        <location filename="advui.ui" line="96"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="72"/>
+        <location filename="advui.ui" line="101"/>
         <source>4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="77"/>
+        <location filename="advui.ui" line="106"/>
         <source>5</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="82"/>
+        <location filename="advui.ui" line="111"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="87"/>
+        <location filename="advui.ui" line="116"/>
         <source>7</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="92"/>
+        <location filename="advui.ui" line="121"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="97"/>
+        <location filename="advui.ui" line="126"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="105"/>
+        <location filename="advui.ui" line="134"/>
         <source>Debugging Diagnostics</source>
         <translation>Depurar errores (debugging)</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="129"/>
+        <location filename="advui.ui" line="158"/>
         <source>Set all format input/output options to default values</source>
         <translation>Asignar a todas las opciones de entrada y salida los valores por defecto</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="132"/>
+        <location filename="advui.ui" line="161"/>
         <source>Default Format Options</source>
         <translation>Opciones de formato por defecto</translation>
     </message>
@@ -260,7 +228,7 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Convertir la codificación de la entrada a la salida</translation>
     </message>
     <message>
-        <location filename="advui.ui" line="42"/>
+        <location filename="advui.ui" line="71"/>
         <source>Debugging diagnostics.  
 Higher number provides more detailed diagnostics.</source>
         <translation>Depurar errores. Cuanto mayor es el número, el diagnóstico es más detallado.</translation>
@@ -276,32 +244,32 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="donate.ui" line="32"/>
         <source>Support GPSBabel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Apoyar GPSBabel</translation>
     </message>
     <message>
         <location filename="donate.ui" line="43"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;https://www.gpsbabel.org/contribute.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;p&gt;GPSBabel es software gratuito construido y respaldado por voluntarios. Consuma una gran cantidad de tiempo crear y respaldar el software, así como dinero para programas de mapeo, receptores GPS y accesorios de desarrollo. Por favor, vea cómo puede &lt;a href=&quot;https://www.gpsbabel.org/contribute.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribuir tiempo o mediante PayPal (no se necesita cuenta).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="donate.ui" line="69"/>
         <source>&lt;p&gt;Of course, if you&apos;ve already contributed to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;p&gt;Por supuesto, si ya has contribuido al proyecto o simplemente no puedes ayudar al proyecto, marque la casilla de abajo para no ver este mensaje nuevamente.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="donate.ui" line="79"/>
         <source>Never show this message again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">No mostrar este mensaje nuevamente.</translation>
     </message>
     <message>
         <location filename="donate.ui" line="114"/>
         <source>No, Thanks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">No, Gracias</translation>
     </message>
     <message>
         <location filename="donate.ui" line="121"/>
         <source>Contribute</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Contribuir</translation>
     </message>
 </context>
 <context>
@@ -525,6 +493,171 @@ Higher number provides more detailed diagnostics.</source>
     </message>
 </context>
 <context>
+    <name>LeafletMap</name>
+    <message>
+        <location filename="leafletmap.cc" line="142"/>
+        <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
+        <translation type="unfinished">Error al abrir el archivo &quot;leafletbase.html&quot;. Compruebe la instalación</translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="146"/>
+        <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
+        <translation type="unfinished">Falta el archivo &quot;leafletbase.html&quot;. Compruebe la instalación</translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="164"/>
+        <source>Failed to load Leaflet maps base page</source>
+        <translation type="unfinished">Error al cargar la página base de mapas Leaflet</translation>
+    </message>
+</context>
+<context>
+    <name>LeafletMapDialog</name>
+    <message>
+        <location filename="leafletdlg.cc" line="56"/>
+        <source>meters</source>
+        <translation type="unfinished">metros</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="65"/>
+        <source>feet</source>
+        <translation type="unfinished">pies</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="69"/>
+        <source>miles</source>
+        <translation type="unfinished">millas</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="72"/>
+        <source>Length: %1 %2
+  %3 %4</source>
+        <translation type="unfinished">Longitud:  %1 %2
+  %3 %4</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="83"/>
+        <source>Lat: %1</source>
+        <translation type="unfinished">Lat: %1</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="84"/>
+        <source>Lng: %1</source>
+        <translation type="unfinished">Lng: %1</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="86"/>
+        <source>Desc: %1</source>
+        <translation type="unfinished">Desc: %1</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="89"/>
+        <source>Cmt: %1</source>
+        <translation type="unfinished">Cm:  %1</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="92"/>
+        <source>Ele: %1</source>
+        <translation type="unfinished">Ele: %1</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="127"/>
+        <source>Start: %1</source>
+        <translation type="unfinished">Comenzar: %1</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="129"/>
+        <source>Stop: %1</source>
+        <translation type="unfinished">Parar: %1</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="132"/>
+        <source>Points: %1</source>
+        <translation type="unfinished">Puntos: %1</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="164"/>
+        <source>Waypoints</source>
+        <translation type="unfinished">Puntos de ruta</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="178"/>
+        <source>Tracks</source>
+        <translation type="unfinished">Rutas</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="192"/>
+        <source>Routes</source>
+        <translation type="unfinished">Rutas</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="533"/>
+        <source>Show All Waypoints</source>
+        <translation type="unfinished">Mostrar todos los puntos de interés</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="534"/>
+        <source>Hide All Waypoints</source>
+        <translation type="unfinished">Ocultar todos los puntos de interés</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="535"/>
+        <location filename="leafletdlg.cc" line="542"/>
+        <location filename="leafletdlg.cc" line="549"/>
+        <source>Expand All</source>
+        <translation type="unfinished">Expandir todo</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="536"/>
+        <location filename="leafletdlg.cc" line="543"/>
+        <location filename="leafletdlg.cc" line="550"/>
+        <source>Collapse All</source>
+        <translation type="unfinished">Colapsar todo</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="540"/>
+        <source>Show All Routes</source>
+        <translation type="unfinished">Mostrar todas las rutas</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="541"/>
+        <source>Hide All Routes</source>
+        <translation type="unfinished">Ocultar todas las rutas</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="547"/>
+        <source>Show All Tracks</source>
+        <translation type="unfinished">Mostrar todos los trazados</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="548"/>
+        <source>Hide All Tracks</source>
+        <translation type="unfinished">Ocultar todos los trazados</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="556"/>
+        <source>Show Only This Waypoint</source>
+        <translation type="unfinished">Mostras sólo este punto de interés</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="558"/>
+        <source>Show Only This Track</source>
+        <translation type="unfinished">Mostrar sólo este trazado</translation>
+    </message>
+    <message>
+        <location filename="leafletdlg.cc" line="560"/>
+        <source>Show Only This Route</source>
+        <translation type="unfinished">Mostrar sólo esta ruta</translation>
+    </message>
+</context>
+<context>
+    <name>LeafletMapDlg</name>
+    <message>
+        <location filename="leafletdlg.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished">Diálogo</translation>
+    </message>
+</context>
+<context>
     <name>MainDlg</name>
     <message>
         <source>About</source>
@@ -574,31 +707,31 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="obsolete">Defecto</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="506"/>
+        <location filename="mainwindow.cc" line="537"/>
         <source>Select one or more input files</source>
         <translation>Seleccionar uno o más archivos de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="534"/>
+        <location filename="mainwindow.cc" line="565"/>
         <source>Output File Name</source>
         <translation>Nombre del fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="598"/>
+        <location filename="mainwindow.cc" line="629"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>Se ha producido un error cuando se intentaba leer la configuración. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="609"/>
+        <location filename="mainwindow.cc" line="640"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>El formato de alfunos ficheros o dispositivos no se halló durante la inicialización. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="630"/>
+        <location filename="mainwindow.cc" line="661"/>
         <source>Input and output formats do not support %1</source>
         <translation>Formatos de entrada y salida inadmisibles %1</translation>
     </message>
@@ -607,70 +740,75 @@ This program cannot continue.</source>
         <translation type="vanished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="633"/>
+        <location filename="mainwindow.cc" line="664"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="636"/>
+        <location filename="mainwindow.cc" line="667"/>
         <source>Input format supports %1; output format does not support %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El formato de entrada admite %1; el formato de salida no admite %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="639"/>
+        <location filename="mainwindow.cc" line="670"/>
         <source>Both input and output formats support %1</source>
         <translation>Formatos de entrada y salida admisibles (ambos) %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="660"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="661"/>
+        <location filename="mainwindow.cc" line="692"/>
         <source>tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="693"/>
         <source>routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="757"/>
+        <location filename="mainwindow.cc" line="788"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>No hay opciones de entrada para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="763"/>
-        <location filename="mainwindow.cc" line="782"/>
+        <location filename="mainwindow.cc" line="794"/>
+        <location filename="mainwindow.cc" line="813"/>
         <source>Options for %1</source>
         <translation>Opciones de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="776"/>
+        <location filename="mainwindow.cc" line="807"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>No hay opciones de salida para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="796"/>
+        <location filename="mainwindow.cc" line="827"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Se han especificicado puntos de interés, trazados o rutas no traducibles</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="815"/>
+        <location filename="mainwindow.cc" line="846"/>
         <source>No input file specified</source>
         <translation>No se ha especificado el fichero de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="824"/>
+        <location filename="mainwindow.cc" line="855"/>
         <source>No valid output specified</source>
         <translation>El fichero de salida no es válido</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="829"/>
+        <location filename="mainwindow.cc" line="860"/>
         <source>No output file specified</source>
         <translation>No se ha especificado el fichero de salida</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cc" line="979"/>
+        <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
+        <translation type="unfinished">No se pudo abrir el archivo temporal &quot;%1&quot; para la vista previa del mapa. El error fue: &quot;%2&quot;. La vista previa del mapa no se mostrará.</translation>
     </message>
     <message>
         <source>Process &quot;%1&quot; did not start</source>
@@ -681,39 +819,39 @@ This program cannot continue.</source>
         <translation type="vanished">El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="964"/>
+        <location filename="mainwindow.cc" line="996"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="977"/>
+        <location filename="mainwindow.cc" line="1008"/>
         <source>Error preparing map: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Error al preparar el mapa: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="995"/>
+        <location filename="mainwindow.cc" line="1043"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1118"/>
+        <location filename="mainwindow.cc" line="1168"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1147"/>
+        <location filename="mainwindow.cc" line="1198"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1193"/>
+        <location filename="mainwindow.cc" line="1246"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1195"/>
+        <location filename="mainwindow.cc" line="1248"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
@@ -724,7 +862,7 @@ This program cannot continue.</source>
     <message>
         <location filename="mainwinui.ui" line="14"/>
         <source>GPSBabel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GPSBabel</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
@@ -738,8 +876,8 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="44"/>
-        <location filename="mainwinui.ui" line="467"/>
-        <location filename="mainwinui.ui" line="682"/>
+        <location filename="mainwinui.ui" line="463"/>
+        <location filename="mainwinui.ui" line="674"/>
         <source>File</source>
         <translation>Archivo</translation>
     </message>
@@ -750,13 +888,13 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="60"/>
-        <location filename="mainwinui.ui" line="483"/>
+        <location filename="mainwinui.ui" line="479"/>
         <source>Device</source>
         <translation>Dispositivo</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="89"/>
-        <location filename="mainwinui.ui" line="512"/>
+        <location filename="mainwinui.ui" line="508"/>
         <source>Format</source>
         <translation>Formato</translation>
     </message>
@@ -781,29 +919,29 @@ This program cannot continue.</source>
         <translation>Nombre del o los ficheros</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="173"/>
-        <location filename="mainwinui.ui" line="593"/>
+        <location filename="mainwinui.ui" line="169"/>
+        <location filename="mainwinui.ui" line="585"/>
         <source>Device Name:</source>
         <translation>Nombre del dispositivo:</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="180"/>
+        <location filename="mainwinui.ui" line="176"/>
         <source>Name of port to which input device is connected</source>
         <translation>Nombre del puerto al que está conectado el dispositivo</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="211"/>
+        <location filename="mainwinui.ui" line="207"/>
         <source>Options for the selected input format. </source>
         <translation>Opciones aplicables al formato de entrada seleccionado.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="214"/>
-        <location filename="mainwinui.ui" line="634"/>
+        <location filename="mainwinui.ui" line="210"/>
+        <location filename="mainwinui.ui" line="626"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="239"/>
+        <location filename="mainwinui.ui" line="235"/>
         <source>Translation Options</source>
         <translation>Opciones de conversión</translation>
     </message>
@@ -812,72 +950,72 @@ This program cannot continue.</source>
         <translation type="vanished">-</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="270"/>
+        <location filename="mainwinui.ui" line="266"/>
         <source>If selected, translate waypoints.</source>
         <translation>Si se selecciona, convertir puntos de interés.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="273"/>
+        <location filename="mainwinui.ui" line="269"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="313"/>
+        <location filename="mainwinui.ui" line="309"/>
         <source>If selected, translate routes.</source>
         <translation>Si se selecciona, convertir las rutas.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="316"/>
+        <location filename="mainwinui.ui" line="312"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="356"/>
+        <location filename="mainwinui.ui" line="352"/>
         <source>If selected, translate tracks.</source>
         <translation>Si se selecciona, convertir los trazados.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="359"/>
+        <location filename="mainwinui.ui" line="355"/>
         <source>Tracks</source>
         <translation>Trazados</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="395"/>
+        <location filename="mainwinui.ui" line="391"/>
         <source>Data Filters between input and output</source>
         <translation>Filtros de datos entre la entrada y la salida</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="398"/>
+        <location filename="mainwinui.ui" line="394"/>
         <source>Filters</source>
         <translation>Filtros</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="431"/>
+        <location filename="mainwinui.ui" line="427"/>
         <source>More translation options. </source>
         <translation>Más opciones de conversión.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="434"/>
+        <location filename="mainwinui.ui" line="430"/>
         <source>More Options</source>
         <translation>Más opciones</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="444"/>
+        <location filename="mainwinui.ui" line="440"/>
         <source>Output</source>
         <translation>Salida</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="464"/>
+        <location filename="mainwinui.ui" line="460"/>
         <source>If selected, output is to a file. </source>
         <translation>Si se selecciona, la salida es a un fichero. </translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="480"/>
+        <location filename="mainwinui.ui" line="476"/>
         <source>If selected, output is to a device or GPS unit</source>
         <translation>Si se selecciona, la salida esperada es un dispositivo o un GPS</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="519"/>
+        <location filename="mainwinui.ui" line="515"/>
         <source>Output data format.</source>
         <translation>Formato de salida de los datos.</translation>
     </message>
@@ -886,72 +1024,72 @@ This program cannot continue.</source>
         <translation type="obsolete">Codificación de los caracteres de salida</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="549"/>
+        <location filename="mainwinui.ui" line="545"/>
         <source>Browse for an output file name. </source>
         <translation>Selecciona el nombre del fichero de salida. </translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="552"/>
+        <location filename="mainwinui.ui" line="548"/>
         <source>File Name</source>
         <translation>Nombre del fichero</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="600"/>
+        <location filename="mainwinui.ui" line="592"/>
         <source>Name of port to which output device is connected</source>
         <translation>Nombre del puerto al que está conectado el dispositivo de salida</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="631"/>
+        <location filename="mainwinui.ui" line="623"/>
         <source>Options for the selected output format. </source>
         <translation>Opciones aplicables al formato de salida seleccionado.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="655"/>
+        <location filename="mainwinui.ui" line="647"/>
         <source>Output of GPSBabel translation process. </source>
         <translation>Salida del proceso de conversión de GPSBabel.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="689"/>
+        <location filename="mainwinui.ui" line="681"/>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="708"/>
+        <location filename="mainwinui.ui" line="700"/>
         <source>GPSBabel Help</source>
         <translation>Ayuda de GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="713"/>
+        <location filename="mainwinui.ui" line="705"/>
         <source>About GPSBabel</source>
         <translation>Acerca de GPSBabel</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="718"/>
+        <location filename="mainwinui.ui" line="710"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="723"/>
+        <location filename="mainwinui.ui" line="715"/>
         <source>Preferences...</source>
         <translation>Preferencias ...</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="728"/>
+        <location filename="mainwinui.ui" line="720"/>
         <source>Check for Upgrade</source>
         <translation>Comprueba si hay una actualización</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="731"/>
+        <location filename="mainwinui.ui" line="723"/>
         <source>Enable this is the File Menu, Preferences Item, Privacy tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Habilite esta opción en el menú Archivo, elemento Preferencias, pestaña Privacidad.</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="736"/>
+        <location filename="mainwinui.ui" line="728"/>
         <source>Visit Website...</source>
-        <translation></translation>
+        <translation>Visitar sitio web...</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="741"/>
+        <location filename="mainwinui.ui" line="733"/>
         <source>Make a Donation...</source>
         <translation>Haga una donación...</translation>
     </message>
@@ -959,17 +1097,17 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="118"/>
+        <location filename="map.cc" line="122"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Error al abrir el archivo &quot;gmapbase.html&quot;. Compruebe la instalación</translation>
     </message>
     <message>
-        <location filename="map.cc" line="122"/>
+        <location filename="map.cc" line="126"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation>No se encuentra el fichero &quot;&quot;gmapbase.html&quot;. Compruebe la instalación</translation>
     </message>
     <message>
-        <location filename="map.cc" line="177"/>
+        <location filename="map.cc" line="181"/>
         <source>Failed to load Google maps base page</source>
         <translation>Fallo al buscar la página básica de los mapas de Googe</translation>
     </message>
@@ -1022,7 +1160,7 @@ This program cannot continue.</source>
     <message>
         <location filename="miscfltui.ui" line="22"/>
         <source>Sort Routes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ordenar rutas</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="31"/>
@@ -1063,42 +1201,42 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
         <location filename="miscfltui.ui" line="171"/>
         <location filename="miscfltui.ui" line="248"/>
         <source>By</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Por</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="124"/>
         <location filename="miscfltui.ui" line="179"/>
         <location filename="miscfltui.ui" line="256"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Descripción</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="129"/>
         <source>GCID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GCID</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="134"/>
         <location filename="miscfltui.ui" line="184"/>
         <location filename="miscfltui.ui" line="261"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="139"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tiempo</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="162"/>
         <source>Sort Waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ordenar puntos de ruta</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="189"/>
         <location filename="miscfltui.ui" line="266"/>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Número</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="212"/>
@@ -1118,7 +1256,7 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
     <message>
         <location filename="miscfltui.ui" line="239"/>
         <source>Sort Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ordenar pistas</translation>
     </message>
 </context>
 <context>
@@ -1155,62 +1293,103 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
     <message>
         <location filename="preferences.ui" line="36"/>
         <source>Ignore mismatch between command line and GUI version.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ignorar la discrepancia entre la versión de la línea de comandos y la GUI.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="57"/>
         <source>Privacy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Privacidad</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="63"/>
         <source>&lt;html&gt;The check transmits information about your installation and computer environment, such as the Installation ID, GPSBabel GUI and CLI versions, CPU architecture, operating system name and version, and language, to gpsbabel.org. This never includes any data from user files or devices.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;La verificación transmite información sobre su instalación y entorno informático, como el ID de instalación, las versiones de la GUI y CLI de GPSBabel, la arquitectura de la CPU, el nombre y versión del sistema operativo y el idioma, a gpsbabel.org. Esto nunca incluye datos de archivos o dispositivos de usuario.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="73"/>
         <source>&lt;html&gt;Anonymous usage data is sent to gpsbabel.org. This helps the developers at gpsbabel.org understand what features of the program are being used. This never includes any data from user files or devices.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;Los datos de uso anónimos se envían a gpsbabel.org. Esto ayuda a los desarrolladores de gpsbabel.org a entender qué características del programa se están utilizando. Esto nunca incluye datos de archivos o dispositivos de usuario.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="83"/>
         <source>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;Cuando se selecciona, este elemento del menú envía la misma información que &quot;Buscar versión más reciente al iniciar.&quot; a gpsbabel.org.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="86"/>
         <source>Enable upgrade check menu item.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Habilitar elemento de menú de verificación de actualización.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="93"/>
         <source>&lt;html&gt;When selected, this feature uses the Google Maps API(s) per &lt;a href=&quot;http://www.google.com/intl/en/policies/terms&quot;&gt;Google’s Terms of Service&lt;/a&gt; and the &lt;a href=&quot;http://www.google.com/policies/privacy&quot;&gt;Google Privacy Policy&lt;/a&gt;.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;Cuando se selecciona, esta característica utiliza la API de Google Maps según los &lt;a href=&quot;http://www.google.com/intl/en/policies/terms&quot;&gt;Términos de Servicio de Google&lt;/a&gt; y la &lt;a href=&quot;http://www.google.com/policies/privacy&quot;&gt;Política de Privacidad de Google&lt;/a&gt;.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="96"/>
-        <source>Enable map preview feature.</source>
-        <translation type="unfinished"></translation>
+        <source>Enable Google map preview feature.</source>
+        <oldsource>Enable map preview feature.</oldsource>
+        <translation type="unfinished">Habilitar función de vista previa del mapa de Google.</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="117"/>
+        <location filename="preferences.ui" line="106"/>
+        <source>&lt;html&gt;When selected, this feature uses the Leaflet Maps API(s) per &lt;a href=&quot;https://leafletjs.com/&quot;&gt;Leaflet’s Terms of Service&lt;/a&gt; and the &lt;a href=&quot;https://leafletjs.com/privacy.html&quot;&gt;Leaflet Privacy Policy&lt;/a&gt;.&lt;/html&gt;</source>
+        <translation type="unfinished">&lt;html&gt;Cuando se selecciona, esta característica utiliza la API de Leaflet Maps según los &lt;a href=&quot;https://leafletjs.com/&quot;&gt;Términos de Servicio de Leaflet&lt;/a&gt; y la &lt;a href=&quot;https://leafletjs.com/privacy.html&quot;&gt;Política de Privacidad de Leaflet&lt;/a&gt;.&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="109"/>
+        <source>Enable Leaflet map preview feature.</source>
+        <translation type="unfinished">Habilitar función de vista previa del mapa de Leaflet.</translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="119"/>
+        <source>Disable map preview feature.</source>
+        <translation type="unfinished">Deshabilitar función de vista previa del mapa.</translation>
+    </message>
+    <message>
+        <location filename="preferences.ui" line="143"/>
         <source>Formats</source>
         <translation>Formatos</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="125"/>
+        <location filename="preferences.ui" line="151"/>
         <source>Enabled Formats</source>
         <translation>Formatos activos</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="149"/>
+        <location filename="preferences.ui" line="175"/>
         <source>Enable All</source>
         <translation>Activar todo</translation>
     </message>
     <message>
-        <location filename="preferences.ui" line="156"/>
+        <location filename="preferences.ui" line="182"/>
         <source>Disable All</source>
         <translation>Desactivar todo</translation>
+    </message>
+    <message>
+        <location filename="preferences.cc" line="73"/>
+        <source>This version never checks for a newer version on start.</source>
+        <translation type="unfinished">Esta versión nunca verifica una versión más reciente al iniciar.</translation>
+    </message>
+    <message>
+        <location filename="preferences.cc" line="77"/>
+        <source>This version never reports usage data.</source>
+        <translation type="unfinished">Esta versión nunca informa datos de uso.</translation>
+    </message>
+    <message>
+        <location filename="preferences.cc" line="81"/>
+        <source>This version does not include the ability to check for an upgrade.</source>
+        <translation type="unfinished">Esta versión no incluye la capacidad de verificar actualizaciones.</translation>
+    </message>
+    <message>
+        <location filename="preferences.cc" line="88"/>
+        <source>The version does not include the map preview feature.</source>
+        <translation type="unfinished">Esta versión no incluye la función de vista previa del mapa.</translation>
+    </message>
+    <message>
+        <location filename="preferences.cc" line="96"/>
+        <source>The version does not include the Leaflet map preview feature.</source>
+        <translation type="unfinished">Esta versión no incluye la función de vista previa del mapa de Leaflet.</translation>
     </message>
 </context>
 <context>
@@ -1473,7 +1652,7 @@ This option changes the time of all trackpoints. This might be useful if your tr
     <message>
         <location filename="trackui.ui" line="93"/>
         <source>weeks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">semanas</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="117"/>
@@ -1521,18 +1700,18 @@ Esta opción se utiliza junto con la de parar (stop) para descartar puntos que f
         <location filename="trackui.ui" line="473"/>
         <location filename="trackui.ui" line="476"/>
         <source>If checked, times specified here are based on this computer&apos;s current time zone.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Si se marca, las horas especificadas aquí se basan en la zona horaria actual de este ordenador.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="489"/>
         <location filename="trackui.ui" line="492"/>
         <source>If checked, times specified here are UTC.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Si se marca, las horas especificadas aquí son UTC.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="495"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">UTC</translation>
     </message>
     <message>
         <source>If checked, time specified here is based on this computer&apos;s current time zone. </source>
@@ -1780,7 +1959,7 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
     <message>
         <location filename="upgrade.cc" line="214"/>
         <source>Unexpected reply.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Respuesta inesperada.</translation>
     </message>
     <message>
         <location filename="upgrade.cc" line="218"/>
@@ -1790,7 +1969,7 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
     <message>
         <location filename="upgrade.cc" line="234"/>
         <source>Download failed: %1: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Descarga fallida: %1: %2.</translation>
     </message>
     <message>
         <location filename="upgrade.cc" line="256"/>
@@ -1827,27 +2006,27 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
     <message>
         <location filename="version_mismatch.ui" line="32"/>
         <source>GPSBabel Version Mismatch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Incompatibilidad de versiones de GPSBabel</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="38"/>
         <source>&lt;b&gt;A version mismatch has been detected.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;b&gt;Se ha detectado una incompatibilidad de versiones.&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="47"/>
         <source>GPSBabel command line version:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Versión de línea de comandos de GPSBabel:</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="81"/>
         <source>GPSBabel GUI version:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Versión de la interfaz gráfica de usuario (GUI) de GPSBabel:</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="115"/>
         <source>Never show this message again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">No mostrar este mensaje de nuevo.</translation>
     </message>
 </context>
 <context>

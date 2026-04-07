@@ -221,7 +221,12 @@ else()
   list(APPEND TRANSLATIONS gpsbabelfe_fr.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_hu.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_it.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_ja.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_pt_BR.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_pt_PT.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_zh_CN.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_zh_TW.ts)
 
   add_custom_target(gpsbabelfe_lupdate
                     COMMAND Qt6::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
