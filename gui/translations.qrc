@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="translations/gpsbabel_ar.qm">coretool/gpsbabel_ar.qm</file>
+        <file alias="translations/gpsbabel_cs.qm">coretool/gpsbabel_cs.qm</file>
         <file alias="translations/gpsbabel_de.qm">coretool/gpsbabel_de.qm</file>
         <file alias="translations/gpsbabel_es.qm">coretool/gpsbabel_es.qm</file>
         <file alias="translations/gpsbabel_fa.qm">coretool/gpsbabel_fa.qm</file>
@@ -15,6 +16,7 @@
         <file alias="translations/gpsbabel_zh_CN.qm">coretool/gpsbabel_zh_CN.qm</file>
         <file alias="translations/gpsbabel_zh_TW.qm">coretool/gpsbabel_zh_TW.qm</file>
         <file alias="translations/gpsbabelfe_ar.qm">gpsbabelfe_ar.qm</file>
+        <file alias="translations/gpsbabelfe_cs.qm">gpsbabelfe_cs.qm</file>
         <file alias="translations/gpsbabelfe_de.qm">gpsbabelfe_de.qm</file>
         <file alias="translations/gpsbabelfe_es.qm">gpsbabelfe_es.qm</file>
         <file alias="translations/gpsbabelfe_fa.qm">gpsbabelfe_fa.qm</file>

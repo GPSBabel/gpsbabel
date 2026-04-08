@@ -217,6 +217,7 @@ if(NOT Qt6LinguistTools_FOUND)
 else()
 # FIXME: translations updated and released in source directory (and under version control).
   list(APPEND TRANSLATIONS gpsbabelfe_ar.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_cs.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_es.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_fa.ts)
