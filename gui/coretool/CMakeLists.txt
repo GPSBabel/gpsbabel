@@ -34,6 +34,7 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/core_strings.h
 list(APPEND TRANSLATIONS gpsbabel_ar.ts)
 list(APPEND TRANSLATIONS gpsbabel_de.ts)
 list(APPEND TRANSLATIONS gpsbabel_es.ts)
+list(APPEND TRANSLATIONS gpsbabel_fa.ts)
 list(APPEND TRANSLATIONS gpsbabel_fr.ts)
 list(APPEND TRANSLATIONS gpsbabel_hu.ts)
 list(APPEND TRANSLATIONS gpsbabel_it.ts)
