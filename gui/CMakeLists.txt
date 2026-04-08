@@ -230,6 +230,7 @@ else()
   list(APPEND TRANSLATIONS gpsbabelfe_pt_BR.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_tr.ts)
+  list(APPEND TRANSLATIONS gpsbabelfe_uk.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_zh_CN.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_zh_TW.ts)
 
