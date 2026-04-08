@@ -7,6 +7,7 @@
         <file alias="translations/gpsbabel_hu.qm">coretool/gpsbabel_hu.qm</file>
         <file alias="translations/gpsbabel_it.qm">coretool/gpsbabel_it.qm</file>
         <file alias="translations/gpsbabel_ja.qm">coretool/gpsbabel_ja.qm</file>
+        <file alias="translations/gpsbabel_ko.qm">coretool/gpsbabel_ko.qm</file>
         <file alias="translations/gpsbabel_pt_BR.qm">coretool/gpsbabel_pt_BR.qm</file>
         <file alias="translations/gpsbabel_ru.qm">coretool/gpsbabel_ru.qm</file>
         <file alias="translations/gpsbabel_zh_CN.qm">coretool/gpsbabel_zh_CN.qm</file>
@@ -18,6 +19,7 @@
         <file alias="translations/gpsbabelfe_hu.qm">gpsbabelfe_hu.qm</file>
         <file alias="translations/gpsbabelfe_it.qm">gpsbabelfe_it.qm</file>
         <file alias="translations/gpsbabelfe_ja.qm">gpsbabelfe_ja.qm</file>
+        <file alias="translations/gpsbabelfe_ko.qm">gpsbabelfe_ko.qm</file>
         <file alias="translations/gpsbabelfe_pt_BR.qm">gpsbabelfe_pt_BR.qm</file>
         <file alias="translations/gpsbabelfe_ru.qm">gpsbabelfe_ru.qm</file>
         <file alias="translations/gpsbabelfe_zh_CN.qm">gpsbabelfe_zh_CN.qm</file>
