@@ -216,6 +216,7 @@ if(NOT Qt6LinguistTools_FOUND)
   message(WARNING "Qt6LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
 else()
 # FIXME: translations updated and released in source directory (and under version control).
+  list(APPEND TRANSLATIONS gpsbabelfe_ar.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_es.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_fr.ts)
