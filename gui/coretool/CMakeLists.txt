@@ -41,6 +41,7 @@ list(APPEND TRANSLATIONS gpsbabel_ja.ts)
 list(APPEND TRANSLATIONS gpsbabel_ko.ts)
 list(APPEND TRANSLATIONS gpsbabel_pt_BR.ts)
 list(APPEND TRANSLATIONS gpsbabel_ru.ts)
+list(APPEND TRANSLATIONS gpsbabel_tr.ts)
 list(APPEND TRANSLATIONS gpsbabel_zh_CN.ts)
 list(APPEND TRANSLATIONS gpsbabel_zh_TW.ts)
 
