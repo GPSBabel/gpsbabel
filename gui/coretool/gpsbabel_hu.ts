@@ -564,7 +564,7 @@
     <message>
         <location filename="core_strings.h" line="125"/>
         <source>Write course rather than history, default yes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kurs írása, nem előzmények, alapértelmezett igen</translation>
     </message>
     <message>
         <source>Starting seed of the internal number generator</source>
@@ -581,91 +581,91 @@
     <message>
         <location filename="core_strings.h" line="306"/>
         <source>Set location finder target location as lat,lng</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helymeghatározó célhelyének beállítása lat,lng formátumban</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="307"/>
         <source>Configure logging parameter as tmin:tmax:dmin:dmax</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Naplózás paraméterének konfigurálása tmin:tmax:dmin:dmax formátumban</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="248"/>
         <location filename="core_strings.h" line="315"/>
         <location filename="core_strings.h" line="320"/>
         <source>Seconds that GPS time tracks UTC (0: best guess)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Másodpercek, amelyeket a GPS idő UTC-t követ (0: legjobb tipp)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="35"/>
         <source>Image Offset Time (+HH:MM or -HH:MM)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kép eltolás ideje (+HH:MM vagy -HH:MM)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="163"/>
         <source>Google Takeout Location History</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Google Takeout helyszín előzmények</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="249"/>
         <location filename="core_strings.h" line="316"/>
         <location filename="core_strings.h" line="321"/>
         <source>GPS week rollover period we&apos;re in (-1: best guess)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GPS hét átfordulási periódus, amelyben vagyunk (-1: legjobb tipp)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="293"/>
         <source>codec to use for reading and writing strings (default windows-1252)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kódolás használata szövegek olvasásához és írásához (alapértelmezett windows-1252)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="304"/>
         <source>See You flight analysis data</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">See You repülés elemzési adatok</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="317"/>
         <source>SkyTraq Venus based loggers (download)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SkyTraq Venus alapú naplózók (letöltés)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="318"/>
         <source>First sector to be read from the file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Első szektor, amelyet a fájlból kell olvasni</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="319"/>
         <source>Last sector to be read from the file (-1: read till empty sector)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utolsó szektor, amelyet a fájlból kell olvasni (-1: olvasás üres szektorig)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="322"/>
         <source>SkyTraq Venus based loggers Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SkyTraq Venus alapú naplózók bináris fájlformátum</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="326"/>
         <source>Format for subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Feliratok formátuma</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="327"/>
         <source>SubRip subtitles for video mapping (.srt)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SubRip feliratok videó térképezéshez (.srt)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="336"/>
         <source>Tab delimited fields useful for OpenOffice</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tabulátorral elválasztott mezők, hasznos az OpenOffice-hoz</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="347"/>
         <source>Write name(s) of format(s) from input session(s)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Írja be a formátum(ok) nevét az input munkamenet(ek)ből</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="348"/>
         <source>Write filename(s) from input session(s)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Írja be a fájlnév(ek)ét az input munkamenet(ek)ből</translation>
     </message>
     <message>
         <source>String to separate concatenated address fields (default=&quot;, &quot;)</source>
@@ -906,187 +906,187 @@
         <location filename="core_strings.h" line="300"/>
         <location filename="core_strings.h" line="332"/>
         <source>Basename prepended to URL on output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Basename hozzáadva az URL-hez kimenetként</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="3"/>
         <source>Columbus/Visiontac V900 files (.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Columbus/Visiontac V900 fájlok (.csv)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="12"/>
         <source>Comma separated values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vesszővel elválasztott értékek</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="21"/>
         <source>Data Logger iBlue747 csv</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Adatgyűjtő iBlue747 csv</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="36"/>
         <source>Embedded Exif-GPS data (.jpg)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beágyazott Exif-GPS adatok (.jpg)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="31"/>
         <source>Set waypoint name to source filename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Útvonalnév beállítása forrásfájl nevére</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="1"/>
         <source>70mai Dash Cam</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">70mai Dash Cam</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="2"/>
         <source>offset from UTC in hours</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">UTC-tól való eltolás órákban</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="30"/>
         <source>Data Logger iBlue757 csv</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Adatgyűjtő iBlue757 csv</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="32"/>
         <source>Time-frame (in seconds)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Időkeret (másodpercekben)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="33"/>
         <source>Locate waypoint for tagging by this name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Útvonal keresése ezzel a névvel címkézéshez</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="34"/>
         <source>!OVERWRITE! the original file. Default=N</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">!FELÜLÍRÁS! az eredeti fájl. Alapértelmezett=N</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="37"/>
         <source>Source for name field in .dbf</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forrás a névmezőhöz .dbf-ben</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="38"/>
         <source>Source for URL field in .dbf</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Forrás az URL mezőhöz .dbf-ben</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="39"/>
         <source>ESRI shapefile</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ESRI alakfájl</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="41"/>
         <source>Engine Noise (ENL; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Motorzaj (ENL; alapértelmezett=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="42"/>
         <source>True Airspeed (TAS; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Igazi sebesség (TAS; alapértelmezett=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="43"/>
         <source>Total Energy Vario (VAT; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Teljes energia varió (VAT; alapértelmezett=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="44"/>
         <source>Outside Air Temperature (OAT; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Külső léghőmérséklet (OAT; alapértelmezett=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="45"/>
         <source>True Track (TRT; default=0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Igazi nyom (TRT; alapértelmezett=0)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="46"/>
         <source>Ground Speed (GSP; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Földi sebesség (GSP; alapértelmezett=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="47"/>
         <source>Fix Accuracy (FXA; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rögzítés pontossága (FXA; alapértelmezett=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="48"/>
         <source># Of Sats (SIU; default=0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"># Szerelvények (SIU; alapértelmezett=0)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="49"/>
         <source>Z Acceleration (ACZ; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Z Gyorsulás (ACZ; alapértelmezett=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="50"/>
         <source>G Force? (GFO; default=0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">G Erő? (GFO; alapértelmezett=0)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="51"/>
         <source>FAI/IGC Flight Recorder Data Format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">FAI/IGC Repülőmérő Adatformátum</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="52"/>
         <source>Read all points even if latitude or longitude is missing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Olvasd be az összes pontot, még ha a szélesség vagy hosszúság hiányzik is</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="54"/>
         <source>Flexible and Interoperable Data Transfer (FIT) Activity file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rugalmas és Interoperábilis Adatátvitel (FIT) Aktivitásfájl</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="63"/>
         <source>Garmin 301 Custom position and heartrate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin 301 Egyéni pozíció és szívverés</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="72"/>
         <source>Garmin G1000 datalog input filter file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin G1000 adatnapló beviteli szűrőfájl</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="79"/>
         <source>Garmin MapSource - gdb</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin MapSource - gdb</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="88"/>
         <source>Garmin MapSource - txt (tab delimited)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin MapSource - txt (tabulátorral elválasztott)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="97"/>
         <source>Garmin POI database</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin POI adatbázis</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="110"/>
         <source>codec to use for writing strings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">kódoló használata íráshoz</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="111"/>
         <source>language code to use for reading dual language files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">nyelvi kód használata két nyelvű fájlok olvasásához</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="112"/>
         <source>Garmin Points of Interest (.gpi)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin Érdekes Pontok (.gpi)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="118"/>
         <source>Erase existing courses when writing new ones</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Törölje a meglévő útvonalakat, amikor újakat ír</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="122"/>
@@ -1096,52 +1096,52 @@
     <message>
         <location filename="core_strings.h" line="123"/>
         <source>override codec to use for device</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">felülírja a kódolót a eszköz használatához</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="124"/>
         <source>Garmin serial/USB protocol</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin soros/USB protokoll</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="126"/>
         <source>Sport: Biking (deflt), Running, Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sport: Ciklizés (alapértelmezett), Futás, Egyéb</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="127"/>
         <source>Write global extension namespace declarations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Írja a globális kiterjesztési névterek deklarációit</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="128"/>
         <source>Garmin Training Center (.tcx/.crs/.hst/.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin Edzés Központ (.tcx/.crs/.hst/.xml)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="130"/>
         <source>Geocaching.com .loc</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geocaching.com .loc</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="131"/>
         <source>Compact Output. Default is off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kompakt kimenet. Alapértelmezésben kikapcsolva</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="132"/>
         <source>Property key to use for name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tulajdonság kulcs használata névhez</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="133"/>
         <source>Property key to use for description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tulajdonság kulcs használata leíráshoz</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="137"/>
         <source>GlobalSat DG-100/BT-335 Download</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GlobalSat DG-100/BT-335 letöltés</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="136"/>
@@ -1149,148 +1149,148 @@
         <location filename="core_strings.h" line="213"/>
         <location filename="core_strings.h" line="257"/>
         <source>Only erase device data, do not download anything</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Csak a készülék adatait törölje, ne töltsön le semmit</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="162"/>
         <source>Google Earth (Keyhole) Markup Language</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Google Föld (Keyhole) jelölésnyelv</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="173"/>
         <source>GPS TrackMaker</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GPS TrackMaker</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="182"/>
         <source>GPSBabel arc filter file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GPSBabel arc szűrőfájl</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="191"/>
         <source>GpsDrive Format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GpsDrive formátum</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="200"/>
         <source>GpsDrive Format for Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GpsDrive formátum nyomokhoz</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="209"/>
         <source>GPX XML</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GPX XML</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="206"/>
         <source>Add info (depth) as Humminbird extension</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Információ (mélység) hozzáadása Humminbird kiterjesztésként</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="207"/>
         <source>Add info (depth) as Garmin extension</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Információ (mélység) hozzáadása Garmin kiterjesztésként</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="211"/>
         <source>Holux M-241 (MTK based) Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Holux M-241 (MTK alapú) bináris fájlformátum</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="217"/>
         <source>Holux M-241 (MTK based) download</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Holux M-241 (MTK alapú) letöltés</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="214"/>
         <location filename="core_strings.h" line="258"/>
         <source>Enable logging after download</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Naplózás engedélyezése letöltés után</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="223"/>
         <source>HTML Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HTML kimenet</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="224"/>
         <source>Humminbird tracks (.ht)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humminbird nyomok (.ht)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="225"/>
         <source>Humminbird waypoints and routes (.hwr)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Humminbird útmutatók és útvonalak (.hwr)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="234"/>
         <source>Lowrance USR</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lowrance USR</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="230"/>
         <source>(USR output) Write version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(USR kimenet) Írás verzió</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="255"/>
         <source>MTK Logger (iBlue 747,...) Binary File Format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MTK Logger (iBlue 747,...) Bináris fájlformátum</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="261"/>
         <source>MTK Logger (iBlue 747,Qstarz BT-1000,...) download</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MTK Logger (iBlue 747,Qstarz BT-1000,...) letöltés</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="263"/>
         <source>National Geographic Topo .tpg (waypoints)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">National Geographic Topo .tpg (pontok)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="264"/>
         <source>National Geographic Topo 2.x .tpo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">National Geographic Topo 2.x .tpo</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="265"/>
         <source>National Geographic Topo 3.x/4.x .tpo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">National Geographic Topo 3.x/4.x .tpo</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="145"/>
         <source>Time zone ID</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Időzóna azonosító</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="53"/>
         <source>Attempt to recovery data from corrupt file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Próbálkozás adatok helyreállításával sérült fájlból</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="77"/>
         <source>Don&apos;t create waypoints for non-user points</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ne hozzon létre útvonalpontokat nem felhasználói pontokhoz</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="134"/>
         <source>GeoJson</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GeoJson</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="140"/>
         <source>GlobalSat DG-200 Download</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GlobalSat DG-200 letöltés</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="141"/>
         <source>GlobalSat DG-388 Binary File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GlobalSat DG-388 Bináris fájl</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="142"/>
         <source>list tracks</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nyomok listázása</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="143"/>
@@ -1298,234 +1298,234 @@
         <location filename="core_strings.h" line="236"/>
         <location filename="core_strings.h" line="313"/>
         <source>Dump raw data to this file</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rohamadatok kiírása ebbe a fájlba</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="146"/>
         <source>GlobalSat GH625XT GPS training watch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GlobalSat GH625XT GPS edzésóra</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="154"/>
         <source>Write KML track (default = 0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">KML nyom írása (alapértelmezett = 0)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="157"/>
         <source>Units used when writing comments (&apos;s&apos;tatute, &apos;m&apos;etric,&apos; &apos;n&apos;autical, &apos;a&apos;viation)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egységek használata megjegyzések írásakor (&apos;s&apos; statúta, &apos;m&apos; méter, &apos;n&apos; nautikus, &apos;a&apos; repülési)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="160"/>
         <source>Rotate colors for tracks and routes (default automatic)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Színek forgatása nyomokhoz és útvonalakhoz (alapértelmezett automatikus)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="161"/>
         <source>Precision of coordinates, number of decimals</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Koordináták pontossága, tizedesjegyek száma</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="172"/>
         <source>GPS Tracking Key Pro text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GPS követési kulcs Pro szöveg</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="208"/>
         <source>Precision of elevations, number of decimals</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Magasság pontossága, tizedesjegyek száma</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="216"/>
         <location filename="core_strings.h" line="260"/>
         <source>Size of blocks in KB to request from device</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Blokkméret KB-ban a készüléktől kérve</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="226"/>
         <source>(USR input) Ignore event marker icons on read</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(USR bemenet) Eseményjelző ikonok figyelmen kívül hagyása olvasáskor</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="227"/>
         <source>(USR output) Treat waypoints as icons on write</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(USR kimenet) Útvonalpontok kezelése ikonként írásnál</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="228"/>
         <source>(USR output) Merge into one segmented trail</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(USR kimenet) Összevonás egy szegmensre</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="229"/>
         <source>(USR input) Break segments into separate trails</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(USR bemenet) Szegmensek felbontása külön útvonalakra</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="231"/>
         <source>(USR output) Output file title string</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(USR kimenet) Kimenet fájl cím szövege</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="232"/>
         <source>(USR output) Device serial number</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(USR kimenet) Készülék sorozatszáma</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="233"/>
         <source>(USR output) Output file content description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(USR kimenet) Kimenet fájl tartalom leírása</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="238"/>
         <location filename="core_strings.h" line="311"/>
         <source>First sector to be read from the device</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Első szektor, amelyet a készüléktől kell olvasni</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="239"/>
         <location filename="core_strings.h" line="309"/>
         <source>Baud rate used to init device (0=autodetect)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Baud sebesség a készülék inicializálásához (0=automatikus észlelés)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="240"/>
         <location filename="core_strings.h" line="312"/>
         <source>Last sector to be read from the device (-1: smart read everything)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utolsó szektor, amelyet a készüléktől kell olvasni (-1: intelligens olvasás minden adatot)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="241"/>
         <location filename="core_strings.h" line="314"/>
         <source>Disable output (useful with erase)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kimenet letiltása (hasznos az törléssel együtt)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="242"/>
         <location filename="core_strings.h" line="310"/>
         <source>Number of sectors to read at once (0=use single sector mode)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Egyszerre olvasott szektorok száma (0=egyszerű szektor mód használata)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="243"/>
         <source>POI for Home Symbol as lat:lng[:alt]</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">POI otthoni szimbólumhoz lat:lng[:alt] formátumban</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="244"/>
         <source>POI for Car Symbol as lat:lng[:alt]</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">POI autó szimbólumhoz lat:lng[:alt] formátumban</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="245"/>
         <source>POI for Boat Symbol as lat:lng[:alt]</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">POI hajó szimbólumhoz lat:lng[:alt] formátumban</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="246"/>
         <source>POI for Heart Symbol as lat:lng[:alt]</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">POI szív szimbólumhoz lat:lng[:alt] formátumban</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="247"/>
         <source>POI for Bar Symbol as lat:lng[:alt]</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">POI pult szimbólumhoz lat:lng[:alt] formátumban</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="250"/>
         <source>MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">MiniHomer, egy skyTraq Venus 6 alapú naplózó (trackek, pontok letöltése és POI beállítása)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="251"/>
         <source>Garmin Mobile XT ([ATRK]/STRK)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Garmin Mobile XT ([ATRK]/STRK)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="252"/>
         <source>Track name processing option ([0]-nrm/1-ign)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Track név feldolgozási opció ([0]-nrm/1-ign)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="253"/>
         <source>Mobile Garmin XT Track files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mobile Garmin XT Track fájlok</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="277"/>
         <source>Accept position fixes in gpgga marked invalid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Elfogadja a gpgga által érvénytelennek jelölt pozíció-javításokat</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="278"/>
         <source>NMEA 0183 sentences</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">NMEA 0183 mondatok</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="282"/>
         <source>OpenStreetMap data files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OpenStreetMap adatfájlok</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="281"/>
         <source>Use this value as custom created_by value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ezt az értéket használja egyéni created_by értékként</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="294"/>
         <source>OziExplorer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OziExplorer</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="291"/>
         <source>Unit used in altitude values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Magasság értékekhez használt egység</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="292"/>
         <source>Unit used in proximity values</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Közelség értékekhez használt egység</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="235"/>
         <location filename="core_strings.h" line="308"/>
         <source>Baud rate used for download</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Letöltéshez használt Baud sebesség</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="295"/>
         <source>Qstarz BL-1000</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Qstarz BL-1000</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="323"/>
         <source>Video position for which exact GPS time is known (hhmmss[.sss], default is 00:00:00,000)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Videó pozíció, amelyhez pontos GPS idő ismert (hhmmss[.sss], alapértelmezett 00:00:00,000)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="324"/>
         <source>GPS time at position video_time (hhmmss[.sss], default is first timestamp of track)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GPS idő a video_time pozícióban (hhmmss[.sss], alapértelmezett a track első időbélyege)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="325"/>
         <source>GPS date at position video_time (yyyymmdd, default is first timestamp of track)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">GPS dátum a video_time pozícióban (yyyymmdd, alapértelmezett a track első időbélyege)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="343"/>
         <source>Textual Output</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Szöveges kimenet</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="349"/>
         <source>Universal csv with field structure in first line</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Univerzális csv, amelyben az első sorban a mezőstruktúra szerepel</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="351"/>
         <source>Vcard Output (for iPod)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vcard kimenet (iPod-hoz)</translation>
     </message>
 </context>
 </TS>

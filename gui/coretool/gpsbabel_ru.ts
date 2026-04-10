@@ -415,12 +415,12 @@
     <message>
         <location filename="core_strings.h" line="1"/>
         <source>70mai Dash Cam</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">70mai Dash Cam</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="2"/>
         <source>offset from UTC in hours</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">смещение от UTC в часах</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="35"/>
@@ -430,52 +430,52 @@
     <message>
         <location filename="core_strings.h" line="41"/>
         <source>Engine Noise (ENL; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Шум двигателя (ENL; значение по умолчанию=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="42"/>
         <source>True Airspeed (TAS; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Истинная скорость (TAS; значение по умолчанию=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="43"/>
         <source>Total Energy Vario (VAT; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вариометр полной энергии (VAT; значение по умолчанию=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="44"/>
         <source>Outside Air Temperature (OAT; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Внешняя температура воздуха (OAT; значение по умолчанию=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="45"/>
         <source>True Track (TRT; default=0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Истинный курс (TRT; значение по умолчанию=0)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="46"/>
         <source>Ground Speed (GSP; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Скорость по земле (GSP; значение по умолчанию=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="47"/>
         <source>Fix Accuracy (FXA; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Точность фиксации (FXA; значение по умолчанию=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="48"/>
         <source># Of Sats (SIU; default=0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Количество спутников (SIU; значение по умолчанию=0)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="49"/>
         <source>Z Acceleration (ACZ; default=1)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ускорение по оси Z (ACZ; значение по умолчанию=1)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="50"/>
         <source>G Force? (GFO; default=0)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сила G? (GFO; значение по умолчанию=0)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="88"/>
@@ -798,27 +798,27 @@
     <message>
         <location filename="core_strings.h" line="126"/>
         <source>Sport: Biking (deflt), Running, Other</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Спорт: Велосипед (по умолчанию), Бег, Другое</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="127"/>
         <source>Write global extension namespace declarations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Записать объявления глобального пространства имен расширений</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="132"/>
         <source>Property key to use for name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ключ свойства для использования в имени</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="133"/>
         <source>Property key to use for description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ключ свойства для использования в описании</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="141"/>
         <source>GlobalSat DG-388 Binary File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Файл бинарного формата GlobalSat DG-388</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="163"/>

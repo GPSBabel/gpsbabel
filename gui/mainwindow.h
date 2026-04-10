@@ -30,6 +30,7 @@
 #include <QLabel>           // for QLabel
 #include <QLineEdit>        // for QLineEdit
 #include <QList>            // for QList
+#include <QLocale>          // for QLocale
 #include "gpx.h"
 #include <QMainWindow>
 #include <QTranslator>
@@ -65,12 +66,11 @@ private:
   QTranslator     translator_;     // translation for the GUI.
   QTranslator     translatorCore_; // translation for the core application.
   QTranslator     translatorQt_;   // translations for Qt.
-  QString         currLang_;       // currently loaded language.
 
 private:
   void loadFormats();
-  void loadLanguage(const QString& rLanguage);
-  void switchTranslator(QTranslator&, const QString&);
+  void loadLanguage(const QLocale& rLanguage);
+  void switchTranslator(QTranslator&, const QString&, const QLocale&);
   QString filterForFormat(int idx);
   QString ensureExtensionPresent(const QString& nanme, int idx);
   QString findBabelVersion();

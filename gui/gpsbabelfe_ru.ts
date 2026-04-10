@@ -9,7 +9,6 @@
         <translation>О программе GPSBabel</translation>
     </message>
     <message>
-        <location filename="aboutui.ui" line="80"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -54,7 +53,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
-        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -168,7 +167,7 @@ p, li { white-space: pre-wrap; }
         <location filename="advui.ui" line="30"/>
         <location filename="advui.ui" line="43"/>
         <source>Enable this is the File Menu, Preferences Item, Privacy tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включить это в меню Файл, элемент настройки, вкладка Конфиденциальность.</translation>
     </message>
     <message>
         <location filename="advui.ui" line="33"/>
@@ -178,17 +177,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="advui.ui" line="46"/>
         <source>Preview in Leaflet Maps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Предварительный просмотр в Leaflet Maps</translation>
     </message>
     <message>
         <location filename="advui.ui" line="56"/>
         <source>Disable map preview.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отключить предварительный просмотр карты.</translation>
     </message>
     <message>
         <location filename="advui.ui" line="59"/>
         <source>Disable map preview</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отключить предварительный просмотр карты</translation>
     </message>
     <message>
         <location filename="advui.ui" line="71"/>
@@ -205,52 +204,52 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="advui.ui" line="81"/>
         <source>0</source>
-        <translation></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="advui.ui" line="86"/>
         <source>1</source>
-        <translation></translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="advui.ui" line="91"/>
         <source>2</source>
-        <translation></translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="advui.ui" line="96"/>
         <source>3</source>
-        <translation></translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="advui.ui" line="101"/>
         <source>4</source>
-        <translation></translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="advui.ui" line="106"/>
         <source>5</source>
-        <translation></translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="advui.ui" line="111"/>
         <source>6</source>
-        <translation></translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="advui.ui" line="116"/>
         <source>7</source>
-        <translation></translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="advui.ui" line="121"/>
         <source>8</source>
-        <translation></translation>
+        <translation>8</translation>
     </message>
     <message>
         <location filename="advui.ui" line="126"/>
         <source>9</source>
-        <translation></translation>
+        <translation>9</translation>
     </message>
     <message>
         <location filename="advui.ui" line="134"/>
@@ -287,7 +286,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="donate.ui" line="69"/>
         <source>&lt;p&gt;Of course, if you&apos;ve already contributed to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;p&gt;Конечно, если вы уже внесли вклад в проект или просто не можете помочь проекту, пожалуйста, отметьте флажок ниже, чтобы больше не видеть это сообщение.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="donate.ui" line="79"/>
@@ -529,17 +528,17 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="leafletmap.cc" line="142"/>
         <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ошибка открытия файла &quot;leafletbase.html&quot;. Проверьте установку</translation>
     </message>
     <message>
         <location filename="leafletmap.cc" line="146"/>
         <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отсутствует файл &quot;leafletbase.html&quot;. Проверьте установку</translation>
     </message>
     <message>
         <location filename="leafletmap.cc" line="164"/>
         <source>Failed to load Leaflet maps base page</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удалось загрузить базовую страницу карт Leaflet</translation>
     </message>
 </context>
 <context>
@@ -912,7 +911,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="mainwinui.ui" line="723"/>
         <source>Enable this is the File Menu, Preferences Item, Privacy tab.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включите это в меню Файл, элементе Настройки, вкладка Конфиденциальность.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="728"/>
@@ -929,17 +928,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="obsolete">по умолчанию</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="535"/>
+        <location filename="mainwindow.cc" line="532"/>
         <source>Select one or more input files</source>
         <translation>Выберите один или несколько файлов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="563"/>
+        <location filename="mainwindow.cc" line="560"/>
         <source>Output File Name</source>
         <translation>Имя выходного файла</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="627"/>
+        <location filename="mainwindow.cc" line="624"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -948,7 +947,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="638"/>
+        <location filename="mainwindow.cc" line="635"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -957,7 +956,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="656"/>
         <source>Input and output formats do not support %1</source>
         <translation>Входной и выходной форматы не поддерживают %1</translation>
     </message>
@@ -970,75 +969,75 @@ This program cannot continue.</source>
         <translation type="vanished">Входной формат поддерживает %1; выходной формат не поддерживаетt %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation>Входной формат не поддерживает %1; выходной формат поддерживает %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation>Входной формат поддерживает %1; выходной формат не поддерживаетt %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="668"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Both input and output formats support %1</source>
         <translation>Входной и выходной формат поддерживают %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="689"/>
+        <location filename="mainwindow.cc" line="686"/>
         <source>waypoints</source>
         <translation>маршрутные точки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="690"/>
+        <location filename="mainwindow.cc" line="687"/>
         <source>tracks</source>
         <translation>треки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="691"/>
+        <location filename="mainwindow.cc" line="688"/>
         <source>routes</source>
         <translation>маршруты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="786"/>
+        <location filename="mainwindow.cc" line="783"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Нет входных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="792"/>
-        <location filename="mainwindow.cc" line="811"/>
+        <location filename="mainwindow.cc" line="789"/>
+        <location filename="mainwindow.cc" line="808"/>
         <source>Options for %1</source>
         <translation>Параметры %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="805"/>
+        <location filename="mainwindow.cc" line="802"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Нет выходных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="825"/>
+        <location filename="mainwindow.cc" line="822"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Не выбрано преобразование маршрутных точек/маршрутов/треков</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="844"/>
+        <location filename="mainwindow.cc" line="841"/>
         <source>No input file specified</source>
         <translation>Не выбран входной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="853"/>
+        <location filename="mainwindow.cc" line="850"/>
         <source>No valid output specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="858"/>
+        <location filename="mainwindow.cc" line="855"/>
         <source>No output file specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="977"/>
+        <location filename="mainwindow.cc" line="974"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удалось открыть временный файл &quot;%1&quot; для предварительного просмотра карты. Ошибка: &quot;%2&quot;. Предварительный просмотр карты не будет показан.</translation>
     </message>
     <message>
         <source>Process &quot;%1&quot; did not start</source>
@@ -1049,39 +1048,39 @@ This program cannot continue.</source>
         <translation type="vanished">Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="994"/>
+        <location filename="mainwindow.cc" line="991"/>
         <source>Translation successful</source>
         <translation>Конвертация выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1006"/>
+        <location filename="mainwindow.cc" line="1003"/>
         <source>Error preparing map: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ошибка подготовки карты: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1041"/>
+        <location filename="mainwindow.cc" line="1038"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Ошибка запуска gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1166"/>
+        <location filename="mainwindow.cc" line="1163"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Вы действительно желаете сбросить все параметры формата в значения по умолчанию?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1196"/>
+        <location filename="mainwindow.cc" line="1193"/>
         <source>About %1</source>
         <translation>О %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1244"/>
+        <location filename="mainwindow.cc" line="1241"/>
         <source>One or more data filters are active</source>
         <translation>Один или более фильтров данных активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1246"/>
+        <location filename="mainwindow.cc" line="1243"/>
         <source>No data filters are active</source>
         <translation>Фильтры данных не активны</translation>
     </message>
@@ -1289,53 +1288,53 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="preferences.ui" line="57"/>
         <source>Privacy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Конфиденциальность</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="63"/>
         <source>&lt;html&gt;The check transmits information about your installation and computer environment, such as the Installation ID, GPSBabel GUI and CLI versions, CPU architecture, operating system name and version, and language, to gpsbabel.org. This never includes any data from user files or devices.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;Проверка передает информацию об установке и компьютерной среде, например, идентификатор установки, версии GUI и CLI GPSBabel, архитектуру процессора, имя и версию операционной системы, а также язык на gpsbabel.org. Это никогда не включает данные из файлов или устройств пользователя.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="73"/>
         <source>&lt;html&gt;Anonymous usage data is sent to gpsbabel.org. This helps the developers at gpsbabel.org understand what features of the program are being used. This never includes any data from user files or devices.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;Анонимные данные использования отправляются на gpsbabel.org. Это помогает разработчикам gpsbabel.org понять, какие функции программы используются. Это никогда не включает данные из файлов или устройств пользователя.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="83"/>
         <source>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">When selected, this menu item sends the same information as </translation>
     </message>
     <message>
         <location filename="preferences.ui" line="86"/>
         <source>Enable upgrade check menu item.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включить пункт меню проверки обновлений.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="93"/>
         <source>&lt;html&gt;When selected, this feature uses the Google Maps API(s) per &lt;a href=&quot;http://www.google.com/intl/en/policies/terms&quot;&gt;Google’s Terms of Service&lt;/a&gt; and the &lt;a href=&quot;http://www.google.com/policies/privacy&quot;&gt;Google Privacy Policy&lt;/a&gt;.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;При выборе эта функция использует API Google Maps в соответствии с &lt;a href=&quot;http://www.google.com/intl/en/policies/terms&quot;&gt;Условиями обслуживания Google&lt;/a&gt; и &lt;a href=&quot;http://www.google.com/policies/privacy&quot;&gt;Политикой конфиденциальности Google&lt;/a&gt;.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="96"/>
         <source>Enable Google map preview feature.</source>
         <oldsource>Enable map preview feature.</oldsource>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включить предварительный просмотр карты Google.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="106"/>
         <source>&lt;html&gt;When selected, this feature uses the Leaflet Maps API(s) per &lt;a href=&quot;https://leafletjs.com/&quot;&gt;Leaflet’s Terms of Service&lt;/a&gt; and the &lt;a href=&quot;https://leafletjs.com/privacy.html&quot;&gt;Leaflet Privacy Policy&lt;/a&gt;.&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;При выборе эта функция использует API Leaflet Maps в соответствии с &lt;a href=&quot;https://leafletjs.com/&quot;&gt;Условиями обслуживания Leaflet&lt;/a&gt; и &lt;a href=&quot;https://leafletjs.com/privacy.html&quot;&gt;Политикой конфиденциальности Leaflet&lt;/a&gt;.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="109"/>
         <source>Enable Leaflet map preview feature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включить предварительный просмотр карты Leaflet.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="119"/>
         <source>Disable map preview feature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отключить предварительный просмотр карты.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="143"/>
@@ -1360,27 +1359,27 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="preferences.cc" line="73"/>
         <source>This version never checks for a newer version on start.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эта версия никогда не проверяет наличие новой версии при запуске.</translation>
     </message>
     <message>
         <location filename="preferences.cc" line="77"/>
         <source>This version never reports usage data.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эта версия никогда не отправляет данные об использовании.</translation>
     </message>
     <message>
         <location filename="preferences.cc" line="81"/>
         <source>This version does not include the ability to check for an upgrade.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эта версия не включает возможность проверки обновлений.</translation>
     </message>
     <message>
         <location filename="preferences.cc" line="88"/>
         <source>The version does not include the map preview feature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эта версия не включает функцию предварительного просмотра карт.</translation>
     </message>
     <message>
         <location filename="preferences.cc" line="96"/>
         <source>The version does not include the Leaflet map preview feature.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Эта версия не включает функцию предварительного просмотра карт Leaflet.</translation>
     </message>
 </context>
 <context>
@@ -1827,22 +1826,22 @@ This option puts all track points from all tracks into a single track and sorts 
     <message>
         <location filename="trackui.ui" line="405"/>
         <source>pps</source>
-        <translation></translation>
+        <translation>pps</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="410"/>
         <source>dgps</source>
-        <translation></translation>
+        <translation>dgps</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="415"/>
         <source>3d</source>
-        <translation></translation>
+        <translation>3d</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="420"/>
         <source>2d</source>
-        <translation></translation>
+        <translation>2d</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
@@ -1914,7 +1913,7 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
         <location filename="upgrade.cc" line="217"/>
         <location filename="upgrade.cc" line="233"/>
         <source>HTTP</source>
-        <translation></translation>
+        <translation>HTTP</translation>
     </message>
     <message>
         <location filename="upgrade.cc" line="214"/>
