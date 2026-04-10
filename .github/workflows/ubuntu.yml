@@ -115,10 +115,17 @@ jobs:
       with:
         fetch-depth: 0
         fetch-tags: true
-
+    - name: detect architecture
+      id: detect-arch
+      shell: bash
+      env:
+        ARCHES: '{"X86": "i386", "X64": "amd64", "ARM": "armhf", "ARM64": "arm64"}'
+      run: echo "architecture=${{ fromJSON(env.ARCHES)[runner.arch] }}" >> $GITHUB_OUTPUT
     - name: Build
-      uses: snapcore/action-build@v1
+      uses: canonical/actions/build-snap@bd56f0f0934af9edbbd49378645727d7ef7a4571 # release @ 2025.06.05
       id: build-snap
+      with:
+        architecture: ${{ steps.detect-arch.outputs.architecture }}
 
     # Make sure the snap is installable
     - name: Test
