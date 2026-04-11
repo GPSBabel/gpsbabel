@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=GPSBabel
+Comment=Qt GUI interface for GPSBabel
+GenericName=GPSBabel
+Icon=${SNAP}/meta/gui/gpsbabel.png
+Exec=gpsbabel.gpsbabelfe
+Terminal=false
+Categories=Geography;Education;Utility;
