@@ -10,7 +10,7 @@ title: GPSBabel
 source-code: https://github.com/GPSBabel/gpsbabel.git
 website: https://www.gpsbabel.org
 
-grade: devel # must be 'stable' to release into candidate/stable channels
+grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
@@ -42,9 +42,6 @@ apps:
     command: usr/bin/gpsbabelfe
     environment:
 #      QT_DEBUG_PLUGINS: 1
-#     bug https://forum.snapcraft.io/t/libpxbackend-1-0-so-cannot-open-shared-object-file-no-such-file-or-directory/44263
-#     error while loading shared libraries: libpxbackend-1.0.so: cannot open shared object file: No such file or directory
-      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy
 
 plugs:
 # avoid FATAL:credentials.cc(122)] Check failed: . : Permission denied (13) with map preview
