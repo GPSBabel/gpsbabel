@@ -42,6 +42,13 @@ apps:
     command: usr/bin/gpsbabelfe
     environment:
 #      QT_DEBUG_PLUGINS: 1
+#     bug https://forum.snapcraft.io/t/libpxbackend-1-0-so-cannot-open-shared-object-file-no-such-file-or-directory/44263
+#     error while loading shared libraries: libpxbackend-1.0.so: cannot open shared object file: No such file or directory
+#     This error only occurs when starting gpsbabel.gpsbabelfe when ~/snap/gpsbabel doesn't exist.
+#     Even though https://github.com/canonical/snapcraft-desktop-integration/commit/d966bd8e0648bb1bb9140a282adbe2a435458a73
+#     adds this same directory to the end of the path somehow that isn't sufficient but this is (where it will be duplicated
+#     earlier in the path.
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy
 
 plugs:
 # avoid FATAL:credentials.cc(122)] Check failed: . : Permission denied (13) with map preview
