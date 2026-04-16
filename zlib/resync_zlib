@@ -10,8 +10,8 @@ git checkout -- zlib
 
 mv zlib zlib.old
 
-tar -xzvf ../../Downloads/zlib-1.3.1.tar.gz
-mv zlib-1.3.1 zlib
+tar -xzvf ../../Downloads/zlib-1.3.2.tar.gz
+mv zlib-1.3.2 zlib
 cd zlib
 
 mv doc/algorithm.txt .
@@ -42,22 +42,12 @@ rm -f zlib.3.pdf
 rm -f zlib.map
 rm -f zlib.pc.cmakein
 rm -f zlib.pc.in
-rm -fr contrib/ada
-rm -fr contrib/blast
-rm -fr contrib/delphi
-rm -fr contrib/dotzlib
-rm -fr contrib/gcc_gvmat64
-rm -fr contrib/infback9
-rm -fr contrib/iostream
-rm -fr contrib/iostream2
-rm -fr contrib/iostream3
-rm -fr contrib/nuget
-rm -fr contrib/pascal
-rm -fr contrib/puff
-rm -fr contrib/README.contrib
-rm -fr contrib/testzlib
-rm -fr contrib/untgz
-rm -fr contrib/vstudio
+rm -fr contrib
+rm -f .cmake-format.yaml
+rm -f BUILD.bazel
+rm -f MODULE.bazel
+rm -f README-cmake.md
+rm -f zlibConfig.cmake.in
 
 # copy our unique files
 cp -p ../zlib.old/README.gpsbabel .
