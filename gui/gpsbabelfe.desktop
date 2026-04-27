@@ -3,7 +3,6 @@ Type=Application
 Name=GPSBabel
 Comment=Qt GUI interface for GPSBabel
 GenericName=GPSBabel
-# a suitable icon is in the repostiory at gui/images/gpsbabelfe.png
 Icon=gpsbabelfe
 Exec=gpsbabelfe
 Terminal=false

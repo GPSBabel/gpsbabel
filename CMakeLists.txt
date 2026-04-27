@@ -6,6 +6,9 @@ endif()
 
 include(CMakeDependentOption)
 include(CheckIncludeFile)
+if(UNIX AND NOT APPLE)
+  include(GNUInstallDirs)
+endif()
 
 include(gbversion.cmake)
 project(gpsbabel LANGUAGES C CXX VERSION ${GB.VERSION})
@@ -493,4 +496,6 @@ if(UNIX AND NOT APPLE)
                     VERBATIM
                     USES_TERMINAL)
 endif()
-install(TARGETS gpsbabel DESTINATION ${CMAKE_INSTALL_BINDIR})
+if(UNIX AND NOT APPLE)
+  install(TARGETS gpsbabel DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
