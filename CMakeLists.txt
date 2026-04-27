@@ -493,3 +493,4 @@ if(UNIX AND NOT APPLE)
                     VERBATIM
                     USES_TERMINAL)
 endif()
+install(TARGETS gpsbabel DESTINATION ${CMAKE_INSTALL_BINDIR})
