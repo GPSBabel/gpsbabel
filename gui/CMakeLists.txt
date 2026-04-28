@@ -333,7 +333,9 @@ if(UNIX AND NOT APPLE)
   if (((GPSBABEL_GOOGLE_MAPPREVIEW AND GPSBABEL_EMBED_MAP) OR NOT GPSBABEL_GOOGLE_MAPPREVIEW) AND GPSBABEL_EMBED_TRANSLATIONS)
     set(_GPSBABEL_INSTALL ON PARENT_SCOPE)
     install(TARGETS gpsbabelfe DESTINATION ${CMAKE_INSTALL_BINDIR})
+    # you probably don't need to run update-desktop-database on ${CMAKE_INSTALL_DATADIR}/applications as our desktop file doesn't have MimeTypes.
     install(FILES gpsbabelfe.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    # you may need to run gtk-update-icon-cache on ${CMAKE_INSTALL_DATADIR}/icons/hicolor, possibly with -t or equivalently with --ignore-theme-index.
     foreach(resolution 16 22 24 32 48 64 128 256)
       install(FILES "images/appicon-${resolution}x${resolution}.png" DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/${resolution}x${resolution}/apps" RENAME "gpsbabelfe.png")
     endforeach()
