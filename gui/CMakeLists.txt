@@ -181,14 +181,18 @@ if(GPSBABEL_LEAFLET_MAPPREVIEW)
 endif()
 
 if(APPLE)
-  set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
-  set(ICON_FILE images/${MACOSX_BUNDLE_ICON_FILE})
+  set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
+  set(ICON_FILE images/macosx/${MACOSX_BUNDLE_ICON_FILE})
   set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+  
+  set(CAR_FILE images/macosx/Assets.car)
+  set_source_files_properties(${CAR_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-  target_sources(gpsbabelfe PRIVATE ${SOURCES} ${HEADERS} ${ICON_FILE} ${RESOURCES})
+  target_sources(gpsbabelfe PRIVATE ${SOURCES} ${HEADERS} ${ICON_FILE} ${CAR_FILE} ${RESOURCES})
 
   # Info.plist has not been debugged with the cmake flow, it's a bit different than with the qmake flow.
   set_target_properties(gpsbabelfe PROPERTIES
+    MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
     MACOSX_BUNDLE_BUNDLE_NAME GPSBabel
     MACOSX_BUNDLE_BUNDLE_VERSION ${GB.BUILD}
     MACOSX_BUNDLE_COPYRIGHT "© 2002-${GB.COPYRIGHT_YEAR} Robert Lipe"

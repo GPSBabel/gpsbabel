@@ -1,0 +1,33 @@
+{
+  "fill" : {
+    "solid" : "extended-gray:0.75000,1.00000"
+  },
+  "groups" : [
+    {
+      "blend-mode" : "normal",
+      "layers" : [
+        {
+          "image-name" : "badge.svg",
+          "name" : "badge"
+        },
+        {
+          "image-name" : "tower.svg",
+          "name" : "tower"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : [
+      "macOS"
+    ]
+  }
+}
