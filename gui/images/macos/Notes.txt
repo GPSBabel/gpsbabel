@@ -1,0 +1,4 @@
+appicon_master.svg change page to 1024x1024, scale by 200%, save badge and tower as plain svg separately.
+add badge and tower to new icon composer document.  select solid background color.
+run make_car_file.sh to translate icon composer .icon output to Assets.car and AppIcon.icns
+
