@@ -314,6 +314,7 @@ private:
   OptionBool opt_notes;
   OptionBool opt_hide_bitmap;
   OptionBool opt_descr;
+  OptionBool opt_comment;
   OptionString opt_bitmap;
   OptionBool opt_unique;
   OptionBool opt_alerts;
@@ -345,6 +346,10 @@ private:
     },
     {
       "descr", &opt_descr, "Write description to address field",
+      nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "comment", &opt_comment, "Write description/notes to the comment record instead of the address field (multi-line on some Garmin devices)",
       nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
     },
     {

@@ -30,6 +30,14 @@
    At this time we don't support special features as "Tour-Guide" or links
    to sounds and pictures.
 </para>
+<para>
+   By default the waypoint description/notes are written to the address field.
+   The <emphasis>comment</emphasis> option instead writes them to the GPI
+   comment record (the same record Garmin's POI Loader produces), which Garmin
+   handheld devices such as the GPSMAP&#xA0;276CX render as the multi-line POI
+   comment on the detail page. When <emphasis>comment</emphasis> is given the
+   text is written only to that record, so it is not displayed twice.
+</para>
 <important>
 <para>
    Creation timestamp issue: See the option <link linkend="fmt_garmin_gpi">sleep</link> !!!

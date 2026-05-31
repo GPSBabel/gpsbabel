@@ -31,9 +31,16 @@ compare ${TMPDIR}/garmin_gpi_encoding.gpx ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
 gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi,category="Vinícolas",hide -F ${TMPDIR}/garmin_gpi_category~gpx.gpi
 compare ${REFERENCE}/garmin_gpi_category~gpx.gpi ${TMPDIR}/garmin_gpi_category~gpx.gpi
 
-# check position option 
+# check position option
 gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi,position -F ${TMPDIR}/garmin_gpi_position~gpx.gpi
 compare ${REFERENCE}/garmin_gpi_position~gpx.gpi ${TMPDIR}/garmin_gpi_position~gpx.gpi
+
+# check comment option: the description is written as the 0xe comment record
+# (which Garmin devices render as the multi-line POI comment) instead of the 0xa
+# description record, and round-trips back out unchanged.
+gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi,comment -F ${TMPDIR}/garmin_gpi_comment.gpi
+gpsbabel -i garmin_gpi -f ${TMPDIR}/garmin_gpi_comment.gpi -o gpx -F ${TMPDIR}/garmin_gpi_comment.gpx
+compare ${REFERENCE}/garmin_gpi.gpx ${TMPDIR}/garmin_gpi_comment.gpx
 
 # check dual language read
 # spb_metro_norm.gpi from https://www.garmin.ru/download/extras/poi.php or  https://files.navicom.ru/spb_metro_norm.gpi

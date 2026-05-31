@@ -802,7 +802,11 @@ GarminGPIFormat::wdata_compute_size(writer_data_t* data) const
     }
 //    if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
     if (!str.isEmpty()) {
-      res += (12 + 4 + str_from_unicode(str).size());
+      if (opt_comment) {
+        res += (12 + 4 + 1 + str_from_unicode(str).size());  /* 0xe comment record (+ flag byte) */
+      } else {
+        res += (12 + 4 + str_from_unicode(str).size());      /* 0xa description record */
+      }
     }
   }
 
@@ -865,7 +869,11 @@ GarminGPIFormat::wdata_write(const writer_data_t* data) const
       s0 += 10;  /* tag(4) */
     }
     if (!str.isEmpty()) {
-      s0 += (12 + 4 + str_from_unicode(str).size());  /* descr */
+      if (opt_comment) {
+        s0 += (12 + 4 + 1 + str_from_unicode(str).size());  /* 0xe comment record (+ flag byte) */
+      } else {
+        s0 += (12 + 4 + str_from_unicode(str).size());      /* 0xa descr */
+      }
     }
     if (dt->sz) {
       s0 += (12 + dt->sz);  /* address part */
@@ -921,9 +929,19 @@ GarminGPIFormat::wdata_write(const writer_data_t* data) const
     }
 
     if (!str.isEmpty()) {
-      gbfputint32(0xa, fout);
-      gbfputint32(str_from_unicode(str).size() + 8, fout);  /* string + string header */
-      write_string(str_from_unicode(str), 1);
+      if (opt_comment) {
+        /* Comment (note) record. Garmin devices (e.g. GPSMAP 276CX) render this
+           as the multi-line POI comment; written in place of the 0xa description
+           record so the text is not shown twice. */
+        gbfputint32(0xe, fout);
+        gbfputint32(str_from_unicode(str).size() + 9, fout);  /* flag + string + string header */
+        gbfputc(0x01, fout);                                  /* flag: plain comment text */
+        write_string(str_from_unicode(str), 1);
+      } else {
+        gbfputint32(0xa, fout);
+        gbfputint32(str_from_unicode(str).size() + 8, fout);  /* string + string header */
+        write_string(str_from_unicode(str), 1);
+      }
     }
 
     if (dt->sz) {          /* gpi address */
