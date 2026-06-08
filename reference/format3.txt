@@ -260,6 +260,8 @@ option	garmin_gpi	hide	Don't show gpi bitmap on device	boolean				https://www.gp
 
 option	garmin_gpi	descr	Write description to address field	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_descr
 
+option	garmin_gpi	comment	Write description/notes to the comment record instead of the address field (multi-line on some Garmin devices)	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_comment
+
 option	garmin_gpi	notes	Write notes to address field	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_notes
 
 option	garmin_gpi	position	Write position to address field	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_gpi.html#fmt_garmin_gpi_o_position
