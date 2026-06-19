@@ -135,6 +135,7 @@ File Types (-i and -o options):
 	  category              Default category on output
 	  hide                  (0/1) Don't show gpi bitmap on device
 	  descr                 (0/1) Write description to address field
+	  comment               (0/1) Write description/notes to the comment record inst
 	  notes                 (0/1) Write notes to address field
 	  position              (0/1) Write position to address field
 	  proximity             Default proximity
