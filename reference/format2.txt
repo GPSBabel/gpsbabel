@@ -27,6 +27,7 @@ serial	r-r---	dg-200		GlobalSat DG-200 Download
 file	r-r---	dg-388	gpl	GlobalSat DG-388 Binary File
 serial	--r---	globalsat		GlobalSat GH625XT GPS training watch
 file	rwrwrw	kml	kml	Google Earth (Keyhole) Markup Language
+file	r-r---	googletimeline	json	Google Maps Timeline
 file	r-r---	googletakeout	json	Google Takeout Location History
 file	--rw--	land_air_sea	txt	GPS Tracking Key Pro text
 file	rwrwrw	gtm	gtm	GPS TrackMaker

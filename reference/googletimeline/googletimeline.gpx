@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="37.421998300" minlon="-122.104100000" maxlat="37.441998300" maxlon="-122.084000000"/>
+  <wpt lat="37.421998300" lon="-122.084000000">
+    <time>2024-11-15T17:30:00Z</time>
+    <name>Inferred Home</name>
+    <cmt>ChIJ2eUgeAK6j4ARbn5u_wAGqWA</cmt>
+    <desc>ChIJ2eUgeAK6j4ARbn5u_wAGqWA</desc>
+  </wpt>
+  <wpt lat="37.441900000" lon="-122.104100000">
+    <time>2024-11-15T19:20:00Z</time>
+    <name>Parking</name>
+    <cmt>Parking</cmt>
+    <desc>Parking</desc>
+  </wpt>
+  <wpt lat="37.441998300" lon="-122.104000000">
+    <time>2024-11-15T19:20:00Z</time>
+    <name>Unknown</name>
+    <cmt>Unknown</cmt>
+    <desc>Unknown</desc>
+  </wpt>
+  <trk>
+    <name>In Passenger Vehicle</name>
+    <trkseg>
+      <trkpt lat="37.421998300" lon="-122.084000000">
+        <time>2024-11-15T19:00:00Z</time>
+      </trkpt>
+      <trkpt lat="37.441998300" lon="-122.104000000">
+        <time>2024-11-15T19:20:00Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>2024-11-15T11:00:00.000-08:00</name>
+    <trkseg>
+      <trkpt lat="37.421998300" lon="-122.084000000">
+        <time>2024-11-15T19:02:00Z</time>
+      </trkpt>
+      <trkpt lat="37.430000000" lon="-122.095000000">
+        <time>2024-11-15T19:10:00Z</time>
+      </trkpt>
+      <trkpt lat="37.441998300" lon="-122.104000000">
+        <time>2024-11-15T19:19:00Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

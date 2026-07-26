@@ -1,0 +1,68 @@
+<para>
+  In late 2024 Google retired the Takeout "Location History" download and moved
+  Timeline data on-device. The current export is a single <filename>Timeline.json</filename>
+  file with a top-level "semanticSegments" array, a different structure from
+  the older Takeout download. The "googletimeline" format reads this newer file.
+</para>
+
+<para>
+  If instead you have an older Takeout download archived (a ZIP of monthly JSON
+  files, or per-year folders), use the
+  <link linkend="fmt_googletakeout">googletakeout</link> format.
+</para>
+
+<para>
+  This is a read-only format. Each Timeline segment is converted as follows:
+  <itemizedlist mark="bullet">
+    <listitem><para>
+      a <emphasis>visit</emphasis> (a place you stopped) becomes a waypoint, named
+      by its semantic type (HOME, INFERRED_WORK, and so on);
+    </para></listitem>
+    <listitem><para>
+      an <emphasis>activity</emphasis> (a trip) becomes a track holding its start
+      and end points, named by the activity type (WALKING, CYCLING, ...); a parked
+      vehicle location, if present, becomes a waypoint;
+    </para></listitem>
+    <listitem><para>
+      a <emphasis>timelinePath</emphasis> (a recorded point trail) becomes a track.
+    </para></listitem>
+  </itemizedlist>
+</para>
+
+<para>
+  There is no official documentation from Google for this format. A volunteer is
+  maintaining a schema at
+  <link xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="https://locationhistoryformat.com/">
+    locationhistoryformat.com
+  </link>.
+</para>
+
+<para>
+  To export <filename>Timeline.json</filename> from an Android device:
+  <itemizedlist mark="bullet">
+    <listitem><para>Open the device <emphasis>Settings</emphasis> app</para></listitem>
+    <listitem><para>
+      Go to <emphasis>Location</emphasis> &gt; <emphasis>Location services</emphasis>
+      &gt; <emphasis>Timeline</emphasis>
+    </para></listitem>
+    <listitem><para>
+      Choose <emphasis>Export Timeline data</emphasis> and save the resulting
+      <filename>Timeline.json</filename> file
+    </para></listitem>
+  </itemizedlist>
+</para>
+
+<example xml:id="googletimeline-gpx">
+  <title>Convert a Timeline export to GPX</title>
+  <para><userinput>
+    gpsbabel -i googletimeline -f Timeline.json -o gpx -F timeline.gpx
+  </userinput></para>
+</example>
+
+<example xml:id="googletimeline-tracks">
+  <title>Keep only the recorded tracks, dropping the visit waypoints</title>
+  <para><userinput>
+    gpsbabel -i googletimeline -f Timeline.json -x nuketypes,waypoints -o gpx -F tracks.gpx
+  </userinput></para>
+</example>

@@ -1,7 +1,18 @@
+<note><para>
+  This format reads the <emphasis>older</emphasis> Google Takeout Location
+  History download (a ZIP of monthly JSON files with a "timelineObjects" array).
+  In late 2024 Google retired that download and moved Timeline data on-device;
+  the current export is a single "Timeline.json" file with a different structure.
+  To read that newer file, use the
+  <link linkend="fmt_googletimeline">googletimeline</link> format. The
+  "googletakeout" format is retained for anyone who still has an archived Takeout
+  download.
+</para></note>
+
 <para>
-  Google gives you two options to download your location history:
-  In Google Maps, you can go into your Timeline and download your location
-  history a day at a time as KML files. Or, in Google Takeout, you can
+  Historically, Google gave you two options to download your location history:
+  In Google Maps, you could go into your Timeline and download your location
+  history a day at a time as KML files. Or, in Google Takeout, you could
   download all of your location history all at once as a ZIP of JSON files,
   one for each month.
 </para>

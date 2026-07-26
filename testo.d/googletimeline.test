@@ -1,0 +1,8 @@
+rm -f ${TMPDIR}/googletimeline.gpx
+gpsbabel \
+  -i googletimeline \
+  -f ${REFERENCE}/googletimeline/Timeline.json \
+  -o gpx \
+  -F ${TMPDIR}/googletimeline.gpx
+
+compare "${TMPDIR}/googletimeline.gpx" "${REFERENCE}/googletimeline/googletimeline.gpx"
