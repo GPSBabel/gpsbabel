@@ -18,7 +18,7 @@
  */
 
 #include <QByteArray>              // for QByteArray
-#include <QIODevice>               // for operator|, QIODevice, QIODevice::ReadOnly, QIODevice::Text
+#include <QIODevice>               // for QIODevice, QIODevice::ReadOnly, QIODevice::WriteOnly
 #include <QJsonArray>              // for QJsonArray
 #include <QJsonDocument>           // for QJsonDocument, QJsonDocument::Compact, QJsonDocument::Indented, QJsonDocument::JsonFormat
 #include <QJsonObject>             // for QJsonObject
@@ -36,7 +36,12 @@ void
 GeoJsonFormat::rd_init(const QString& fname)
 {
   ifd = new gpsbabel::File(fname);
-  ifd->open(QIODevice::ReadOnly | QIODevice::Text);
+  /*
+   * Deliberately not QIODevice::Text: it translates line endings on read, so
+   * the parser would not see the bytes that are actually on disk. JSON treats
+   * CR and LF alike as whitespace, so the translation gains nothing.
+   */
+  ifd->open(QIODevice::ReadOnly);
 }
 
 void
@@ -144,7 +149,7 @@ void
 GeoJsonFormat::read()
 {
   /*
-   * Hand the raw bytes to the parser. Decoding to QString and re-encoding with
+   * Hand the bytes to the parser. Decoding to QString and re-encoding with
    * toUtf8() copies the whole buffer an extra time and, worse, launders invalid
    * UTF-8: the decode substitutes U+FFFD, so a corrupt file parses
    * "successfully" and the damage lands silently in the output. Parsing the

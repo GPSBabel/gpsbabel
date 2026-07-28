@@ -93,9 +93,14 @@ QList<QJsonObject> GoogleTakeoutFormat::GoogleTakeoutInputStream::readJson(
     Debug(2) << "Reading from JSON " << source;
   }
   auto* ifd = new gpsbabel::File(source);
-  ifd->open(QIODevice::ReadOnly | QIODevice::Text);
   /*
-   * Hand the raw bytes to the parser. Decoding to QString and re-encoding with
+   * Deliberately not QIODevice::Text: it translates line endings on read, so
+   * the parser would not see the bytes that are actually on disk. JSON treats
+   * CR and LF alike as whitespace, so the translation gains nothing.
+   */
+  ifd->open(QIODevice::ReadOnly);
+  /*
+   * Hand the bytes to the parser. Decoding to QString and re-encoding with
    * toUtf8() copies the whole buffer an extra time and, worse, launders invalid
    * UTF-8: the decode substitutes U+FFFD, so a corrupt file parses
    * "successfully" and the damage lands silently in the output. Parsing the
