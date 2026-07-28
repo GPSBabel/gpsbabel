@@ -100,7 +100,9 @@ private:
                                  const QString* description, const QString& time_str);
   static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint);
   static void title_case(QString& title);
-  void add_visit(const QJsonObject& visit, const QString& start_time);
+  // Returns true if a waypoint was added, false if the visit had no usable
+  // coordinate and was skipped.
+  bool add_visit(const QJsonObject& visit, const QString& start_time);
   int add_activity(const QJsonObject& activity, const QString& start_time,
                    const QString& end_time);
   int add_timeline_path(const QJsonArray& path, const QString& track_name);

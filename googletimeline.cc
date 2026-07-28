@@ -141,9 +141,16 @@ void GoogleTimelineFormat::read()
   }
   auto* ifd = new gpsbabel::File(fname);
   ifd->open(QIODevice::ReadOnly | QIODevice::Text);
-  const QString content = ifd->readAll();
+  /*
+   * Hand the raw bytes to the JSON parser. Decoding to QString first and
+   * re-encoding with toUtf8() both copies the whole buffer an extra time and,
+   * more importantly, launders invalid UTF-8: the decode substitutes U+FFFD, so
+   * a corrupt file parses "successfully" and the damage lands silently in the
+   * output. Parsing the QByteArray directly reports QJsonParseError::IllegalUTF8String
+   * instead.
+   */
   QJsonParseError error{};
-  const QJsonDocument doc = QJsonDocument::fromJson(content.toUtf8(), &error);
+  const QJsonDocument doc = QJsonDocument::fromJson(ifd->readAll(), &error);
   if (error.error != QJsonParseError::NoError) {
     timeline_fatal(
       QString("JSON parse error in ") + ifd->fileName() + ": " + error.errorString()
@@ -177,9 +184,12 @@ void GoogleTimelineFormat::read()
      * point trail, -> track). Some carry only "timelineMemory" and no coordinates.
      */
     if (segment.contains(VISIT)) {
-      add_visit(segment[VISIT].toObject(), startTime);
-      ++visits;
-      ++points;
+      /* a visit with an unusable placeLocation adds nothing, so it must not be
+       * counted towards either total */
+      if (add_visit(segment[VISIT].toObject(), startTime)) {
+        ++visits;
+        ++points;
+      }
     } else if (segment.contains(ACTIVITY)) {
       points += add_activity(segment[ACTIVITY].toObject(), startTime, endTime);
       ++activities;
@@ -198,7 +208,10 @@ void GoogleTimelineFormat::read()
   }
 }
 
-void GoogleTimelineFormat::add_visit(const QJsonObject& visit, const QString& start_time)
+/* add a "visit" as a waypoint. returns true if a waypoint was added, false if the
+ * visit had no usable coordinate and was skipped.
+ */
+bool GoogleTimelineFormat::add_visit(const QJsonObject& visit, const QString& start_time)
 {
   /*
    * A visit's coordinate lives in visit.topCandidate.placeLocation.latLng.
@@ -216,7 +229,7 @@ void GoogleTimelineFormat::add_visit(const QJsonObject& visit, const QString& st
       Debug(2) << "visit @" << start_time <<
         ": unparsable placeLocation \"" << latLng << "\", skipping";
     }
-    return;
+    return false;
   }
   QString shortname = topCandidate[SEMANTIC_TYPE].toString();
   title_case(shortname);
@@ -228,6 +241,7 @@ void GoogleTimelineFormat::add_visit(const QJsonObject& visit, const QString& st
     start_time
   );
   waypt_add(waypoint);
+  return true;
 }
 
 /* add an "activity" as a track: its start and end points, plus (as a standalone
