@@ -143,9 +143,15 @@ GeoJsonFormat::routes_from_polygon_coordinates(const QJsonArray& polygon)
 void
 GeoJsonFormat::read()
 {
-  QString file_content = ifd->readAll();
+  /*
+   * Hand the raw bytes to the parser. Decoding to QString and re-encoding with
+   * toUtf8() copies the whole buffer an extra time and, worse, launders invalid
+   * UTF-8: the decode substitutes U+FFFD, so a corrupt file parses
+   * "successfully" and the damage lands silently in the output. Parsing the
+   * QByteArray reports QJsonParseError::IllegalUTF8String instead.
+   */
   QJsonParseError error{};
-  QJsonDocument document = QJsonDocument::fromJson(file_content.toUtf8(), &error);
+  QJsonDocument document = QJsonDocument::fromJson(ifd->readAll(), &error);
   if (error.error != QJsonParseError::NoError) {
     gbFatal(FatalMsg().nospace() << "GeoJSON parse error in " << ifd->fileName() << ": " << error.errorString());
   }

@@ -94,9 +94,15 @@ QList<QJsonObject> GoogleTakeoutFormat::GoogleTakeoutInputStream::readJson(
   }
   auto* ifd = new gpsbabel::File(source);
   ifd->open(QIODevice::ReadOnly | QIODevice::Text);
-  const QString content = ifd->readAll();
+  /*
+   * Hand the raw bytes to the parser. Decoding to QString and re-encoding with
+   * toUtf8() copies the whole buffer an extra time and, worse, launders invalid
+   * UTF-8: the decode substitutes U+FFFD, so a corrupt file parses
+   * "successfully" and the damage lands silently in the output. Parsing the
+   * QByteArray reports QJsonParseError::IllegalUTF8String instead.
+   */
   QJsonParseError error{};
-  const QJsonDocument doc = QJsonDocument::fromJson(content.toUtf8(), &error);
+  const QJsonDocument doc = QJsonDocument::fromJson(ifd->readAll(), &error);
   if (error.error != QJsonParseError::NoError) {
     takeout_fatal(
       QString("JSON parse error in ") + ifd->fileName() + ": " +
