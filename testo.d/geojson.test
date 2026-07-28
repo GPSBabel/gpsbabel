@@ -27,9 +27,12 @@ ${VALGRIND} "${PNAME}" -i geojson -f ${REFERENCE}/geojson-badutf8.geojson -o gpx
   echo "${PNAME} succeeded! (it shouldn't have with this input...)"
   errorcount=`expr $errorcount + 1`
 }
-# The diagnostic embeds the input path, which varies with how testo was
-# invoked, so match the distinctive part instead of comparing the whole log.
-grep -q 'invalid UTF8 string' ${TMPDIR}/geojson-badutf8.log || {
+# Not a whole-log compare: the diagnostic embeds the input path, which varies
+# with how testo was invoked. Anchor on gpsbabel's own "parse error in" wording
+# plus the UTF8 token, rather than Qt's exact phrasing -- errorString() is a
+# translatable, human-readable string and pinning all of it would couple this
+# test to third-party wording.
+grep -Eq 'parse error in .*UTF8' ${TMPDIR}/geojson-badutf8.log || {
   echo "ERROR: expected an invalid UTF-8 diagnostic from geojson, got:"
   cat ${TMPDIR}/geojson-badutf8.log
   errorcount=`expr $errorcount + 1`
