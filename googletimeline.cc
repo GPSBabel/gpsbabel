@@ -24,7 +24,7 @@
 #include <QChar>                // for QChar
 #include <QDateTime>            // for QDateTime
 #include <QDebug>               // for QDebug
-#include <QIODevice>            // for operator|, QIODevice
+#include <QIODevice>            // for QIODevice, QIODevice::ReadOnly
 #include <QJsonArray>           // for QJsonArray, QJsonArray::const_iterator
 #include <QJsonDocument>        // for QJsonDocument
 #include <QJsonObject>          // for QJsonObject
@@ -102,13 +102,21 @@ Waypoint* GoogleTimelineFormat::make_waypoint(
   return waypoint;
 }
 
+/* Add a point to a track, dropping a null-island (0, 0) coordinate.
+ *
+ * Unlike googletakeout, where a missing late7/lone7 field reads back as 0, a
+ * point only reaches here once parse_latlng() has accepted an explicit
+ * coordinate string, so (0, 0) means the file really did say "0.0°, 0.0°".
+ * That is open ocean in the Gulf of Guinea and, in a phone's timeline, a
+ * placeholder rather than a visit.
+ */
 bool GoogleTimelineFormat::track_maybe_add_wpt(route_head* route, Waypoint* waypoint)
 {
   if (waypoint->latitude == 0 && waypoint->longitude == 0) {
     if (global_opts.debug_level >= 2) {
       Debug(2) << "Track " << route->rte_name << "@" <<
         waypoint->creation_time.toPrettyString() <<
-        ": Dropping point with no lat/long";
+        ": Dropping null island (0, 0) point";
     }
     delete waypoint; // as we're dropping it, gpsbabel won't clean it up later
     return false;
@@ -141,7 +149,12 @@ void GoogleTimelineFormat::read()
     Debug(4) << "reading " << fname;
   }
   auto* ifd = new gpsbabel::File(fname);
-  ifd->open(QIODevice::ReadOnly | QIODevice::Text);
+  /*
+   * Deliberately not QIODevice::Text: it translates line endings on read, so
+   * the parser would not see the bytes that are actually on disk. JSON treats
+   * CR and LF alike as whitespace, so the translation gains nothing.
+   */
+  ifd->open(QIODevice::ReadOnly);
   /*
    * Hand the raw bytes to the JSON parser. Decoding to QString first and
    * re-encoding with toUtf8() both copies the whole buffer an extra time and,
