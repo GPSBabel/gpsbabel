@@ -37,6 +37,7 @@
 #include "src/core/file.h"      // for File
 #include "src/core/logging.h"   // for Debug, FatalMsg, Warning
 
+const QString GoogleTimelineFormat::nullString = QString();
 
 void GoogleTimelineFormat::timeline_fatal(const QString& message)
 {
@@ -82,18 +83,18 @@ gpsbabel::DateTime GoogleTimelineFormat::parse_time(const QString& s)
 Waypoint* GoogleTimelineFormat::make_waypoint(
   double lat,
   double lon,
-  const QString* shortname,
-  const QString* description,
+  const QString& shortname,
+  const QString& description,
   const QString& time_str)
 {
   auto* waypoint = new Waypoint();
   waypoint->latitude = lat;
   waypoint->longitude = lon;
-  if (shortname != nullptr && !shortname->isEmpty()) {
-    waypoint->shortname = *shortname;
+  if (!shortname.isEmpty()) {
+    waypoint->shortname = shortname;
   }
-  if (description != nullptr && !description->isEmpty()) {
-    waypoint->description = *description;
+  if (!description.isEmpty()) {
+    waypoint->description = description;
   }
   if (!time_str.isEmpty()) {
     waypoint->SetCreationTime(parse_time(time_str));
@@ -236,8 +237,8 @@ bool GoogleTimelineFormat::add_visit(const QJsonObject& visit, const QString& st
   const QString placeId = topCandidate[PLACE_ID].toString();
   Waypoint* waypoint = make_waypoint(
     lat, lon,
-    shortname.isEmpty() ? nullptr : &shortname,
-    placeId.isEmpty() ? nullptr : &placeId,
+    shortname,
+    placeId,
     start_time
   );
   waypt_add(waypoint);
@@ -263,11 +264,11 @@ int GoogleTimelineFormat::add_activity(
   double lon = 0;
   if (parse_latlng(activity[START].toObject()[LATLNG].toString(), lat, lon)) {
     n_points += track_maybe_add_wpt(
-      route, make_waypoint(lat, lon, nullptr, nullptr, start_time));
+      route, make_waypoint(lat, lon, nullString, nullString, start_time));
   }
   if (parse_latlng(activity[END].toObject()[LATLNG].toString(), lat, lon)) {
     n_points += track_maybe_add_wpt(
-      route, make_waypoint(lat, lon, nullptr, nullptr, end_time));
+      route, make_waypoint(lat, lon, nullString, nullString, end_time));
   }
   if (n_points == 0) {
     if (global_opts.debug_level >= 2) {
@@ -282,9 +283,8 @@ int GoogleTimelineFormat::add_activity(
     double plat = 0;
     double plon = 0;
     if (parse_latlng(parking[LOCATION].toObject()[LATLNG].toString(), plat, plon)) {
-      QString parking_name = QStringLiteral("Parking");
       waypt_add(make_waypoint(
-        plat, plon, &parking_name, nullptr, parking[START_TIME].toString()));
+        plat, plon, QStringLiteral("Parking"), nullString, parking[START_TIME].toString()));
     }
   }
   return n_points;
@@ -309,7 +309,7 @@ int GoogleTimelineFormat::add_timeline_path(
       continue;
     }
     n_points += track_maybe_add_wpt(
-      route, make_waypoint(lat, lon, nullptr, nullptr, point[TIME].toString()));
+      route, make_waypoint(lat, lon, nullString, nullString, point[TIME].toString()));
   }
   if (n_points == 0) {
     track_del_head(route);

@@ -89,6 +89,8 @@ private:
   static constexpr char16_t PARKING[] = u"parking";
   static constexpr char16_t LOCATION[] = u"location";
 
+  static const QString nullString;
+
   /* Member functions */
   static void timeline_fatal(const QString& message);
   static void timeline_warning(const QString& message);
@@ -96,16 +98,16 @@ private:
   // untouched) on a malformed value.
   static bool parse_latlng(const QString& s, double& lat, double& lon);
   static gpsbabel::DateTime parse_time(const QString& s);
-  static Waypoint* make_waypoint(double lat, double lon, const QString* shortname,
-                                 const QString* description, const QString& time_str);
+  static Waypoint* make_waypoint(double lat, double lon, const QString& shortname,
+                                 const QString& description, const QString& time_str);
   static bool track_maybe_add_wpt(route_head* route, Waypoint* waypoint);
   static void title_case(QString& title);
   // Returns true if a waypoint was added, false if the visit had no usable
   // coordinate and was skipped.
-  bool add_visit(const QJsonObject& visit, const QString& start_time);
-  int add_activity(const QJsonObject& activity, const QString& start_time,
-                   const QString& end_time);
-  int add_timeline_path(const QJsonArray& path, const QString& track_name);
+  static bool add_visit(const QJsonObject& visit, const QString& start_time);
+  static int add_activity(const QJsonObject& activity, const QString& start_time,
+                          const QString& end_time);
+  static int add_timeline_path(const QJsonArray& path, const QString& track_name);
 
   /* Data Members */
   QVector<arglist_t> googletimeline_args;
