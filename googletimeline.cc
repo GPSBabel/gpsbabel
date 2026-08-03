@@ -104,7 +104,7 @@ Waypoint* GoogleTimelineFormat::make_waypoint(
 
 /* Add a point to a track, dropping a null-island (0, 0) coordinate.
  *
- * Unlike googletakeout, where a missing late7/lone7 field reads back as 0, a
+ * Unlike googletakeout, where a missing latitudeE7/longitudeE7 field reads back as 0, a
  * point only reaches here once parse_latlng() has accepted an explicit
  * coordinate string, so (0, 0) means the file really did say "0.0°, 0.0°".
  * That is open ocean in the Gulf of Guinea and, in a phone's timeline, a
