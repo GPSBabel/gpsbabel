@@ -205,11 +205,19 @@ void GoogleTimelineFormat::read()
         ++points;
       }
     } else if (segment.contains(ACTIVITY)) {
-      points += add_activity(segment[ACTIVITY].toObject(), startTime, endTime);
-      ++activities;
+      /* likewise, an activity or timelinePath whose points were all unusable
+       * or dropped emits no track and isn't counted */
+      if (const int n = add_activity(segment[ACTIVITY].toObject(), startTime, endTime);
+          n > 0) {
+        points += n;
+        ++activities;
+      }
     } else if (segment.contains(TIMELINE_PATH)) {
-      points += add_timeline_path(segment[TIMELINE_PATH].toArray(), startTime);
-      ++paths;
+      if (const int n = add_timeline_path(segment[TIMELINE_PATH].toArray(), startTime);
+          n > 0) {
+        points += n;
+        ++paths;
+      }
     }
   }
   if (segments.isEmpty()) {
