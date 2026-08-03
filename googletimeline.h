@@ -107,6 +107,9 @@ private:
   static bool add_visit(const QJsonObject& visit, const QString& start_time);
   static int add_activity(const QJsonObject& activity, const QString& start_time,
                           const QString& end_time);
+  // Returns true if a parking waypoint was added, false if the activity had no
+  // parking location or an unusable one.
+  static bool add_parking(const QJsonObject& activity);
   static int add_timeline_path(const QJsonArray& path, const QString& track_name);
 
   /* Data Members */

@@ -187,6 +187,7 @@ void GoogleTimelineFormat::read()
   int visits = 0;
   int activities = 0;
   int paths = 0;
+  int parking = 0;
   int points = 0;
   for (const auto&& segmentRef : segments) {
     const QJsonObject segment = segmentRef.toObject();
@@ -205,12 +206,16 @@ void GoogleTimelineFormat::read()
         ++points;
       }
     } else if (segment.contains(ACTIVITY)) {
+      const QJsonObject activity = segment[ACTIVITY].toObject();
       /* likewise, an activity or timelinePath whose points were all unusable
        * or dropped emits no track and isn't counted */
-      if (const int n = add_activity(segment[ACTIVITY].toObject(), startTime, endTime);
-          n > 0) {
+      if (const int n = add_activity(activity, startTime, endTime); n > 0) {
         points += n;
         ++activities;
+      }
+      if (add_parking(activity)) {
+        ++parking;
+        ++points;
       }
     } else if (segment.contains(TIMELINE_PATH)) {
       if (const int n = add_timeline_path(segment[TIMELINE_PATH].toArray(), startTime);
@@ -226,7 +231,7 @@ void GoogleTimelineFormat::read()
   if (global_opts.debug_level >= 1) {
     Debug(1) << "Processed " << segments.size() << " semanticSegments: " <<
       visits << " visits, " << activities << " activities, " << paths <<
-      " timelinePaths (" << points << " points total)";
+      " timelinePaths, " << parking << " parking (" << points << " points total)";
   }
 }
 
@@ -266,8 +271,8 @@ bool GoogleTimelineFormat::add_visit(const QJsonObject& visit, const QString& st
   return true;
 }
 
-/* add an "activity" as a track: its start and end points, plus (as a standalone
- * waypoint) a parking location if present. returns the number of TRACK points added.
+/* add an "activity" as a track: its start and end points. returns the number of
+ * points added.
  */
 int GoogleTimelineFormat::add_activity(
   const QJsonObject& activity,
@@ -297,18 +302,26 @@ int GoogleTimelineFormat::add_activity(
     }
     track_del_head(route);
   }
-
-  /* A parked-vehicle activity carries a parking.location — emit it as a waypoint. */
-  if (activity.contains(PARKING)) {
-    const QJsonObject parking = activity[PARKING].toObject();
-    double plat = 0;
-    double plon = 0;
-    if (parse_latlng(parking[LOCATION].toObject()[LATLNG].toString(), plat, plon)) {
-      waypt_add(make_waypoint(
-        plat, plon, QStringLiteral("Parking"), nullString, parking[START_TIME].toString()));
-    }
-  }
   return n_points;
+}
+
+/* a parked-vehicle activity carries a parking.location — emit it as a waypoint.
+ * returns true if one was added.
+ */
+bool GoogleTimelineFormat::add_parking(const QJsonObject& activity)
+{
+  if (!activity.contains(PARKING)) {
+    return false;
+  }
+  const QJsonObject parking = activity[PARKING].toObject();
+  double lat = 0;
+  double lon = 0;
+  if (!parse_latlng(parking[LOCATION].toObject()[LATLNG].toString(), lat, lon)) {
+    return false;
+  }
+  waypt_add(make_waypoint(
+    lat, lon, QStringLiteral("Parking"), nullString, parking[START_TIME].toString()));
+  return true;
 }
 
 /* add a "timelinePath" (the raw point trail) as a track. returns the number of
