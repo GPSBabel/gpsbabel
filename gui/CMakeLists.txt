@@ -338,6 +338,7 @@ if(UNIX AND NOT APPLE)
   if (((GPSBABEL_GOOGLE_MAPPREVIEW AND GPSBABEL_EMBED_MAP) OR NOT GPSBABEL_GOOGLE_MAPPREVIEW) AND GPSBABEL_EMBED_TRANSLATIONS)
     set(_GPSBABEL_INSTALL ON PARENT_SCOPE)
     install(TARGETS gpsbabelfe RUNTIME)
+    install(FILES org.gpsbabel.gui.metainfo.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
     # you probably don't need to run update-desktop-database on ${CMAKE_INSTALL_DATADIR}/applications as our desktop file doesn't have MimeTypes.
     install(FILES gpsbabelfe.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
     # you may need to run gtk-update-icon-cache on ${CMAKE_INSTALL_DATADIR}/icons/hicolor, possibly with -t or equivalently with --ignore-theme-index.
