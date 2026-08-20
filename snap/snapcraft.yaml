@@ -125,31 +125,18 @@ parts:
       - qt6-qpa-plugins
       - qt6-wayland
 
-  gpu-2404:
-    after: [gpsbabel]
-    source: https://github.com/canonical/gpu-snap.git
-    plugin: dump
-    override-prime: |
-      craftctl default
-      ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
-      # Workaround for https://bugs.launchpad.net/snapd/+bug/2055273
-      mkdir -p "${CRAFT_PRIME}/gpu-2404"
-    prime:
-      - bin/gpu-2404-wrapper
-
   cleanup:
     after:
       - gpsbabel
-      - gpu-2404
     plugin: nil
     build-snaps:  # List all content-snaps and base snaps you're using here
       - core24
       - gnome-46-2404 
       - mesa-2404 
     override-prime: |
-      set -eux
+      set -eu
       for snap in "core24" "gnome-46-2404" "mesa-2404"; do  # List all content-snaps and base snaps you're using here
-          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -fv "$CRAFT_PRIME/{}" \;
       done
 
 lint:
