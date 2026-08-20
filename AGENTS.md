@@ -5,6 +5,7 @@
 - **Formats Conform to Core, Not Core to Formats:** `src/core/gbtypes.h` defines the canonical C++20 vocabulary. If a format has archaic syntax (e.g., `t.hour` without parentheses, or homebrewed string pointer slicing), update the format call-site. Do NOT add Frankenstein overloads, dual struct/method semantics, or ambiguous operator conversions to `gbtypes.h`.
 - **Zero Warnings:** All builds must compile clean with `-Wall -Wextra -Werror` (or zero compiler warnings).
 - Never commit trailing whitespace in any source files.
+- Stay out of gui, deprecated, and no commits in reference.
 
 ## 2. Build & Test Commands
 - **Build Core & Formats:** `cmake --build build -j$(sysctl -n hw.ncpu 2>/dev/null || nproc)`
