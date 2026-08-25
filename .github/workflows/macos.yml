@@ -45,7 +45,7 @@ jobs:
             RELEASE: true
             os: macos-15
           - QT_VERSION: '6.10.3'
-            XCODE_VERSION: '26.2'
+            XCODE_VERSION: '26.6'
             GENERATOR: 'Ninja'
             RELEASE: false
             os: macos-26
@@ -97,6 +97,7 @@ jobs:
         #brew install jing-trang
 
     - name: Install the Apple certificate
+      if: vars.FORCE_ADHOC != 'true'
       env:
         BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE }}
         P12_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
