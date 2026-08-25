@@ -40,15 +40,7 @@ apps:
     command-chain:
       - usr/bin/gpsbabelfe.sh
     command: usr/bin/gpsbabelfe
-    environment:
-#      QT_DEBUG_PLUGINS: 1
-#     bug https://forum.snapcraft.io/t/libpxbackend-1-0-so-cannot-open-shared-object-file-no-such-file-or-directory/44263
-#     error while loading shared libraries: libpxbackend-1.0.so: cannot open shared object file: No such file or directory
-#     This error only occurs when starting gpsbabel.gpsbabelfe when ~/snap/gpsbabel doesn't exist.
-#     Even though https://github.com/canonical/snapcraft-desktop-integration/commit/d966bd8e0648bb1bb9140a282adbe2a435458a73
-#     adds this same directory to the end of the path somehow that isn't sufficient but this is (where it will be duplicated
-#     earlier in the path.
-      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/gnome-platform/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy
+    desktop: usr/share/applications/gpsbabelfe.desktop
 
 plugs:
 # avoid FATAL:credentials.cc(122)] Check failed: . : Permission denied (13) with map preview
@@ -89,10 +81,12 @@ parts:
       # add install command to CMakeLists.txt
       echo "install(PROGRAMS snap/local/gpsbabelfe.sh TYPE BIN)" >> CMakeLists.txt
       # jam repo sha into GITHUB_SHA
-      sed -i -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake
+      sed -i.bak -e"/GB.SHA/i set(ENV{GITHUB_SHA} \"$(git log -1 --format=%h)\")" gbversion.cmake
       # set snap version
       # ensure version has at most 32 characters
       craftctl set version="$(git describe | sed -e 's/gpsbabel_//' -e 's/_/./g')"
+      # correct icon location
+      sed -i.bak -e 's|Icon=.*|Icon=/usr/share/icons/hicolor/256x256/apps/gpsbabelfe.png|' gui/gpsbabelfe.desktop
     build-packages:
       - git
       - vim
@@ -131,37 +125,29 @@ parts:
       - qt6-qpa-plugins
       - qt6-wayland
 
-  gpu-2404:
-    after: [gpsbabel]
-    source: https://github.com/canonical/gpu-snap.git
-    plugin: dump
-    override-prime: |
-      craftctl default
-      ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
-      # Workaround for https://bugs.launchpad.net/snapd/+bug/2055273
-      mkdir -p "${CRAFT_PRIME}/gpu-2404"
-    prime:
-      - bin/gpu-2404-wrapper
+    stage:
+      # these are all required by libQt6WebEngineCore.so.6.4.2
+      # they are older versions than those in gnome-46-2404
+      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz-subset.so.0.*
+      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz.so.0.*
+      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libpsl.so.5.*
+      # we don't need lintian files
+      - -usr/share/lintian
 
   cleanup:
     after:
       - gpsbabel
-      - gpu-2404
     plugin: nil
     build-snaps:  # List all content-snaps and base snaps you're using here
-      - core24
-      - gnome-46-2404 
-      - mesa-2404 
+      - gnome-46-2404
     override-prime: |
-      set -eux
-      for snap in "core24" "gnome-46-2404" "mesa-2404"; do  # List all content-snaps and base snaps you're using here
-          cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
+      set -eu
+      for snap in "gnome-46-2404"; do  # List all content-snaps and base snaps you're using here
+          cd "/snap/$snap/current" && find . -type f,l -exec rm -fv "$CRAFT_PRIME/{}" \;
       done
 
 lint:
   ignore:
-    - library:
-#     these are all required by libQt6WebEngineCore.so.6.4.2
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz-subset.so.0.*
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz.so.0.*
-      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libpsl.so.5.*
+    - metadata:
+      - contact
+      - issues
