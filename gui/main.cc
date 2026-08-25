@@ -37,6 +37,9 @@ int main(int argc, char** argv)
 #error this version of Qt is not supported.
 #endif
 
+  // Set desktop filename before creating QApplication, see QTBUG-149180
+  QApplication::setDesktopFileName("gpsbabelfe");
+
   QApplication app(argc, argv);
   // Don't override the window icon on macos.
   // Overriding defeats style preferences which otherwise will modify the appearance

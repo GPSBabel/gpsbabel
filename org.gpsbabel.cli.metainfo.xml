@@ -42,6 +42,7 @@
       <li>geojson: GeoJson</li>
       <li>globalsat: GlobalSat GH625XT GPS training watch</li>
       <li>googletakeout: Google Takeout Location History</li>
+      <li>googletimeline: Google Maps Timeline</li>
       <li>gpsdrive: GpsDrive Format</li>
       <li>gpsdrivetrack: GpsDrive Format for Tracks</li>
       <li>gpx: GPX XML</li>

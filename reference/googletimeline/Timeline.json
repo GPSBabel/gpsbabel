@@ -1,0 +1,66 @@
+{
+  "semanticSegments": [
+    {
+      "startTime": "2024-11-15T09:30:00.000-08:00",
+      "endTime": "2024-11-15T11:00:00.000-08:00",
+      "startTimeTimezoneUtcOffsetMinutes": -480,
+      "endTimeTimezoneUtcOffsetMinutes": -480,
+      "visit": {
+        "hierarchyLevel": 0,
+        "probability": 0.9200000166893005,
+        "topCandidate": {
+          "placeId": "ChIJ2eUgeAK6j4ARbn5u_wAGqWA",
+          "semanticType": "INFERRED_HOME",
+          "probability": 0.9700000286102295,
+          "placeLocation": { "latLng": "37.4219983°, -122.0840000°" }
+        }
+      }
+    },
+    {
+      "startTime": "2024-11-15T11:00:00.000-08:00",
+      "endTime": "2024-11-15T11:20:00.000-08:00",
+      "startTimeTimezoneUtcOffsetMinutes": -480,
+      "endTimeTimezoneUtcOffsetMinutes": -480,
+      "activity": {
+        "start": { "latLng": "37.4219983°, -122.0840000°" },
+        "end": { "latLng": "37.4419983°, -122.1040000°" },
+        "distanceMeters": 2900.0,
+        "topCandidate": { "type": "IN_PASSENGER_VEHICLE", "probability": 0.8100000023841858 },
+        "parking": {
+          "location": { "latLng": "37.4419000°, -122.1041000°" },
+          "startTime": "2024-11-15T11:20:00.000-08:00"
+        }
+      }
+    },
+    {
+      "startTime": "2024-11-15T11:00:00.000-08:00",
+      "endTime": "2024-11-15T11:20:00.000-08:00",
+      "startTimeTimezoneUtcOffsetMinutes": -480,
+      "endTimeTimezoneUtcOffsetMinutes": -480,
+      "timelinePath": [
+        { "point": "37.4219983°, -122.0840000°", "time": "2024-11-15T11:02:00.000-08:00" },
+        { "point": "37.4300000°, -122.0950000°", "time": "2024-11-15T11:10:00.000-08:00" },
+        { "point": "37.4419983°, -122.1040000°", "time": "2024-11-15T11:19:00.000-08:00" }
+      ]
+    },
+    {
+      "startTime": "2024-11-15T11:20:00.000-08:00",
+      "endTime": "2024-11-15T12:30:00.000-08:00",
+      "startTimeTimezoneUtcOffsetMinutes": -480,
+      "endTimeTimezoneUtcOffsetMinutes": -480,
+      "visit": {
+        "topCandidate": {
+          "semanticType": "UNKNOWN",
+          "placeLocation": { "latLng": "37.4419983°, -122.1040000°" }
+        }
+      }
+    },
+    {
+      "startTime": "2024-11-15T12:30:00.000-08:00",
+      "endTime": "2024-11-15T12:30:00.000-08:00",
+      "timelineMemory": {
+        "trip": { "distanceFromPreviousVisitMeters": 0 }
+      }
+    }
+  ]
+}

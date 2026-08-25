@@ -1,0 +1,7 @@
+# These fixtures deliberately contain a byte sequence that is not valid UTF-8,
+# and exist to prove the JSON readers reject such input rather than silently
+# substituting U+FFFD. Mark them binary so no end-of-line normalisation or
+# encoding conversion can quietly turn them back into well-formed text, which
+# would leave the tests passing while testing nothing.
+reference/geojson-badutf8.geojson   binary
+reference/googletakeout-badutf8.json binary

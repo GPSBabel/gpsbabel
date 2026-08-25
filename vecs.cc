@@ -83,6 +83,7 @@
 #include "vcf.h"               // for VcfFormat
 #include "xcsv.h"              // for XcsvStyle, XcsvFormat
 #include "googletakeout.h"     // for GoogleTakeoutFormat
+#include "googletimeline.h"    // for GoogleTimelineFormat
 
 
 template <typename T>
@@ -482,6 +483,14 @@ struct Vecs::Impl {
       "json",
       nullptr,
       &fmtfactory<GoogleTakeoutFormat>
+    },
+    {
+      nullptr,
+      "googletimeline",
+      "Google Maps Timeline",
+      "json",
+      nullptr,
+      &fmtfactory<GoogleTimelineFormat>
     },
     {
       nullptr,

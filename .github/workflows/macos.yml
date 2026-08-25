@@ -45,17 +45,17 @@ jobs:
             RELEASE: true
             os: macos-15
           - QT_VERSION: '6.10.3'
-            XCODE_VERSION: '26.2'
+            XCODE_VERSION: '26.6'
             GENERATOR: 'Ninja'
             RELEASE: false
             os: macos-26
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Cache Qt
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       id: restore-cache
       with:
         path: ~/Cache
@@ -63,7 +63,7 @@ jobs:
 
     - name: Qt install setup
       if: steps.restore-cache.outputs.cache-hit != 'true'
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: '3.13'
 
@@ -97,6 +97,7 @@ jobs:
         #brew install jing-trang
 
     - name: Install the Apple certificate
+      if: vars.FORCE_ADHOC != 'true'
       env:
         BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE }}
         P12_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
@@ -148,7 +149,7 @@ jobs:
 
     - name: Save Cache Qt
       if: ( steps.restore-cache.outputs.cache-hit != 'true' ) && ( github.ref == 'refs/heads/master' )
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         path: ~/Cache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -168,7 +169,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: 'Download Artifacts'
       uses: actions/download-artifact@v8

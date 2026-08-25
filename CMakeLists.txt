@@ -106,6 +106,7 @@ set(ALL_FMTS ${MINIMAL_FMTS}
   geojson.cc
   globalsat_sport.cc
   googletakeout.cc
+  googletimeline.cc
   gtm.cc
   gtrnctr.cc
   html.cc
@@ -239,6 +240,7 @@ set(HEADERS
   globalsat_sport.h
   geo.h
   googletakeout.h
+  googletimeline.h
   gpx.h
   grtcirc.h
   gtm.h
@@ -410,6 +412,7 @@ set(TESTS
   geo
   globalsat_sport
   googletakeout
+  googletimeline
   gpsdrive
   gpx
   grapheme
@@ -499,4 +502,5 @@ if(UNIX AND NOT APPLE)
 endif()
 if(_GPSBABEL_INSTALL)
   install(TARGETS gpsbabel RUNTIME)
+  install(FILES org.gpsbabel.cli.metainfo.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 endif()

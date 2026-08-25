@@ -15,7 +15,7 @@
   </description>
   <url type="homepage">https://www.gpsbabel.org</url>
   <url type="vcs-browser">https://github.com/GPSBabel/gpsbabel</url>
-  <launchable type="desktop-id">gpsbabel.desktop</launchable>
+  <launchable type="desktop-id">gpsbabelfe.desktop</launchable>
   <provides>
     <binary>gpsbabelfe</binary>
     <modalias>usb:v091Ep0003d*</modalias>

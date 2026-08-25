@@ -22,6 +22,7 @@ dg-200		GlobalSat DG-200 Download
 dg-388	gpl	GlobalSat DG-388 Binary File
 globalsat		GlobalSat GH625XT GPS training watch
 kml	kml	Google Earth (Keyhole) Markup Language
+googletimeline	json	Google Maps Timeline
 googletakeout	json	Google Takeout Location History
 land_air_sea	txt	GPS Tracking Key Pro text
 gtm	gtm	GPS TrackMaker

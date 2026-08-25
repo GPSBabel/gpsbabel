@@ -74,10 +74,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Cache Qt
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       id: restore-cache
       with:
         path: ~/Cache
@@ -85,7 +85,7 @@ jobs:
 
     - name: Install Qt setup(aqt)
       if: ( steps.restore-cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: '3.13'
 
@@ -173,7 +173,7 @@ jobs:
 
     - name: Save Cache Qt
       if: ( steps.restore-cache.outputs.cache-hit != 'true' ) && ( github.ref == 'refs/heads/master' )
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         path: ~/Cache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -198,7 +198,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: 'Download Artifacts'
       uses: actions/download-artifact@v8

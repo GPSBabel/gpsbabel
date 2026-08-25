@@ -18,3 +18,23 @@ compare ${REFERENCE}/wptsequence~gpx.json ${TMPDIR}/wptsequence~gpx.json
 gpsbabel -i geojson -f ${REFERENCE}/wptsequence~gpx.json -o gpx -F ${TMPDIR}/wptsequence~gpx~json.gpx
 compare ${REFERENCE}/wptsequence~gpx~json.gpx ${TMPDIR}/wptsequence~gpx~json.gpx
 
+# Input containing invalid UTF-8 must be rejected, not silently repaired.
+# The reader used to decode the file to a QString and re-encode it before
+# parsing, which replaced the bad byte with U+FFFD. This fixture therefore
+# converted "successfully" and emitted a waypoint with a corrupted name.
+# expecting this to fail so call directly rather than via gpsbabel function
+${VALGRIND} "${PNAME}" -i geojson -f ${REFERENCE}/geojson-badutf8.geojson -o gpx -F ${TMPDIR}/geojson-badutf8.gpx > /dev/null 2> ${TMPDIR}/geojson-badutf8.log && {
+  echo "${PNAME} succeeded! (it shouldn't have with this input...)"
+  errorcount=`expr $errorcount + 1`
+}
+# Not a whole-log compare: the diagnostic embeds the input path, which varies
+# with how testo was invoked. Anchor on gpsbabel's own "parse error in" wording
+# plus the UTF8 token, rather than Qt's exact phrasing -- errorString() is a
+# translatable, human-readable string and pinning all of it would couple this
+# test to third-party wording.
+grep -Eq 'parse error in .*UTF8' ${TMPDIR}/geojson-badutf8.log || {
+  echo "ERROR: expected an invalid UTF-8 diagnostic from geojson, got:"
+  cat ${TMPDIR}/geojson-badutf8.log
+  errorcount=`expr $errorcount + 1`
+}
+
