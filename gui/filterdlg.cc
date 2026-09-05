@@ -26,8 +26,10 @@
 #include <QFrame>           // for QFrame
 #include <QHBoxLayout>      // for QHBoxLayout
 #include <QListWidget>      // for QListWidget
+#include <QLoggingCategory> // for QLoggingCategory
 #include <QMessageBox>      // for QMessageBox, operator|
 #include <QPushButton>      // for QPushButton
+#include <QTimeZone>        // for QTimeZone
 #include <Qt>               // for CheckState
 #include "appname.h"        // for appName
 #include "help.h"           // for ShowHelp
@@ -129,13 +131,23 @@ void FilterDialog::helpX()
 }
 
 //------------------------------------------------------------------------
+void FilterDialog::traceDialog(const char* state) const
+{
+  static QLoggingCategory category("gpsbabelfe.filterdialog.track");
+  qCDebug(category) << state << "start time:" << fd_.trackFilterData.startTime << "time zone:" << fd_.trackFilterData.startTime.timeZone() << "time spec:" << fd_.trackFilterData.startTime.timeSpec();
+  qCDebug(category) << state << "stop time:" << fd_.trackFilterData.stopTime << "time zone:" << fd_.trackFilterData.stopTime.timeZone() << "time spec:" << fd_.trackFilterData.stopTime.timeSpec();
+}
+
+//------------------------------------------------------------------------
 void FilterDialog::runDialog()
 {
+  traceDialog("before:");
   if (exec() != 0) {
     for (int i=0; i<pages_.size(); i++) {
       pages_[i]->getWidgetValues();
       *(usePages_[i]) = ui_.filterList->item(i)->checkState() == Qt::Checked;
     }
   }
+  traceDialog("after:");
   lastPage_ = ui_.filterList->currentRow();
 }

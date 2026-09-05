@@ -22,6 +22,7 @@
 //------------------------------------------------------------------------
 #include <QApplication>  // for QApplication
 #include <QIcon>         // for QIcon
+#include <QLoggingCategory>
 #include <QString>       // for QString
 #include <QtGlobal>      // for QT_VERSION, QT_VERSION_CHECK
 
@@ -37,6 +38,7 @@ int main(int argc, char** argv)
 #error this version of Qt is not supported.
 #endif
 
+  QLoggingCategory::setFilterRules(QStringLiteral("gpsbabelfe.*=false"));
   // Set desktop filename before creating QApplication, see QTBUG-149180
   QApplication::setDesktopFileName("gpsbabelfe");
 
