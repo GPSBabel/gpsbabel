@@ -15,7 +15,7 @@ will be automatically set to /app.
 Specify the version of GPSBabel.  This is only used with the -cli, -gui, and
 -clean options.  The default is "latest".  Valid versions are "1.5.0",
 "1.5.1", "1.5.2", "1.5.3", "1.5.4", "1.6.0", "1.7.0", "1.8.0", "1.9.0",
-"1.10.0", "latest", and "dev".
+"1.10.0", "1.11.0", "latest", and "dev".
 
 .PARAMETER cli
 Run the gpsbabel CLI, passing all the remaining arguments.  
@@ -62,7 +62,7 @@ param(
     [Parameter(ParameterSetName = 'CleanSet')]
     [Parameter(ParameterSetName = 'CliSet')]
     [Parameter(ParameterSetName = 'GuiSet')]
-    [ValidateSet("1.5.0", "1.5.1", "1.5.2", "1.5.3", "1.5.4", "1.6.0", "1.7.0", "1.8.0", "1.9.0", "1.10.0", "latest", "dev")]
+    [ValidateSet("1.5.0", "1.5.1", "1.5.2", "1.5.3", "1.5.4", "1.6.0", "1.7.0", "1.8.0", "1.9.0", "1.10.0", "1.11.0", "latest", "dev")]
     [string] $version = "latest",
 
     [Parameter(ParameterSetName = 'ListSet')]
