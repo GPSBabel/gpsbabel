@@ -6,7 +6,7 @@
 -s2
 
 # Even single line ifs and elses get braces.
---add-brackets
+--add-braces
 
 # Insert space after 'if', 'for', 'while'.
 --pad-header

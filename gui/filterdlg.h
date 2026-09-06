@@ -44,6 +44,8 @@ public:
 
 
 private:
+  void traceDialog(const char* state) const;
+
   static int lastPage_;
   QList <FilterWidget*>pages_;
   QList <bool*>usePages_;

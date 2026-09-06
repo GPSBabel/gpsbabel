@@ -248,7 +248,7 @@ bool GoogleTimelineFormat::add_visit(const QJsonObject& visit, const QString& st
    */
   const QJsonObject topCandidate = visit[TOP_CANDIDATE].toObject();
   const QString latLng =
-    topCandidate[PLACE_LOCATION].toObject()[LATLNG].toString();
+    topCandidate[PLACE_LOCATION][LATLNG].toString();
   double lat = 0;
   double lon = 0;
   if (!parse_latlng(latLng, lat, lon)) {
@@ -288,11 +288,11 @@ int GoogleTimelineFormat::add_activity(
 
   double lat = 0;
   double lon = 0;
-  if (parse_latlng(activity[START].toObject()[LATLNG].toString(), lat, lon)) {
+  if (parse_latlng(activity[START][LATLNG].toString(), lat, lon)) {
     n_points += track_maybe_add_wpt(
       route, make_waypoint(lat, lon, nullString, nullString, start_time));
   }
-  if (parse_latlng(activity[END].toObject()[LATLNG].toString(), lat, lon)) {
+  if (parse_latlng(activity[END][LATLNG].toString(), lat, lon)) {
     n_points += track_maybe_add_wpt(
       route, make_waypoint(lat, lon, nullString, nullString, end_time));
   }
@@ -316,7 +316,7 @@ bool GoogleTimelineFormat::add_parking(const QJsonObject& activity)
   const QJsonObject parking = activity[PARKING].toObject();
   double lat = 0;
   double lon = 0;
-  if (!parse_latlng(parking[LOCATION].toObject()[LATLNG].toString(), lat, lon)) {
+  if (!parse_latlng(parking[LOCATION][LATLNG].toString(), lat, lon)) {
     return false;
   }
   waypt_add(make_waypoint(
