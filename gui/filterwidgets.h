@@ -28,13 +28,13 @@
 #include <QDateTime>         // for QDateTime
 #include <QDateTimeEdit>     // for QDateTimeEdit
 #include <QDoubleValidator>  // for QDoubleValidator
-#include <QFunctionPointer>  // for qMax, qMin
 #include <QLineEdit>         // for QLineEdit
 #include <QList>             // for QList
 #include <QObject>           // for QObject, Q_OBJECT, slots
 #include <QSpinBox>          // for QSpinBox
 #include <QString>           // for QString
 #include <QWidget>           // for QWidget
+#include <QtGlobal>          // for qMax, qMin
 
 #include <memory>            // for unique_ptr
 #include <utility>           // for move
@@ -326,6 +326,8 @@ public:
   }
 
 private:
+  void setTZ(bool local) const;
+
   Ui_TrackWidget ui;
   TrackFilterData& tfd;
 

@@ -22,18 +22,18 @@
 
 #include "filterwidgets.h"
 
-#include <cassert>       // for assert
-#include <limits>        // for numeric_limits
+#include <limits>             // for numeric_limits
 
-#include <QChar>         // for QChar
-#include <QCheckBox>     // for QCheckBox
-#include <QEvent>        // for QEvent
-#include <QLabel>        // for QLabel
-#include <QRadioButton>  // for QRadioButton
+#include <QChar>              // for QChar
+#include <QCheckBox>          // for QCheckBox
+#include <QEvent>             // for QEvent
+#include <QLabel>             // for QLabel
+#include <QRadioButton>       // for QRadioButton
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
-#include <QTimeZone>     // for QTimeZone
+#include <QTimeZone>          // for QTimeZone
 #endif
-#include <Qt>            // for TimeSpec
+#include <Qt>                 // for TimeSpec
+#include <QtGlobal>           // for QT_VERSION, QT_VERSION_CHECK
 
 
 //------------------------------------------------------------------------
@@ -78,27 +78,10 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   ui.startEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
 
-  // Qt5 QDateTimeEdit::setDateTime ignored the passed QDateTime::timeSpec.
-  // Qt6 QDateTimeEdit::setDateTime will convert the passed QDateTime if the passed
-  // QDateTime::timeSpec doesn't match QDateTimeEdit::timeSpec.
-  // If the two timeSpecs match Qt5 and Qt6 behave the same.
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
-  assert(tfd.startTime.timeZone() == tfd.stopTime.timeZone());
-  assert((tfd.startTime.timeZone() == QTimeZone::UTC) || (tfd.startTime.timeZone() == QTimeZone::LocalTime));
-  ui.startEdit->setTimeZone(tfd.startTime.timeZone());
-  ui.stopEdit->setTimeZone(tfd.stopTime.timeZone());
-  // Make sure the initial state of the localTime and utc radio buttons
-  // is in agreement with the startTime::timeSpec and stopTime::timeSpec.
-  tfd.localTime = tfd.startTime.timeZone() == QTimeZone::LocalTime;
-#else
-  assert(tfd.startTime.timeSpec() == tfd.stopTime.timeSpec());
-  assert((tfd.startTime.timeSpec() == Qt::UTC) || (tfd.startTime.timeSpec() == Qt::LocalTime));
-  ui.startEdit->setTimeSpec(tfd.startTime.timeSpec());
-  ui.stopEdit->setTimeSpec(tfd.stopTime.timeSpec());
-  // Make sure the initial state of the localTime and utc radio buttons
-  // is in agreement with the startTime::timeSpec and stopTime::timeSpec.
-  tfd.localTime = tfd.startTime.timeSpec() == Qt::LocalTime;
-#endif
+  // setWidgetValues() will set the QDateTimeEdit dateTime property.
+  // When setting this property, the new QDateTime is converted to the time
+  // system of the QDateTimeEdit, which thus remains unchanged.
+  setTZ(tfd.localTime);
   tfd.utc = !tfd.localTime;
 
   // Collect the data fields.
@@ -198,9 +181,9 @@ void TrackWidget::splitDistanceX()
   otherCheckX();
 }
 //------------------------------------------------------------------------
-void TrackWidget::TZX() const
+void TrackWidget::setTZ(bool local) const
 {
-  if (ui.localTime->isChecked()) {
+  if (local) {
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
     ui.startEdit->setTimeZone(QTimeZone::LocalTime);
     ui.stopEdit->setTimeZone(QTimeZone::LocalTime);
@@ -217,6 +200,12 @@ void TrackWidget::TZX() const
     ui.stopEdit->setTimeSpec(Qt::UTC);
 #endif
   }
+
+}
+//------------------------------------------------------------------------
+void TrackWidget::TZX() const
+{
+  setTZ(ui.localTime->isChecked());
   // Force update of Edit displays, so the displayed
   // datetimes are in sync with the specified time spec.
   auto ev = QEvent(QEvent::LocaleChange);
