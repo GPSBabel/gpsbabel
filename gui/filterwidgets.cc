@@ -79,8 +79,8 @@ TrackWidget::TrackWidget(QWidget* parent, TrackFilterData& tfd): FilterWidget(pa
   ui.stopEdit->setDisplayFormat("dd MMM yyyy hh:mm:ss AP");
 
   // setWidgetValues() will set the QDateTimeEdit dateTime property.
-  // When setting this property, e.g. with QDateTimeEdit::setDateTime,
-  // the new QDateTime is converted to the time system of the QDateTimeEdit, which thus remains unchanged.
+  // When setting this property, the new QDateTime is converted to the time
+  // system of the QDateTimeEdit, which thus remains unchanged.
   setTZ(tfd.localTime);
   tfd.utc = !tfd.localTime;
 
