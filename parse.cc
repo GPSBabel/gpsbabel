@@ -196,20 +196,20 @@ parse_distance(const QString& str, double* val, double scale)
     return 1;
   }
 
-  if (QString::compare(unit, QLatin1String("m"), Qt::CaseInsensitive) == 0) /* do nothing, that's our standard */;
-  else if (QString::compare(unit, QLatin1String("ft"), Qt::CaseInsensitive) == 0) {
+  if (unit.compare(QLatin1String("m"), Qt::CaseInsensitive) == 0) /* do nothing, that's our standard */;
+  else if (unit.compare(QLatin1String("ft"), Qt::CaseInsensitive) == 0) {
     *val = FEET_TO_METERS(*val);
-  } else if (QString::compare(unit, QLatin1String("feet"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("feet"), Qt::CaseInsensitive) == 0) {
     *val = FEET_TO_METERS(*val);
-  } else if (QString::compare(unit, QLatin1String("k"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("k"), Qt::CaseInsensitive) == 0) {
     *val *= 1000.0;
-  } else if (QString::compare(unit, QLatin1String("km"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("km"), Qt::CaseInsensitive) == 0) {
     *val *= 1000.0;
-  } else if (QString::compare(unit, QLatin1String("nm"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("nm"), Qt::CaseInsensitive) == 0) {
     *val = NMILES_TO_METERS(*val);
-  } else if (QString::compare(unit, QLatin1String("mi"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("mi"), Qt::CaseInsensitive) == 0) {
     *val = MILES_TO_METERS(*val);
-  } else if (QString::compare(unit, QLatin1String("fa"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("fa"), Qt::CaseInsensitive) == 0) {
     *val = FATHOMS_TO_METERS(*val);
   } else {
     gbFatal("Unsupported distance unit in item '%s'!\n", gbLogCStr(str));
@@ -243,23 +243,23 @@ parse_speed(const QString& str, double* val, const double scale)
     return 1;
   }
 
-  if (QString::compare(unit, QLatin1String("m/s"), Qt::CaseInsensitive) == 0) ;
-  else if (QString::compare(unit, QLatin1String("mps"), Qt::CaseInsensitive) == 0) ;
-  else if (QString::compare(unit, QLatin1String("kph"), Qt::CaseInsensitive) == 0) {
+  if (unit.compare(QLatin1String("m/s"), Qt::CaseInsensitive) == 0) ;
+  else if (unit.compare(QLatin1String("mps"), Qt::CaseInsensitive) == 0) ;
+  else if (unit.compare(QLatin1String("kph"), Qt::CaseInsensitive) == 0) {
     *val = KPH_TO_MPS(*val);
-  } else if (QString::compare(unit, QLatin1String("km/h"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("km/h"), Qt::CaseInsensitive) == 0) {
     *val = KPH_TO_MPS(*val);
-  } else if (QString::compare(unit, QLatin1String("kmh"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("kmh"), Qt::CaseInsensitive) == 0) {
     *val = KPH_TO_MPS(*val);
-  } else if (QString::compare(unit, QLatin1String("kt"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("kt"), Qt::CaseInsensitive) == 0) {
     *val = KNOTS_TO_MPS(*val);
-  } else if (QString::compare(unit, QLatin1String("knot"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("knot"), Qt::CaseInsensitive) == 0) {
     *val = KNOTS_TO_MPS(*val);
-  } else if (QString::compare(unit, QLatin1String("mph"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("mph"), Qt::CaseInsensitive) == 0) {
     *val = MPH_TO_MPS(*val);
-  } else if (QString::compare(unit, QLatin1String("mi/h"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("mi/h"), Qt::CaseInsensitive) == 0) {
     *val = MPH_TO_MPS(*val);
-  } else if (QString::compare(unit, QLatin1String("mih"), Qt::CaseInsensitive) == 0) {
+  } else if (unit.compare(QLatin1String("mih"), Qt::CaseInsensitive) == 0) {
     *val = MPH_TO_MPS(*val);
   } else {
     gbWarning("Unsupported speed unit '%s' in item '%s'!\n", gbLogCStr(unit), gbLogCStr(str));
