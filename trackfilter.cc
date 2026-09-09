@@ -35,6 +35,7 @@ static constexpr bool TRACKF_DBG = false;
 #include <QDate>                           // for QDate
 #include <QDateTime>                       // for QDateTime
 #include <QDebug>
+#include <QLatin1String>                   // for QLatin1String
 #include <QList>                           // for QList<>::iterator, QList, QList<>::const_iterator
 #include <QRegularExpression>              // for QRegularExpression, QRegularExpression::CaseInsensitiveOption, QRegularExpression::PatternOptions
 #include <QRegularExpressionMatch>         // for QRegularExpressionMatch

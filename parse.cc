@@ -25,8 +25,9 @@
 #include <stdexcept>               // for invalid_argument, out_of_range
 #include <string>                  // for stod
 
+#include <QLatin1String>           // for QLatin1String
 #include <QString>                 // for QString
-#include <QtGlobal>                // for qPrintable
+#include <Qt>                      // for CaseSensitivity
 
 #include "parse.h"                 // for parse_double, parse_integer
 #include "defs.h"                  // for gbFatal, grid_type, KPH_TO_MPS, MPH_TO_MPS, gbWarning, FEET_TO_METERS, KNOTS_TO_MPS, kDatumWGS84, FATHOMS_TO_METERS, MILES_TO_METERS, NMILES_TO_METERS, parse_coordinates, CSTR, parse_distance, parse_speed
