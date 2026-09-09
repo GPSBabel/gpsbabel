@@ -26,6 +26,8 @@
 #include <windows.h>
 #include <setupapi.h>
 
+#include <QByteArray>
+
 #include <cassert>
 #include <cstdarg>
 #include <cstdio>
@@ -151,7 +153,7 @@ fix_win_serial_name_r(const char* comname, char* obuf, size_t len)
 {
   if (!gbser_is_serial(comname) ||
       ((strlen(comname) == 5) && (comname[4] == ':')) ||
-      ((strlen(comname) == 4) && (case_ignore_strncmp(comname, "com", 3) == 0))
+      ((strlen(comname) == 4) && qstrnicmp(comname, "com", 3) == 0)
      ) {
     strncpy(obuf, comname, len);
   } else {
@@ -402,7 +404,7 @@ int gbser_is_serial(const char* port_name)
     port_name += pfx_l;
   }
 
-  if (case_ignore_strncmp(port_name, com, com_l) != 0) {
+  if (qstrnicmp(port_name, com, com_l) != 0) {
     return 0;
   }
 

@@ -30,9 +30,10 @@
 #include <cstring>           // for strcmp, strcpy
 #include <ctime>             // for time_t
 
+#include <QByteArray>        // for qstricmp
 #include <QString>           // for QString
 
-#include "defs.h"            // for case_ignore_strcmp, gbFatal, CSTR
+#include "defs.h"            // for gbFatal, CSTR
 #include "jeeps/gpsdatum.h"  // for GPS_ODatum, GPS_OEllipse, GPS_Datums, GPS_Ellipses, UKNG, GPS_SDatum_Alias, GPS_SDatum, GPS_DatumAliases, GPS_PDatum, GPS_PDatum_Alias
 
 static constexpr bool use_exact_helmert_inverse = false;
@@ -2778,13 +2779,13 @@ int32_t GPS_Lookup_Datum_Index(const char* n)
   const GPS_Datum_Alias* al;
 
   for (al = GPS_DatumAliases; al->alias; al++) {
-    if (case_ignore_strcmp(al->alias, n) == 0) {
+    if (qstricmp(al->alias, n) == 0) {
       return al->datum;
     }
   }
 
   for (dp = GPS_Datums; dp->name; dp++) {
-    if (0 == case_ignore_strcmp(dp->name, n)) {
+    if (0 == qstricmp(dp->name, n)) {
       return dp - GPS_Datums;
     }
   }
