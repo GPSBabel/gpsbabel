@@ -1173,7 +1173,7 @@ ExifFormat::exif_find_wpt_by_name(const Waypoint* wpt)
 {
   if (exif_wpt_ref != nullptr) {
     return;
-  } else if ((wpt->shortname != nullptr) && (QString::compare(wpt->shortname, opt_name, Qt::CaseInsensitive) == 0)) {
+  } else if ((wpt->shortname != nullptr) && (wpt->shortname.compare(opt_name, Qt::CaseInsensitive) == 0)) {
     exif_wpt_ref = wpt;
   }
 }
