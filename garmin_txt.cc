@@ -931,7 +931,7 @@ GarminTxtFormat::parse_display(const QString& str, int* val) const
   }
 
   for (int i = 0; i < gt_display_mode_names.size(); ++i) {
-    if (case_ignore_strcmp(str, gt_display_mode_names[i]) == 0) {
+    if (str.compare(gt_display_mode_names[i], Qt::CaseInsensitive) == 0) {
       *val = i;
       return true;
     }
@@ -1036,7 +1036,7 @@ GarminTxtFormat::parse_waypoint(const QStringList& lineparts)
       break;
     case  3:
       for (i = 0; i < gt_waypt_class_names.size(); i++) {
-        if (case_ignore_strcmp(str, gt_waypt_class_names[i]) == 0) {
+        if (str.compare(gt_waypt_class_names[i], Qt::CaseInsensitive) == 0) {
           garmin_fs_t::set_wpt_class(gmsd, i);
           break;
         }

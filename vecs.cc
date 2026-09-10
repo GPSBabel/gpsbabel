@@ -39,7 +39,7 @@
 #include <type_traits>         // for is_base_of
 #include <utility>             // for as_const
 
-#include "defs.h"              // for arglist_t, CSTR, gbFatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, case_ignore_strcmp, gpsdata_type, gbWarning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
+#include "defs.h"              // for arglist_t, CSTR, gbFatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, gpsdata_type, gbWarning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
 #include "dg-388.h"            // for Dg388Format
 #include "exif.h"              // for ExifFormat
@@ -647,7 +647,7 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
         gbDebug("options: module/option=value: %s/%s=\"%s\"",
                gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
-        if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
+        if (QString::compare(arg.defaultvalue, arg.argval->get(), Qt::CaseInsensitive) == 0) {
           gbDebug(" (=default)");
         }
         gbDebug("\n");
@@ -855,8 +855,8 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
    * the option to set the style file.  Make sure we know which entry in
    * the argument list that is.
    */
-  assert(case_ignore_strcmp(xcsvfmt->get_args()->at(0).helpstring,
-                            "Full path to XCSV style file") == 0);
+  assert(QString::compare(xcsvfmt->get_args()->at(0).helpstring,
+                            QLatin1String("Full path to XCSV style file"), Qt::CaseInsensitive) == 0);
 
   /* Gather the relevant info for the style based formats. */
   for (const auto& svec : style_list) {
