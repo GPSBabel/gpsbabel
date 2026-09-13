@@ -91,8 +91,7 @@ def fetch_installer(tmpdir: str, verbose: int) -> str:
         elif platform.machine() in ["arm64", "ARM64"]:
             installer_name = "qt-online-installer-windows-arm64-online.exe"
     elif platform.system() == "Darwin":
-        # note this may require rosetta is installed on arm64 macs.
-        installer_name = "qt-online-installer-mac-x64-online.dmg"
+        installer_name = "qt-online-installer-macOS-universal.dmg"
     elif platform.system() == "Linux":
         if platform.machine() == "x86_64":
             installer_name = "qt-online-installer-linux-x64-online.run"
