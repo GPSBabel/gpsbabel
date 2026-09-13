@@ -1,56 +1,104 @@
 <para>
-	Format for output subtitles.
+  Each subtitle is constructed from a format string. A variety of variables
+  are available that reflect aspects of the track. The format string is <emphasis>similar</emphasis>
+  to C++ <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://en.cppreference.com/cpp/utility/format/spec">std::format</link> 
+  and Python <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://docs.python.org/3/library/string.html#format-specification-mini-language">f-strings</link>, 
+  but must always contain the variable name.
+</para>
+<para>
+  Variables are accessed by using a <emphasis>named field</emphasis>, which are curly braces
+  containing the variable name. An optional format specification can be provided
+  for each field. The format specification controls aspects such as the total
+  width (number of characters), the alignment within the field width, decimal digits
+  shown, and so on.
+</para>
+<para>
+  The format specification depends on the variable type, shown in the table 
+  below. If the format specification is not appropriate for the type, an error
+  such as "subrip: format error for hour: Invalid presentation type for integer"
+  will be shown.
 </para>
 <table xml:id="subrip_format">
-<title>Supported format characters for subrip</title>
-<tgroup cols="2">
-<thead>
-<row>
- <entry>format char</entry>
- <entry>description</entry>
-</row>
-</thead>
-<tbody>
-<row>
-  <entry>%s</entry>
-  <entry>speed in km/h</entry>
-</row>
-<row>
-  <entry>%e</entry>
-  <entry>elevation in meters</entry>
-</row>
-<row>
-  <entry>%v</entry>
-  <entry>vertical speed in m/s</entry>
-</row>
-<row>
-  <entry>%t</entry>
-  <entry>timestamp</entry>
-</row>
-<row>
-  <entry>%l</entry>
-  <entry>coordinates</entry>
-</row>
-<row>
-  <entry>%c</entry>
-  <entry>pedal cadence</entry>
-</row>
-<row>
-  <entry>%h</entry>
-  <entry>heart rate</entry>
-</row>
-<row>
-  <entry>%g</entry>
-  <entry>road gradient</entry>
-</row>
-<row>
-  <entry>\n</entry>
-  <entry>newline</entry>
-</row>
-</tbody>
-</tgroup>
+  <title>Supported format variable for subrip</title>
+  <tgroup cols="3">
+    <thead>
+      <row>
+        <entry>variable</entry>
+        <entry>type</entry>
+        <entry>description</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>hour</entry>
+        <entry>integer</entry>
+        <entry>The hour component of waypoint time.</entry>
+      </row>
+      <row>
+        <entry>minute</entry>
+        <entry>integer</entry>
+        <entry>The minute component of waypoint time.</entry>
+      </row>
+      <row>
+        <entry>second</entry>
+        <entry>integer</entry>
+        <entry>The second component of waypoint time.</entry>
+      </row>
+      <row>
+        <entry>longitude</entry>
+        <entry>float</entry>
+        <entry>Location x-component (E/W) in decimal degrees.</entry>
+      </row>
+      <row>
+        <entry>latitude</entry>
+        <entry>float</entry>
+        <entry>Location y-component (N/S) in decimal degrees.</entry>
+      </row>
+      <row>
+        <entry>altitude</entry>
+        <entry>float</entry>
+        <entry>Vertical position of waypoint. Assumed to be meters by default.</entry>
+      </row>
+      <row>
+        <entry>speed</entry>
+        <entry>float</entry>
+        <entry>Horizontal velocity. Assumed to be meters-per-second by default.</entry>
+      </row>
+      <row>
+        <entry>course</entry>
+        <entry>float</entry>
+        <entry>Bearing/compass direction relative to North in degrees.</entry>
+      </row>
+      <row>
+        <entry>vspeed</entry>
+        <entry>float</entry>
+        <entry>Vertical velocity. Assumed to be meters-per-second by default.</entry>
+      </row>
+      <row>
+        <entry>gradient</entry>
+        <entry>float</entry>
+        <entry>Incline (eg of road) as a %.</entry>
+      </row>
+      <row>
+        <entry>cadence</entry>
+        <entry>float</entry>
+        <entry>Pedal cadence.</entry>
+      </row>
+      <row>
+        <entry>heartrate</entry>
+        <entry>float</entry>
+        <entry>Heart rate.</entry>
+      </row>
+      <row>
+        <entry>\n</entry>
+        <entry></entry>
+        <entry>Type "\n" in the format string to insert a newline 
+        and produce multi-line subtitles.</entry>
+      </row>
+    </tbody>
+  </tgroup>
 </table>
 <para>
-	Default format (used when option isn't specified) is "%s km/h %e m\n%t %l".
-	Suggested format for bicycle video is "'%s km/h   %h bpm\n      %e m  %c rpm".
+	The default format string is <code>{speed:4.1f} m/s {altitude:4.0f} m\n{hour:02d}:{minute:02d}:{second:02d} Lat={latitude:.5f} Lon={longitude:.5f}</code>.
+	A possible format for a bicycle video is <code>{speed:&lt;4.1f} m/s{heartrate:5.0f} bpm\n{altitude:&lt;6.1f} m{cadence:5.0f} rpm</code>.
 </para>
