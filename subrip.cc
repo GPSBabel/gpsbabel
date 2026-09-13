@@ -44,8 +44,6 @@ SubripFormat::video_time(const QDateTime& dt) const
 void
 SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
 {
-  static long long deltaoffset;
-
   /* Now that we have the next waypoint, we can write out the subtitle for
    * the previous one.
    */
@@ -57,7 +55,15 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
     return;
   }
 
-  *fout << QString::number(stnum++) << "\n";
+  *fout << subtitle_counter() << "\n";
+  *fout << subtitle_onscreen_period(waypointp) << "\n";
+  *fout << subtitle_content() << "\n\n";
+}
+
+QString
+SubripFormat::subtitle_onscreen_period(const Waypoint *waypointp) const
+{
+  static long long deltaoffset;
 
   /* Writes start and end time for subtitle display to file. */
   QDateTime end_datetime;
@@ -70,13 +76,21 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
     end_datetime = waypointp->GetCreationTime();
     deltaoffset = prevwpp->GetCreationTime().msecsTo(waypointp->GetCreationTime());
   }
+
   QTime starttime = video_time(prevwpp->GetCreationTime());
   QTime endtime = video_time(end_datetime);
-  *fout << QStringLiteral("%1:%2:%3,%4 --> %5:%6:%7,%8\n")
-            .arg(starttime.hour(), 2, 10, QChar('0')).arg(starttime.minute(), 2, 10, QChar('0')).arg(starttime.second(), 2, 10, QChar('0')).arg(starttime.msec(), 3, 10, QChar('0'))
-            .arg(endtime.hour(), 2, 10, QChar('0')).arg(endtime.minute(), 2, 10, QChar('0')).arg(endtime.second(), 2, 10, QChar('0')).arg(endtime.msec(), 3, 10, QChar('0'));
 
-  *fout << subtitle_content() << "\n\n";
+  const auto time_line = QStringLiteral("%1:%2:%3,%4 --> %5:%6:%7,%8")
+                          .arg(starttime.hour(), 2, 10, QChar('0'))
+                            .arg(starttime.minute(), 2, 10, QChar('0'))
+                            .arg(starttime.second(), 2, 10, QChar('0'))
+                            .arg(starttime.msec(), 3, 10, QChar('0'))
+                          .arg(endtime.hour(), 2, 10, QChar('0'))
+                            .arg(endtime.minute(), 2, 10, QChar('0'))
+                            .arg(endtime.second(), 2, 10, QChar('0'))
+                            .arg(endtime.msec(), 3, 10, QChar('0'));
+
+  return time_line;
 }
 
 QString
