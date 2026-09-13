@@ -1,0 +1,5 @@
+<para>
+	A number that will be multipled with the <code>altitude</code> and 
+	<code>vspeed</code> format variables. This allows conversion to other 
+	vertical distance and vertical velocity units.
+</para>
