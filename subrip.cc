@@ -31,6 +31,7 @@
 #include "src/core/datetime.h"  // for DateTime
 #include "src/core/logging.h"   // for Fatal
 
+#include <vector>
 
 /* internal helper functions */
 
@@ -75,87 +76,46 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
             .arg(starttime.hour(), 2, 10, QChar('0')).arg(starttime.minute(), 2, 10, QChar('0')).arg(starttime.second(), 2, 10, QChar('0')).arg(starttime.msec(), 3, 10, QChar('0'))
             .arg(endtime.hour(), 2, 10, QChar('0')).arg(endtime.minute(), 2, 10, QChar('0')).arg(endtime.second(), 2, 10, QChar('0')).arg(endtime.msec(), 3, 10, QChar('0'));
 
-  for (auto it = opt_format.get().cbegin(), end = opt_format.get().cend(); it != end; ++it) {
+  *fout << subtitle_content() << "\n\n";
+}
 
-    switch (it->unicode()) {
-    case u'%':
-      if (++it == end) {
-        gbFatal("No character after %% in subrip format.\n");
-      }
+QString
+SubripFormat::subtitle_content() const
+{
+  // prepare fields and values
+  const double nan = std::numeric_limits<double>::quiet_NaN();
+  const QTime t = opt_localtime ? prevwpp->GetCreationTime().toLocalTime().time() : prevwpp->GetCreationTime().toUTC().time();
+  const double speed_factor = opt_speedfactor.has_value() ? opt_speedfactor.get_result() : 1.0;
+  const double altitude_factor = opt_altitudefactor.has_value() ? opt_altitudefactor.get_result() : 1.0;
 
-      switch (it->unicode()) {
-      case u's': // speed in km/h
-        if (prevwpp->speed_has_value()) {
-          *fout << QStringLiteral("%1").arg(MPS_TO_KPH(prevwpp->speed_value()), 4, 'f', 1);
-        } else {
-          *fout << "--.-";
-        }
-        break;
-      case u'e': // elevation in meters
-        if (prevwpp->altitude != unknown_alt) {
-          *fout << QStringLiteral("%1").arg(prevwpp->altitude, 4, 'f', 0);
-        } else {
-          *fout << "   -";
-        }
-        break;
-      case u'v': // vertical speed in m/s
-        if (vspeed.has_value()) {
-          *fout << QStringLiteral("%1").arg(*vspeed, 5, 'f', 2);
-        } else {
-          *fout << "--.--";
-        }
-        break;
-      case u'g': // road gradient
-        if (gradient.has_value()) {
-          *fout << QStringLiteral("%1%").arg(*gradient, 4, 'f', 1);
-        } else {
-          *fout << "--.-%";
-        }
-        break;
-      case u't': { // timestamp
-        QTime t = prevwpp->GetCreationTime().toUTC().time();
-        *fout << QStringLiteral("%1:%2:%3").arg(t.hour(), 2, 10, QChar('0')).arg(t.minute(), 2, 10, QChar('0')).arg(t.second(), 2, 10, QChar('0'));
-        break;
-      }
-      case u'l': // coordinates
-        *fout << QStringLiteral("Lat=%1 Lon=%2")
-                  .arg(prevwpp->latitude, 0, 'f', 5).arg(prevwpp->longitude, 0, 'f', 5);
-        break;
-      case u'c': // pedal cadence
-        if (prevwpp->cadence != 0) {
-          *fout << QStringLiteral("%1").arg(prevwpp->cadence, 3);
-        } else {
-          *fout << "  -";
-        }
-        break;
-      case u'h': // heart rate
-        if (prevwpp->heartrate != 0) {
-          *fout << QStringLiteral("%1").arg(prevwpp->heartrate, 3);
-        } else {
-          *fout << "  -";
-        }
-        break;
-      }
+  const std::vector<FormatString::NamedField> fields = {
+    {"hour", t.hour()},
+    {"minute", t.minute()},
+    {"second", t.second()},
+    {"longitude", prevwpp->longitude},
+    {"latitude", prevwpp->latitude},
+    {"altitude", prevwpp->altitude != unknown_alt ? prevwpp->altitude * altitude_factor : nan},
+    {"speed", prevwpp->speed_has_value() ? speed_factor * prevwpp->speed_value() : nan},
+    {"course", prevwpp->course_has_value() ? prevwpp->course_value() : nan},
+    {"vspeed", vspeed.has_value() ? *vspeed * altitude_factor : nan},
+    {"gradient", gradient.has_value() ? *gradient : nan},
+    {"cadence", prevwpp->cadence != 0 ? prevwpp->cadence : nan},
+    {"heartrate", prevwpp->heartrate != 0 ? prevwpp->heartrate : nan},
+  };
 
-      break;
-
-    case u'\\':
-      if (++it == end) {
-        gbFatal("No character after \\ in subrip format.\n");
-      }
-
-      switch (it->unicode()) {
-      case u'n': // newline
-        *fout << "\n";
-        break;
-      }
-      break;
-
-    default:
-      *fout << *it;
-    }
+  try
+  {
+    // must replace any literal "\n" (2 chars) in fmt string with actual newline
+    auto fmt_qstring = opt_format.get(); // make it nonconst for replace()
+    const auto fmt_string = fmt_qstring.replace("\\n", "\n").toStdString();
+    const auto nan_inf_replacement = opt_nodata.get().toStdString();
+    const auto subtitle = FormatString(fmt_string, nan_inf_replacement).format(fields);
+    return QString::fromStdString(subtitle);
   }
-  *fout << "\n\n";
+  catch (const std::format_error &e)
+  {
+    gbFatal(FatalMsg().nospace() << e.what());
+  }
 }
 
 /* callback functions */
