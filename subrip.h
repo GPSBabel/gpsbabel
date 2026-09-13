@@ -71,12 +71,19 @@ private:
   void subrip_prevwp_pr(const Waypoint* waypointp);
   void subrip_trkpt_pr(const Waypoint* waypointp);
 
+  QString subtitle_content() const;
+
   /* Data Members */
 
   OptionString opt_videotime;
   OptionString opt_gpstime;
   OptionString opt_gpsdate;
   OptionString opt_format;
+  OptionString opt_nodata;
+  OptionDouble opt_speedfactor;
+  OptionDouble opt_altitudefactor;
+  OptionBool opt_localtime;
+
   QDateTime gps_datetime;    // Date time corresponding to video video_offset_ms
   QDateTime video_datetime;  // Date time corresponding to video time 00:00:00,000.
   int video_offset_ms{0};
@@ -90,7 +97,11 @@ private:
     {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss[.sss], default is 00:00:00,000)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
     {"gps_time", &opt_gpstime, "GPS time at position video_time (hhmmss[.sss], default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
     {"gps_date", &opt_gpsdate, "GPS date at position video_time (yyyymmdd, default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-    {"format", &opt_format, "Format for subtitles", "%s km/h %e m\\n%t %l", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+    {"format", &opt_format, "Format for subtitles", "{speed:4.1f} m/s {altitude:4.0f} m\\n{hour:02d}:{minute:02d}:{second:02d} Lat={latitude:.5f} Lon={longitude:.5f}", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+    {"no_data", &opt_nodata, "Substitution for no-data value", "---", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+    {"speed_factor", &opt_speedfactor, "Speed unit conversion factor", "1.0", ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr },
+    {"altitude_factor", &opt_altitudefactor, "Altitude unit conversion factor", "1.0", ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr },
+    {"local_time", &opt_localtime, "Hour, minute, second in subtitle is local time instead of UTC", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   };
 };
 
