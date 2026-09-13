@@ -71,6 +71,9 @@ jobs:
       if: steps.restore-cache.outputs.cache-hit != 'true'
       env:
         CI_BUILD_DIR: ${{ github.workspace }}
+        ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+        ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
+        ARTIFACTORY_BASE_URL: ${{ secrets.ARTIFACTORY_BASE_URL }}
         QT_INSTALLER_JWT_TOKEN: ${{secrets.QT_INSTALLER_JWT_TOKEN}}
       run: |
         ./tools/ci_install_osx.sh ${{ matrix.QT_VERSION }} aqt
