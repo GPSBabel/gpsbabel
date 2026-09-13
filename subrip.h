@@ -22,7 +22,13 @@
 #ifndef SUBRIP_H_INCLUDED_
 #define SUBRIP_H_INCLUDED_
 
+#include <concepts>   // for same_as
 #include <optional>   // for optional
+#include <ranges>     // for ranges
+#include <regex>      // for regex, regex_replace
+#include <string>     // for string
+#include <utility>    // for pair
+#include <variant>    // for variant, visit
 
 #include <QList>      // for QList
 #include <QDateTime>  // for QDateTime, operator<<
@@ -87,4 +93,86 @@ private:
     {"format", &opt_format, "Format for subtitles", "%s km/h %e m\\n%t %l", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   };
 };
+
+
+
+/// @brief Performs placement and formatting of values into a string.
+/// These format strings are generally like those expected by std::format(),
+/// but should normally have a field name specified similar to python's
+/// f-strings. Unlike std::format or python, curly braces do not need to
+/// be "doubled" to insert a single brace in the final formatted string.
+/// A format string must specify a name for each field, such as
+/// `{field_name}`, or `{field_name:0.2f}`.
+class FormatString
+{
+public:
+  using Value = std::variant<int64_t, double, std::string, bool>;
+  using NamedField = std::pair<const std::string, Value>;
+
+  /// @param fmt_string A string with replacement fields.
+  /// @param nan_inf_replacement A string that will replace "nan" or "inf"
+  /// when a double is converted to string.
+  FormatString(const std::string &fmt_string, const std::string &nan_inf_replacement = "---")
+      : original_fmt_string{fmt_string},
+        nan_inf_replacement{nan_inf_replacement} {}
+
+  /// @brief Replaces named fields in format string using the mapping of field name to value.
+  /// @param fields A mapping of field names to their replacement values. This
+  /// can be anything that provides an iterable of `NamedField`.
+  /// @return The format string with fields replaced.
+  /// @throws std::format_error An error during field replacement.
+  template <typename T>
+    requires std::ranges::forward_range<T> && std::same_as<std::ranges::range_value_t<T>, NamedField>
+  std::string
+  format(const T &fields) const
+  {
+    std::string format_str{original_fmt_string};
+
+    for (const auto &[field_name, field_value] : fields)
+    {
+      const auto field_spec{std::format("\\{{{}(?::.*?)?\\}}", field_name)};
+      const std::regex field_spec_re{field_spec};
+      for (std::smatch matched_spec; std::regex_search(format_str, matched_spec, field_spec_re);)
+      {
+        const auto replacement = format_single_field(matched_spec.str(), field_name, field_value);
+        format_str = matched_spec.prefix().str() + replacement + matched_spec.suffix().str();
+      }
+    }
+
+    return format_str;
+  }
+
+private:
+  const std::string original_fmt_string;
+
+  const std::string nan_inf_replacement;
+  const std::regex nan_inf_re{"nan|-?inf", std::regex_constants::icase};
+
+  /// @brief Replace a single field, possibly containing a field name, with the
+  /// formatted version of its value.
+  /// @param field_spec A field such as `{}`, `{:0.2f}`, `{field_name}`, or `{field_name:0.2f}`
+  /// @param field_name The name of a variable that may appear in `field_spec`.
+  /// @param field_value A value to be formatted according to `field_spec`.
+  /// @return The final formatted value as a string.
+  /// @throws std::format_error An error during field replacement.
+  std::string
+  format_single_field(std::string field_spec, const std::string &field_name, const Value &field_value) const
+  {
+    try
+    {
+      field_spec = std::regex_replace(field_spec, std::regex{field_name}, "");
+      auto format_variant = [&](auto &v){ return std::vformat(field_spec, std::make_format_args(v)); };
+      auto formatted = std::visit(format_variant, field_value);
+      formatted = std::regex_replace(formatted, nan_inf_re, nan_inf_replacement);
+      return formatted;
+    }
+    catch (const std::format_error &e)
+    {
+      const std::string error = std::format("format error for {}: {}", field_name, e.what());
+      throw std::format_error{error};
+    }
+  }
+};
+
+
 #endif // SUBRIP_H_INCLUDED_
