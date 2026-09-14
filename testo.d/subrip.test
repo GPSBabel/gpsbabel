@@ -10,9 +10,9 @@ compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip4.sr
 gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,gps_date=20110702,gps_time=174725.400 -F ${TMPDIR}/subrip-shifted.srt
 compare  ${REFERENCE}/track/gpx_subsecond-sample-shifted~subrip.srt ${TMPDIR}/subrip-shifted.srt
 
-gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,format="%s km/h %e m\n%t %l" -F ${TMPDIR}/subrip5.srt
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip,format="{speed:4.1f} m/s {altitude:4.0f} m\n{hour:02d}:{minute:02d}:{second:02d} Lat={latitude:.5f} Lon={longitude:.5f}" -F ${TMPDIR}/subrip5.srt
 compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip5.srt
 
 # test all output fields
-gpsbabel -t -i unicsv -f ${REFERENCE}/track/subrip.csv -o subrip,format="speed: %s\nelevation: %e\nvertical speed: %v\ntimestamp: %t\ncoordinates: %l\npedal cadence: %c\nheart rate: %h\ngradient %g" -F ${TMPDIR}/subrip~csv.srt
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/subrip.csv -o subrip,format="speed: {speed:4.1f}\nelevation: {altitude:4.0f}\nvertical speed: {vspeed:4.1f}\ntimestamp: {hour:02d}:{minute:02d}:{second:02d}\ncoordinates: Lat={latitude:.5f} Lon={longitude:.5f}\npedal cadence: {cadence:3.0f}\nheart rate: {heartrate:3.0f}\ngradient: {gradient:4.1f}%" -F ${TMPDIR}/subrip~csv.srt
 compare ${REFERENCE}/track/subrip~csv.srt ${TMPDIR}/subrip~csv.srt
