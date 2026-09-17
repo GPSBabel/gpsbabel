@@ -419,7 +419,7 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, int which, in
         // subject sequence empty or does not have the expected form, .e.g ".a"
         // no conversion was performed, zero was returned.
         // prevent an infinite loop, use the zero result.
-        Warning() << "Ignoring malformed input when attempting to parse human readable latitude/longitude on line" << line_no << instr;
+        Warning() << "Treating malformed input as zero when attempting to parse human readable latitude/longitude on line" << line_no << instr;
         end++;
       }
       cur = end;
