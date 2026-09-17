@@ -336,7 +336,7 @@ ddmmdir_to_degrees(const char* ddmmdir)
  *****************************************************************************/
 
 void
-human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
+human_to_dec(const QString& instr, double* outlat, double* outlon, int which, int line_no)
 {
   double unk[3] = {999,999,999};
   double lat[3] = {999,999,999};
@@ -415,6 +415,13 @@ human_to_dec(const QString& instr, double* outlat, double* outlon, int which)
     case '.':
       char* end;
       numres[numind] = strtod(cur, &end);
+      if (cur == end) {
+        // subject sequence empty or does not have the expected form, .e.g ".a"
+        // no conversion was performed, zero was returned.
+        // prevent an infinite loop, use the zero result.
+        Warning() << "Ignoring malformed input when attempting to parse human readable latitude/longitude on line" << line_no << instr;
+        end++;
+      }
       cur = end;
       break;
     case '-':
