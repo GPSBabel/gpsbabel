@@ -441,7 +441,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->latitude = intdeg_to_dec((int) strtod(s, nullptr));
     break;
   case XcsvStyle::XT_LAT_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 1);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 1, line_no);
     break;
   case XcsvStyle::XT_LAT_DDMMDIR:
     wpt->latitude = ddmmdir_to_degrees(s);
@@ -465,7 +465,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->longitude = intdeg_to_dec((int) strtod(s, nullptr));
     break;
   case XcsvStyle::XT_LON_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 2);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 2, line_no);
     break;
   case XcsvStyle::XT_LON_DDMMDIR:
     wpt->longitude = ddmmdir_to_degrees(s);
@@ -476,7 +476,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   // case XcsvStyle::XT_LON_10E is handled outside the switch.
   /* LAT AND LON CONVERSIONS ********************************************/
   case XcsvStyle::XT_LATLON_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 0);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 0, line_no);
     break;
   /* DIRECTIONS **********************************************************/
   case XcsvStyle::XT_LAT_DIR:
