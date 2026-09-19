@@ -1062,8 +1062,8 @@ gbfgetutf16char(gbfile* file)
  * Fatal errors can occur if:
  * i) the file ends with either an incomplete utf-16 character, or
  * ii) the file ends with an incomplete surrogate pair, or
- * iii) a high surrogate is not followd by a low surrogate, or
- * iv) a low surrogate isn't preceeded by a high surrogate.
+ * iii) a high surrogate is not followed by a low surrogate, or
+ * iv) a low surrogate isn't preceded by a high surrogate.
  */
 static char*
 gbfgetutf16str(gbfile* file)
@@ -1124,7 +1124,7 @@ gbfgetutf16str(gbfile* file)
 }
 
 /*
- * gbfgetstr: Reads a string from file (util any type of line-breaks or eof or error)
+ * gbfgetstr: Reads a string from file (until any type of line-breaks or eof or error)
  *            except xfree and free you can do all possible things with the result
  */
 
