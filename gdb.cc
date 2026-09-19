@@ -43,7 +43,7 @@
 #include "formspec.h"               // for FormatSpecificDataList
 #include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t
 #include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
-#include "gbfile.h"                 // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfile, gbfgetcstr, gbfclose, gbfgetnativecstr, gbfopen_le, gbfputint16, gbfcopyfrom, gbfputcstr, gbfrewind, gbfseek, gbftell, gbfgetcstr_old, gbfgetint16, gbfgetuint32, gbfputdbl
+#include "gbfile.h"                 // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfile, gbfgetcstr, gbfgetnativecstr, gbfclose, gbfopen_le, gbfputint16, gbfcopyfrom, gbfputcstr, gbfrewind, gbfseek, gbftell, gbfgetint16, gbfgetuint32, gbfputdbl
 #include "grtcirc.h"                // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"          // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
 #include "mkshort.h"                // for MakeShort
@@ -150,7 +150,7 @@ QString GdbFormat::fread_cstr() const
   QString rv;
   QByteArray s = gbfgetnativecstr(fin);
   // Historically we convert empty strings to null strings.
-  if (!s.isNull() && s.isEmpty()) {
+  if (s.isEmpty() && !s.isNull()) {
     s.clear();
   }
   if (gdb_ver >= kGDBVerUTF8) {
