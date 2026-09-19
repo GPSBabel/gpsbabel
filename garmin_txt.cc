@@ -49,7 +49,6 @@
 #include <QtGlobal>                // for qRound, qPrintable
 
 #include "defs.h"
-#include "csv_util.h"              // for csv_linesplit
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t
 #include "garmin_tables.h"         // for gt_display_modes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_get_mps_grid_longname, gt_lookup_datum_index, gt_lookup_grid_type, GDB, gt_get_icao_cc, gt_get_icao_country, gt_get_mps_datum_name, gt_waypt_class_names, GT_DISPLAY_MODE...
@@ -1307,7 +1306,7 @@ GarminTxtFormat::read()
       continue;
     }
 
-    QStringList lineparts = csv_linesplit(buff, "\t", "", 0);
+    QStringList lineparts = buff.split('\t');
 
     if (lineparts.empty()) {
       continue;

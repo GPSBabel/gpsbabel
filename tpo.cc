@@ -619,7 +619,7 @@ void TpoFormatBase::tpo_process_tracks()
     }
 
     // Track description
-    track_temp->rte_desc = QString("Style=%1, Width=%2, Dashed=%3, Color=#%4")
+    track_temp->rte_desc = QStringLiteral("Style=%1, Width=%2, Dashed=%3, Color=#%4")
                            .arg(styles[track_style].name)
                            .arg(styles[track_style].wide)
                            .arg(styles[track_style].dash)
