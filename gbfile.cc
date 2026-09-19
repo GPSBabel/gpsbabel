@@ -670,9 +670,7 @@ gbfgets(char* buf, int len, gbfile* file)
   }
   *buf = '\0';
 
-  QString rv(result);
-  return rv;
-
+  return QString::fromUtf8(result);
 }
 
 /*
@@ -697,7 +695,7 @@ gbfread(QString& buf, const gbsize_t size,
   QByteArray tmp;
   tmp.resize(static_cast<qsizetype>(members) * size);
   gbsize_t retval = gbfread(tmp.data(), size, members, file);
-  buf = QString(tmp);
+  buf = QString::fromUtf8(tmp);
   return retval;
 }
 
@@ -1005,7 +1003,7 @@ gbfgetnativecstr(gbfile* file)
 QString
 gbfgetcstr(gbfile* file)
 {
-  return QString(gbfgetnativecstr(file));
+  return QString::fromUtf8(gbfgetnativecstr(file));
 }
 
 /*
@@ -1025,7 +1023,7 @@ gbfgetpstr(gbfile* file)
     gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
-  return QString(ba);
+  return QString::fromUtf8(ba);
 }
 
 static QChar
