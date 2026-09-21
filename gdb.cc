@@ -149,6 +149,10 @@ QString GdbFormat::fread_cstr() const
 {
   QString rv;
   QByteArray s = gbfgetnativecstr(fin);
+  // Historically we convert empty strings to null strings.
+  if (s.isEmpty() && !s.isNull()) {
+    s.clear();
+  }
   if (gdb_ver >= kGDBVerUTF8) {
     rv = QString::fromUtf8(s);
   } else {
