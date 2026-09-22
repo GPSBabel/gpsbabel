@@ -97,7 +97,7 @@ jobs:
           CXX=clang++
           export CXX
         fi
-        "${JOB_SCRIPT}"
+        ${JOB_SCRIPT}
 
     - name: upload_coverage 
       if: contains(matrix.script, 'coverage') && ( github.secret_source == 'Actions' )
