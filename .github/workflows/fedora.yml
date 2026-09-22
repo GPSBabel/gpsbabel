@@ -47,4 +47,4 @@ jobs:
           CMAKE_PREFIX_PATH="${JOB_CMAKE_PREFIX_PATH}"
           export CMAKE_PREFIX_PATH
         fi
-        ./tools/build_and_test_cmake.sh
+        ./tools/build_and_test_cmake.sh -d -t -v
