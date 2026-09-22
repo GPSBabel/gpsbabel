@@ -30,7 +30,7 @@ GBTEMP=$(pwd)/gbtemp
 export GBTEMP
 mkdir -p "$GBTEMP"
 if [ -n "$DOCVERSION" ]; then
-  cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release -DGPSABEL_DOCVERSION="$DOCVERSION"
+  cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release -DGPSBABEL_DOCVERSION="$DOCVERSION"
 else
   cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release
 fi
