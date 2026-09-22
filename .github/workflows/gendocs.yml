@@ -23,7 +23,7 @@ jobs:
         include:
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
+            SCRIPT: './tools/build_and_test_cmake.sh -d'
             RELEASE: true
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_${{ matrix.IMAGE }}

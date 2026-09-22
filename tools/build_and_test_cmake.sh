@@ -6,9 +6,9 @@
 while getopts dtv name
 do
   case $name in
-    d) DOCS=OFF;;
-    t) TESTALL=OFF;;
-    v) VALGRIND=OFF;;
+    d) DOCS=ON;;
+    t) TESTALL=ON;;
+    v) VALGRIND=ON;;
     ?) printf "Usage: %s: [-d] [-t] [-v]\n" "$0"
        exit 2;;
   esac
@@ -40,7 +40,7 @@ fi
 #make toolinfo
 cmake --build . --target clean
 cmake --build . --target gpsbabel
-if [ "${DOCS}" != "OFF" ]; then
+if [ "${DOCS}" = "ON" ]; then
   cmake --build . --target gpsbabel.html
   cmake --build . --target gpsbabel.pdf
   cmake --build . --target gpsbabel.org
@@ -51,10 +51,10 @@ cmake --build . --target gpsbabelfe
 ./test_encoding_latin1
 ./test_encoding_utf8
 #make torture
-if [ "${VALGRIND}" != "OFF" ]; then
+if [ "${VALGRIND}" = "ON" ]; then
   cmake --build . --target check-vtesto
 fi
-if [ "${TESTALL}" != "OFF" ]; then
+if [ "${TESTALL}" = "ON" ]; then
   # eat the verbose output from test-all, including crash.output
   # this is a bit risky, if test-all generates an error we won't see what happened.
   echo "test-all in progress... (read/write test between all possible formats)"

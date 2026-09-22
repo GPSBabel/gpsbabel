@@ -25,41 +25,38 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # focal has Qt 5.12, end of standard support 4/2025, end of life 4/2030.
-          #- IMAGE: 'focal'
-          #  SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            SCRIPT: './tools/build_and_test_cmake.sh'
             os: ubuntu-latest
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
             os: ubuntu-latest
 
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            SCRIPT: './tools/build_and_test_cmake.sh -d'
             os: ubuntu-latest
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
             os: ubuntu-latest
 
           - IMAGE: 'resolute'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
             os: ubuntu-latest
           - IMAGE: 'resolute'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
             TOOLS: 'clang'
             os: ubuntu-latest
           - IMAGE: 'resolute'
             CMAKE_PREFIX_PATH: '/usr/lib/aarch64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
             os: ubuntu-24.04-arm
 
           - IMAGE: 'resolute'
