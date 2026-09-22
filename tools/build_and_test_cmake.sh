@@ -3,19 +3,18 @@
 # this script is triggered by SCM changes and is run on the build server.
 # output is conditionally mailed to gpsbabel-code.
 #
-while getopts dtv name
+while getopts dD:tv name
 do
   case $name in
     d) DOCS=ON;;
+    D) DOCS=ON; DOCVERSION="$OPTARG";;
     t) TESTALL=ON;;
     v) VALGRIND=ON;;
-    ?) printf "Usage: %s: [-d] [-t] [-v]\n" "$0"
+    ?) printf "Usage: %s: [-d] [-D docversion] [-t] [-v]\n" "$0"
        exit 2;;
   esac
 done
 shift "$((OPTIND - 1))"
-
-echo $VALGRIND
 
 # echo some system info to log
 uname -a
@@ -27,10 +26,11 @@ if [ -e /etc/os-release ]; then
 fi
 git --no-pager log -n 1
 # build and test keeping output within the pwd.
-export GBTEMP=$(pwd)/gbtemp
+GBTEMP=$(pwd)/gbtemp
+export GBTEMP
 mkdir -p "$GBTEMP"
-if [ -n "$1" ]; then
-  cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release -DGPSABEL_DOCVERSION="$1"
+if [ -n "$DOCVERSION" ]; then
+  cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release -DGPSABEL_DOCVERSION="$DOCVERSION"
 else
   cmake . -G Ninja -DCMAKE_BUILD_TYPE=Release
 fi
