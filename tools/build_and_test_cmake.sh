@@ -3,7 +3,7 @@
 # this script is triggered by SCM changes and is run on the build server.
 # output is conditionally mailed to gpsbabel-code.
 #
-while getopts vt name
+while getopts dtv name
 do
   case $name in
     d) DOCS=OFF;;
