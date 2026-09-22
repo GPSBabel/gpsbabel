@@ -3,6 +3,20 @@
 # this script is triggered by SCM changes and is run on the build server.
 # output is conditionally mailed to gpsbabel-code.
 #
+while getopts vt name
+do
+  case $name in
+    d) DOCS=OFF;;
+    t) TESTALL=OFF;;
+    v) VALGRIND=OFF;;
+    ?) printf "Usage: %s: [-d] [-t] [-v]\n" "$0"
+       exit 2;;
+  esac
+done
+shift "$((OPTIND - 1))"
+
+echo $VALGRIND
+
 # echo some system info to log
 uname -a
 if [ -e /etc/system-release ]; then
@@ -26,20 +40,26 @@ fi
 #make toolinfo
 cmake --build . --target clean
 cmake --build . --target gpsbabel
-cmake --build . --target gpsbabel.html
-cmake --build . --target gpsbabel.pdf
-cmake --build . --target gpsbabel.org
+if [ "${DOCS}" != "OFF" ]; then
+  cmake --build . --target gpsbabel.html
+  cmake --build . --target gpsbabel.pdf
+  cmake --build . --target gpsbabel.org
+fi
 cmake --build . --target check
 cmake --build . --target gpsbabelfe
 # test for mangled encoding of command line arguments
 ./test_encoding_latin1
 ./test_encoding_utf8
 #make torture
-cmake --build . --target check-vtesto
-# eat the verbose output from test-all, including crash.output
-# this is a bit risky, if test-all generates an error we won't see what happened.
-echo "test-all in progress... (read/write test between all possible formats)"
-(LIBC_FATAL_STDERR_=1; export LIBC_FATAL_STDERR_; ./test-all -s -r reference/expertgps.gpx >/dev/null 2>&1)
-# summarize the test-all results, and generate an error if a fatal error was
-# detected by test-all.
-./test-all -J
+if [ "${VALGRIND}" != "OFF" ]; then
+  cmake --build . --target check-vtesto
+fi
+if [ "${TESTALL}" != "OFF" ]; then
+  # eat the verbose output from test-all, including crash.output
+  # this is a bit risky, if test-all generates an error we won't see what happened.
+  echo "test-all in progress... (read/write test between all possible formats)"
+  (LIBC_FATAL_STDERR_=1; export LIBC_FATAL_STDERR_; ./test-all -s -r reference/expertgps.gpx >/dev/null 2>&1)
+  # summarize the test-all results, and generate an error if a fatal error was
+  # detected by test-all.
+  ./test-all -J
+fi

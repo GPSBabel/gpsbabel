@@ -30,30 +30,43 @@ jobs:
           #  SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
             os: ubuntu-latest
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            TOOLS: 'clang'
+            os: ubuntu-latest
+
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            os: ubuntu-latest
+          - IMAGE: 'noble'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            TOOLS: 'clang'
+            os: ubuntu-latest
+
+          - IMAGE: 'resolute'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh'
+            os: ubuntu-latest
+          - IMAGE: 'resolute'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
             os: ubuntu-latest
-          - IMAGE: 'noble'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
-            os: ubuntu-latest
-          - IMAGE: 'noble'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
-            TOOLS: 'clang'
-            os: ubuntu-latest
-          - IMAGE: 'noble'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_extra_tests.sh'
-            os: ubuntu-latest
-          - IMAGE: 'noble'
+          - IMAGE: 'resolute'
             CMAKE_PREFIX_PATH: '/usr/lib/aarch64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             os: ubuntu-24.04-arm
+
+          - IMAGE: 'resolute'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_extra_tests.sh'
+            os: ubuntu-latest
+
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/travis_script_linux_coverage'
