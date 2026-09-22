@@ -1520,11 +1520,7 @@ ExifFormat::write()
     waypt_disp_all(exif_find_wpt_by_name_lambda);
     if (exif_wpt_ref == nullptr) {
       route_disp_all(nullptr, nullptr, exif_find_wpt_by_name_lambda);
-    }
-    if (exif_wpt_ref == nullptr) {
       track_disp_all(nullptr, nullptr, exif_find_wpt_by_name_lambda);
-    }
-    if (exif_wpt_ref == nullptr) {
       gbWarning("No matching point with name \"%s\" found.\n", gbLogCStr(opt_name));
     }
   } else {
