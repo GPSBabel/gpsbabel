@@ -10,8 +10,10 @@ mkdir bld-coverage
 cmake -DCMAKE_BUILD_TYPE=Release -DGPSBABEL_EXTRA_COMPILE_OPTIONS="--coverage" -DGPSBABEL_EXTRA_LINK_OPTIONS="--coverage" -G Ninja -S . -B bld-coverage
 cmake --build bld-coverage --target check
 # produce lcov data for codacy
-# while gcovr can produce this also, the gcovr produced lcov data doesn't work with genhtml.
-lcov --capture --directory bld-coverage --base-directory "$(pwd)" --no-external --output-file lcov.info
-genhtml lcov.info --demangle-cpp --output-directory coverage_report --ignore-errors inconsistent
-# produce cobertura data for github
-gcovr bld-coverage --cobertura=coverage.xml
+if [ -n "$USE_LCOV" ]; then
+  lcov --capture --directory bld-coverage --base-directory "$(pwd)" --no-external --output-file lcov.info
+  genhtml lcov.info --demangle-cpp --output-directory coverage_report --ignore-errors inconsistent
+else
+  mkdir coverage_report
+  gcovr bld-coverage --lcov lcov.info --html-details coverage_report/index.html
+fi
