@@ -351,7 +351,6 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
 int
 GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 {
-  Q_UNUSED(caller);
   int dist;
   double speed;
   short mask;
@@ -367,6 +366,28 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
   }
   if ((tag >= 0x80000) && (tag <= 0x800ff)) {
     sz += 4;
+  }
+
+  /* read(), read_poi_list() and read_poi_group() pass a null waypoint.  The
+   * tags below all write through it, so a file that places one of them
+   * outside a POI record must be rejected here rather than dereferenced.  */
+  if (wpt == nullptr) {
+    switch (tag) {
+    case 0x3:
+    case 0x80003:
+    case 0xa:
+    case 0xe:
+    case 0xb:
+    case 0x8000b:
+    case 0xc:
+    case 0x8000c:
+      gbWarning("%s: tag 0x%x appears outside a POI record; skipping.\n",
+                caller, tag);
+      gbfseek(fin, pos + sz, SEEK_SET);
+      return 1;
+    default:
+      break;
+    }
   }
 
   switch (tag) {
