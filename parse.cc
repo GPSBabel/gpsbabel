@@ -25,11 +25,12 @@
 #include <stdexcept>               // for invalid_argument, out_of_range
 #include <string>                  // for stod
 
+#include <QLatin1String>           // for QLatin1String
 #include <QString>                 // for QString
-#include <QtGlobal>                // for qPrintable
+#include <Qt>                      // for CaseSensitivity
 
 #include "parse.h"                 // for parse_double, parse_integer
-#include "defs.h"                  // for case_ignore_strcmp, gbFatal, grid_type, KPH_TO_MPS, MPH_TO_MPS, gbWarning, FEET_TO_METERS, KNOTS_TO_MPS, kDatumWGS84, FATHOMS_TO_METERS, MILES_TO_METERS, NMILES_TO_METERS, parse_coordinates, CSTR, parse_distance, parse_speed
+#include "defs.h"                  // for gbFatal, grid_type, KPH_TO_MPS, MPH_TO_MPS, gbWarning, FEET_TO_METERS, KNOTS_TO_MPS, kDatumWGS84, FATHOMS_TO_METERS, MILES_TO_METERS, NMILES_TO_METERS, parse_coordinates, CSTR, parse_distance, parse_speed
 #include "jeeps/gpsmath.h"         // for GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_Swiss_EN_To_WGS84, GPS_Math_UKOSMap_To_WGS84_H, GPS_Math_UTM_EN_To_Known_Datum
 
 
@@ -196,20 +197,20 @@ parse_distance(const QString& str, double* val, double scale)
     return 1;
   }
 
-  if (case_ignore_strcmp(unit, "m") == 0) /* do nothing, that's our standard */;
-  else if (case_ignore_strcmp(unit, "ft") == 0) {
+  if (unit.compare(QLatin1String("m"), Qt::CaseInsensitive) == 0) /* do nothing, that's our standard */;
+  else if (unit.compare(QLatin1String("ft"), Qt::CaseInsensitive) == 0) {
     *val = FEET_TO_METERS(*val);
-  } else if (case_ignore_strcmp(unit, "feet") == 0) {
+  } else if (unit.compare(QLatin1String("feet"), Qt::CaseInsensitive) == 0) {
     *val = FEET_TO_METERS(*val);
-  } else if (case_ignore_strcmp(unit, "k") == 0) {
+  } else if (unit.compare(QLatin1String("k"), Qt::CaseInsensitive) == 0) {
     *val *= 1000.0;
-  } else if (case_ignore_strcmp(unit, "km") == 0) {
+  } else if (unit.compare(QLatin1String("km"), Qt::CaseInsensitive) == 0) {
     *val *= 1000.0;
-  } else if (case_ignore_strcmp(unit, "nm") == 0) {
+  } else if (unit.compare(QLatin1String("nm"), Qt::CaseInsensitive) == 0) {
     *val = NMILES_TO_METERS(*val);
-  } else if (case_ignore_strcmp(unit, "mi") == 0) {
+  } else if (unit.compare(QLatin1String("mi"), Qt::CaseInsensitive) == 0) {
     *val = MILES_TO_METERS(*val);
-  } else if (case_ignore_strcmp(unit, "fa") == 0) {
+  } else if (unit.compare(QLatin1String("fa"), Qt::CaseInsensitive) == 0) {
     *val = FATHOMS_TO_METERS(*val);
   } else {
     gbFatal("Unsupported distance unit in item '%s'!\n", gbLogCStr(str));
@@ -243,23 +244,23 @@ parse_speed(const QString& str, double* val, const double scale)
     return 1;
   }
 
-  if (case_ignore_strcmp(unit, "m/s") == 0) ;
-  else if (case_ignore_strcmp(unit, "mps") == 0) ;
-  else if (case_ignore_strcmp(unit, "kph") == 0) {
+  if (unit.compare(QLatin1String("m/s"), Qt::CaseInsensitive) == 0) ;
+  else if (unit.compare(QLatin1String("mps"), Qt::CaseInsensitive) == 0) ;
+  else if (unit.compare(QLatin1String("kph"), Qt::CaseInsensitive) == 0) {
     *val = KPH_TO_MPS(*val);
-  } else if (case_ignore_strcmp(unit, "km/h") == 0) {
+  } else if (unit.compare(QLatin1String("km/h"), Qt::CaseInsensitive) == 0) {
     *val = KPH_TO_MPS(*val);
-  } else if (case_ignore_strcmp(unit, "kmh") == 0) {
+  } else if (unit.compare(QLatin1String("kmh"), Qt::CaseInsensitive) == 0) {
     *val = KPH_TO_MPS(*val);
-  } else if (case_ignore_strcmp(unit, "kt") == 0) {
+  } else if (unit.compare(QLatin1String("kt"), Qt::CaseInsensitive) == 0) {
     *val = KNOTS_TO_MPS(*val);
-  } else if (case_ignore_strcmp(unit, "knot") == 0) {
+  } else if (unit.compare(QLatin1String("knot"), Qt::CaseInsensitive) == 0) {
     *val = KNOTS_TO_MPS(*val);
-  } else if (case_ignore_strcmp(unit, "mph") == 0) {
+  } else if (unit.compare(QLatin1String("mph"), Qt::CaseInsensitive) == 0) {
     *val = MPH_TO_MPS(*val);
-  } else if (case_ignore_strcmp(unit, "mi/h") == 0) {
+  } else if (unit.compare(QLatin1String("mi/h"), Qt::CaseInsensitive) == 0) {
     *val = MPH_TO_MPS(*val);
-  } else if (case_ignore_strcmp(unit, "mih") == 0) {
+  } else if (unit.compare(QLatin1String("mih"), Qt::CaseInsensitive) == 0) {
     *val = MPH_TO_MPS(*val);
   } else {
     gbWarning("Unsupported speed unit '%s' in item '%s'!\n", gbLogCStr(unit), gbLogCStr(str));

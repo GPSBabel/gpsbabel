@@ -939,20 +939,6 @@ FILE* xfopen(const QString& fname, const char* type);
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);
 
-// FIXME: case_ignore_strcmp() and case_ignore_strncmp() should probably
-// just be replaced at the call sites.  These shims are just here to make
-// them more accommodating of QString input.
-inline int
-case_ignore_strcmp(const QString& s1, const QString& s2)
-{
-  return QString::compare(s1, s2, Qt::CaseInsensitive);
-}
-// In 95% of the callers, this could be s1.startsWith(s2)...
-inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
-{
-  return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
-}
-
 QDateTime make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset);
 bool gpsbabel_testmode();
 gpsbabel::DateTime current_time();

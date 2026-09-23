@@ -23,13 +23,15 @@
 #include "jeeps/gpsdevice.h"
 #include "jeeps/gpsserial.h"
 
+#include <QByteArray>
+
 extern gps_device_ops gps_serial_ops;
 extern gps_device_ops gps_usb_ops;
 static gps_device_ops* ops = nullptr;
 
 int32_t GPS_Device_On(const char* port, gpsdevh** fd)
 {
-  gps_is_usb = (0 == case_ignore_strncmp(port, "usb:", 4));
+  gps_is_usb = (0 == qstrnicmp(port, "usb:", 4));
 
   if (gps_is_usb) {
     ops = &gps_usb_ops;

@@ -27,7 +27,7 @@ chmod +x run-clang-tidy-nocolor
 ./run-clang-tidy-nocolor -p "$(pwd)" -header-filter "${HEADERFILTER}" -checks "${CHECKS}" | \
 tee tidy.out
 
-grep warning: tidy.out | sed 's/.*\[/[/' | sort | uniq -c | sort | tee tidy.summary
+grep warning: tidy.out | sed 's/.*\[/[/' | sort | uniq -c | sort -n | tee tidy.summary
 
 curl -L "${CODACY_CLANG_TIDY}" --output codacy-clang-tidy
 chmod +x codacy-clang-tidy

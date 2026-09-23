@@ -686,7 +686,7 @@ OsmFormat::osm_release_ids(const Waypoint* waypoint)
 QString
 OsmFormat::osm_name_from_wpt(const Waypoint* waypoint)
 {
-  QString name = QString("%1\01%2\01%3")
+  QString name = QStringLiteral("%1\01%2\01%3")
                  .arg(waypoint->shortname)
                  .arg(waypoint->latitude, 0, 'f', 6)
                  .arg(waypoint->longitude, 0, 'f', 6);

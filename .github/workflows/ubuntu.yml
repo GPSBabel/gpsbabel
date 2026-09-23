@@ -25,9 +25,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # focal has Qt 5.12, end of standard support 4/2025, end of life 4/2030.
-          #- IMAGE: 'focal'
-          #  SCRIPT: './tools/build_and_test_cmake.sh'
           - IMAGE: 'jammy'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
@@ -37,24 +34,37 @@ jobs:
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
             os: ubuntu-latest
+
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
+            SCRIPT: './tools/build_and_test_cmake.sh -d'
             os: ubuntu-latest
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh'
             TOOLS: 'clang'
             os: ubuntu-latest
-          - IMAGE: 'noble'
+
+          - IMAGE: 'resolute'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            os: ubuntu-latest
+          - IMAGE: 'resolute'
+            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            TOOLS: 'clang'
+            os: ubuntu-latest
+          - IMAGE: 'resolute'
+            CMAKE_PREFIX_PATH: '/usr/lib/aarch64-linux-gnu/cmake/Qt6'
+            SCRIPT: './tools/build_and_test_cmake.sh -d -t -v'
+            os: ubuntu-24.04-arm
+
+          - IMAGE: 'resolute'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_extra_tests.sh'
             os: ubuntu-latest
-          - IMAGE: 'noble'
-            CMAKE_PREFIX_PATH: '/usr/lib/aarch64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
-            os: ubuntu-24.04-arm
-          - IMAGE: 'noble'
+
+          - IMAGE: 'resolute'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/travis_script_linux_coverage'
             os: ubuntu-latest
@@ -84,14 +94,14 @@ jobs:
           CXX=clang++
           export CXX
         fi
-        "${JOB_SCRIPT}"
+        ${JOB_SCRIPT}
 
     - name: upload_coverage 
       if: contains(matrix.script, 'coverage') && ( github.secret_source == 'Actions' )
       uses: codacy/codacy-coverage-reporter-action@v1.3.0
       with:
         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: lcov.info
+        coverage-reports: coverage.xml
         language: CPP
 
   snap:

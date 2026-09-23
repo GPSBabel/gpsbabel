@@ -989,7 +989,7 @@ NmeaFormat::read()
   while ((ibuf = gbfgetstr(file_in))) {
     line++;
 
-    if ((line == 0) && (case_ignore_strncmp(ibuf, "@SonyGPS/ver", 12) == 0)) {
+    if ((line == 0) && qstrnicmp(ibuf, "@SonyGPS/ver", 12) == 0) {
       /* special hack for Sony GPS-CS1 files:
          they are fully (?) nmea compatible, but come with a header line like
          "@Sonygps/ver1.0/wgs-84". */
