@@ -1,0 +1,4 @@
+<para>
+	A number that will be multipled with the <code>speed</code> format 
+	variable. This allows conversion to other horizontal velocity units.
+</para>
