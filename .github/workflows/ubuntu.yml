@@ -101,7 +101,7 @@ jobs:
       uses: codacy/codacy-coverage-reporter-action@v1.3.0
       with:
         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: lcov.info
+        coverage-reports: coverage.xml
         language: CPP
 
   snap:
