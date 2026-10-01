@@ -2,7 +2,7 @@
 // $Id: map.h,v 1.1 2009-07-05 21:14:56 robertl Exp $
 //------------------------------------------------------------------------
 //
-//  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
+//  Copyright (C) 2026 Robert Lipe
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License as
