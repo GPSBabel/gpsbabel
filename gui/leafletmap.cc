@@ -29,6 +29,8 @@
 #include <QWebChannel>
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
+#include <QWebEngineScript>
+#include <QWebEngineScriptCollection>
 #include <QWebEngineSettings>
 #include <QWebEngineUrlRequestInterceptor>
 #include <QWebEngineView>
@@ -41,6 +43,7 @@
 #include "gpx.h"
 #include "latlng.h"
 #include "leafletmap.h"
+#include "mapexception.h"
 #include "markerclicker.h"
 #include "webenginepage.h"
 
@@ -97,6 +100,24 @@ LeafletMap::LeafletMap(QWidget* parent,
 
   auto* mclicker = new MarkerClicker(this);
   auto* channel = new QWebChannel(this->page());
+
+  // Inject qwebchannel.js to avoid any cross-origin errors,
+  // which may be due to a cross-scheme difference.
+  if (QFile jsFile(":/qtwebchannel/qwebchannel.js"); jsFile.open(QIODevice::ReadOnly)) {
+      QWebEngineScript script;
+      script.setSourceCode(jsFile.readAll());
+      script.setName("qwebchannel.js");
+      script.setWorldId(QWebEngineScript::MainWorld);
+      
+      // DocumentCreation ensures it's available before initialize() runs
+      script.setInjectionPoint(QWebEngineScript::DocumentCreation); 
+      script.setRunsOnSubFrames(false);
+  
+      this->page()->scripts().insert(script);
+  } else {
+    throw MapException(tr("Error opening \":/qtwebchannel/qwebchannel.js\" file.  Check installation").toStdString());
+  }
+
   this->page()->setWebChannel(channel);
   channel->registerObject(QStringLiteral("mclicker"), mclicker);
   connect(mclicker, &MarkerClicker::loadFinished, this, &LeafletMap::loadFinishedX);
@@ -138,12 +159,10 @@ LeafletMap::LeafletMap(QWidget* parent,
       htmlFile.close();
       this->setContent(content, "text/html;charset=UTF-8", baseUrl);
     } else {
-      QMessageBox::critical(nullptr, appName,
-                            tr("Error opening \"leafletbase.html\" file.  Check installation"));
+      throw(tr("Error opening \"leafletbase.html\" file.  Check installation"));
     }
   } else {
-    QMessageBox::critical(nullptr, appName,
-                          tr("Missing \"leafletbase.html\" file.  Check installation"));
+    throw(tr("Missing \"leafletbase.html\" file.  Check installation"));
   }
 }
 

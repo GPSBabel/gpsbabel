@@ -81,6 +81,7 @@
 #include "leafletdlg.h"        // for LeafletMapDialog
 #endif
 #include "help.h"              // for ShowHelp
+#include "mapexception.h"
 #include "optionsdlg.h"        // for OptionsDlg
 #include "preferences.h"       // for Preferences
 #include "runmachine.h"        // for RunMachine
@@ -1006,9 +1007,13 @@ void MainWindow::applyActionX()
         this->hide();
 #ifndef DISABLE_GOOGLEMAPPREVIEW
         if (useGoogleMaps) {
-          GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
-          dlg.show();
-          dlg.exec();
+          try {
+            GMapDialog dlg(nullptr, mapData, babelData_.debugLevel_, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+            dlg.show();
+            dlg.exec();
+          } catch (MapException& e) {
+            QMessageBox::critical(nullptr, appName, e.what());
+          }
         }
 #endif
 #ifndef DISABLE_LEAFLETMAPPREVIEW
@@ -1018,9 +1023,13 @@ void MainWindow::applyActionX()
           // This uses MainWindow::generateGeoJsonWithIndices to include GUI-specific properties
           // like 'originalIndex' which are not present in the CLI's geojson writer output.
           geojsonData = generateGeoJsonWithIndices(mapData);
-          LeafletMapDialog dlg(nullptr, mapData, geojsonData, babelData_.debugLevel_, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
-          dlg.show();
-          dlg.exec();
+          try {
+            LeafletMapDialog dlg(nullptr, mapData, geojsonData, babelData_.debugLevel_, babelData_.debugLevel_ >=1 ? ui_.outputWindow : nullptr);
+            dlg.show();
+            dlg.exec();
+          } catch (MapException& e) {
+            QMessageBox::critical(nullptr, appName, e.what());
+          }
         }
 #endif
         this->show();

@@ -71,7 +71,6 @@
       }
 
       async function setupWebChannel() {
-        await loadScript("qrc:///qtwebchannel/qwebchannel.js");
         const channel = await new Promise(function(resolve) {
           new QWebChannel(qt.webChannelTransport, resolve);
         });

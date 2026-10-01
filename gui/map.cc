@@ -35,6 +35,8 @@
 #include <QUrl>                   // for QUrl
 #include <QWebChannel>            // for QWebChannel
 #include <QWebEnginePage>         // for QWebEnginePage
+#include <QWebEngineScript>
+#include <QWebEngineScriptCollection>
 #include <QWebEngineSettings>     // for QWebEngineSettings
 #include <QWebEngineView>         // for QWebEngineView
 #include <Qt>                     // for CursorShape
@@ -45,6 +47,7 @@
 #include "appname.h"              // for appName
 #include "gpx.h"                  // for GpxRoute, GpxTrack, GpxWaypoint, Gpx, GpxRoutePoint, GpxTrackPoint, GpxTrackSegment
 #include "latlng.h"               // for LatLng
+#include "mapexception.h"
 
 
 using std::string;
@@ -71,6 +74,24 @@ Map::Map(QWidget* parent,
 
   auto* mclicker = new MarkerClicker(this);
   auto* channel = new QWebChannel(this->page());
+
+  // Inject qwebchannel.js to avoid any cross-origin errors,
+  // which may be due to a cross-scheme difference.
+  if (QFile jsFile(":/qtwebchannel/qwebchannel.js"); jsFile.open(QIODevice::ReadOnly)) {
+      QWebEngineScript script;
+      script.setSourceCode(jsFile.readAll());
+      script.setName("qwebchannel.js");
+      script.setWorldId(QWebEngineScript::MainWorld);
+      
+      // DocumentCreation ensures it's available before initialize() runs
+      script.setInjectionPoint(QWebEngineScript::DocumentCreation); 
+      script.setRunsOnSubFrames(false);
+  
+      this->page()->scripts().insert(script);
+  } else {
+    throw MapException(tr("Error opening \":/qtwebchannel/qwebchannel.js\" file.  Check installation").toStdString());
+  }
+
   this->page()->setWebChannel(channel);
   // Note: A current limitation is that objects must be registered before any client is initialized.
   channel->registerObject(QStringLiteral("mclicker"), mclicker);
@@ -118,12 +139,10 @@ Map::Map(QWidget* parent,
       content.replace("APIKEY", decodeKey(encodedKey));
       this->setContent(content, "text/html;charset=UTF-8", baseUrl);
     } else {
-      QMessageBox::critical(nullptr, appName,
-                            tr("Error opening \"gmapbase.html\" file.  Check installation"));
+       throw MapException(tr("Error opening \"gmapbase.html\" file.  Check installation").toStdString());
     }
   } else {
-    QMessageBox::critical(nullptr, appName,
-                          tr("Missing \"gmapbase.html\" file.  Check installation"));
+    throw MapException(tr("Missing \"gmapbase.html\" file.  Check installation").toStdString());
   }
 
 #ifdef DEBUG_JS_GENERATION
