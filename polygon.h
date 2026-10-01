@@ -52,9 +52,9 @@ private:
   /* Member Functions */
 
   static void polytest(double lat1, double lon1,
-                double lat2, double lon2,
-                double wlat, double wlon,
-                unsigned short* state, int first, int last);
+                       double lat2, double lon2,
+                       double wlat, double wlon,
+                       unsigned short* state, bool first, bool last);
 
   /* Data Members */
 

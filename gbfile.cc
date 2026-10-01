@@ -670,9 +670,7 @@ gbfgets(char* buf, int len, gbfile* file)
   }
   *buf = '\0';
 
-  QString rv(result);
-  return rv;
-
+  return QString::fromUtf8(result);
 }
 
 /*
@@ -697,7 +695,7 @@ gbfread(QString& buf, const gbsize_t size,
   QByteArray tmp;
   tmp.resize(static_cast<qsizetype>(members) * size);
   gbsize_t retval = gbfread(tmp.data(), size, members, file);
-  buf = QString(tmp);
+  buf = QString::fromUtf8(tmp);
   return retval;
 }
 
@@ -977,15 +975,13 @@ gbfgetflt(gbfile* file)
 }
 
 /*
- * gbfgetcstr: Reads a string from file until either a '\0' or eof.
- *             The result is a temporary allocated entity: use it or free it!
+ * gbfgetnativecstr: Reads a string from file until either a '\0' or eof.
  */
 
-char*
-gbfgetcstr_old(gbfile* file)
+QByteArray
+gbfgetnativecstr(gbfile* file)
 {
-  int len = 0;
-  char* str = file->buff;
+  QByteArray str;
 
   for (;;) {
     int c = gbfgetc(file);
@@ -998,39 +994,16 @@ gbfgetcstr_old(gbfile* file)
       gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
     }
 
-    if (len == file->buffsz) {
-      file->buffsz += 64;
-      str = file->buff = (char*) xrealloc(file->buff, file->buffsz + 1);
-    }
-    str[len] = c;
-    len++;
+    str += c;
   }
 
-  char* result = (char*) xmalloc(len + 1);
-  if (len > 0) {
-    memcpy(result, str, len);
-  }
-  result[len] = '\0';
-
-  return result;
+  return str;
 }
 
 QString
 gbfgetcstr(gbfile* file)
 {
-  char* result = gbfgetcstr_old(file);
-  QString rv(result);
-  xfree(result);
-  return rv;
-}
-
-QByteArray
-gbfgetnativecstr(gbfile* file)
-{
-  char* result = gbfgetcstr_old(file);
-  QByteArray rv(result);
-  xfree(result);
-  return rv;
+  return QString::fromUtf8(gbfgetnativecstr(file));
 }
 
 /*
@@ -1050,7 +1023,7 @@ gbfgetpstr(gbfile* file)
     gbFatal("Unexpected end of file (%s)!\n", gbLogCStr(file->name));
   }
 
-  return QString(ba);
+  return QString::fromUtf8(ba);
 }
 
 static QChar
@@ -1089,8 +1062,8 @@ gbfgetutf16char(gbfile* file)
  * Fatal errors can occur if:
  * i) the file ends with either an incomplete utf-16 character, or
  * ii) the file ends with an incomplete surrogate pair, or
- * iii) a high surrogate is not followd by a low surrogate, or
- * iv) a low surrogate isn't preceeded by a high surrogate.
+ * iii) a high surrogate is not followed by a low surrogate, or
+ * iv) a low surrogate isn't preceded by a high surrogate.
  */
 static char*
 gbfgetutf16str(gbfile* file)
@@ -1151,7 +1124,7 @@ gbfgetutf16str(gbfile* file)
 }
 
 /*
- * gbfgetstr: Reads a string from file (util any type of line-breaks or eof or error)
+ * gbfgetstr: Reads a string from file (until any type of line-breaks or eof or error)
  *            except xfree and free you can do all possible things with the result
  */
 

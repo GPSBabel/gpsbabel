@@ -619,7 +619,7 @@ void TpoFormatBase::tpo_process_tracks()
     }
 
     // Track description
-    track_temp->rte_desc = QString("Style=%1, Width=%2, Dashed=%3, Color=#%4")
+    track_temp->rte_desc = QStringLiteral("Style=%1, Width=%2, Dashed=%3, Color=#%4")
                            .arg(styles[track_style].name)
                            .arg(styles[track_style].wide)
                            .arg(styles[track_style].dash)
@@ -1031,7 +1031,7 @@ void TpoFormatBase::tpo_process_map_notes()
 //printf("name_length: %x\n", name_length);
     if (name_length) {
       QString notes = gbfreadbuf(name_length, tpo_file_in);
-      waypoint_temp->AddUrlLink(notes);
+      waypoint_temp->AddUrlLink(UrlLink(notes));
     }
 
     // Length of text for image path.  If non-zero, skip past
@@ -1040,7 +1040,7 @@ void TpoFormatBase::tpo_process_map_notes()
     name_length = tpo_read_int();
     if (name_length) {
       QString notes = gbfreadbuf(name_length, tpo_file_in);
-      waypoint_temp->AddUrlLink(notes);
+      waypoint_temp->AddUrlLink(UrlLink(notes));
     }
 
 //UNKNOWN DATA LENGTH

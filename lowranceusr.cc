@@ -622,7 +622,7 @@ LowranceusrFormat::lowranceusr4_parse_waypt(Waypoint* wpt_tmp)
       }
       gbDebug(" %+15.10f %+15.10f", wpt_tmp->longitude, wpt_tmp->latitude);
       gbDebug(" %08x %4d %4d %7s", fsdata->flags, fsdata->icon_num, fsdata->color,
-             (fsdata->color_desc == nullptr ? "unk" : gbLogCStr(fsdata->color_desc)));
+             (fsdata->color_desc == nullptr ? "unk" : fsdata->color_desc));
       if (desc.length() > 16) {
         gbDebug(" %6s %.13s...", QByteArray::number(desc.length()).constData(), gbLogCStr(desc));
       } else {

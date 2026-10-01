@@ -109,7 +109,7 @@
 void PolygonFilter::polytest(double lat1, double lon1,
                              double lat2, double lon2,
                              double wlat, double wlon,
-                             unsigned short* state, int first, int last)
+                             unsigned short* state, bool first, bool last)
 {
 
   if (lat1 == wlat) {
@@ -133,7 +133,7 @@ void PolygonFilter::polytest(double lat1, double lon1,
         *state |= LIMBO_BEGIN;
       }
     } else if (lat2 == wlat) {
-      if (first & (lon1 > wlon || lon2 > wlon)) {
+      if (first && (lon1 > wlon || lon2 > wlon)) {
         *state |= LIMBO_BEGIN | BEGIN_HOR;
       } else if (last && (*state & LIMBO_BEGIN) && (*state & LIMBO)) {
         if ((!!(*state & LIMBO_UP)) != (!!(*state & BEGIN_UP))) {
@@ -222,8 +222,8 @@ void PolygonFilter::process()
 {
   extra_data* ed;
   int fileline = 0;
-  int first = 1;
-  int last = 0;
+  bool first = true;
+  bool last = false;
   QString line;
 
   gpsbabel::TextStream stream;
@@ -266,14 +266,14 @@ void PolygonFilter::process()
         }
         if (olat != BADVAL && olon != BADVAL &&
             olat == lat2 && olon == lon2) {
-          last = 1;
+          last = true;
         }
         polytest(lat1, lon1, lat2, lon2,
                  waypointp->latitude,
                  waypointp->longitude,
                  &ed->state, first, last);
-        first = 0;
-        last = 0;
+        first = false;
+        last = false;
       }
     }
     if (olat != BADVAL && olon != BADVAL &&
@@ -282,7 +282,7 @@ void PolygonFilter::process()
       olon = BADVAL;
       lat1 = BADVAL;
       lon1 = BADVAL;
-      first = 1;
+      first = true;
     } else if (lat1 == BADVAL || lon1 == BADVAL) {
       olat = lat2;
       olon = lon2;

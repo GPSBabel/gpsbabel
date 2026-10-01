@@ -17,23 +17,34 @@ jobs:
         include:
           - IMAGE: '37'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: ''
           - IMAGE: '38'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: ''
           - IMAGE: '39'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: ''
           - IMAGE: '40'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: ''
           - IMAGE: '41'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: ''
           - IMAGE: '42'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: ''
           - IMAGE: '43'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: '-d -t -v'
+          - IMAGE: '44'
+            CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: '-d -t -v'
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_f${{ matrix.IMAGE }}
       env:
         LC_ALL: 'C.UTF-8'
         JOB_CMAKE_PREFIX_PATH: ${{ matrix.CMAKE_PREFIX_PATH }}
+        JOB_OPTS: ${{ matrix.OPTS }}
 
     steps:
     - name: Checkout repository
@@ -47,4 +58,4 @@ jobs:
           CMAKE_PREFIX_PATH="${JOB_CMAKE_PREFIX_PATH}"
           export CMAKE_PREFIX_PATH
         fi
-        ./tools/build_and_test_cmake.sh
+        ./tools/build_and_test_cmake.sh ${JOB_OPTS}

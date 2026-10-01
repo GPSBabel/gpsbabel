@@ -197,21 +197,18 @@ class UrlLink
 {
 public:
   UrlLink() = default;
-  UrlLink(QString url) :
+  explicit UrlLink(QString url) :
     url_(std::move(url))
-  { }
-  explicit UrlLink(const char* url) :
-    url_(url)
-  { }
+  {}
   UrlLink(QString url, QString url_link_text) :
     url_(std::move(url)),
     url_link_text_(std::move(url_link_text))
-  { }
+  {}
   UrlLink(QString url, QString url_link_text, QString url_link_type) :
     url_(std::move(url)),
     url_link_text_(std::move(url_link_text)),
     url_link_type_(std::move(url_link_type))
-  { }
+  {}
   QString url_;
   QString url_link_text_;
   QString url_link_type_;

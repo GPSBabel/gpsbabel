@@ -112,13 +112,13 @@ class Kalman : public Filter {
   OptionDouble interp_min_multiplier_option_;
 
   // Member variables to store the resolved option values
-  double r_scale_;
-  double q_scale_pos_;
-  double q_scale_vel_;
-  double interp_max_dt_;
-  double interp_min_multiplier_;
-  double gap_factor_;
-  double max_speed_;
+  double r_scale_{};
+  double q_scale_pos_{};
+  double q_scale_vel_{};
+  double interp_max_dt_{};
+  double interp_min_multiplier_{};
+  double gap_factor_{};
+  double max_speed_{};
 
   QVector<arglist_t> args = {
     {"gap_factor", &gap_factor_option_, "Factor to determine if a time gap is significant enough to trigger gap recovery",
