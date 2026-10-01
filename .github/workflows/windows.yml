@@ -47,7 +47,7 @@ jobs:
             RELEASE: false
             GENERATOR: 'Ninja'
             os: windows-2022
-          - QT_VERSION: '6.8.3'
+          - QT_VERSION: '6.12.0'
             ARCH: 'amd64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
@@ -55,7 +55,7 @@ jobs:
             RELEASE: true
             GENERATOR: 'Ninja'
             os: windows-2025
-          - QT_VERSION: '6.10.3'
+          - QT_VERSION: '6.12.0'
             TARGET_ARCH: 'arm64'
             HOST_ARCH: 'amd64'
             COMPILER: 'msvc2022_64'
@@ -63,7 +63,7 @@ jobs:
             METHOD: 'aqt'
             RELEASE: false
             os: windows-2025
-          - QT_VERSION: '6.10.3'
+          - QT_VERSION: '6.12.0'
             ARCH: 'arm64'
             HOST_ARCH: 'arm64'
             COMPILER: 'msvc2022_arm64'
