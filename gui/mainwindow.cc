@@ -81,7 +81,9 @@
 #include "leafletdlg.h"        // for LeafletMapDialog
 #endif
 #include "help.h"              // for ShowHelp
+#if !defined(DISABLE_GOOGLEMAPPREVIEW) || !defined(DISABLE_LEAFLETMAPPREVIEW)
 #include "mapexception.h"
+#endif
 #include "optionsdlg.h"        // for OptionsDlg
 #include "preferences.h"       // for Preferences
 #include "runmachine.h"        // for RunMachine
