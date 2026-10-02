@@ -568,7 +568,16 @@ void TpoFormatBase::tpo_process_tracks()
 
     // Can be 8/16/32-bit value (defined in 2012, ignored before then)
     unsigned int track_style = tpo_read_int(); // index into freehand route styles defined in this .tpo file
-    track_style -= 1;  // STARTS AT 1, whereas style arrays start at 0
+    // STARTS AT 1, whereas style arrays start at 0
+    if (track_style < 1 || track_style > track_style_count) {
+      gbWarning("Track %u names style %u, but the file defines %u.\n",
+                ii + 1, track_style, track_style_count);
+      if (track_style_count == 0) {
+        return;
+      }
+      track_style = 1;
+    }
+    track_style -= 1;
 
     // Can be 8/16/32-bit value - never used? length in meters?
     double track_length = tpo_read_int();
@@ -714,6 +723,9 @@ void TpoFormatBase::tpo_process_tracks()
 
       // read 8-byte lon+lat, required at start of track or after 0x88 tag
       if (tpmode == GetFullPoint) {
+        if (jj + 8 > track_byte_count) {
+          break;              // truncated track record
+        }
         lon = le_read32(&buf[jj]);
         if constexpr(debug > 3) {
           gbDebug("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
@@ -1247,6 +1259,12 @@ void TpoFormatBase::tpo_process_routes(const QList<Waypoint>& tpo_wp_index)
       // Fetch the index to the waypoint
       unsigned int val = tpo_read_int();
 //printf("val: %x\t\t", val);
+
+      if (val < 1 || val > (unsigned int)tpo_wp_index.size()) {
+        gbWarning("Route %u references waypoint %u, but the file defines %lld.\n",
+                  ii + 1, val, (long long)tpo_wp_index.size());
+        continue;
+      }
 
       // Duplicate a waypoint from our index of waypoints.
       auto* waypoint_temp = new Waypoint(tpo_wp_index[val-1]);
