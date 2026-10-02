@@ -342,6 +342,34 @@ include(zlib.cmake)
 include(libusb.cmake)
 include(strptime.cmake)
 
+set(_use_fmt_default OFF)
+if(APPLE)
+  if (CMAKE_OSX_DEPLOYMENT_TARGET)
+    if(CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS "14.0")
+      set(_use_fmt_default ON)
+    endif()
+  else()
+    if(CMAKE_HOST_SYSTEM_VERSION VERSION_LESS "23.0.0") # Darwin 23 is macOS 14 Sonoma
+      set(_use_fmt_default ON)
+    endif()
+  endif()
+endif()
+option(GPSBABEL_USE_FMT "use {fmt} instead of std::format" ${_use_fmt_default})
+if(GPSBABEL_USE_FMT)
+  message(STATUS "Using {fmt} fallback")
+  include(FetchContent)
+  FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG        12.2.0
+    GIT_SHALLOW    TRUE
+    SYSTEM
+  )
+  FetchContent_MakeAvailable(fmt)
+  target_compile_definitions(gpsbabel PRIVATE MOCK_FORMAT)
+  list(APPEND LIBS fmt::fmt)
+endif()
+
 set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
 list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})
 set(GPSBABEL_EXTRA_INCLUDE_DIRECTORIES "" CACHE STRING "extra directories to include.")

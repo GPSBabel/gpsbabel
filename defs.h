@@ -43,6 +43,11 @@
 #include <Qt>                        // for CaseInsensitive
 #include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
+#ifndef MOCK_FORMAT
+#include <format>
+#else
+#include <fmt/format.h>
+#endif
 #include "geocache.h"                // for Geocache
 #include "formspec.h"                // for FormatSpecificData
 #include "inifile.h"                 // for inifile_t
@@ -1040,6 +1045,20 @@ constexpr QTimeZone::Initialization QtUTC = QTimeZone::UTC;
 #else
 constexpr Qt::TimeSpec QtLocalTime = Qt::LocalTime;
 constexpr Qt::TimeSpec QtUTC = Qt::UTC;
+#endif
+
+#ifndef MOCK_FORMAT
+namespace gpsbabel {
+  using std::format;
+  using std::format_to;
+  using std::make_format_args;
+}
+#else
+namespace gpsbabel {
+  using fmt::format;
+  using fmt::format_to;
+  using fmt::make_format_args;
+}
 #endif
 
 #endif // DEFS_H_INCLUDED_
