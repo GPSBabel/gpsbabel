@@ -921,10 +921,23 @@ enum ff_cap {
 // This can have a large effect on codacy issues from cppcheck
 // nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
 // negativeIndex, arrayIndexOutOfBoundsCond.
+#ifndef GBLOG_NO_ASCII
+// deprecated
 [[gnu::format(printf, 1, 2)]] [[noreturn]] void gbFatal(const char* fmt, ...);
 [[gnu::format(printf, 1, 2)]] void gbWarning(const char* fmt, ...);
 [[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...);
 [[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...);
+#else
+[[gnu::format(printf, 1, 2)]] [[noreturn]] void gbFatal(const char* fmt, ...) = delete;
+[[gnu::format(printf, 1, 2)]] void gbWarning(const char* fmt, ...) = delete;
+[[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...) = delete;
+[[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...) = delete;
+#endif
+
+[[noreturn]] void gbFatal(const std::string& s);
+void gbWarning(const std::string& s);
+void gbInfo(const std::string& s);
+void gbDebug(const std::string& s);
 
 void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args1);
 

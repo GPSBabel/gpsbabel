@@ -22,6 +22,7 @@
 #include <cstdarg>             // for va_end, va_list, va_start
 #include <cstdio>              // for fprintf, stderr, fflush
 #include <cstdlib>             // for exit
+#include <string>              // for string
 
 #include <QDebug>              // for QDebug
 #include <QMessageLogContext>  // for QtMsgType, QMessageLogContext, qFormatLogMessage
@@ -46,6 +47,35 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
 }
 #endif
 
+/* std::string interface
+ * A newline is added by the MessageHandler.
+ */
+[[noreturn]] void
+gbFatal(const std::string& s)
+{
+  FatalMsg().noquote() << s;
+  exit(1);
+}
+
+void
+gbWarning(const std::string& s)
+{
+  QDebug(QtWarningMsg).noquote() << s;
+}
+
+void
+gbInfo(const std::string& s)
+{
+  QDebug(QtInfoMsg).noquote() << s;
+}
+
+void
+gbDebug(const std::string& s)
+{
+  QDebug(QtDebugMsg).noquote() << s;
+}
+
+/* TextStream interface */
 [[noreturn]] void gbFatal(QDebug& msginstance)
 {
   auto* myinstance = new FatalMsg;
@@ -53,6 +83,10 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
   delete myinstance;
   exit(1);
 }
+
+/* legacy printf like interface
+ * you must supply your own newlines!
+ */
 
 [[noreturn]] void
 gbFatal(const char* fmt, ...)
@@ -91,6 +125,13 @@ gbDebug(const char* fmt, ...)
   va_end(args);
 }
 
+/* The LegacyLog supports
+ * 1) messages containing embedded newlines are broken it single line message
+ *    so they can be properly formated by our log formatter.
+ * 2) accumulation of messages that don't end in a newline. These are output
+ * as they come in in case a newline never shows up.  If they start a line
+ * they are formatted by our log formatter.
+ */
 static void LegacyLogMessageHandler(QtMsgType type, const QString& msg)
 {
   static bool lineInProgress = false;
