@@ -1097,7 +1097,7 @@ GarminTxtFormat::parse_waypoint(const QStringList& lineparts)
       }
     break;
     case 17: {
-      wpt->AddUrlLink(str);
+      wpt->AddUrlLink(UrlLink(str));
     }
     break;
     case 18:

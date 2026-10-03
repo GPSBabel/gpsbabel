@@ -42,12 +42,12 @@ qtconnectivity \
 qtlanguageserver \
 qtlocation \
 qtmultimedia \
+qtopenapi \
 qtquickeffectmaker \
 qtremoteobjects \
 qtscxml \
 qtsensors \
 qtspeech \
-qttasktree \
 qtwebsockets \
 )
 

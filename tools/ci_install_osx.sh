@@ -66,7 +66,12 @@ else
       fi
      )
   elif [ "$METHOD" = "aqt" ]; then
-    pip3 install 'aqtinstall>=3.1.20'
+    # we need https://github.com/miurahr/aqtinstall/pull/1048 for 6.12.0
+    # until these are merged and released we must use a locally generated version of aqt.
+    #pip3 install 'aqtinstall>=3.1.20'
+    archive=aqtinstall-3.3.1.dev169-py3-none-any.whl
+    curl -u "${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}" "${ARTIFACTORY_BASE_URL}/${archive}" -o "/tmp/${archive}"
+    pip3 install "/tmp/${archive}"
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" mac "${QT_VERSION}" clang_64 "${CACHEDIR}/Qt"
     echo "export PATH=${QTDIR}/bin:\$PATH" > "${CACHEDIR}/qt-${QT_VERSION}.env"
   elif [ "$METHOD" = "qtonline" ]; then
