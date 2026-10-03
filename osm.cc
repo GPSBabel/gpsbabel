@@ -20,6 +20,8 @@
 
 */
 
+#include "osm.h"
+
 #include <QByteArray>                  // for QByteArray
 #include <QIODevice>                   // for operator|, QIODevice, QIODevice::Text, QIODevice::WriteOnly
 #include <QLatin1String>               // for QLatin1String
@@ -29,7 +31,7 @@
 #include <QtGlobal>                    // for qMax, qPrintable
 
 #include "defs.h"
-#include "osm.h"
+#include "gbversion.h"                 // for kVersion
 #include "src/core/datetime.h"         // for DateTime
 #include "src/core/xmlstreamwriter.h"  // for XmlStreamWriter
 #include "xmlgeneric.h"                // for xml_deinit, xml_init, xml_read
@@ -756,7 +758,7 @@ OsmFormat::osm_waypt_disp(const Waypoint* waypoint)
     if (!gpsbabel_testmode()) {
       if (creator == "GPSBabel") {
         creator += '-';
-        creator += gpsbabel_version;
+        creator += gpsbabel::kVersion;
       }
     }
     osm_write_tag(QStringLiteral("created_by"), creator);
@@ -815,7 +817,7 @@ OsmFormat::osm_rte_disp_trail(const route_head* route)
     if (!gpsbabel_testmode()) {
       if (creator == "GPSBabel") {
         creator += '-';
-        creator += gpsbabel_version;
+        creator += gpsbabel::kVersion;
       }
     }
     osm_write_tag(QStringLiteral("created_by"), creator);
@@ -855,7 +857,7 @@ OsmFormat::write()
   QString value(QStringLiteral("GPSBabel"));
   if (!gpsbabel_testmode()) {
     value += '-';
-    value += gpsbabel_version;
+    value += gpsbabel::kVersion;
   }
   fout->writeAttribute(QStringLiteral("generator"), value);
 

@@ -42,7 +42,7 @@
 
 #include "babeldata.h"            // for BabelData
 #include "format.h"               // for Format
-#include "gbversion.h"            // for VERSION
+#include "gbversion.h"            // for kVersion
 
 
 #if 0
@@ -111,7 +111,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   QLocale locale;
 
   QString args = "current_version=" + currentVersion_;
-  args += "&current_gui_version=" VERSION;
+  args += QStringLiteral("&current_gui_version=%1").arg(gpsbabel::kVersion);
   args += "&installation=" + babelData_.installationUuid_;
   args += "&os=" + getOsName();
   args += "&cpu=" + getCpuArchitecture();

@@ -49,7 +49,7 @@
 #include "garmin_gpi.h"        // for GarminGPIFormat
 #include "garmin_txt.h"        // for GarminTxtFormat
 #include "garmin_xt.h"         // for GarminXTFormat
-#include "gbversion.h"         // for WEB_DOC_DIR
+#include "gbversion.h"         // for kWebDocDir
 #include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
@@ -999,7 +999,7 @@ const char* Vecs::name_option(uint32_t type)
 
 void Vecs::disp_help_url(const vecinfo_t& vec, const QString& argstring)
 {
-  printf("\t" WEB_DOC_DIR "/fmt_%s.html", CSTR(vec.name));
+  printf("\t%s/fmt_%s.html", gpsbabel::kWebDocDir, CSTR(vec.name));
   if (!argstring.isEmpty()) {
     printf("#fmt_%s_o_%s", CSTR(vec.name), CSTR(argstring));
   }
