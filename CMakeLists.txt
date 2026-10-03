@@ -342,17 +342,19 @@ include(zlib.cmake)
 include(libusb.cmake)
 include(strptime.cmake)
 
-set(_use_fmt_default OFF)
-if(APPLE)
-  if (CMAKE_OSX_DEPLOYMENT_TARGET)
-    if(CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS "14.0")
-      set(_use_fmt_default ON)
-    endif()
-  else()
-    if(CMAKE_HOST_SYSTEM_VERSION VERSION_LESS "23.0.0") # Darwin 23 is macOS 14 Sonoma
-      set(_use_fmt_default ON)
-    endif()
-  endif()
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles("
+  #include <format>
+  #include <string>
+  int main() {
+      std::string s = std::format(\"Hello {}\", 42);
+      return 0;
+  }
+" _have_std_format)
+if(_have_std_format)
+  set(_use_fmt_default OFF)
+else()
+  set(_use_fmt_default ON)
 endif()
 option(GPSBABEL_USE_FMT "use {fmt} instead of std::format" ${_use_fmt_default})
 if(GPSBABEL_USE_FMT)
