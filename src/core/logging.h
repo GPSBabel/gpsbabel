@@ -100,7 +100,7 @@ public:
 }
 
 template <typename... Args>
-[[noreturn]] void gbLogFatal(std::format_string<Args...> fmt, Args&&... args)
+[[noreturn]] void gbLogFatal(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
     qCritical().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
     exit(1);
@@ -117,7 +117,7 @@ inline void gbLogDebug(const std::string& message)
 }
 
 template <typename... Args>
-void gbLogDebug(std::format_string<Args...> fmt, Args&&... args)
+void gbLogDebug(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
     qDebug().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
 }
@@ -133,7 +133,7 @@ inline void gbLogWarning(const std::string& message)
 }
 
 template <typename... Args>
-void gbLogWarning(std::format_string<Args...> fmt, Args&&... args)
+void gbLogWarning(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
     qWarning().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
 }
@@ -149,7 +149,7 @@ inline void gbLogInfo(const std::string& message)
 }
 
 template <typename... Args>
-void gbLogInfo(std::format_string<Args...> fmt, Args&&... args)
+void gbLogInfo(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
     qInfo().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
 }
