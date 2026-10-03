@@ -351,8 +351,12 @@ check_cxx_source_compiles("
   #error \"Insufficient std::format support\"
   #endif
 
+  template <typename... Args>
+  void test(std::format_string<Args...> fmt, Args&&... args) {}
+
   int main() {
       std::string s = std::format(\"Hello {}\", 42);
+      test(\"Hello {}\", 42);
       return 0;
   }
 " _have_std_format)
