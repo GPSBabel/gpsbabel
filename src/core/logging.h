@@ -87,22 +87,6 @@ public:
  * A newline is added by the MessageHandler.
  */
 
-#ifndef MOCK_FORMAT
-namespace gpsbabel {
-  using std::format;
-  using std::format_string;
-  using std::format_to;
-  using std::make_format_args;
-}
-#else
-namespace gpsbabel {
-  using fmt::format;
-  using fmt::format_string;
-  using fmt::format_to;
-  using fmt::make_format_args;
-}
-#endif
-
 [[noreturn]] inline void gbLogFatal(const char* message)
 {
     qCritical().noquote() << message;
