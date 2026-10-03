@@ -934,11 +934,6 @@ enum ff_cap {
 [[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...) = delete;
 #endif
 
-[[noreturn]] void gbFatal(const std::string& s);
-void gbWarning(const std::string& s);
-void gbInfo(const std::string& s);
-void gbDebug(const std::string& s);
-
 void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args1);
 
 void printposn(double c, bool is_lat);

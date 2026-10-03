@@ -22,12 +22,10 @@
 #include <cstdarg>             // for va_end, va_list, va_start
 #include <cstdio>              // for fprintf, stderr, fflush
 #include <cstdlib>             // for exit
-#include <string>              // for string
 
 #include <QDebug>              // for QDebug
 #include <QMessageLogContext>  // for QtMsgType, QMessageLogContext, qFormatLogMessage
 #include <QString>             // for QString
-#include <QUtf8StringView>     // for QUtf8StringView
 #include <QtGlobal>            // for qPrintable
 
 #include "defs.h"              // for gbFatal, gbDebug, gbInfo, gbVLegacyLog, gbWarning
@@ -47,34 +45,6 @@ static QByteArray xvasprintf(const char* fmt, va_list args)
   return rval;
 }
 #endif
-
-/* std::string interface
- * A newline is added by the MessageHandler.
- */
-[[noreturn]] void
-gbFatal(const std::string& s)
-{
-  FatalMsg().noquote() << QUtf8StringView(s);
-  exit(1);
-}
-
-void
-gbWarning(const std::string& s)
-{
-  QDebug(QtWarningMsg).noquote() << QUtf8StringView(s);
-}
-
-void
-gbInfo(const std::string& s)
-{
-  QDebug(QtInfoMsg).noquote() << QUtf8StringView(s);
-}
-
-void
-gbDebug(const std::string& s)
-{
-  QDebug(QtDebugMsg).noquote() << QUtf8StringView(s);
-}
 
 /* TextStream interface */
 [[noreturn]] void gbFatal(QDebug& msginstance)

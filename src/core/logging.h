@@ -22,8 +22,19 @@
 // A wrapper for QDebug that provides a sensible Warning() and FatalMsg()
 // with convenient functions, stream operators and manipulators.
 
-#include <QDebug>            // for QDebug
-#include <QtGlobal>          // for QtCriticalMsg, QtWarningMsg
+#include <cstdlib>               // for exit
+#include <format>                // for format, format_string
+#include <string>                // for basic_string, string
+#include <type_traits>           // for type_identity
+#include <utility>               // for forward
+
+#include <QBasicUtf8StringView>  // for QBasicUtf8StringView
+#include <QDebug>                // for QDebug
+#include <QMessageLogger>        // for QtMsgType, qCritical, qInfo, qWarning
+#include <QUtf8StringView>       // for QUtf8StringView
+#include <QtGlobal>              // for qDebug
+
+#include "defs.h"                // for format
 
 
 class Warning : public QDebug
@@ -67,5 +78,76 @@ public:
   Debug() : QDebug(QtDebugMsg) {nospace().noquote();}
   explicit Debug(int level) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(level);}
 };
+
+/* std::format_string interface.
+ * A newline is added by the MessageHandler.
+ */
+
+[[noreturn]] inline void gbLogFatal(const char* message)
+{
+    qCritical().noquote() << message;
+    exit(1);
+}
+
+[[noreturn]] inline void gbLogFatal(const std::string& message)
+{
+    qCritical().noquote() << QUtf8StringView(message);
+    exit(1);
+}
+
+template <typename... Args>
+[[noreturn]] void gbLogFatal(std::format_string<Args...> fmt, Args&&... args)
+{
+    qCritical().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
+    exit(1);
+}
+
+inline void gbLogDebug(const char* message)
+{
+    qDebug().noquote() << message;
+}
+
+inline void gbLogDebug(const std::string& message)
+{
+    qDebug().noquote() << QUtf8StringView(message);
+}
+
+template <typename... Args>
+void gbLogDebug(std::format_string<Args...> fmt, Args&&... args)
+{
+    qDebug().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
+}
+
+inline void gbLogWarning(const char* message)
+{
+    qWarning().noquote() << message;
+}
+
+inline void gbLogWarning(const std::string& message)
+{
+    qWarning().noquote() << QUtf8StringView(message);
+}
+
+template <typename... Args>
+void gbLogWarning(std::format_string<Args...> fmt, Args&&... args)
+{
+    qWarning().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
+}
+
+inline void gbLogInfo(const char* message)
+{
+    qInfo().noquote() << message;
+}
+
+inline void gbLogInfo(const std::string& message)
+{
+    qInfo().noquote() << QUtf8StringView(message);
+}
+
+template <typename... Args>
+void gbLogInfo(std::format_string<Args...> fmt, Args&&... args)
+{
+    qInfo().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
+}
 
 #endif //  SRC_CORE_LOGGING_H_
