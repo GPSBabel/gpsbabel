@@ -30,6 +30,8 @@ jobs:
           - version: 1.9.0
             latest: false
           - version: 1.10.0
+            latest: false
+          - version: 1.11.0
             latest: true
 
     uses: ./.github/workflows/docker.yml
