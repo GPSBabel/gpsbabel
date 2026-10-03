@@ -346,6 +346,11 @@ include(CheckCXXSourceCompiles)
 check_cxx_source_compiles("
   #include <format>
   #include <string>
+
+  #if !defined(__cpp_lib_format) || __cpp_lib_format < 202207L
+  #error \"Insufficient std::format support\"
+  #endif
+
   int main() {
       std::string s = std::format(\"Hello {}\", 42);
       return 0;
