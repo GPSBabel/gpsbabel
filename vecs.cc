@@ -23,7 +23,6 @@
 
 #include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar
-#include <QDebug>              // for QDebug
 #include <QDir>                // for QDir, QDir::Files, QDir::Name
 #include <QFileInfo>           // for QFileInfo
 #include <QFileInfoList>       // for QFileInfoList
@@ -36,6 +35,12 @@
 #include <algorithm>           // for sort
 #include <cassert>             // for assert
 #include <cstdio>              // for printf, putchar, sscanf
+#ifndef MOCK_FORMAT
+#include <format>
+#else
+#include <fmt/format.h>
+#endif
+#include <string>              // for basic_string, string
 #include <type_traits>         // for is_base_of
 #include <utility>             // for as_const
 
@@ -645,12 +650,13 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
   if (args) {
     for (const auto& arg : *args) {
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
-        gbDebug("options: module/option=value: %s/%s=\"%s\"",
-               gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
+        std::string msg = gpsbabel::format(
+                            R"(options: module/option=value: {}/{}="{}")",
+                            gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
         if (QString::compare(arg.defaultvalue, arg.argval->get(), Qt::CaseInsensitive) == 0) {
-          gbDebug(" (=default)");
+          msg +=" (=default)";
         }
-        gbDebug("\n");
+        gbLogDebug(msg);
       }
     }
   }
@@ -856,7 +862,7 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
    * the argument list that is.
    */
   assert(QString::compare(xcsvfmt->get_args()->at(0).helpstring,
-                            QLatin1String("Full path to XCSV style file"), Qt::CaseInsensitive) == 0);
+                          QLatin1String("Full path to XCSV style file"), Qt::CaseInsensitive) == 0);
 
   /* Gather the relevant info for the style based formats. */
   for (const auto& svec : style_list) {
