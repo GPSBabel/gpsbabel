@@ -175,7 +175,6 @@ struct global_options {
 };
 
 extern global_options global_opts;
-extern const char gpsbabel_version[];
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 
 enum fix_type {

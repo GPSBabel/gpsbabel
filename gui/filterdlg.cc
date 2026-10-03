@@ -109,7 +109,7 @@ void FilterDialog::pageSelectionChanged(int i)
 void FilterDialog::resetX()
 {
   int ret = QMessageBox::warning
-            (this, QString(appName),
+            (this, appName,
              tr("Are you sure you want to reset all filter options to default values?"),
              QMessageBox::Yes | QMessageBox::No);
 

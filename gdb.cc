@@ -52,6 +52,7 @@
 #include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t
 #include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
 #include "gbfile.h"                 // for gbfgetint32, gbfputint32, gbfgetc, gbfread, gbfwrite, gbfgetdbl, gbfputc, gbfile, gbfgetcstr, gbfgetnativecstr, gbfclose, gbfopen_le, gbfputint16, gbfcopyfrom, gbfputcstr, gbfrewind, gbfseek, gbftell, gbfgetint16, gbfgetuint32, gbfputdbl
+#include "gbversion.h"              // for kVersion
 #include "grtcirc.h"                // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"          // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
 #include "mkshort.h"                // for MakeShort
@@ -1115,7 +1116,7 @@ GdbFormat::write_header()
    * The date/time used to be from CVS, and may be from git in the future.
    */
   static const QDateTime gdb_release_dt = QDateTime(QDate(2011, 4, 14), QTime(1, 30, 1), QtUTC);
-  gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel_version));
+  gdb_write_cstr(QStringLiteral("GPSBabel-%1").arg(gpsbabel::kVersion));
   gdb_write_cstr(gdb_release_dt.toString(u"MMM dd yyyy"));
   gdb_write_cstr(gdb_release_dt.toString(u"HH:mm:ss"));
 

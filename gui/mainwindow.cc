@@ -70,7 +70,7 @@
 #include "donate.h"            // for Donate
 #include "filterdlg.h"         // for FilterDialog
 #include "formatload.h"        // for FormatLoad
-#include "gbversion.h"         // for VERSION, kVersionDate, kVersionSHA
+#include "gbversion.h"         // for kVersion, kVersionDate, kVersionSHA
 #if !defined(DISABLE_GOOGLEMAPPREVIEW) || !defined(DISABLE_LEAFLETMAPPREVIEW)
 #include "gpx.h"               // for Gpx
 #endif
@@ -255,8 +255,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   }
 #endif
 
-  if (!babelData_.ignoreVersionMismatch_ && babelVersion_ != VERSION) {
-    VersionMismatch vm(nullptr, babelVersion_, QString(VERSION));
+  if (!babelData_.ignoreVersionMismatch_ && babelVersion_ != gpsbabel::kVersion) {
+    VersionMismatch vm(nullptr, babelVersion_, gpsbabel::kVersion);
 
     vm.exec();
     babelData_.ignoreVersionMismatch_ = vm.neverAgain();
@@ -623,7 +623,7 @@ QList<int> MainWindow::outputDeviceFormatIndices()
 void MainWindow::loadFormats()
 {
   if (!FormatLoad().getFormats(formatList_)) {
-    QMessageBox::information(nullptr, QString(appName),
+    QMessageBox::information(nullptr, appName,
                              tr("Error reading format configuration.  "
                                 "Check that the backend program \"gpsbabel\" is properly installed "
                                 "and is in the current PATH\n\n"
@@ -634,7 +634,7 @@ void MainWindow::loadFormats()
       inputDeviceFormatIndices().empty() ||
       outputFileFormatIndices().empty() ||
       outputDeviceFormatIndices().empty()) {
-    QMessageBox::information(nullptr, QString(appName),
+    QMessageBox::information(nullptr, appName,
                              tr("Some file/device formats were not found during initialization.  "
                                 "Check that the backend program \"gpsbabel\" is properly installed "
                                 "and is in the current PATH\n\n"
@@ -789,7 +789,7 @@ void MainWindow::inputOptionButtonClicked()
                          formatList_[fidx].getName(),
                          formatList_[fidx].getInputOptionsRef(),
                          formatList_[fidx].getHtml());
-    optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList_[fidx].getName()));
+    optionDlg.setWindowTitle(QStringLiteral("%1 - %2").arg(appName, tr("Options for %1").arg(formatList_[fidx].getName())));
     optionDlg.exec();
     displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
   }
@@ -808,7 +808,7 @@ void MainWindow::outputOptionButtonClicked()
                          formatList_[fidx].getName(),
                          formatList_[fidx].getOutputOptionsRef(),
                          formatList_[fidx].getHtml());
-    optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList_[fidx].getName()));
+    optionDlg.setWindowTitle(QStringLiteral("%1 - %2").arg(appName, tr("Options for %1").arg(formatList_[fidx].getName())));
     optionDlg.exec();
     displayOptionsText(ui_.outputOptionsText,  ui_.outputFormatCombo, false);
   }
@@ -822,7 +822,7 @@ bool MainWindow::isOkToGo()
   if (!((ui_.xlateWayPtsCk->isChecked() && ui_.xlateWayPtsCk->isEnabled()) ||
         (ui_.xlateRoutesCk->isChecked() && ui_.xlateRoutesCk->isEnabled()) ||
         (ui_.xlateTracksCk->isChecked() && ui_.xlateTracksCk->isEnabled()))) {
-    QMessageBox::information(nullptr, QString(appName), tr("No valid waypoints/routes/tracks translation specified"));
+    QMessageBox::information(nullptr, appName, tr("No valid waypoints/routes/tracks translation specified"));
     return false;
   }
 
@@ -841,7 +841,7 @@ bool MainWindow::isOkToGo()
 
   if ((babelData_.inputType_ == BabelData::fileType_) &&
       (babelData_.inputFileNames_.empty())) {
-    QMessageBox::information(nullptr, QString(appName), tr("No input file specified"));
+    QMessageBox::information(nullptr, appName, tr("No input file specified"));
     return false;
   }
 
@@ -850,12 +850,12 @@ bool MainWindow::isOkToGo()
 #else
   if (babelData_.outputType_ == BabelData::noType_) {
 #endif
-    QMessageBox::information(nullptr, QString(appName), tr("No valid output specified"));
+    QMessageBox::information(nullptr, appName, tr("No valid output specified"));
     return false;
   }
   if (babelData_.outputType_ == BabelData::fileType_ &&
       babelData_.outputFileName_.isEmpty()) {
-    QMessageBox::information(nullptr, QString(appName), tr("No output file specified"));
+    QMessageBox::information(nullptr, appName, tr("No output file specified"));
     return false;
   }
   return true;
@@ -973,7 +973,7 @@ void MainWindow::applyActionX()
       args << "-o" << "gpx" << "-F" << gpxTempName;
     } else {
       // gpxTempFile.fileName() may be empty so display gpxTempFile.fileTemplate().
-      QMessageBox::warning(nullptr, QString(appName),
+      QMessageBox::warning(nullptr, appName,
                            tr("Failed to open temporary file \"%1\" for map preview.  The error was: \"%2\".  The map preview will not be shown.")
                            .arg(gpxTempFile.fileTemplate(), gpxTempFile.errorString()));
     }
@@ -1087,7 +1087,7 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
 //------------------------------------------------------------------------
 void MainWindow::donateActionX()
 {
-  QDesktopServices::openUrl(QString("https://www.gpsbabel.org/contribute.html?gbversion=" VERSION));
+  QDesktopServices::openUrl(QStringLiteral("https://www.gpsbabel.org/contribute.html?gbversion=%1").arg(gpsbabel::kVersion));
 }
 
 //------------------------------------------------------------------------
@@ -1170,7 +1170,7 @@ void MainWindow::restoreSettings()
 void MainWindow::resetFormatDefaults()
 {
   int ret = QMessageBox::warning
-            (this, QString(appName),
+            (this, appName,
              tr("Are you sure you want to reset all format options to default values?"),
              QMessageBox::Yes | QMessageBox::No);
   if (ret == QMessageBox::Yes) {
@@ -1195,12 +1195,12 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
+  QDateTime date = QDateTime::fromString(gpsbabel::kVersionDate, Qt::ISODate);
   QString utcdate;
   if (date.isValid()) {
     utcdate = date.toUTC().toString(Qt::ISODate);
   }
-  AboutDlg aboutDlg(nullptr, babelVersion_, QString(appName) + QString(" " VERSION), kVersionSHA, utcdate, babelData_.installationUuid_);
+  AboutDlg aboutDlg(nullptr, babelVersion_, QStringLiteral("%1 %2").arg(appName, gpsbabel::kVersion), gpsbabel::kVersionSHA, utcdate, babelData_.installationUuid_);
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }
