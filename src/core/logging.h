@@ -23,7 +23,11 @@
 // with convenient functions, stream operators and manipulators.
 
 #include <cstdlib>               // for exit
+#ifndef MOCK_FORMAT
 #include <format>                // for format, format_string
+#else
+#include <fmt/format.h>
+#endif
 #include <string>                // for basic_string, string
 #include <type_traits>           // for type_identity
 #include <utility>               // for forward
