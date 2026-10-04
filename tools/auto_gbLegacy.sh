@@ -432,14 +432,53 @@ diff -u before/xcsv.cc after/xcsv.cc
  }
 EOJ
 
+# a couple that didn't match our replacement search pattern
+patch <<"EOJ"
+--- before/garmin_gpi.cc	2026-10-04 11:19:44.306571026 -0600
++++ after/garmin_gpi.cc	2026-10-04 11:20:14.071541333 -0600
+@@ -59,7 +59,8 @@
+ #define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
+ 
+ #define GPI_DBG global_opts.debug_level >= 3
+-#define PP if (GPI_DBG) gbDebug("@%6x (%8d): ", gbftell(fin), gbftell(fin))
++#define PP if (GPI_DBG) gbLogDebug("@{:6x} ({:8}): ", gbftell(fin), gbftell(fin))
++
+ 
+ /*******************************************************************************
+ * %%%                             gpi reader                               %%% *
+--- before/lowranceusr.cc	2026-10-04 11:19:44.307110293 -0600
++++ after/lowranceusr.cc	2026-10-04 11:27:05.898826439 -0600
+@@ -632,11 +632,11 @@
+       gbLogDebug(" {:08x} {:>8.3f} {:08x} {:08x} {:08x}",
+              unused_byte, fsdata->depth, loran_GRI, loran_Tda, loran_Tdb);
+     } else {
+-      gbDebug("parse_waypoints: version = %d, name = %s, uid_unit = %u, "
+-             "uid_seq_low = %d, uid_seq_high = %d, lat = %+.10f, lon = %+.10f, depth = %f\n",
+-             waypoint_version, gbLogCStr(wpt_tmp->shortname), fsdata->uid_unit,
+-             fsdata->uid_seq_low, fsdata->uid_seq_high,
+-             wpt_tmp->longitude, wpt_tmp->latitude, fsdata->depth);
++      gbLogDebug("parse_waypoints: version = {}, name = {}, uid_unit = {},"
++                 "uid_seq_low = {}, uid_seq_high = {}, lat = {:+.10f}, lon = {:+.10f}, depth = {:.6f}",
++                  waypoint_version, gbLogCStr(wpt_tmp->shortname), fsdata->uid_unit,
++                  fsdata->uid_seq_low, fsdata->uid_seq_high,
++                  wpt_tmp->longitude, wpt_tmp->latitude, fsdata->depth);
+     }
+   }
+ }
+EOJ
 cp *.cc after
 echo "++++++++++ possible untranslatd print specifier ++++++++++"
-grep -s gbLogDebug *.cc | grep %
-grep -s gbLogFatal *.cc | grep %
-grep -s gbLogWarning *.cc | grep %
-grep -s gbLogInfo *.cc | grep % || true
+grep gbLogDebug *.cc | grep % || true
+grep gbLogFatal *.cc | grep % || true
+grep gbLogWarning *.cc | grep % || true
+grep gbLogInfo *.cc | grep % || true
 echo "++++++++++ possible embedded newline, will not print identically ++++++++++"
-grep -s gbLogDebug *.cc | grep '\\n'
-grep -s gbLogFatal *.cc | grep '\\n'
-grep -s gbLogWarning *.cc | grep '\\n'
-grep -s gbLogInfo *.cc | grep '\\n' || true
+grep gbLogDebug *.cc | grep '\\n' || true
+grep gbLogFatal *.cc | grep '\\n' || true
+grep gbLogWarning *.cc | grep '\\n' || true
+grep gbLogInfo *.cc | grep '\\n' || true
+echo "++++++++++ possible missed conversions ++++++++++"
+grep gbDebug *.cc | grep -v \#include || true
+grep gbFatal *.cc | grep -v FatalMsg\(\) | grep -v \#include || true
+grep gbWarning *.cc | grep -v \#include || true
+grep gbInfo *.cc | grep -v \#include || true
