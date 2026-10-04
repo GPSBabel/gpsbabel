@@ -6,45 +6,47 @@
 #gbDebug("parse of string '%s' on line number %d as time_t failed.\n",
 for file in *.cc
 do
-# be wimpy, require semicolon or a comma at end of line.
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/\\n"/"/' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%s/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%d/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%ld/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%lld/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%i/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%u/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%zu/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%llu/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%c/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%f/{:.6f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%g/{:g}/g' "$file"
+# be careful, require ); or a \n", at end of line.
+#  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/\\n"/"/' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%s/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%d/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%ld/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%lld/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%i/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%u/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%zu/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%llu/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%c/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%f/{:.6f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%g/{:g}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%" PRId64 "/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%" PRId64 "/{}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/0x%0\*X/0x{:0{}X-REORDER-}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%(0|\.)([1-9][0-9]*)([xX])/{:0\2\3}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%([1-9][0-9]*)([xX])/{:\1\2}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%([xX])/{:\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/0x%0\*X/0x{:0{}X-REORDER-}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%(0|\.)([1-9][0-9]*)([xX])/{:0\2\3}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)([xX])/{:\1\2}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([xX])/{:\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%([1-9][0-9]*)[diu]/{:\1}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%0([1-9][0-9]*)[diu]/{:0\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)[diu]/{:\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%0([1-9][0-9]*)[diu]/{:0\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%([1-9][0-9]*)\.([1-9][0-9]*)s/{:>\1.\2}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%([1-9][0-9]*)s/{:>\1}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%\.([1-9][0-9]*)s/{:.\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)\.([1-9][0-9]*)s/{:>\1.\2}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)s/{:>\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\.([1-9][0-9]*)s/{:.\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%\.f/{:.0f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%\+f/{:+f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%\.([0-9]+)f/{:.\1f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%\+\.([0-9]+)f/{:+.\1f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%([1-9][0-9]*)\.([0-9]+)f/{:>\1.\2f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%\+([1-9][0-9]*)\.([0-9]+)f/{:>+\1.\2f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\.f/{:.0f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\+f/{:+f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\.([0-9]+)f/{:.\1f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\+\.([0-9]+)f/{:+.\1f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)\.([0-9]+)f/{:>\1.\2f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\+([1-9][0-9]*)\.([0-9]+)f/{:>+\1.\2f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%0\.([0-9]+)f/{:.\1f}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%\+#g/{:+#g}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\+#g/{:+#g}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/%%/%/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[;,]$/s/gb(Debug|Fatal|Warning|Info)/gbLog\1/' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%%/%/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/gb(Debug|Fatal|Warning|Info)/gbLog\1/' "$file"
+  sed -E -i '/gbLog(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/\\n"/"/' "$file"
 done
 rm -rf before
 rm -rf after
@@ -120,18 +122,6 @@ diff -u before/duplicate.cc after/duplicate.cc
  
  
  #if FILTERS_ENABLED
-diff -u before/exif.cc after/exif.cc
---- before/exif.cc	2026-10-04 10:06:13.345536262 -0600
-+++ after/exif.cc	2026-10-04 10:06:13.355295859 -0600
-@@ -552,7 +552,7 @@
-           } else if (tag->type == EXIF_TYPE_DOUBLE) {
-             gbLogDebug(" {:+#g}", tag->data.at(idx).value<double>());
-           } else {
--            gbLogDebug(" 0x{:0{}X-REORDER-}", 2 * exif_type_size(tag->type), tag->data.at(idx).value<uint32_t>());
-+            gbLogDebug(" 0x{:0{}X}", tag->data.at(idx).value<uint32_t>(), 2 * exif_type_size(tag->type));
-           }
-         }
-         if (tag->count > 4) {
 diff -u before/garmin_txt.cc after/garmin_txt.cc
 --- before/garmin_txt.cc	2026-10-04 10:06:13.345714496 -0600
 +++ after/garmin_txt.cc	2026-10-04 10:06:13.355530013 -0600
@@ -468,17 +458,17 @@ patch <<"EOJ"
 EOJ
 cp *.cc after
 echo "++++++++++ possible untranslatd print specifier ++++++++++"
-grep gbLogDebug *.cc | grep % || true
-grep gbLogFatal *.cc | grep % || true
-grep gbLogWarning *.cc | grep % || true
-grep gbLogInfo *.cc | grep % || true
+grep -n gbLogDebug *.cc | grep % || true
+grep -n gbLogFatal *.cc | grep % || true
+grep -n gbLogWarning *.cc | grep % || true
+grep -n gbLogInfo *.cc | grep % || true
 echo "++++++++++ possible embedded newline, will not print identically ++++++++++"
-grep gbLogDebug *.cc | grep '\\n' || true
-grep gbLogFatal *.cc | grep '\\n' || true
-grep gbLogWarning *.cc | grep '\\n' || true
-grep gbLogInfo *.cc | grep '\\n' || true
+grep -n gbLogDebug *.cc | grep '\\n' || true
+grep -n gbLogFatal *.cc | grep '\\n' || true
+grep -n gbLogWarning *.cc | grep '\\n' || true
+grep -n gbLogInfo *.cc | grep '\\n' || true
 echo "++++++++++ possible missed conversions ++++++++++"
-grep gbDebug *.cc | grep -v \#include || true
-grep gbFatal *.cc | grep -v FatalMsg\(\) | grep -v \#include || true
-grep gbWarning *.cc | grep -v \#include || true
-grep gbInfo *.cc | grep -v \#include || true
+grep -n gbDebug *.cc | grep -v \#include || true
+grep -n gbFatal *.cc | grep -v FatalMsg\(\) | grep -v \#include || true
+grep -n gbWarning *.cc | grep -v \#include || true
+grep -n gbInfo *.cc | grep -v \#include || true
