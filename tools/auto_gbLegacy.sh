@@ -78,13 +78,13 @@ cp *.cc before
 # gbWarning patches
 
 # fix the rest by hand:
-# parse.cc needs logging include (already done)
+# parse.cc needs logging include
 # unicsv.cc 425 is an enum
 # mtk_logger.cc 509 is multiline
 # shape.cc 152 enum
-# gbser_posix.cc needs logging include (already done)
-# gtm.cc 386 mutliline literal, multiline
-# stackfilter.cc 147 multline literal, needs logging include (logging done)
+# gbser_posix.cc needs logging include
+# gtm.cc 386 multiline literal, multiline
+# stackfilter.cc 147 multiline literal, needs logging include
 # trackfilter.cc 591 multiline literal
 
 # gbFatal patches
@@ -107,7 +107,7 @@ cp *.cc before
 # sort.cc needs logging include
 # position.cc
 # xcsv.cc 812 enum
-# igc.cc 10 lines with newlines 157, 167, 183, 227, 290, 306, 315, 353, 364, 443
+# igc.cc 157, 167, 183, 227, 290, 306, 315, 353, 364, 443 multiline
 echo "igc.cc has multiline gbLogFatal calls"
 
 patch <<"EOJ"
@@ -145,24 +145,6 @@ diff -u before/gbser_posix.cc after/gbser_posix.cc
  
  #include <cassert>
  #include <cerrno>
-diff -u before/gtm.cc after/gtm.cc
---- before/gtm.cc	2026-10-04 10:06:13.346000645 -0600
-+++ after/gtm.cc	2026-10-04 10:06:13.355810271 -0600
-@@ -383,10 +383,10 @@
-   //       If ts_count != real_track_list.size() we don't know how to line up
-   //       the tracklogs, and the real tracks, with the tracklog styles.
-   if (ts_count != real_track_list.size()) {
--    gbWarning("The number of tracklog entries with the new flag "
--           "set doesn't match the number of tracklog style entries.\n"
--           "  This is unexpected and may indicate a malformed input file.\n"
--           "  As a result the track names may be incorrect.\n");
-+    gbLogWarning("The number of tracklog entries with the new flag "
-+              "set doesn't match the number of tracklog style entries.");
-+    gbLogWarning("  This is unexpected and may indicate a malformed input file.");
-+    gbLogWarning("  As a result the track names may be incorrect.");
-   }
-   // Read the entire tracklog styles section whether we use it or not.
-   for (i = 0; i != ts_count; i++) {
 diff -u before/height.cc after/height.cc
 --- before/height.cc	2026-10-04 10:06:13.346032876 -0600
 +++ after/height.cc	2026-10-04 10:06:13.355841759 -0600
@@ -185,19 +167,6 @@ diff -u before/mkshort.cc after/mkshort.cc
  
  
  const QByteArray MakeShort::vowels = "aeiouAEIOU";
-diff -u before/mtk_logger.cc after/mtk_logger.cc
---- before/mtk_logger.cc	2026-10-04 10:06:13.346261451 -0600
-+++ after/mtk_logger.cc	2026-10-04 10:06:13.356064968 -0600
-@@ -506,7 +506,8 @@
-             }
-           } else {
-             if (null_len == chunk_size) {  // 0x00 block - bad block....
--              gbLogWarning("FIXME -- read bad block at 0x{:06x} - retry ? skip ?\n{}", data_addr, line);
-+              gbLogWarning("FIXME -- read bad block at 0x{:06x} - retry ? skip ?", data_addr);
-+              gbLogWarning("{}", line);
-             }
-             if (ff_len == chunk_size) {  // 0xff block - read complete...
-               len = ff_len;
 diff -u before/parse.cc after/parse.cc
 --- before/parse.cc	2026-10-04 10:06:13.346371586 -0600
 +++ after/parse.cc	2026-10-04 10:06:13.356174632 -0600
@@ -309,30 +278,6 @@ diff -u before/stackfilter.cc after/stackfilter.cc
  
  #if FILTERS_ENABLED
  
-@@ -144,8 +145,7 @@
-   stack_elt* tmp_elt = nullptr;
- 
-   if (warnings_enabled && stack) {
--    gbWarning("Warning: leftover stack entries; "
--            "check command line for mistakes\n");
-+    gbLogWarning("Warning: leftover stack entries; check command line for mistakes");
-   }
-   while (stack) {
-     stack->waypts.flush();
-diff -u before/trackfilter.cc after/trackfilter.cc
---- before/trackfilter.cc	2026-10-04 10:06:13.346766450 -0600
-+++ after/trackfilter.cc	2026-10-04 10:06:13.356537761 -0600
-@@ -588,8 +588,8 @@
-     }
-   }
-   if (timeless_points > 0) {
--    gbWarning("move: %d points out of %d total points didn't have "
--            "time information and could not be moved.\n",
-+    gbLogWarning("move: {} points out of {} total points didn't have "
-+            "time information and could not be moved.",
-             timeless_points, track_waypt_count());
-   }
- }
 diff -u before/transform.cc after/transform.cc
 --- before/transform.cc	2026-10-04 10:06:13.346787378 -0600
 +++ after/transform.cc	2026-10-04 10:06:13.356561046 -0600
