@@ -130,7 +130,7 @@ diff -u before/garmin_txt.cc after/garmin_txt.cc
        header_mapping_info[ht].append(std::make_pair(name, field_no));
        if (global_opts.debug_level >= 2) {
 -        gbLogDebug("Binding field \"{}\" to internal number {} ({},{})", gbLogCStr(name), field_no, ht, i);
-+        gbLogDebug("Binding field \"{}\" to internal number {} ({},{})", gbLogCStr(name), field_no, static_cast<int>(ht), i);
++        gbLogDebug("Binding field \"{}\" to internal number {} ({},{})", gbLogCStr(name), field_no, gpsbabel::to_underlying(ht), i);
        }
      } else {
        gbLogWarning("Field {} not recognized!", gbLogCStr(name));
@@ -241,7 +241,7 @@ diff -u before/shape.cc after/shape.cc
    for (int i = 0; i < nFields; i++) {
      DBFFieldType type = DBFGetFieldInfo(ihandledb, i, name, nullptr, nullptr);
 -    gbLogWarning("Field Index: {:2}, Field Name: {:>12}, Field Type {}", i, name, type);
-+    gbLogWarning("Field Index: {:2}, Field Name: {:>12}, Field Type {}", i, name, static_cast<int>(type));
++    gbLogWarning("Field Index: {:2}, Field Name: {:>12}, Field Type {}", i, name, gpsbabel::to_underlying(type));
    }
    gbLogFatal("");
  }
@@ -297,7 +297,7 @@ diff -u before/unicsv.cc after/unicsv.cc
  
        if (global_opts.debug_level) {
 -        gbLogWarning("Interpreting column \"{}\" as {}({}).", gbLogCStr(value), gbLogCStr(f.name), f.type);
-+        gbLogWarning("Interpreting column \"{}\" as {}({}).", gbLogCStr(value), gbLogCStr(f.name), static_cast<int>(f.type));
++        gbLogWarning("Interpreting column \"{}\" as {}({}).", gbLogCStr(value), gbLogCStr(f.name), gpsbabel::to_underlying(f.type));
        }
  
        /* handle some special items */
@@ -361,7 +361,7 @@ diff -u before/xcsv.cc after/xcsv.cc
  
    default:
 -    gbLogFatal("Unknown style directive: {} - {}", fmp.key.constData(), fmp.hashed_key);
-+    gbLogFatal("Unknown style directive: {} - {}", fmp.key.constData(), static_cast<int>(fmp.hashed_key));
++    gbLogFatal("Unknown style directive: {} - {}", fmp.key.constData(), gpsbabel::to_underlying(fmp.hashed_key));
      break;
    }
  }
