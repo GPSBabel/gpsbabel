@@ -451,7 +451,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       if constexpr(GDB_DEBUG) {
         DBG(GDB_DBG_WPTe, true)
         gbLogDebug("wpt \"{}\" ({}): Altitude = {:.1f}",
-                gbLogCStr(res->shortname), static_cast<int>(wpt_class), alt);
+                gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), alt);
       }
     }
   }
@@ -466,7 +466,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, !res->notes.isNull())
     gbLogDebug("wpt \"{}\" ({}): notes = {}",
-            gbLogCStr(res->shortname), static_cast<int>(wpt_class),
+            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class),
             gbLogCStr(QString(res->notes).replace("\r\n", ", ")));
   }
   if (FREAD_C == 1) {
@@ -474,14 +474,14 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     if constexpr(GDB_DEBUG) {
       DBG(GDB_DBG_WPTe, res->proximity_has_value())
       gbLogDebug("wpt \"{}\" ({}): Proximity = {:.1f}",
-              gbLogCStr(res->shortname), static_cast<int>(wpt_class), res->proximity_value() / 1000);
+              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->proximity_value() / 1000);
     }
   }
   int display = FREAD_i32;
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, true)
     gbLogDebug("wpt \"{}\" ({}): display = {}",
-            gbLogCStr(res->shortname), static_cast<int>(wpt_class), display);
+            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), display);
   }
   switch (display) {			/* display value */
   case gt_gdb_display_mode_symbol:
@@ -510,7 +510,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     if constexpr(GDB_DEBUG) {
       DBG(GDB_DBG_WPTe, res->depth_has_value())
       gbLogDebug("wpt \"{}\" ({}): Depth = {:.1f}",
-              gbLogCStr(res->shortname), static_cast<int>(wpt_class), res->depth_value());
+              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->depth_value());
     }
   }
 
@@ -530,7 +530,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       QString temp = FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
       DBG(GDB_DBG_WPTe, !temp.isEmpty())
       gbLogDebug("wpt \"{}\" ({}): Unknown string = {}",
-              gbLogCStr(res->shortname), static_cast<int>(wpt_class), gbLogCStr(temp));
+              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(temp));
     } else {
       (void) FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
     }
@@ -559,7 +559,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       if constexpr(GDB_DEBUG) {
         DBG(GDB_DBG_WPTe, true)
         gbLogDebug("wpt \"{}\" ({}): duration = {}",
-                gbLogCStr(res->shortname), static_cast<int>(wpt_class), duration);
+                gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), duration);
       }
     }
     int url_ct = FREAD_i32;
@@ -570,7 +570,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
         if constexpr(GDB_DEBUG) {
           DBG(GDB_DBG_WPTe, true)
           gbLogDebug("wpt \"{}\" ({}): url({}) = {}",
-                  gbLogCStr(res->shortname), static_cast<int>(wpt_class), url_ct - i, gbLogCStr(str));
+                  gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), url_ct - i, gbLogCStr(str));
         }
       }
     }
@@ -579,10 +579,10 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, !res->description.isNull())
     gbLogDebug("wpt \"{}\" ({}): description = {}",
-            gbLogCStr(res->shortname), static_cast<int>(wpt_class), gbLogCStr(res->description));
+            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->description));
     DBG(GDB_DBG_WPTe, res->urls.HasUrlLink())
     gbLogDebug("wpt \"{}\" ({}): url = {}",
-            gbLogCStr(res->shortname), static_cast<int>(wpt_class), gbLogCStr(res->urls.GetUrlLink().url_));
+            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->urls.GetUrlLink().url_));
   }
   int category = FREAD_i16;
   if (category != 0) {
@@ -591,7 +591,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, category)
     gbLogDebug("wpt \"{}\" ({}): category = {}",
-            gbLogCStr(res->shortname), static_cast<int>(wpt_class), category);
+            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), category);
   }
 
   if (FREAD_C == 1) {
@@ -599,7 +599,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     if constexpr(GDB_DEBUG) {
       DBG(GDB_DBG_WPTe, res->temperature_has_value())
       gbLogDebug("wpt \"{}\" ({}): temperature = {:.1f}",
-              gbLogCStr(res->shortname), static_cast<int>(wpt_class), res->temperature_value());
+              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->temperature_value());
     }
   }
 
@@ -628,7 +628,7 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, icon != kGDBDefIcon)
     gbLogDebug("wpt \"{}\" ({}): icon = \"{}\" (MapSource symbol {})",
-            gbLogCStr(res->shortname), static_cast<int>(wpt_class), gbLogCStr(res->icon_descr), icon);
+            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->icon_descr), icon);
   }
   QString str;
   if (!(str = garmin_fs_t::get_cc(gmsd, nullptr)).isEmpty()) {
@@ -1042,7 +1042,7 @@ GdbFormat::read()
       std::string msgbuf;
       if (typ == 'W')
         msgbuf = gpsbabel::format("({}{}-{:02}): delta = {} (flag={:3}/{:02x})-",
-                  gdb_ver, typ, static_cast<int>(wpt_class), delta, waypt_flag, waypt_flag);
+                  gdb_ver, typ, gpsbabel::to_underlying(wpt_class), delta, waypt_flag, waypt_flag);
       else {
         msgbuf = gpsbabel::format("({}{}): delta = {} -", gdb_ver, typ, delta);
       }

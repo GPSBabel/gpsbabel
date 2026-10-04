@@ -26,6 +26,7 @@
 #include <ctime>                     // for time_t
 #include <numbers>                   // for inv_pi, pi
 #include <optional>                  // for optional
+#include <type_traits>               // for underlying_type_t, is_enum_v
 #include <utility>                   // for move
 
 #include <QByteArray>                // for QByteArray
@@ -1069,5 +1070,17 @@ namespace gpsbabel {
   using fmt::make_format_args;
 }
 #endif
+
+
+// mock c++23 std::to_underlying
+namespace gpsbabel {
+  template <typename Enum>
+  constexpr auto to_underlying(Enum value) noexcept
+      -> std::underlying_type_t<Enum>
+  {
+      static_assert(std::is_enum_v<Enum>);
+      return static_cast<std::underlying_type_t<Enum>>(value);
+  }
+}
 
 #endif // DEFS_H_INCLUDED_
