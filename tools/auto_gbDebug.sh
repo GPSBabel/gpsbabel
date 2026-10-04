@@ -50,19 +50,19 @@ done
 # duplicate.cc needs logging include
 # gbser_posic.cc needs logging include
 # height.cc needs logging include
-# mkshort.cc
+# mkshort.cc needs logging include
 # parse.cc needs logging include
-# reverse_route.cc
-# rgbcolors.cc
-# session.cc
-# units.cc
-# validate.cc
-# transform.cc
-# stackfilter.cc
-# radius.cc
-# smplrout.cc
-# sort.cc
-# position.cc
+# reverse_route.cc needs logging include
+# rgbcolors.cc needs logging include
+# session.cc needs logging include
+# units.cc needs logging include
+# validate.cc needs logging include
+# transform.cc needs logging include
+# stackfilter.cc needs logging include
+# radius.cc needs logging include
+# smplrout.cc needs logging include
+# sort.cc needs logging include
+# position.cc needs logging include
 # garmin_txt.cc 966 enum
 # exif.cc 555 reorder
 patch <<"EOJ"
