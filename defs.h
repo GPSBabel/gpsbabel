@@ -921,14 +921,6 @@ enum ff_cap {
 // This can have a large effect on codacy issues from cppcheck
 // nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
 // negativeIndex, arrayIndexOutOfBoundsCond.
-#if 0
-[[gnu::format(printf, 1, 2)]] [[noreturn]] void gbFatal(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void gbWarning(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...);
-#endif
-
-void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args1);
 
 void printposn(double c, bool is_lat);
 
