@@ -4,7 +4,17 @@
 
 #gbDebug("parse of string '%s' on line number %d as double failed.\n");
 #gbDebug("parse of string '%s' on line number %d as time_t failed.\n",
-for file in *.cc format.h
+sources=( \
+*.cc \
+format.h \
+igc.h \
+jeeps/*.cc \
+src/core/textstream.cc \
+src/core/xmlstreamwriter.cc \
+src/core/matrix.cc \
+src/core/codecdevice.cc \
+)
+for file in "${sources[@]}"
 do
 # be careful, require ); or a \n", at end of line.
 #  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/\\n"/"/' "$file"
@@ -50,8 +60,14 @@ done
 rm -rf before
 rm -rf after
 mkdir before
+mkdir before/jeeps
+mkdir -p before/src/core
 mkdir after
-cp *.cc before
+mkdir after/jeeps
+mkdir -p after/src/core
+cp *.cc *.h before
+cp jeeps/*.cc jeeps/*.h before/jeeps
+cp src/core/*.cc src/core/*.h before/src/core
 # gbDebug patches
 
 # fix the rest by hand:
@@ -566,20 +582,233 @@ patch <<"EOJ"
        else {
          gbLogWarning("({}{}): delta = {} -", gdb_ver, typ, delta);
        }
+--- before/gdb.cc	2026-10-05 12:54:13.720486891 -0600
++++ after/gdb.cc	2026-10-05 12:54:57.288923146 -0600
+@@ -828,8 +828,8 @@
+       FREAD(tbuf, 8); /* unknown bytes */
+       if constexpr(GDB_DEBUG) {
+         DBG(GDB_DBG_RTE, true)
+-        gbDebug("rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"
+-                "                            driving speeds (kph) %.0f, %.0f, %.0f, %.0f, %.0f\n",
++        gbLogDebug("rte_pt: autoroute info: route style {}, calculation type {}, vehicle type {}, road selection {}\n"
++                   "                            driving speeds (kph) {:.0f}, {:.0f}, {:.0f}, {:.0f}, {:.0f}\n",
+                 route_style, calc_type, vehicle_type, road_selection,
+                 driving_speed[0], driving_speed[1], driving_speed[2], driving_speed[3], driving_speed[4]);
+       } else {
+--- before/gdb.cc	2026-10-05 12:59:59.205232583 -0600
++++ after/gdb.cc	2026-10-05 13:00:12.849667809 -0600
+@@ -235,10 +235,10 @@
+     double dist = radtometers(gcdist(ref->position(), tmp->position()));
+ 
+     if (fabs(dist) > 100) {
+-      gbFatal("Route point mismatch!\n" \
+-              "  \"%s\" from waypoints differs to \"%s\"\n" \
+-              "  from route table by more than %0.1f meters!\n", \
+-              gbLogCStr(tmp->shortname), gbLogCStr(ref->shortname), dist);
++      gbLogFatal("Route point mismatch!\n"
++                 "  \"{}\" from waypoints differs to \"{}\"\n"
++                 "  from route table by more than {:.1f} meters!\n",
++                 gbLogCStr(tmp->shortname), gbLogCStr(ref->shortname), dist);
+     }
+   }
+   Waypoint* res = nullptr;
+--- before/gtm.cc	2026-10-05 13:01:37.947131825 -0600
++++ after/gtm.cc	2026-10-05 13:02:07.531500645 -0600
+@@ -383,10 +383,10 @@
+   //       If ts_count != real_track_list.size() we don't know how to line up
+   //       the tracklogs, and the real tracks, with the tracklog styles.
+   if (ts_count != real_track_list.size()) {
+-    gbWarning("The number of tracklog entries with the new flag "
+-           "set doesn't match the number of tracklog style entries.\n"
+-           "  This is unexpected and may indicate a malformed input file.\n"
+-           "  As a result the track names may be incorrect.\n");
++    gbLogWarning("The number of tracklog entries with the new flag "
++                 "set doesn't match the number of tracklog style entries.\n"
++                 "  This is unexpected and may indicate a malformed input file.\n"
++                 "  As a result the track names may be incorrect.\n");
+   }
+   // Read the entire tracklog styles section whether we use it or not.
+   for (i = 0; i != ts_count; i++) {
+--- before/stackfilter.cc	2026-10-05 13:03:22.283744350 -0600
++++ after/stackfilter.cc	2026-10-05 13:03:47.723097433 -0600
+@@ -145,8 +145,8 @@
+   stack_elt* tmp_elt = nullptr;
+ 
+   if (warnings_enabled && stack) {
+-    gbWarning("Warning: leftover stack entries; "
+-            "check command line for mistakes\n");
++    gbLogWarning("Warning: leftover stack entries; "
++                 "check command line for mistakes\n");
+   }
+   while (stack) {
+     stack->waypts.flush();
+--- before/trackfilter.cc	2026-10-05 13:06:04.440264270 -0600
++++ after/trackfilter.cc	2026-10-05 13:06:18.400676057 -0600
+@@ -588,9 +588,9 @@
+     }
+   }
+   if (timeless_points > 0) {
+-    gbWarning("move: %d points out of %d total points didn't have "
+-            "time information and could not be moved.\n",
+-            timeless_points, track_waypt_count());
++    gbLogWarning("move: {} points out of {} total points didn't have "
++                 "time information and could not be moved.\n",
++                 timeless_points, track_waypt_count());
+   }
+ }
+ 
+--- before/gbfile.cc	2026-10-05 13:07:27.513637089 -0600
++++ after/gbfile.cc	2026-10-05 13:07:43.301591073 -0600
+@@ -547,7 +547,7 @@
+       /* force gzipped files on output */
+       file->gzapi = 1;
+ #else
+-      gbFatal(NO_ZLIB);
++      gbLogFatal(NO_ZLIB);
+ #endif
+     }
+ 
 EOJ
-cp *.cc after
+patch -p0 <<"EOJ"
+--- jeeps/gpsapp.cc	2026-10-05 13:53:57.971024963 -0600
++++ jeeps/gpsapp.cc	2026-10-05 13:54:23.080778739 -0600
+@@ -40,6 +40,7 @@
+ #include "jeeps/garminusb.h"
+ #include "jeeps/gpsserial.h"
+ #include "jeeps/gpsusbint.h"
++#include "src/core/logging.h"
+ 
+ time_t gps_save_time;
+ double gps_save_lat;
+--- jeeps/gpscom.cc	2026-10-05 13:29:17.737948350 -0600
++++ jeeps/gpscom.cc	2026-10-05 13:31:22.983365036 -0600
+@@ -31,6 +31,8 @@
+ 
+ #include <QByteArray>
+ 
++#include "src/core/logging.h"
++
+ /* @func GPS_Command_Off ***********************************************
+ **
+ ** Turn off power on GPS
+--- jeeps/gpsmath.cc	2026-10-05 13:34:02.083887520 -0600
++++ after/jeeps/gpsmath.cc	2026-10-05 13:34:36.536903244 -0600
+@@ -35,6 +35,7 @@
+ 
+ #include "defs.h"            // for gbFatal, CSTR
+ #include "jeeps/gpsdatum.h"  // for GPS_ODatum, GPS_OEllipse, GPS_Datums, GPS_Ellipses, UKNG, GPS_SDatum_Alias, GPS_SDatum, GPS_DatumAliases, GPS_PDatum, GPS_PDatum_Alias
++#include "src/core/logging.h"
+ 
+ static constexpr bool use_exact_helmert_inverse = false;
+ 
+--- jeeps/gpsusbcommon.cc	2026-10-05 13:35:17.806650995 -0600
++++ jeeps/gpsusbcommon.cc	2026-10-05 13:38:39.593960049 -0600
+@@ -22,6 +22,7 @@
+ #include "jeeps/gps.h"
+ #include "jeeps/garminusb.h"
+ #include "jeeps/gpsusbcommon.h"
++#include "src/core/logging.h"
+ 
+ /*
+  * This receive logic is a little convoluted as we go to some efforts here
+@@ -93,7 +94,7 @@
+     rv = gusb_llops->llop_get_bulk(ibuf, sz);
+     break;
+   default:
+-    gbLogFatal("Unknown receiver state {}\n", receive_state);
++    gbLogFatal("Unknown receiver state {}\n", gpsbabel::to_underlying(receive_state));
+   }
+ 
+   pkt_id = le_read16(&ibuf->gusb_pkt.pkt_id);
+--- before/jeeps/gpslibusb.cc	2026-10-05 15:04:57.011302183 -0600
++++ jeeps/gpslibusb.cc	2026-10-05 15:04:37.266018361 -0600
+@@ -37,6 +37,7 @@
+ #include "jeeps/garminusb.h"
+ #include "jeeps/gpsdevice.h"
+ #include "jeeps/gpsusbcommon.h"
++#include "src/core/logging.h"
+ 
+ #define GARMIN_VID 0x91e
+ 
+@@ -312,8 +313,8 @@
+      * kernel driver that bonds with the hardware.
+      */
+     usb_get_driver_np(udev, 0, drvnm, sizeof(drvnm)-1);
+-    gbFatal("usb_set_configuration failed, probably because kernel driver '%s'\n is blocking our access to the USB device.\n"
+-          "For more information see https://www.gpsbabel.org/os/Linux_Hotplug.html\n", drvnm);
++    gbLogFatal("usb_set_configuration failed, probably because kernel driver '{}'\n is blocking our access to the USB device.\n"
++               "For more information see https://www.gpsbabel.org/os/Linux_Hotplug.html\n", drvnm);
+ #else
+ 
+     gbLogFatal("usb_set_configuration failed: {}\n", usb_strerror());
+@@ -421,9 +422,9 @@
+     return;
+   }
+ 
+-  gbFatal("Could not identify endpoints on USB device.\n"
+-        "Found endpoints Intr In 0x%x Bulk Out 0x%x Bulk In %0xx\n",
+-        gusb_intr_in_ep, gusb_bulk_out_ep, gusb_bulk_in_ep);
++  gbLogFatal("Could not identify endpoints on USB device.\n"
++             "Found endpoints Intr In 0x{:x} Bulk Out 0x{:x} Bulk In %0xx\n",
++             gusb_intr_in_ep, gusb_bulk_out_ep, gusb_bulk_in_ep);
+ }
+ 
+ static
+@@ -477,11 +478,11 @@
+   if (0 == found_devices) {
+     gbLogFatal("Found no Garmin USB devices.\n");
+   } else if (req_unit_number >= found_devices) {
+-    gbFatal("usb unit number(%d) too high.\n"
+-          "The unit number must be either\n"
+-          "1) nonnegative and less than the number of garmin devices found(%d), or\n"
+-          "2) negative to list the garmin devices found.\n",
+-          req_unit_number, found_devices);
++    gbLogFatal("usb unit number({}) too high.\n"
++               "The unit number must be either\n"
++               "1) nonnegative and less than the number of garmin devices found({}), or\n"
++               "2) negative to list the garmin devices found.\n",
++               req_unit_number, found_devices);
+   } else {
+     return 1;
+   }
+EOJ
+patch -p0 <<"EOJ"
+--- src/core/matrix.cc	2026-10-05 14:03:56.950517886 -0600
++++ src/core/matrix.cc	2026-10-05 14:04:13.590903113 -0600
+@@ -25,6 +25,7 @@
+ #include <QDebugStateSaver>  // for QDebugStateSaver
+ 
+ #include "defs.h"            // For gbFatal
++#include "src/core/logging.h"
+ 
+ Matrix::Matrix(int rows, int cols) : rows_(rows), cols_(cols), data_(rows * cols, 0.0) {}
+ 
+--- src/core/xmlstreamwriter.cc	2026-10-05 14:04:51.854997658 -0600
++++ src/core/xmlstreamwriter.cc	2026-10-05 14:05:08.928901998 -0600
+@@ -24,6 +24,7 @@
+ #include <QtGlobal>                 // for QT_VERSION, QT_VERSION_CHECK
+ 
+ #include "defs.h"
++#include "src/core/logging.h"
+ 
+ // As this code began in C, we have several hundred places that write
+ // c strings.  Add a test that the string contains anything useful
+EOJ
+cp *.cc *.h after
+cp jeeps/*.cc jeeps/*.h after/jeeps
+cp src/core/*.cc src/core/*.h after/src/core
 echo "++++++++++ possible untranslatd print specifier ++++++++++"
-grep -n gbLogDebug *.cc | grep % || true
-grep -n gbLogFatal *.cc | grep % || true
-grep -n gbLogWarning *.cc | grep % || true
-grep -n gbLogInfo *.cc | grep % || true
+grep -n gbLogDebug "${sources[@]}" | grep % || true
+grep -n gbLogFatal "${sources[@]}" | grep % || true
+grep -n gbLogWarning "${sources[@]}" | grep % || true
+grep -n gbLogInfo "${sources[@]}" | grep % || true
 #echo "++++++++++ possible embedded newline, will not print identically ++++++++++"
 #grep -n gbLogDebug *.cc | grep '\\n' || true
 #grep -n gbLogFatal *.cc | grep '\\n' || true
 #grep -n gbLogWarning *.cc | grep '\\n' || true
 #grep -n gbLogInfo *.cc | grep '\\n' || true
 echo "++++++++++ possible missed conversions ++++++++++"
-grep -n gbDebug *.cc | grep -v \#include || true
-grep -n gbFatal *.cc | grep -v FatalMsg\(\) | grep -v \#include || true
-grep -n gbWarning *.cc | grep -v \#include || true
-grep -n gbInfo *.cc | grep -v \#include || true
+grep -n gbDebug "${sources[@]}" | grep -v \#include || true
+grep -n gbFatal "${sources[@]}" | grep -v FatalMsg\(\) | grep -v \#include || true
+grep -n gbWarning "${sources[@]}" | grep -v \#include || true
+grep -n gbInfo "${sources[@]}" | grep -v \#include || true
