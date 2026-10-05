@@ -819,6 +819,16 @@ patch -p0 <<"EOJ"
          "Exclusive access is denied.  It's likely that something else such as\n"
          "Garmin Lifetime Updater, Communicator, Basecamp, Nroute, Spanner,\n"
          "Google Earth, or GPSGate already has control of the device\n");
+--- before/jeeps/gpsserial.cc	2026-10-05 16:17:22.286160835 -0600
++++ jeeps/gpsserial.cc	2026-10-05 16:17:44.053496283 -0600
+@@ -26,6 +26,7 @@
+ #include "jeeps/gps.h"
+ #include "gbser.h"
+ #include "jeeps/gpsserial.h"
++#include "src/core/logging.h"
+ #include <QThread>
+ #include <cerrno>
+ #include <cstdio>
 EOJ
 patch -p0 <<"EOJ"
 --- src/core/matrix.cc	2026-10-05 14:03:56.950517886 -0600
