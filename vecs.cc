@@ -23,6 +23,7 @@
 
 #include <QByteArray>          // for QByteArray
 #include <QChar>               // for QChar
+#include <QDebug>              // for QDebug
 #include <QDir>                // for QDir, QDir::Files, QDir::Name
 #include <QFileInfo>           // for QFileInfo
 #include <QFileInfoList>       // for QFileInfoList
@@ -35,12 +36,6 @@
 #include <algorithm>           // for sort
 #include <cassert>             // for assert
 #include <cstdio>              // for printf, putchar, sscanf
-#ifndef MOCK_FORMAT
-#include <format>
-#else
-#include <fmt/format.h>
-#endif
-#include <string>              // for basic_string, string
 #include <type_traits>         // for is_base_of
 #include <utility>             // for as_const
 
@@ -78,7 +73,7 @@
 #include "seventymai.h"        // for SeventymaiFormat
 #include "shape.h"             // for ShapeFormat
 #include "skytraq.h"           // for MinihomerFormat, SkytraqFormat, SkytraqfileFormat
-#include "src/core/logging.h"  // for gbLogFatal, gbLogWarning
+#include "src/core/logging.h"  // for Warning, FatalMsg
 #include "subrip.h"            // for SubripFormat
 #include "text.h"              // for TextFormat
 #include "tpg.h"               // for TpgFormat
@@ -598,7 +593,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
 
   if (arg.argval == nullptr) {
-    gbLogFatal("{}: Program error - No local variable defined for option.", gbLogCStr(id));
+    gbFatal("%s: Program error - No local variable defined for option.\n", gbLogCStr(id));
   }
 
   arg.argval->reset();
@@ -635,7 +630,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
             rval = '1';
           }
         } else {
-          gbLogWarning(R"({}: Invalid logical value "{}".)", gbLogCStr(id), gbLogCStr(val));
+          gbWarning("%s: Invalid logical value \"%s\".\n", gbLogCStr(id), gbLogCStr(val));
           rval = '0';
         }
       }
@@ -650,13 +645,12 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
   if (args) {
     for (const auto& arg : *args) {
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
-        std::string msg = gpsbabel::format(
-                            R"(options: module/option=value: {}/{}="{}")",
-                            gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
+        gbDebug("options: module/option=value: %s/%s=\"%s\"",
+               gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
         if (QString::compare(arg.defaultvalue, arg.argval->get(), Qt::CaseInsensitive) == 0) {
-          msg +=" (=default)";
+          gbDebug(" (=default)");
         }
-        gbLogDebug(msg);
+        gbDebug("\n");
       }
     }
   }
@@ -676,7 +670,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
       }
     }
     if (!valid) {
-      gbLogWarning("'{}' is an unknown option to {}.", gbLogCStr(option_name), gbLogCStr(name));
+      gbWarning("'%s' is an unknown option to %s.\n", gbLogCStr(option_name), gbLogCStr(name));
     }
   }
 }
@@ -729,7 +723,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
 {
   QStringList options = fmtargstring.split(',');
   if (options.isEmpty()) {
-    gbLogFatal("A format name is required.");
+    gbFatal("A format name is required.\n");
   }
   const QString fmtname = options.takeFirst();
 
@@ -795,7 +789,7 @@ QVector<Vecs::style_vec_t> Vecs::create_style_vec()
   QString styledir(":/style");
   QDir dir(styledir);
   if (!dir.isReadable()) {
-    gbLogFatal(R"(style directory "{}" not readable.)", gbLogCStr(QFileInfo(styledir).absoluteFilePath()));
+    gbFatal(FatalMsg() << "style directory" << QFileInfo(styledir).absoluteFilePath() << "not readable.");
   }
 
   dir.setNameFilters(QStringList("*.style"));
@@ -805,7 +799,7 @@ QVector<Vecs::style_vec_t> Vecs::create_style_vec()
   QVector<style_vec_t> slist;
   for (const auto& fileinfo : fileinfolist) {
     if (!fileinfo.isReadable()) {
-      gbLogFatal(R"(Cannot open style file "{}".)", gbLogCStr(fileinfo.absoluteFilePath()));
+      gbFatal(FatalMsg() << "Cannot open style file" << fileinfo.absoluteFilePath() << ".");
     }
 
     style_vec_t entry;
@@ -862,7 +856,7 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
    * the argument list that is.
    */
   assert(QString::compare(xcsvfmt->get_args()->at(0).helpstring,
-                          QLatin1String("Full path to XCSV style file"), Qt::CaseInsensitive) == 0);
+                            QLatin1String("Full path to XCSV style file"), Qt::CaseInsensitive) == 0);
 
   /* Gather the relevant info for the style based formats. */
   for (const auto& svec : style_list) {
@@ -1084,89 +1078,89 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
 
 #ifdef FIND_ALL_NULLPTR_ARGUMENTS
   if (args == nullptr) {
-    gbLogWarning(R"("{}" Is passing nullptr for arguments.)", gbLogCStr(name));
+    Warning() << name << "Is passing nullptr for arguments.";
   }
 #endif
 
   if (args != nullptr) {
 #ifdef FIND_ALL_EMPTY_ARGUMENT_LISTS
     if (args->isEmpty()) {
-      gbLogWarning(R"("{}" It isn't necessary to use an empty argument list, you can pass nullptr.)", gbLogCStr(name));
+      Warning() << name << "It isn't necessary to use an empty argument list, you can pass nullptr.";
     }
 #endif
     for (const auto& arg : *args) {
       if (arg.argval == nullptr) {
-        gbLogWarning(R"("{}" option "{}" does not point to an Option instance.)", gbLogCStr(name), gbLogCStr(arg.argstring));
+        Warning() << name << "option" << arg.argstring << "does not point to an Option instance.";
         ok = false;
       }
       if (const auto* int_option = dynamic_cast<const OptionInt*>(arg.argval); int_option != nullptr) {
         if (int_option->trailing_data_allowed()) {
           // GUI QIntValidator will reject input with trailing data.
           if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
-            gbLogWarning(R"("{}" OptionInt with trailing data "{}" is not of ARGTYPE_STRING.)", gbLogCStr(name), gbLogCStr(arg.argstring));
+            Warning() << name << "OptionInt with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
             ok = false;
           }
         } else {
           if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_INT) {
-            gbLogWarning(R"("{}" OptionInt without trailing data "{}" is not of ARGTYPE_INT.)", gbLogCStr(name), gbLogCStr(arg.argstring));
+            Warning() << name << "OptionInt option without trailing data" << arg.argstring << "is not of ARGTYPE_INT.";
             ok = false;
           }
         }
 
         if (!arg.defaultvalue.isNull() && !int_option->isValid(arg.defaultvalue)) {
-          gbLogWarning(R"("{}" Int option "{}" default value "{}" is not an integer.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.defaultvalue));
+          Warning() << name << "Int option" << arg.argstring << "default value" << arg.defaultvalue << "is not an integer.";
           ok = false;
         }
         if (!arg.minvalue.isNull() && !int_option->isValid(arg.minvalue)) {
-          gbLogWarning(R"("{}" Int option "{}" minimum value "{}" is not an integer.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.minvalue));
+          Warning() << name << "Int option" << arg.argstring << "minimum value" << arg.minvalue << "is not an integer.";
           ok = false;
         }
         if (!arg.maxvalue.isNull() && !int_option->isValid(arg.maxvalue)) {
-          gbLogWarning(R"("{}" Int option "{}" maximum value "{}" is not an integer.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.maxvalue));
+          Warning() << name << "Int option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an integer.";
           ok = false;
         }
       } else if (const auto* double_option = dynamic_cast<const OptionDouble*>(arg.argval); double_option != nullptr) {
         if (double_option->trailing_data_allowed()) {
           // GUI QDoubleValidator will reject input with trailing data.
           if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_STRING) {
-            gbLogWarning(R"("{}" OptionDouble with trailing data "{}" is not of ARGTYPE_STRING.)", gbLogCStr(name), gbLogCStr(arg.argstring));
+            Warning() << name << "OptionDouble with trailing data" << arg.argstring << "is not of ARGTYPE_STRING.";
             ok = false;
           }
         } else {
           if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_FLOAT) {
-            gbLogWarning(R"("{}" OptionDouble without trailing data "{}" is not of ARGTYPE_FLOAT.)", gbLogCStr(name), gbLogCStr(arg.argstring));
+            Warning() << name << "OptionDouble without trailing data" << arg.argstring << "is not of ARGTYPE_FLOAT.";
             ok = false;
           }
         }
 
         if (!arg.defaultvalue.isNull() && !double_option->isValid(arg.defaultvalue)) {
-          gbLogWarning(R"("{}" Float option "{}" default value "{}" is not a float.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.defaultvalue));
+          Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
           ok = false;
         }
         if (!arg.minvalue.isNull() && !double_option->isValid(arg.minvalue)) {
-          gbLogWarning(R"("{}" Float option "{}" minimum value "{}" is not a float.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.minvalue));
+          Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
           ok = false;
         }
         if (!arg.maxvalue.isNull() && !double_option->isValid(arg.maxvalue)) {
-          gbLogWarning(R"("{}" Float option "{}" maximum value "{}" is not a float.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.maxvalue));
+          Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
           ok = false;
         }
       } else if (const auto* bool_option = dynamic_cast<const OptionBool*>(arg.argval); bool_option != nullptr) {
         if ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_BOOL) {
-          gbLogWarning(R"("{}" OptionBool "{}" is not of ARGTYPE_BOOL.)", gbLogCStr(name), gbLogCStr(arg.argstring));
+          Warning() << name << "OptionBool" << arg.argstring << "is not of ARGTYPE_BOOL.";
           ok = false;
         }
 
         if (!arg.defaultvalue.isNull() && !is_bool(arg.defaultvalue)) {
-          gbLogWarning(R"("{}" Bool option "{}" default value "{}" is not a bool.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.defaultvalue));
+          Warning() << name << "Bool option" << arg.argstring << "default value" << arg.defaultvalue << "is not an bool.";
           ok = false;
         }
         if (!arg.minvalue.isNull() && !is_bool(arg.minvalue)) {
-          gbLogWarning(R"("{}" Bool option "{}" minimum value "{}" is not a bool.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.minvalue));
+          Warning() << name << "Bool option" << arg.argstring << "minimum value" << arg.minvalue << "is not an bool.";
           ok = false;
         }
         if (!arg.maxvalue.isNull() && !is_bool(arg.maxvalue)) {
-          gbLogWarning(R"("{}" Bool option "{}" maximum value "{}" is not a bool.)", gbLogCStr(name), gbLogCStr(arg.argstring), gbLogCStr(arg.maxvalue));
+          Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an bool.";
           ok = false;
         }
       } else if (const auto* str_option = dynamic_cast<const OptionString*>(arg.argval); str_option != nullptr) {
@@ -1174,11 +1168,11 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
             ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_FILE) &&
             ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_OUTFILE) &&
             ((arg.argtype & ARGTYPE_TYPEMASK) != ARGTYPE_UNKNOWN)) {
-          gbLogWarning(R"("{}" OptionString "{}" is not of ARGTYPE STRING, FILE, OUTFILE or UNKNOWN.)", gbLogCStr(name), gbLogCStr(arg.argstring));
+          Warning() << name << "OptionString" << arg.argstring << "is not of ARGTYPE STRING, FILE, OUTFILE or UNKNOWN.";
           ok = false;
         }
       } else {
-        gbLogWarning(R"("{}" Unexpected Option type "{}".)", gbLogCStr(name), gbLogCStr(arg.argstring));
+        Warning() << name << "Unexpected Option type" << arg.argstring << ".";
         ok = false;
       }
 
@@ -1192,7 +1186,7 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
         break;
       case ARGTYPE_UNKNOWN:
       default:
-        gbLogWarning(R"("{}" Unknown ARGTYPE for "{}".)", gbLogCStr(name), gbLogCStr(arg.argstring));
+        Warning() << name << "Unknown ARGTYPE for << arg.argstring.";
         ok = false;
         break;
       }

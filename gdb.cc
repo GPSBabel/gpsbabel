@@ -24,8 +24,6 @@
   https://www.memotech.franken.de/FileFormats/Garmin_MPS_GDB_and_GFI_Format.pdf
 */
 
-#define GBLOG_NO_ASCII 1
-
 #include "gdb.h"
 
 #include <QByteArray>               // for QByteArray, operator==
@@ -39,15 +37,9 @@
 #include <cmath>                    // for fabs
 #include <cstdio>                   // for SEEK_SET
 #include <cstring>                  // for memset, strstr, strcmp
-#ifndef MOCK_FORMAT
-#include <format>
-#else
-#include <fmt/format.h>
-#endif
 #include <iterator>                 // for next
-#include <string>                   // for operator""s, basic_string, string
 
-#include "defs.h"                   // for Waypoint, route_head, gbLogCStr, UrlLink, UrlList, bounds, unknown_alt, waypt_add_to_bounds, waypt_init_bounds, gb_color, WaypointList, format, route_add_wpt, route_disp_all, waypt_bounds_valid, global_options, global_opts, wp_flags, find_waypt_by_name
+#include "defs.h"                   // for Waypoint, gbWarning, route_head, gbFatal, UrlLink, bounds, UrlList, unknown_alt, xfree, waypt_add_to_bounds, waypt_init_bounds, route_add_wpt, route_disp_all, waypt_bounds_valid, xmalloc, gb_color, WaypointList, find_wa...
 #include "formspec.h"               // for FormatSpecificDataList
 #include "garmin_fs.h"              // for garmin_fs_t, garmin_ilink_t
 #include "garmin_tables.h"          // for gt_waypt_class_map_point, gt_color_index_by_rgb, gt_color_value, gt_waypt_classes_e, gt_find_desc_from_icon_number, gt_find_icon_number_from_desc, gt_gdb_display_mode_symbol, gt_get_icao_country, gt_waypt_class_user_waypoint, GDB, gt_display_mode_symbol
@@ -57,7 +49,6 @@
 #include "jeeps/gpsmath.h"          // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
 #include "mkshort.h"                // for MakeShort
 #include "src/core/datetime.h"      // for DateTime
-#include "src/core/logging.h"       // for gbLogWarning, gbLogDebug, gbLogFatal, gbLogInfo
 
 
 #define GDB_DEF_CLASS		gt_waypt_class_user_waypoint
@@ -113,19 +104,19 @@ GdbFormat::disp_summary(const gbfile* f) const
   if constexpr(GDB_DEBUG) {
     int len = strlen(gbLogCStr(f->name));
 
-    gbLogWarning("{}", QByteArray(len + 21, '=').constData());
+    gbWarning("%s\n", QByteArray(len + 21, '=').constData());
 
-    gbLogWarning("{} summary for \"{}\"",
+    gbWarning("%s summary for \"%s\"\n",
               (f->mode == 'r') ? "Reader" : "Writer", gbLogCStr(f->name));
 
-    gbLogWarning("{}", QByteArray(len + 21, '-').constData());
+    gbWarning("%s\n", QByteArray(len + 21, '-').constData());
 
-    gbLogWarning("{} waypoint(s)", waypt_ct - waypth_ct);
-    gbLogWarning("{} hidden waypoint(s)", waypth_ct);
-    gbLogWarning("{} route(s) with total {} point(s)", rte_ct, rtept_ct);
-    gbLogWarning("{} track(s) with total {} point(s)", trk_ct, trkpt_ct);
+    gbWarning("%d waypoint(s)\n", waypt_ct - waypth_ct);
+    gbWarning("%d hidden waypoint(s)\n", waypth_ct);
+    gbWarning("%d route(s) with total %d point(s)\n", rte_ct, rtept_ct);
+    gbWarning("%d track(s) with total %d point(s)\n", trk_ct, trkpt_ct);
 
-    gbLogWarning("{}", QByteArray(len + 21, '-').constData());
+    gbWarning("%s\n", QByteArray(len + 21, '-').constData());
   } else {
     Q_UNUSED(f);
   }
@@ -243,11 +234,10 @@ GdbFormat::gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_cla
     double dist = radtometers(gcdist(ref->position(), tmp->position()));
 
     if (fabs(dist) > 100) {
-      gbLogWarning("Route point mismatch!");
-      gbLogWarning("  \"{}\" from waypoints differs to \"{}\"",
-              gbLogCStr(tmp->shortname), gbLogCStr(ref->shortname));
-      gbLogFatal("  from route table by more than {:.1f} meters!",
-              dist);
+      gbFatal("Route point mismatch!\n" \
+              "  \"%s\" from waypoints differs to \"%s\"\n" \
+              "  from route table by more than %0.1f meters!\n", \
+              gbLogCStr(tmp->shortname), gbLogCStr(ref->shortname), dist);
     }
   }
   Waypoint* res = nullptr;
@@ -366,28 +356,28 @@ GdbFormat::read_file_header()
   	misinterpreted.
   */
   if (strcmp(buf, "MsRcf") != 0) {
-    gbLogFatal("Invalid file \"{}\"!", gbLogCStr(fin->name));
+    gbFatal("Invalid file \"%s\"!\n", gbLogCStr(fin->name));
   }
 
   int reclen = FREAD_i32;
   Q_UNUSED(reclen);
   QByteArray drec = FREAD_STR();
   if (drec.at(0) != 'D') {
-    gbLogFatal("Invalid file \"{}\"!", gbLogCStr(fin->name));
+    gbFatal("Invalid file \"%s\"!\n", gbLogCStr(fin->name));
   }
 
   gdb_ver = drec.at(1) - 'k' + 1;
   if ((gdb_ver < kGDBVerMin) || (gdb_ver > kGDBVerMax)) {
-    gbLogFatal("Unknown or/and unsupported GDB version ({}.0)!", gdb_ver);
+    gbFatal("Unknown or/and unsupported GDB version (%d.0)!\n", gdb_ver);
   }
 
   if (global_opts.verbose_status > 0) {
-    gbLogInfo("Reading Garmin GPS Database version {}.0", gdb_ver);
+    gbInfo("Reading Garmin GPS Database version %d.0\n", gdb_ver);
   }
 
   reclen = FREAD_i32;
   if (reclen + 1 > int(sizeof(buf))) {
-    gbLogFatal("Invalid record length");
+    gbFatal("Invalid record length\n");
   }
   (void) FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
@@ -397,12 +387,12 @@ GdbFormat::read_file_header()
     } else if (strstr(name, "neaderhi") == nullptr) {
       name = "MapSource BETA";
     }
-    gbLogWarning("File created with \"{}\"", name);
+    gbWarning("File created with \"%s\"\n", name);
   }
 
   QByteArray applicationField = FREAD_STR();
   if (!((applicationField == "MapSource") || (applicationField == "BaseCamp"))) {
-    gbLogFatal("Not a recognized signature in header");
+    gbFatal("Not a recognized signature in header\n");
   }
 }
 
@@ -450,14 +440,14 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       res->altitude = alt;
       if constexpr(GDB_DEBUG) {
         DBG(GDB_DBG_WPTe, true)
-        gbLogDebug("wpt \"{}\" ({}): Altitude = {:.1f}",
-                gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), alt);
+        gbDebug("wpt \"%s\" (%d): Altitude = %.1f\n",
+                gbLogCStr(res->shortname), wpt_class, alt);
       }
     }
   }
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPT, true)
-    gbLogDebug("wpt \"{}\": coordinates = {}{:.6f} {}{:.6f}",
+    gbDebug("wpt \"%s\": coordinates = %c%0.6f %c%0.6f\n",
             gbLogCStr(res->shortname),
             res->latitude < 0 ? 'S' : 'N', res->latitude,
             res->longitude < 0 ? 'W' : 'E', res->longitude);
@@ -465,23 +455,23 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   res->notes = fread_cstr();
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, !res->notes.isNull())
-    gbLogDebug("wpt \"{}\" ({}): notes = {}",
-            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class),
+    gbDebug("wpt \"%s\" (%d): notes = %s\n",
+            gbLogCStr(res->shortname), wpt_class,
             gbLogCStr(QString(res->notes).replace("\r\n", ", ")));
   }
   if (FREAD_C == 1) {
     res->set_proximity(FREAD_DBL);
     if constexpr(GDB_DEBUG) {
       DBG(GDB_DBG_WPTe, res->proximity_has_value())
-      gbLogDebug("wpt \"{}\" ({}): Proximity = {:.1f}",
-              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->proximity_value() / 1000);
+      gbDebug("wpt \"%s\" (%d): Proximity = %.1f\n",
+              gbLogCStr(res->shortname), wpt_class, res->proximity_value() / 1000);
     }
   }
   int display = FREAD_i32;
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, true)
-    gbLogDebug("wpt \"{}\" ({}): display = {}",
-            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), display);
+    gbDebug("wpt \"%s\" (%d): display = %d\n",
+            gbLogCStr(res->shortname), wpt_class, display);
   }
   switch (display) {			/* display value */
   case gt_gdb_display_mode_symbol:
@@ -509,8 +499,8 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     res->set_depth(FREAD_DBL);
     if constexpr(GDB_DEBUG) {
       DBG(GDB_DBG_WPTe, res->depth_has_value())
-      gbLogDebug("wpt \"{}\" ({}): Depth = {:.1f}",
-              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->depth_value());
+      gbDebug("wpt \"%s\" (%d): Depth = %.1f\n",
+              gbLogCStr(res->shortname), wpt_class, res->depth_value());
     }
   }
 
@@ -529,8 +519,8 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
     if constexpr(GDB_DEBUG) {
       QString temp = FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
       DBG(GDB_DBG_WPTe, !temp.isEmpty())
-      gbLogDebug("wpt \"{}\" ({}): Unknown string = {}",
-              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(temp));
+      gbDebug("wpt \"%s\" (%d): Unknown string = %s\n",
+              gbLogCStr(res->shortname), wpt_class, gbLogCStr(temp));
     } else {
       (void) FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
     }
@@ -558,8 +548,8 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
       res->notes = QStringLiteral("[%1]").arg(gdb_to_ISO8601_duration(duration));
       if constexpr(GDB_DEBUG) {
         DBG(GDB_DBG_WPTe, true)
-        gbLogDebug("wpt \"{}\" ({}): duration = {}",
-                gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), duration);
+        gbDebug("wpt \"%s\" (%d): duration = %u\n",
+                gbLogCStr(res->shortname), wpt_class, duration);
       }
     }
     int url_ct = FREAD_i32;
@@ -569,8 +559,8 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
         waypt_add_url(res, str, nullptr);
         if constexpr(GDB_DEBUG) {
           DBG(GDB_DBG_WPTe, true)
-          gbLogDebug("wpt \"{}\" ({}): url({}) = {}",
-                  gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), url_ct - i, gbLogCStr(str));
+          gbDebug("wpt \"%s\" (%d): url(%d) = %s\n",
+                  gbLogCStr(res->shortname), wpt_class, url_ct - i, gbLogCStr(str));
         }
       }
     }
@@ -578,11 +568,11 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, !res->description.isNull())
-    gbLogDebug("wpt \"{}\" ({}): description = {}",
-            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->description));
+    gbDebug("wpt \"%s\" (%d): description = %s\n",
+            gbLogCStr(res->shortname), wpt_class, gbLogCStr(res->description));
     DBG(GDB_DBG_WPTe, res->urls.HasUrlLink())
-    gbLogDebug("wpt \"{}\" ({}): url = {}",
-            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->urls.GetUrlLink().url_));
+    gbDebug("wpt \"%s\" (%d): url = %s\n",
+            gbLogCStr(res->shortname), wpt_class, gbLogCStr(res->urls.GetUrlLink().url_));
   }
   int category = FREAD_i16;
   if (category != 0) {
@@ -590,16 +580,16 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
   }
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, category)
-    gbLogDebug("wpt \"{}\" ({}): category = {}",
-            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), category);
+    gbDebug("wpt \"%s\" (%d): category = %d\n",
+            gbLogCStr(res->shortname), wpt_class, category);
   }
 
   if (FREAD_C == 1) {
     res->set_temperature(FREAD_DBL);
     if constexpr(GDB_DEBUG) {
       DBG(GDB_DBG_WPTe, res->temperature_has_value())
-      gbLogDebug("wpt \"{}\" ({}): temperature = {:.1f}",
-              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->temperature_value());
+      gbDebug("wpt \"%s\" (%d): temperature = %.1f\n",
+              gbLogCStr(res->shortname), wpt_class, res->temperature_value());
     }
   }
 
@@ -627,8 +617,8 @@ GdbFormat::read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_WPTe, icon != kGDBDefIcon)
-    gbLogDebug("wpt \"{}\" ({}): icon = \"{}\" (MapSource symbol {})",
-            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->icon_descr), icon);
+    gbDebug("wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n",
+            gbLogCStr(res->shortname), wpt_class, gbLogCStr(res->icon_descr), icon);
   }
   QString str;
   if (!(str = garmin_fs_t::get_cc(gmsd, nullptr)).isEmpty()) {
@@ -680,7 +670,7 @@ GdbFormat::read_route()
 
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_RTE, true)
-    gbLogDebug("rte \"{}\": loading route with {} point(s)...",
+    gbDebug("rte \"%s\": loading route with %d point(s)...\n",
             gbLogCStr(rte->rte_name), points);
   }
 
@@ -708,21 +698,21 @@ GdbFormat::read_route()
     if ((buf[0] != 0x00) && (buf[0] != 0x01) && (buf[0] != 0x03)) {
       warnings++;
       if (warnings > 3) {
-        gbLogFatal("rte_pt \"{}\": too many warnings!", gbLogCStr(wpt->shortname));
+        gbFatal("rte_pt \"%s\": too many warnings!\n", gbLogCStr(wpt->shortname));
       }
-      gbLogWarning("rte_pt \"{}\" (class {}): possible error in route.", gbLogCStr(wpt->shortname), wpt_class);
-      std::string msgbuf = "rte_pt (dump):";
+      gbWarning("rte_pt \"%s\" (class %d): possible error in route.\n", gbLogCStr(wpt->shortname), wpt_class);
+      gbWarning("rte_pt (dump):");
       for (int idx = 0; idx < 18; idx++) {
-        msgbuf += gpsbabel::format(" {:02x}", (unsigned char)buf[idx]);
+        gbWarning(" %02x", (unsigned char)buf[idx]);
       }
-      gbLogWarning(msgbuf);
+      gbWarning("\n");
     }
 
     int links = FREAD_i32;
     QList<garmin_ilink_t> il_list;
     if constexpr(GDB_DEBUG) {
       DBG(GDB_DBG_RTE, links)
-      gbLogDebug("rte_pt \"{}\" ({}): {} interlink step(s)",
+      gbDebug("rte_pt \"%s\" (%d): %d interlink step(s)\n",
               gbLogCStr(wpt->shortname), wpt_class, links);
     }
     for (int j = 0; j < links; j++) {
@@ -746,7 +736,7 @@ GdbFormat::read_route()
 
       if constexpr(GDB_DEBUG) {
         DBG(GDB_DBG_RTEe, true) {
-          gbLogDebug("rte_il \"{}\" ({} of {}): {}{:.6f} {}{:.6f}",
+          gbDebug("rte_il \"%s\" (%d of %d): %c%0.6f %c%0.6f\n",
                   gbLogCStr(wpt->shortname), j + 1, links,
                   il_step.lat < 0 ? 'S' : 'N', il_step.lat,
                   il_step.lon < 0 ? 'W' : 'E', il_step.lon);
@@ -778,11 +768,11 @@ GdbFormat::read_route()
         wpt = new Waypoint(*tmp);
       } else {
         if (waypt_bounds_valid(&bounds)) {
-          gbLogWarning("(has bounds)");
+          gbWarning("(has bounds)\n");
         }
 
-        gbLogWarning("Data corruption detected!");
-        gbLogFatal("Sleeping route point without coordinates!");
+        gbWarning("Data corruption detected!\n");
+        gbFatal("Sleeping route point without coordinates!\n");
       }
     }
 
@@ -795,7 +785,7 @@ GdbFormat::read_route()
     }
     if constexpr(GDB_DEBUG) {
       DBG(GDB_DBG_RTE, true)
-      gbLogDebug("rte_pt \"{}\": coordinates = {}{:.6f}, {}{:.6f}",
+      gbDebug("rte_pt \"%s\": coordinates = %c%0.6f, %c%0.6f\n",
               gbLogCStr(wpt->shortname),
               wpt->latitude < 0 ? 'S' : 'N', wpt->latitude,
               wpt->longitude < 0 ? 'W' : 'E', wpt->longitude);
@@ -837,8 +827,8 @@ GdbFormat::read_route()
       FREAD(tbuf, 8); /* unknown bytes */
       if constexpr(GDB_DEBUG) {
         DBG(GDB_DBG_RTE, true)
-        gbLogDebug("rte_pt: autoroute info: route style {}, calculation type {}, vehicle type {}, road selection {}"
-                "                            driving speeds (kph) {:.0f}, {:.0f}, {:.0f}, {:.0f}, {:.0f}",
+        gbDebug("rte_pt: autoroute info: route style %d, calculation type %d, vehicle type %d, road selection %d\n"
+                "                            driving speeds (kph) %.0f, %.0f, %.0f, %.0f, %.0f\n",
                 route_style, calc_type, vehicle_type, road_selection,
                 driving_speed[0], driving_speed[1], driving_speed[2], driving_speed[3], driving_speed[4]);
       } else {
@@ -918,7 +908,7 @@ GdbFormat::read_track()
   }
   if constexpr(GDB_DEBUG) {
     DBG(GDB_DBG_TRK, res->rte_urls.HasUrlLink())
-    gbLogDebug("trk \"{}\": url = {}",
+    gbDebug("trk \"%s\": url = %s\n",
             gbLogCStr(res->rte_name), gbLogCStr(res->rte_urls.GetUrlLink().url_));
   }
   return res;
@@ -978,7 +968,7 @@ GdbFormat::read()
 
     int len = FREAD_i32;
     if (FREAD(&typ, 1) < 1) {
-      gbLogFatal("Attempt to read past EOF.");
+      gbFatal("Attempt to read past EOF.\n");
     }
     if (typ == 'V') {
       break;  /* break the loop */
@@ -1027,7 +1017,7 @@ GdbFormat::read()
 
     int delta = len - gbftell(ftmp);
     if (delta > 1000000) {
-      gbLogFatal("Internal consistency error.  Delta too big");
+      gbFatal("Internal consistency error.  Delta too big\n");
     }
 
     // Avoid finite loop on bogus beta files from '06.
@@ -1036,27 +1026,26 @@ GdbFormat::read()
 
     if (dump && delta) {
       if (! incomplete++) {
-        gbLogWarning("==========================================");
-        gbLogWarning("===          W A R N I N G             ===");
+        gbWarning("==========================================\n");
+        gbWarning("===          W A R N I N G             ===\n");
       }
-      std::string msgbuf;
       if (typ == 'W')
-        msgbuf = gpsbabel::format("({}{}-{:02}): delta = {} (flag={:3}/{:02x})-",
-                  gdb_ver, typ, gpsbabel::to_underlying(wpt_class), delta, waypt_flag, waypt_flag);
+        gbWarning("(%d%c-%02d): delta = %d (flag=%3d/%02x)-",
+                  gdb_ver, typ, wpt_class, delta, waypt_flag, waypt_flag);
       else {
-        msgbuf = gpsbabel::format("({}{}): delta = {} -", gdb_ver, typ, delta);
+        gbWarning("(%d%c): delta = %d -", gdb_ver, typ, delta);
       }
       if (delta > 0) {
         char* buf = (char*) xmalloc(delta);
         if (FREAD(buf, delta) < 1) {
-          gbLogFatal("Attempt to read past EOF.");
+          gbFatal("Attempt to read past EOF.\n");
         }
         for (int i = 0; i < delta; i++) {
-          msgbuf += gpsbabel::format(" {:02x}", (unsigned char)buf[i]);
+          gbWarning(" %02x", (unsigned char)buf[i]);
         }
         xfree(buf);
       }
-      gbLogWarning(msgbuf);
+      gbWarning("\n");
     }
 
     fin = fsave;
@@ -1064,13 +1053,13 @@ GdbFormat::read()
 
 
   if (incomplete) {
-    gbLogWarning("------------------------------------------");
-    gbLogWarning("\"{}\"", gbLogCStr(fin->name));
-    gbLogWarning("------------------------------------------");
-    gbLogWarning("Please mail this information");
-    gbLogWarning("and, if you can, the used GDB file");
-    gbLogWarning("to gpsbabel-misc@lists.sourceforge.net");
-    gbLogWarning("==========================================");
+    gbWarning("------------------------------------------\n");
+    gbWarning("\"%s\"\n", gbLogCStr(fin->name));
+    gbWarning("------------------------------------------\n");
+    gbWarning("Please mail this information\n");
+    gbWarning("and, if you can, the used GDB file\n");
+    gbWarning("to gpsbabel-misc@lists.sourceforge.net\n");
+    gbWarning("==========================================\n");
   }
 }
 
@@ -1338,7 +1327,7 @@ GdbFormat::write_route(const route_head* rte, const QString& rte_name)
     if (test != nullptr) {
       wpt = test;
     } else {
-      gbLogFatal("Sorry, that should never happen!!!");
+      gbFatal("Sorry, that should never happen!!!\n");
     }
 
     const garmin_fs_t* gmsd = garmin_fs_t::find(wpt);
@@ -1628,7 +1617,7 @@ GdbFormat::wr_init(const QString& fname)
 
   if (gdb_category) {
     if ((gdb_category < 1) || (gdb_category > 16)) {
-      gbLogFatal("cat must be between 1 and 16!");
+      gbFatal("cat must be between 1 and 16!\n");
     }
     gdb_category = 1 << (gdb_category - 1);
   }
