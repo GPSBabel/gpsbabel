@@ -242,12 +242,12 @@ GarminTxtFormat::print_position(const Waypoint* wpt)
     break;
 
   default:
-    gbLogFatal("ToDo\n");
+    gbFatal("ToDo\n");
   }
 
   if (! valid) {
     *fout << "#####\n";
-    gbLogFatal("{} ({}) is outside of convertible area \"{}\"!\n",
+    gbFatal("%s (%s) is outside of convertible area \"%s\"!\n",
           wpt->shortname.isEmpty() ? "Waypoint" : gbLogCStr(wpt->shortname),
           gbLogCStr(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
           gbLogCStr(gt_get_mps_grid_longname(grid_index)));
@@ -640,7 +640,7 @@ GarminTxtFormat::wr_init(const QString& fname)
   if (opt_precision) {
     precision = opt_precision.get_result();
     if (precision < 0) {
-      gbLogFatal("Invalid precision ({})!\n", gbLogCStr(opt_precision));
+      gbFatal("Invalid precision (%s)!\n", gbLogCStr(opt_precision));
     }
   }
 
@@ -651,7 +651,7 @@ GarminTxtFormat::wr_init(const QString& fname)
     if (int i = opt_grid.toInt(&ok); ok) {
       grid_index = (grid_type) i;
       if ((grid_index < GRID_INDEX_MIN) || (grid_index > GRID_INDEX_MAX))
-        gbLogFatal("Grid index out of range ({}..{})!\n",
+        gbFatal("Grid index out of range (%d..%d)!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
       grid_index = gt_lookup_grid_type(opt_grid);
@@ -842,7 +842,7 @@ GarminTxtFormat::strftime_to_timespec(const char* s)
           q += "AP";
           continue;
         default:
-          gbLogWarning("omitting unknown strptime conversion \"%{}\" in \"{}\"\n", s[i], s);
+          gbWarning("omitting unknown strptime conversion \"%%%c\" in \"%s\"\n", s[i], s);
           break;
         }
       }
@@ -875,7 +875,7 @@ GarminTxtFormat::parse_categories(const QString& str) const
     QString cin = catstring.trimmed();
     if (!cin.isEmpty()) {
       if (std::optional<uint16_t> cat = garmin_fs_t::convert_category(cin); !cat.has_value()) {
-        gbLogWarning("Unable to convert category \"{}\" at line {}!\n", gbLogCStr(cin), current_line);
+        gbWarning("Unable to convert category \"%s\" at line %d!\n", gbLogCStr(cin), current_line);
       } else {
         res = res | *cat;
       }
@@ -904,11 +904,11 @@ GarminTxtFormat::parse_temperature(const QString& str, double* temperature) cons
       *temperature = FAHRENHEIT_TO_CELSIUS(value);
       break;
     default:
-      gbLogFatal("Unknown temperature unit \"{}\" at line {}!\n", unit, current_line);
+      gbFatal("Unknown temperature unit \"%c\" at line %d!\n", unit, current_line);
     }
     return true;
   } else {
-    gbLogFatal("Invalid temperature \"{}\" at line {}!\n", gbLogCStr(str), current_line);
+    gbFatal("Invalid temperature \"%s\" at line %d!\n", gbLogCStr(str), current_line);
   }
   return false;
 }
@@ -935,7 +935,7 @@ GarminTxtFormat::parse_display(const QString& str, int* val) const
       return true;
     }
   }
-  gbLogWarning("Unknown display mode \"{}\" at line {}.\n", gbLogCStr(str), current_line);
+  gbWarning("Unknown display mode \"%s\" at line %d.\n", gbLogCStr(str), current_line);
   return false;
 }
 
@@ -943,7 +943,7 @@ void
 GarminTxtFormat::bind_fields(const header_type ht)
 {
   if ((grid_index < 0) || (datum_index < 0)) {
-    gbLogFatal("Incomplete or invalid file header!\n");
+    gbFatal("Incomplete or invalid file header!\n");
   }
 
   if (header_column_names.isEmpty()) {
@@ -963,10 +963,10 @@ GarminTxtFormat::bind_fields(const header_type ht)
       int field_no = field_idx + 1;
       header_mapping_info[ht].append(std::make_pair(name, field_no));
       if (global_opts.debug_level >= 2) {
-        gbLogDebug("Binding field \"{}\" to internal number {} ({},{})\n", gbLogCStr(name), field_no, gpsbabel::to_underlying(ht), i);
+        gbDebug("Binding field \"%s\" to internal number %d (%d,%d)\n", gbLogCStr(name), field_no, ht, i);
       }
     } else {
-      gbLogWarning("Field {} not recognized!\n", gbLogCStr(name));
+      gbWarning("Field %s not recognized!\n", gbLogCStr(name));
     }
   }
   header_column_names.clear();
@@ -976,7 +976,7 @@ void
 GarminTxtFormat::parse_grid(const QStringList& lineparts)
 {
   if (lineparts.empty()) {
-    gbLogFatal("Missing grid headline!\n");
+    gbFatal("Missing grid headline!\n");
   }
 
   const QString& str = lineparts.at(0);
@@ -995,7 +995,7 @@ void
 GarminTxtFormat::parse_datum(const QStringList& lineparts)
 {
   if (lineparts.empty()) {
-    gbLogFatal("Missing GPS datum headline!\n");
+    gbFatal("Missing GPS datum headline!\n");
   }
 
   const auto& str = lineparts.at(0);
@@ -1015,7 +1015,7 @@ GarminTxtFormat::parse_waypoint(const QStringList& lineparts)
 
   for (const auto& str : lineparts) {
     if (++column >= header_mapping_info[waypt_header].size()) {
-      gbLogWarning("too many fields in Waypoint record!\n");
+      gbWarning("too many fields in Waypoint record!\n");
       break;
     }
     int i;
@@ -1120,7 +1120,7 @@ GarminTxtFormat::parse_route_header(const QStringList& lineparts)
   bind_fields(route_header);
   for (const auto& str : lineparts) {
     if (++column >= header_mapping_info[route_header].size()) {
-      gbLogWarning("too many fields in Route record!\n");
+      gbWarning("too many fields in Route record!\n");
       break;
     }
     const auto& [name, field_no] = header_mapping_info[route_header].at(column);
@@ -1148,7 +1148,7 @@ GarminTxtFormat::parse_track_header(const QStringList& lineparts)
   auto* trk = new route_head;
   for (const auto& str : lineparts) {
     if (++column >= header_mapping_info[track_header].size()) {
-      gbLogWarning("too many fields in Track record!\n");
+      gbWarning("too many fields in Track record!\n");
       break;
     }
     const auto& [name, field_no] = header_mapping_info[track_header].at(column);
@@ -1178,14 +1178,14 @@ GarminTxtFormat::parse_route_waypoint(const QStringList& lineparts)
 
   for (const auto& str : lineparts) {
     if (++column >= header_mapping_info[rtept_header].size()) {
-      gbLogWarning("too many fields in Route Waypoint record!\n");
+      gbWarning("too many fields in Route Waypoint record!\n");
       break;
     }
     const auto& [name, field_no] = header_mapping_info[rtept_header].at(column);
     switch (field_no) {
     case 1:
       if (str.isEmpty()) {
-        gbLogFatal("Route waypoint without name at line {}!\n", current_line);
+        gbFatal("Route waypoint without name at line %d!\n", current_line);
       }
       wpt = find_waypt_by_name(str);
       if (wpt == nullptr) {
@@ -1210,7 +1210,7 @@ GarminTxtFormat::parse_track_waypoint(const QStringList& lineparts)
 
   for (const auto& str : lineparts) {
     if (++column >= header_mapping_info[trkpt_header].size()) {
-      gbLogWarning("too many fields in Trackpoint record!\n");
+      gbWarning("too many fields in Trackpoint record!\n");
       break;
     }
     double x;
@@ -1332,7 +1332,7 @@ GarminTxtFormat::read()
       parse_track_header(lineparts);
     } else if (linetype.compare(u"Map", Qt::CaseInsensitive) == 0) /* do nothing */ ;
     else {
-      gbLogFatal("Unknown identifier ({}) at line {}!\n", gbLogCStr(linetype), current_line);
+      gbFatal("Unknown identifier (%s) at line %d!\n", gbLogCStr(linetype), current_line);
     }
 
   }

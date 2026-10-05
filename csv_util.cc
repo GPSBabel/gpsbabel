@@ -533,7 +533,7 @@ dec_to_human(const char* format, const char* dirs, double val)
       case 'x':
       case 'X':
         if (index>2) {
-          gbLogFatal("too many format specifiers\n");
+          gbFatal("too many format specifiers\n");
         }
         buff += QString::asprintf(subformat, intvals[index]);
         index++;
@@ -544,7 +544,7 @@ dec_to_human(const char* format, const char* dirs, double val)
       case 'g':
       case 'G':
         if (index>2) {
-          gbLogFatal("too many format specifiers\n");
+          gbFatal("too many format specifiers\n");
         }
         buff += QString::asprintf(subformat, dblvals[index]);
         index++;
@@ -553,7 +553,7 @@ dec_to_human(const char* format, const char* dirs, double val)
         buff += subformat;
         break;
       default:
-        gbLogFatal("invalid format specifier\n");
+        gbFatal("invalid format specifier\n");
         break;
 
       }

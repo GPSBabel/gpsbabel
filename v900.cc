@@ -147,7 +147,7 @@ QList<V900Format::field_id_t> V900Format::parse_header(const QString& line)
       ids.append(field_idxs.value(column_header));
     } else {
       ids.append(field_id_t::unknown);
-      gbLogWarning("Ignoring unrecognized field {}\n", qPrintable(header_part));
+      gbWarning("Ignoring unrecognized field %s\n", qPrintable(header_part));
     }
   }
   return ids;
@@ -199,7 +199,7 @@ V900Format::read()
 
   QString line;
   if (!stream->readLineInto(&line)) {
-    gbLogFatal("error reading header (first) line from input file\n");
+    gbFatal("error reading header (first) line from input file\n");
   }
   ++lc;
 
@@ -217,7 +217,7 @@ V900Format::read()
     const QStringList parts = line.remove(QChar::Null).split(',');
 
     if (parts.size() != ids.size()) {
-      gbLogWarning("skipping malformed record at line {}.  The number of fields don't match the header.\n", lc);
+      gbWarning("skipping malformed record at line %d.  The number of fields don't match the header.\n", lc);
       continue;
     }
 
@@ -242,13 +242,13 @@ V900Format::read()
     if (dt.isValid()) {
       wpt->SetCreationTime(dt);
     } else {
-      gbLogWarning("skipping malformed record at line {}.  Failed to parse date and or time.\n", lc);
+      gbWarning("skipping malformed record at line %d.  Failed to parse date and or time.\n", lc);
       continue;
     }
 
     wpt->latitude = parse_double(map.value(field_id_t::latitude), "", &ok, &end);
     if (!ok || !((end == 'N') || (end == 'S'))) {
-      gbLogWarning("skipping malformed record at line {}.  Failed to parse latitude.\n", lc);
+      gbWarning("skipping malformed record at line %d.  Failed to parse latitude.\n", lc);
       continue;
     }
     if (end == 'S') {
@@ -257,7 +257,7 @@ V900Format::read()
 
     wpt->longitude = parse_double(map.value(field_id_t::longitude), "", &ok, &end);
     if (!ok || !((end == 'E') || (end == 'W'))) {
-      gbLogWarning("skipping malformed record at line {}.  Failed to parse longitude.\n", lc);
+      gbWarning("skipping malformed record at line %d.  Failed to parse longitude.\n", lc);
       continue;
     }
     if (end == 'W') {
@@ -266,26 +266,26 @@ V900Format::read()
 
     wpt->altitude = parse_double(map.value(field_id_t::height), "", &ok);
     if (!ok) {
-      gbLogWarning("skipping malformed record at line {}.  Failed to parse height.\n", lc);
+      gbWarning("skipping malformed record at line %d.  Failed to parse height.\n", lc);
       continue;
     }
 
     wpt->set_speed(KPH_TO_MPS(parse_double(map.value(field_id_t::speed), "", &ok)));
     if (!ok) {
-      gbLogWarning("skipping malformed record at line {}.  Failed to parse speed.\n", lc);
+      gbWarning("skipping malformed record at line %d.  Failed to parse speed.\n", lc);
       continue;
     }
 
     wpt->set_course(parse_double(map.value(field_id_t::heading), "", &ok));
     if (!ok) {
-      gbLogWarning("skipping malformed record at line {}.  Failed to parse heading.\n", lc);
+      gbWarning("skipping malformed record at line %d.  Failed to parse heading.\n", lc);
       continue;
     }
 
     if (map.contains(field_id_t::pdop)) {
       wpt->pdop = parse_double(map.value(field_id_t::pdop), "", &ok);
       if (!ok) {
-        gbLogWarning("skipping malformed record at line {}.  Failed to parse pdop.\n", lc);
+        gbWarning("skipping malformed record at line %d.  Failed to parse pdop.\n", lc);
         continue;
       }
     }
@@ -293,7 +293,7 @@ V900Format::read()
     if (map.contains(field_id_t::hdop)) {
       wpt->hdop = parse_double(map.value(field_id_t::hdop), "", &ok);
       if (!ok) {
-        gbLogWarning("skipping malformed record at line {}.  Failed to parse hdop.\n", lc);
+        gbWarning("skipping malformed record at line %d.  Failed to parse hdop.\n", lc);
         continue;
       }
     }
@@ -301,7 +301,7 @@ V900Format::read()
     if (map.contains(field_id_t::vdop)) {
       wpt->vdop = parse_double(map.value(field_id_t::vdop), "", &ok);
       if (!ok) {
-        gbLogWarning("skipping malformed record at line {}.  Failed to parse vdop.\n", lc);
+        gbWarning("skipping malformed record at line %d.  Failed to parse vdop.\n", lc);
         continue;
       }
     }
@@ -323,7 +323,7 @@ V900Format::read()
     if (map.contains(field_id_t::temp)) {
       wpt->set_temperature(parse_double(map.value(field_id_t::temp), "", &ok));
       if (!ok) {
-        gbLogWarning("skipping malformed record at line {}.  Failed to parse temp.\n", lc);
+        gbWarning("skipping malformed record at line %d.  Failed to parse temp.\n", lc);
         continue;
       }
     }
@@ -355,9 +355,9 @@ V900Format::read()
         waypt_add(wpt2.release());
       } else {
         if (!tag.isEmpty()) {
-          gbLogWarning("unrecognized tag \"{}\" at line {}. Skipping waypoint generation.\n", qPrintable(tag), lc);
+          gbWarning("unrecognized tag \"%s\" at line %d. Skipping waypoint generation.\n", qPrintable(tag), lc);
         } else {
-          gbLogWarning("missing or empty tag at line {}. Skipping waypoint generation.\n", lc);
+          gbWarning("missing or empty tag at line %d. Skipping waypoint generation.\n", lc);
         }
       }
     }

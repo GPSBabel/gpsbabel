@@ -133,7 +133,7 @@ void ArcDistanceFilter::process()
       int argsfound = sscanf(CSTR(line), "%lf %lf", &arcpt2->latitude, &arcpt2->longitude);
 
       if ((argsfound != 2) && (!line.trimmed().isEmpty())) {
-        gbLogWarning("Warning: Arc file contains unusable vertex on line {}.\n", fileline);
+        gbWarning("Warning: Arc file contains unusable vertex on line %d.\n", fileline);
       } else {
         Waypoint* arcpttmp = arcpt1;
         arcdist_arc_disp_wpt_cb(arcpt2);
@@ -189,7 +189,7 @@ void ArcDistanceFilter::process()
           }
         }
         if (global_opts.debug_level >= 1) {
-          gbLogWarning("Including waypoint {} at dist:{:.6f} lat:{:.6f} lon:{:.6f}\n",
+          gbWarning("Including waypoint %s at dist:%f lat:%f lon:%f\n",
                   gbLogCStr(wp->shortname), ed->distance, wp->latitude, wp->longitude);
         }
       }
@@ -198,7 +198,7 @@ void ArcDistanceFilter::process()
   }
   del_marked_wpts();
   if (global_opts.verbose_status > 0) {
-    gbLogInfo("{} waypoint(s) removed.\n", removed);
+    gbInfo("%u waypoint(s) removed.\n", removed);
   }
 }
 
@@ -207,14 +207,14 @@ void ArcDistanceFilter::init()
   if ((!arcfileopt && !rteopt && !trkopt) ||
       (arcfileopt && (rteopt || trkopt)) ||
       (rteopt && trkopt)) {
-    gbLogFatal("Incompatible or incomplete option values!\n");
+    gbFatal("Incompatible or incomplete option values!\n");
   }
 
   pos_dist = 0.0;
 
   if (distopt) {
     if (parse_distance(distopt, &pos_dist, kMetersPerMile) == 0) {
-      gbLogFatal("No distance specified with distance option.\n");
+      gbFatal("No distance specified with distance option.\n");
     }
   }
 }

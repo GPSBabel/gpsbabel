@@ -24,7 +24,6 @@
 
 #include "defs.h"
 #include "reverse_route.h"
-#include "src/core/logging.h"
 
 #if FILTERS_ENABLED
 
@@ -67,7 +66,7 @@ void ReverseRouteFilter::init()
   case trkdata:
     break;
   default:
-    gbLogFatal("This filter only works in track or route (-t or -r) mode.\n");
+    gbFatal("This filter only works in track or route (-t or -r) mode.\n");
   }
 }
 
