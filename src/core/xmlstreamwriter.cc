@@ -24,7 +24,6 @@
 #include <QtGlobal>                 // for QT_VERSION, QT_VERSION_CHECK
 
 #include "defs.h"
-#include "src/core/logging.h"
 
 // As this code began in C, we have several hundred places that write
 // c strings.  Add a test that the string contains anything useful
@@ -47,7 +46,7 @@ namespace gpsbabel
 XmlStreamWriter::xml_stack_list_entry_t& XmlStreamWriter::activeStack()
 {
   if (stack_list.isEmpty()) {
-    gbLogFatal("xmlstreamwriter: programming error: the stack* functions are used incorrectly.\n");
+    gbFatal("xmlstreamwriter: programming error: the stack* functions are used incorrectly.\n");
   }
   return stack_list.last();
 }

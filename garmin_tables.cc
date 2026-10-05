@@ -450,7 +450,7 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
       }
       break;
     default:
-      gbLogFatal("unknown garmin format.\n");
+      gbFatal("unknown garmin format.\n");
     }
   }
   return DEFAULT_ICON_DESCR;
@@ -499,7 +499,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
         case GARMIN_SERIAL:
           return icon_mapping.pcxsymnum;
         default:
-          gbLogFatal("unknown garmin format.\n");
+          gbFatal("unknown garmin format.\n");
         }
       }
     }
@@ -514,7 +514,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
       case GARMIN_SERIAL:
         return icon_mapping.pcxsymnum;
       default:
-        gbLogFatal("unknown garmin format.\n");
+        gbFatal("unknown garmin format.\n");
       }
     }
   }

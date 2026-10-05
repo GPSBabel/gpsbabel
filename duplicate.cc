@@ -27,7 +27,6 @@
 #include <QMultiHash>            // for QMultiHash
 
 #include "defs.h"
-#include "src/core/logging.h"
 
 
 #if FILTERS_ENABLED
@@ -35,7 +34,7 @@
 void DuplicateFilter::init()
 {
   if (!lcopt && !snopt) {
-    gbLogFatal("one or both of the shortname and location options are required.\n");
+    gbFatal("one or both of the shortname and location options are required.\n");
   }
 }
 

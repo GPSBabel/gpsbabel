@@ -367,27 +367,27 @@ run(const char* prog_name)
       argument = FETCH_OPTARG;
       ivecs = Vecs::Instance().find_vec(argument);
       if (!ivecs) {
-        gbLogFatal("Input type '{}' not recognized\n", gbLogCStr(argument));
+        gbFatal("Input type '%s' not recognized\n", gbLogCStr(argument));
       }
       break;
     case 'o':
       if (!ivecs) {
-        gbLogWarning("-o appeared before -i.   This is probably not what you want to do.\n");
+        gbWarning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
       argument = FETCH_OPTARG;
       ovecs = Vecs::Instance().find_vec(argument);
       if (!ovecs) {
-        gbLogFatal("Output type '{}' not recognized\n", gbLogCStr(argument));
+        gbFatal("Output type '%s' not recognized\n", gbLogCStr(argument));
       }
       break;
     case 'f':
       argument = FETCH_OPTARG;
       fname = argument;
       if (fname.isEmpty()) {
-        gbLogFatal("No file or device name specified.\n");
+        gbFatal("No file or device name specified.\n");
       }
       if (!ivecs) {
-        gbLogFatal("No valid input type specified\n");
+        gbFatal("No valid input type specified\n");
       }
       if (global_opts.masked_objective & POSNDATAMASK) {
         did_something = true;
@@ -406,7 +406,7 @@ run(const char* prog_name)
       argument = FETCH_OPTARG;
       ofname = argument;
       if (ofname.isEmpty()) {
-        gbLogFatal("No output file or device name specified.\n");
+        gbFatal("No output file or device name specified.\n");
       }
       if (ovecs && (!(global_opts.masked_objective & POSNDATAMASK))) {
         /* simulates the default behaviour of waypoints */
@@ -486,7 +486,7 @@ run(const char* prog_name)
                               .arg(filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
         }
       }  else {
-        gbLogFatal("Unknown filter '{}'\n",gbLogCStr(argument));
+        gbFatal("Unknown filter '%s'\n",gbLogCStr(argument));
       }
       break;
     case 'D':
@@ -495,33 +495,33 @@ run(const char* prog_name)
         bool ok;
         global_opts.debug_level = argument.toInt(&ok);
         if (!ok) {
-          gbLogFatal("the -D option requires an integer value to specify the debug level, i.e. -D level\n");
+          gbFatal("the -D option requires an integer value to specify the debug level, i.e. -D level\n");
         }
       }
       /*
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        gbLogInfo("GPSBabel Version: {}\n", gpsbabel::kVersion);
+        gbInfo("GPSBabel Version: %s\n", gpsbabel::kVersion);
         if(sizeof(gpsbabel::kVersionSHA) > 1) {
-          gbLogInfo("Repository SHA: {}\n", gpsbabel::kVersionSHA);
+          gbInfo("Repository SHA: %s\n", gpsbabel::kVersionSHA);
         }
         if(sizeof(gpsbabel::kVersionDate) > 1) {
           QDateTime date = QDateTime::fromString(gpsbabel::kVersionDate, Qt::ISODate);
           if (date.isValid()) {
-            gbLogInfo("Date: {}\n", gbLogCStr(date.toUTC().toString(Qt::ISODate)));
+            gbInfo("Date: %s\n", gbLogCStr(date.toUTC().toString(Qt::ISODate)));
           }
         }
-        gbLogInfo("Compiled with Qt {} for architecture {}\n",
+        gbInfo("Compiled with Qt %s for architecture %s\n",
                 QT_VERSION_STR,
                 gbLogCStr(QSysInfo::buildAbi()));
-        gbLogInfo("Running with Qt {} on {}, {}\n", qVersion(),
+        gbInfo("Running with Qt %s on %s, %s\n", qVersion(),
                 gbLogCStr(QSysInfo::prettyProductName()),
                 gbLogCStr(QSysInfo::currentCpuArchitecture()));
-        gbLogInfo("QLocale::system() is {}\n", gbLogCStr(QLocale::system().name()));
-        gbLogInfo("QLocale() is {}\n", gbLogCStr(QLocale().name()));
+        gbInfo("QLocale::system() is %s\n", gbLogCStr(QLocale::system().name()));
+        gbInfo("QLocale() is %s\n", gbLogCStr(QLocale().name()));
         QTextCodec* defaultcodec = QTextCodec::codecForLocale();
-        gbLogInfo("QTextCodec::codecForLocale() is {}, mib {}\n",
+        gbInfo("QTextCodec::codecForLocale() is %s, mib %d\n",
                 defaultcodec->name().constData(),defaultcodec->mibEnum());
       }
       break;
@@ -586,7 +586,7 @@ run(const char* prog_name)
       break;
 
     default:
-      gbLogFatal("Unknown option '{}'.\n", gbLogCStr(qargs.at(argn)));
+      gbFatal("Unknown option '%s'.\n", gbLogCStr(qargs.at(argn)));
       break;
     }
 
@@ -606,7 +606,7 @@ run(const char* prog_name)
     qargs.removeFirst();
   }
   if (qargs.size() > 2) {
-    gbLogFatal("Extra arguments on command line\n");
+    gbFatal("Extra arguments on command line\n");
   } else if ((!qargs.isEmpty()) && ivecs) {
     did_something = true;
     /* simulates the default behaviour of waypoints */
@@ -642,11 +642,11 @@ run(const char* prog_name)
   if (global_opts.masked_objective & POSNDATAMASK) {
 
     if (!ivecs) {
-      gbLogFatal("Realtime tracking (-T) requires an input type (-t)i such as Garmin or NMEA.\n");
+      gbFatal("Realtime tracking (-T) requires an input type (-t)i such as Garmin or NMEA.\n");
     }
 
     if (fname.isEmpty()) {
-      gbLogFatal("An input file (-f) must be specified.\n");
+      gbFatal("An input file (-f) must be specified.\n");
     }
 
     if (ivecs.isDynamic()) {
@@ -669,11 +669,11 @@ run(const char* prog_name)
     gpsbabel::Logging::setMessagePattern();
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
-      gbLogFatal("Realtime tracking (-T) is exclusive of other modes.\n");
+      gbFatal("Realtime tracking (-T) is exclusive of other modes.\n");
     }
 
     if (signal(SIGINT, signal_handler) == SIG_ERR) {
-      gbLogFatal("Couldn't install the exit signal handler.\n");
+      gbFatal("Couldn't install the exit signal handler.\n");
     }
 
     if (ovecs) {
@@ -733,7 +733,7 @@ run(const char* prog_name)
 
 
   if (!did_something) {
-    gbLogFatal("Nothing to do!  Use '{} -h' for command-line options.\n", prog_name);
+    gbFatal("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);
   }
 
   return 0;
@@ -763,7 +763,7 @@ main(int argc, char* argv[])
   gpsbabel::Logging::setMessagePattern();
 
   if constexpr (DEBUG_LOCALE) {
-    gbLogDebug("Initial locale: {}\n",setlocale(LC_ALL, nullptr));
+    gbDebug("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
   }
 
   // Create a QCoreApplication object to handle application initialization.
@@ -780,7 +780,7 @@ main(int argc, char* argv[])
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
   if constexpr (DEBUG_LOCALE) {
-    gbLogDebug("Locale after initial setup: {}\n",setlocale(LC_ALL, nullptr));
+    gbDebug("Locale after initial setup: %s\n",setlocale(LC_ALL, nullptr));
   }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
@@ -788,21 +788,21 @@ main(int argc, char* argv[])
   // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
   if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
     if constexpr (DEBUG_LOCALE) {
-      gbLogDebug("Resetting LC_NUMERIC\n");
+      gbDebug("Resetting LC_NUMERIC\n");
     }
     setlocale(LC_NUMERIC,"C");
     if constexpr (DEBUG_LOCALE) {
-      gbLogDebug("LC_ALL: {}\n",setlocale(LC_ALL, nullptr));
+      gbDebug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
   /* reset LC_TIME for strftime */
   if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
     if constexpr (DEBUG_LOCALE) {
-      gbLogDebug("Resetting LC_TIME\n");
+      gbDebug("Resetting LC_TIME\n");
     }
     setlocale(LC_TIME,"C");
     if constexpr (DEBUG_LOCALE) {
-      gbLogDebug("LC_ALL: {}\n",setlocale(LC_ALL, nullptr));
+      gbDebug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
     }
   }
 
