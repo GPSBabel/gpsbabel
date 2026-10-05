@@ -56,6 +56,12 @@
 
 #include <cstdio>    // for FILE
 #include <ctime>     // for time_t
+#ifndef MOCK_FORMAT
+#include <format>
+#else
+#include <fmt/format.h>
+#endif
+#include <utility>             // for forward
 
 #include <QList>     // for QList
 #include <QString>   // for QString
@@ -65,6 +71,8 @@
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
 #include "option.h"  // for OptionBool, OptionString
+#include "src/core/logging.h"  // for gbLogDebug
+
 
 
 class MtkLoggerBase
@@ -275,7 +283,7 @@ protected:
   static void dbg(int l, gpsbabel::format_string<Args...> fmt, Args&&... args)
   {
     if (global_opts.debug_level > l) {
-      qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+      gbLogDebug(gpsbabel::format(fmt, std::forward<Args>(args)...));
     }
   }
   static QString GetTempName(bool backup);
