@@ -46,7 +46,7 @@ bool CodecDevice::open(QIODevice::OpenMode mode)
   codec_ = QTextCodec::codecForName(codec_name_);
   if (codec_ == nullptr) {
     list_codecs();
-    gbFatal("Unsupported codec '%s'.\n", codec_name_);
+    gbLogFatal("Unsupported codec '{}'.\n", codec_name_);
     // return false;
   }
 

@@ -27,6 +27,7 @@
 #include "defs.h"
 #include "geocache.h"           // for Geocache
 #include "src/core/datetime.h"  // for DateTime
+#include "src/core/logging.h"
 
 
 #if FILTERS_ENABLED
@@ -84,7 +85,7 @@ void SortFilter::process()
     waypt_sort(sort_comp_wpt_by_time);
     break;
   default:
-    gbFatal("unknown waypoint sort mode.\n");
+    gbLogFatal("unknown waypoint sort mode.\n");
   }
 
   switch (rte_sort_mode)  {
@@ -100,7 +101,7 @@ void SortFilter::process()
     route_sort(sort_comp_rh_by_number);
     break;
   default:
-    gbFatal("unknown route sort mode.\n");
+    gbLogFatal("unknown route sort mode.\n");
   }
 
   switch (trk_sort_mode)  {
@@ -116,7 +117,7 @@ void SortFilter::process()
     track_sort(sort_comp_rh_by_number);
     break;
   default:
-    gbFatal("unknown track sort mode.\n");
+    gbLogFatal("unknown track sort mode.\n");
   }
 }
 
@@ -134,7 +135,7 @@ void SortFilter::init()
   } else if (!opt_sm_description && !opt_sm_gcid && !opt_sm_shortname && opt_sm_time) {
     wpt_sort_mode = SortModeWpt::time;
   } else {
-    gbFatal("At most one of the options description, gcid, shortname and time may be selected.\n");
+    gbLogFatal("At most one of the options description, gcid, shortname and time may be selected.\n");
   }
 
   // sort routes by
@@ -147,7 +148,7 @@ void SortFilter::init()
   } else if (!opt_sm_rtedesc && !opt_sm_rtename && opt_sm_rtenum) {
     rte_sort_mode = SortModeRteHd::number;
   } else {
-    gbFatal("At most one of the options rtedesc, rtename and rtenum may be selected.\n");
+    gbLogFatal("At most one of the options rtedesc, rtename and rtenum may be selected.\n");
   }
 
   // sort tracks by
@@ -160,7 +161,7 @@ void SortFilter::init()
   } else if (!opt_sm_trkdesc && !opt_sm_trkname && opt_sm_trknum) {
     trk_sort_mode = SortModeRteHd::number;
   } else {
-    gbFatal("At most one of the options trkdesc, trkname and trknum may be selected.\n");
+    gbLogFatal("At most one of the options trkdesc, trkname and trknum may be selected.\n");
   }
 }
 
