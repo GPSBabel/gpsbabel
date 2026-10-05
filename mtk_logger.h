@@ -271,7 +271,13 @@ protected:
 
   gbfile* cd{};
 
-  [[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...);
+  template <typename... Args>
+  static void dbg(int l, gpsbabel::format_string<Args...> fmt, Args&&... args)
+  {
+    if (global_opts.debug_level > l) {
+      qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+    }
+  }
   static QString GetTempName(bool backup);
   int do_send_cmd(const char* cmd, int cmdLen);
   int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec);

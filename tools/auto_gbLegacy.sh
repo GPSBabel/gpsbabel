@@ -4,47 +4,47 @@
 
 #gbDebug("parse of string '%s' on line number %d as double failed.\n");
 #gbDebug("parse of string '%s' on line number %d as time_t failed.\n",
-for file in *.cc
+for file in *.cc format.h
 do
 # be careful, require ); or a \n", at end of line.
 #  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/\\n"/"/' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%s/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%d/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%ld/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%lld/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%i/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%u/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%zu/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%llu/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%c/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%f/{:.6f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%g/{:g}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%s/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%d/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%ld/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%lld/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%i/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%u/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%zu/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%llu/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%c/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%f/{:.6f}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%g/{:g}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%" PRId64 "/{}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%" PRId64 "/{}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/0x%0\*X/0x{:0{}X-REORDER-}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%(0|\.)([1-9][0-9]*)([xX])/{:0\2\3}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)([xX])/{:\1\2}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([xX])/{:\1}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/0x%0\*X/0x{:0{}X-REORDER-}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%(0|\.)([1-9][0-9]*)([xX])/{:0\2\3}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%([1-9][0-9]*)([xX])/{:\1\2}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%([xX])/{:\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)[diu]/{:\1}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%0([1-9][0-9]*)[diu]/{:0\1}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%([1-9][0-9]*)[diu]/{:\1}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%0([1-9][0-9]*)[diu]/{:0\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)\.([1-9][0-9]*)s/{:>\1.\2}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)s/{:>\1}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\.([1-9][0-9]*)s/{:.\1}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%([1-9][0-9]*)\.([1-9][0-9]*)s/{:>\1.\2}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%([1-9][0-9]*)s/{:>\1}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%\.([1-9][0-9]*)s/{:.\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\.f/{:.0f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\+f/{:+f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\.([0-9]+)f/{:.\1f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\+\.([0-9]+)f/{:+.\1f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)\.([0-9]+)f/{:>\1.\2f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\+([1-9][0-9]*)\.([0-9]+)f/{:>+\1.\2f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%0\.([0-9]+)f/{:.\1f}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%\.f/{:.0f}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%\+f/{:+f}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%\.([0-9]+)f/{:.\1f}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%\+\.([0-9]+)f/{:+.\1f}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%([1-9][0-9]*)\.([0-9]+)f/{:>\1.\2f}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%\+([1-9][0-9]*)\.([0-9]+)f/{:>+\1.\2f}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%0\.([0-9]+)f/{:.\1f}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\+#g/{:+#g}/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%\+#g/{:+#g}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%%/%/g' "$file"
+  sed -E -i '/(dg100_log\("|dbg\(|gbDebug\("|gbFatal\("|gbWarning\("|gbInfo\(").*[^\\]"(,|\);$)/s/%%/%/g' "$file"
   sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/gb(Debug|Fatal|Warning|Info)/gbLog\1/' "$file"
 done
 rm -rf before
@@ -365,6 +365,207 @@ patch <<"EOJ"
      }
    }
  }
+--- before/dg-100.cc	2026-10-05 11:58:30.034886159 -0600
++++ after/dg-100.cc	2026-10-05 11:59:14.263096420 -0600
+@@ -129,18 +129,6 @@
+   }
+ }
+ 
+-void
+-Dg100Format::dg100_log(const char* fmt, ...)
+-{
+-  if (global_opts.debug_level > 0) {
+-    va_list ap;
+-    va_start(ap, fmt);
+-    gbVLegacyLog(QtDebugMsg, fmt, ap);
+-    va_end(ap);
+-  }
+-}
+-
+-
+ /* TODO: check whether negative lat/lon (West/South) are handled correctly */
+ float
+ Dg100Format::bin2deg(int val)
+--- before/skytraq.cc	2026-10-05 11:59:42.441131074 -0600
++++ after/skytraq.cc	2026-10-05 12:00:04.900146582 -0600
+@@ -65,17 +65,6 @@
+ 
+ 
+ void
+-SkytraqBase::dbg(int l, const char* msg, ...)
+-{
+-  if (global_opts.debug_level >= l) {
+-    va_list ap;
+-    va_start(ap, msg);
+-    gbVLegacyLog(QtDebugMsg, msg, ap);
+-    va_end(ap);
+-  }
+-}
+-
+-void
+ SkytraqBase::rd_drain()
+ {
+   if (gbser_flush(serial_handle)) {
+--- before/mtk_logger.cc	2026-10-05 12:00:24.462995712 -0600
++++ after/mtk_logger.cc	2026-10-05 12:00:40.343297581 -0600
+@@ -98,17 +98,6 @@
+ 
+ #define HOLUX245_MASK (1 << 27)
+ 
+-// TODO: These should become Debug() from src/core/logging.
+-void MtkLoggerBase::dbg(int l, const char* msg, ...)
+-{
+-  if (global_opts.debug_level >= l) {
+-    va_list ap;
+-    va_start(ap, msg);
+-    gbVLegacyLog(QtDebugMsg, msg, ap);
+-    va_end(ap);
+-  }
+-}
+-
+ // Returns a fully qualified pathname to a temporary file that is a copy
+ // of the data downloaded from the device. Only two copies are ever in play,
+ // the primary (e.g. "/tmp/data.bin") and the backup ("/tmp/data_old.bin").
+--- before/format.h	2026-10-05 12:26:56.137005964 -0600
++++ after/format.h	2026-10-05 12:27:20.346483594 -0600
+@@ -39,6 +39,7 @@
+ #define FORMAT_H_INCLUDED_
+ 
+ #include "defs.h"
++#include "src/core/logging.h"
+ 
+ 
+ class Format
+--- before/gdb.cc	2026-10-05 12:34:33.642306660 -0600
++++ after/gdb.cc	2026-10-05 12:41:00.145453524 -0600
+@@ -49,6 +49,7 @@
+ #include "jeeps/gpsmath.h"          // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+ #include "mkshort.h"                // for MakeShort
+ #include "src/core/datetime.h"      // for DateTime
++#include "src/core/logging.h"       // for gbLogWarning, gbLogDebug, gbLogFatal, gbLogInfo
+ 
+ 
+ #define GDB_DEF_CLASS		gt_waypt_class_user_waypoint
+@@ -441,7 +442,7 @@
+       if constexpr(GDB_DEBUG) {
+         DBG(GDB_DBG_WPTe, true)
+         gbLogDebug("wpt \"{}\" ({}): Altitude = {:.1f}\n",
+-                gbLogCStr(res->shortname), wpt_class, alt);
++                gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), alt);
+       }
+     }
+   }
+@@ -456,7 +457,7 @@
+   if constexpr(GDB_DEBUG) {
+     DBG(GDB_DBG_WPTe, !res->notes.isNull())
+     gbLogDebug("wpt \"{}\" ({}): notes = {}\n",
+-            gbLogCStr(res->shortname), wpt_class,
++            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class),
+             gbLogCStr(QString(res->notes).replace("\r\n", ", ")));
+   }
+   if (FREAD_C == 1) {
+@@ -464,14 +465,14 @@
+     if constexpr(GDB_DEBUG) {
+       DBG(GDB_DBG_WPTe, res->proximity_has_value())
+       gbLogDebug("wpt \"{}\" ({}): Proximity = {:.1f}\n",
+-              gbLogCStr(res->shortname), wpt_class, res->proximity_value() / 1000);
++              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->proximity_value() / 1000);
+     }
+   }
+   int display = FREAD_i32;
+   if constexpr(GDB_DEBUG) {
+     DBG(GDB_DBG_WPTe, true)
+     gbLogDebug("wpt \"{}\" ({}): display = {}\n",
+-            gbLogCStr(res->shortname), wpt_class, display);
++            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), display);
+   }
+   switch (display) {			/* display value */
+   case gt_gdb_display_mode_symbol:
+@@ -500,7 +501,7 @@
+     if constexpr(GDB_DEBUG) {
+       DBG(GDB_DBG_WPTe, res->depth_has_value())
+       gbLogDebug("wpt \"{}\" ({}): Depth = {:.1f}\n",
+-              gbLogCStr(res->shortname), wpt_class, res->depth_value());
++              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->depth_value());
+     }
+   }
+ 
+@@ -520,7 +521,7 @@
+       QString temp = FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
+       DBG(GDB_DBG_WPTe, !temp.isEmpty())
+       gbLogDebug("wpt \"{}\" ({}): Unknown string = {}\n",
+-              gbLogCStr(res->shortname), wpt_class, gbLogCStr(temp));
++              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(temp));
+     } else {
+       (void) FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
+     }
+@@ -549,7 +550,7 @@
+       if constexpr(GDB_DEBUG) {
+         DBG(GDB_DBG_WPTe, true)
+         gbLogDebug("wpt \"{}\" ({}): duration = {}\n",
+-                gbLogCStr(res->shortname), wpt_class, duration);
++                gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), duration);
+       }
+     }
+     int url_ct = FREAD_i32;
+@@ -560,7 +561,7 @@
+         if constexpr(GDB_DEBUG) {
+           DBG(GDB_DBG_WPTe, true)
+           gbLogDebug("wpt \"{}\" ({}): url({}) = {}\n",
+-                  gbLogCStr(res->shortname), wpt_class, url_ct - i, gbLogCStr(str));
++                  gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), url_ct - i, gbLogCStr(str));
+         }
+       }
+     }
+@@ -569,10 +570,10 @@
+   if constexpr(GDB_DEBUG) {
+     DBG(GDB_DBG_WPTe, !res->description.isNull())
+     gbLogDebug("wpt \"{}\" ({}): description = {}\n",
+-            gbLogCStr(res->shortname), wpt_class, gbLogCStr(res->description));
++            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->description));
+     DBG(GDB_DBG_WPTe, res->urls.HasUrlLink())
+     gbLogDebug("wpt \"{}\" ({}): url = {}\n",
+-            gbLogCStr(res->shortname), wpt_class, gbLogCStr(res->urls.GetUrlLink().url_));
++            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->urls.GetUrlLink().url_));
+   }
+   int category = FREAD_i16;
+   if (category != 0) {
+@@ -581,7 +582,7 @@
+   if constexpr(GDB_DEBUG) {
+     DBG(GDB_DBG_WPTe, category)
+     gbLogDebug("wpt \"{}\" ({}): category = {}\n",
+-            gbLogCStr(res->shortname), wpt_class, category);
++            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), category);
+   }
+ 
+   if (FREAD_C == 1) {
+@@ -589,7 +590,7 @@
+     if constexpr(GDB_DEBUG) {
+       DBG(GDB_DBG_WPTe, res->temperature_has_value())
+       gbLogDebug("wpt \"{}\" ({}): temperature = {:.1f}\n",
+-              gbLogCStr(res->shortname), wpt_class, res->temperature_value());
++              gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), res->temperature_value());
+     }
+   }
+ 
+@@ -618,7 +619,7 @@
+   if constexpr(GDB_DEBUG) {
+     DBG(GDB_DBG_WPTe, icon != kGDBDefIcon)
+     gbLogDebug("wpt \"{}\" ({}): icon = \"{}\" (MapSource symbol {})\n",
+-            gbLogCStr(res->shortname), wpt_class, gbLogCStr(res->icon_descr), icon);
++            gbLogCStr(res->shortname), gpsbabel::to_underlying(wpt_class), gbLogCStr(res->icon_descr), icon);
+   }
+   QString str;
+   if (!(str = garmin_fs_t::get_cc(gmsd, nullptr)).isEmpty()) {
+@@ -1031,7 +1032,7 @@
+       }
+       if (typ == 'W')
+         gbLogWarning("({}{}-{:02}): delta = {} (flag={:3}/{:02x})-",
+-                  gdb_ver, typ, wpt_class, delta, waypt_flag, waypt_flag);
++                  gdb_ver, typ, gpsbabel::to_underlying(wpt_class), delta, waypt_flag, waypt_flag);
+       else {
+         gbLogWarning("({}{}): delta = {} -", gdb_ver, typ, delta);
+       }
 EOJ
 cp *.cc after
 echo "++++++++++ possible untranslatd print specifier ++++++++++"

@@ -111,7 +111,13 @@ protected:
   const dg100_command* dg100_findcmd(int id);
   static QDateTime bintime2utc(int date, int time);
   static void dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf);
-  [[gnu::format(printf, 1, 2)]] static void dg100_log(const char* fmt, ...);
+  template <typename... Args>
+  static void dg100_log(gpsbabel::format_string<Args...> fmt, Args&&... args)
+  {
+    if (global_opts.debug_level > 0) {
+      qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+    }
+  }
   static float bin2deg(int val);
   void process_gpsfile(uint8_t* data, route_head** track);
   static uint16_t dg100_checksum(const uint8_t* buf, int count);

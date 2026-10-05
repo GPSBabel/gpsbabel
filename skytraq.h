@@ -112,7 +112,13 @@ protected:
 
   /* Member Functions */
 
-  [[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...);
+  template <typename... Args>
+  static void dbg(int l, gpsbabel::format_string<Args...> fmt, Args&&... args)
+  {
+    if (global_opts.debug_level > l) {
+      qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+    }
+  }
   void rd_drain();
   int rd_char(int* errors);
   int rd_buf(uint8_t* buf, int len);
