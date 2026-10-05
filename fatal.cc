@@ -20,13 +20,11 @@
  */
 
 #include <cstdarg>             // for va_end, va_list, va_start
-#include <cstdio>              // for fprintf, stderr, fflush
 #include <cstdlib>             // for exit
 
 #include <QDebug>              // for QDebug
 #include <QMessageLogContext>  // for QtMsgType, QMessageLogContext, qFormatLogMessage
 #include <QString>             // for QString
-#include <QtGlobal>            // for qPrintable
 
 #include "defs.h"              // for gbFatal, gbDebug, gbInfo, gbVLegacyLog, gbWarning
 #include "src/core/logging.h"  // for FatalMsg
@@ -96,37 +94,7 @@ gbDebug(const char* fmt, ...)
   va_end(args);
 }
 
-/* The LegacyLog supports
- * 1) messages containing embedded newlines are broken it single line message
- *    so they can be properly formated by our log formatter.
- * 2) accumulation of messages that don't end in a newline. These are output
- * as they come in in case a newline never shows up.  If they start a line
- * they are formatted by our log formatter.
- */
-static void LegacyLogMessageHandler(QtMsgType type, const QString& msg)
-{
-  static bool lineInProgress = false;
-
-  if (lineInProgress) {
-    fprintf(stderr, "%s", qPrintable(msg));
-  } else {
-    QString message = qFormatLogMessage(type, QMessageLogContext(), msg);
-    fprintf(stderr, "%s", qPrintable(message));
-  }
-  fflush(stderr);
-  lineInProgress = !msg.endsWith('\n');
-}
-
 void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args)
 {
-  QString logString(QString::vasprintf(fmt, args));
-
-  for (auto idx = logString.indexOf('\n'); idx >= 0; idx = logString.indexOf('\n')) {
-    QString msg = logString.sliced(0, idx + 1);
-    LegacyLogMessageHandler(type, msg);
-    logString.remove(0, idx + 1);
-  }
-  if (!logString.isEmpty()) {
-    LegacyLogMessageHandler(type, logString);
-  }
+  QDebug(type).noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::vasprintf(fmt, args));
 }

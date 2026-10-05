@@ -32,10 +32,9 @@
 #include <type_traits>           // for type_identity
 #include <utility>               // for forward
 
-#include <QBasicUtf8StringView>  // for QBasicUtf8StringView
 #include <QDebug>                // for QDebug
 #include <QMessageLogger>        // for QtMsgType, qCritical, qInfo, qWarning
-#include <QUtf8StringView>       // for QUtf8StringView
+#include <QString>               // for QString
 #include <QtGlobal>              // for qDebug
 
 #include "defs.h"                // for format
@@ -95,14 +94,14 @@ public:
 
 [[noreturn]] inline void gbLogFatal(const std::string& message)
 {
-    qCritical().noquote() << QUtf8StringView(message);
+    qCritical().noquote() << QString::fromStdString(message);
     exit(1);
 }
 
 template <typename... Args>
 [[noreturn]] void gbLogFatal(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
-    qCritical().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
+    qCritical().noquote() << QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...));
     exit(1);
 }
 
@@ -113,13 +112,13 @@ inline void gbLogDebug(const char* message)
 
 inline void gbLogDebug(const std::string& message)
 {
-    qDebug().noquote() << QUtf8StringView(message);
+    qDebug().noquote() << QString::fromStdString(message);
 }
 
 template <typename... Args>
 void gbLogDebug(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
-    qDebug().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
+    qDebug().noquote() << QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...));
 }
 
 inline void gbLogWarning(const char* message)
@@ -129,13 +128,13 @@ inline void gbLogWarning(const char* message)
 
 inline void gbLogWarning(const std::string& message)
 {
-    qWarning().noquote() << QUtf8StringView(message);
+    qWarning().noquote() << QString::fromStdString(message);
 }
 
 template <typename... Args>
 void gbLogWarning(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
-    qWarning().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
+    qWarning().noquote() << QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...));
 }
 
 inline void gbLogInfo(const char* message)
@@ -145,13 +144,31 @@ inline void gbLogInfo(const char* message)
 
 inline void gbLogInfo(const std::string& message)
 {
-    qInfo().noquote() << QUtf8StringView(message);
+    qInfo().noquote() << QString::fromStdString(message);
 }
 
 template <typename... Args>
 void gbLogInfo(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
-    qInfo().noquote() << QUtf8StringView(gpsbabel::format(fmt, std::forward<Args>(args)...));
+    qInfo().noquote() << QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...));
 }
 
+namespace gpsbabel
+{
+
+class Logging
+{
+public:
+  static void setMessagePattern(const QString& id = QString());
+  static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg);
+  static QString flaggedLegacyMessage(const QString& msg);
+private:
+  static void LegacyLogMessageHandler(QtMsgType type, const QString& msg);
+  static QString legacyKey()
+  {
+    return QStringLiteral("λλµ");
+  }
+};
+
+} // namespace gpsbabel 
 #endif //  SRC_CORE_LOGGING_H_

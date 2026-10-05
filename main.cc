@@ -194,31 +194,6 @@ print_extended_info()
     "\n");
 }
 
-static void setMessagePattern(const QString& id = QString())
-{
-  if (id.isEmpty()) {
-    qSetMessagePattern("%{if-category}%{category}: %{endif}main: %{message}");
-  } else {
-    qSetMessagePattern(QStringLiteral("%{if-category}%{category}: %{endif}%1: %{message}").arg(id));
-  }
-}
-
-/* The GUI captures standard error and standard output for
- * display in the output window.
- * On windows the Qt supplied default message handler might send messages
- * to the debugger instead.
- * We override the default message handler to ensure that messages go to
- * standard error.  Alternatively, the GUI could set the undocumented
- * environmental variable QT_FORCE_STDERR_LOGGING. */
-static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
-{
-  QString message = qFormatLogMessage(type, context, msg);
-  /* flush any buffered standard output */
-  fflush(stdout);
-  fprintf(stderr, "%s\n", qPrintable(message));
-  fflush(stderr);
-}
-
 static void
 signal_handler(int sig)
 {
@@ -262,7 +237,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     timer.start();
   }
   start_session(ivecs.fmtname, fname);
-  setMessagePattern(ivecs.fmtname);
+  gpsbabel::Logging::setMessagePattern(ivecs.fmtname);
   if (ivecs.isDynamic()) {
     ivecs.fmt = ivecs.factory(fname);
     Vecs::init_vec(ivecs.fmt, ivecs.fmtname);
@@ -283,7 +258,7 @@ run_reader(Vecs::fmtinfo_t& ivecs, const QString& fname)
     ivecs->read();
     ivecs->rd_deinit();
   }
-  setMessagePattern();
+  gpsbabel::Logging::setMessagePattern();
   if (global_opts.debug_level > 0)  {
     gbLogDebug("reader {} took {:.3f} seconds.",
                gbLogCStr(ivecs.fmtname), timer.elapsed()/1000.0);
@@ -296,7 +271,7 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
   if (global_opts.debug_level > 0)  {
     timer.start();
   }
-  setMessagePattern(ovecs.fmtname);
+  gpsbabel::Logging::setMessagePattern(ovecs.fmtname);
   if (ovecs.isDynamic()) {
     ovecs.fmt = ovecs.factory(ofname);
     Vecs::init_vec(ovecs.fmt, ovecs.fmtname);
@@ -317,7 +292,7 @@ run_writer(Vecs::fmtinfo_t& ovecs, const QString& ofname)
     ovecs->write();
     ovecs->wr_deinit();
   }
-  setMessagePattern();
+  gpsbabel::Logging::setMessagePattern();
   if (global_opts.debug_level > 0)  {
     gbLogDebug("writer {} took {:.3f} seconds.",
                gbLogCStr(ovecs.fmtname), timer.elapsed()/1000.0);
@@ -483,7 +458,7 @@ run(const char* prog_name)
         if (global_opts.debug_level > 0)  {
           timer.start();
         }
-        setMessagePattern(filter.fltname);
+        gpsbabel::Logging::setMessagePattern(filter.fltname);
         if (filter.isDynamic()) {
           filter.flt = filter.factory();
           FilterVecs::init_filter_vec(filter.flt, filter.fltname);
@@ -504,7 +479,7 @@ run(const char* prog_name)
           filter->deinit();
           FilterVecs::free_filter_vec(filter.flt);
         }
-        setMessagePattern();
+        gpsbabel::Logging::setMessagePattern();
         if (global_opts.debug_level > 0)  {
           gbLogDebug("filter {} took {:.3f} seconds.",
                     gbLogCStr(filter.fltname), timer.elapsed()/1000.0);
@@ -674,23 +649,23 @@ run(const char* prog_name)
     }
 
     if (ivecs.isDynamic()) {
-      setMessagePattern(ivecs.fmtname);
+      gpsbabel::Logging::setMessagePattern(ivecs.fmtname);
       ivecs.fmt = ivecs.factory(fname);
       Vecs::init_vec(ivecs.fmt, ivecs.fmtname);
-      setMessagePattern();
+      gpsbabel::Logging::setMessagePattern();
     }
     if (ovecs && ovecs.isDynamic()) {
-      setMessagePattern(ovecs.fmtname);
+      gpsbabel::Logging::setMessagePattern(ovecs.fmtname);
       ovecs.fmt = ovecs.factory(ofname);
       Vecs::init_vec(ovecs.fmt, ovecs.fmtname);
-      setMessagePattern();
+      gpsbabel::Logging::setMessagePattern();
     }
 
     start_session(ivecs.fmtname, fname);
-    setMessagePattern(ivecs.fmtname);
+    gpsbabel::Logging::setMessagePattern(ivecs.fmtname);
     Vecs::prepare_format(ivecs);
     ivecs->rd_position_init(fname);
-    setMessagePattern();
+    gpsbabel::Logging::setMessagePattern();
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
       gbLogFatal("Realtime tracking (-T) is exclusive of other modes.");
@@ -701,24 +676,24 @@ run(const char* prog_name)
     }
 
     if (ovecs) {
-      setMessagePattern(ovecs.fmtname);
+      gpsbabel::Logging::setMessagePattern(ovecs.fmtname);
       Vecs::prepare_format(ovecs);
       ovecs->wr_position_init(ofname);
-      setMessagePattern();
+      gpsbabel::Logging::setMessagePattern();
     }
 
     tracking_status.request_terminate = 0;
     while (!tracking_status.request_terminate) {
-      setMessagePattern(ivecs.fmtname);
+      gpsbabel::Logging::setMessagePattern(ivecs.fmtname);
       Waypoint* wpt = ivecs->rd_position(&tracking_status);
-      setMessagePattern();
+      gpsbabel::Logging::setMessagePattern();
 
       if (tracking_status.request_terminate) {
         delete wpt;
         break;
       }
       if (wpt) {
-        setMessagePattern(ovecs.fmtname);
+        gpsbabel::Logging::setMessagePattern(ovecs.fmtname);
         if (ovecs) {
 //          ovecs->wr_position_init(ofname);
           ovecs->wr_position(wpt);
@@ -728,18 +703,18 @@ run(const char* prog_name)
           fbOutput.waypt_disp(wpt);
         }
         delete wpt;
-        setMessagePattern();
+        gpsbabel::Logging::setMessagePattern();
       }
     }
-    setMessagePattern(ivecs.fmtname);
+    gpsbabel::Logging::setMessagePattern(ivecs.fmtname);
     Vecs::prepare_format(ivecs);
     ivecs->rd_position_deinit();
-    setMessagePattern();
+    gpsbabel::Logging::setMessagePattern();
     if (ovecs) {
-      setMessagePattern(ovecs.fmtname);
+      gpsbabel::Logging::setMessagePattern(ovecs.fmtname);
       Vecs::prepare_format(ovecs);
       ovecs->wr_position_deinit();
-      setMessagePattern();
+      gpsbabel::Logging::setMessagePattern();
     }
 
     if (ovecs && ovecs.isDynamic()) {
@@ -783,8 +758,8 @@ main(int argc, char* argv[])
 #error Visual Studio 2017 and earlier are not supported. Please use Visual Studio 2019 or 2022.
 #endif
 
-  qInstallMessageHandler(MessageHandler);
-  setMessagePattern();
+  qInstallMessageHandler(gpsbabel::Logging::MessageHandler);
+  gpsbabel::Logging::setMessagePattern();
 
   if constexpr (DEBUG_LOCALE) {
     gbLogDebug("Initial locale: {}",setlocale(LC_ALL, nullptr));
