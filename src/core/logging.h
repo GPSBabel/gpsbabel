@@ -82,77 +82,6 @@ public:
   explicit Debug(int level) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(level);}
 };
 
-/* std::format_string interface.
- * A newline is added by the MessageHandler.
- */
-
-[[noreturn]] inline void gbLogFatal(const char* message)
-{
-    qCritical().noquote() << message;
-    exit(1);
-}
-
-[[noreturn]] inline void gbLogFatal(const std::string& message)
-{
-    qCritical().noquote() << QString::fromStdString(message);
-    exit(1);
-}
-
-template <typename... Args>
-[[noreturn]] void gbLogFatal(gpsbabel::format_string<Args...> fmt, Args&&... args)
-{
-    qCritical().noquote() << QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...));
-    exit(1);
-}
-
-inline void gbLogDebug(const char* message)
-{
-    qDebug().noquote() << message;
-}
-
-inline void gbLogDebug(const std::string& message)
-{
-    qDebug().noquote() << QString::fromStdString(message);
-}
-
-template <typename... Args>
-void gbLogDebug(gpsbabel::format_string<Args...> fmt, Args&&... args)
-{
-    qDebug().noquote() << QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...));
-}
-
-inline void gbLogWarning(const char* message)
-{
-    qWarning().noquote() << message;
-}
-
-inline void gbLogWarning(const std::string& message)
-{
-    qWarning().noquote() << QString::fromStdString(message);
-}
-
-template <typename... Args>
-void gbLogWarning(gpsbabel::format_string<Args...> fmt, Args&&... args)
-{
-    qWarning().noquote() << QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...));
-}
-
-inline void gbLogInfo(const char* message)
-{
-    qInfo().noquote() << message;
-}
-
-inline void gbLogInfo(const std::string& message)
-{
-    qInfo().noquote() << QString::fromStdString(message);
-}
-
-template <typename... Args>
-void gbLogInfo(gpsbabel::format_string<Args...> fmt, Args&&... args)
-{
-    qInfo().noquote() << QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...));
-}
-
 namespace gpsbabel
 {
 
@@ -170,5 +99,77 @@ private:
   }
 };
 
-} // namespace gpsbabel 
+} // namespace gpsbabel
+
+/* std::format_string interface.
+ * A newline is added by the MessageHandler.
+ */
+
+[[noreturn]] inline void gbLogFatal(const char* message)
+{
+    qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+    exit(1);
+}
+
+[[noreturn]] inline void gbLogFatal(const std::string& message)
+{
+    qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+    exit(1);
+}
+
+template <typename... Args>
+[[noreturn]] void gbLogFatal(gpsbabel::format_string<Args...> fmt, Args&&... args)
+{
+    qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+    exit(1);
+}
+
+inline void gbLogDebug(const char* message)
+{
+    qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+}
+
+inline void gbLogDebug(const std::string& message)
+{
+    qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+}
+
+template <typename... Args>
+void gbLogDebug(gpsbabel::format_string<Args...> fmt, Args&&... args)
+{
+    qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+}
+
+inline void gbLogWarning(const char* message)
+{
+    qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+}
+
+inline void gbLogWarning(const std::string& message)
+{
+    qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+}
+
+template <typename... Args>
+void gbLogWarning(gpsbabel::format_string<Args...> fmt, Args&&... args)
+{
+    qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+}
+
+inline void gbLogInfo(const char* message)
+{
+    qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+}
+
+inline void gbLogInfo(const std::string& message)
+{
+    qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+}
+
+template <typename... Args>
+void gbLogInfo(gpsbabel::format_string<Args...> fmt, Args&&... args)
+{
+    qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+}
+
 #endif //  SRC_CORE_LOGGING_H_

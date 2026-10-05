@@ -8,45 +8,44 @@ for file in *.cc
 do
 # be careful, require ); or a \n", at end of line.
 #  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/\\n"/"/' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%s/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%d/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%ld/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%lld/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%i/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%u/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%zu/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%llu/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%c/{}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%f/{:.6f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%g/{:g}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%s/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%d/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%ld/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%lld/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%i/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%u/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%zu/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%llu/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%c/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%f/{:.6f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%g/{:g}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%" PRId64 "/{}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%" PRId64 "/{}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/0x%0\*X/0x{:0{}X-REORDER-}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%(0|\.)([1-9][0-9]*)([xX])/{:0\2\3}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)([xX])/{:\1\2}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([xX])/{:\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/0x%0\*X/0x{:0{}X-REORDER-}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%(0|\.)([1-9][0-9]*)([xX])/{:0\2\3}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)([xX])/{:\1\2}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([xX])/{:\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)[diu]/{:\1}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%0([1-9][0-9]*)[diu]/{:0\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)[diu]/{:\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%0([1-9][0-9]*)[diu]/{:0\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)\.([1-9][0-9]*)s/{:>\1.\2}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)s/{:>\1}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\.([1-9][0-9]*)s/{:.\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)\.([1-9][0-9]*)s/{:>\1.\2}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)s/{:>\1}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\.([1-9][0-9]*)s/{:.\1}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\.f/{:.0f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\+f/{:+f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\.([0-9]+)f/{:.\1f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\+\.([0-9]+)f/{:+.\1f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%([1-9][0-9]*)\.([0-9]+)f/{:>\1.\2f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\+([1-9][0-9]*)\.([0-9]+)f/{:>+\1.\2f}/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%0\.([0-9]+)f/{:.\1f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\.f/{:.0f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\+f/{:+f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\.([0-9]+)f/{:.\1f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\+\.([0-9]+)f/{:+.\1f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%([1-9][0-9]*)\.([0-9]+)f/{:>\1.\2f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\+([1-9][0-9]*)\.([0-9]+)f/{:>+\1.\2f}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%0\.([0-9]+)f/{:.\1f}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%\+#g/{:+#g}/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%\+#g/{:+#g}/g' "$file"
 
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/%%/%/g' "$file"
-  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/gb(Debug|Fatal|Warning|Info)/gbLog\1/' "$file"
-  sed -E -i '/gbLog(Debug|Fatal|Warning|Info)\(".*\\n"(,|\);$)/s/\\n"/"/' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/%%/%/g' "$file"
+  sed -E -i '/gb(Debug|Fatal|Warning|Info)\(".*[^\\]"(,|\);$)/s/gb(Debug|Fatal|Warning|Info)/gbLog\1/' "$file"
 done
 rm -rf before
 rm -rf after
@@ -108,7 +107,6 @@ cp *.cc before
 # position.cc
 # xcsv.cc 812 enum
 # igc.cc 157, 167, 183, 227, 290, 306, 315, 353, 364, 443 multiline
-echo "igc.cc has multiline gbLogFatal calls"
 
 patch <<"EOJ"
 diff -u before/duplicate.cc after/duplicate.cc
@@ -122,18 +120,17 @@ diff -u before/duplicate.cc after/duplicate.cc
  
  
  #if FILTERS_ENABLED
-diff -u before/garmin_txt.cc after/garmin_txt.cc
---- before/garmin_txt.cc	2026-10-04 10:06:13.345714496 -0600
-+++ after/garmin_txt.cc	2026-10-04 10:06:13.355530013 -0600
+--- before/garmin_txt.cc	2026-10-05 09:12:14.875203043 -0600
++++ after/garmin_txt.cc	2026-10-05 09:12:44.314562956 -0600
 @@ -963,7 +963,7 @@
        int field_no = field_idx + 1;
        header_mapping_info[ht].append(std::make_pair(name, field_no));
        if (global_opts.debug_level >= 2) {
--        gbLogDebug("Binding field \"{}\" to internal number {} ({},{})", gbLogCStr(name), field_no, ht, i);
-+        gbLogDebug("Binding field \"{}\" to internal number {} ({},{})", gbLogCStr(name), field_no, gpsbabel::to_underlying(ht), i);
+-        gbLogDebug("Binding field \"{}\" to internal number {} ({},{})\n", gbLogCStr(name), field_no, ht, i);
++        gbLogDebug("Binding field \"{}\" to internal number {} ({},{})\n", gbLogCStr(name), field_no, gpsbabel::to_underlying(ht), i);
        }
      } else {
-       gbLogWarning("Field {} not recognized!", gbLogCStr(name));
+       gbLogWarning("Field {} not recognized!\n", gbLogCStr(name));
 diff -u before/gbser_posix.cc after/gbser_posix.cc
 --- before/gbser_posix.cc	2026-10-04 10:06:13.345776990 -0600
 +++ after/gbser_posix.cc	2026-10-04 10:06:13.355597239 -0600
@@ -233,17 +230,16 @@ diff -u before/session.cc after/session.cc
  
  #include <QList>         // for QList
  
-diff -u before/shape.cc after/shape.cc
---- before/shape.cc	2026-10-04 10:06:13.346598510 -0600
-+++ after/shape.cc	2026-10-04 10:06:13.356348316 -0600
+--- before/shape.cc	2026-10-05 09:16:03.039363463 -0600
++++ after/shape.cc	2026-10-05 09:16:09.959643796 -0600
 @@ -149,7 +149,7 @@
    const int nFields = DBFGetFieldCount(ihandledb);
    for (int i = 0; i < nFields; i++) {
      DBFFieldType type = DBFGetFieldInfo(ihandledb, i, name, nullptr, nullptr);
--    gbLogWarning("Field Index: {:2}, Field Name: {:>12}, Field Type {}", i, name, type);
-+    gbLogWarning("Field Index: {:2}, Field Name: {:>12}, Field Type {}", i, name, gpsbabel::to_underlying(type));
+-    gbLogWarning("Field Index: {:2}, Field Name: {:>12}, Field Type {}\n", i, name, type);
++    gbLogWarning("Field Index: {:2}, Field Name: {:>12}, Field Type {}\n", i, name, gpsbabel::to_underlying(type));
    }
-   gbLogFatal("");
+   gbLogFatal("\n");
  }
 diff -u before/smplrout.cc after/smplrout.cc
 --- before/smplrout.cc	2026-10-04 10:06:13.346639640 -0600
@@ -296,8 +292,8 @@ diff -u before/unicsv.cc after/unicsv.cc
        unicsv_fields_tab.last() = f.type;
  
        if (global_opts.debug_level) {
--        gbLogWarning("Interpreting column \"{}\" as {}({}).", gbLogCStr(value), gbLogCStr(f.name), f.type);
-+        gbLogWarning("Interpreting column \"{}\" as {}({}).", gbLogCStr(value), gbLogCStr(f.name), gpsbabel::to_underlying(f.type));
+-        gbLogWarning("Interpreting column \"{}\" as {}({}).\n", gbLogCStr(value), gbLogCStr(f.name), f.type);
++        gbLogWarning("Interpreting column \"{}\" as {}({}).\n", gbLogCStr(value), gbLogCStr(f.name), gpsbabel::to_underlying(f.type));
        }
  
        /* handle some special items */
@@ -323,36 +319,6 @@ diff -u before/validate.cc after/validate.cc
  
  #if FILTERS_ENABLED
  
-@@ -60,7 +61,8 @@
- 
-   point_ct = 0;
-   if (opt_debug) {
--    gbLogDebug("\nProcessing waypts");
-+    gbLogDebug("");
-+    gbLogDebug("Processing waypts");
-   }
-   waypt_disp_all(validate_point_f);
-   if (opt_debug) {
-@@ -75,7 +77,8 @@
-   total_segment_ct = 0;
-   segment_type = "route";
-   if (opt_debug) {
--    gbLogDebug("\nProcessing routes");
-+    gbLogDebug("");
-+    gbLogDebug("Processing routes");
-   }
-   route_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
-   if (opt_debug) {
-@@ -94,7 +97,8 @@
-   total_segment_ct = 0;
-   segment_type = "track";
-   if (opt_debug) {
--    gbLogDebug("\nProcessing tracks");
-+    gbLogDebug("");
-+    gbLogDebug("Processing tracks");
-   }
-   track_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
-   if (opt_debug) {
 diff -u before/xcsv.cc after/xcsv.cc
 --- before/xcsv.cc	2026-10-04 10:06:13.346996764 -0600
 +++ after/xcsv.cc	2026-10-04 10:06:13.356798825 -0600
@@ -360,31 +326,30 @@ diff -u before/xcsv.cc after/xcsv.cc
      break;
  
    default:
--    gbLogFatal("Unknown style directive: {} - {}", fmp.key.constData(), fmp.hashed_key);
-+    gbLogFatal("Unknown style directive: {} - {}", fmp.key.constData(), gpsbabel::to_underlying(fmp.hashed_key));
+-    gbLogFatal("Unknown style directive: {} - {}\n", fmp.key.constData(), fmp.hashed_key);
++    gbLogFatal("Unknown style directive: {} - {}\n", fmp.key.constData(), gpsbabel::to_underlying(fmp.hashed_key));
      break;
    }
  }
+--- before/exif.cc	2026-10-05 09:26:11.147010741 -0600
++++ after/exif.cc	2026-10-05 09:30:25.139103222 -0600
+@@ -552,7 +552,7 @@
+           } else if (tag->type == EXIF_TYPE_DOUBLE) {
+             gbLogDebug(" {:+#g}", tag->data.at(idx).value<double>());
+           } else {
+-            gbLogDebug(" 0x{:0{}X-REORDER-}", 2 * exif_type_size(tag->type), tag->data.at(idx).value<uint32_t>());
++            gbLogDebug(" 0x{:0{}X}", tag->data.at(idx).value<uint32_t>(), 2 * exif_type_size(tag->type));
+           }
+         }
+         if (tag->count > 4) {
 EOJ
 
 # a couple that didn't match our replacement search pattern
 patch <<"EOJ"
---- before/garmin_gpi.cc	2026-10-04 11:19:44.306571026 -0600
-+++ after/garmin_gpi.cc	2026-10-04 11:20:14.071541333 -0600
-@@ -59,7 +59,8 @@
- #define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
- 
- #define GPI_DBG global_opts.debug_level >= 3
--#define PP if (GPI_DBG) gbDebug("@%6x (%8d): ", gbftell(fin), gbftell(fin))
-+#define PP if (GPI_DBG) gbLogDebug("@{:6x} ({:8}): ", gbftell(fin), gbftell(fin))
-+
- 
- /*******************************************************************************
- * %%%                             gpi reader                               %%% *
---- before/lowranceusr.cc	2026-10-04 11:19:44.307110293 -0600
-+++ after/lowranceusr.cc	2026-10-04 11:27:05.898826439 -0600
+--- before/lowranceusr.cc	2026-10-05 09:24:44.942211145 -0600
++++ after/lowranceusr.cc	2026-10-05 09:24:44.948263858 -0600
 @@ -632,11 +632,11 @@
-       gbLogDebug(" {:08x} {:>8.3f} {:08x} {:08x} {:08x}",
+       gbLogDebug(" {:08x} {:>8.3f} {:08x} {:08x} {:08x}\n",
               unused_byte, fsdata->depth, loran_GRI, loran_Tda, loran_Tdb);
      } else {
 -      gbDebug("parse_waypoints: version = %d, name = %s, uid_unit = %u, "
@@ -407,11 +372,11 @@ grep -n gbLogDebug *.cc | grep % || true
 grep -n gbLogFatal *.cc | grep % || true
 grep -n gbLogWarning *.cc | grep % || true
 grep -n gbLogInfo *.cc | grep % || true
-echo "++++++++++ possible embedded newline, will not print identically ++++++++++"
-grep -n gbLogDebug *.cc | grep '\\n' || true
-grep -n gbLogFatal *.cc | grep '\\n' || true
-grep -n gbLogWarning *.cc | grep '\\n' || true
-grep -n gbLogInfo *.cc | grep '\\n' || true
+#echo "++++++++++ possible embedded newline, will not print identically ++++++++++"
+#grep -n gbLogDebug *.cc | grep '\\n' || true
+#grep -n gbLogFatal *.cc | grep '\\n' || true
+#grep -n gbLogWarning *.cc | grep '\\n' || true
+#grep -n gbLogInfo *.cc | grep '\\n' || true
 echo "++++++++++ possible missed conversions ++++++++++"
 grep -n gbDebug *.cc | grep -v \#include || true
 grep -n gbFatal *.cc | grep -v FatalMsg\(\) | grep -v \#include || true
