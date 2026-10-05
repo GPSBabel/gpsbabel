@@ -253,7 +253,7 @@ GpxFormat::tag_garmin_fs(tag_type tag, const QString& text, Waypoint* waypt)
       // but that feature is so obscure and used in so few outputs that
       // there's no reason to alarm the user.  Just silently disregard
       // category names that don't map cleanly.
-      // gbWarning("Unable to convert category \"%s\"!\n", CSTR(text));
+      // gbLogWarning("Unable to convert category \"{}\"!\n", CSTR(text));
     }
     break;
   case tag_type::garmin_wpt_addr:

@@ -76,7 +76,7 @@ open_gpsbabel_inifile()
     if (QFile(envstr).open(QIODevice::ReadOnly)) {
       return envstr;
     }
-    gbWarning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
+    gbLogWarning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
     return res;
   }
   QString name = find_gpsbabel_inifile("");  // Check in current directory first.
@@ -124,7 +124,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile)
         section_name = buf.mid(1, buf.indexOf(']') - 1).trimmed();
       }
       if (section_name.isEmpty()) {
-        gbFatal("invalid section header '%s' in '%s'.\n", gbLogCStr(section_name),
+        gbLogFatal("invalid section header '{}' in '{}'.\n", gbLogCStr(section_name),
               gbLogCStr(inifile->source));
       }
 
@@ -134,7 +134,7 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile)
       section = inifile->sections.value(section_name);
     } else {
       if (section.name.isEmpty()) {
-        gbFatal("missing section header in '%s'.\n",
+        gbLogFatal("missing section header in '{}'.\n",
               gbLogCStr(inifile->source));
       }
 

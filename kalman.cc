@@ -558,6 +558,6 @@ double Kalman::median(std::vector<double>& samples)
             return samples[n / 2];
         }
     }
-    gbFatal("Attempt to compute median without any samples.");
+    gbLogFatal("Attempt to compute median without any samples.");
 }
 #endif // FILTERS_ENABLED
