@@ -668,6 +668,16 @@ patch <<"EOJ"
  #endif
      }
  
+--- before/gbser_win.cc	2026-10-05 15:53:29.599743541 -0600
++++ gbser_win.cc	2026-10-05 15:54:02.966020620 -0600
+@@ -22,6 +22,7 @@
+ #include "defs.h"
+ #include "gbser.h"
+ #include "gbser_private.h"
++#include "src/core/logging.h"
+ 
+ #include <windows.h>
+ #include <setupapi.h>
 EOJ
 patch -p0 <<"EOJ"
 --- jeeps/gpsapp.cc	2026-10-05 13:53:57.971024963 -0600
