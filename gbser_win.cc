@@ -83,7 +83,7 @@ DWORD mkspeed(unsigned br)
     return 230400;
 #endif
   default:
-    gbFatal("Unsupported serial speed: %d\n", br);
+    gbLogFatal("Unsupported serial speed: {}\n", br);
     return 0;   /* keep compiler happy */
   }
 }
@@ -229,15 +229,15 @@ int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity,
   DCB tio;
 
   if (bits < 5 || bits > 8) {
-    gbFatal("Unsupported bits setting: %d\n", bits);
+    gbLogFatal("Unsupported bits setting: {}\n", bits);
   }
 
   if (parity > 2) {
-    gbFatal("Unsupported parity setting: %d\n", parity);
+    gbLogFatal("Unsupported parity setting: {}\n", parity);
   }
 
   if (stop < 1 || stop > 2) {
-    gbFatal("Unsupported stop setting: %d\n", stop);
+    gbLogFatal("Unsupported stop setting: {}\n", stop);
   }
 
   tio.DCBlength = sizeof(DCB);

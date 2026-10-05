@@ -35,6 +35,7 @@
 
 #include "defs.h"            // for gbFatal, CSTR
 #include "jeeps/gpsdatum.h"  // for GPS_ODatum, GPS_OEllipse, GPS_Datums, GPS_Ellipses, UKNG, GPS_SDatum_Alias, GPS_SDatum, GPS_DatumAliases, GPS_PDatum, GPS_PDatum_Alias
+#include "src/core/logging.h"
 
 static constexpr bool use_exact_helmert_inverse = false;
 
@@ -1107,7 +1108,7 @@ int32_t GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
 
   int32_t datum = GPS_Lookup_Datum_Index("Palestine 1923");
   if (datum < 0) {
-    gbFatal("Unable to find Palestine 1923 in internal tables\n");
+    gbLogFatal("Unable to find Palestine 1923 in internal tables\n");
   }
   int32_t ellipse = GPS_Datums[datum].ellipse;
 
@@ -1143,7 +1144,7 @@ void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon)
   double phi, lambda, alt, a, b;
   int32_t datum = GPS_Lookup_Datum_Index("Palestine 1923");
   if (datum < 0) {
-    gbFatal("Unable to find Palestine 1923 in internal tables\n");
+    gbLogFatal("Unable to find Palestine 1923 in internal tables\n");
   }
   int32_t ellipse = GPS_Datums[datum].ellipse;
 

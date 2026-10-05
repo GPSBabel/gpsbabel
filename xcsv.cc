@@ -286,7 +286,7 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
       bad_time_parse = true;
     }
     if ((time_result.has_value() && !time_result->isValid()) || bad_time_parse) {
-      gbFatal("couldn't parse time from string '%s' with format '%s'.\n",
+      gbLogFatal("couldn't parse time from string '{}' with format '{}'.\n",
             s, format);
     }
     if (time_result.has_value()) {
@@ -306,7 +306,7 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
       bad_date_parse = true;
     }
     if ((date_result.has_value() && !date_result->isValid()) || bad_date_parse) {
-      gbFatal("couldn't parse date from string '%s' with format '%s'.\n",
+      gbLogFatal("couldn't parse date from string '{}' with format '{}'.\n",
             s, format);
     }
     if (date_result.has_value()) {
@@ -315,7 +315,7 @@ XcsvFormat::sscanftime(const char* s, const char* format, QDate& date, QTime& ti
   } else {
     // Don't fuss for empty strings.
     if (*s) {
-      gbWarning("date parse of string '%s' with format '%s' failed.\n",
+      gbLogWarning("date parse of string '{}' with format '{}' failed.\n",
               s, format);
     }
   }
@@ -378,7 +378,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   Geocache* gc_data = nullptr;
 
   if (fmp.printfc.isNull()) {
-    gbFatal("xcsv style '%s' is missing format specifier\n", fmp.key.constData());
+    gbLogFatal("xcsv style '{}' is missing format specifier\n", fmp.key.constData());
   }
 
   if (0 == strcmp(fmp.printfc.constData(), "\"%s\"")) {
@@ -487,7 +487,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     } else if (*s == 's' || *s == 'S') {
       parse_data->lat_dir_positive = false;
     } else {
-      gbWarning("parse of string '%s' on line number %d as LAT_DIR failed.  Expected 'n', 'N', 's' or 'S'.\n", s, line_no);
+      gbLogWarning("parse of string '{}' on line number {} as LAT_DIR failed.  Expected 'n', 'N', 's' or 'S'.\n", s, line_no);
     }
     break;
   case XcsvStyle::XT_LON_DIR:
@@ -497,7 +497,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     } else if (*s == 'w' || *s == 'W') {
       parse_data->lon_dir_positive = false;
     } else {
-      gbWarning("parse of string '%s' on line number %d as LON_DIR failed.  Expected 'e', 'E', 'w' or 'W'.\n", s, line_no);
+      gbLogWarning("parse of string '{}' on line number {} as LON_DIR failed.  Expected 'e', 'E', 'w' or 'W'.\n", s, line_no);
     }
     break;
   /* SPECIAL COORDINATES/GRID */
@@ -589,7 +589,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
       wpt->SetCreationTime(0, excel_to_timetms(et));
       parse_data->need_datetime = false;
     } else if (!value.isEmpty()) {
-      gbWarning("parse of string '%s' on line number %d as EXCEL_TIME failed.\n", s, line_no);
+      gbLogWarning("parse of string '{}' on line number {} as EXCEL_TIME failed.\n", s, line_no);
     }
   }
   break;
@@ -601,7 +601,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
       wpt->SetCreationTime(tt);
       parse_data->need_datetime = false;
     } else if (!value.isEmpty()) {
-      gbWarning("parse of string '%s' on line number %d as TIMET_TIME failed.\n", s, line_no);
+      gbLogWarning("parse of string '{}' on line number {} as TIMET_TIME failed.\n", s, line_no);
     }
   }
   break;
@@ -613,7 +613,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
       wpt->SetCreationTime(0, tt);
       parse_data->need_datetime = false;
     } else if (!value.isEmpty()) {
-      gbWarning("parse of string '%s' on line number %d as TIMET_TIME_MS failed.\n", s, line_no);
+      gbLogWarning("parse of string '{}' on line number {} as TIMET_TIME_MS failed.\n", s, line_no);
     }
   }
   break;
@@ -638,7 +638,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
       wpt->SetCreationTime(dotnet_time_to_qdatetime(dnt));
       parse_data->need_datetime = false;
     } else if (!value.isEmpty()) {
-      gbWarning("parse of string '%s' on line number %d as NET_TIME failed.\n", s, line_no);
+      gbLogWarning("parse of string '{}' on line number {} as NET_TIME failed.\n", s, line_no);
     }
   }
   break;
@@ -804,12 +804,12 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     } else if (strncmp(fmp.key.constData(), "LAT_10E", 7) == 0) {
       wpt->latitude = strtod(s, nullptr) / pow(10.0, strtod(fmp.key.constData()+7, nullptr));
     } else {
-      gbWarning("Unknown style directive: %s\n", fmp.key.constData());
+      gbLogWarning("Unknown style directive: {}\n", fmp.key.constData());
     }
     break;
 
   default:
-    gbFatal("Unknown style directive: %s - %d\n", fmp.key.constData(), fmp.hashed_key);
+    gbLogFatal("Unknown style directive: {} - {}\n", fmp.key.constData(), gpsbabel::to_underlying(fmp.hashed_key));
     break;
   }
 }
@@ -862,7 +862,7 @@ XcsvFormat::read()
                                  xcsv_style->field_encloser, linecount);
 
       if (xcsv_style->ifields.isEmpty()) {
-        gbFatal("attempt to read, but style '%s' has no IFIELDs in it.\n", gbLogCStr(xcsv_style->description)? gbLogCStr(xcsv_style->description) : "unknown");
+        gbLogFatal("attempt to read, but style '{}' has no IFIELDs in it.\n", gbLogCStr(xcsv_style->description)? gbLogCStr(xcsv_style->description) : "unknown");
       }
 
       int ifield_idx = 0;
@@ -1225,7 +1225,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       double north;
       double east;
       if (! GPS_Math_WGS84_To_UKOSMap_H(wpt->latitude, wpt->longitude, &east, &north, map))
-        gbFatal("Position (%.5f/%.5f) outside of BNG.\n",
+        gbLogFatal("Position ({:.5f}/{:.5f}) outside of BNG.\n",
               wpt->latitude, wpt->longitude);
       buff = QString::asprintf(fmp.printfc.constData(), map, qRound(east), qRound(north));
     }
@@ -1589,7 +1589,7 @@ XcsvFormat::xcsv_waypt_pr(const Waypoint* wpt)
       }
       break;
     default:
-      gbWarning("Unknown style directive: %s\n", fmp.key.constData());
+      gbLogWarning("Unknown style directive: {}\n", fmp.key.constData());
       break;
     }
     QString obuff = csv_stringclean(buff, xcsv_style->badchars);
@@ -1878,7 +1878,7 @@ XcsvFormat::rd_init(const QString& fname)
     xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
-      gbFatal("XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
+      gbLogFatal("XCSV input style not declared.  Use ... -i xcsv,style=path/to/file.style\n");
     }
 
     xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
@@ -1886,7 +1886,7 @@ XcsvFormat::rd_init(const QString& fname)
 
   if ((xcsv_style->datatype == 0) || (xcsv_style->datatype == wptdata)) {
     if (global_opts.masked_objective & (TRKDATAMASK|RTEDATAMASK)) {
-      gbWarning("attempt to read %s as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", gbLogCStr(fname));
+      gbLogWarning("attempt to read {} as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", gbLogCStr(fname));
     }
   }
 
@@ -1908,7 +1908,7 @@ XcsvFormat::rd_init(const QString& fname)
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
   if (xcsv_file->gps_datum_idx < 0) {
-    gbFatal("datum \"%s\" is not supported.\n", gbLogCStr(datum_name));
+    gbLogFatal("datum \"{}\" is not supported.\n", gbLogCStr(datum_name));
   }
 
   utc_offset = opt_utc? opt_utc.get_result() * SECONDS_PER_HOUR : 0;
@@ -1936,7 +1936,7 @@ XcsvFormat::wr_init(const QString& fname)
     xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(intstylefile));
   } else {
     if (!styleopt) {
-      gbFatal("XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
+      gbLogFatal("XCSV output style not declared.  Use ... -o xcsv,style=path/to/file.style\n");
     }
 
     xcsv_style = new XcsvStyle(XcsvStyle::xcsv_read_style(styleopt));
@@ -1990,7 +1990,7 @@ XcsvFormat::wr_init(const QString& fname)
   }
   xcsv_file->gps_datum_idx = GPS_Lookup_Datum_Index(datum_name);
   if (xcsv_file->gps_datum_idx < 0) {
-    gbFatal("datum \"%s\" is not supported.\n", gbLogCStr(datum_name));
+    gbLogFatal("datum \"{}\" is not supported.\n", gbLogCStr(datum_name));
   }
 }
 

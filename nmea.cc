@@ -259,7 +259,7 @@ NmeaFormat::rd_deinit()
     file_in = nullptr;
     break;
   default:
-    gbFatal("nmea_rd_deinit: illegal read_mode.\n");
+    gbLogFatal("nmea_rd_deinit: illegal read_mode.\n");
     break;
   }
 
@@ -814,8 +814,8 @@ NmeaFormat::nmea_fix_timestamps(route_head* track)
 
   if (!prev_datetime.date().isValid()) {
     if (!optdate) {
-      gbWarning("No date found within track (all points dropped)!\n");
-      gbWarning("Please use option \"date\" to preset a valid date for those tracks.\n");
+      gbLogWarning("No date found within track (all points dropped)!\n");
+      gbLogWarning("Please use option \"date\" to preset a valid date for those tracks.\n");
       track_del_head(track);
       return;
     }
@@ -980,7 +980,7 @@ NmeaFormat::read()
   if (optdate) {
     opt_tm = QDate::fromString(optdate, u"yyyyMMdd");
     if (!opt_tm.isValid()) {
-      gbFatal("Invalid date \"%s\"!\n", gbLogCStr(optdate));
+      gbLogFatal("Invalid date \"{}\"!\n", gbLogCStr(optdate));
     }
   }
 
@@ -1009,7 +1009,7 @@ NmeaFormat::read()
         }
         datum = GPS_Lookup_Datum_Index(sdatum);
         if (datum < 0) {
-          gbFatal("/SonyGPS: Unsupported datum \"%s\" in source data!\n", sdatum);
+          gbLogFatal("/SonyGPS: Unsupported datum \"{}\" in source data!\n", sdatum);
         }
       }
       continue;
@@ -1036,14 +1036,14 @@ NmeaFormat::rd_position_init(const QString& fname)
     read_mode = rm_serial;
     gbser_set_speed(gbser_handle, 4800);
   } else {
-    gbFatal("Could not open '%s' for position tracking.\n", gbLogCStr(fname));
+    gbLogFatal("Could not open '{}' for position tracking.\n", gbLogCStr(fname));
   }
 
   gbser_flush(gbser_handle);
 
   if (opt_baud) {
     if (!gbser_set_speed(gbser_handle, opt_baud.get_result())) {
-      gbFatal("Unable to set baud rate %s\n", gbLogCStr(opt_baud));
+      gbLogFatal("Unable to set baud rate {}\n", gbLogCStr(opt_baud));
     }
   }
   posn_fname = fname;
@@ -1068,7 +1068,7 @@ int NmeaFormat::hunt_sirf()
 
   for (brp = br; *brp > 0; brp++) {
     if (global_opts.debug_level > 1) {
-      gbDebug("Trying %d\n", *brp);
+      gbLogDebug("Trying {}\n", *brp);
     }
 
     /*
@@ -1122,7 +1122,7 @@ NmeaFormat::rd_position(posn_status* /*unused*/)
     if (rv < 0) {
       if (am_sirf == 0) {
         if (global_opts.debug_level > 1) {
-          gbWarning("Attempting sirf mode.\n");
+          gbLogWarning("Attempting sirf mode.\n");
         }
         /* This is tacky, we have to change speed
          * to 9600bps to tell it to speak NMEA at
@@ -1134,7 +1134,7 @@ NmeaFormat::rd_position(posn_status* /*unused*/)
           continue;
         }
       }
-      gbFatal("No data received on %s.\n", gbLogCStr(posn_fname));
+      gbLogFatal("No data received on {}.\n", gbLogCStr(posn_fname));
     }
     nmea_parse_one_line(ibuf);
     if (lt != last_read_time) {
