@@ -771,6 +771,44 @@ patch -p0 <<"EOJ"
    } else {
      return 1;
    }
+--- before/jeeps/gpsusbstub.cc	2026-10-05 15:12:03.434043221 -0600
++++ jeeps/gpsusbstub.cc	2026-10-05 15:12:42.004460399 -0600
+@@ -21,6 +21,7 @@
+ 
+ 
+ #include "defs.h"
++#include "src/core/logging.h"
+ 
+ #if !HAVE_LIBUSB_1_0
+ 
+@@ -29,7 +30,7 @@
+ int
+ gusb_init(const char* portname, gpsdevh** dh)
+ {
+-  gbFatal(no_usb);
++  gbLogFatal(no_usb);
+   return 0;
+ }
+ 
+--- before/jeeps/gpsusbwin.cc	2026-10-05 15:12:03.434054833 -0600
++++ jeeps/gpsusbwin.cc	2026-10-05 15:14:06.452031078 -0600
+@@ -31,6 +31,7 @@
+ #include "jeeps/gps.h"
+ #include "jeeps/gpsapp.h"
+ #include "jeeps/gpsusbcommon.h"
++#include "src/core/logging.h"
+ 
+ /* Constants from Garmin doc. */
+ 
+@@ -162,7 +163,7 @@
+                           0, NULL, OPEN_EXISTING, 0, NULL);
+   if (usb_handle == INVALID_HANDLE_VALUE) {
+     if (GetLastError() == ERROR_ACCESS_DENIED) {
+-      gbWarning(
++      gbLogWarning(
+         "Exclusive access is denied.  It's likely that something else such as\n"
+         "Garmin Lifetime Updater, Communicator, Basecamp, Nroute, Spanner,\n"
+         "Google Earth, or GPSGate already has control of the device\n");
 EOJ
 patch -p0 <<"EOJ"
 --- src/core/matrix.cc	2026-10-05 14:03:56.950517886 -0600
