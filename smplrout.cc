@@ -67,6 +67,7 @@
 #include "smplrout.h"
 #include "grtcirc.h"            // for gcdist, linedist, radtometers, linepart
 #include "src/core/datetime.h"  // for DateTime
+#include "src/core/logging.h"
 
 
 #if FILTERS_ENABLED
@@ -159,7 +160,7 @@ void SimplifyRouteFilter::routesimple_head(const route_head* rte)
     if (metric == metric_t::relative) {
       // check hdop is available for compute_track_error
       if (wpt->hdop == 0) {
-        gbFatal("relative needs hdop information.\n");
+        gbLogFatal("relative needs hdop information.\n");
       }
     }
 
@@ -270,7 +271,7 @@ void SimplifyRouteFilter::init()
   } else if (countopt && !erroropt) {
     limit_basis = limit_basis_t::count;
   } else {
-    gbFatal("You must specify either count or error, but not both.\n");
+    gbLogFatal("You must specify either count or error, but not both.\n");
   }
 
   if (!lenopt && !relopt) {
@@ -280,7 +281,7 @@ void SimplifyRouteFilter::init()
   } else if (!xteopt && !lenopt && relopt) {
     metric = metric_t::relative;
   } else {
-    gbFatal("You may specify only one of crosstrack, length, or relative.\n");
+    gbLogFatal("You may specify only one of crosstrack, length, or relative.\n");
   }
 
   switch (limit_basis) {
@@ -292,7 +293,7 @@ void SimplifyRouteFilter::init()
       error = erroropt.get_result();
     } else {
       if (parse_distance(erroropt, &error, kMetersPerMile) == 0) {
-        gbFatal("No value specified with error option.\n");
+        gbLogFatal("No value specified with error option.\n");
       }
     }
   }

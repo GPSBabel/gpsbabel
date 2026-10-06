@@ -40,6 +40,7 @@
 #include "jeeps/garminusb.h"
 #include "jeeps/gpsserial.h"
 #include "jeeps/gpsusbint.h"
+#include "src/core/logging.h"
 
 time_t gps_save_time;
 double gps_save_lat;
@@ -357,7 +358,7 @@ static int32_t GPS_A000(const char* port)
         i = 0;
       }
     }
-    gbFatal("Failed to find a product inquiry response.\n");
+    gbLogFatal("Failed to find a product inquiry response.\n");
   }
 
 carry_on:

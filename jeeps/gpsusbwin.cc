@@ -31,6 +31,7 @@
 #include "jeeps/gps.h"
 #include "jeeps/gpsapp.h"
 #include "jeeps/gpsusbcommon.h"
+#include "src/core/logging.h"
 
 /* Constants from Garmin doc. */
 
@@ -80,7 +81,7 @@ gusb_win_get(garmin_usb_packet* ibuf, size_t sz)
     if (!DeviceIoControl(usb_handle, IOCTL_GARMIN_USB_INTERRUPT_IN, NULL, 0,
                          buf, GARMIN_USB_INTERRUPT_DATA_SIZE, &rxed, NULL)) {
       GPS_Serial_Error("Ioctl");
-      gbFatal("ioctl\n");
+      gbLogFatal("ioctl\n");
     }
     buf += rxed;
     sz  -= rxed;
@@ -117,7 +118,7 @@ gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
   WriteFile(usb_handle, obuf, sz, &rsz, NULL);
 
   if (rsz != sz) {
-    gbFatal("Error sending %zu bytes.  Successfully sent %ld\n", sz, rsz);
+    gbLogFatal("Error sending {} bytes.  Successfully sent {}\n", sz, rsz);
   }
 
   return rsz;
@@ -155,14 +156,14 @@ HANDLE garmin_usb_start(HDEVINFO hdevinfo, SP_DEVICE_INTERFACE_DATA* infodata)
            pdd->DevicePath);
 
   if (usb_handle != INVALID_HANDLE_VALUE) {
-    gbFatal("garmin_usb_start called while device already started.\n");
+    gbLogFatal("garmin_usb_start called while device already started.\n");
   }
 
   usb_handle = CreateFile(pdd->DevicePath, GENERIC_READ|GENERIC_WRITE,
                           0, NULL, OPEN_EXISTING, 0, NULL);
   if (usb_handle == INVALID_HANDLE_VALUE) {
     if (GetLastError() == ERROR_ACCESS_DENIED) {
-      gbWarning(
+      gbLogWarning(
         "Exclusive access is denied.  It's likely that something else such as\n"
         "Garmin Lifetime Updater, Communicator, Basecamp, Nroute, Spanner,\n"
         "Google Earth, or GPSGate already has control of the device\n");
@@ -174,7 +175,7 @@ HANDLE garmin_usb_start(HDEVINFO hdevinfo, SP_DEVICE_INTERFACE_DATA* infodata)
   if (!DeviceIoControl(usb_handle, IOCTL_GARMIN_USB_BULK_OUT_PACKET_SIZE,
                        NULL, 0, &usb_tx_packet_size, GARMIN_USB_INTERRUPT_DATA_SIZE,
                        &size, NULL)) {
-    gbFatal("Couldn't get USB packet size.\n");
+    gbLogFatal("Couldn't get USB packet size.\n");
   }
   win_llops.max_tx_size = usb_tx_packet_size;
 
@@ -215,7 +216,7 @@ gusb_init(const char* pname, gpsdevh** dh)
 
   if (hdevinfo == INVALID_HANDLE_VALUE) {
     GPS_Serial_Error("SetupDiGetClassDevs failed");
-    gbWarning("Is the Garmin USB driver installed?\n");
+    gbLogWarning("Is the Garmin USB driver installed?\n");
     return 0;
   }
 
@@ -226,7 +227,7 @@ gusb_init(const char* pname, gpsdevh** dh)
                                      &GARMIN_GUID,
                                      req_unit_number, &devinterface)) {
       GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
-      gbWarning("Is the Garmin USB unit number %d powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.\nAre the Garmin USB drivers installed and functioning with other programs?\nIs it a storage based device like Nuvi, CO, or OR?\n  If so, send GPX files to it, don't use this module.\n", un);
+      gbLogWarning("Is the Garmin USB unit number {} powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.\nAre the Garmin USB drivers installed and functioning with other programs?\nIs it a storage based device like Nuvi, CO, or OR?\n  If so, send GPX files to it, don't use this module.\n", un);
       return 0;
     }
     /* We've matched.  Now start the specific unit. */
@@ -247,7 +248,7 @@ gusb_init(const char* pname, gpsdevh** dh)
       } else {
 
         GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
-        gbWarning("Is the Garmin USB unit number %d powered up and connected?\n", un);
+        gbLogWarning("Is the Garmin USB unit number {} powered up and connected?\n", un);
         return 0;
       }
     }

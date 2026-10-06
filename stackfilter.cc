@@ -21,6 +21,7 @@
 
 #include "defs.h"
 #include "stackfilter.h"
+#include "src/core/logging.h"
 
 #if FILTERS_ENABLED
 
@@ -56,7 +57,7 @@ void StackFilter::process()
   } else if (opt_pop) {
     tmp_elt = stack;
     if (!tmp_elt) {
-      gbFatal("stack empty\n");
+      gbLogFatal("stack empty\n");
     }
     if (opt_append) {
       waypt_append(&(stack->waypts));
@@ -81,7 +82,7 @@ void StackFilter::process()
     tmp_elt = stack;
     while (swapdepth > 1) {
       if (!tmp_elt->next) {
-        gbFatal("swap with nonexistent element\n");
+        gbLogFatal("swap with nonexistent element\n");
       }
       tmp_elt = tmp_elt->next;
       swapdepth--;
@@ -129,7 +130,7 @@ void StackFilter::init()
   }
 
   if (invalid) {
-    gbFatal("invalid combination of options\n");
+    gbLogFatal("invalid combination of options\n");
   }
 
 }
@@ -144,8 +145,8 @@ void StackFilter::exit()
   stack_elt* tmp_elt = nullptr;
 
   if (warnings_enabled && stack) {
-    gbWarning("Warning: leftover stack entries; "
-            "check command line for mistakes\n");
+    gbLogWarning("Warning: leftover stack entries; "
+                 "check command line for mistakes\n");
   }
   while (stack) {
     stack->waypts.flush();

@@ -28,6 +28,7 @@
 #include <QtGlobal>            // for qPrintable
 
 #include "defs.h"              // for gbFatal, color_to_bbggrr
+#include "src/core/logging.h"
 
 /*
  * Colors derived from http://www.w3.org/TR/SVG/types.html#ColorKeywords
@@ -227,6 +228,6 @@ color_to_bbggrr(const QString& cname)
     return (entry.b << 16) + (entry.g << 8) + entry.r;
   }
 
-  gbFatal("unrecognized color name %s\n", gbLogCStr(cname));
+  gbLogFatal("unrecognized color name {}\n", gbLogCStr(cname));
   return -1;
 }

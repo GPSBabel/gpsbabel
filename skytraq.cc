@@ -65,17 +65,6 @@
 
 
 void
-SkytraqBase::dbg(int l, const char* msg, ...)
-{
-  if (global_opts.debug_level >= l) {
-    va_list ap;
-    va_start(ap, msg);
-    gbVLegacyLog(QtDebugMsg, msg, ap);
-    va_end(ap);
-  }
-}
-
-void
 SkytraqBase::rd_drain()
 {
   if (gbser_flush(serial_handle)) {
@@ -89,14 +78,14 @@ SkytraqBase::rd_char(int* errors)
   while (*errors > 0) {
     int c = gbser_readc_wait(serial_handle, TIMEOUT);
     if (c < 0) {
-      dbg(1, "rd_char(): Got error: %d\n", c);
+      dbg(1, "rd_char(): Got error: {}\n", c);
       (*errors)--;
     } else {
-      dbg(4, "rd_char(): Got char: %02x '%c'\n", c, isprint(c) ? c : '.');
+      dbg(4, "rd_char(): Got char: {:02x} '{}'\n", c, isprint(c) ? c : '.');
       return c;
     }
   }
-  gbFatal("Too many read errors on serial port\n");
+  gbLogFatal("Too many read errors on serial port\n");
   return -1;
 }
 
@@ -115,7 +104,7 @@ SkytraqBase::rd_buf(uint8_t* buf, int len)
   printf("len=%i  skytraq_baud=%i  timeout=%i\n", len, skytraq_baud, timeout);*/
   int rc = gbser_read_wait(serial_handle, (void*)buf, len, timeout);
   if (rc < 0) {
-    dbg(1, "rd_buf(): Read error (%d)\n", rc);
+    dbg(1, "rd_buf(): Read error ({})\n", rc);
     return res_ERROR;
   } else if (rc < len) {
     dbg(1, "rd_buf(): Read timeout\n");
@@ -135,7 +124,7 @@ SkytraqBase::rd_buf(uint8_t* buf, int len)
       }
       if ((i+1)%16 == 0) {
         dump[16*3] = ' ';	// gets overwritten with 0 by snprintf
-        dbg(4, "%s\n", dump);
+        dbg(4, "{}\n", dump);
       }
     }
   }
@@ -152,13 +141,13 @@ SkytraqBase::rd_word()
 
   c = rd_char(&errors);
   if (c < 0) {
-    dbg(1, "rd_word(): Got error: %d\n", c);
+    dbg(1, "rd_word(): Got error: {}\n", c);
     return -1;
   }
   buffer[0] = c;
   c = rd_char(&errors);
   if (c < 0) {
-    dbg(1, "rd_word(): Got error: %d\n", c);
+    dbg(1, "rd_word(): Got error: {}\n", c);
     return -1;
   }
   buffer[1] = c;
@@ -174,9 +163,9 @@ void
 SkytraqBase::wr_char(int c)
 {
   int rc;
-  dbg(4, "Sending: %02x '%c'\n", (unsigned)c, isprint(c) ? c : '.');
+  dbg(4, "Sending: {:02x} '{}'\n", (unsigned)c, isprint(c) ? c : '.');
   if (rc = gbser_writec(serial_handle, c), gbser_OK != rc) {
-    gbFatal("Write error (%d)\n", rc);
+    gbLogFatal("Write error ({})\n", rc);
   }
 }
 
@@ -228,7 +217,7 @@ SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len)
 
   if ((rcv_len = rd_word()) < (signed int)len) {
     if (rcv_len >= 0) {	/* negative values indicate receive errors */
-      dbg(1, "Received message too short (got %i bytes, expected %u)\n",
+      dbg(1, "Received message too short (got {} bytes, expected {})\n",
          rcv_len, len);
       return res_PROTOCOL_ERR;
     }
@@ -236,7 +225,7 @@ SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len)
   }
   /* at this point, we have rcv_len >= len >= 0 */
 
-  dbg(2, "Receiving message with %i bytes of payload (expected >=%u)\n", rcv_len, len);
+  dbg(2, "Receiving message with {} bytes of payload (expected >={})\n", rcv_len, len);
   rd_buf((uint8_t*) payload, len);
 
   unsigned int calc_cs = skytraq_calc_checksum((const unsigned char*) payload, len);
@@ -247,11 +236,11 @@ SkytraqBase::skytraq_rd_msg(void* payload, unsigned int len)
 
   unsigned int rcv_cs = rd_char(&errors);
   if (rcv_cs != calc_cs) {
-    gbFatal("Checksum error: got 0x%02x, expected 0x%02x\n", rcv_cs, calc_cs);
+    gbLogFatal("Checksum error: got 0x{:02x}, expected 0x{:02x}\n", rcv_cs, calc_cs);
   }
 
   if (rd_word() != 0x0D0A) {
-    gbFatal("Didn't get message end tag (CR/LF)\n");
+    gbLogFatal("Didn't get message end tag (CR/LF)\n");
   }
 
   return res_OK;
@@ -284,20 +273,20 @@ SkytraqBase::skytraq_expect_ack(uint8_t id)
     if (skytraq_rd_msg(ack_msg, sizeof(ack_msg)) == res_OK) {
       if (ack_msg[0] == 0x83) {
         if (ack_msg[1] == id) {
-          dbg(3, "Got ACK (id=0x%02x)\n", id);
+          dbg(3, "Got ACK (id=0x{:02x})\n", id);
           return res_OK;
         } else if (ack_msg[1] == 0) {
           /* some (all?) devices first send an ACK with id==0, skip that */
           continue;
         } else {
-          dbg(1, "Warning: Got unexpected ACK (id=0x%02x)\n", ack_msg[1]);
+          dbg(1, "Warning: Got unexpected ACK (id=0x{:02x})\n", ack_msg[1]);
           continue;
         }
       } else if (ack_msg[0] == 0x84) {
-        dbg(3, "Warning: Got NACK (id=0x%02x)\n", ack_msg[1]);
+        dbg(3, "Warning: Got NACK (id=0x{:02x})\n", ack_msg[1]);
         return res_NACK;
       } else {
-        dbg(3, "Warning: Got unexpected message (id=0x%02x), expected ACK (id=0x%02x)\n",
+        dbg(3, "Warning: Got unexpected message (id=0x{:02x}), expected ACK (id=0x{:02x})\n",
            ack_msg[0], id);
       }
     } else {
@@ -332,7 +321,7 @@ SkytraqBase::skytraq_wr_msg_verify(const uint8_t* payload, int len)
 {
   for (int i = 0; i < MSG_RETRIES; i++) {
     if (i > 0) {
-      dbg(1, "resending msg (id=0x%02x)...\n", payload[0]);
+      dbg(1, "resending msg (id=0x{:02x})...\n", payload[0]);
     }
     skytraq_wr_msg(payload, len);
     int rc = skytraq_expect_ack(payload[0]);
@@ -341,7 +330,7 @@ SkytraqBase::skytraq_wr_msg_verify(const uint8_t* payload, int len)
     }
     dbg(1, "Got neither ACK nor NACK, ");
   }
-  dbg(1, "aborting (msg id was 0x%02x).\n", payload[0]);
+  dbg(1, "aborting (msg id was 0x{:02x}).\n", payload[0]);
 
   return res_ERROR;
 }
@@ -365,7 +354,7 @@ SkytraqBase::skytraq_set_baud(int baud)
   uint8_t MSG_CONFIGURE_SERIAL_PORT[4]
     = { 0x05, 0x00, 0x00, 0x02 };
 
-  dbg(2, "Setting baud rate to %i\n", baud);
+  dbg(2, "Setting baud rate to {}\n", baud);
 
   switch (baud) {
   case 4800:
@@ -390,7 +379,7 @@ SkytraqBase::skytraq_set_baud(int baud)
     MSG_CONFIGURE_SERIAL_PORT[2] = 6;
     break;
   default:
-    gbFatal("Unsupported baud rate: %ibd\n", baud);
+    gbLogFatal("Unsupported baud rate: {}bd\n", baud);
   }
 
   int rc = skytraq_wr_msg_verify(MSG_CONFIGURE_SERIAL_PORT, sizeof(MSG_CONFIGURE_SERIAL_PORT));
@@ -399,7 +388,7 @@ SkytraqBase::skytraq_set_baud(int baud)
     return rc;
   }
 
-  dbg(3, "Now setting UART baud rate to %i\n", baud);
+  dbg(3, "Now setting UART baud rate to {}\n", baud);
   rd_drain();
   if (gbser_set_speed(serial_handle, baud) != gbser_OK) {
     dbg(2, "Warning: error setting uart baud rate\n");
@@ -435,7 +424,7 @@ SkytraqBase::skytraq_configure_logging()
   if (!opt_configure_logging.isEmpty()) {
     unsigned int nn = sscanf(opt_configure_logging.get().toUtf8(), "%u:%u:%u:%u", &tmin, &tmax, &dmin, &dmax);
     if (nn>3) {
-      dbg(0, "Reconfiguring logging to: tmin=%u, tmax=%u, dmin=%u, dmax=%u\n", tmin, tmax, dmin, dmax);
+      dbg(0, "Reconfiguring logging to: tmin={}, tmax={}, dmin={}, dmax={}\n", tmin, tmax, dmin, dmax);
       be_write32(MSG_LOG_CONFIGURE_CONTROL+5, tmin);
       be_write32(MSG_LOG_CONFIGURE_CONTROL+1, tmax);
       be_write32(MSG_LOG_CONFIGURE_CONTROL+13, dmin);
@@ -464,13 +453,13 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   unsigned int rc;
 
   if ((rc = skytraq_wr_msg_verify(&MSG_LOG_STATUS_CONTROL, 1)) != res_OK) {	/* get memory status */
-    dbg(1, "Error sending LOG STATUS CONTROL message (%d)\n", rc);
+    dbg(1, "Error sending LOG STATUS CONTROL message ({})\n", rc);
     return res_ERROR;
   }
 
   rc = skytraq_expect_msg(0x94, (uint8_t*)&MSG_LOG_STATUS_OUTPUT, sizeof(MSG_LOG_STATUS_OUTPUT));
   if (rc < sizeof(MSG_LOG_STATUS_OUTPUT)) {
-    dbg(1, "Didn't receive expected reply (%d)\n", rc);
+    dbg(1, "Didn't receive expected reply ({})\n", rc);
     return res_ERROR;
   }
 
@@ -487,7 +476,7 @@ SkytraqBase::skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* secto
   unsigned int vmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_speed);
   // log_bool = *(MSG_LOG_STATUS_OUTPUT.datalog_enable);
   // fifo_mode = *(MSG_LOG_STATUS_OUTPUT.log_fifo_mode);
-  dbg(1, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
+  dbg(1, "#logging: tmin={}, tmax={}, dmin={}, dmax={}, vmin={}, vmax={}\n", tmin, tmax, dmin, dmax, vmin, vmax);
 
   return res_OK;
 }
@@ -660,7 +649,7 @@ SkytraqBase::process_data_item(read_state* pst, const item_frame* pitem, int len
 
     spe = KPH_TO_MPS(be_read16(pitem->multi_hz.v_kmh));
 
-    dbg(4, "Got multi hz item: week=%i sec=%i lat=%i  lon=%i  alt=%i  speed=%f\n",
+    dbg(4, "Got multi hz item: week={} sec={} lat={}  lon={}  alt={}  speed={:.6f}\n",
        m.gps_week, m.gps_sec,
        m.lat, m.lon, m.alt,
        spe);
@@ -698,7 +687,7 @@ SkytraqBase::process_data_item(read_state* pst, const item_frame* pitem, int len
     pst->y = f.y;
     pst->z = f.z;
 
-    dbg(4, "Got %s item: week=%i  sec=%i  x=%i  y=%i  z=%i  speed=%i\n",
+    dbg(4, "Got {} item: week={}  sec={}  x={}  y={}  z={}  speed={}\n",
        poi ? "POI" : "full",
        f.gps_week, f.gps_sec,
        f.x, f.y, f.z,
@@ -726,7 +715,7 @@ SkytraqBase::process_data_item(read_state* pst, const item_frame* pitem, int len
     }
     c.dt = (pitem->comp.dt[0] << 8) | pitem->comp.dt[1];
 
-    dbg(4, "Got compact item: dt=%i  dx=%i  dy=%i  dz=%i  speed=%i uu=%i\n",
+    dbg(4, "Got compact item: dt={}  dx={}  dy={}  dz={}  speed={} uu={}\n",
        c.dt, c.dx, c.dy, c.dz,
        ITEM_SPEED(pitem), (pitem->comp.dpos[2] & 0x0F)>>2);
 
@@ -739,7 +728,7 @@ SkytraqBase::process_data_item(read_state* pst, const item_frame* pitem, int len
     break;
 
   default:
-    dbg(1, "Unknown item type encountered: 0x%02x\n", ITEM_TYPE(pitem));
+    dbg(1, "Unknown item type encountered: 0x{:02x}\n", ITEM_TYPE(pitem));
     return 0;
   }
 
@@ -774,7 +763,7 @@ SkytraqBase::process_data_sector(read_state* pst, const uint8_t* buf, int len)
   for (plen = 0; plen < len  &&  buf[plen] != 0xFF; plen += ilen) {
     ilen = process_data_item(pst, reinterpret_cast<const item_frame*>(&buf[plen]), len-plen);
     if (ilen <= 0) {
-      gbFatal("Error %i while processing data item #%i (starts at %i)\n",
+      gbLogFatal("Error {} while processing data item #{} (starts at {})\n",
             ilen, pst->tpn, plen);
     }
   }
@@ -795,10 +784,10 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf)
   uint8_t buffer[16];
 
   if (sector > 0xFF) {
-    gbFatal("Invalid sector number (%i)\n", sector);
+    gbLogFatal("Invalid sector number ({})\n", sector);
   }
 
-  dbg(2, "Reading sector #%i...\n", sector);
+  dbg(2, "Reading sector #{}...\n", sector);
 
   if (skytraq_wr_msg_verify((uint8_t*)&MSG_LOG_SECTOR_READ_CONTROL, sizeof(MSG_LOG_SECTOR_READ_CONTROL)) != res_OK) {
     dbg(1, "Didn't receive ACK\n");
@@ -849,7 +838,7 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf)
   }
 #endif
   i = i-j;
-  dbg(3, "Received %i bytes of log data\n", i);
+  dbg(3, "Received {} bytes of log data\n", i);
 
 //#define SINGLE_READ_WORKAROUND
 #ifdef SINGLE_READ_WORKAROUND
@@ -865,7 +854,7 @@ SkytraqBase::skytraq_read_single_sector(unsigned int sector, uint8_t* buf)
 
   cs = skytraq_calc_checksum(buf, i);
   if (cs != buf[i+sizeof(SECTOR_READ_END)]) {
-    dbg(1, "Checksum error while reading sector: got 0x%02x, expected 0x%02x\n",
+    dbg(1, "Checksum error while reading sector: got 0x{:02x}, expected 0x{:02x}\n",
        buf[i+sizeof(SECTOR_READ_END)], cs);
     return res_ERROR;
   }
@@ -884,15 +873,15 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
   unsigned int i;
 
   if (first_sector < 0  ||  first_sector > 0xFFFF) {
-    gbFatal("Invalid sector number (%i)\n", first_sector);
+    gbLogFatal("Invalid sector number ({})\n", first_sector);
   }
   be_write16(&MSG_LOG_READ_MULTI_SECTORS[1], first_sector);
   if (sector_count > 0xFFFF) {
-    gbFatal("Invalid sector count (%i)\n", sector_count);
+    gbLogFatal("Invalid sector count ({})\n", sector_count);
   }
   be_write16(&MSG_LOG_READ_MULTI_SECTORS[3], sector_count);
 
-  dbg(2, "Reading %i sectors beginning from #%i...\n", sector_count, first_sector);
+  dbg(2, "Reading {} sectors beginning from #{}...\n", sector_count, first_sector);
 
   unsigned int read_result = skytraq_wr_msg_verify((uint8_t*)&MSG_LOG_READ_MULTI_SECTORS, sizeof(MSG_LOG_READ_MULTI_SECTORS));
   if (read_result != res_OK) {
@@ -900,7 +889,7 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
   }
 
   for (i = 0; i < sector_count; i++) {
-    dbg(2, "Receiving data of sector #%i...\n", first_sector+i);
+    dbg(2, "Receiving data of sector #{}...\n", first_sector+i);
     rd_buf(buf+i*SECTOR_SIZE, SECTOR_SIZE);
   }
   rd_buf(buf+SECTOR_SIZE*sector_count, sizeof(SECTOR_READ_END)+6);
@@ -908,7 +897,7 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
   uint8_t* buf_end_tag = buf + SECTOR_SIZE*sector_count;
   for (i = 0; i < sizeof(SECTOR_READ_END); i++) {
     if (buf_end_tag[i] != SECTOR_READ_END[i]) {
-      dbg(1, "Wrong end tag: got 0x%02x ('%c'), expected 0x%02x ('%c')\n",
+      dbg(1, "Wrong end tag: got 0x{:02x} ('{}'), expected 0x{:02x} ('{}')\n",
          buf_end_tag[i], isprint(buf_end_tag[i]) ? buf_end_tag[i] : '.',
          SECTOR_READ_END[i], isprint(SECTOR_READ_END[i]) ? SECTOR_READ_END[i] : '.');
       return res_ERROR;
@@ -917,7 +906,7 @@ SkytraqBase::skytraq_read_multiple_sectors(int first_sector, unsigned int sector
 
   unsigned int cs = skytraq_calc_checksum(buf, SECTOR_SIZE*sector_count);
   if (cs != buf_end_tag[sizeof(SECTOR_READ_END)]) {
-    dbg(1, "Checksum error while reading sector: got 0x%02x, expected 0x%02x\n",
+    dbg(1, "Checksum error while reading sector: got 0x{:02x}, expected 0x{:02x}\n",
        buf_end_tag[sizeof(SECTOR_READ_END)], cs);
     return res_ERROR;
   }
@@ -948,14 +937,14 @@ SkytraqBase::skytraq_read_tracks()
   state_init(&st);
 
   if (skytraq_get_log_buffer_status(&log_wr_ptr, &sectors_free, &sectors_total) != res_OK) {
-    gbFatal("Can't get log buffer status\n");
+    gbLogFatal("Can't get log buffer status\n");
   }
 
-  dbg(1, "Device status: free sectors: %i / total sectors: %i / %i%% used / write ptr: %i\n",
+  dbg(1, "Device status: free sectors: {} / total sectors: {} / {}% used / write ptr: {}\n",
      sectors_free, sectors_total, 100 - sectors_free*100 / sectors_total, log_wr_ptr);
 
   if (opt_first_sector_val >= sectors_total) {
-    dbg(1, "Warning: sector# specified by option first-sector (%i) is beyond reported total sector count (%i)",
+    dbg(1, "Warning: sector# specified by option first-sector ({}) is beyond reported total sector count ({})",
        opt_first_sector_val, sectors_total);
   }
   /* Workaround: sectors_free is sometimes reported wrong. Tried to use log_wr_ptr as an
@@ -977,7 +966,7 @@ SkytraqBase::skytraq_read_tracks()
   } else {
     sectors_used = opt_last_sector_val;
     if (opt_last_sector_val >= sectors_total) {
-      dbg(1, "Warning: sector# specified by option last-sector (%i) is beyond reported total sector count (%i)",
+      dbg(1, "Warning: sector# specified by option last-sector ({}) is beyond reported total sector count ({})",
          opt_last_sector_val, sectors_total);
     }
   }
@@ -990,8 +979,8 @@ SkytraqBase::skytraq_read_tracks()
   }
 
   dbg(1, "Reading log data from device...\n");
-  dbg(1, "start=%d used=%d\n", opt_first_sector_val, sectors_used);
-  dbg(1, "opt_last_sector_val=%d\n", opt_last_sector_val);
+  dbg(1, "start={} used={}\n", opt_first_sector_val, sectors_used);
+  dbg(1, "opt_last_sector_val={}\n", opt_last_sector_val);
   for (int i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
     for (t = 0, got_sectors = 0; (t < SECTOR_RETRIES) && (got_sectors <= 0); t++) {
       if (opt_read_at_once.get_result() == 0  ||  multi_read_supported == 0) {
@@ -1026,7 +1015,7 @@ SkytraqBase::skytraq_read_tracks()
       }
     }
     if (got_sectors <= 0) {
-      gbFatal("Error reading sector %i\n", i);
+      gbLogFatal("Error reading sector {}\n", i);
     }
 
     total_sectors_read += got_sectors;
@@ -1040,7 +1029,7 @@ SkytraqBase::skytraq_read_tracks()
     }
 
     for (int s = 0; s < got_sectors; s++) {
-      dbg(4, "Decoding sector #%i...\n", i+s);
+      dbg(4, "Decoding sector #{}...\n", i+s);
       rc = process_data_sector(&st, buffer+s*SECTOR_SIZE, SECTOR_SIZE);
       if (rc == 0) {
         dbg(1, "Empty sector encountered: apparently only %i sectors are "
@@ -1055,7 +1044,7 @@ SkytraqBase::skytraq_read_tracks()
     }
   }
   free(buffer);
-  dbg(1, "Got %i trackpoints from %i sectors.\n", st.tpn, total_sectors_read);
+  dbg(1, "Got {} trackpoints from {} sectors.\n", st.tpn, total_sectors_read);
 
   if (dumpfile) {
     gbfclose(dumpfile);
@@ -1086,13 +1075,13 @@ SkytraqBase::skytraq_probe()
   }
 
   for (int i = 0; i < baud_rates_count; i++) {
-    dbg(1, "Probing SkyTraq Venus at %ibaud...\n", baud_rates[i]);
+    dbg(1, "Probing SkyTraq Venus at {}baud...\n", baud_rates[i]);
 
     rd_drain();
     if (int rc = gbser_set_speed(serial_handle, baud_rates[i]); rc != gbser_OK) {
-      dbg(1, "Set baud rate to %d failed (%d), retrying...\n", baud_rates[i], rc);
+      dbg(1, "Set baud rate to {} failed ({}), retrying...\n", baud_rates[i], rc);
       if (int rc = gbser_set_speed(serial_handle, baud_rates[i]); rc != gbser_OK) {
-        dbg(1, "Set baud rate to %d failed (%d)\n", baud_rates[i], rc);
+        dbg(1, "Set baud rate to {} failed ({})\n", baud_rates[i], rc);
         continue;
       }
     }
@@ -1102,11 +1091,11 @@ SkytraqBase::skytraq_probe()
     skytraq_wr_msg(MSG_QUERY_SOFTWARE_VERSION,	/* get firmware version */
                    sizeof(MSG_QUERY_SOFTWARE_VERSION));
     if (int rc = skytraq_expect_ack(0x02); rc != res_OK) {
-      dbg(2, "Didn't receive ACK (%d), retrying...\n", rc);
+      dbg(2, "Didn't receive ACK ({}), retrying...\n", rc);
       skytraq_wr_msg(MSG_QUERY_SOFTWARE_VERSION,	/* get firmware version */
                      sizeof(MSG_QUERY_SOFTWARE_VERSION));
       if (int rc = skytraq_expect_ack(0x02); rc != res_OK) {
-        dbg(2, "Didn't receive ACK (%d)\n", rc);
+        dbg(2, "Didn't receive ACK ({})\n", rc);
         continue;
       }
     }
@@ -1118,7 +1107,7 @@ SkytraqBase::skytraq_probe()
     		}*/
     if (int rc = skytraq_expect_msg(0x80, (uint8_t*)&MSG_SOFTWARE_VERSION, sizeof(MSG_SOFTWARE_VERSION));
         rc < (int)sizeof(MSG_SOFTWARE_VERSION)) {
-      dbg(2, "Didn't receive expected reply (%d)\n", rc);
+      dbg(2, "Didn't receive expected reply ({})\n", rc);
     } else {
       dbg(1, "Venus device found: Kernel version = %i.%i.%i, ODM version = %i.%i.%i, "\
          "revision (Y/M/D) = %02i/%02i/%02i\n",
@@ -1158,17 +1147,17 @@ SkytraqBase::skytraq_set_location()
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   uint8_t MSG_GET_LOCATION = 0x35;
 
-  dbg(3, "set_location='%s'\n", gbLogCStr(opt_set_location));
+  dbg(3, "set_location='{}'\n", gbLogCStr(opt_set_location));
 
   sscanf(opt_set_location.get().toUtf8(), "%lf:%lf", &lat, &lng);
   le_write_double(&MSG_SET_LOCATION[1], lat);
   le_write_double(&MSG_SET_LOCATION[9], lng);
   for (unsigned char i : MSG_SET_LOCATION) {
-    dbg(3, "%02x ", i);
+    dbg(3, "{:02x} ", i);
   }
   dbg(3, "\n");
   if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_LOCATION, sizeof(MSG_SET_LOCATION)) != res_OK) {
-    gbFatal("cannot set new location\n");
+    gbLogFatal("cannot set new location\n");
   }
   {
     char buf[32];
@@ -1185,10 +1174,10 @@ void
 SkytraqBase::skytraq_rd_init(const QString& fname)
 {
   if ((serial_handle = gbser_init(qPrintable(fname))) == nullptr) {
-    gbFatal("Can't open port '%s'\n", gbLogCStr(fname));
+    gbLogFatal("Can't open port '{}'\n", gbLogCStr(fname));
   }
   if ((skytraq_baud = skytraq_probe()) <= 0) {
-    gbFatal("Can't find skytraq device on '%s'\n", gbLogCStr(fname));
+    gbLogFatal("Can't find skytraq device on '{}'\n", gbLogCStr(fname));
   }
 }
 
@@ -1237,7 +1226,7 @@ SkytraqfileFormat::rd_init(const QString& fname)
 {
   dbg(1, "Opening file...\n");
   if ((file_handle = gbfopen(fname, "rb")) == nullptr) {
-    gbFatal("Can't open file '%s'\n", gbLogCStr(fname));
+    gbLogFatal("Can't open file '{}'\n", gbLogCStr(fname));
   }
 }
 
@@ -1261,14 +1250,14 @@ SkytraqfileFormat::read()
   auto* buffer = (uint8_t*) xmalloc(SECTOR_SIZE);
 
   if (opt_first_sector_val > 0) {
-    dbg(4, "Seeking to first-sector index %i\n", opt_first_sector_val*SECTOR_SIZE);
+    dbg(4, "Seeking to first-sector index {}\n", opt_first_sector_val*SECTOR_SIZE);
     gbfseek(file_handle, opt_first_sector_val*SECTOR_SIZE, SEEK_SET);
   }
 
   dbg(1, "Reading log data from file...\n");
   int sectors_read = 0;
   while ((got_bytes = gbfread(buffer, 1, SECTOR_SIZE, file_handle)) > 0) {
-    dbg(4, "Decoding sector #%i...\n", sectors_read++);
+    dbg(4, "Decoding sector #{}...\n", sectors_read++);
     int rc = process_data_sector(&st, buffer, got_bytes);
     if (opt_last_sector_val < 0) {
       if (rc < (4096-FULL_ITEM_LEN)) {
@@ -1276,12 +1265,12 @@ SkytraqfileFormat::read()
         break;
       }
     } else if (sectors_read-1 >= opt_last_sector_val) {
-      dbg(1, "desired last-sector #%i reached, terminating.\n", sectors_read-1);
+      dbg(1, "desired last-sector #{} reached, terminating.\n", sectors_read-1);
       break;
     }
   }
   xfree(buffer);
-  dbg(1, "Got %i trackpoints from %i sectors.\n", st.tpn, sectors_read);
+  dbg(1, "Got {} trackpoints from {} sectors.\n", st.tpn, sectors_read);
 }
 
 /**************************************************************************/
@@ -1336,7 +1325,7 @@ void MinihomerFormat::miniHomer_get_poi()
     MSG_GET_POI[1]=(poi>>8)&0xff;
     MSG_GET_POI[2]=(poi)&0xff;
     if (skytraq_wr_msg_verify((uint8_t*)&MSG_GET_POI, sizeof(MSG_GET_POI)) != res_OK) {
-      gbWarning("cannot read poi %d '%s'\n", poi, poinames[poi]);
+      gbLogWarning("cannot read poi {} '{}'\n", poi, poinames[poi]);
     }
     skytraq_rd_msg(buf, 25);
     double ecef_x = be_read_double(buf+1);
@@ -1345,7 +1334,7 @@ void MinihomerFormat::miniHomer_get_poi()
 
     // todo - how to determine not-set POIs ?
     if (ecef_x < 100.0 && ecef_y < 100.0 && ecef_z < 100.0) {
-      dbg(2, "skipped poi %u for X=%f, y=%f, Z=%f\n", poi, ecef_x, ecef_y, ecef_z);
+      dbg(2, "skipped poi {} for X={:.6f}, y={:.6f}, Z={:.6f}\n", poi, ecef_x, ecef_y, ecef_z);
     } else {
       ECEF_to_LLA(ecef_x, ecef_y, ecef_z, &lat, &lng, &alt);
 
@@ -1356,7 +1345,7 @@ void MinihomerFormat::miniHomer_get_poi()
       wpt->longitude      = lng;
       wpt->altitude       = alt;
       waypt_add(wpt);
-      dbg(1, "got POI[%s]='%f %f %f/%f %f %f'\n", poinames[poi], lat, lng, alt, ecef_x, ecef_y, ecef_z);
+      dbg(1, "got POI[{}]='{:.6f} {:.6f} {:.6f}/{:.6f} {:.6f} {:.6f}'\n", poinames[poi], lat, lng, alt, ecef_x, ecef_y, ecef_z);
     }
   }
 }
@@ -1395,9 +1384,9 @@ int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const QString& opt_poi)
      */
     int n = sscanf(opt_poi.toUtf8(), "%lf:%lf:%lf", &lat, &lng, &alt);
     if (n >= 2) {
-      dbg(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f\n", n, gbLogCStr(opt_poi), poinames[poinum], poinum, lat, lng, alt);
+      dbg(3, "found {} elems '{}':poi={}@{}, lat={:.6f}, lng={:.6f}, alt={:.6f}\n", n, gbLogCStr(opt_poi), poinames[poinum], poinum, lat, lng, alt);
       lla2ecef(lat, lng, alt, &ecef_x, &ecef_y, &ecef_z);
-      dbg(1, "set POI[%s]='%f %f %f/%f %f %f'\n", poinames[poinum], lat, lng, alt, ecef_x, ecef_y, ecef_z);
+      dbg(1, "set POI[{}]='{:.6f} {:.6f} {:.6f}/{:.6f} {:.6f} {:.6f}'\n", poinames[poinum], lat, lng, alt, ecef_x, ecef_y, ecef_z);
       be_write16(MSG_SET_POI+1, poinum);
       be_write_double(MSG_SET_POI+3, ecef_x);
       be_write_double(MSG_SET_POI+11, ecef_y);
@@ -1406,11 +1395,11 @@ int MinihomerFormat::miniHomer_set_poi(uint16_t poinum, const QString& opt_poi)
       if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_POI, sizeof(MSG_SET_POI)) == res_OK) {
         result=1;
       } else {
-        gbWarning("cannot set poi %d '%s'\n", poinum, poinames[poinum]);
+        gbLogWarning("cannot set poi {} '{}'\n", poinum, poinames[poinum]);
         result=-1;
       }
     } else {
-      gbWarning("argument to %s needs to be like <lat>:<lng>[:<alt>]\n", poinames[poinum]);
+      gbLogWarning("argument to {} needs to be like <lat>:<lng>[:<alt>]\n", poinames[poinum]);
       result=-1;
     }
   }
