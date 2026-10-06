@@ -44,6 +44,7 @@
 #include "garmin_fs.h"             // for garmin_fs_t
 #include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbsize_t, gbfile
 #include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+#include "src/core/logging.h"      // for Warning
 
 
 #define DEFAULT_ICON  "Waypoint"
@@ -69,7 +70,8 @@
  * that could drift out of sync with the switch below. */
 #define REQUIRE_WPT \
   if (wpt == nullptr) { \
-    gbWarning("%s: tag 0x%x appears outside a POI record; skipping.\n", caller, tag); \
+    Warning().nospace() << caller << ": tag 0x" << Qt::hex << tag \
+                        << Qt::dec << " appears outside a POI record; skipping."; \
     gbfseek(fin, pos + sz, SEEK_SET); \
     return 1; \
   }
