@@ -67,7 +67,7 @@ GarminXTFormat::format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_
   int32_t		 TrackMaxLon = 0;
   int32_t		 TrackMinLat = 0;
   int32_t		 TrackMinLon = 0;
-  char		trk_name[30]="";
+  char		trk_name[31]="";
   // TODO: SHIFT - can't test behaviour, do not have appropriate files
   //int		ii;
 
@@ -104,6 +104,7 @@ GarminXTFormat::format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_
   default: { // NORMAL
     spam = gbfgetc(fin);
     gbfread(&trk_name, 30, DATABLOCKSIZE, fin);
+    trk_name[30] = '\0';     /* the file's 30 bytes need not contain a NUL */
     gbfseek(fin, -1, SEEK_CUR);
   }
   break;
@@ -228,13 +229,16 @@ GarminXTFormat::format_garmin_xt_proc_strk()
   // Process all tracks one by one
   while ((TracksCompleted < NumberOfTracks) && (!gbfeof(fin))) {
     Waypoint*	wpt;
-    char* trk_name = (char*) xmalloc(30);
+    char* trk_name = (char*) xmalloc(31);
 
     // Generate Track Header
     uint16_t trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50; // Bytes in track
 
     auto* tmp_track = new route_head;
     // update track color
+    if (trk_color >= sizeof(colors) / sizeof(colors[0])) {
+      trk_color = 9;          /* out of range in the file; fall back to RED */
+    }
     tmp_track->line_color.bbggrr = colors[trk_color];
     tmp_track->line_color.opacity = 255;
     // update track name
@@ -287,7 +291,9 @@ GarminXTFormat::format_garmin_xt_proc_strk()
     if (Count > 12) {
       Count--;
     }
-    format_garmin_xt_decomp_last_ele(Count, &PrevEle, TrackBlock);
+    if (Count >= 2) {
+      format_garmin_xt_decomp_last_ele(Count, &PrevEle, TrackBlock);
+    }
 
     //create new waypoint
     wpt = new Waypoint;

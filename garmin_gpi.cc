@@ -44,6 +44,7 @@
 #include "garmin_fs.h"             // for garmin_fs_t
 #include "gbfile.h"                // for gbfputint32, gbfgetint32, gbfgetint16, gbfputint16, gbfgetc, gbfputc, gbfread, gbftell, gbfwrite, gbfseek, gbfclose, gbfopen_le, gbfgetuint16, gbsize_t, gbfile
 #include "jeeps/gpsmath.h"         // for GPS_Math_Deg_To_Semi, GPS_Math_Semi_To_Deg
+#include "src/core/logging.h"      // for Warning
 
 
 #define DEFAULT_ICON  "Waypoint"
@@ -60,6 +61,20 @@
 
 #define GPI_DBG global_opts.debug_level >= 3
 #define PP if (GPI_DBG) gbDebug("@%6x (%8d): ", gbftell(fin), gbftell(fin))
+
+/* read(), read_poi_list() and read_poi_group() pass a null waypoint into
+ * read_tag().  A handful of tag cases below write through wpt unconditionally;
+ * each of those cases starts with this guard so a file that places one of
+ * them outside a POI record gets rejected right there, at the point of use,
+ * instead of relying on a second, separately-maintained list of tag numbers
+ * that could drift out of sync with the switch below. */
+#define REQUIRE_WPT \
+  if (wpt == nullptr) { \
+    Warning().nospace() << caller << ": tag 0x" << Qt::hex << tag \
+                        << Qt::dec << " appears outside a POI record; skipping."; \
+    gbfseek(fin, pos + sz, SEEK_SET); \
+    return 1; \
+  }
 
 /*******************************************************************************
 * %%%                             gpi reader                               %%% *
@@ -351,7 +366,6 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
 int
 GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 {
-  Q_UNUSED(caller);
   int dist;
   double speed;
   short mask;
@@ -372,6 +386,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
   switch (tag) {
   case 0x3:  /* size = 12 */
   case 0x80003:  /* size = 12 */
+    REQUIRE_WPT;
 
     dist = gbfgetint16(fin);    /* proximity distance in meters */
     speed = (double)gbfgetint16(fin) / 100;  /* speed in meters per second */
@@ -411,10 +426,12 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     break;
 
   case 0xa:
+    REQUIRE_WPT;
     wpt->description = gpi_read_string("Description");
     break;
 
   case 0xe:  /* ? notes or description / or both ? */
+    REQUIRE_WPT;
     mask = gbfgetc(fin);
     // Olaf's code called this a mask, but the bits below have nothing
     // in common.  I'm wondering if that first byte is something else and
@@ -450,9 +467,11 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     break;
 
   case 0x8000b:  /* address (street/city...) */
+    REQUIRE_WPT;
     (void) gbfgetint32(fin);
     [[fallthrough]];
   case 0xb:  /* as seen in German POI files. */
+    REQUIRE_WPT;
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
     if (GPI_DBG) {
@@ -481,6 +500,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     break;
 
   case 0xc:
+    REQUIRE_WPT;
     mask = gbfgetint16(fin);
     if ((mask & 1) && !(str = gpi_read_string("Phone")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
@@ -504,6 +524,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     break;
 
   case 0x8000c:  /* phone-number */
+    REQUIRE_WPT;
     (void) gbfgetint32(fin);
     PP;
 
