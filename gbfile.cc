@@ -46,8 +46,6 @@
 #  define SET_BINARY_MODE(file)
 #endif
 
-#define NO_ZLIB "No zlib support.\n"
-
 /* About the ZLIB_INHIBITED stuff:
  *
  * If a user goes out of his way to build with ZLIB_INHIBITED set,
@@ -547,7 +545,7 @@ gbfopen(const QString& filename, const char* mode)
       /* force gzipped files on output */
       file->gzapi = 1;
 #else
-      gbFatal(NO_ZLIB);
+      gbFatal("No zlib support.\n");
 #endif
     }
 
