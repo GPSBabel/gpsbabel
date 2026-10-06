@@ -72,7 +72,7 @@ XmlGenericReader::xml_common_init(const QString& fname, const char* encoding,
   if (encoding != nullptr) {
     codec = QTextCodec::codecForName(encoding);
     if (codec == nullptr) {
-      gbLogFatal("codec \"{}\" is not available.\n", encoding);
+      gbFatal("codec \"%s\" is not available.\n", encoding);
     }
   } else {
     codec = QTextCodec::codecForName("UTF-8");
@@ -188,7 +188,7 @@ void XmlGenericReader::xml_read()
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    gbLogFatal("Read error: {} ({}, line {}, col {})\n",
+    gbFatal("Read error: %s (%s, line %lld, col %lld)\n",
           gbLogCStr(reader.errorString()),
           gbLogCStr(file.fileName()),
           reader.lineNumber(),
@@ -213,7 +213,7 @@ void XmlGenericReader::xml_readstring(const char* str)
 
   xml_run_parser(reader);
   if (reader.hasError())  {
-    gbLogFatal("Read error: {} ({}, line {}, col {})\n",
+    gbFatal("Read error: %s (%s, line %lld, col %lld)\n",
           gbLogCStr(reader.errorString()),
           "unknown",
           reader.lineNumber(),

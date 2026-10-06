@@ -66,7 +66,7 @@ xmalloc(size_t size)
   void* obj = malloc(size);
 
   if (!obj) {
-    gbLogFatal("gpsbabel: Unable to allocate {} bytes of memory.\n", size);
+    gbFatal("gpsbabel: Unable to allocate %zu bytes of memory.\n", size);
   }
 
   return obj;
@@ -78,7 +78,7 @@ xcalloc(size_t nmemb, size_t size)
   void* obj = calloc(nmemb, size);
 
   if (!obj) {
-    gbLogFatal("gpsbabel: Unable to allocate {} units of {} bytes of memory.\n", nmemb, size);
+    gbFatal("gpsbabel: Unable to allocate %zu units of %zu bytes of memory.\n", nmemb, size);
   }
 
   return obj;
@@ -96,7 +96,7 @@ xstrdup(const char* s)
   char* o = s ? strdup(s) : strdup("");
 
   if (!o) {
-    gbLogFatal("gpsbabel: Unable to allocate {} bytes of memory.\n", strlen(s));
+    gbFatal("gpsbabel: Unable to allocate %zu bytes of memory.\n", strlen(s));
   }
 
   return o;
@@ -108,7 +108,7 @@ xrealloc(void* p, size_t s)
   char* o = (char*) realloc(p, s);
 
   if (!o) {
-    gbLogFatal("gpsbabel: Unable to realloc {} bytes of memory.\n", s);
+    gbFatal("gpsbabel: Unable to realloc %zu bytes of memory.\n", s);
   }
 
   return o;
@@ -123,7 +123,7 @@ xfopen(const QString& fname, const char* type)
   bool am_writing = strchr(type, 'w') != nullptr;
 
   if (fname.isEmpty()) {
-    gbLogFatal("must have a filename specified for {}.\n",
+    gbFatal("must have a filename specified for %s.\n",
           am_writing ? "write" : "read");
   }
 
@@ -136,7 +136,7 @@ xfopen(const QString& fname, const char* type)
     // vs. the STD C library used for the actual file I/O. It's worth it
     // to get a better error message.
     QFileInfo info(fname);
-    gbLogFatal("cannot open '{}' for {}.  Error was '{}'.\n",
+    gbFatal("cannot open '%s' for %s.  Error was '%s'.\n",
           gbLogCStr(info.absoluteFilePath()),
           am_writing ? "write" : "read",
           strerror(errno));

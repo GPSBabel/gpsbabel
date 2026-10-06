@@ -254,7 +254,7 @@ FilterVecs::fltinfo_t FilterVecs::find_filter_vec(const QString& fltargstring)
 {
   QStringList options = fltargstring.split(',');
   if (options.isEmpty()) {
-    gbLogFatal("A filter name is required.\n");
+    gbFatal("A filter name is required.\n");
   }
   const QString fltname = options.takeFirst();
 
