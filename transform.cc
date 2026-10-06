@@ -26,7 +26,6 @@
 
 #include "defs.h"
 #include "transform.h"
-#include "src/core/logging.h"
 
 
 #if FILTERS_ENABLED
@@ -154,7 +153,7 @@ void TransformFilter::process()
         route_flush_all_tracks();
       }
     } else {
-      gbLogFatal("Invalid option value ({})!\n", gbLogCStr(opt_waypts));
+      gbFatal("Invalid option value (%s)!\n", gbLogCStr(opt_waypts));
     }
   }
   if (opt_routes) {
@@ -170,7 +169,7 @@ void TransformFilter::process()
         route_flush_all_tracks();
       }
     } else {
-      gbLogFatal("Invalid option value ({})!\n", gbLogCStr(opt_routes));
+      gbFatal("Invalid option value (%s)!\n", gbLogCStr(opt_routes));
     }
   }
   if (opt_tracks) {
@@ -186,7 +185,7 @@ void TransformFilter::process()
         route_flush_all_routes();
       }
     } else {
-      gbLogFatal("Invalid option value ({})!\n", gbLogCStr(opt_tracks));
+      gbFatal("Invalid option value (%s)!\n", gbLogCStr(opt_tracks));
     }
   }
 }

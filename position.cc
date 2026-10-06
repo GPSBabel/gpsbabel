@@ -30,7 +30,6 @@
 #include "defs.h"
 #include "grtcirc.h"            // for gcdist, radtometers
 #include "src/core/datetime.h"  // for DateTime
-#include "src/core/logging.h"
 
 #if FILTERS_ENABLED
 
@@ -114,7 +113,7 @@ void PositionFilter::init()
 
   if (distopt) {
     if (parse_distance(distopt, &pos_dist, kMetersPerFoot) == 0) {
-      gbLogFatal("No distance specified with distance option.\n");
+      gbFatal("No distance specified with distance option.\n");
     }
   }
 
