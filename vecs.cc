@@ -593,7 +593,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
   QString id = QStringLiteral("%1(%2)").arg(module, arg.argstring);
 
   if (arg.argval == nullptr) {
-    gbFatal("%s: Program error - No local variable defined for option.\n", gbLogCStr(id));
+    gbLogFatal("{}: Program error - No local variable defined for option.\n", gbLogCStr(id));
   }
 
   arg.argval->reset();
@@ -630,7 +630,7 @@ void Vecs::assign_option(const QString& module, arglist_t& arg, const QString& v
             rval = '1';
           }
         } else {
-          gbWarning("%s: Invalid logical value \"%s\".\n", gbLogCStr(id), gbLogCStr(val));
+          gbLogWarning("{}: Invalid logical value \"{}\".\n", gbLogCStr(id), gbLogCStr(val));
           rval = '0';
         }
       }
@@ -645,12 +645,12 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
   if (args) {
     for (const auto& arg : *args) {
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
-        gbDebug("options: module/option=value: %s/%s=\"%s\"",
+        gbLogDebug("options: module/option=value: {}/{}=\"{}\"",
                gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
         if (QString::compare(arg.defaultvalue, arg.argval->get(), Qt::CaseInsensitive) == 0) {
-          gbDebug(" (=default)");
+          gbLogDebug(" (=default)");
         }
-        gbDebug("\n");
+        gbLogDebug("\n");
       }
     }
   }
@@ -670,7 +670,7 @@ void Vecs::validate_options(const QStringList& options, const QVector<arglist_t>
       }
     }
     if (!valid) {
-      gbWarning("'%s' is an unknown option to %s.\n", gbLogCStr(option_name), gbLogCStr(name));
+      gbLogWarning("'{}' is an unknown option to {}.\n", gbLogCStr(option_name), gbLogCStr(name));
     }
   }
 }
@@ -723,7 +723,7 @@ Vecs::fmtinfo_t Vecs::find_vec(const QString& fmtargstring)
 {
   QStringList options = fmtargstring.split(',');
   if (options.isEmpty()) {
-    gbFatal("A format name is required.\n");
+    gbLogFatal("A format name is required.\n");
   }
   const QString fmtname = options.takeFirst();
 

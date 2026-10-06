@@ -80,7 +80,7 @@ void TextStream::open(const QString& fname, QIODevice::OpenMode mode, const char
     device_ = new gpsbabel::CodecDevice(fname, codec_name);
     bool status = device_->open(mode);
     if (!status) {
-      gbFatal("device not open %d\n", status);
+      gbLogFatal("device not open {}\n", status);
     }
     setDevice(device_);
     setEncoding(QStringConverter::Utf16);

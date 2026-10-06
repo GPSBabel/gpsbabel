@@ -22,6 +22,7 @@
 #include "jeeps/gps.h"
 #include "jeeps/garminusb.h"
 #include "jeeps/gpsusbcommon.h"
+#include "src/core/logging.h"
 
 /*
  * This receive logic is a little convoluted as we go to some efforts here
@@ -93,7 +94,7 @@ top:
     rv = gusb_llops->llop_get_bulk(ibuf, sz);
     break;
   default:
-    gbFatal("Unknown receiver state %d\n", receive_state);
+    gbLogFatal("Unknown receiver state {}\n", gpsbabel::to_underlying(receive_state));
   }
 
   pkt_id = le_read16(&ibuf->gusb_pkt.pkt_id);
@@ -236,7 +237,7 @@ gusb_id_unit(garmin_unit_info_t* gu)
       return;
     }
   }
-  gbFatal("Unable to sync with Garmin USB device in %d attempts.\n", i);
+  gbLogFatal("Unable to sync with Garmin USB device in {} attempts.\n", i);
 }
 
 void
@@ -272,5 +273,5 @@ gusb_syncup()
       return;
     }
   }
-  gbFatal("Unable to establish USB syncup\n");
+  gbLogFatal("Unable to establish USB syncup\n");
 }

@@ -415,14 +415,14 @@ UnicsvFormat::unicsv_fondle_header(QString header)
 
     if (it == fields_def.cend()) { // not found
       if (global_opts.debug_level) {
-        gbWarning("Unhandled column \"%s\".\n", gbLogCStr(value));
+        gbLogWarning("Unhandled column \"{}\".\n", gbLogCStr(value));
       }
     } else { // found
       const field_t& f = *it;
       unicsv_fields_tab.last() = f.type;
 
       if (global_opts.debug_level) {
-        gbWarning("Interpreting column \"%s\" as %s(%d).\n", gbLogCStr(value), gbLogCStr(f.name), f.type);
+        gbLogWarning("Interpreting column \"{}\" as {}({}).\n", gbLogCStr(value), gbLogCStr(f.name), gpsbabel::to_underlying(f.type));
       }
 
       /* handle some special items */
@@ -1013,19 +1013,19 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
         if (! GPS_Math_EN_To_UKOSNG_Map(
               bng_easting, bng_northing,
               &bnge, &bngn, bngz)) {
-          gbFatal("Unable to convert BNG coordinates (%.f %.f)!\n",
+          gbLogFatal("Unable to convert BNG coordinates ({:.0f} {:.0f})!\n",
                 bng_easting, bng_northing);
         }
         if (! GPS_Math_UKOSMap_To_WGS84_H(
               bngz, bnge, bngn,
               &wpt->latitude, &wpt->longitude))
-          gbFatal("Unable to convert BNG coordinates (%s %.f %.f)!\n",
+          gbLogFatal("Unable to convert BNG coordinates ({} {:.0f} {:.0f})!\n",
                 bngz, bnge, bngn);
       } else { // traditional zone easting northing
         if (! GPS_Math_UKOSMap_To_WGS84_H(
               CSTR(bng_zone), bng_easting, bng_northing,
               &wpt->latitude, &wpt->longitude))
-          gbFatal("Unable to convert BNG coordinates (%s %.f %.f)!\n",
+          gbLogFatal("Unable to convert BNG coordinates ({} {:.0f} {:.0f})!\n",
                 CSTR(bng_zone), bng_easting, bng_northing);
       }
       src_datum = kDatumWGS84;	/* don't convert afterwards */
@@ -1087,7 +1087,7 @@ UnicsvFormat::read()
 [[noreturn]] void UnicsvFormat::unicsv_fatal_outside(const Waypoint* wpt) const
 {
   *fout << "#####\n";
-  gbFatal("%s (%s) is outside of convertible area of grid \"%s\"!\n",
+  gbLogFatal("{} ({}) is outside of convertible area of grid \"{}\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : gbLogCStr(wpt->shortname),
         gbLogCStr(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
         gbLogCStr(gt_get_mps_grid_longname(unicsv_grid_idx)));
@@ -1693,7 +1693,7 @@ UnicsvFormat::wr_init(const QString& fname)
     if (int i = opt_grid.toInt(&ok); ok) {
       unicsv_grid_idx = (grid_type) i;
       if ((unicsv_grid_idx < GRID_INDEX_MIN) || (unicsv_grid_idx > GRID_INDEX_MAX))
-        gbFatal("Grid index out of range (%d..%d)!\n",
+        gbLogFatal("Grid index out of range ({}..{})!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
       unicsv_grid_idx = gt_lookup_grid_type(opt_grid);

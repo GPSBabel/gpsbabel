@@ -39,6 +39,7 @@
 #define FORMAT_H_INCLUDED_
 
 #include "defs.h"
+#include "src/core/logging.h"
 
 
 class Format
@@ -65,7 +66,7 @@ public:
 
   virtual void rd_init(const QString& /* fname */)
   {
-    gbFatal("Format does not support reading.\n");
+    gbLogFatal("Format does not support reading.\n");
 //	fin = gbfopen(fname, "r");
   }
 
@@ -110,7 +111,7 @@ public:
 
   virtual void wr_init(const QString& /* fname */)
   {
-    gbFatal("Format does not support writing.\n");
+    gbLogFatal("Format does not support writing.\n");
 //	fout = gbfopen(fname, "w");
   }
 
@@ -133,7 +134,7 @@ public:
 
   virtual void rd_position_init(const QString& /* fname */)
   {
-    gbFatal("Realtime tracking (-T) is not supported by this input type.\n");
+    gbLogFatal("Realtime tracking (-T) is not supported by this input type.\n");
   }
 
   virtual Waypoint* rd_position(posn_status* /* status */)
@@ -151,7 +152,7 @@ public:
 
   virtual void wr_position(Waypoint* /* wpt */)
   {
-    gbFatal("This output format does not support output of realtime positioning.\n");
+    gbLogFatal("This output format does not support output of realtime positioning.\n");
   }
 
   virtual void wr_position_deinit()

@@ -33,6 +33,7 @@
 
 #include "defs.h"
 #include "geocache.h"  // for Geocache
+#include "src/core/logging.h"
 
 
 const QByteArray MakeShort::vowels = "aeiouAEIOU";
@@ -70,7 +71,7 @@ void MakeShort::mkshort_add_to_list(QByteArray& name, bool is_utf8)
         name.append(suffix);
       }
     } else {
-      gbFatal("mkshort failure, the specified short length is insufficient.\n");
+      gbLogFatal("mkshort failure, the specified short length is insufficient.\n");
     }
   }
 
@@ -130,7 +131,7 @@ void MakeShort::replace_constants(QByteArray& s)
 void MakeShort::set_length(int l)
 {
   if (l < 0) {
-    gbFatal("mkshort: short length must be non-negative.\n");
+    gbLogFatal("mkshort: short length must be non-negative.\n");
   } else if (l == 0) {
     target_len_ = default_target_len;
   } else {
@@ -164,7 +165,7 @@ void MakeShort::set_repeating_whitespace_ok(bool ok)
 void MakeShort::set_defname(const char* s)
 {
   if (s == nullptr) {
-    gbFatal("set_defname called without a valid name.\n");
+    gbLogFatal("set_defname called without a valid name.\n");
   }
   defname_ = s;
 }
