@@ -107,69 +107,69 @@ private:
 
 [[noreturn]] inline void gbLogFatal(const char* message)
 {
-    qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
-    exit(1);
+  qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+  exit(1);
 }
 
 [[noreturn]] inline void gbLogFatal(const std::string& message)
 {
-    qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
-    exit(1);
+  qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+  exit(1);
 }
 
 template <typename... Args>
 [[noreturn]] void gbLogFatal(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
-    qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
-    exit(1);
+  qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+  exit(1);
 }
 
 inline void gbLogDebug(const char* message)
 {
-    qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+  qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
 }
 
 inline void gbLogDebug(const std::string& message)
 {
-    qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+  qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
 }
 
 template <typename... Args>
 void gbLogDebug(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
-    qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+  qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
 }
 
 inline void gbLogWarning(const char* message)
 {
-    qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+  qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
 }
 
 inline void gbLogWarning(const std::string& message)
 {
-    qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+  qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
 }
 
 template <typename... Args>
 void gbLogWarning(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
-    qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+  qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
 }
 
 inline void gbLogInfo(const char* message)
 {
-    qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+  qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
 }
 
 inline void gbLogInfo(const std::string& message)
 {
-    qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+  qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
 }
 
 template <typename... Args>
 void gbLogInfo(gpsbabel::format_string<Args...> fmt, Args&&... args)
 {
-    qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+  qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
 }
 
 #endif //  SRC_CORE_LOGGING_H_

@@ -657,17 +657,6 @@ patch <<"EOJ"
    }
  }
  
---- before/gbfile.cc	2026-10-05 13:07:27.513637089 -0600
-+++ after/gbfile.cc	2026-10-05 13:07:43.301591073 -0600
-@@ -547,7 +547,7 @@
-       /* force gzipped files on output */
-       file->gzapi = 1;
- #else
--      gbFatal(NO_ZLIB);
-+      gbLogFatal(NO_ZLIB);
- #endif
-     }
- 
 --- before/gbser_win.cc	2026-10-05 15:53:29.599743541 -0600
 +++ gbser_win.cc	2026-10-05 15:54:02.966020620 -0600
 @@ -22,6 +22,7 @@
