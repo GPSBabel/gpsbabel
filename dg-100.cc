@@ -118,16 +118,28 @@ Dg100Format::dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned ch
     return;
   }
 
-  gbLogDebug("{}", hdr);
+  gbDebug("%s", hdr);
 
   for (unsigned int i = 0; i < sz; i++)  {
-    gbLogDebug("{:02x} ", buf[i]);
+    gbDebug("%02x ", buf[i]);
   }
 
   if (include_nl) {
-    gbLogDebug("\n");
+    gbDebug("\n");
   }
 }
+
+void
+Dg100Format::dg100_log(const char* fmt, ...)
+{
+  if (global_opts.debug_level > 0) {
+    va_list ap;
+    va_start(ap, fmt);
+    gbVLegacyLog(QtDebugMsg, fmt, ap);
+    va_end(ap);
+  }
+}
+
 
 /* TODO: check whether negative lat/lon (West/South) are handled correctly */
 float
@@ -162,7 +174,7 @@ Dg100Format::process_gpsfile(uint8_t data[], route_head** track)
    * determines the format of all subsequent records in the file */
   int style = be_read32(data + 28);
   if (style > 2) {
-    gbLogWarning("unknown GPS record style {}\n", style);
+    gbWarning("unknown GPS record style %d\n", style);
     return;
   }
   int recsize = recordsizes[style];
@@ -281,10 +293,10 @@ Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len)
   if (isfile) {
     QScopedArrayPointer<uint8_t> buf(new uint8_t[framelen]);
     if (gbfread(buf.data(), 1, framelen, fin) != framelen) {
-      gbLogFatal("failed to get data to compare to sent data.\n");
+      gbFatal("failed to get data to compare to sent data.\n");
     }
     if (memcmp(frame, buf.data(), framelen) != 0) {
-      gbLogFatal("sent data does not match expected value.\n");
+      gbFatal("sent data does not match expected value.\n");
     }
 
     n = gbser_OK;
@@ -297,12 +309,12 @@ Dg100Format::dg100_send(uint8_t cmd, const void* payload, size_t param_len)
 
     dg100_debug(n == 0 ? "Sent: " : "Error Sending:",
                 1, framelen, frame);
-    dg100_log("TX: Frame Start {:02x} {:02x} Payload_Len {:04x} Cmd: {}\n",
+    dg100_log("TX: Frame Start %02x %02x Payload_Len %04x Cmd: %s\n",
               frame[0], frame[1], payload_len, cmdp->text);
   }
 
   if (n == gbser_ERROR) {
-    gbLogFatal("dg_100_send: write failed\n");
+    gbFatal("dg_100_send: write failed\n");
   }
   return (n);
 }
@@ -314,7 +326,7 @@ Dg100Format::dg100_recv_byte()
   if (isfile) {
     result = gbfgetc(fin);
     if (result < 0) {
-      gbLogFatal("dg100_recv_byte(): read error\n");
+      gbFatal("dg100_recv_byte(): read error\n");
     }
   } else {
     /* allow for a delay of 40s;
@@ -323,9 +335,9 @@ Dg100Format::dg100_recv_byte()
     result = gbser_readc_wait(serial_handle, 40000);
     switch (result) {
     case gbser_ERROR:
-      gbLogFatal("dg100_recv_byte(): error reading one byte\n");
+      gbFatal("dg100_recv_byte(): error reading one byte\n");
     case gbser_NOTHING:
-      gbLogFatal("dg100_recv_byte(): read timeout\n");
+      gbFatal("dg100_recv_byte(): read timeout\n");
     }
   }
   return result;
@@ -385,7 +397,7 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
   /* read Payload Length, Command ID, and two further bytes */
   int i = dg100_read_wait(serial_handle, &buf[2], 5, 1000);
   if (i < 5) {
-    gbLogFatal("Expected to read 5 bytes, but got {}\n", i);
+    gbFatal("Expected to read 5 bytes, but got %d\n", i);
   }
   dg100_debug("", 0, 5, &buf[2]);
 
@@ -406,7 +418,7 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
   if (!cmdinfo) {
     /* TODO: consume data until frame end signature,
      * then report failure to the caller? */
-    gbLogFatal("unknown answer ID {:02x}\n", cmd);
+    gbFatal("unknown answer ID %02x\n", cmd);
   }
 
   int param_len = cmdinfo->recvsize;
@@ -431,13 +443,13 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
   int frame_len = 2 + 2 + 1 + param_len + ((model->has_payload_end_seq) ? 2 : 0) + 2 + 2;
 
   if (frame_len > FRAME_MAXLEN) {
-    gbLogFatal("frame too large (frame_len={}, FRAME_MAXLEN={})\n",
+    gbFatal("frame too large (frame_len=%d, FRAME_MAXLEN=%d)\n",
           frame_len, FRAME_MAXLEN);
   }
 
   i = dg100_read_wait(serial_handle, &buf[7], frame_len - 7, 1000);
   if (i < frame_len - 7) {
-    gbLogFatal("Expected to read {} bytes, but got {}\n",
+    gbFatal("Expected to read %d bytes, but got %d\n",
           frame_len - 7, i);
   }
   dg100_debug("", 0, frame_len - 7, &buf[7]);
@@ -452,13 +464,13 @@ Dg100Format::dg100_recv_frame(const dg100_command** cmdinfo_result, uint8_t** pa
   (void) payload_end_seq;
   (void) frame_end_seq;
 
-  dg100_log("RX: Start {:04x} Len {:04x} Cmd: {}\n",
+  dg100_log("RX: Start %04x Len %04x Cmd: %s\n",
             frame_start_seq, payload_len_field, cmdinfo->text);
 
   /* calculate checksum */
   uint16_t sum = dg100_checksum(buf + 4, frame_len - 8);
   if (sum != payload_checksum) {
-    gbLogFatal("checksum mismatch: data sum is 0x{:04x}, checksum received is 0x{:04x}\n",
+    gbFatal("checksum mismatch: data sum is 0x%04x, checksum received is 0x%04x\n",
           sum, payload_checksum);
   }
 
@@ -484,7 +496,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 
   /* check whether the received frame matches the expected answer type */
   if (cmdinfo->id != expected_id) {
-    gbLogWarning("ERROR: answer type {:02x}, expecting {:02x}\n", cmdinfo->id, expected_id);
+    gbWarning("ERROR: answer type %02x, expecting %02x\n", cmdinfo->id, expected_id);
     return -1;
   }
 
@@ -493,7 +505,7 @@ Dg100Format::dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 
   /* check for buffer overflow */
   if (len < copysize) {
-    gbLogWarning("ERROR: buffer too small, size={}, need={}\n", len, copysize);
+    gbWarning("ERROR: buffer too small, size=%u, need=%u\n", len, copysize);
     return -1;
   }
 
@@ -542,7 +554,7 @@ Dg100Format::dg100_getfileheaders()
     /* process the answer */
     int16_t numheaders = be_read16(answer);
     nextheader = be_read16(answer + 2);
-    dg100_log("found {} headers, nextheader={}\n",
+    dg100_log("found %d headers, nextheader=%d\n",
               numheaders, nextheader);
     if (numheaders <= 0) {
       dg100_log("no further headers, aborting the loop\n");
@@ -558,7 +570,7 @@ Dg100Format::dg100_getfileheaders()
         int date   = be_read32(answer + offset + 4);
         QDateTime ti = bintime2utc(date, time);
         QByteArray datetime = ti.toLocalTime().toString(Qt::TextDate).toUtf8();
-        dg100_log("Header #{}: Seq: {} Time: {}\n",
+        dg100_log("Header #%d: Seq: %d Time: %s\n",
                   i, seqnum, datetime.constData());
       }
     }
@@ -617,7 +629,7 @@ Dg100Format::dg100_erase()
 
   dg100_request(dg100cmd_erase, request, answer, sizeof(answer));
   if (be_read32(answer) != 1) {
-    gbLogWarning("dg100_erase() FAILED\n");
+    gbWarning("dg100_erase() FAILED\n");
     return(-1);
   }
   return(0);
@@ -634,10 +646,10 @@ Dg100Format::common_rd_init(const QString& fname)
     fin = gbfopen(fname, "rb");
   } else {
     if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
-      gbLogFatal("Can't open port '{}'\n", gbLogCStr(fname));
+      gbFatal("Can't open port '%s'\n", gbLogCStr(fname));
     }
     if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
-      gbLogFatal("Can't configure port '{}'\n", gbLogCStr(fname));
+      gbFatal("Can't configure port '%s'\n", gbLogCStr(fname));
     }
     // Toss anything that came in before our speed was set, particularly
     // for the bluetooth BT-335 product.

@@ -37,7 +37,6 @@
 #include "jeeps/garminusb.h"
 #include "jeeps/gpsdevice.h"
 #include "jeeps/gpsusbcommon.h"
-#include "src/core/logging.h"
 
 #define GARMIN_VID 0x91e
 
@@ -91,11 +90,11 @@ gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
   int ret = libusb_bulk_transfer(udev, gusb_bulk_out_ep, buf, sz,
                                  &transferred, TMOUT_B);
   if (ret != LIBUSB_SUCCESS) {
-    gbLogFatal("libusb_bulk_transfer failed. '{}'\n",
+    gbFatal("libusb_bulk_transfer failed. '%s'\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
   if (transferred != (int) sz) {
-    gbLogWarning("Bad cmdsend transferred {} sz {}\n", transferred, sz);
+    gbWarning("Bad cmdsend transferred %d sz %zu\n", transferred, sz);
   }
 
   return transferred;
@@ -142,7 +141,7 @@ gusb_teardown(gpsdevh* dh, bool exit_lib)
   if (udev != nullptr) {
     int ret = libusb_release_interface(udev, 0);
     if (ret != LIBUSB_SUCCESS) {
-      gbLogWarning("libusb_release_interface failed: {}\n",
+      gbWarning("libusb_release_interface failed: %s\n",
               libusb_strerror(static_cast<enum libusb_error>(ret)));
     }
     libusb_close(udev);
@@ -239,7 +238,7 @@ gusb_reset_toggles()
       break;
     }
     if (t-- <= 0) {
-      gbLogFatal("Could not start session in a reasonable number of tries.\n");
+      gbFatal("Could not start session in a reasonable number of tries.\n");
     }
   }
 
@@ -267,7 +266,7 @@ gusb_reset_toggles()
       return rv;
     }
     if (t-- <= 0) {
-      gbLogFatal("Could not start session in a reasonable number of tries.\n");
+      gbFatal("Could not start session in a reasonable number of tries.\n");
     }
   }
   return 0;
@@ -284,7 +283,7 @@ garmin_usb_start(struct libusb_device* dev,
   }
   ret  = libusb_open(dev, &udev);
   if (ret != LIBUSB_SUCCESS) {
-    gbLogFatal("libusb_open failed: {}\n",
+    gbFatal("libusb_open failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
   assert(udev != nullptr);
@@ -298,7 +297,7 @@ garmin_usb_start(struct libusb_device* dev,
   // devices will work only the first time after a reset.
   ret = libusb_set_configuration(udev, 1);
   if (ret != LIBUSB_SUCCESS) {
-    gbLogFatal("libusb_set_configuration failed: {}\n",
+    gbFatal("libusb_set_configuration failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
 #endif
@@ -313,17 +312,17 @@ garmin_usb_start(struct libusb_device* dev,
      * kernel driver that bonds with the hardware.
      */
     usb_get_driver_np(udev, 0, drvnm, sizeof(drvnm)-1);
-    gbLogFatal("usb_set_configuration failed, probably because kernel driver '{}'\n is blocking our access to the USB device.\n"
-               "For more information see https://www.gpsbabel.org/os/Linux_Hotplug.html\n", drvnm);
+    gbFatal("usb_set_configuration failed, probably because kernel driver '%s'\n is blocking our access to the USB device.\n"
+          "For more information see https://www.gpsbabel.org/os/Linux_Hotplug.html\n", drvnm);
 #else
 
-    gbLogFatal("usb_set_configuration failed: {}\n", usb_strerror());
+    gbFatal("usb_set_configuration failed: %s\n", usb_strerror());
 #endif
   }
 #endif
   ret = libusb_claim_interface(udev, 0);
   if (ret != LIBUSB_SUCCESS) {
-    gbLogFatal("libusb_claim_interface failed: {}\n",
+    gbFatal("libusb_claim_interface failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
 
@@ -348,12 +347,12 @@ garmin_usb_start(struct libusb_device* dev,
   struct libusb_config_descriptor* config;
   ret = libusb_get_active_config_descriptor(dev, &config);
   if (ret != LIBUSB_SUCCESS) {
-    gbLogFatal("libusb_get_active_config_descriptor failed: {}\n",
+    gbFatal("libusb_get_active_config_descriptor failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
 
   if (config == nullptr) {
-    gbLogFatal("Found USB device with no configuration.\n");
+    gbFatal("Found USB device with no configuration.\n");
   }
 
   for (int i = 0; i < config->bNumInterfaces; ++i) {
@@ -422,9 +421,9 @@ garmin_usb_start(struct libusb_device* dev,
     return;
   }
 
-  gbLogFatal("Could not identify endpoints on USB device.\n"
-             "Found endpoints Intr In 0x{:x} Bulk Out 0x{:x} Bulk In %0xx\n",
-             gusb_intr_in_ep, gusb_bulk_out_ep, gusb_bulk_in_ep);
+  gbFatal("Could not identify endpoints on USB device.\n"
+        "Found endpoints Intr In 0x%x Bulk Out 0x%x Bulk In %0xx\n",
+        gusb_intr_in_ep, gusb_bulk_out_ep, gusb_bulk_in_ep);
 }
 
 static
@@ -447,7 +446,7 @@ int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
     struct libusb_device_descriptor desc;
     int ret = libusb_get_device_descriptor(devs[i], &desc);
     if (ret != LIBUSB_SUCCESS) {
-      gbLogFatal("libusb_get_device_descriptor failed: {}\n",
+      gbFatal("libusb_get_device_descriptor failed: %s\n",
             libusb_strerror(static_cast<enum libusb_error>(ret)));
     }
     if ((desc.idVendor == GARMIN_VID) &&
@@ -476,13 +475,13 @@ int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
   }
 
   if (0 == found_devices) {
-    gbLogFatal("Found no Garmin USB devices.\n");
+    gbFatal("Found no Garmin USB devices.\n");
   } else if (req_unit_number >= found_devices) {
-    gbLogFatal("usb unit number({}) too high.\n"
-               "The unit number must be either\n"
-               "1) nonnegative and less than the number of garmin devices found({}), or\n"
-               "2) negative to list the garmin devices found.\n",
-               req_unit_number, found_devices);
+    gbFatal("usb unit number(%d) too high.\n"
+          "The unit number must be either\n"
+          "1) nonnegative and less than the number of garmin devices found(%d), or\n"
+          "2) negative to list the garmin devices found.\n",
+          req_unit_number, found_devices);
   } else {
     return 1;
   }
@@ -502,7 +501,7 @@ gusb_init(const char* portname, gpsdevh** dh)
 //  libusb_set_option(nullptr, LIBUSB_OPTION_LOG_LEVEL, 99);
   int ret = libusb_init(nullptr);
   if (ret != LIBUSB_SUCCESS) {
-    gbLogFatal("libusb_init failed: {}\n",
+    gbFatal("libusb_init failed: %s\n",
           libusb_strerror(static_cast<enum libusb_error>(ret)));
   }
   libusb_successfully_initialized = true;

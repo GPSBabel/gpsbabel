@@ -429,7 +429,7 @@ OsmFormat::osm_node(const QString& /*unused*/, const QXmlStreamAttributes* attrv
     QString atstr = attrv->value("id").toString();
     wpt->description =  "osm-id " + atstr;
     if (waypoints.contains(atstr)) {
-      gbLogWarning("Duplicate osm-id {}!\n", gbLogCStr(atstr));
+      gbWarning("Duplicate osm-id %s!\n", gbLogCStr(atstr));
     } else {
       waypoints.insert(atstr, wpt);
       wpt->wpt_flags.fmt_use = 1;
@@ -526,7 +526,7 @@ OsmFormat::osm_way_nd(const QString& /*unused*/, const QXmlStreamAttributes* att
       auto* tmp = new Waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
-      gbLogWarning("Way reference id \"{}\" wasn't listed under nodes!\n", gbLogCStr(atstr));
+      gbWarning("Way reference id \"%s\" wasn't listed under nodes!\n", gbLogCStr(atstr));
     }
   }
 }

@@ -80,7 +80,7 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
     switch (it->unicode()) {
     case u'%':
       if (++it == end) {
-        gbLogFatal("No character after % in subrip format.\n");
+        gbFatal("No character after %% in subrip format.\n");
       }
 
       switch (it->unicode()) {
@@ -141,7 +141,7 @@ SubripFormat::subrip_prevwp_pr(const Waypoint* waypointp)
 
     case u'\\':
       if (++it == end) {
-        gbLogFatal("No character after \\ in subrip format.\n");
+        gbFatal("No character after \\ in subrip format.\n");
       }
 
       switch (it->unicode()) {

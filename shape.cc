@@ -145,21 +145,21 @@ ShapeFormat::DBFCreateGpsbabel(const QString& pszFilename)
 [[noreturn]] void ShapeFormat::dump_fields() const
 {
   char name[12];
-  gbLogWarning("Database fields:\n");
+  gbWarning("Database fields:\n");
   const int nFields = DBFGetFieldCount(ihandledb);
   for (int i = 0; i < nFields; i++) {
     DBFFieldType type = DBFGetFieldInfo(ihandledb, i, name, nullptr, nullptr);
-    gbLogWarning("Field Index: {:2}, Field Name: {:>12}, Field Type {}\n", i, name, gpsbabel::to_underlying(type));
+    gbWarning("Field Index: %2d, Field Name: %12s, Field Type %d\n", i, name, type);
   }
-  gbLogFatal("\n");
+  gbFatal("\n");
 }
 
 void ShapeFormat::check_field_index(const int fieldIdx) const
 {
   const int maxFields = DBFGetFieldCount(ihandledb);
   if (fieldIdx < 0 || fieldIdx >= maxFields) {
-    gbLogWarning("dbf file for {} doesn't have a field index number {}.\n", gbLogCStr(ifname), fieldIdx);
-    gbLogWarning("the minimum field number is 0 and the maximum field number is {}.\n",maxFields-1);
+    gbWarning("dbf file for %s doesn't have a field index number %d.\n", gbLogCStr(ifname), fieldIdx);
+    gbWarning("the minimum field number is 0 and the maximum field number is %d.\n",maxFields-1);
     dump_fields();
   }
 }
@@ -168,7 +168,7 @@ int ShapeFormat::get_field_index(const QString& fieldName) const
 {
   const int fieldIdx = DBFGetFieldIndex(ihandledb, CSTR(fieldName));
   if (fieldIdx < 0) {
-    gbLogWarning("dbf file for {} doesn't have a field named '{}'.\n", gbLogCStr(ifname), gbLogCStr(fieldName));
+    gbWarning("dbf file for %s doesn't have a field named '%s'.\n", gbLogCStr(ifname), gbLogCStr(fieldName));
     dump_fields();
   }
   return fieldIdx;
@@ -181,21 +181,21 @@ ShapeFormat::rd_init(const QString& fname)
   // TODO: The .prj file can define the the coordinate system and projection information.
   ihandle = SHPOpenGpsbabel(fname, "rb");
   if (ihandle == nullptr) {
-    gbLogFatal("Cannot open shp file {} for reading\n", gbLogCStr(ifname));
+    gbFatal("Cannot open shp file %s for reading\n", gbLogCStr(ifname));
   }
 
   ihandledb = DBFOpenGpsbabel(fname, "rb");
   if (ihandledb == nullptr) {
-    gbLogFatal("Cannot open dbf file {} for reading\n", gbLogCStr(ifname));
+    gbFatal("Cannot open dbf file %s for reading\n", gbLogCStr(ifname));
   }
   const char* codepage = DBFGetCodePage(ihandledb);
   if (codepage) {
     QString qcodepage(codepage);
     if (qcodepage.compare(u"UTF-8", Qt::CaseInsensitive)) {
-      gbLogWarning("dbf file {} is in code page {}, but we always process dbf files as UTF-8.\n",gbLogCStr(ifname),codepage);
+      gbWarning("dbf file %s is in code page %s, but we always process dbf files as UTF-8.\n",gbLogCStr(ifname),codepage);
     }
   } else {
-    gbLogWarning("dbf file {} uses unknown code page, assuming UTF-8.\n", gbLogCStr(ifname));
+    gbWarning("dbf file %s uses unknown code page, assuming UTF-8.\n", gbLogCStr(ifname));
   }
 }
 
@@ -363,7 +363,7 @@ ShapeFormat::read()
     default:
 
 err:
-      gbLogWarning("This file contains shapefile geometry type {} that does not naturally convert\nCustom programming is likely required.\n",
+      gbWarning("This file contains shapefile geometry type %s that does not naturally convert\nCustom programming is likely required.\n",
               etype);
       break;
     }
@@ -467,12 +467,12 @@ ShapeFormat::write()
     ohandle = SHPCreateGpsbabel(ofname, SHPT_POINT);
 
     if (ohandle == nullptr) {
-      gbLogFatal("Cannot open shp file {} for writing\n",
+      gbFatal("Cannot open shp file %s for writing\n",
             gbLogCStr(ofname));
     }
     ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
     if (ohandledb == nullptr) {
-      gbLogFatal("Cannot open dbf file {} for writing\n",
+      gbFatal("Cannot open dbf file %s for writing\n",
             gbLogCStr(ofname));
     }
     nameFieldIdx=DBFAddField(ohandledb,"name",FTString,100,0);
@@ -487,12 +487,12 @@ ShapeFormat::write()
     ohandle = SHPCreateGpsbabel(ofname, SHPT_ARC);
 
     if (ohandle == nullptr) {
-      gbLogFatal("Cannot open shp file {} for writing\n",
+      gbFatal("Cannot open shp file %s for writing\n",
             gbLogCStr(ofname));
     }
     ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
     if (ohandledb == nullptr) {
-      gbLogFatal("Cannot open dbf file {} for writing\n",
+      gbFatal("Cannot open dbf file %s for writing\n",
             gbLogCStr(ofname));
     }
     nameFieldIdx=DBFAddField(ohandledb,"name",FTString,100,0);
@@ -513,7 +513,7 @@ ShapeFormat::write()
     break;
   }
   case posndata:
-    gbLogFatal("Realtime positioning not supported\n");
+    gbFatal("Realtime positioning not supported\n");
     break;
   }
 }
