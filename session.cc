@@ -21,6 +21,7 @@
 
 #include "defs.h"
 #include "session.h"
+#include "src/core/logging.h"
 
 #include <QList>         // for QList
 
@@ -50,7 +51,7 @@ curr_session()
   if (!session_list.isEmpty()) {
     return &session_list.last();
   } else {
-    gbFatal("Attempt to fetch session outside of session range.\n");
+    gbLogFatal("Attempt to fetch session outside of session range.\n");
   }
 }
 
