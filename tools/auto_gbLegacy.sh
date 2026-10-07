@@ -794,7 +794,7 @@ echo "============== possible usages that weren't transformed =============="
 grep -n -E 'gb(Debug|Warning|Info|Fatal)'  "${sources[@]}" | grep -v FatalMsg\(\) | grep -v '#include'
 echo "============== renaming back to original names =============="
 # name them back
-#for file in "${sources[@]}"
-#do
-#  sed -E -i 's/gbLog(Debug|Fatal|Warning|Info)/gb\1/' "$file"
-#done
+for file in "${sources[@]}"
+do
+  sed -E -i 's/gbLog(Debug|Fatal|Warning|Info)/gb\1/' "$file"
+done
