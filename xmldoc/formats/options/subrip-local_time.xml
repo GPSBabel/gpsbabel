@@ -1,0 +1,5 @@
+<para>
+	When checked (or set to 1 on the command line) the <code>hour</code>,
+	<code>minute</code>, and <code>second</code> time variables available in 
+	<option>format</option> will represent local time instead of UTC.
+</para>

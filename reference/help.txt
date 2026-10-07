@@ -361,6 +361,10 @@ File Types (-i and -o options):
 	  gps_time              GPS time at position video_time (hhmmss[.sss], def
 	  gps_date              GPS date at position video_time (yyyymmdd, default
 	  format                Format for subtitles
+	  no_data               Substitution for no-data value
+	  speed_factor          Speed unit conversion factor
+	  altitude_factor       Altitude unit conversion factor
+	  local_time            (0/1) Hour, minute, second in subtitle is local time ins
 	openoffice            Tab delimited fields useful for OpenOffice
 	  snlen                 Max synthesized shortname length
 	  snwhite               (0/1) Allow whitespace synth. shortnames
