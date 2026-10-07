@@ -367,7 +367,7 @@ run(const char* prog_name)
       argument = FETCH_OPTARG;
       ivecs = Vecs::Instance().find_vec(argument);
       if (!ivecs) {
-        gbFatal("Input type '%s' not recognized\n", gbLogCStr(argument));
+        gbFatal("Input type '{}' not recognized\n", gbLogCStr(argument));
       }
       break;
     case 'o':
@@ -377,7 +377,7 @@ run(const char* prog_name)
       argument = FETCH_OPTARG;
       ovecs = Vecs::Instance().find_vec(argument);
       if (!ovecs) {
-        gbFatal("Output type '%s' not recognized\n", gbLogCStr(argument));
+        gbFatal("Output type '{}' not recognized\n", gbLogCStr(argument));
       }
       break;
     case 'f':
@@ -486,7 +486,7 @@ run(const char* prog_name)
                               .arg(filter.fltname, QString::number(timer.elapsed()/1000.0, 'f', 3));
         }
       }  else {
-        gbFatal("Unknown filter '%s'\n",gbLogCStr(argument));
+        gbFatal("Unknown filter '{}'\n",gbLogCStr(argument));
       }
       break;
     case 'D':
@@ -502,26 +502,26 @@ run(const char* prog_name)
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        gbInfo("GPSBabel Version: %s\n", gpsbabel::kVersion);
+        gbInfo("GPSBabel Version: {}\n", gpsbabel::kVersion);
         if(sizeof(gpsbabel::kVersionSHA) > 1) {
-          gbInfo("Repository SHA: %s\n", gpsbabel::kVersionSHA);
+          gbInfo("Repository SHA: {}\n", gpsbabel::kVersionSHA);
         }
         if(sizeof(gpsbabel::kVersionDate) > 1) {
           QDateTime date = QDateTime::fromString(gpsbabel::kVersionDate, Qt::ISODate);
           if (date.isValid()) {
-            gbInfo("Date: %s\n", gbLogCStr(date.toUTC().toString(Qt::ISODate)));
+            gbInfo("Date: {}\n", gbLogCStr(date.toUTC().toString(Qt::ISODate)));
           }
         }
-        gbInfo("Compiled with Qt %s for architecture %s\n",
+        gbInfo("Compiled with Qt {} for architecture {}\n",
                 QT_VERSION_STR,
                 gbLogCStr(QSysInfo::buildAbi()));
-        gbInfo("Running with Qt %s on %s, %s\n", qVersion(),
+        gbInfo("Running with Qt {} on {}, {}\n", qVersion(),
                 gbLogCStr(QSysInfo::prettyProductName()),
                 gbLogCStr(QSysInfo::currentCpuArchitecture()));
-        gbInfo("QLocale::system() is %s\n", gbLogCStr(QLocale::system().name()));
-        gbInfo("QLocale() is %s\n", gbLogCStr(QLocale().name()));
+        gbInfo("QLocale::system() is {}\n", gbLogCStr(QLocale::system().name()));
+        gbInfo("QLocale() is {}\n", gbLogCStr(QLocale().name()));
         QTextCodec* defaultcodec = QTextCodec::codecForLocale();
-        gbInfo("QTextCodec::codecForLocale() is %s, mib %d\n",
+        gbInfo("QTextCodec::codecForLocale() is {}, mib {}\n",
                 defaultcodec->name().constData(),defaultcodec->mibEnum());
       }
       break;
@@ -586,7 +586,7 @@ run(const char* prog_name)
       break;
 
     default:
-      gbFatal("Unknown option '%s'.\n", gbLogCStr(qargs.at(argn)));
+      gbFatal("Unknown option '{}'.\n", gbLogCStr(qargs.at(argn)));
       break;
     }
 
@@ -733,7 +733,7 @@ run(const char* prog_name)
 
 
   if (!did_something) {
-    gbFatal("Nothing to do!  Use '%s -h' for command-line options.\n", prog_name);
+    gbFatal("Nothing to do!  Use '{} -h' for command-line options.\n", prog_name);
   }
 
   return 0;
@@ -763,7 +763,7 @@ main(int argc, char* argv[])
   gpsbabel::Logging::setMessagePattern();
 
   if constexpr (DEBUG_LOCALE) {
-    gbDebug("Initial locale: %s\n",setlocale(LC_ALL, nullptr));
+    gbDebug("Initial locale: {}\n",setlocale(LC_ALL, nullptr));
   }
 
   // Create a QCoreApplication object to handle application initialization.
@@ -780,7 +780,7 @@ main(int argc, char* argv[])
   // as opposed to the initial default "C" locale.
   // This was demonstrated with Qt5 on Mac OS X.
   if constexpr (DEBUG_LOCALE) {
-    gbDebug("Locale after initial setup: %s\n",setlocale(LC_ALL, nullptr));
+    gbDebug("Locale after initial setup: {}\n",setlocale(LC_ALL, nullptr));
   }
   // As recommended in QCoreApplication reset the locale to the default.
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
@@ -792,7 +792,7 @@ main(int argc, char* argv[])
     }
     setlocale(LC_NUMERIC,"C");
     if constexpr (DEBUG_LOCALE) {
-      gbDebug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
+      gbDebug("LC_ALL: {}\n",setlocale(LC_ALL, nullptr));
     }
   }
   /* reset LC_TIME for strftime */
@@ -802,7 +802,7 @@ main(int argc, char* argv[])
     }
     setlocale(LC_TIME,"C");
     if constexpr (DEBUG_LOCALE) {
-      gbDebug("LC_ALL: %s\n",setlocale(LC_ALL, nullptr));
+      gbDebug("LC_ALL: {}\n",setlocale(LC_ALL, nullptr));
     }
   }
 

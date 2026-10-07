@@ -165,7 +165,7 @@ void GtmFormat::set_datum(int n)
   }
 
   if (indatum == -1) {
-    gbWarning("Unsupported datum (%d), won't convert to WGS84\n", n);
+    gbWarning("Unsupported datum ({}), won't convert to WGS84\n", n);
   }
 }
 
@@ -384,9 +384,9 @@ GtmFormat::read()
   //       the tracklogs, and the real tracks, with the tracklog styles.
   if (ts_count != real_track_list.size()) {
     gbWarning("The number of tracklog entries with the new flag "
-           "set doesn't match the number of tracklog style entries.\n"
-           "  This is unexpected and may indicate a malformed input file.\n"
-           "  As a result the track names may be incorrect.\n");
+                 "set doesn't match the number of tracklog style entries.\n"
+                 "  This is unexpected and may indicate a malformed input file.\n"
+                 "  As a result the track names may be incorrect.\n");
   }
   // Read the entire tracklog styles section whether we use it or not.
   for (i = 0; i != ts_count; i++) {

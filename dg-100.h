@@ -48,7 +48,7 @@
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
 #include "option.h"   // for OptionBool
-#include "src/core/logging.h"  // for gbLogDebug
+#include "src/core/logging.h"  // for gbDebug
 
 
 class Dg100Format : public Format
@@ -122,7 +122,7 @@ protected:
   static void dg100_log(gpsbabel::format_string<Args...> fmt, Args&&... args)
   {
     if (global_opts.debug_level > 0) {
-      gbLogDebug(gpsbabel::format(fmt, std::forward<Args>(args)...));
+      gbDebug(gpsbabel::format(fmt, std::forward<Args>(args)...));
     }
   }
   static float bin2deg(int val);

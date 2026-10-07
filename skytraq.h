@@ -42,7 +42,7 @@
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
 #include "option.h"   // for OptionString, OptionBool
-#include "src/core/logging.h"  // for gbLogDebug
+#include "src/core/logging.h"  // for gbDebug
 
 
 class SkytraqBase
@@ -123,7 +123,7 @@ protected:
   static void dbg(int l, gpsbabel::format_string<Args...> fmt, Args&&... args)
   {
     if (global_opts.debug_level > l) {
-      gbLogDebug(gpsbabel::format(fmt, std::forward<Args>(args)...));
+      gbDebug(gpsbabel::format(fmt, std::forward<Args>(args)...));
     }
   }
   void rd_drain();
