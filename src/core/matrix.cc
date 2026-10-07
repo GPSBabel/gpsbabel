@@ -25,7 +25,6 @@
 #include <QDebugStateSaver>  // for QDebugStateSaver
 
 #include "defs.h"            // For gbFatal
-#include "src/core/logging.h"
 
 Matrix::Matrix(int rows, int cols) : rows_(rows), cols_(cols), data_(rows * cols, 0.0) {}
 
@@ -59,7 +58,7 @@ Matrix Matrix::transpose() const {
 
 Matrix Matrix::inverse() const {
     if (rows_ != cols_) {
-        gbLogFatal("Matrix inverse is only defined for square matrices.");
+        gbFatal("Matrix inverse is only defined for square matrices.");
     }
 
     int n = rows_;
@@ -92,7 +91,7 @@ Matrix Matrix::inverse() const {
 
         double pivot = augmented_matrix(i, i);
         if (std::abs(pivot) < 1e-9) { // Check for singular matrix
-            gbLogFatal("Matrix is singular and cannot be inverted.");
+            gbFatal("Matrix is singular and cannot be inverted.");
         }
 
         // Divide row by pivot to make diagonal element 1
@@ -123,7 +122,7 @@ Matrix Matrix::inverse() const {
 
 Matrix Matrix::operator+(const Matrix& other) const {
     if (rows_ != other.rows_ || cols_ != other.cols_) {
-        gbLogFatal("Matrix dimensions must match for addition.");
+        gbFatal("Matrix dimensions must match for addition.");
     }
     Matrix result(rows_, cols_);
     for (size_t i = 0; i < data_.size(); ++i) {
@@ -134,7 +133,7 @@ Matrix Matrix::operator+(const Matrix& other) const {
 
 Matrix Matrix::operator-(const Matrix& other) const {
     if (rows_ != other.rows_ || cols_ != other.cols_) {
-        gbLogFatal("Matrix dimensions must match for subtraction.");
+        gbFatal("Matrix dimensions must match for subtraction.");
     }
     Matrix result(rows_, cols_);
     for (size_t i = 0; i < data_.size(); ++i) {
@@ -145,7 +144,7 @@ Matrix Matrix::operator-(const Matrix& other) const {
 
 Matrix Matrix::operator*(const Matrix& other) const {
     if (cols_ != other.rows_) {
-        gbLogFatal("Matrix dimensions are not compatible for multiplication.");
+        gbFatal("Matrix dimensions are not compatible for multiplication.");
     }
     Matrix result(rows_, other.cols_);
     for (int i = 0; i < rows_; ++i) {
@@ -168,7 +167,7 @@ Matrix Matrix::operator*(double scalar) const {
 
 Matrix& Matrix::operator+=(const Matrix& other) {
     if (rows_ != other.rows_ || cols_ != other.cols_) {
-        gbLogFatal("Matrix dimensions must match for addition.");
+        gbFatal("Matrix dimensions must match for addition.");
     }
     for (size_t i = 0; i < data_.size(); ++i) {
         data_[i] += other.data_[i];
@@ -178,7 +177,7 @@ Matrix& Matrix::operator+=(const Matrix& other) {
 
 Matrix& Matrix::operator-=(const Matrix& other) {
     if (rows_ != other.rows_ || cols_ != other.cols_) {
-        gbLogFatal("Matrix dimensions must match for subtraction.");
+        gbFatal("Matrix dimensions must match for subtraction.");
     }
     for (size_t i = 0; i < data_.size(); ++i) {
         data_[i] -= other.data_[i];

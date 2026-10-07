@@ -90,7 +90,7 @@ void GeoFormat::read()
 
   GeoReadLoc(reader);
   if (reader.hasError())  {
-    gbLogFatal("Read error: {} ({}, line {}, col {})\n",
+    gbFatal("Read error: %s (%s, line %ld, col %ld)\n",
           gbLogCStr(reader.errorString()),
           gbLogCStr(ifile.fileName()),
           (long) reader.lineNumber(),
