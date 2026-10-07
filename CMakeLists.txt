@@ -180,7 +180,6 @@ set(JEEPS
 # SUPPORT
 set(SUPPORT
   csv_util.cc
-  fatal.cc
   filter_vecs.cc
   formspec.cc
   garmin_fs.cc
