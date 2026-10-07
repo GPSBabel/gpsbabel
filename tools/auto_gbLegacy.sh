@@ -2,18 +2,8 @@
 
 # script to change gbDebug (printf like) usage to gbLogFatal (std::format)
 
-#gbDebug("parse of string '%s' on line number %d as double failed.\n");
-#gbDebug("parse of string '%s' on line number %d as time_t failed.\n",
-sources=( \
-*.cc \
-format.h \
-igc.h \
-jeeps/*.cc \
-src/core/textstream.cc \
-src/core/xmlstreamwriter.cc \
-src/core/matrix.cc \
-src/core/codecdevice.cc \
-)
+mapfile -d '' sources < <(find . ./src/core ./jeeps -maxdepth 1 \( -name "*.cc" -o -name "*.h" \) -print0)
+
 for file in "${sources[@]}"
 do
 # be careful, require ); or a \n", at end of line.
@@ -796,18 +786,15 @@ EOJ
 cp ./*.cc ./*.h after
 cp jeeps/*.cc jeeps/*.h after/jeeps
 cp src/core/*.cc src/core/*.h after/src/core
-echo "++++++++++ possible untranslatd print specifier ++++++++++"
-grep -n gbLogDebug "${sources[@]}" | grep % || true
-grep -n gbLogFatal "${sources[@]}" | grep % || true
-grep -n gbLogWarning "${sources[@]}" | grep % || true
-grep -n gbLogInfo "${sources[@]}" | grep % || true
-#echo "++++++++++ possible embedded newline, will not print identically ++++++++++"
-#grep -n gbLogDebug *.cc | grep '\\n' || true
-#grep -n gbLogFatal *.cc | grep '\\n' || true
-#grep -n gbLogWarning *.cc | grep '\\n' || true
-#grep -n gbLogInfo *.cc | grep '\\n' || true
-echo "++++++++++ possible missed conversions ++++++++++"
-grep -n gbDebug "${sources[@]}" | grep -v \#include || true
-grep -n gbFatal "${sources[@]}" | grep -v FatalMsg\(\) | grep -v \#include || true
-grep -n gbWarning "${sources[@]}" | grep -v \#include || true
-grep -n gbInfo "${sources[@]}" | grep -v \#include || true
+# did we miss any print specifier to place holder tranformations?
+echo "++++++++++ possible untranslated print specifier ++++++++++"
+grep -n -E 'gbLog(Debug|Warning|Info|Fatal)'  "${sources[@]}" | grep %
+# do we have any usages of the original names left?
+echo "============== possible usages that weren't transformed =============="
+grep -n -E 'gb(Debug|Warning|Info|Fatal)'  "${sources[@]}" | grep -v FatalMsg\(\) | grep -v '#include'
+echo "============== renaming back to original names =============="
+# name them back
+#for file in "${sources[@]}"
+#do
+#  sed -E -i 's/gbLog(Debug|Fatal|Warning|Info)/gb\1/' "$file"
+#done
