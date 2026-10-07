@@ -24,6 +24,15 @@
 #include <QDebug>            // for QDebug
 
 
+/* TextStream interface */
+[[noreturn]] void gbFatal(QDebug& msginstance)
+{
+  auto* myinstance = new FatalMsg;
+  myinstance->swap(msginstance);
+  delete myinstance;
+  exit(1);
+}
+
 QDebug& operator<< (QDebug& debug, const DebugIndent& indent)
 {
   for (int i = 1; i<indent.level_; i++) {

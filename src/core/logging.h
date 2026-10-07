@@ -63,6 +63,9 @@ public:
   explicit FatalMsg() : QDebug(QtCriticalMsg) {}
 };
 
+/* TextStream interface */
+[[noreturn]] void gbFatal(QDebug& msginstance);
+
 class DebugIndent
 {
 public:

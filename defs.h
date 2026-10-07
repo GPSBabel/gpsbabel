@@ -912,16 +912,6 @@ enum ff_cap {
 #define FF_CAP_RW_WPT \
 	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
 
-[[noreturn]] void gbFatal(QDebug& msginstance);
-// cppcheck 2.10.3 fails to assign noreturn attribute to gbFatal if
-// the noreturn attribute is listed before the gnu::format attribute.
-// A PR to resolve this is https://github.com/danmar/cppcheck/pull/4971,
-// but cppcheck works if the noreturn attribute follows the gnu::format
-// attribute.
-// This can have a large effect on codacy issues from cppcheck
-// nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
-// negativeIndex, arrayIndexOutOfBoundsCond.
-
 void printposn(double c, bool is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);
@@ -1045,15 +1035,11 @@ constexpr Qt::TimeSpec QtUTC = Qt::UTC;
 namespace gpsbabel {
   using std::format;
   using std::format_string;
-  using std::format_to;
-  using std::make_format_args;
 }
 #else
 namespace gpsbabel {
   using fmt::format;
   using fmt::format_string;
-  using fmt::format_to;
-  using fmt::make_format_args;
 }
 #endif
 
