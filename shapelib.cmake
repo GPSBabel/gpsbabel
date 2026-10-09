@@ -19,7 +19,7 @@ else()
     )
     # note gpsbabel has conditional code include "shapelib/shapefil.h",
     # so it doesn't actually rely on the include directory being PUBLIC/INTERFACE
-    target_include_directories(shp PUBLIC shape)
+    target_include_directories(shp PUBLIC shapelib)
     include(TestBigEndian)
     if(HAVE_BYTE_ORDER_BIG_ENDIAN)
       # Define SHP_BIG_ENDIAN if the system is big-endian
