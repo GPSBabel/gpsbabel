@@ -22,8 +22,22 @@
 // A wrapper for QDebug that provides a sensible Warning() and FatalMsg()
 // with convenient functions, stream operators and manipulators.
 
-#include <QDebug>            // for QDebug
-#include <QtGlobal>          // for QtCriticalMsg, QtWarningMsg
+#include <cstdlib>               // for exit
+#ifndef MOCK_FORMAT
+#include <format>                // for format, format_string
+#else
+#include <fmt/format.h>
+#endif
+#include <string>                // for basic_string, string
+#include <type_traits>           // for type_identity
+#include <utility>               // for forward
+
+#include <QDebug>                // for QDebug
+#include <QMessageLogger>        // for QtMsgType, qCritical, qInfo, qWarning
+#include <QString>               // for QString
+#include <QtGlobal>              // for qDebug
+
+#include "defs.h"                // for format
 
 
 class Warning : public QDebug
@@ -49,6 +63,9 @@ public:
   explicit FatalMsg() : QDebug(QtCriticalMsg) {}
 };
 
+/* TextStream interface */
+[[noreturn]] void gbFatal(QDebug& msginstance);
+
 class DebugIndent
 {
 public:
@@ -67,5 +84,95 @@ public:
   Debug() : QDebug(QtDebugMsg) {nospace().noquote();}
   explicit Debug(int level) : QDebug(QtDebugMsg) {nospace().noquote() << DebugIndent(level);}
 };
+
+namespace gpsbabel
+{
+
+class Logging
+{
+public:
+  static void setMessagePattern(const QString& id = QString());
+  static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg);
+  static QString flaggedLegacyMessage(const QString& msg);
+private:
+  static void LegacyLogMessageHandler(QtMsgType type, const QString& msg);
+  static QString legacyKey()
+  {
+    return QStringLiteral("λλµ");
+  }
+};
+
+} // namespace gpsbabel
+
+/* std::format_string interface.
+ * A newline is added by the MessageHandler.
+ */
+
+[[noreturn]] inline void gbFatal(const char* message)
+{
+  qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+  exit(1);
+}
+
+[[noreturn]] inline void gbFatal(const std::string& message)
+{
+  qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+  exit(1);
+}
+
+template <typename... Args>
+[[noreturn]] void gbFatal(gpsbabel::format_string<Args...> fmt, Args&&... args)
+{
+  qCritical().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+  exit(1);
+}
+
+inline void gbDebug(const char* message)
+{
+  qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+}
+
+inline void gbDebug(const std::string& message)
+{
+  qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+}
+
+template <typename... Args>
+void gbDebug(gpsbabel::format_string<Args...> fmt, Args&&... args)
+{
+  qDebug().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+}
+
+inline void gbWarning(const char* message)
+{
+  qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+}
+
+inline void gbWarning(const std::string& message)
+{
+  qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+}
+
+template <typename... Args>
+void gbWarning(gpsbabel::format_string<Args...> fmt, Args&&... args)
+{
+  qWarning().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+}
+
+inline void gbInfo(const char* message)
+{
+  qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(message);
+}
+
+inline void gbInfo(const std::string& message)
+{
+  qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(message));
+}
+
+template <typename... Args>
+void gbInfo(gpsbabel::format_string<Args...> fmt, Args&&... args)
+{
+  qInfo().noquote() << gpsbabel::Logging::flaggedLegacyMessage(QString::fromStdString(gpsbabel::format(fmt, std::forward<Args>(args)...)));
+}
 
 #endif //  SRC_CORE_LOGGING_H_

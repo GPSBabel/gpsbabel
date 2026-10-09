@@ -56,6 +56,12 @@
 
 #include <cstdio>    // for FILE
 #include <ctime>     // for time_t
+#ifndef MOCK_FORMAT
+#include <format>
+#else
+#include <fmt/format.h>
+#endif
+#include <utility>             // for forward
 
 #include <QList>     // for QList
 #include <QString>   // for QString
@@ -65,6 +71,8 @@
 #include "format.h"  // for Format
 #include "gbfile.h"  // for gbfile
 #include "option.h"  // for OptionBool, OptionString
+#include "src/core/logging.h"  // for gbDebug
+
 
 
 class MtkLoggerBase
@@ -271,7 +279,13 @@ protected:
 
   gbfile* cd{};
 
-  [[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...);
+  template <typename... Args>
+  static void dbg(int l, gpsbabel::format_string<Args...> fmt, Args&&... args)
+  {
+    if (global_opts.debug_level > l) {
+      gbDebug(gpsbabel::format(fmt, std::forward<Args>(args)...));
+    }
+  }
   static QString GetTempName(bool backup);
   int do_send_cmd(const char* cmd, int cmdLen);
   int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec);
