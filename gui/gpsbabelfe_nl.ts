@@ -378,7 +378,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="leafletmap.cc" line="118"/>
         <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fout bij het openen van bestand &quot;:/qtwebchannel/qwebchannel.js&quot;. Controleer de installatie</translation>
     </message>
     <message>
         <location filename="leafletmap.cc" line="162"/>
@@ -913,7 +913,7 @@ Dit programma kan niet doorgaan.</translation>
     <message>
         <location filename="map.cc" line="92"/>
         <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fout bij het openen van bestand &quot;:/qtwebchannel/qwebchannel.js&quot;. Controleer de installatie</translation>
     </message>
     <message>
         <location filename="map.cc" line="142"/>

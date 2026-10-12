@@ -458,7 +458,7 @@ Un numero più alto fornisce un livello di diagnosi più dettagliato.</translati
     <message>
         <location filename="leafletmap.cc" line="118"/>
         <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Errore nell&apos;apertura del file &quot;:/qtwebchannel/qwebchannel.js&quot;. Controlla l&apos;installazione</translation>
     </message>
     <message>
         <location filename="leafletmap.cc" line="162"/>
@@ -1030,7 +1030,7 @@ Questo programma non può proseguire.</translation>
     <message>
         <location filename="map.cc" line="92"/>
         <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Errore nell&apos;apertura del file &quot;:/qtwebchannel/qwebchannel.js&quot;. Controlla l&apos;installazione</translation>
     </message>
     <message>
         <location filename="map.cc" line="142"/>

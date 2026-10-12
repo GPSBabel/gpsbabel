@@ -428,7 +428,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="leafletmap.cc" line="118"/>
         <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fehler beim Öffnen der Datei &quot;:/qtwebchannel/qwebchannel.js&quot;. Überprüfen Sie die Installation</translation>
     </message>
     <message>
         <location filename="leafletmap.cc" line="162"/>
@@ -1051,7 +1051,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="map.cc" line="92"/>
         <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fehler beim Öffnen der Datei &quot;:/qtwebchannel/qwebchannel.js&quot;. Überprüfen Sie die Installation</translation>
     </message>
     <message>
         <location filename="map.cc" line="142"/>
