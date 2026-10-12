@@ -178,27 +178,27 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cc" line="47"/>
+        <location filename="filterdlg.cc" line="49"/>
         <source>Tracks</source>
         <translation type="unfinished">Traços</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="50"/>
+        <location filename="filterdlg.cc" line="52"/>
         <source>Waypoints</source>
         <translation type="unfinished">Pontos de Caminho</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="53"/>
+        <location filename="filterdlg.cc" line="55"/>
         <source>Routes &amp; Tracks</source>
         <translation type="unfinished">Rotas &amp; Trilhas</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="56"/>
+        <location filename="filterdlg.cc" line="58"/>
         <source>Miscellaneous</source>
         <translation type="unfinished">Diversos</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="111"/>
+        <location filename="filterdlg.cc" line="113"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation type="unfinished">Tem certeza de que deseja redefinir todas as opções de filtro para os valores padrão?</translation>
     </message>
@@ -376,17 +376,22 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>LeafletMap</name>
     <message>
-        <location filename="leafletmap.cc" line="142"/>
+        <location filename="leafletmap.cc" line="118"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="162"/>
         <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Erro ao abrir o arquivo &quot;leafletbase.html&quot;. Verifique a instalação</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="146"/>
+        <location filename="leafletmap.cc" line="165"/>
         <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Arquivo &quot;leafletbase.html&quot; ausente. Verifique a instalação</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="164"/>
+        <location filename="leafletmap.cc" line="183"/>
         <source>Failed to load Leaflet maps base page</source>
         <translation type="unfinished">Falha ao carregar a página base dos mapas Leaflet</translation>
     </message>
@@ -471,61 +476,61 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">Rotas</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="533"/>
+        <location filename="leafletdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished">Mostrar Todos os Waypoints</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="534"/>
+        <location filename="leafletdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished">Esconder Todos os Waypoints</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="535"/>
-        <location filename="leafletdlg.cc" line="542"/>
-        <location filename="leafletdlg.cc" line="549"/>
+        <location filename="leafletdlg.cc" line="543"/>
+        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="557"/>
         <source>Expand All</source>
         <translation type="unfinished">Expandir Todos</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="536"/>
-        <location filename="leafletdlg.cc" line="543"/>
-        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="544"/>
+        <location filename="leafletdlg.cc" line="551"/>
+        <location filename="leafletdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation type="unfinished">Colapsar Todos</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="540"/>
+        <location filename="leafletdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation type="unfinished">Mostrar Todas as Rotas</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="541"/>
+        <location filename="leafletdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation type="unfinished">Esconder Todas as Rotas</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="547"/>
+        <location filename="leafletdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation type="unfinished">Mostrar Todas as Faixas</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="548"/>
+        <location filename="leafletdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished">Esconder Todas as Faixas</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="556"/>
+        <location filename="leafletdlg.cc" line="564"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished">Mostrar Apenas Este Ponto de Caminho</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="558"/>
+        <location filename="leafletdlg.cc" line="566"/>
         <source>Show Only This Track</source>
         <translation type="unfinished">Mostrar Apenas Esta Faixa</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="560"/>
+        <location filename="leafletdlg.cc" line="568"/>
         <source>Show Only This Route</source>
         <translation type="unfinished">Mostrar Apenas Esta Rota</translation>
     </message>
@@ -762,17 +767,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">Faça uma Doação...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="532"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation type="unfinished">Selecione um ou mais arquivos de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation type="unfinished">Nome do Arquivo de Saída</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="624"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -781,7 +786,7 @@ This program cannot continue.</source>
 Este programa não pode continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="635"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -790,115 +795,115 @@ This program cannot continue.</source>
 Este programa não pode continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished">Os formatos de entrada e saída não suportam %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">O formato de entrada não suporta %1; o formato de saída suporta %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">O formato de entrada suporta %1; o formato de saída não suporta %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished">Ambos os formatos de entrada e saída suportam %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="686"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation type="unfinished">waypoints</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation type="unfinished">tracks</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="688"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation type="unfinished">routes</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished">Não há opções de entrada para o formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="789"/>
-        <location filename="mainwindow.cc" line="808"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation type="unfinished">Opções para %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished">Não há opções de saída para o formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished">Nenhuma tradução válida de waypoints/rotas/trilhas especificada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation type="unfinished">Nenhum arquivo de entrada especificado</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation type="unfinished">Nenhuma saída válida especificada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation type="unfinished">Nenhum arquivo de saída especificado</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="974"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">Falha ao abrir arquivo temporário &quot;%1&quot; para visualização do mapa. O erro foi: &quot;%2&quot;. A visualização do mapa não será exibida.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="991"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation type="unfinished">Tradução bem-sucedida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1003"/>
+        <location filename="mainwindow.cc" line="1006"/>
         <source>Error preparing map: %1
 </source>
         <translation type="unfinished">Erro ao preparar o mapa: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1038"/>
+        <location filename="mainwindow.cc" line="1049"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished">Erro ao executar gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1163"/>
+        <location filename="mainwindow.cc" line="1174"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished">Tem certeza de que deseja redefinir todas as opções de formato para os valores padrão?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1193"/>
+        <location filename="mainwindow.cc" line="1204"/>
         <source>About %1</source>
         <translation type="unfinished">Sobre %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1241"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished">Um ou mais filtros de dados estão ativos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1243"/>
+        <location filename="mainwindow.cc" line="1254"/>
         <source>No data filters are active</source>
         <translation type="unfinished">Nenhum filtro de dados está ativo</translation>
     </message>
@@ -906,17 +911,22 @@ Este programa não pode continuar.</translation>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="122"/>
+        <location filename="map.cc" line="92"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="142"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Erro ao abrir o arquivo &quot;gmapbase.html&quot;. Verifique a instalação</translation>
     </message>
     <message>
-        <location filename="map.cc" line="126"/>
+        <location filename="map.cc" line="145"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Arquivo &quot;gmapbase.html&quot; ausente. Verifique a instalação</translation>
     </message>
     <message>
-        <location filename="map.cc" line="181"/>
+        <location filename="map.cc" line="200"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished">Falha ao carregar a página base do Google Maps</translation>
     </message>
@@ -974,28 +984,28 @@ Alguns formatos de dados GPS suportam apenas um subconjunto de waypoints, tracks
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="297"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="286"/>
         <source>Routes</source>
         <translation type="unfinished">Rotas</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="297"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="286"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Tracks</source>
         <translation type="unfinished">Tracks</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Waypoints</source>
         <translation type="unfinished">Waypoints</translation>
     </message>

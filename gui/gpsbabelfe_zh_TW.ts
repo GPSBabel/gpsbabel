@@ -178,27 +178,27 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cc" line="47"/>
+        <location filename="filterdlg.cc" line="49"/>
         <source>Tracks</source>
         <translation type="unfinished">轨道</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="50"/>
+        <location filename="filterdlg.cc" line="52"/>
         <source>Waypoints</source>
         <translation type="unfinished">航点</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="53"/>
+        <location filename="filterdlg.cc" line="55"/>
         <source>Routes &amp; Tracks</source>
         <translation type="unfinished">路线与轨道</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="56"/>
+        <location filename="filterdlg.cc" line="58"/>
         <source>Miscellaneous</source>
         <translation type="unfinished">杂项</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="111"/>
+        <location filename="filterdlg.cc" line="113"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation type="unfinished">您确定要将所有过滤器选项重置为默认值吗？</translation>
     </message>
@@ -376,17 +376,22 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>LeafletMap</name>
     <message>
-        <location filename="leafletmap.cc" line="142"/>
+        <location filename="leafletmap.cc" line="118"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="162"/>
         <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">打开“leafletbase.html”文件时出错。请检查安装</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="146"/>
+        <location filename="leafletmap.cc" line="165"/>
         <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">缺少“leafletbase.html”文件。请检查安装</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="164"/>
+        <location filename="leafletmap.cc" line="183"/>
         <source>Failed to load Leaflet maps base page</source>
         <translation type="unfinished">无法加载 Leaflet 地图基础页面</translation>
     </message>
@@ -471,61 +476,61 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">路线</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="533"/>
+        <location filename="leafletdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished">显示所有航点</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="534"/>
+        <location filename="leafletdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished">隐藏所有航点</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="535"/>
-        <location filename="leafletdlg.cc" line="542"/>
-        <location filename="leafletdlg.cc" line="549"/>
+        <location filename="leafletdlg.cc" line="543"/>
+        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="557"/>
         <source>Expand All</source>
         <translation type="unfinished">展开全部</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="536"/>
-        <location filename="leafletdlg.cc" line="543"/>
-        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="544"/>
+        <location filename="leafletdlg.cc" line="551"/>
+        <location filename="leafletdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation type="unfinished">折叠全部</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="540"/>
+        <location filename="leafletdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation type="unfinished">显示所有路线</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="541"/>
+        <location filename="leafletdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation type="unfinished">隐藏所有路线</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="547"/>
+        <location filename="leafletdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation type="unfinished">显示所有轨迹</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="548"/>
+        <location filename="leafletdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished">隐藏所有轨迹</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="556"/>
+        <location filename="leafletdlg.cc" line="564"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished">仅显示此航点</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="558"/>
+        <location filename="leafletdlg.cc" line="566"/>
         <source>Show Only This Track</source>
         <translation type="unfinished">仅显示此轨迹</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="560"/>
+        <location filename="leafletdlg.cc" line="568"/>
         <source>Show Only This Route</source>
         <translation type="unfinished">仅显示此路线</translation>
     </message>
@@ -762,17 +767,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">捐赠...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="532"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation type="unfinished">选择一个或多个输入文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation type="unfinished">输出文件名</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="624"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -781,7 +786,7 @@ This program cannot continue.</source>
 此程序无法继续。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="635"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -790,115 +795,115 @@ This program cannot continue.</source>
 此程序无法继续。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished">输入和输出格式均不支持%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">输入格式不支持%1；输出格式支持%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">输入格式支持%1；输出格式不支持%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished">输入和输出格式均支持%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="686"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation type="unfinished">航点</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation type="unfinished">轨迹</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="688"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation type="unfinished">路线</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished">格式“%1”没有输入选项</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="789"/>
-        <location filename="mainwindow.cc" line="808"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation type="unfinished">%1的选项</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished">格式“%1”没有输出选项</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished">未指定有效的航点/路线/轨迹转换</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation type="unfinished">未指定输入文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation type="unfinished">未指定有效输出</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation type="unfinished">未指定输出文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="974"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">无法打开临时文件“%1”以预览地图。错误为：“%2”。地图预览将不会显示。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="991"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation type="unfinished">翻译成功</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1003"/>
+        <location filename="mainwindow.cc" line="1006"/>
         <source>Error preparing map: %1
 </source>
         <translation type="unfinished">准备地图时出错：%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1038"/>
+        <location filename="mainwindow.cc" line="1049"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished">运行gpsbabel时出错：%1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1163"/>
+        <location filename="mainwindow.cc" line="1174"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished">您确定要将所有格式选项重置为默认值吗？</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1193"/>
+        <location filename="mainwindow.cc" line="1204"/>
         <source>About %1</source>
         <translation type="unfinished">关于 %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1241"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished">一个或多个数据过滤器处于活动状态</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1243"/>
+        <location filename="mainwindow.cc" line="1254"/>
         <source>No data filters are active</source>
         <translation type="unfinished">没有数据过滤器处于活动状态</translation>
     </message>
@@ -906,17 +911,22 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="122"/>
+        <location filename="map.cc" line="92"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="142"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">打开“gmapbase.html”文件时出错。请检查安装</translation>
     </message>
     <message>
-        <location filename="map.cc" line="126"/>
+        <location filename="map.cc" line="145"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">缺少“gmapbase.html”文件。请检查安装</translation>
     </message>
     <message>
-        <location filename="map.cc" line="181"/>
+        <location filename="map.cc" line="200"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished">无法加载 Google 地图基础页面</translation>
     </message>
@@ -974,28 +984,28 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="297"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="286"/>
         <source>Routes</source>
         <translation type="unfinished">路线</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="297"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="286"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Tracks</source>
         <translation type="unfinished">轨迹</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Waypoints</source>
         <translation type="unfinished">航点</translation>
     </message>

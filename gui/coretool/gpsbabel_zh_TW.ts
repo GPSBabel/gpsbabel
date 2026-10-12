@@ -25,13 +25,13 @@
         <location filename="core_strings.h" line="55"/>
         <location filename="core_strings.h" line="64"/>
         <location filename="core_strings.h" line="89"/>
-        <location filename="core_strings.h" line="164"/>
-        <location filename="core_strings.h" line="174"/>
-        <location filename="core_strings.h" line="183"/>
-        <location filename="core_strings.h" line="192"/>
-        <location filename="core_strings.h" line="284"/>
-        <location filename="core_strings.h" line="296"/>
-        <location filename="core_strings.h" line="328"/>
+        <location filename="core_strings.h" line="166"/>
+        <location filename="core_strings.h" line="176"/>
+        <location filename="core_strings.h" line="185"/>
+        <location filename="core_strings.h" line="194"/>
+        <location filename="core_strings.h" line="286"/>
+        <location filename="core_strings.h" line="298"/>
+        <location filename="core_strings.h" line="330"/>
         <source>Max synthesized shortname length</source>
         <translation type="unfinished">合成短名最大长度</translation>
     </message>
@@ -42,14 +42,14 @@
         <location filename="core_strings.h" line="56"/>
         <location filename="core_strings.h" line="65"/>
         <location filename="core_strings.h" line="90"/>
-        <location filename="core_strings.h" line="114"/>
-        <location filename="core_strings.h" line="165"/>
-        <location filename="core_strings.h" line="175"/>
-        <location filename="core_strings.h" line="184"/>
-        <location filename="core_strings.h" line="193"/>
-        <location filename="core_strings.h" line="285"/>
-        <location filename="core_strings.h" line="297"/>
-        <location filename="core_strings.h" line="329"/>
+        <location filename="core_strings.h" line="115"/>
+        <location filename="core_strings.h" line="167"/>
+        <location filename="core_strings.h" line="177"/>
+        <location filename="core_strings.h" line="186"/>
+        <location filename="core_strings.h" line="195"/>
+        <location filename="core_strings.h" line="287"/>
+        <location filename="core_strings.h" line="299"/>
+        <location filename="core_strings.h" line="331"/>
         <source>Allow whitespace synth. shortnames</source>
         <translation type="unfinished">允许空格合成短名</translation>
     </message>
@@ -60,13 +60,13 @@
         <location filename="core_strings.h" line="57"/>
         <location filename="core_strings.h" line="66"/>
         <location filename="core_strings.h" line="91"/>
-        <location filename="core_strings.h" line="166"/>
-        <location filename="core_strings.h" line="176"/>
-        <location filename="core_strings.h" line="185"/>
-        <location filename="core_strings.h" line="194"/>
-        <location filename="core_strings.h" line="286"/>
-        <location filename="core_strings.h" line="298"/>
-        <location filename="core_strings.h" line="330"/>
+        <location filename="core_strings.h" line="168"/>
+        <location filename="core_strings.h" line="178"/>
+        <location filename="core_strings.h" line="187"/>
+        <location filename="core_strings.h" line="196"/>
+        <location filename="core_strings.h" line="288"/>
+        <location filename="core_strings.h" line="300"/>
+        <location filename="core_strings.h" line="332"/>
         <source>UPPERCASE synth. shortnames</source>
         <translation type="unfinished">大写合成短名</translation>
     </message>
@@ -77,13 +77,13 @@
         <location filename="core_strings.h" line="58"/>
         <location filename="core_strings.h" line="67"/>
         <location filename="core_strings.h" line="92"/>
-        <location filename="core_strings.h" line="167"/>
-        <location filename="core_strings.h" line="177"/>
-        <location filename="core_strings.h" line="186"/>
-        <location filename="core_strings.h" line="195"/>
-        <location filename="core_strings.h" line="287"/>
-        <location filename="core_strings.h" line="299"/>
-        <location filename="core_strings.h" line="331"/>
+        <location filename="core_strings.h" line="169"/>
+        <location filename="core_strings.h" line="179"/>
+        <location filename="core_strings.h" line="188"/>
+        <location filename="core_strings.h" line="197"/>
+        <location filename="core_strings.h" line="289"/>
+        <location filename="core_strings.h" line="301"/>
+        <location filename="core_strings.h" line="333"/>
         <source>Make synth. shortnames unique</source>
         <translation type="unfinished">使合成短名唯一</translation>
     </message>
@@ -94,12 +94,12 @@
         <location filename="core_strings.h" line="59"/>
         <location filename="core_strings.h" line="68"/>
         <location filename="core_strings.h" line="93"/>
-        <location filename="core_strings.h" line="168"/>
-        <location filename="core_strings.h" line="178"/>
-        <location filename="core_strings.h" line="187"/>
-        <location filename="core_strings.h" line="196"/>
-        <location filename="core_strings.h" line="300"/>
-        <location filename="core_strings.h" line="332"/>
+        <location filename="core_strings.h" line="170"/>
+        <location filename="core_strings.h" line="180"/>
+        <location filename="core_strings.h" line="189"/>
+        <location filename="core_strings.h" line="198"/>
+        <location filename="core_strings.h" line="302"/>
+        <location filename="core_strings.h" line="334"/>
         <source>Basename prepended to URL on output</source>
         <translation type="unfinished">输出时在 URL 前添加基名</translation>
     </message>
@@ -110,12 +110,12 @@
         <location filename="core_strings.h" line="60"/>
         <location filename="core_strings.h" line="69"/>
         <location filename="core_strings.h" line="94"/>
-        <location filename="core_strings.h" line="169"/>
-        <location filename="core_strings.h" line="179"/>
-        <location filename="core_strings.h" line="188"/>
-        <location filename="core_strings.h" line="197"/>
-        <location filename="core_strings.h" line="301"/>
-        <location filename="core_strings.h" line="333"/>
+        <location filename="core_strings.h" line="171"/>
+        <location filename="core_strings.h" line="181"/>
+        <location filename="core_strings.h" line="190"/>
+        <location filename="core_strings.h" line="199"/>
+        <location filename="core_strings.h" line="303"/>
+        <location filename="core_strings.h" line="335"/>
         <source>Use shortname instead of description</source>
         <translation type="unfinished">使用短名而非描述</translation>
     </message>
@@ -127,13 +127,13 @@
         <location filename="core_strings.h" line="70"/>
         <location filename="core_strings.h" line="81"/>
         <location filename="core_strings.h" line="95"/>
-        <location filename="core_strings.h" line="170"/>
-        <location filename="core_strings.h" line="180"/>
-        <location filename="core_strings.h" line="189"/>
-        <location filename="core_strings.h" line="198"/>
-        <location filename="core_strings.h" line="302"/>
-        <location filename="core_strings.h" line="334"/>
-        <location filename="core_strings.h" line="344"/>
+        <location filename="core_strings.h" line="172"/>
+        <location filename="core_strings.h" line="182"/>
+        <location filename="core_strings.h" line="191"/>
+        <location filename="core_strings.h" line="200"/>
+        <location filename="core_strings.h" line="304"/>
+        <location filename="core_strings.h" line="336"/>
+        <location filename="core_strings.h" line="346"/>
         <source>GPS datum (def. WGS 84)</source>
         <translation type="unfinished">GPS 基准（默认 WGS 84）</translation>
     </message>
@@ -145,13 +145,13 @@
         <location filename="core_strings.h" line="71"/>
         <location filename="core_strings.h" line="87"/>
         <location filename="core_strings.h" line="96"/>
-        <location filename="core_strings.h" line="171"/>
-        <location filename="core_strings.h" line="181"/>
-        <location filename="core_strings.h" line="190"/>
-        <location filename="core_strings.h" line="199"/>
-        <location filename="core_strings.h" line="303"/>
-        <location filename="core_strings.h" line="335"/>
-        <location filename="core_strings.h" line="346"/>
+        <location filename="core_strings.h" line="173"/>
+        <location filename="core_strings.h" line="183"/>
+        <location filename="core_strings.h" line="192"/>
+        <location filename="core_strings.h" line="201"/>
+        <location filename="core_strings.h" line="305"/>
+        <location filename="core_strings.h" line="337"/>
+        <location filename="core_strings.h" line="348"/>
         <source>Write timestamps with offset x to UTC time</source>
         <translation type="unfinished">将时间戳写入 UTC 时间偏移量 x</translation>
     </message>
@@ -307,7 +307,7 @@
     </message>
     <message>
         <location filename="core_strings.h" line="74"/>
-        <location filename="core_strings.h" line="121"/>
+        <location filename="core_strings.h" line="122"/>
         <source>Bitmap of categories</source>
         <translation type="unfinished">类别位图</translation>
     </message>
@@ -348,7 +348,7 @@
     </message>
     <message>
         <location filename="core_strings.h" line="83"/>
-        <location filename="core_strings.h" line="345"/>
+        <location filename="core_strings.h" line="347"/>
         <source>Write position using this grid.</source>
         <translation type="unfinished">使用此网格写入位置。</translation>
     </message>
@@ -404,821 +404,831 @@
     </message>
     <message>
         <location filename="core_strings.h" line="103"/>
+        <source>Write description/notes to the comment record instead of the address field (multi-line on some Garmin devices)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="core_strings.h" line="104"/>
         <source>Write notes to address field</source>
         <translation type="unfinished">将注释写入地址字段</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="104"/>
+        <location filename="core_strings.h" line="105"/>
         <source>Write position to address field</source>
         <translation type="unfinished">将位置写入地址字段</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="105"/>
+        <location filename="core_strings.h" line="106"/>
         <source>Default proximity</source>
         <translation type="unfinished">默认接近度</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="106"/>
+        <location filename="core_strings.h" line="107"/>
         <source>After output job done sleep n second(s)</source>
         <translation type="unfinished">输出作业完成后休眠n秒</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="107"/>
+        <location filename="core_strings.h" line="108"/>
         <source>Default speed</source>
         <translation type="unfinished">默认速度</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="108"/>
+        <location filename="core_strings.h" line="109"/>
         <source>Create unique waypoint names (default = yes)</source>
         <translation type="unfinished">创建唯一航点名称（默认=是）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="109"/>
+        <location filename="core_strings.h" line="110"/>
         <source>Units used for names with @speed (&apos;s&apos;tatute or &apos;m&apos;etric)</source>
         <translation type="unfinished">名称中使用@speed的单位（&apos;s&apos;表示英制或&apos;m&apos;表示公制）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="110"/>
+        <location filename="core_strings.h" line="111"/>
         <source>codec to use for writing strings</source>
         <translation type="unfinished">用于写入字符串的编解码器</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="111"/>
+        <location filename="core_strings.h" line="112"/>
         <source>language code to use for reading dual language files</source>
         <translation type="unfinished">用于读取双语文件的语言代码</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="112"/>
+        <location filename="core_strings.h" line="113"/>
         <source>Garmin Points of Interest (.gpi)</source>
         <translation type="unfinished">Garmin兴趣点（.gpi）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="113"/>
-        <location filename="core_strings.h" line="201"/>
+        <location filename="core_strings.h" line="114"/>
+        <location filename="core_strings.h" line="203"/>
         <source>Length of generated shortnames</source>
         <translation type="unfinished">生成的短名称长度</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="115"/>
-        <location filename="core_strings.h" line="129"/>
-        <location filename="core_strings.h" line="147"/>
+        <location filename="core_strings.h" line="116"/>
+        <location filename="core_strings.h" line="130"/>
+        <location filename="core_strings.h" line="148"/>
         <source>Default icon name</source>
         <translation type="unfinished">默认图标名称</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="116"/>
-        <location filename="core_strings.h" line="272"/>
+        <location filename="core_strings.h" line="117"/>
+        <location filename="core_strings.h" line="274"/>
         <source>Return current position as a waypoint</source>
         <translation type="unfinished">将当前位置返回为航点</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="117"/>
+        <location filename="core_strings.h" line="118"/>
         <source>Command unit to power itself down</source>
         <translation type="unfinished">命令单元自行断电</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="118"/>
+        <location filename="core_strings.h" line="119"/>
         <source>Erase existing courses when writing new ones</source>
         <translation type="unfinished">写入新航迹时擦除现有航迹</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="119"/>
+        <location filename="core_strings.h" line="120"/>
         <source>Sync GPS time to computer time</source>
         <translation type="unfinished">将GPS时间同步到计算机时间</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="120"/>
+        <location filename="core_strings.h" line="121"/>
         <source>Category number to use for written waypoints</source>
         <translation type="unfinished">用于写入航点的类别编号</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="122"/>
+        <location filename="core_strings.h" line="123"/>
         <source>Speed in bits per second of serial port (baud=9600)</source>
         <translation type="unfinished">串行端口速度（比特/秒，波特率=9600）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="123"/>
+        <location filename="core_strings.h" line="124"/>
         <source>override codec to use for device</source>
         <translation type="unfinished">覆盖设备使用的编解码器</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="124"/>
+        <location filename="core_strings.h" line="125"/>
         <source>Garmin serial/USB protocol</source>
         <translation type="unfinished">Garmin串行/USB协议</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="125"/>
+        <location filename="core_strings.h" line="126"/>
         <source>Write course rather than history, default yes</source>
         <translation type="unfinished">写入课程而非历史，默认是</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="126"/>
+        <location filename="core_strings.h" line="127"/>
         <source>Sport: Biking (deflt), Running, Other</source>
         <translation type="unfinished">运动：骑行（默认），跑步，其他</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="127"/>
+        <location filename="core_strings.h" line="128"/>
         <source>Write global extension namespace declarations</source>
         <translation type="unfinished">写入全局扩展命名空间声明</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="128"/>
+        <location filename="core_strings.h" line="129"/>
         <source>Garmin Training Center (.tcx/.crs/.hst/.xml)</source>
         <translation type="unfinished">Garmin训练中心（.tcx/.crs/.hst/.xml）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="130"/>
+        <location filename="core_strings.h" line="131"/>
         <source>Geocaching.com .loc</source>
         <translation type="unfinished">Geocaching.com .loc</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="131"/>
+        <location filename="core_strings.h" line="132"/>
         <source>Compact Output. Default is off</source>
         <translation type="unfinished">紧凑输出。默认关闭</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="132"/>
+        <location filename="core_strings.h" line="133"/>
         <source>Property key to use for name</source>
         <translation type="unfinished">用于名称的属性键</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="133"/>
+        <location filename="core_strings.h" line="134"/>
         <source>Property key to use for description</source>
         <translation type="unfinished">用于描述的属性键</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="134"/>
+        <location filename="core_strings.h" line="135"/>
         <source>GeoJson</source>
         <translation type="unfinished">GeoJson</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="135"/>
-        <location filename="core_strings.h" line="138"/>
-        <location filename="core_strings.h" line="212"/>
-        <location filename="core_strings.h" line="237"/>
-        <location filename="core_strings.h" line="256"/>
-        <location filename="core_strings.h" line="305"/>
+        <location filename="core_strings.h" line="136"/>
+        <location filename="core_strings.h" line="139"/>
+        <location filename="core_strings.h" line="214"/>
+        <location filename="core_strings.h" line="239"/>
+        <location filename="core_strings.h" line="258"/>
+        <location filename="core_strings.h" line="307"/>
         <source>Erase device data after download</source>
         <translation type="unfinished">下载后擦除设备数据</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="136"/>
-        <location filename="core_strings.h" line="139"/>
-        <location filename="core_strings.h" line="213"/>
-        <location filename="core_strings.h" line="257"/>
+        <location filename="core_strings.h" line="137"/>
+        <location filename="core_strings.h" line="140"/>
+        <location filename="core_strings.h" line="215"/>
+        <location filename="core_strings.h" line="259"/>
         <source>Only erase device data, do not download anything</source>
         <translation type="unfinished">仅擦除设备数据，不下载任何内容</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="137"/>
+        <location filename="core_strings.h" line="138"/>
         <source>GlobalSat DG-100/BT-335 Download</source>
         <translation type="unfinished">GlobalSat DG-100/BT-335 下载</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="140"/>
+        <location filename="core_strings.h" line="141"/>
         <source>GlobalSat DG-200 Download</source>
         <translation type="unfinished">GlobalSat DG-200 下载</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="141"/>
+        <location filename="core_strings.h" line="142"/>
         <source>GlobalSat DG-388 Binary File</source>
         <translation type="unfinished">GlobalSat DG-388 二进制文件</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="142"/>
+        <location filename="core_strings.h" line="143"/>
         <source>list tracks</source>
         <translation type="unfinished">列出轨迹</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="143"/>
         <location filename="core_strings.h" line="144"/>
-        <location filename="core_strings.h" line="236"/>
-        <location filename="core_strings.h" line="313"/>
+        <location filename="core_strings.h" line="145"/>
+        <location filename="core_strings.h" line="238"/>
+        <location filename="core_strings.h" line="315"/>
         <source>Dump raw data to this file</source>
         <translation type="unfinished">将原始数据转储到此文件</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="145"/>
+        <location filename="core_strings.h" line="146"/>
         <source>Time zone ID</source>
         <translation type="unfinished">时区ID</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="146"/>
+        <location filename="core_strings.h" line="147"/>
         <source>GlobalSat GH625XT GPS training watch</source>
         <translation type="unfinished">GlobalSat GH625XT GPS训练手表</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="148"/>
+        <location filename="core_strings.h" line="149"/>
         <source>Export linestrings for tracks and routes</source>
         <translation type="unfinished">为轨迹和路线导出线串</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="149"/>
+        <location filename="core_strings.h" line="150"/>
         <source>Export placemarks for tracks and routes</source>
         <translation type="unfinished">为轨迹和路线导出标记点</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="150"/>
+        <location filename="core_strings.h" line="151"/>
         <source>Width of lines, in pixels</source>
         <translation type="unfinished">线条宽度（像素）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="151"/>
+        <location filename="core_strings.h" line="152"/>
         <source>Line color, specified in hex AABBGGRR</source>
         <translation type="unfinished">线条颜色（十六进制 AABBGGRR 格式）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="152"/>
+        <location filename="core_strings.h" line="153"/>
         <source>Altitudes are absolute and not clamped to ground</source>
         <translation type="unfinished">高度为绝对值，不与地面夹紧</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="153"/>
+        <location filename="core_strings.h" line="154"/>
         <source>Draw extrusion line from trackpoint to ground</source>
         <translation type="unfinished">从航点绘制延伸线至地面</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="154"/>
+        <location filename="core_strings.h" line="155"/>
         <source>Write KML track (default = 0)</source>
         <translation type="unfinished">写入KML轨迹（默认值=0）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="155"/>
+        <location filename="core_strings.h" line="156"/>
         <source>Include extended data for trackpoints (default = 1)</source>
         <translation type="unfinished">包含航点的扩展数据（默认值=1）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="156"/>
+        <location filename="core_strings.h" line="157"/>
         <source>Indicate direction of travel in track icons (default = 0)</source>
         <translation type="unfinished">在轨迹图标中指示行进方向（默认值=0）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="157"/>
+        <location filename="core_strings.h" line="158"/>
         <source>Units used when writing comments (&apos;s&apos;tatute, &apos;m&apos;etric,&apos; &apos;n&apos;autical, &apos;a&apos;viation)</source>
         <translation type="unfinished">写入注释时使用的单位（&apos;s&apos;英制，&apos;m&apos;公制，&apos;n&apos;海里，&apos;a&apos;航空）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="158"/>
+        <location filename="core_strings.h" line="159"/>
         <source>Display labels on track and routepoints  (default = 1)</source>
         <translation type="unfinished">在轨迹和航点显示标签（默认值=1）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="159"/>
+        <location filename="core_strings.h" line="160"/>
         <source>Retain at most this number of position points  (0 = unlimited)</source>
         <translation type="unfinished">最多保留此数量的位置点（0=无限）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="160"/>
+        <location filename="core_strings.h" line="161"/>
         <source>Rotate colors for tracks and routes (default automatic)</source>
         <translation type="unfinished">为轨迹和路线旋转颜色（默认自动）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="161"/>
+        <location filename="core_strings.h" line="162"/>
         <source>Precision of coordinates, number of decimals</source>
         <translation type="unfinished">坐标精度，小数位数</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="162"/>
+        <location filename="core_strings.h" line="163"/>
         <source>Google Earth (Keyhole) Markup Language</source>
         <translation type="unfinished">Google Earth（Keyhole）标记语言</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="163"/>
+        <location filename="core_strings.h" line="164"/>
+        <source>Google Maps Timeline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="core_strings.h" line="165"/>
         <source>Google Takeout Location History</source>
         <translation type="unfinished">Google Takeout 位置历史</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="172"/>
+        <location filename="core_strings.h" line="174"/>
         <source>GPS Tracking Key Pro text</source>
         <translation type="unfinished">GPS Tracking Key Pro 文本</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="173"/>
+        <location filename="core_strings.h" line="175"/>
         <source>GPS TrackMaker</source>
         <translation type="unfinished">GPS TrackMaker</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="182"/>
+        <location filename="core_strings.h" line="184"/>
         <source>GPSBabel arc filter file</source>
         <translation type="unfinished">GPSBabel 弧过滤文件</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="191"/>
+        <location filename="core_strings.h" line="193"/>
         <source>GpsDrive Format</source>
         <translation type="unfinished">GpsDrive 格式</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="200"/>
+        <location filename="core_strings.h" line="202"/>
         <source>GpsDrive Format for Tracks</source>
         <translation type="unfinished">GpsDrive 轨迹格式</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="202"/>
+        <location filename="core_strings.h" line="204"/>
         <source>No whitespace in generated shortnames</source>
         <translation type="unfinished">生成的短名称中无空格</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="203"/>
+        <location filename="core_strings.h" line="205"/>
         <source>Create waypoints from geocache log entries</source>
         <translation type="unfinished">从地理标记日志条目创建航点</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="204"/>
+        <location filename="core_strings.h" line="206"/>
         <source>Base URL for link tag in output</source>
         <translation type="unfinished">输出中链接标签的基URL</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="205"/>
+        <location filename="core_strings.h" line="207"/>
         <source>Target GPX version for output</source>
         <translation type="unfinished">输出的目标GPX版本</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="206"/>
+        <location filename="core_strings.h" line="208"/>
         <source>Add info (depth) as Humminbird extension</source>
         <translation type="unfinished">作为Humminbird扩展添加信息（深度）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="207"/>
+        <location filename="core_strings.h" line="209"/>
         <source>Add info (depth) as Garmin extension</source>
         <translation type="unfinished">作为Garmin扩展添加信息（深度）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="208"/>
+        <location filename="core_strings.h" line="210"/>
         <source>Precision of elevations, number of decimals</source>
         <translation type="unfinished">高程精度，小数位数</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="209"/>
+        <location filename="core_strings.h" line="211"/>
         <source>GPX XML</source>
         <translation type="unfinished">GPX XML</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="210"/>
-        <location filename="core_strings.h" line="215"/>
-        <location filename="core_strings.h" line="254"/>
-        <location filename="core_strings.h" line="259"/>
+        <location filename="core_strings.h" line="212"/>
+        <location filename="core_strings.h" line="217"/>
+        <location filename="core_strings.h" line="256"/>
+        <location filename="core_strings.h" line="261"/>
         <source>MTK compatible CSV output file</source>
         <translation type="unfinished">MTK兼容的CSV输出文件</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="211"/>
+        <location filename="core_strings.h" line="213"/>
         <source>Holux M-241 (MTK based) Binary File Format</source>
         <translation type="unfinished">Holux M-241（基于MTK）二进制文件格式</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="214"/>
-        <location filename="core_strings.h" line="258"/>
+        <location filename="core_strings.h" line="216"/>
+        <location filename="core_strings.h" line="260"/>
         <source>Enable logging after download</source>
         <translation type="unfinished">下载后启用日志记录</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="216"/>
-        <location filename="core_strings.h" line="260"/>
+        <location filename="core_strings.h" line="218"/>
+        <location filename="core_strings.h" line="262"/>
         <source>Size of blocks in KB to request from device</source>
         <translation type="unfinished">从设备请求的块大小（KB）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="217"/>
+        <location filename="core_strings.h" line="219"/>
         <source>Holux M-241 (MTK based) download</source>
         <translation type="unfinished">Holux M-241（基于MTK）下载</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="218"/>
+        <location filename="core_strings.h" line="220"/>
         <source>Path to HTML style sheet</source>
         <translation type="unfinished">HTML样式表路径</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="219"/>
-        <location filename="core_strings.h" line="338"/>
-        <location filename="core_strings.h" line="350"/>
+        <location filename="core_strings.h" line="221"/>
+        <location filename="core_strings.h" line="340"/>
+        <location filename="core_strings.h" line="352"/>
         <source>Encrypt hints using ROT13</source>
         <translation type="unfinished">使用ROT13加密提示</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="220"/>
-        <location filename="core_strings.h" line="339"/>
+        <location filename="core_strings.h" line="222"/>
+        <location filename="core_strings.h" line="341"/>
         <source>Include groundspeak logs if present</source>
         <translation type="unfinished">如果存在，包含Groundspeak日志</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="221"/>
-        <location filename="core_strings.h" line="340"/>
+        <location filename="core_strings.h" line="223"/>
+        <location filename="core_strings.h" line="342"/>
         <source>Degrees output as &apos;ddd&apos;, &apos;dmm&apos;(default) or &apos;dms&apos;</source>
         <translation type="unfinished">度数输出为&apos;ddd&apos;、&apos;dmm&apos;（默认）或&apos;dms&apos;</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="222"/>
-        <location filename="core_strings.h" line="341"/>
+        <location filename="core_strings.h" line="224"/>
+        <location filename="core_strings.h" line="343"/>
         <source>Units for altitude (f)eet or (m)etres</source>
         <translation type="unfinished">海拔单位（f）英尺或（m）米</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="223"/>
+        <location filename="core_strings.h" line="225"/>
         <source>HTML Output</source>
         <translation type="unfinished">HTML输出</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="224"/>
+        <location filename="core_strings.h" line="226"/>
         <source>Humminbird tracks (.ht)</source>
         <translation type="unfinished">Humminbird轨迹（.ht）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="225"/>
+        <location filename="core_strings.h" line="227"/>
         <source>Humminbird waypoints and routes (.hwr)</source>
         <translation type="unfinished">Humminbird航点和路线（.hwr）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="226"/>
+        <location filename="core_strings.h" line="228"/>
         <source>(USR input) Ignore event marker icons on read</source>
         <translation type="unfinished">(USR 输入) 读取时忽略事件标记图标</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="227"/>
+        <location filename="core_strings.h" line="229"/>
         <source>(USR output) Treat waypoints as icons on write</source>
         <translation type="unfinished">(USR 输出) 写入时将航点视为图标</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="228"/>
+        <location filename="core_strings.h" line="230"/>
         <source>(USR output) Merge into one segmented trail</source>
         <translation type="unfinished">(USR 输出) 合并为一个分段轨迹</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="229"/>
+        <location filename="core_strings.h" line="231"/>
         <source>(USR input) Break segments into separate trails</source>
         <translation type="unfinished">(USR 输入) 将分段拆分为独立轨迹</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="230"/>
+        <location filename="core_strings.h" line="232"/>
         <source>(USR output) Write version</source>
         <translation type="unfinished">(USR 输出) 写入版本</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="231"/>
+        <location filename="core_strings.h" line="233"/>
         <source>(USR output) Output file title string</source>
         <translation type="unfinished">(USR 输出) 输出文件标题字符串</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="232"/>
+        <location filename="core_strings.h" line="234"/>
         <source>(USR output) Device serial number</source>
         <translation type="unfinished">(USR 输出) 设备序列号</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="233"/>
+        <location filename="core_strings.h" line="235"/>
         <source>(USR output) Output file content description</source>
         <translation type="unfinished">(USR 输出) 输出文件内容描述</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="234"/>
+        <location filename="core_strings.h" line="236"/>
         <source>Lowrance USR</source>
         <translation type="unfinished">Lowrance USR</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="235"/>
-        <location filename="core_strings.h" line="308"/>
+        <location filename="core_strings.h" line="237"/>
+        <location filename="core_strings.h" line="310"/>
         <source>Baud rate used for download</source>
         <translation type="unfinished">下载使用的波特率</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="238"/>
-        <location filename="core_strings.h" line="311"/>
+        <location filename="core_strings.h" line="240"/>
+        <location filename="core_strings.h" line="313"/>
         <source>First sector to be read from the device</source>
         <translation type="unfinished">要从设备读取的第一个扇区</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="239"/>
-        <location filename="core_strings.h" line="309"/>
+        <location filename="core_strings.h" line="241"/>
+        <location filename="core_strings.h" line="311"/>
         <source>Baud rate used to init device (0=autodetect)</source>
         <translation type="unfinished">初始化设备使用的波特率（0=自动检测）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="240"/>
-        <location filename="core_strings.h" line="312"/>
+        <location filename="core_strings.h" line="242"/>
+        <location filename="core_strings.h" line="314"/>
         <source>Last sector to be read from the device (-1: smart read everything)</source>
         <translation type="unfinished">要从设备读取的最后一个扇区（-1：智能读取全部）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="241"/>
-        <location filename="core_strings.h" line="314"/>
+        <location filename="core_strings.h" line="243"/>
+        <location filename="core_strings.h" line="316"/>
         <source>Disable output (useful with erase)</source>
         <translation type="unfinished">禁用输出（与擦除配合使用）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="242"/>
-        <location filename="core_strings.h" line="310"/>
+        <location filename="core_strings.h" line="244"/>
+        <location filename="core_strings.h" line="312"/>
         <source>Number of sectors to read at once (0=use single sector mode)</source>
         <translation type="unfinished">一次读取的扇区数量（0=使用单扇区模式）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="243"/>
+        <location filename="core_strings.h" line="245"/>
         <source>POI for Home Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">家符号的POI坐标格式为纬度:经度[:高度]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="244"/>
+        <location filename="core_strings.h" line="246"/>
         <source>POI for Car Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">汽车符号的POI坐标格式为纬度:经度[:高度]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="245"/>
+        <location filename="core_strings.h" line="247"/>
         <source>POI for Boat Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">船符号的POI坐标格式为纬度:经度[:高度]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="246"/>
+        <location filename="core_strings.h" line="248"/>
         <source>POI for Heart Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">心形符号的POI坐标格式为纬度:经度[:高度]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="247"/>
+        <location filename="core_strings.h" line="249"/>
         <source>POI for Bar Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">条形符号的POI坐标格式为纬度:经度[:高度]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="248"/>
-        <location filename="core_strings.h" line="315"/>
-        <location filename="core_strings.h" line="320"/>
+        <location filename="core_strings.h" line="250"/>
+        <location filename="core_strings.h" line="317"/>
+        <location filename="core_strings.h" line="322"/>
         <source>Seconds that GPS time tracks UTC (0: best guess)</source>
         <translation type="unfinished">GPS时间跟踪UTC的秒数（0：最佳猜测）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="249"/>
-        <location filename="core_strings.h" line="316"/>
-        <location filename="core_strings.h" line="321"/>
+        <location filename="core_strings.h" line="251"/>
+        <location filename="core_strings.h" line="318"/>
+        <location filename="core_strings.h" line="323"/>
         <source>GPS week rollover period we&apos;re in (-1: best guess)</source>
         <translation type="unfinished">当前GPS周回滚周期（-1：最佳猜测）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="250"/>
+        <location filename="core_strings.h" line="252"/>
         <source>MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)</source>
         <translation type="unfinished">MiniHomer，基于skyTraq Venus 6的记录器（下载轨迹、航点并获取/设置POI）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="251"/>
+        <location filename="core_strings.h" line="253"/>
         <source>Garmin Mobile XT ([ATRK]/STRK)</source>
         <translation type="unfinished">Garmin Mobile XT ([ATRK]/STRK)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="252"/>
+        <location filename="core_strings.h" line="254"/>
         <source>Track name processing option ([0]-nrm/1-ign)</source>
         <translation type="unfinished">轨迹名称处理选项（[0]-标准/1-忽略）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="253"/>
+        <location filename="core_strings.h" line="255"/>
         <source>Mobile Garmin XT Track files</source>
         <translation type="unfinished">移动Garmin XT轨迹文件</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="255"/>
+        <location filename="core_strings.h" line="257"/>
         <source>MTK Logger (iBlue 747,...) Binary File Format</source>
         <translation type="unfinished">MTK记录器（iBlue 747,...）二进制文件格式</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="261"/>
+        <location filename="core_strings.h" line="263"/>
         <source>MTK Logger (iBlue 747,Qstarz BT-1000,...) download</source>
         <translation type="unfinished">MTK记录器（iBlue 747,Qstarz BT-1000,...）下载</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="262"/>
+        <location filename="core_strings.h" line="264"/>
         <source>Datum (default=NAD27)</source>
         <translation type="unfinished">基准面（默认=NAD27）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="263"/>
+        <location filename="core_strings.h" line="265"/>
         <source>National Geographic Topo .tpg (waypoints)</source>
         <translation type="unfinished">国家地理地形图 .tpg（航点）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="264"/>
+        <location filename="core_strings.h" line="266"/>
         <source>National Geographic Topo 2.x .tpo</source>
         <translation type="unfinished">国家地理地形图 2.x .tpo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="265"/>
+        <location filename="core_strings.h" line="267"/>
         <source>National Geographic Topo 3.x/4.x .tpo</source>
         <translation type="unfinished">国家地理地形图 3.x/4.x .tpo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="266"/>
+        <location filename="core_strings.h" line="268"/>
         <source>Max length of waypoint name to write</source>
         <translation type="unfinished">要写入的航点名称最大长度</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="267"/>
+        <location filename="core_strings.h" line="269"/>
         <source>Read/write GPRMC sentences</source>
         <translation type="unfinished">读写GPRMC语句</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="268"/>
+        <location filename="core_strings.h" line="270"/>
         <source>Read/write GPGGA sentences</source>
         <translation type="unfinished">读写GPGGA语句</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="269"/>
+        <location filename="core_strings.h" line="271"/>
         <source>Read/write GPVTG sentences</source>
         <translation type="unfinished">读写GPVTG语句</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="270"/>
+        <location filename="core_strings.h" line="272"/>
         <source>Read/write GPGSA sentences</source>
         <translation type="unfinished">读写GPGSA语句</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="271"/>
+        <location filename="core_strings.h" line="273"/>
         <source>Complete date-free tracks with given date (YYYYMMDD).</source>
         <translation type="unfinished">用给定日期（YYYYMMDD）补全无日期轨迹。</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="273"/>
+        <location filename="core_strings.h" line="275"/>
         <source>Decimal seconds to pause between groups of strings</source>
         <translation type="unfinished">字符串组之间暂停的十进制秒数</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="274"/>
+        <location filename="core_strings.h" line="276"/>
         <source>Append realtime positioning data to the output file instead of truncating</source>
         <translation type="unfinished">将实时定位数据追加到输出文件，而不是截断</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="275"/>
+        <location filename="core_strings.h" line="277"/>
         <source>Speed in bits per second of serial port (baud=4800)</source>
         <translation type="unfinished">串行端口速度（波特率=4800位/秒）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="276"/>
+        <location filename="core_strings.h" line="278"/>
         <source>Write tracks for Gisteq Phototracker</source>
         <translation type="unfinished">为Gisteq Phototracker写入轨迹</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="277"/>
+        <location filename="core_strings.h" line="279"/>
         <source>Accept position fixes in gpgga marked invalid</source>
         <translation type="unfinished">接受gpgga中标记为无效的位置修正</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="278"/>
+        <location filename="core_strings.h" line="280"/>
         <source>NMEA 0183 sentences</source>
         <translation type="unfinished">NMEA 0183语句</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="279"/>
+        <location filename="core_strings.h" line="281"/>
         <source>Write additional way tag key/value pairs</source>
         <translation type="unfinished">写入额外的way标签键/值对</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="280"/>
+        <location filename="core_strings.h" line="282"/>
         <source>Write additional node tag key/value pairs</source>
         <translation type="unfinished">写入额外的node标签键/值对</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="281"/>
+        <location filename="core_strings.h" line="283"/>
         <source>Use this value as custom created_by value</source>
         <translation type="unfinished">将此值用作自定义created_by值</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="282"/>
+        <location filename="core_strings.h" line="284"/>
         <source>OpenStreetMap data files</source>
         <translation type="unfinished">OpenStreetMap数据文件</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="283"/>
+        <location filename="core_strings.h" line="285"/>
         <source>Write all tracks into one file</source>
         <translation type="unfinished">将所有轨迹写入一个文件</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="288"/>
+        <location filename="core_strings.h" line="290"/>
         <source>Waypoint foreground color</source>
         <translation type="unfinished">航点前景色</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="289"/>
+        <location filename="core_strings.h" line="291"/>
         <source>Waypoint background color</source>
         <translation type="unfinished">航点背景色</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="290"/>
+        <location filename="core_strings.h" line="292"/>
         <source>Proximity distance</source>
         <translation type="unfinished">接近距离</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="291"/>
+        <location filename="core_strings.h" line="293"/>
         <source>Unit used in altitude values</source>
         <translation type="unfinished">高度值中使用的单位</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="292"/>
+        <location filename="core_strings.h" line="294"/>
         <source>Unit used in proximity values</source>
         <translation type="unfinished">接近值中使用的单位</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="293"/>
+        <location filename="core_strings.h" line="295"/>
         <source>codec to use for reading and writing strings (default windows-1252)</source>
         <translation type="unfinished">用于读写字符串的编码（默认为windows-1252）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="294"/>
+        <location filename="core_strings.h" line="296"/>
         <source>OziExplorer</source>
         <translation type="unfinished">OziExplorer</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="295"/>
+        <location filename="core_strings.h" line="297"/>
         <source>Qstarz BL-1000</source>
         <translation type="unfinished">Qstarz BL-1000</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="304"/>
+        <location filename="core_strings.h" line="306"/>
         <source>See You flight analysis data</source>
         <translation type="unfinished">See You飞行分析数据</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="306"/>
+        <location filename="core_strings.h" line="308"/>
         <source>Set location finder target location as lat,lng</source>
         <translation type="unfinished">将位置查找器目标位置设置为纬度,经度</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="307"/>
+        <location filename="core_strings.h" line="309"/>
         <source>Configure logging parameter as tmin:tmax:dmin:dmax</source>
         <translation type="unfinished">将日志参数配置为tmin:tmax:dmin:dmax</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="317"/>
+        <location filename="core_strings.h" line="319"/>
         <source>SkyTraq Venus based loggers (download)</source>
         <translation type="unfinished">SkyTraq Venus 基于记录器（下载）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="318"/>
+        <location filename="core_strings.h" line="320"/>
         <source>First sector to be read from the file</source>
         <translation type="unfinished">从文件中读取的第一个扇区</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="319"/>
+        <location filename="core_strings.h" line="321"/>
         <source>Last sector to be read from the file (-1: read till empty sector)</source>
         <translation type="unfinished">从文件中读取的最后一个扇区（-1：读取至空扇区）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="322"/>
+        <location filename="core_strings.h" line="324"/>
         <source>SkyTraq Venus based loggers Binary File Format</source>
         <translation type="unfinished">SkyTraq Venus 基于记录器二进制文件格式</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="323"/>
+        <location filename="core_strings.h" line="325"/>
         <source>Video position for which exact GPS time is known (hhmmss[.sss], default is 00:00:00,000)</source>
         <translation type="unfinished">已知精确GPS时间的视频位置（hhmmss[.sss]，默认为00:00:00,000）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="324"/>
+        <location filename="core_strings.h" line="326"/>
         <source>GPS time at position video_time (hhmmss[.sss], default is first timestamp of track)</source>
         <translation type="unfinished">视频位置video_time处的GPS时间（hhmmss[.sss]，默认为轨迹的第一个时间戳）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="325"/>
+        <location filename="core_strings.h" line="327"/>
         <source>GPS date at position video_time (yyyymmdd, default is first timestamp of track)</source>
         <translation type="unfinished">视频位置video_time处的GPS日期（yyyymmdd，默认为轨迹的第一个时间戳）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="326"/>
+        <location filename="core_strings.h" line="328"/>
         <source>Format for subtitles</source>
         <translation type="unfinished">字幕格式</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="327"/>
+        <location filename="core_strings.h" line="329"/>
         <source>SubRip subtitles for video mapping (.srt)</source>
         <translation type="unfinished">视频映射的SubRip字幕（.srt）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="336"/>
+        <location filename="core_strings.h" line="338"/>
         <source>Tab delimited fields useful for OpenOffice</source>
         <translation type="unfinished">适用于OpenOffice的制表符分隔字段</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="337"/>
+        <location filename="core_strings.h" line="339"/>
         <source>Suppress separator lines between waypoints</source>
         <translation type="unfinished">抑制航点之间的分隔行</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="342"/>
+        <location filename="core_strings.h" line="344"/>
         <source>Write each waypoint in a separate file</source>
         <translation type="unfinished">将每个航点写入单独的文件</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="343"/>
+        <location filename="core_strings.h" line="345"/>
         <source>Textual Output</source>
         <translation type="unfinished">文本输出</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="347"/>
+        <location filename="core_strings.h" line="349"/>
         <source>Write name(s) of format(s) from input session(s)</source>
         <translation type="unfinished">从输入会话中写入格式名称（s）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="348"/>
+        <location filename="core_strings.h" line="350"/>
         <source>Write filename(s) from input session(s)</source>
         <translation type="unfinished">从输入会话中写入文件名（s）</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="349"/>
+        <location filename="core_strings.h" line="351"/>
         <source>Universal csv with field structure in first line</source>
         <translation type="unfinished">第一行包含字段结构的通用CSV</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="351"/>
+        <location filename="core_strings.h" line="353"/>
         <source>Vcard Output (for iPod)</source>
         <translation type="unfinished">Vcard输出（用于iPod）</translation>
     </message>
