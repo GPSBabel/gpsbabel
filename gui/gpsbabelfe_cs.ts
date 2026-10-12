@@ -1217,7 +1217,7 @@ Některé formáty GPS dat podporují pouze určitý podmnožinu bodů, tras a t
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">Chyba zpracování formátů při spuštění procesu </translation>
+        <translation type="unfinished">Chyba při zpracování formátů z běžícího procesu &quot;gpsbabel -^3&quot; na řádku %1</translation>
     </message>
 </context>
 <context>

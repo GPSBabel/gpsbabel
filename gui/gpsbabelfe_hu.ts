@@ -1261,7 +1261,7 @@ Néhány GPS-adatformátum csak egy részhalmazt támogat útjelzők, nyomok és
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">Error processing formats from running process </translation>
+        <translation type="unfinished">Hiba a feldolgozás során a futó folyamatból &quot;gpsbabel -^3&quot; a(z) %1 sorban</translation>
     </message>
 </context>
 <context>

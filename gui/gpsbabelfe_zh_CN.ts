@@ -1217,7 +1217,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">Error processing formats from running process </translation>
+        <translation type="unfinished">错误处理来自运行进程 &quot;gpsbabel -^3&quot; 的格式，位于第 %1 行</translation>
     </message>
 </context>
 <context>

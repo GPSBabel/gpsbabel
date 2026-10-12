@@ -1267,7 +1267,7 @@ Certains formats de données GPS ne prennent en charge qu&apos;un sous-ensemble 
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">Erreur lors du traitement des formats à partir du processus en cours </translation>
+        <translation type="unfinished">Erreur lors du traitement des formats à partir du processus en cours &quot;gpsbabel -^3&quot; à la ligne %1</translation>
     </message>
 </context>
 <context>

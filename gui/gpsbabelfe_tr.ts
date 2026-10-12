@@ -1217,7 +1217,7 @@ Bazı GPS veri biçimleri, yollar, yollar ve rotaların yalnızca bir alt kümes
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">Hata: </translation>
+        <translation type="unfinished">Hata: Çalışan işlem &quot;gpsbabel -^3&quot; tarafından satır %1&apos;de biçimler işlenirken</translation>
     </message>
 </context>
 <context>
