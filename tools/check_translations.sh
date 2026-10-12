@@ -11,7 +11,7 @@ declare -A check_hash=(
     [whitespaces]="--no-accelerator --no-punctuation --no-place-marker"
 )
 for check in "${!check_hash[@]}"; do
-  for file in gpsbabelfe*ts; do
+  for file in gpsbabel*ts; do
     echo -n "$check: $file: "
     # shellcheck disable=SC2086 # Intentional word splitting
     lcheck ${check_hash[$check]} -o lcheck."$check"."$(basename -s .ts "$file")" "$file" || true
