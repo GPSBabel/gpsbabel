@@ -1071,7 +1071,7 @@
     <message>
         <location filename="core_strings.h" line="103"/>
         <source>Write description/notes to the comment record instead of the address field (multi-line on some Garmin devices)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Írja a leírást/jegyzetet a megjegyzésbe helyette az cím mezőbe (több soros néhány Garmin eszközön)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="111"/>
@@ -1333,7 +1333,7 @@
     <message>
         <location filename="core_strings.h" line="164"/>
         <source>Google Maps Timeline</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Google Maps Idővonal</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="174"/>

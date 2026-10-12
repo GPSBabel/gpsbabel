@@ -405,7 +405,7 @@
     <message>
         <location filename="core_strings.h" line="103"/>
         <source>Write description/notes to the comment record instead of the address field (multi-line on some Garmin devices)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">כתוב תיאור/הערות לרשומה של הערה במקום שדה הכתובת (ריבועי-שורה מרובות במכשירי Garmin מסוימים)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="104"/>
@@ -690,7 +690,7 @@
     <message>
         <location filename="core_strings.h" line="164"/>
         <source>Google Maps Timeline</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Google Maps Timeline</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="165"/>

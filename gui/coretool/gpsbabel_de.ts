@@ -1692,7 +1692,7 @@
     <message>
         <location filename="core_strings.h" line="103"/>
         <source>Write description/notes to the comment record instead of the address field (multi-line on some Garmin devices)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beschreibung/Notizen in den Kommentar-Record schreiben statt in das Adressfeld (mehrzeilige Eingabe auf einigen Garmin-Geräten)</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="127"/>
@@ -1760,7 +1760,7 @@
     <message>
         <location filename="core_strings.h" line="164"/>
         <source>Google Maps Timeline</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Google Maps Timeline</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="174"/>
