@@ -1059,15 +1059,17 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1006"/>
-        <source>Error preparing map: %1
-</source>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">Ошибка подготовки карты: %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1049"/>
-        <source>Error running gpsbabel: %1
-</source>
-        <translation>Ошибка запуска gpsbabel: %1</translation>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
+        <translation type="unfinished">Ошибка запуска gpsbabel: %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1174"/>

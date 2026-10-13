@@ -877,14 +877,16 @@ Este programa não pode continuar.</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1006"/>
-        <source>Error preparing map: %1
-</source>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">Erro ao preparar o mapa: %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1049"/>
-        <source>Error running gpsbabel: %1
-</source>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
         <translation type="unfinished">Erro ao executar gpsbabel: %1</translation>
     </message>
     <message>

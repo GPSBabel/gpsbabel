@@ -699,15 +699,16 @@ Ce programme ne peut pas continuer.</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1006"/>
-        <source>Error preparing map: %1
-</source>
-        <translation type="unfinished">Erreur lors de la préparation de la carte : %1
-</translation>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
+        <translation type="unfinished">Erreur lors de la préparation de la carte : %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1049"/>
-        <source>Error running gpsbabel: %1
-</source>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
         <translation type="unfinished">Erreur lors de l&apos;exécution de gpsbabel : %1</translation>
     </message>
     <message>

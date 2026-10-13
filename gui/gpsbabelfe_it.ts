@@ -993,16 +993,17 @@ Questo programma non può proseguire.</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1006"/>
-        <source>Error preparing map: %1
-</source>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">Errore durante la preparazione della mappa: %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1049"/>
-        <source>Error running gpsbabel: %1
-</source>
-        <translation>Errore durante l&apos;esecuzione di gpsbabel: %1
-</translation>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
+        <translation type="unfinished">Errore durante l&apos;esecuzione di gpsbabel: %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1174"/>

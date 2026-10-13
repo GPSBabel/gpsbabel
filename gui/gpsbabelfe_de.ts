@@ -765,15 +765,17 @@ Das Prgramm muss abgebrochen werden.</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1006"/>
-        <source>Error preparing map: %1
-</source>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">Fehler bei der Vorbereitung der Karte: %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1049"/>
-        <source>Error running gpsbabel: %1
-</source>
-        <translation>Fehler beim Aufruf von gpsbabel: %1</translation>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
+        <translation type="unfinished">Fehler beim Aufruf von gpsbabel: %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="1174"/>
