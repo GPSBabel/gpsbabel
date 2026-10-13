@@ -125,8 +125,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
-        <translation type="unfinished">Okos rövidített nevek létrehozása. </translation>
+        <source>Create smart shortened names.</source>
+        <translation type="unfinished">Okos rövidített nevek létrehozása.</translation>
     </message>
 </context>
 <context>
@@ -212,7 +212,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="filterui.ui" line="17"/>
-        <source>Data filters process and transform the data between input and output files or devices. </source>
+        <source>Data filters process and transform the data between input and output files or devices.</source>
         <translation type="unfinished">Adat szűrők feldolgozzák és átalakítják az adatokat a bemeneti és kimeneti fájlok vagy eszközök között.</translation>
     </message>
     <message>
@@ -736,8 +736,8 @@ Ez a program nem folytatható.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
-        <translation type="unfinished">Bemenet </translation>
+        <source>Input</source>
+        <translation type="unfinished">Bemenet</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="41"/>
@@ -775,7 +775,7 @@ Ez a program nem folytatható.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="129"/>
-        <source>Browse for one or more input files. </source>
+        <source>Browse for one or more input files.</source>
         <translation type="unfinished">Válasszon ki egy vagy több bemeneti fájlt.</translation>
     </message>
     <message>
@@ -796,7 +796,7 @@ Ez a program nem folytatható.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="207"/>
-        <source>Options for the selected input format. </source>
+        <source>Options for the selected input format.</source>
         <translation type="unfinished">A kiválasztott bemeneti formátum beállításai.</translation>
     </message>
     <message>
@@ -852,8 +852,8 @@ Ez a program nem folytatható.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="427"/>
-        <source>More translation options. </source>
-        <translation type="unfinished">További fordítási lehetőségek. </translation>
+        <source>More translation options.</source>
+        <translation type="unfinished">További fordítási lehetőségek.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="430"/>
@@ -867,8 +867,8 @@ Ez a program nem folytatható.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="460"/>
-        <source>If selected, output is to a file. </source>
-        <translation type="unfinished">Ha kiválasztva, a kimenet fájlba kerül. </translation>
+        <source>If selected, output is to a file.</source>
+        <translation type="unfinished">Ha kiválasztva, a kimenet fájlba kerül.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="476"/>
@@ -882,8 +882,8 @@ Ez a program nem folytatható.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="545"/>
-        <source>Browse for an output file name. </source>
-        <translation type="unfinished">Fájlnevet keresés a kimenethez. </translation>
+        <source>Browse for an output file name.</source>
+        <translation type="unfinished">Fájlnevet keresés a kimenethez.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="548"/>
@@ -897,13 +897,13 @@ Ez a program nem folytatható.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="623"/>
-        <source>Options for the selected output format. </source>
-        <translation type="unfinished">A kiválasztott kimeneti formátum beállításai. </translation>
+        <source>Options for the selected output format.</source>
+        <translation type="unfinished">A kiválasztott kimeneti formátum beállításai.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="647"/>
-        <source>Output of GPSBabel translation process. </source>
-        <translation type="unfinished">GPSBabel fordítási folyamat kimenete. </translation>
+        <source>Output of GPSBabel translation process.</source>
+        <translation type="unfinished">GPSBabel fordítási folyamat kimenete.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="681"/>
@@ -1032,7 +1032,7 @@ Ez a program nem folytatható.</translation>
         <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</source>
         <translation type="unfinished">Ez a szűrő használható GPS-adatok átalakításához különböző adattípusok között.
 
 Néhány GPS-adatformátum csak egy részhalmazt támogat útjelzők, nyomok és útvonalak közül. A transzformációs szűrő lehetővé teszi ezek közötti átalakítást. Például útjelzők (pl. CSV-fájlból származó) összességét nyomokká vagy fordítva alakíthatja át.</translation>
@@ -1044,13 +1044,13 @@ Néhány GPS-adatformátum csak egy részhalmazt támogat útjelzők, nyomok és
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <source>Type of transformation. </source>
-        <translation type="unfinished">Átalakítás típusa. </translation>
+        <source>Type of transformation.</source>
+        <translation type="unfinished">Átalakítás típusa.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <source>Delete original data after transform to prevent duplicated data. </source>
-        <translation type="unfinished">Törölje az eredeti adatokat az átalakítás után, hogy elkerülje a duplikált adatokat. </translation>
+        <source>Delete original data after transform to prevent duplicated data.</source>
+        <translation type="unfinished">Törölje az eredeti adatokat az átalakítás után, hogy elkerülje a duplikált adatokat.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="56"/>
@@ -1106,7 +1106,7 @@ Néhány GPS-adatformátum csak egy részhalmazt támogat útjelzők, nyomok és
     </message>
     <message>
         <location filename="miscfltui.ui" line="215"/>
-        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</source>
         <translation type="unfinished">Egyszerű szűrő a koordináták (szélesség és hosszúság) értékeinek felcseréléséhez minden pontnál. Ez hasznos lehet rosszul definiált/kódolt adatok esetén. Vagy ha úgy gondolja, hogy használhatja az egyik xcsv formátumunkat, de a szélesség és hosszúság sorrendje fordított.</translation>
     </message>
     <message>
@@ -1322,7 +1322,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="rttrkui.ui" line="89"/>
-        <source>Maximum number points in track or route. </source>
+        <source>Maximum number points in track or route.</source>
         <translation type="unfinished">Maximális pontszám a nyom vagy útvonalban.</translation>
     </message>
     <message>
@@ -1431,7 +1431,7 @@ Továbbá, ha ezt az útvonal megfordításához használja, amely navigál, mon
     </message>
     <message>
         <location filename="trackui.ui" line="17"/>
-        <source>This filter performs various operations on track data. </source>
+        <source>This filter performs various operations on track data.</source>
         <translation type="unfinished">Ez a szűrő különböző műveleteket végez a naplóadatokon.</translation>
     </message>
     <message>
@@ -1448,7 +1448,7 @@ Továbbá, ha ezt az útvonal megfordításához használja, amely navigál, mon
         <location filename="trackui.ui" line="45"/>
         <source>Basic title for new track(s). 
 This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
-If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names.</source>
         <translation type="unfinished">Alapértelmezett cím az új napló(oka)hoz.
 Ez a beállítás meghatározza a naplószűrő által létrehozott naplók címét. Alapértelmezés szerint az új napló címe a napló kezdőidőpontjának hozzáadásával áll össze ehhez az értékhez.
 Ha ez az érték százalék (%) karaktert tartalmaz, akkor a POSIX strftime függvény formátumkarakterként kezeli, lehetővé téve egyéni időalapú naplóneveket.</translation>
@@ -1460,7 +1460,7 @@ Ha ez az érték százalék (%) karaktert tartalmaz, akkor a POSIX strftime füg
     </message>
     <message>
         <location filename="trackui.ui" line="57"/>
-        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
+        <source>the title of the new track is composed of the start time of the track appended to this value.</source>
         <translation type="unfinished">Az új napló címe a napló kezdőidőpontjának hozzáadásával áll össze ehhez az értékhez.</translation>
     </message>
     <message>
@@ -1471,7 +1471,7 @@ Ha ez az érték százalék (%) karaktert tartalmaz, akkor a POSIX strftime füg
     <message>
         <location filename="trackui.ui" line="67"/>
         <source>Correct trackpoint timestamps by a delta. 
-This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone.</source>
         <translation type="unfinished">Naplópontok időbélyegeinek korrekciója egy delta értékkel.
 Ez a beállítás minden naplópont időpontját módosítja. Ez hasznos lehet, ha a napló időzóna hibája miatt egy vagy több órával el kell mozdítani.</translation>
     </message>
@@ -1510,14 +1510,14 @@ Ez a beállítás minden naplópont időpontját módosítja. Ez hasznos lehet, 
     <message>
         <location filename="trackui.ui" line="204"/>
         <location filename="trackui.ui" line="219"/>
-        <source>Use track pts. after this time. </source>
+        <source>Use track pts. after this time.</source>
         <translation type="unfinished">Naplópontok használata ezen az időpont után.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
-This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period.</source>
         <translation type="unfinished">Csak olyan naplópontok használata, amelyek ezen az időpont után vannak rögzítve.
 Ez a beállítás együtt használható a végével, hogy eldobhassuk a specifikus időszakon kívül rögzített naplópontokat. Ez a beállítás a időszak kezdetét határozza meg.</translation>
     </message>
@@ -1534,14 +1534,14 @@ Ez a beállítás együtt használható a végével, hogy eldobhassuk a specifik
     <message>
         <location filename="trackui.ui" line="232"/>
         <location filename="trackui.ui" line="247"/>
-        <source>Use track pts before this time. </source>
+        <source>Use track pts before this time.</source>
         <translation type="unfinished">Naplópontok használata ezen az időpont előtt.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
         <source> Use only track points before this timestamp.
 
-This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Csak a megadott időpont előtti útvonalpontokat használja. Ez az opció a kezdő opcióval együtt használatos, hogy eldobja az időszakon kívüli összes útvonalpontot. Ez az opció a időszak végét határozza meg.</translation>
     </message>
     <message>
@@ -1551,8 +1551,8 @@ This option is used in conjunction with the start option to discard all trackpoi
     </message>
     <message>
         <location filename="trackui.ui" line="254"/>
-        <source>Pack all tracks into one. </source>
-        <translation type="unfinished">Összes útvonal egybe csomagolása. </translation>
+        <source>Pack all tracks into one.</source>
+        <translation type="unfinished">Összes útvonal egybe csomagolása.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="257"/>
@@ -1560,7 +1560,7 @@ This option is used in conjunction with the start option to discard all trackpoi
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
-This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop.</source>
         <translation type="unfinished">Összes útvonal egybe csomagolása. Ez az opció összefűzi az összes útvonalat egyetlen útvonalba. Ez az opció nem működik, ha bármely két útvonal időben átfedésben van; ebben az esetben érdemes a merge opciót használni. Ez az opció leginkább hasznos az útvonalak újraösszekapcsolásához, amelyeket eszközhiba vagy éjszakai megállás miatt szakítottak meg.</translation>
     </message>
     <message>
@@ -1577,7 +1577,7 @@ This option is most useful for rejoining tracks that might have been interrupted
         <location filename="trackui.ui" line="274"/>
         <source> Merge multiple tracks for the same way.
 
-This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">Több útvonal egyesítése ugyanahhoz a módhoz. Ez az opció összegyűjti az összes útvonalpontot az összes útvonalból egyetlen útvonalba, és időbélyeg szerint rendezve. Az azonos időbélyegű pontokat eldobja.</translation>
     </message>
     <message>
@@ -1593,7 +1593,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="305"/>
-        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date.</source>
         <translation type="unfinished">Ha nem nulla, az útvonal felosztásra kerül, ha két pont közötti időtartam ezen paramétert meghaladja. Ha nulla, az útvonal nap szerint oszlik fel.</translation>
     </message>
     <message>
@@ -1608,7 +1608,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="348"/>
-        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter.</source>
         <translation type="unfinished">Ha nem nulla, a bemeneti útvonal több útvonalra oszlik, ha a szomszédos útvonalpontok közötti távolság ezen paramétert meghaladja.</translation>
     </message>
     <message>
@@ -1670,7 +1670,7 @@ This option puts all track points from all tracks into a single track and sorts 
         <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
-This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
         <translation type="unfinished">Kurzus szintetizálása.
 
 Ez a lehetőség kiszámít (vagy újra kiszámít) egy értéket a GPS irányzat minden trackpointnél. Ez leginkább hasznos a trackpointeknél, amelyek forrásai nem támogatják az irányzat információt, vagy a szintetizált trackpointeknél, amelyeket az interpolációs szűrő hozott létre. Minden trackpointnél az irányzat egyszerűen a korábbi trackpointból származó kurzus. Az egyes trackek első trackpointjének tetszőlegesen 0 fokos irányzatot rendelünk.</translation>
@@ -1699,7 +1699,7 @@ Ez a lehetőség kiszámít (vagy újra kiszámít) egy értéket a GPS irányza
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
-        <source>Synthesize speed. </source>
+        <source>Synthesize speed.</source>
         <translation type="unfinished">Sebesség szintetizálása.</translation>
     </message>
     <message>
@@ -1711,7 +1711,7 @@ Ez a lehetőség kiszámít (vagy újra kiszámít) egy értéket a GPS irányza
         <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
         <translation type="unfinished">Sebesség szintetizálása.
 
 Ez a lehetőség kiszámít egy értéket a GPS sebesség minden trackpointnél. Ez leginkább hasznos a trackpointeknél, amelyek forrásai nem támogatják a sebesség információt, vagy a szintetizált trackpointeknél, amelyeket az interpolációs szűrő hozott létre. Minden trackpointnél a sebesség a korábbi trackpointból számított átlagsebesség (távolság osztva idővel). Az egyes trackek első trackpointjének sebessége &quot;ismeretlen&quot; értéket kap.</translation>
@@ -1819,7 +1819,7 @@ Ez a lehetőség kiszámít egy értéket a GPS sebesség minden trackpointnél.
     </message>
     <message>
         <location filename="wayptsui.ui" line="168"/>
-        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</source>
         <translation type="unfinished">A duplikátum szűrő arra tervezve, hogy ismétlődő pontokat távolítson el a rövid név alapján (általában egy útjelző neve a GPS vevőn), és/vagy a hely alapján (6 tizedesjegyre pontosan). Ez a szűrő két lehetőséget támogat, amelyek meghatározzák, hogyan ismerjük fel a duplikátumokat: rövidnév és hely. Általában legalább az egyik ezen lehetőségek közül szükséges.</translation>
     </message>
     <message>
@@ -1855,8 +1855,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="133"/>
-        <source>Suppress duplicate waypoint based on coords. </source>
-        <translation type="unfinished">Ismétlődő útjelző elnyomása koordináták alapján. </translation>
+        <source>Suppress duplicate waypoint based on coords.</source>
+        <translation type="unfinished">Ismétlődő útjelző elnyomása koordináták alapján.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="136"/>
@@ -1888,10 +1888,10 @@ p, li { white-space: pre-wrap; }
         <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</source>
         <translation type="unfinished">Maximális pozíciós távolság.
 
-Ez a lehetőség a két pont közötti minimálisan engedélyezett távolságot határozza meg. Ha két pont ezen távolságnál közelebb van egymáshoz, csak az egyiket tartjuk meg. </translation>
+Ez a lehetőség a két pont közötti minimálisan engedélyezett távolságot határozza meg. Ha két pont ezen távolságnál közelebb van egymáshoz, csak az egyiket tartjuk meg.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="45"/>
@@ -1922,10 +1922,10 @@ Ez a lehetőség a két pont közötti minimálisan engedélyezett távolságot 
         <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</source>
         <translation type="unfinished">Ez a szűrő útjelzőket foglal be vagy zár ki a középponttól való közelítés alapján. Az összes olyan útjelzőt eltávolítja az adatkészletből, amely a megadott ponttól a megadott távolságnál messzebb van.
 
-Alapértelmezés szerint az összes maradék pontot úgy rendezik, hogy a középpont közelebbi pontok a kimeneti fájlban korábban jelenjenek meg. </translation>
+Alapértelmezés szerint az összes maradék pontot úgy rendezik, hogy a középpont közelebbi pontok a kimeneti fájlban korábban jelenjenek meg.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="30"/>
@@ -1934,8 +1934,8 @@ Alapértelmezés szerint az összes maradék pontot úgy rendezik, hogy a közé
     </message>
     <message>
         <location filename="wayptsui.ui" line="208"/>
-        <source>Maximum distance from center. </source>
-        <translation type="unfinished">Középponttól mért maximális távolság. </translation>
+        <source>Maximum distance from center.</source>
+        <translation type="unfinished">Középponttól mért maximális távolság.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="73"/>
