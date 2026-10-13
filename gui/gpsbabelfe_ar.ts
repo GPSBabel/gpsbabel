@@ -1214,7 +1214,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="processwait.cc" line="44"/>
         <source> ... Process GPSBabel</source>
-        <translation type="unfinished">... معالجة GPSBabel</translation>
+        <translation type="unfinished"> ... معالجة GPSBabel</translation>
     </message>
     <message>
         <location filename="processwait.cc" line="61"/>
