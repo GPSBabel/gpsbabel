@@ -1433,11 +1433,11 @@ The quality of the results will vary depending on the density of points in the o
 The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
 
 The quality of the results will vary depending on the density of points in the original route and the length of the original route. </oldsource>
-        <translation type="unfinished"> Il filtro di semplificazione viene usato per semplificare rotte e tracce per l&apos;uso con formati che supportano un limitato numero di punti o semplicemente per ridurre la complessità di una rotta.
+        <translation type="unfinished">Il filtro di semplificazione viene usato per semplificare rotte e tracce per l&apos;uso con formati che supportano un limitato numero di punti o semplicemente per ridurre la complessità di una rotta.
 
 Il filtro prova a rimuovere i punti da ogni rotta finché il numero di punti o l&apos;errore ricade entro i limiti forniti, cercando nel contempo di mantenere per quanto possibile la forma della rotta originale.
 
-La qualità dei risultati dipenderà dalla densità dei punti e dalla lunghezza della rotta originale. </translation>
+La qualità dei risultati dipenderà dalla densità dei punti e dalla lunghezza della rotta originale.</translation>
     </message>
     <message>
         <location filename="rttrkui.ui" line="59"/>

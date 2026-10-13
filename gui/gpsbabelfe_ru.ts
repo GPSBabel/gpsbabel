@@ -1498,11 +1498,11 @@ The quality of the results will vary depending on the density of points in the o
 The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
 
 The quality of the results will vary depending on the density of points in the original route and the length of the original route. </oldsource>
-        <translation type="unfinished"> Фильтр упрощения используется для упрощения маршрутов и треков для использования с форматами, которые ограничивают количество точек или для уменьшения их сложности.
+        <translation type="unfinished">Фильтр упрощения используется для упрощения маршрутов и треков для использования с форматами, которые ограничивают количество точек или для уменьшения их сложности.
 
 Фильтр пытается удалить точки из каждого маршрута, пока не достигается заданное число точек или ошибка. Одновременно он пытается сохранить форму оригинального маршрута насколько это возможно.
 
-Качество результатов будет меняться в зависимости от плотности точек оригинального маршрута и его длины. </translation>
+Качество результатов будет меняться в зависимости от плотности точек оригинального маршрута и его длины.</translation>
     </message>
     <message>
         <location filename="rttrkui.ui" line="59"/>
@@ -1536,7 +1536,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
         <oldsource>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
 Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </oldsource>
         <translation type="unfinished">Разворот производится самым примитивным путем. Оригинальные точки сохраняют временные метки, так что результирующий трек или маршрут будет идти назад во времени. Это может заставить некоторые приборы, такие как в особенности Magellan Mapsend, вести себя странным образом и помещать каждую точку в отдельный день.
-Дополнительно, вы можете оказаться в неудобной ситуации, если используете такой маршрут для навигации по развязке или по улице с односторонним движением. Приложение следит за временными метками </translation>
+Дополнительно, вы можете оказаться в неудобной ситуации, если используете такой маршрут для навигации по развязке или по улице с односторонним движением. Приложение следит за временными метками.</translation>
     </message>
     <message>
         <location filename="rttrkui.ui" line="128"/>

@@ -1538,11 +1538,11 @@ The quality of the results will vary depending on the density of points in the o
 The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
 
 The quality of the results will vary depending on the density of points in the original route and the length of the original route. </oldsource>
-        <translation type="unfinished"> El filtro Simplificar se usa para hacer lo propio con rutas y trazados para que pueden utilizarse con formatos que limitan el número máximo de puntos que pueden contener, o simplemente para reducir la complejidad de una ruta (por eso se llama simplificar).
+        <translation type="unfinished">El filtro Simplificar se usa para hacer lo propio con rutas y trazados para que pueden utilizarse con formatos que limitan el número máximo de puntos que pueden contener, o simplemente para reducir la complejidad de una ruta (por eso se llama simplificar).
 
 El filtro intenta quitar algunos puntos de cada ruta hasta que el número de puntos o el margen de error se halla entre los límites dados, a la vez que intenta que la forma se parezca lo más posible a la ruta original.
 
-La calidad de los resultados variará dependiendo del número de puntos que contenga la ruta original y de su longitud. </translation>
+La calidad de los resultados variará dependiendo del número de puntos que contenga la ruta original y de su longitud.</translation>
     </message>
     <message>
         <location filename="rttrkui.ui" line="124"/>
@@ -1551,7 +1551,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
         <oldsource>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
 Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </oldsource>
         <translation type="unfinished">La inversión es realizada de la manera más simple posible. Los tiempos de marca de los puntos originales se guardan tal cual de tal forma que el trazado o la ruta resultantes tendrá características curiosas cuando el tiempo va para atrás. Esto hace que, sobre todo, Magellan Mapasend haga cosas raras como poner cada punto de interés en un día diferente. 
-Además, si se utiliza este filtro para navegar por una ruta invertida que se mueve, por ejemplo una rampa de salida o una calle de sentido único, puedes encontrarte con un viaje poco apacible. Al programa le importan los tiempos de marca </translation>
+Además, si se utiliza este filtro para navegar por una ruta invertida que se mueve, por ejemplo una rampa de salida o una calle de sentido único, puedes encontrarte con un viaje poco apacible. Al programa le importan los tiempos de marca.</translation>
     </message>
 </context>
 <context>

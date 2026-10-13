@@ -1495,8 +1495,7 @@ The quality of the results will vary depending on the density of points in the o
 
 Der Filter entfernt solange Punkte aus allen Routen bis die Anzahl oder der entstehende Fehler in den gegebenen Grenzen ist. Dabei versucht er, den Character und die Form der originalen Route weitestgehend beizubehalten.
 
-Die Qualität der Ergebnisse hängt von der Länge der Route ab und davon, wie dicht die Punkte beieinander liegen.
-</translation>
+Die Qualität der Ergebnisse hängt von der Länge der Route ab und davon, wie dicht die Punkte beieinander liegen.</translation>
     </message>
     <message>
         <location filename="rttrkui.ui" line="124"/>

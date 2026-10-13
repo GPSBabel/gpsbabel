@@ -241,7 +241,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="gmapdlg.cc" line="70"/>
         <source>miles</source>
-        <translation type="unfinished"> míle</translation>
+        <translation type="unfinished">míle</translation>
     </message>
     <message>
         <location filename="gmapdlg.cc" line="73"/>
