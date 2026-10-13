@@ -144,7 +144,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="donate.ui" line="69"/>
         <source>&lt;p&gt;Of course, if you&apos;ve already contributed to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
-        <translation type="unfinished">البته، اگر قبلاً به پروژه کمک کرده‌اید یا فقط نمی‌توانید به پروژه کمک کنید، لطفاً جعبه زیر را علامت بزنید تا این پیام را دیگر نبینید.</translation>
+        <translation type="unfinished">&lt;p&gt;البته، اگر قبلاً به پروژه کمک کرده‌اید یا فقط نمی‌توانید به پروژه کمک کنید، لطفاً جعبه زیر را علامت بزنید تا دیگر این پیام را نبینید.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="donate.ui" line="79"/>
