@@ -1,0 +1,38 @@
+#!/bin/bash -e
+# this file is used to build the image gpsbabel_build_environment used by travis.
+
+TMPDIR=$(mktemp -d)
+trap "rm -fr $TMPDIR" 0 1 2 3 15
+docker buildx build --pull --file - --tag tsteven4/gpsbabel_ollama_server:latest --progress plain ${TMPDIR} <<"EOJ"
+
+FROM ubuntu:resolute
+
+LABEL maintainer="https://github.com/tsteven4"
+
+WORKDIR /app
+
+# update environment.
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+ && apt-get upgrade -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# install packages needed for gpsbabel build
+# split into multiple commands to limit layer size
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    zstd \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://ollama.com/install.sh | sh
+
+RUN ollama serve >/tmp/ollama.log 2>&1 & \
+    pid=$!; \
+    until ollama list >/dev/null 2>&1; do sleep 1; done; \
+    ollama pull qwen3:30b && kill "$pid"
+
+CMD ["ollama", "serve"]
+EOJ

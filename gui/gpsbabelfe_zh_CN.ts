@@ -18,7 +18,7 @@
     </message>
     <message>
         <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
+        <source>Create smart shortened names.</source>
         <translation type="unfinished">创建智能简短名称。</translation>
     </message>
     <message>
@@ -212,7 +212,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="filterui.ui" line="17"/>
-        <source>Data filters process and transform the data between input and output files or devices. </source>
+        <source>Data filters process and transform the data between input and output files or devices.</source>
         <translation type="unfinished">数据过滤器处理并转换输入和输出文件或设备之间的数据。</translation>
     </message>
     <message>
@@ -552,7 +552,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
+        <source>Input</source>
         <translation type="unfinished">输入</translation>
     </message>
     <message>
@@ -591,7 +591,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="129"/>
-        <source>Browse for one or more input files. </source>
+        <source>Browse for one or more input files.</source>
         <translation type="unfinished">浏览一个或多个输入文件。</translation>
     </message>
     <message>
@@ -612,7 +612,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="207"/>
-        <source>Options for the selected input format. </source>
+        <source>Options for the selected input format.</source>
         <translation type="unfinished">所选输入格式的选项。</translation>
     </message>
     <message>
@@ -668,7 +668,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="427"/>
-        <source>More translation options. </source>
+        <source>More translation options.</source>
         <translation type="unfinished">更多翻译选项。</translation>
     </message>
     <message>
@@ -683,7 +683,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="460"/>
-        <source>If selected, output is to a file. </source>
+        <source>If selected, output is to a file.</source>
         <translation type="unfinished">如果选中，输出将保存到文件。</translation>
     </message>
     <message>
@@ -698,7 +698,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="545"/>
-        <source>Browse for an output file name. </source>
+        <source>Browse for an output file name.</source>
         <translation type="unfinished">浏览输出文件名。</translation>
     </message>
     <message>
@@ -713,12 +713,12 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="623"/>
-        <source>Options for the selected output format. </source>
+        <source>Options for the selected output format.</source>
         <translation type="unfinished">所选输出格式的选项。</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="647"/>
-        <source>Output of GPSBabel translation process. </source>
+        <source>Output of GPSBabel translation process.</source>
         <translation type="unfinished">GPSBabel翻译过程的输出。</translation>
     </message>
     <message>
@@ -952,7 +952,7 @@ This program cannot continue.</source>
         <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</source>
         <translation type="unfinished">此过滤器可用于在不同数据类型之间转换GPS数据。
 
 某些GPS数据格式仅支持航点、轨迹和路线的子集。转换过滤器允许您在这些类型之间进行转换。例如，它可以用于将一堆航点（如来自CSV文件的航点）转换为轨迹，或反之。</translation>
@@ -964,12 +964,12 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <source>Type of transformation. </source>
+        <source>Type of transformation.</source>
         <translation type="unfinished">转换类型。</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <source>Delete original data after transform to prevent duplicated data. </source>
+        <source>Delete original data after transform to prevent duplicated data.</source>
         <translation type="unfinished">转换后删除原始数据以防止数据重复。</translation>
     </message>
     <message>
@@ -1058,7 +1058,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="215"/>
-        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</source>
         <translation type="unfinished">交换坐标值的简单过滤器（纬度和经度）。这有助于处理定义/编码错误的数据。或者，如果您认为可以使用我们的xcsv格式，但纬度和经度顺序相反。</translation>
     </message>
     <message>
@@ -1296,7 +1296,7 @@ The quality of the results will vary depending on the density of points in the o
     </message>
     <message>
         <location filename="rttrkui.ui" line="89"/>
-        <source>Maximum number points in track or route. </source>
+        <source>Maximum number points in track or route.</source>
         <translation type="unfinished">轨迹或路线中最大点数。</translation>
     </message>
     <message>
@@ -1380,7 +1380,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
     </message>
     <message>
         <location filename="trackui.ui" line="17"/>
-        <source>This filter performs various operations on track data. </source>
+        <source>This filter performs various operations on track data.</source>
         <translation type="unfinished">此过滤器对轨迹数据执行各种操作。</translation>
     </message>
     <message>
@@ -1397,7 +1397,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
         <location filename="trackui.ui" line="45"/>
         <source>Basic title for new track(s). 
 This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
-If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names.</source>
         <translation type="unfinished">新轨迹的基本标题。
 此选项指定由轨迹过滤器生成的轨迹的标题。默认情况下，新轨迹的标题由轨迹的开始时间附加到此值组成。
 如果此值包含百分号（%）字符，则将其视为POSIX strftime函数的格式字符串，允许自定义基于时间的轨迹名称。</translation>
@@ -1409,7 +1409,7 @@ If this value contains a percent (%) character, it is treated as a format string
     </message>
     <message>
         <location filename="trackui.ui" line="57"/>
-        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
+        <source>the title of the new track is composed of the start time of the track appended to this value.</source>
         <translation type="unfinished">新轨迹的标题由轨迹的开始时间附加到此值组成。</translation>
     </message>
     <message>
@@ -1420,7 +1420,7 @@ If this value contains a percent (%) character, it is treated as a format string
     <message>
         <location filename="trackui.ui" line="67"/>
         <source>Correct trackpoint timestamps by a delta. 
-This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone.</source>
         <translation type="unfinished">通过增量校正轨迹点时间戳。
 此选项更改所有轨迹点的时间。如果由于时区错误需要将轨迹移动一小时或更多，此选项可能有用。</translation>
     </message>
@@ -1459,14 +1459,14 @@ This option changes the time of all trackpoints. This might be useful if your tr
     <message>
         <location filename="trackui.ui" line="204"/>
         <location filename="trackui.ui" line="219"/>
-        <source>Use track pts. after this time. </source>
+        <source>Use track pts. after this time.</source>
         <translation type="unfinished">在该时间之后使用轨迹点。</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
-This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period.</source>
         <translation type="unfinished">仅在该时间戳之后使用轨迹点。
 此选项与停止选项一起使用，以丢弃在特定时间段之外记录的轨迹点。此选项指定时间周期的开始。</translation>
     </message>
@@ -1478,14 +1478,14 @@ This option is used along with the stop to discard trackpoints that were recorde
     <message>
         <location filename="trackui.ui" line="232"/>
         <location filename="trackui.ui" line="247"/>
-        <source>Use track pts before this time. </source>
+        <source>Use track pts before this time.</source>
         <translation type="unfinished">在该时间之前使用轨迹点。</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
-This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">仅在该时间戳之前使用轨迹点。
 此选项与开始选项一起使用，以丢弃给定时间段之外的所有轨迹点。此选项定义时间周期的结束。</translation>
     </message>
@@ -1496,7 +1496,7 @@ This option is used in conjunction with the start option to discard all trackpoi
     </message>
     <message>
         <location filename="trackui.ui" line="254"/>
-        <source>Pack all tracks into one. </source>
+        <source>Pack all tracks into one.</source>
         <translation type="unfinished">将所有轨道合并为一个。</translation>
     </message>
     <message>
@@ -1505,7 +1505,7 @@ This option is used in conjunction with the start option to discard all trackpoi
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
-This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop.</source>
         <translation type="unfinished">将所有轨道合并为一个。
 
 此选项会将所有轨道依次连接起来形成单一轨道。如果任意两条轨道在时间上有重叠，则此选项无法使用；此时应考虑使用合并选项。
@@ -1524,9 +1524,9 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
-This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">合并同一路径的多条轨道。
 
 此选项将所有轨道的所有轨迹点合并到一个轨道中，并按时间戳排序。时间戳相同的点将被丢弃。</translation>
@@ -1548,7 +1548,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="305"/>
-        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date.</source>
         <translation type="unfinished">如果非零，当两点间时间间隔大于此参数时，轨道将被分割；如果为零，则按日期分割。</translation>
     </message>
     <message>
@@ -1563,7 +1563,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="348"/>
-        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter.</source>
         <translation type="unfinished">如果非零，当连续轨迹点间距离大于参数给定的距离时，输入轨道将被分割为多条轨道。</translation>
     </message>
     <message>
@@ -1618,14 +1618,14 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
-        <source>Synthesize speed. </source>
+        <source>Synthesize speed.</source>
         <translation type="unfinished">合成速度。</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
         <translation type="unfinished">合成速度。
 
 此选项为每个轨迹点计算GPS速度值。这在轨迹点来自不支持速度信息的格式或由插值滤波器合成的轨迹点时最为有用。每个轨迹点的速度是前一个轨迹点的平均速度（距离除以时间）。每个轨迹段中的第一个轨迹点被分配速度为“未知”。</translation>
@@ -1644,7 +1644,7 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
         <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
-This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
         <translation type="unfinished">合成航向。
 
 此选项为每个轨迹点计算（或重新计算）GPS航向值。这在轨迹点来自不支持航向信息的格式或由插值滤波器合成的轨迹点时最为有用。每个轨迹点的航向简单地是前一个轨迹点的航向。每个轨迹段中的第一个轨迹点被任意分配航向为0度。</translation>
@@ -1771,7 +1771,7 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
         <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</source>
         <translation type="unfinished">此筛选器根据点与中心点的距离包含或排除航点。所有距离指定点超过指定距离的航点将从数据集中移除。
 
 默认情况下，所有剩余点将按距离中心点的远近排序，使距离中心点较近的点在输出文件中先出现。</translation>
@@ -1790,7 +1790,7 @@ By default, all remaining points are sorted so that points closer to the center 
         <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</source>
         <translation type="unfinished">最大位置距离。
 
 此选项指定两点之间允许的最小距离。如果两点之间的距离小于该距离，则仅保留其中一个点。</translation>
@@ -1842,7 +1842,7 @@ This option specifies the minimum allowable distance between two points. If two 
     </message>
     <message>
         <location filename="wayptsui.ui" line="133"/>
-        <source>Suppress duplicate waypoint based on coords. </source>
+        <source>Suppress duplicate waypoint based on coords.</source>
         <translation type="unfinished">基于坐标抑制重复航点。</translation>
     </message>
     <message>
@@ -1882,7 +1882,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="168"/>
-        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</source>
         <translation type="unfinished">重复过滤器旨在根据其短名称（传统上为GPS接收器上的航点名称）和/或位置（精度为6位小数）移除重复点。此过滤器支持两种选项来指定如何识别重复项，即短名称和位置。通常，至少需要其中一个选项。</translation>
     </message>
     <message>
@@ -1918,7 +1918,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="208"/>
-        <source>Maximum distance from center. </source>
+        <source>Maximum distance from center.</source>
         <translation type="unfinished">中心的最大距离。</translation>
     </message>
 </context>

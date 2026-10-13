@@ -125,8 +125,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
-        <translation type="unfinished">Créer des noms raccourcis intelligents. </translation>
+        <source>Create smart shortened names.</source>
+        <translation type="unfinished">Créer des noms raccourcis intelligents.</translation>
     </message>
 </context>
 <context>
@@ -212,7 +212,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="filterui.ui" line="17"/>
-        <source>Data filters process and transform the data between input and output files or devices. </source>
+        <source>Data filters process and transform the data between input and output files or devices.</source>
         <translation type="unfinished">Les filtres de données traitent et transforment les données entre les fichiers d&apos;entrée et de sortie ou les périphériques.</translation>
     </message>
     <message>
@@ -737,8 +737,8 @@ Ce programme ne peut pas continuer.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
-        <translation type="unfinished">Entrée </translation>
+        <source>Input</source>
+        <translation type="unfinished">Entrée</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="41"/>
@@ -776,7 +776,7 @@ Ce programme ne peut pas continuer.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="129"/>
-        <source>Browse for one or more input files. </source>
+        <source>Browse for one or more input files.</source>
         <translation type="unfinished">Parcourir pour sélectionner un ou plusieurs fichiers d&apos;entrée.</translation>
     </message>
     <message>
@@ -798,7 +798,7 @@ Ce programme ne peut pas continuer.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="207"/>
-        <source>Options for the selected input format. </source>
+        <source>Options for the selected input format.</source>
         <translatorcomment>Via GT</translatorcomment>
         <translation>Options pour le format d&apos;entrée sélectionnée.</translation>
     </message>
@@ -856,7 +856,7 @@ Ce programme ne peut pas continuer.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="427"/>
-        <source>More translation options. </source>
+        <source>More translation options.</source>
         <translation type="unfinished">Plus d&apos;options de traduction.</translation>
     </message>
     <message>
@@ -872,7 +872,7 @@ Ce programme ne peut pas continuer.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="460"/>
-        <source>If selected, output is to a file. </source>
+        <source>If selected, output is to a file.</source>
         <translation type="unfinished">Si sélectionné, la sortie est vers un fichier.</translation>
     </message>
     <message>
@@ -887,8 +887,8 @@ Ce programme ne peut pas continuer.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="545"/>
-        <source>Browse for an output file name. </source>
-        <translation type="unfinished">Parcourir pour sélectionner un nom de fichier de sortie. </translation>
+        <source>Browse for an output file name.</source>
+        <translation type="unfinished">Parcourir pour sélectionner un nom de fichier de sortie.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="548"/>
@@ -902,13 +902,13 @@ Ce programme ne peut pas continuer.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="623"/>
-        <source>Options for the selected output format. </source>
-        <translation type="unfinished">Options pour le format de sortie sélectionné. </translation>
+        <source>Options for the selected output format.</source>
+        <translation type="unfinished">Options pour le format de sortie sélectionné.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="647"/>
-        <source>Output of GPSBabel translation process. </source>
-        <translation type="unfinished">Sortie du processus de traduction GPSBabel. </translation>
+        <source>Output of GPSBabel translation process.</source>
+        <translation type="unfinished">Sortie du processus de traduction GPSBabel.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="681"/>
@@ -1038,7 +1038,7 @@ Ce programme ne peut pas continuer.</translation>
         <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</source>
         <translation type="unfinished">Ce filtre peut être utilisé pour convertir les données GPS entre différents types de données.
 
 Certains formats de données GPS ne prennent en charge qu&apos;un sous-ensemble de points, pistes et itinéraires. Le filtre de transformation vous permet de convertir entre ces types. Par exemple, il peut être utilisé pour convertir un ensemble de points (tels que ceux provenant d&apos;un fichier CSV) en une piste ou vice versa.</translation>
@@ -1050,12 +1050,12 @@ Certains formats de données GPS ne prennent en charge qu&apos;un sous-ensemble 
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <source>Type of transformation. </source>
+        <source>Type of transformation.</source>
         <translation type="unfinished">Type de transformation.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <source>Delete original data after transform to prevent duplicated data. </source>
+        <source>Delete original data after transform to prevent duplicated data.</source>
         <translation type="unfinished">Supprimer les données originales après la transformation pour éviter les données en double.</translation>
     </message>
     <message>
@@ -1112,7 +1112,7 @@ Certains formats de données GPS ne prennent en charge qu&apos;un sous-ensemble 
     </message>
     <message>
         <location filename="miscfltui.ui" line="215"/>
-        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</source>
         <translation type="unfinished">Filtre simple pour échanger les valeurs de coordonnées (latitude et longitude) de tous les points. Cela peut être utile pour les données mal définies/codées. Ou si vous pensez que vous pouvez utiliser l&apos;un de nos formats xcsv, mais que la latitude et la longitude sont dans l&apos;ordre inverse.</translation>
     </message>
     <message>
@@ -1180,7 +1180,7 @@ Certains formats de données GPS ne prennent en charge qu&apos;un sous-ensemble 
     <message>
         <location filename="preferences.ui" line="83"/>
         <source>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</source>
-        <translation type="unfinished">Lorsque sélectionné, cet élément de menu envoie les mêmes informations que «</translation>
+        <translation type="unfinished">&lt;html&gt;Lorsque sélectionné, cet élément de menu envoie les mêmes informations que &amp;quot;Vérifier s&amp;apos;il existe une nouvelle version au démarrage.&amp;quot; à gpsbabel.org.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="86"/>
@@ -1328,7 +1328,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="rttrkui.ui" line="89"/>
-        <source>Maximum number points in track or route. </source>
+        <source>Maximum number points in track or route.</source>
         <translation type="unfinished">Nombre maximum de points dans une piste ou un itinéraire.</translation>
     </message>
     <message>
@@ -1437,8 +1437,8 @@ De plus, si vous utilisez cette fonction pour inverser un itinéraire qui navigu
     </message>
     <message>
         <location filename="trackui.ui" line="17"/>
-        <source>This filter performs various operations on track data. </source>
-        <translation type="unfinished">Ce filtre effectue diverses opérations sur les données de piste. </translation>
+        <source>This filter performs various operations on track data.</source>
+        <translation type="unfinished">Ce filtre effectue diverses opérations sur les données de piste.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="35"/>
@@ -1454,10 +1454,10 @@ De plus, si vous utilisez cette fonction pour inverser un itinéraire qui navigu
         <location filename="trackui.ui" line="45"/>
         <source>Basic title for new track(s). 
 This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
-If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names.</source>
         <translation type="unfinished">Titre de base pour la nouvelle piste(s). 
 Cette option spécifie un titre pour les pistes générées par le filtre de piste. Par défaut, le titre de la nouvelle piste est composé de l&apos;heure de début de la piste ajoutée à cette valeur. 
-Si cette valeur contient un caractère pourcentage (%), il est traité comme une chaîne de format pour la fonction POSIX strftime, permettant des noms de pistes personnalisés basés sur le temps. </translation>
+Si cette valeur contient un caractère pourcentage (%), il est traité comme une chaîne de format pour la fonction POSIX strftime, permettant des noms de pistes personnalisés basés sur le temps.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="50"/>
@@ -1466,8 +1466,8 @@ Si cette valeur contient un caractère pourcentage (%), il est traité comme une
     </message>
     <message>
         <location filename="trackui.ui" line="57"/>
-        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
-        <translation type="unfinished">Le titre de la nouvelle piste est composé de l&apos;heure de début de la piste ajoutée à cette valeur. </translation>
+        <source>the title of the new track is composed of the start time of the track appended to this value.</source>
+        <translation type="unfinished">Le titre de la nouvelle piste est composé de l&apos;heure de début de la piste ajoutée à cette valeur.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="64"/>
@@ -1477,9 +1477,9 @@ Si cette valeur contient un caractère pourcentage (%), il est traité comme une
     <message>
         <location filename="trackui.ui" line="67"/>
         <source>Correct trackpoint timestamps by a delta. 
-This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone.</source>
         <translation type="unfinished">Corriger les horodatages des points de piste par un delta. 
-Cette option modifie l&apos;heure de tous les points de piste. Cela peut être utile si votre piste doit être déplacée d&apos;une ou plusieurs heures en raison d&apos;une mauvaise configuration de fuseau horaire. </translation>
+Cette option modifie l&apos;heure de tous les points de piste. Cela peut être utile si votre piste doit être déplacée d&apos;une ou plusieurs heures en raison d&apos;une mauvaise configuration de fuseau horaire.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="71"/>
@@ -1516,16 +1516,16 @@ Cette option modifie l&apos;heure de tous les points de piste. Cela peut être u
     <message>
         <location filename="trackui.ui" line="204"/>
         <location filename="trackui.ui" line="219"/>
-        <source>Use track pts. after this time. </source>
-        <translation type="unfinished">Utiliser les points de piste après cette heure. </translation>
+        <source>Use track pts. after this time.</source>
+        <translation type="unfinished">Utiliser les points de piste après cette heure.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
-This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period.</source>
         <translation type="unfinished">Utiliser uniquement les points de piste après ce timestamp.
-Cette option est utilisée conjointement avec l&apos;arrêt pour supprimer les points de piste enregistrés en dehors d&apos;une période spécifique. Cette option spécifie le début de la période temporelle. </translation>
+Cette option est utilisée conjointement avec l&apos;arrêt pour supprimer les points de piste enregistrés en dehors d&apos;une période spécifique. Cette option spécifie le début de la période temporelle.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="212"/>
@@ -1540,14 +1540,14 @@ Cette option est utilisée conjointement avec l&apos;arrêt pour supprimer les p
     <message>
         <location filename="trackui.ui" line="232"/>
         <location filename="trackui.ui" line="247"/>
-        <source>Use track pts before this time. </source>
-        <translation type="unfinished">Utiliser les points de piste avant cette heure. </translation>
+        <source>Use track pts before this time.</source>
+        <translation type="unfinished">Utiliser les points de piste avant cette heure.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
-This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Utilisez uniquement les points de trace avant cette horodatage. Cette option est utilisée conjointement avec l&apos;option de début pour supprimer tous les points de trace en dehors d&apos;une période donnée. Cette option définit la fin de la période de temps.</translation>
     </message>
     <message>
@@ -1557,7 +1557,7 @@ This option is used in conjunction with the start option to discard all trackpoi
     </message>
     <message>
         <location filename="trackui.ui" line="254"/>
-        <source>Pack all tracks into one. </source>
+        <source>Pack all tracks into one.</source>
         <translation type="unfinished">Empaquetage de toutes les pistes en une seule.</translation>
     </message>
     <message>
@@ -1566,7 +1566,7 @@ This option is used in conjunction with the start option to discard all trackpoi
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
-This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop.</source>
         <translation type="unfinished">Empaquetage de toutes les pistes en une seule. Cette option permet de concaténer toutes les pistes pour former une seule piste. Cette option ne fonctionne pas si deux pistes se chevauchent dans le temps ; dans ce cas, envisagez d&apos;utiliser l&apos;option de fusion. Cette option est particulièrement utile pour relier des pistes qui ont pu être interrompues par une panne matérielle ou une pause nocturne.</translation>
     </message>
     <message>
@@ -1581,9 +1581,9 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
-This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">Fusionner plusieurs pistes pour le même chemin. Cette option place tous les points de trace de toutes les pistes dans une seule piste et les trie par horodatage. Les points avec des horodatages identiques seront supprimés.</translation>
     </message>
     <message>
@@ -1599,7 +1599,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="305"/>
-        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date.</source>
         <translation type="unfinished">Si non nul, la piste sera fractionnée si l&apos;intervalle de temps entre deux points est supérieur à ce paramètre. Si zéro, la piste sera fractionnée par date.</translation>
     </message>
     <message>
@@ -1614,7 +1614,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="348"/>
-        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter.</source>
         <translation type="unfinished">Si non nul, la piste d&apos;entrée sera fractionnée en plusieurs pistes si la distance entre deux points successifs est supérieure à la distance indiquée en paramètre.</translation>
     </message>
     <message>
@@ -1676,10 +1676,10 @@ This option puts all track points from all tracks into a single track and sorts 
         <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
-This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
         <translation type="unfinished">Synthétiser le cours.
 
-Cette option calcule (ou recalcul) une valeur pour l&apos;orientation GPS à chaque point de trace. Cela est particulièrement utile avec des points de trace provenant de formats qui ne prennent pas en charge les informations d&apos;orientation ou pour des points de trace synthétisés par le filtre d&apos;interpolation. L&apos;orientation à chaque point de trace est simplement le cours provenant du point précédent dans la trace. Le premier point de trace de chaque trace est arbitrairement attribué une orientation de 0 degrés. </translation>
+Cette option calcule (ou recalcul) une valeur pour l&apos;orientation GPS à chaque point de trace. Cela est particulièrement utile avec des points de trace provenant de formats qui ne prennent pas en charge les informations d&apos;orientation ou pour des points de trace synthétisés par le filtre d&apos;interpolation. L&apos;orientation à chaque point de trace est simplement le cours provenant du point précédent dans la trace. Le premier point de trace de chaque trace est arbitrairement attribué une orientation de 0 degrés.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="466"/>
@@ -1705,7 +1705,7 @@ Cette option calcule (ou recalcul) une valeur pour l&apos;orientation GPS à cha
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
-        <source>Synthesize speed. </source>
+        <source>Synthesize speed.</source>
         <translation type="unfinished">Synthétiser la vitesse.</translation>
     </message>
     <message>
@@ -1717,10 +1717,10 @@ Cette option calcule (ou recalcul) une valeur pour l&apos;orientation GPS à cha
         <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
         <translation type="unfinished">Synthétiser la vitesse.
 
-Cette option calcule une valeur pour la vitesse GPS à chaque point de trace. Cela est particulièrement utile avec des points de trace provenant de formats qui ne prennent pas en charge les informations de vitesse ou pour des points de trace synthétisés par le filtre d&apos;interpolation. La vitesse à chaque point de trace est la vitesse moyenne provenant du point précédent (distance divisée par temps). Le premier point de trace de chaque trace est attribué une vitesse de « inconnue ». </translation>
+Cette option calcule une valeur pour la vitesse GPS à chaque point de trace. Cela est particulièrement utile avec des points de trace provenant de formats qui ne prennent pas en charge les informations de vitesse ou pour des points de trace synthétisés par le filtre d&apos;interpolation. La vitesse à chaque point de trace est la vitesse moyenne provenant du point précédent (distance divisée par temps). Le premier point de trace de chaque trace est attribué une vitesse de « inconnue ».</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="451"/>
@@ -1825,7 +1825,7 @@ Cette option calcule une valeur pour la vitesse GPS à chaque point de trace. Ce
     </message>
     <message>
         <location filename="wayptsui.ui" line="168"/>
-        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</source>
         <translation type="unfinished">Le filtre de doublons est conçu pour supprimer les points en double en fonction de leur nom court (traditionnellement le nom d&apos;un point de chemin sur le récepteur GPS) et/ou de leur emplacement (avec une précision de 6 décimales). Ce filtre prend en charge deux options qui spécifient comment les doublons seront reconnus : nom court et emplacement. Généralement, au moins une de ces options est requise.</translation>
     </message>
     <message>
@@ -1861,8 +1861,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="133"/>
-        <source>Suppress duplicate waypoint based on coords. </source>
-        <translation type="unfinished">Supprimer les points de chemin en double en fonction des coordonnées. </translation>
+        <source>Suppress duplicate waypoint based on coords.</source>
+        <translation type="unfinished">Supprimer les points de chemin en double en fonction des coordonnées.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="136"/>
@@ -1894,7 +1894,7 @@ p, li { white-space: pre-wrap; }
         <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</source>
         <translation type="unfinished">Distance positionnelle maximale.
 
 Cette option spécifie la distance minimale autorisée entre deux points. Si deux points sont plus proches que cette distance, seul l&apos;un d&apos;eux est conservé.</translation>
@@ -1928,7 +1928,7 @@ Cette option spécifie la distance minimale autorisée entre deux points. Si deu
         <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</source>
         <translation type="unfinished">Ce filtre inclut ou exclut les points de chemin en fonction de leur proximité par rapport à un point central. Tous les points de chemin situés à plus de la distance spécifiée du point spécifié seront supprimés du jeu de données.
 
 Par défaut, tous les points restants sont triés de sorte que les points plus proches du centre apparaissent en premier dans le fichier de sortie.</translation>
@@ -1940,8 +1940,8 @@ Par défaut, tous les points restants sont triés de sorte que les points plus p
     </message>
     <message>
         <location filename="wayptsui.ui" line="208"/>
-        <source>Maximum distance from center. </source>
-        <translation type="unfinished">Distance maximale depuis le centre. </translation>
+        <source>Maximum distance from center.</source>
+        <translation type="unfinished">Distance maximale depuis le centre.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="73"/>

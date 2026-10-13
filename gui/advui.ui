@@ -17,7 +17,7 @@
    <item>
     <widget class="QCheckBox" name="synthShortNames">
      <property name="toolTip">
-      <string>Create smart shortened names. </string>
+      <string>Create smart shortened names.</string>
      </property>
      <property name="text">
       <string>Synthesize short names</string>
