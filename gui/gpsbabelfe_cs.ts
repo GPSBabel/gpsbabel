@@ -1484,7 +1484,7 @@ Tato volba se používá spolu s ukončením k odstranění bodů trasy, které 
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Použít pouze body trasy před tímto časovým razítkem.
@@ -1522,10 +1522,10 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
-        <translation type="unfinished"> Sloučit více stop pro stejnou cestu. Tato možnost umístí všechny body stop ze všech stop do jedné stopy a seřadí je podle časového razítka. Body se stejným časovým razítkem budou odstraněny.</translation>
+        <translation type="unfinished">Sloučit více stop pro stejnou cestu. Tato možnost umístí všechny body stop ze všech stop do jedné stopy a seřadí je podle časového razítka. Body se stejným časovým razítkem budou odstraněny.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="279"/>

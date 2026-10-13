@@ -1484,7 +1484,7 @@ Esta opção é usada junto com o stop para descartar pontos de trajeto registra
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Usar apenas pontos de trajeto antes deste timestamp.
@@ -1526,7 +1526,7 @@ Esta opção é mais útil para reconectar trilhas que podem ter sido interrompi
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">Mesclar várias trilhas para o mesmo caminho.

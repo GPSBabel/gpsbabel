@@ -1654,7 +1654,7 @@ Questa opzione viene usata congiuntamente con lo stop per scartare i punti tracc
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation>Usa solo i punti traccia precedenti a questa data/ora.
@@ -1696,10 +1696,10 @@ Questa opzione è utile soprattutto per unire tracce che si sono interrotte per 
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
-        <translation> Unisce più tracce per la stessa strada.
+        <translation>Unisce più tracce per la stessa strada.
 
 Questa opzione inserisce tutti i punti di ogni traccia in una singola traccia e li ordina in base all&apos;orario. I punti con lo stesso orario saranno tralasciati.</translation>
     </message>

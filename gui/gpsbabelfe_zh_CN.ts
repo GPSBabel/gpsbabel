@@ -1483,7 +1483,7 @@ This option is used along with the stop to discard trackpoints that were recorde
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">仅在该时间戳之前使用轨迹点。
@@ -1524,7 +1524,7 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">合并同一路径的多条轨道。

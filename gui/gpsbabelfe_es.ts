@@ -1744,7 +1744,7 @@ Esta opción se utiliza junto con la de parar (stop) para descartar puntos que f
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation>Usa los puntos del trazado tomados antes de esta marca de tiempo. Esta opción se usa junto con la opción comenzar para descartar todos los puntos no tomados en determinado período temporal. Esta opción define el final del período.</translation>
@@ -1784,7 +1784,7 @@ Esta opción es muy útil para juntar trazados que se interrumpieron por un erro
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation>Unir diversos trazados repetitivos.

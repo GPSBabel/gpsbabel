@@ -1484,7 +1484,7 @@ Deze optie wordt gebruikt samen met de stop om trackpunten te verwijderen die bu
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Gebruik alleen trackpunten voor deze tijdstempel.
@@ -1526,7 +1526,7 @@ Deze optie is het meest nuttig voor het herverbinden van tracks die mogelijk ond
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">Meerdere tracks voor dezelfde weg samenvoegen.

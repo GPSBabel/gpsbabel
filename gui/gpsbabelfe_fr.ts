@@ -1545,7 +1545,7 @@ Cette option est utilisée conjointement avec l&apos;arrêt pour supprimer les p
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Utilisez uniquement les points de trace avant cette horodatage. Cette option est utilisée conjointement avec l&apos;option de début pour supprimer tous les points de trace en dehors d&apos;une période donnée. Cette option définit la fin de la période de temps.</translation>
@@ -1581,7 +1581,7 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">Fusionner plusieurs pistes pour le même chemin. Cette option place tous les points de trace de toutes les pistes dans une seule piste et les trie par horodatage. Les points avec des horodatages identiques seront supprimés.</translation>

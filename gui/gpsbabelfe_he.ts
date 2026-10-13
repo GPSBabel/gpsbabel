@@ -1484,7 +1484,7 @@ This option is used along with the stop to discard trackpoints that were recorde
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">השתמש רק בנקודות מסלול לפני התאריך והשעה הזה.
@@ -1522,7 +1522,7 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">לכבות את כל הפסגות לפסגה אחת. האפשרות הזו מכניסה את כל נקודות הפסגה מכל הפסגות לפסגה אחת ומייצרת אותם לפי תאריך. נקודות עם תאריכים זהים יימחקו.</translation>

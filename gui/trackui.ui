@@ -232,7 +232,7 @@ This option is used along with the stop to discard trackpoints that were recorde
         <string>Use track pts before this time.</string>
        </property>
        <property name="whatsThis">
-        <string> Use only track points before this timestamp.
+        <string>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</string>
        </property>
@@ -271,7 +271,7 @@ This option is most useful for rejoining tracks that might have been interrupted
         <string>Merge multiple tracks for the same way.</string>
        </property>
        <property name="whatsThis">
-        <string> Merge multiple tracks for the same way.
+        <string>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</string>
        </property>

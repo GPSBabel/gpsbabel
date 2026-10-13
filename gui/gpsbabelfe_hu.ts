@@ -1539,7 +1539,7 @@ Ez a beállítás együtt használható a végével, hogy eldobhassuk a specifik
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Csak a megadott időpont előtti útvonalpontokat használja. Ez az opció a kezdő opcióval együtt használatos, hogy eldobja az időszakon kívüli összes útvonalpontot. Ez az opció a időszak végét határozza meg.</translation>
@@ -1575,7 +1575,7 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">Több útvonal egyesítése ugyanahhoz a módhoz. Ez az opció összegyűjti az összes útvonalpontot az összes útvonalból egyetlen útvonalba, és időbélyeg szerint rendezve. Az azonos időbélyegű pontokat eldobja.</translation>

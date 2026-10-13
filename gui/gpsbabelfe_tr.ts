@@ -1479,7 +1479,7 @@ This option is used along with the stop to discard trackpoints that were recorde
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
 This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Bu zaman damgasından önce yalnızca iz noktalarını kullan. Bu seçenek, verilen bir süre dışında tüm iz noktalarını atmak için başlangıç seçeneği ile birlikte kullanılır. Bu seçenek, zaman diliminin sonunu tanımlar.</translation>
@@ -1519,7 +1519,7 @@ Bu seçenek, ekipman arızası veya gece yarısı duraklaması nedeniyle kesilen
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">Aynı yoldaki birden fazla izi birleştir.
