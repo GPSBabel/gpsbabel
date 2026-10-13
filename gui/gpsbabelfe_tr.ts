@@ -1131,7 +1131,7 @@ Bazı GPS veri biçimleri, yollar, yollar ve rotaların yalnızca bir alt kümes
     <message>
         <location filename="preferences.ui" line="83"/>
         <source>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</source>
-        <translation type="unfinished">Seçildiğinde, bu menü seçeneği, &quot;Başlangıçta daha yeni sürümü kontrol et.&quot; ile aynı bilgileri gpsbabel.org&apos;a gönderir.</translation>
+        <translation type="unfinished">&lt;html&gt;Seçildiğinde, bu menü öğesi &amp;quot;Başlangıçta daha yeni sürümü kontrol et.&amp;quot; ile aynı bilgiyi gpsbabel.org&apos;a gönderir.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="86"/>

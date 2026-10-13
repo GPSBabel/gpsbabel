@@ -1180,7 +1180,7 @@ Certains formats de données GPS ne prennent en charge qu&apos;un sous-ensemble 
     <message>
         <location filename="preferences.ui" line="83"/>
         <source>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</source>
-        <translation type="unfinished">Lorsque sélectionné, cet élément de menu envoie les mêmes informations que «</translation>
+        <translation type="unfinished">&lt;html&gt;Lorsque sélectionné, cet élément de menu envoie les mêmes informations que &amp;quot;Vérifier s&amp;apos;il existe une nouvelle version au démarrage.&amp;quot; à gpsbabel.org.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="86"/>

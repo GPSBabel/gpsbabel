@@ -1129,7 +1129,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="preferences.ui" line="83"/>
         <source>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</source>
-        <translation type="unfinished">When selected, this menu item sends the same information as </translation>
+        <translation type="unfinished">&lt;html&gt;وقتی انتخاب می‌شود، این آیتم منو اطلاعات مشابهی با &amp;quot;بررسی نسخه جدید در ابتدای اجرای برنامه.&amp;quot; را به gpsbabel.org ارسال می‌کند.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="86"/>

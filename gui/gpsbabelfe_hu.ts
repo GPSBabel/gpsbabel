@@ -1174,7 +1174,7 @@ Néhány GPS-adatformátum csak egy részhalmazt támogat útjelzők, nyomok és
     <message>
         <location filename="preferences.ui" line="83"/>
         <source>&lt;html&gt;When selected, this menu item sends the same information as &quot;Check for newer version on start.&quot; to gpsbabel.org.&lt;/html&gt;</source>
-        <translation type="unfinished">When selected, this menu item sends the same information as </translation>
+        <translation type="unfinished">&lt;html&gt;Megjelölve, ez a menüpont ugyanazt az információt küldi, mint &amp;quot;Újabb verzió ellenőrzése indításkor.&amp;quot; a gpsbabel.org oldalra.&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="86"/>
