@@ -1003,7 +1003,7 @@ void MainWindow::applyActionX()
         errorFormat.setFontItalic(true);
 
         ui_.outputWindow->setCurrentCharFormat(errorFormat);
-        ui_.outputWindow->appendPlainText(tr("Error preparing map: %1\n").arg(mapStatus));
+        ui_.outputWindow->appendPlainText(tr("Error preparing map: %1").arg(mapStatus));
         ui_.outputWindow->setCurrentCharFormat(defaultFormat);
       } else {
         this->hide();
@@ -1046,7 +1046,7 @@ void MainWindow::applyActionX()
     errorFormat.setFontItalic(true);
 
     ui_.outputWindow->setCurrentCharFormat(errorFormat);
-    ui_.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
+    ui_.outputWindow->appendPlainText(tr("Error running gpsbabel: %1").arg(errorString));
     ui_.outputWindow->setCurrentCharFormat(defaultFormat);
   }
 }
