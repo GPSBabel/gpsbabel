@@ -1628,7 +1628,7 @@ Deze optie plaatst alle trackpunten van alle tracks in één enkele track en sor
         <source>Synthesize speed.
 
 This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
-        <translation type="unfinished"> Snelheid synthetiseren.
+        <translation type="unfinished">Snelheid synthetiseren.
 
 Deze optie berekent een waarde voor de GPS-snelheid op elk trackpoint. Dit is het meest nuttig voor trackpoints uit formaten die geen snelheidsinformatie ondersteunen of voor trackpoints die zijn gesynthetiseerd door de interpolate-filter. De snelheid op elk trackpoint is de gemiddelde snelheid van het vorige trackpoint (afstand gedeeld door tijd). Het eerste trackpoint in elke track wordt een snelheid van &quot;onbekend&quot; toegewezen.</translation>
     </message>
@@ -1647,7 +1647,7 @@ Deze optie berekent een waarde voor de GPS-snelheid op elk trackpoint. Dit is he
         <source>Synthesize course.
 
 This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
-        <translation type="unfinished"> Koers synthetiseren.
+        <translation type="unfinished">Koers synthetiseren.
 
 Deze optie berekent (of herberekent) een waarde voor de GPS-richting op elk trackpoint. Dit is het meest nuttig voor trackpoints uit formaten die geen richtingsinformatie ondersteunen of voor trackpoints die zijn gesynthetiseerd door de interpolate-filter. De richting op elk trackpoint is simpelweg de koers van het vorige trackpoint in de track. Het eerste trackpoint in elke track wordt willekeurig een richting van 0 graden toegewezen.</translation>
     </message>

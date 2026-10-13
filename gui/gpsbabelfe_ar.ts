@@ -1809,7 +1809,7 @@ This option specifies the minimum allowable distance between two points. If two 
     <message>
         <location filename="wayptsui.ui" line="73"/>
         <source>Miles</source>
-        <translation type="unfinished"> الأميال</translation>
+        <translation type="unfinished">الأميال</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="78"/>

@@ -781,7 +781,9 @@ Higher number provides more detailed diagnostics.</source>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
-        <translation type="unfinished">برخی از فرمت‌های فایل/دستگاه در حین اولیه‌سازی پیدا نشدند. بررسی کنید که برنامه پشتیبان </translation>
+        <translation type="unfinished">خطا در خواندن پیکربندی فرمت. بررسی کنید که برنامه پشتیبان &quot;gpsbabel&quot; به درستی نصب شده و در مسیر فعلی قرار دارد
+
+این برنامه نمی‌تواند ادامه یابد.</translation>
     </message>
     <message>
         <location filename="mainwindow.cc" line="638"/>
