@@ -14,7 +14,7 @@
    <string>Data Filters</string>
   </property>
   <property name="whatsThis">
-   <string>Data filters process and transform the data between input and output files or devices. </string>
+   <string>Data filters process and transform the data between input and output files or devices.</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

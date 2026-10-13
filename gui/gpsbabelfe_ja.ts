@@ -18,7 +18,7 @@
     </message>
     <message>
         <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
+        <source>Create smart shortened names.</source>
         <translation type="unfinished">スマート短縮名を作成する。</translation>
     </message>
     <message>
@@ -178,27 +178,27 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cc" line="47"/>
+        <location filename="filterdlg.cc" line="49"/>
         <source>Tracks</source>
         <translation type="unfinished">トラック</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="50"/>
+        <location filename="filterdlg.cc" line="52"/>
         <source>Waypoints</source>
         <translation type="unfinished">ウェイポイント</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="53"/>
+        <location filename="filterdlg.cc" line="55"/>
         <source>Routes &amp; Tracks</source>
         <translation type="unfinished">ルートとトラック</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="56"/>
+        <location filename="filterdlg.cc" line="58"/>
         <source>Miscellaneous</source>
         <translation type="unfinished">その他</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="111"/>
+        <location filename="filterdlg.cc" line="113"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation type="unfinished">デフォルト値にすべてのフィルターオプションをリセットしてもよろしいですか？</translation>
     </message>
@@ -212,7 +212,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="filterui.ui" line="17"/>
-        <source>Data filters process and transform the data between input and output files or devices. </source>
+        <source>Data filters process and transform the data between input and output files or devices.</source>
         <translation type="unfinished">データ フィルタは、入力および出力ファイルまたはデバイス間のデータを処理および変換します。</translation>
     </message>
     <message>
@@ -376,17 +376,22 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>LeafletMap</name>
     <message>
-        <location filename="leafletmap.cc" line="142"/>
+        <location filename="leafletmap.cc" line="118"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">エラーが発生しました。&quot;:/qtwebchannel/qwebchannel.js&quot; ファイルを開けません。インストールを確認してください。</translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="162"/>
         <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">&quot;leafletbase.html&quot;ファイルを開けませんでした。インストールを確認してください</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="146"/>
+        <location filename="leafletmap.cc" line="165"/>
         <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">&quot;leafletbase.html&quot;ファイルが見つかりません。インストールを確認してください</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="164"/>
+        <location filename="leafletmap.cc" line="183"/>
         <source>Failed to load Leaflet maps base page</source>
         <translation type="unfinished">Leafletマップのベースページを読み込めませんでした</translation>
     </message>
@@ -471,61 +476,61 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">ルート</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="533"/>
+        <location filename="leafletdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished">すべてのウェイポイントを表示</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="534"/>
+        <location filename="leafletdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished">すべてのウェイポイントを非表示</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="535"/>
-        <location filename="leafletdlg.cc" line="542"/>
-        <location filename="leafletdlg.cc" line="549"/>
+        <location filename="leafletdlg.cc" line="543"/>
+        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="557"/>
         <source>Expand All</source>
         <translation type="unfinished">すべて展開</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="536"/>
-        <location filename="leafletdlg.cc" line="543"/>
-        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="544"/>
+        <location filename="leafletdlg.cc" line="551"/>
+        <location filename="leafletdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation type="unfinished">すべて折りたたみ</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="540"/>
+        <location filename="leafletdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation type="unfinished">すべてのルートを表示</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="541"/>
+        <location filename="leafletdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation type="unfinished">すべてのルートを非表示</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="547"/>
+        <location filename="leafletdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation type="unfinished">すべてのトラックを表示</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="548"/>
+        <location filename="leafletdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished">すべてのトラックを非表示</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="556"/>
+        <location filename="leafletdlg.cc" line="564"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished">このウェイポイントのみを表示</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="558"/>
+        <location filename="leafletdlg.cc" line="566"/>
         <source>Show Only This Track</source>
         <translation type="unfinished">このトラックのみを表示</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="560"/>
+        <location filename="leafletdlg.cc" line="568"/>
         <source>Show Only This Route</source>
         <translation type="unfinished">このルートのみを表示</translation>
     </message>
@@ -547,7 +552,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
+        <source>Input</source>
         <translation type="unfinished">入力</translation>
     </message>
     <message>
@@ -586,7 +591,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="129"/>
-        <source>Browse for one or more input files. </source>
+        <source>Browse for one or more input files.</source>
         <translation type="unfinished">1つ以上の入力ファイルを参照します。</translation>
     </message>
     <message>
@@ -607,7 +612,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="207"/>
-        <source>Options for the selected input format. </source>
+        <source>Options for the selected input format.</source>
         <translation type="unfinished">選択された入力フォーマットのオプション。</translation>
     </message>
     <message>
@@ -663,7 +668,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="427"/>
-        <source>More translation options. </source>
+        <source>More translation options.</source>
         <translation type="unfinished">翻訳オプションの追加。</translation>
     </message>
     <message>
@@ -678,7 +683,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="460"/>
-        <source>If selected, output is to a file. </source>
+        <source>If selected, output is to a file.</source>
         <translation type="unfinished">選択された場合、出力はファイルにされます。</translation>
     </message>
     <message>
@@ -693,7 +698,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="545"/>
-        <source>Browse for an output file name. </source>
+        <source>Browse for an output file name.</source>
         <translation type="unfinished">出力ファイル名を参照します。</translation>
     </message>
     <message>
@@ -708,12 +713,12 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="623"/>
-        <source>Options for the selected output format. </source>
+        <source>Options for the selected output format.</source>
         <translation type="unfinished">選択された出力形式のオプション。</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="647"/>
-        <source>Output of GPSBabel translation process. </source>
+        <source>Output of GPSBabel translation process.</source>
         <translation type="unfinished">GPSBabel変換プロセスの出力。</translation>
     </message>
     <message>
@@ -762,17 +767,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">寄付をする...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="532"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation type="unfinished">1つ以上の入力ファイルを選択してください</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation type="unfinished">出力ファイル名</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="624"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -781,7 +786,7 @@ This program cannot continue.</source>
 このプログラムは続行できません。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="635"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -790,115 +795,117 @@ This program cannot continue.</source>
 このプログラムは続行できません。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished">入力および出力形式は %1 をサポートしていません</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">入力は %1 をサポートしていません; 出力形式は %1 をサポートしています</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">入力形式は %1 をサポートしています; 出力形式は %1 をサポートしていません</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished">入力および出力形式の両方が %1 をサポートしています</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="686"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation type="unfinished">ウェイポイント</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation type="unfinished">トラック</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="688"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation type="unfinished">ルート</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished">形式「%1」の入力オプションがありません</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="789"/>
-        <location filename="mainwindow.cc" line="808"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation type="unfinished">%1 のオプション</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished">形式「%1」の出力オプションがありません</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished">有効なウェイポイント/ルート/トラックの変換が指定されていません</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation type="unfinished">入力ファイルが指定されていません</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation type="unfinished">有効な出力が指定されていません</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation type="unfinished">出力ファイルが指定されていません</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="974"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">マッププレビュー用の一時ファイル &quot;%1&quot; を開けませんでした。エラーは: &quot;%2&quot; です。マッププレビューは表示されません。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="991"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation type="unfinished">翻訳が成功しました</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1003"/>
-        <source>Error preparing map: %1
-</source>
+        <location filename="mainwindow.cc" line="1006"/>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">マップの準備中にエラー: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1038"/>
-        <source>Error running gpsbabel: %1
-</source>
+        <location filename="mainwindow.cc" line="1049"/>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
         <translation type="unfinished">gpsbabel の実行中にエラー: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1163"/>
+        <location filename="mainwindow.cc" line="1174"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished">すべてのフォーマットオプションをデフォルト値にリセットしてもよろしいですか？</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1193"/>
+        <location filename="mainwindow.cc" line="1204"/>
         <source>About %1</source>
         <translation type="unfinished">%1 について</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1241"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished">1 つ以上のデータフィルターが有効です</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1243"/>
+        <location filename="mainwindow.cc" line="1254"/>
         <source>No data filters are active</source>
         <translation type="unfinished">データフィルターは有効になっていません</translation>
     </message>
@@ -906,17 +913,22 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="122"/>
+        <location filename="map.cc" line="92"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">エラーが発生しました。&quot;:/qtwebchannel/qwebchannel.js&quot; ファイルを開けません。インストールを確認してください</translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="142"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">&quot;gmapbase.html&quot;ファイルを開けませんでした。インストールを確認してください</translation>
     </message>
     <message>
-        <location filename="map.cc" line="126"/>
+        <location filename="map.cc" line="145"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">&quot;gmapbase.html&quot;ファイルが見つかりません。インストールを確認してください</translation>
     </message>
     <message>
-        <location filename="map.cc" line="181"/>
+        <location filename="map.cc" line="200"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished">Googleマップのベースページを読み込めませんでした</translation>
     </message>
@@ -942,7 +954,7 @@ This program cannot continue.</source>
         <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</source>
         <translation type="unfinished">このフィルタは、異なるデータタイプ間でGPSデータを変換するために使用できます。
 
 一部のGPSデータ形式は、ウェイポイント、トラック、ルートのサブセットのみをサポートしています。変換フィルタを使用すると、これらのタイプ間で変換できます。たとえば、CSVファイルから取得したウェイポイントのリストをトラックに変換する、またはその逆に変換するために使用できます。</translation>
@@ -954,12 +966,12 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <source>Type of transformation. </source>
+        <source>Type of transformation.</source>
         <translation type="unfinished">変換の種類。</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <source>Delete original data after transform to prevent duplicated data. </source>
+        <source>Delete original data after transform to prevent duplicated data.</source>
         <translation type="unfinished">変換後に元のデータを削除して重複データを防ぎます。</translation>
     </message>
     <message>
@@ -974,28 +986,28 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="297"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="286"/>
         <source>Routes</source>
         <translation type="unfinished">ルート</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="297"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="286"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Tracks</source>
         <translation type="unfinished">トラック</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Waypoints</source>
         <translation type="unfinished">ウェイポイント</translation>
     </message>
@@ -1048,7 +1060,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="215"/>
-        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</source>
         <translation type="unfinished">すべてのポイントの座標値（緯度と経度）を交換するシンプルなフィルタです。これは、誤って定義/コード化されたデータに役立ちます。または、xcsvフォーマットの1つを使用したいと考えている場合、緯度と経度の順序が逆になっている可能性があります。</translation>
     </message>
     <message>
@@ -1217,7 +1229,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">Error processing formats from running process </translation>
+        <translation type="unfinished">エラーが発生しました。実行中のプロセス &quot;gpsbabel -^3&quot; からフォーマットを処理しています。行 %1</translation>
     </message>
 </context>
 <context>
@@ -1286,7 +1298,7 @@ The quality of the results will vary depending on the density of points in the o
     </message>
     <message>
         <location filename="rttrkui.ui" line="89"/>
-        <source>Maximum number points in track or route. </source>
+        <source>Maximum number points in track or route.</source>
         <translation type="unfinished">トラックまたはルートの最大ポイント数。</translation>
     </message>
     <message>
@@ -1370,7 +1382,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
     </message>
     <message>
         <location filename="trackui.ui" line="17"/>
-        <source>This filter performs various operations on track data. </source>
+        <source>This filter performs various operations on track data.</source>
         <translation type="unfinished">トラック データに対してさまざまな操作を実行します。</translation>
     </message>
     <message>
@@ -1387,7 +1399,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
         <location filename="trackui.ui" line="45"/>
         <source>Basic title for new track(s). 
 This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
-If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names.</source>
         <translation type="unfinished">新トラックの基本タイトル。
 このオプションは、トラック フィルタによって生成されたトラックのタイトルを指定します。デフォルトでは、新しいトラックのタイトルは、トラックの開始時刻をこの値に追加して構成されます。
 この値に百分率（%）文字が含まれている場合、POSIX strftime 関数のフォーマット文字列として扱われ、カスタムの時刻ベースのトラック名を許可します。</translation>
@@ -1399,7 +1411,7 @@ If this value contains a percent (%) character, it is treated as a format string
     </message>
     <message>
         <location filename="trackui.ui" line="57"/>
-        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
+        <source>the title of the new track is composed of the start time of the track appended to this value.</source>
         <translation type="unfinished">新しいトラックのタイトルは、トラックの開始時刻をこの値に追加して構成されます。</translation>
     </message>
     <message>
@@ -1410,7 +1422,7 @@ If this value contains a percent (%) character, it is treated as a format string
     <message>
         <location filename="trackui.ui" line="67"/>
         <source>Correct trackpoint timestamps by a delta. 
-This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone.</source>
         <translation type="unfinished">タイムスタンプをデルタ分修正します。
 このオプションは、すべてのトラックポイントの時間を変更します。トラックのタイムゾーンが誤っているために1時間以上移動する必要がある場合に役立ちます。</translation>
     </message>
@@ -1449,14 +1461,14 @@ This option changes the time of all trackpoints. This might be useful if your tr
     <message>
         <location filename="trackui.ui" line="204"/>
         <location filename="trackui.ui" line="219"/>
-        <source>Use track pts. after this time. </source>
+        <source>Use track pts. after this time.</source>
         <translation type="unfinished">この時刻以降のトラックポイントを使用します。</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
-This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period.</source>
         <translation type="unfinished">このタイムスタンプ以降のトラックポイントのみを使用します。
 
 このオプションは、ストップと併用して、特定の期間外で記録されたトラックポイントを破棄するために使用されます。このオプションは、時間期間の開始を指定します。</translation>
@@ -1469,14 +1481,14 @@ This option is used along with the stop to discard trackpoints that were recorde
     <message>
         <location filename="trackui.ui" line="232"/>
         <location filename="trackui.ui" line="247"/>
-        <source>Use track pts before this time. </source>
+        <source>Use track pts before this time.</source>
         <translation type="unfinished">この時刻以前のトラックポイントを使用します。</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
-This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">このタイムスタンプ以前のトラックポイントのみを使用します。
 
 このオプションは、開始オプションと併用して、指定された期間外のすべてのトラックポイントを破棄するために使用されます。このオプションは、時間期間の終了を定義します。</translation>
@@ -1488,7 +1500,7 @@ This option is used in conjunction with the start option to discard all trackpoi
     </message>
     <message>
         <location filename="trackui.ui" line="254"/>
-        <source>Pack all tracks into one. </source>
+        <source>Pack all tracks into one.</source>
         <translation type="unfinished">すべてのトラックを1つにまとめます。</translation>
     </message>
     <message>
@@ -1497,7 +1509,7 @@ This option is used in conjunction with the start option to discard all trackpoi
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
-This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop.</source>
         <translation type="unfinished">すべてのトラックを1つにまとめます。
 
 このオプションでは、すべてのトラックを連結して1つのトラックを作成します。このオプションは、2つのトラックが時間的に重複している場合に機能しません。その場合は、マージオプションを使用することをお勧めします。
@@ -1516,9 +1528,9 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
-This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">同じ経路の複数のトラックをマージします。
 
 このオプションでは、すべてのトラックのトラックポイントを1つのトラックにまとめ、タイムスタンプでソートします。同一のタイムスタンプを持つポイントは削除されます。</translation>
@@ -1540,7 +1552,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="305"/>
-        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date.</source>
         <translation type="unfinished">非ゼロの場合、2つのポイント間の時間がこのパラメータより大きい場合、トラックが分割されます。ゼロの場合、トラックは日付で分割されます。</translation>
     </message>
     <message>
@@ -1555,7 +1567,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="348"/>
-        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter.</source>
         <translation type="unfinished">非ゼロの場合、入力トラックは、連続するトラックポイント間の距離がパラメータで指定された距離より大きい場合、複数のトラックに分割されます。</translation>
     </message>
     <message>
@@ -1610,14 +1622,14 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
-        <source>Synthesize speed. </source>
+        <source>Synthesize speed.</source>
         <translation type="unfinished">速度を合成する。</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
         <translation type="unfinished">速度を合成する。
 
 このオプションは、各トラックポイントでのGPS速度の値を計算します。これは、速度情報をサポートしていないフォーマットからのトラックポイントや、補間フィルタによって合成されたトラックポイントに特に有用です。各トラックポイントでの速度は、前のトラックポイントからの平均速度（距離を時間で割ったもの）です。各トラックの最初のトラックポイントには速度が「不明」に割り当てられます。</translation>
@@ -1636,7 +1648,7 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
         <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
-This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
         <translation type="unfinished">コースを合成する。
 
 このオプションは、各トラックポイントでのGPS方位角の値を計算（または再計算）します。これは、方位情報をサポートしていないフォーマットからのトラックポイントや、補間フィルタによって合成されたトラックポイントに特に有用です。各トラックポイントでの方位角は、トラック内の前のトラックポイントからのコースそのものです。各トラックの最初のトラックポイントには、方位角が0度として任意に割り当てられます。</translation>
@@ -1763,7 +1775,7 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
         <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</source>
         <translation type="unfinished">このフィルタは、中央ポイントからの距離に応じてウェイポイントを含むか除外します。指定されたポイントから指定された距離より遠いすべてのウェイポイントはデータセットから削除されます。
 
 デフォルトでは、残りのすべてのポイントは、中央に近いポイントが出力ファイルの先頭に表示されるようにソートされます。</translation>
@@ -1782,7 +1794,7 @@ By default, all remaining points are sorted so that points closer to the center 
         <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</source>
         <translation type="unfinished">最大位置距離。
 
 このオプションは、2点間の許容最小距離を指定します。2点がこの距離より近い場合、そのうち1点のみが保持されます。</translation>
@@ -1834,7 +1846,7 @@ This option specifies the minimum allowable distance between two points. If two 
     </message>
     <message>
         <location filename="wayptsui.ui" line="133"/>
-        <source>Suppress duplicate waypoint based on coords. </source>
+        <source>Suppress duplicate waypoint based on coords.</source>
         <translation type="unfinished">座標に基づいて重複するウェイポイントを抑制する。</translation>
     </message>
     <message>
@@ -1874,7 +1886,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="168"/>
-        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</source>
         <translation type="unfinished">重複フィルタは、ウェイポイントの短い名前（通常、GPS受信機上のウェイポイントの名前）および/または位置（小数点6桁の精度）に基づいて重複ポイントを削除するために設計されています。このフィルタは、重複がどのように認識されるかを指定する2つのオプション、shortnameおよびlocationをサポートしています。一般的に、これらのオプションの少なくとも1つが必要です。</translation>
     </message>
     <message>
@@ -1910,7 +1922,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="208"/>
-        <source>Maximum distance from center. </source>
+        <source>Maximum distance from center.</source>
         <translation type="unfinished">中心からの最大距離。</translation>
     </message>
 </context>

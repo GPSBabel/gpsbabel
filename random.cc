@@ -129,9 +129,9 @@ RandomFormat::random_generate_wpt(int i, const QDateTime& time, const Waypoint* 
     wpt->set_depth(rand_dbl(1000.0));
   }
   if RND(3) {
-    wpt->AddUrlLink(rand_str(8, "http://link1.example.com/%s"));
+    wpt->AddUrlLink(UrlLink(rand_str(8, "http://link1.example.com/%s")));
     if RND(3) {
-      wpt->AddUrlLink(rand_str(8, "http://link2.example.com/%s"));
+      wpt->AddUrlLink(UrlLink(rand_str(8, "http://link2.example.com/%s")));
     }
   }
   if RND(3) {

@@ -150,7 +150,7 @@ LeafletMapDialog::LeafletMapDialog(QWidget* parent,
   gpx_(mapData)
 {
   ui_.setupUi(this);
-  this->setWindowTitle(QString(appName) + " " + QString("Leaflet Maps"));
+  this->setWindowTitle(appName + QStringLiteral(" - Leaflet Maps"));
 
   mapWidget_ = new LeafletMap(this, gpx_, geojsonData, te);
   auto* lay = new QHBoxLayout(ui_.frame);
@@ -257,13 +257,17 @@ LeafletMapDialog::onMapLoadedAndRendered()
 void LeafletMapDialog::routePointClicked(int i)
 {
   QStandardItem* item = rteItem_->child(i);
-  if (item) itemClickedX(item);
+  if (item) {
+    itemClickedX(item);
+  }
 }
 
 void LeafletMapDialog::trackClicked(int i)
 {
   QStandardItem* item = trkItem_->child(i);
-  if (item) itemClickedX(item);
+  if (item) {
+    itemClickedX(item);
+  }
 }
 
 //------------------------------------------------------------------------
@@ -338,9 +342,13 @@ LeafletMapDialog::itemChangedX(QStandardItem* it)
         it->child(row)->setCheckState(newState);
       }
       // Update the map.
-      if (it == wptItem_) mapWidget_->setAllWaypointsVisibility(newState != Qt::Unchecked);
-      else if (it == trkItem_) mapWidget_->setAllTracksVisibility(newState != Qt::Unchecked);
-      else if (it == rteItem_) mapWidget_->setAllRoutesVisibility(newState != Qt::Unchecked);
+      if (it == wptItem_) {
+        mapWidget_->setAllWaypointsVisibility(newState != Qt::Unchecked);
+      } else if (it == trkItem_) {
+        mapWidget_->setAllTracksVisibility(newState != Qt::Unchecked);
+      } else if (it == rteItem_) {
+        mapWidget_->setAllRoutesVisibility(newState != Qt::Unchecked);
+      }
 
     } else {
       // A child item was clicked.

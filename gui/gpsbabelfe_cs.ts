@@ -18,8 +18,8 @@
     </message>
     <message>
         <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
-        <translation type="unfinished">Vytvořit chytrá zkrácená jména. </translation>
+        <source>Create smart shortened names.</source>
+        <translation type="unfinished">Vytvořit chytrá zkrácená jména.</translation>
     </message>
     <message>
         <location filename="advui.ui" line="23"/>
@@ -178,27 +178,27 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cc" line="47"/>
+        <location filename="filterdlg.cc" line="49"/>
         <source>Tracks</source>
         <translation type="unfinished">Trasy</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="50"/>
+        <location filename="filterdlg.cc" line="52"/>
         <source>Waypoints</source>
         <translation type="unfinished">Bodové body</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="53"/>
+        <location filename="filterdlg.cc" line="55"/>
         <source>Routes &amp; Tracks</source>
         <translation type="unfinished">Trasy a trasy</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="56"/>
+        <location filename="filterdlg.cc" line="58"/>
         <source>Miscellaneous</source>
         <translation type="unfinished">Různé</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="111"/>
+        <location filename="filterdlg.cc" line="113"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation type="unfinished">Jste si jistí, že chcete obnovit všechny filtrační možnosti na výchozí hodnoty?</translation>
     </message>
@@ -212,8 +212,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="filterui.ui" line="17"/>
-        <source>Data filters process and transform the data between input and output files or devices. </source>
-        <translation type="unfinished">Filtry dat zpracovávají a transformují data mezi vstupními a výstupními soubory nebo zařízeními. </translation>
+        <source>Data filters process and transform the data between input and output files or devices.</source>
+        <translation type="unfinished">Filtry dat zpracovávají a transformují data mezi vstupními a výstupními soubory nebo zařízeními.</translation>
     </message>
     <message>
         <location filename="filterui.ui" line="72"/>
@@ -241,7 +241,7 @@ Higher number provides more detailed diagnostics.</source>
     <message>
         <location filename="gmapdlg.cc" line="70"/>
         <source>miles</source>
-        <translation type="unfinished"> míle</translation>
+        <translation type="unfinished">míle</translation>
     </message>
     <message>
         <location filename="gmapdlg.cc" line="73"/>
@@ -376,17 +376,22 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>LeafletMap</name>
     <message>
-        <location filename="leafletmap.cc" line="142"/>
+        <location filename="leafletmap.cc" line="118"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">Chyba při otevírání souboru &quot;:/qtwebchannel/qwebchannel.js&quot;. Zkontrolujte instalaci</translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="162"/>
         <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Chyba při otevírání souboru &quot;leafletbase.html&quot;. Zkontrolujte instalaci</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="146"/>
+        <location filename="leafletmap.cc" line="165"/>
         <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Chybí soubor &quot;leafletbase.html&quot;. Zkontrolujte instalaci</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="164"/>
+        <location filename="leafletmap.cc" line="183"/>
         <source>Failed to load Leaflet maps base page</source>
         <translation type="unfinished">Nepodařilo se načíst základní stránku map Leaflet</translation>
     </message>
@@ -471,61 +476,61 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">Cesty</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="533"/>
+        <location filename="leafletdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished">Zobrazit všechny způsobné body</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="534"/>
+        <location filename="leafletdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished">Skrýt všechny způsobné body</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="535"/>
-        <location filename="leafletdlg.cc" line="542"/>
-        <location filename="leafletdlg.cc" line="549"/>
+        <location filename="leafletdlg.cc" line="543"/>
+        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="557"/>
         <source>Expand All</source>
         <translation type="unfinished">Rozbalit vše</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="536"/>
-        <location filename="leafletdlg.cc" line="543"/>
-        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="544"/>
+        <location filename="leafletdlg.cc" line="551"/>
+        <location filename="leafletdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation type="unfinished">Sbalit vše</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="540"/>
+        <location filename="leafletdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation type="unfinished">Zobrazit všechny cesty</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="541"/>
+        <location filename="leafletdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation type="unfinished">Skrýt všechny trasy</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="547"/>
+        <location filename="leafletdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation type="unfinished">Zobrazit všechny trasy</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="548"/>
+        <location filename="leafletdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished">Skrýt všechny trasy</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="556"/>
+        <location filename="leafletdlg.cc" line="564"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished">Zobrazit pouze tuto značku</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="558"/>
+        <location filename="leafletdlg.cc" line="566"/>
         <source>Show Only This Track</source>
         <translation type="unfinished">Zobrazit pouze tuto trasu</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="560"/>
+        <location filename="leafletdlg.cc" line="568"/>
         <source>Show Only This Route</source>
         <translation type="unfinished">Zobrazit pouze tuto trasu</translation>
     </message>
@@ -547,8 +552,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
-        <translation type="unfinished">Vstup </translation>
+        <source>Input</source>
+        <translation type="unfinished">Vstup</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="41"/>
@@ -586,7 +591,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="129"/>
-        <source>Browse for one or more input files. </source>
+        <source>Browse for one or more input files.</source>
         <translation type="unfinished">Procházet jednotlivé nebo více vstupních souborů.</translation>
     </message>
     <message>
@@ -607,7 +612,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="207"/>
-        <source>Options for the selected input format. </source>
+        <source>Options for the selected input format.</source>
         <translation type="unfinished">Možnosti pro vybraný vstupní formát.</translation>
     </message>
     <message>
@@ -663,8 +668,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="427"/>
-        <source>More translation options. </source>
-        <translation type="unfinished">Více možností překladu. </translation>
+        <source>More translation options.</source>
+        <translation type="unfinished">Více možností překladu.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="430"/>
@@ -678,8 +683,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="460"/>
-        <source>If selected, output is to a file. </source>
-        <translation type="unfinished">Pokud je vybráno, výstup je do souboru. </translation>
+        <source>If selected, output is to a file.</source>
+        <translation type="unfinished">Pokud je vybráno, výstup je do souboru.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="476"/>
@@ -693,8 +698,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="545"/>
-        <source>Browse for an output file name. </source>
-        <translation type="unfinished">Procházet pro název výstupního souboru. </translation>
+        <source>Browse for an output file name.</source>
+        <translation type="unfinished">Procházet pro název výstupního souboru.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="548"/>
@@ -708,13 +713,13 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="623"/>
-        <source>Options for the selected output format. </source>
-        <translation type="unfinished">Možnosti pro vybraný výstupní formát. </translation>
+        <source>Options for the selected output format.</source>
+        <translation type="unfinished">Možnosti pro vybraný výstupní formát.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="647"/>
-        <source>Output of GPSBabel translation process. </source>
-        <translation type="unfinished">Výstup procesu překladu GPSBabel. </translation>
+        <source>Output of GPSBabel translation process.</source>
+        <translation type="unfinished">Výstup procesu překladu GPSBabel.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="681"/>
@@ -762,17 +767,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">Přispět...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="532"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation type="unfinished">Vyberte jednu nebo více vstupních souborů</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation type="unfinished">Název výstupního souboru</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="624"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -781,7 +786,7 @@ This program cannot continue.</source>
 Tato program nemůže pokračovat.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="635"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -790,115 +795,117 @@ This program cannot continue.</source>
 Tento program nemůže pokračovat.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished">Vstupní a výstupní formáty nepodporují %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Vstupní formát nepodporuje %1; výstupní formát podporuje %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">Vstupní formát podporuje %1; výstupní formát nepodporuje %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished">Oba vstupní a výstupní formáty podporují %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="686"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation type="unfinished">body cesty</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation type="unfinished">trasy</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="688"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation type="unfinished">trasy</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished">Nejsou k dispozici žádné vstupní možnosti pro formát &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="789"/>
-        <location filename="mainwindow.cc" line="808"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation type="unfinished">Možnosti pro %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished">Nejsou k dispozici žádné výstupní možnosti pro formát &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished">Nebyla zadána žádná platná převodní cesta pro body cesty/trasy/cesty</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation type="unfinished">Nebyl zadán žádný vstupní soubor</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation type="unfinished">Nebyl zadán žádný platný výstup</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation type="unfinished">Není zadán žádný výstupní soubor</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="974"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">Nepodařilo se otevřít dočasný soubor &quot;%1&quot; pro náhled mapy. Chyba: &quot;%2&quot;. Náhled mapy nebude zobrazen.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="991"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation type="unfinished">Převod byl úspěšný</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1003"/>
-        <source>Error preparing map: %1
-</source>
+        <location filename="mainwindow.cc" line="1006"/>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">Chyba přípravy mapy: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1038"/>
-        <source>Error running gpsbabel: %1
-</source>
+        <location filename="mainwindow.cc" line="1049"/>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
         <translation type="unfinished">Chyba při spuštění gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1163"/>
+        <location filename="mainwindow.cc" line="1174"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished">Opravdu chcete obnovit všechny formátovací volby na výchozí hodnoty?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1193"/>
+        <location filename="mainwindow.cc" line="1204"/>
         <source>About %1</source>
         <translation type="unfinished">O %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1241"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished">Jeden nebo více datových filtrů je aktivní</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1243"/>
+        <location filename="mainwindow.cc" line="1254"/>
         <source>No data filters are active</source>
         <translation type="unfinished">Žádné datové filtry nejsou aktivní</translation>
     </message>
@@ -906,17 +913,22 @@ Tento program nemůže pokračovat.</translation>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="122"/>
+        <location filename="map.cc" line="92"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">Chyba při otevírání souboru &quot;:/qtwebchannel/qwebchannel.js&quot;. Zkontrolujte instalaci</translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="142"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Chyba při otevírání souboru &quot;gmapbase.html&quot;. Zkontrolujte instalaci</translation>
     </message>
     <message>
-        <location filename="map.cc" line="126"/>
+        <location filename="map.cc" line="145"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Chybí soubor &quot;gmapbase.html&quot;. Zkontrolujte instalaci</translation>
     </message>
     <message>
-        <location filename="map.cc" line="181"/>
+        <location filename="map.cc" line="200"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished">Nepodařilo se načíst základní stránku Google Maps</translation>
     </message>
@@ -942,10 +954,10 @@ Tento program nemůže pokračovat.</translation>
         <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</source>
         <translation type="unfinished">Tento filtr lze použít k převodu GPS dat mezi různými datovými typy.
 
-Některé formáty GPS dat podporují pouze určitý podmnožinu bodů, tras a tras. Filtr transformace umožňuje převádět mezi těmito typy. Například lze použít k převodu hromady bodů (např. z CSV souboru) na trasu nebo naopak. </translation>
+Některé formáty GPS dat podporují pouze určitý podmnožinu bodů, tras a tras. Filtr transformace umožňuje převádět mezi těmito typy. Například lze použít k převodu hromady bodů (např. z CSV souboru) na trasu nebo naopak.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="39"/>
@@ -954,13 +966,13 @@ Některé formáty GPS dat podporují pouze určitý podmnožinu bodů, tras a t
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <source>Type of transformation. </source>
-        <translation type="unfinished">Typ transformace. </translation>
+        <source>Type of transformation.</source>
+        <translation type="unfinished">Typ transformace.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <source>Delete original data after transform to prevent duplicated data. </source>
-        <translation type="unfinished">Odstranit původní data po transformaci, aby se zabránilo duplikaci dat. </translation>
+        <source>Delete original data after transform to prevent duplicated data.</source>
+        <translation type="unfinished">Odstranit původní data po transformaci, aby se zabránilo duplikaci dat.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="56"/>
@@ -974,28 +986,28 @@ Některé formáty GPS dat podporují pouze určitý podmnožinu bodů, tras a t
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="297"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="286"/>
         <source>Routes</source>
         <translation type="unfinished">Trasy</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="297"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="286"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Tracks</source>
         <translation type="unfinished">Trasy</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Waypoints</source>
         <translation type="unfinished">Body</translation>
     </message>
@@ -1048,7 +1060,7 @@ Některé formáty GPS dat podporují pouze určitý podmnožinu bodů, tras a t
     </message>
     <message>
         <location filename="miscfltui.ui" line="215"/>
-        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</source>
         <translation type="unfinished">Jednoduchý filtr pro výměnu hodnot souřadnic (zeměpisná šířka a délka) všech bodů. To může být užitečné pro špatně definovaná/kódovaná data. Nebo pokud si myslíte, že můžete použít jeden z našich xcsv formátů, ale zeměpisná šířka a délka jsou v opačném pořadí.</translation>
     </message>
     <message>
@@ -1217,7 +1229,7 @@ Některé formáty GPS dat podporují pouze určitý podmnožinu bodů, tras a t
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">Chyba zpracování formátů při spuštění procesu </translation>
+        <translation type="unfinished">Chyba při zpracování formátů z běžícího procesu &quot;gpsbabel -^3&quot; na řádku %1</translation>
     </message>
 </context>
 <context>
@@ -1286,8 +1298,8 @@ Kvalita výsledků se bude lišit podle hustoty bodů v původní trase a délky
     </message>
     <message>
         <location filename="rttrkui.ui" line="89"/>
-        <source>Maximum number points in track or route. </source>
-        <translation type="unfinished">Maximální počet bodů v trase nebo trase. </translation>
+        <source>Maximum number points in track or route.</source>
+        <translation type="unfinished">Maximální počet bodů v trase nebo trase.</translation>
     </message>
     <message>
         <location filename="rttrkui.ui" line="99"/>
@@ -1370,8 +1382,8 @@ Kromě toho, pokud používáte tuto funkci k obrácení trasy, která naviguje,
     </message>
     <message>
         <location filename="trackui.ui" line="17"/>
-        <source>This filter performs various operations on track data. </source>
-        <translation type="unfinished">Tento filtr provádí různé operace nad daty trasy. </translation>
+        <source>This filter performs various operations on track data.</source>
+        <translation type="unfinished">Tento filtr provádí různé operace nad daty trasy.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="35"/>
@@ -1387,10 +1399,10 @@ Kromě toho, pokud používáte tuto funkci k obrácení trasy, která naviguje,
         <location filename="trackui.ui" line="45"/>
         <source>Basic title for new track(s). 
 This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
-If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names.</source>
         <translation type="unfinished">Základní název pro novou trasu(ovou). 
 Tato volba určuje název pro trasy generované filtrem trasy. Ve výchozím stavu je název nové trasy složen z času zahájení trasy připojeného k této hodnotě. 
-Pokud tato hodnota obsahuje znak procenta (%), je považována za formátovací řetězec pro funkci POSIX strftime, což umožňuje vlastní názvy trasy založené na čase. </translation>
+Pokud tato hodnota obsahuje znak procenta (%), je považována za formátovací řetězec pro funkci POSIX strftime, což umožňuje vlastní názvy trasy založené na čase.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="50"/>
@@ -1399,8 +1411,8 @@ Pokud tato hodnota obsahuje znak procenta (%), je považována za formátovací 
     </message>
     <message>
         <location filename="trackui.ui" line="57"/>
-        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
-        <translation type="unfinished">název nové trasy je složen z času zahájení trasy připojeného k této hodnotě. </translation>
+        <source>the title of the new track is composed of the start time of the track appended to this value.</source>
+        <translation type="unfinished">název nové trasy je složen z času zahájení trasy připojeného k této hodnotě.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="64"/>
@@ -1410,9 +1422,9 @@ Pokud tato hodnota obsahuje znak procenta (%), je považována za formátovací 
     <message>
         <location filename="trackui.ui" line="67"/>
         <source>Correct trackpoint timestamps by a delta. 
-This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone.</source>
         <translation type="unfinished">Opravit časová razítka bodů trasy o delta. 
-Tato volba změní čas všech bodů trasy. Může být užitečné, pokud musíte posunout trasu o jednu nebo více hodin kvůli nesprávnému časovému pásmu. </translation>
+Tato volba změní čas všech bodů trasy. Může být užitečné, pokud musíte posunout trasu o jednu nebo více hodin kvůli nesprávnému časovému pásmu.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="71"/>
@@ -1449,17 +1461,17 @@ Tato volba změní čas všech bodů trasy. Může být užitečné, pokud musí
     <message>
         <location filename="trackui.ui" line="204"/>
         <location filename="trackui.ui" line="219"/>
-        <source>Use track pts. after this time. </source>
-        <translation type="unfinished">Použít body trasy po této době. </translation>
+        <source>Use track pts. after this time.</source>
+        <translation type="unfinished">Použít body trasy po této době.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
-This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period.</source>
         <translation type="unfinished">Použít pouze body trasy po tomto časovém razítku.
 
-Tato volba se používá spolu s ukončením k odstranění bodů trasy, které byly zaznamenány mimo konkrétní časový období. Tato volba určuje začátek časového období. </translation>
+Tato volba se používá spolu s ukončením k odstranění bodů trasy, které byly zaznamenány mimo konkrétní časový období. Tato volba určuje začátek časového období.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="212"/>
@@ -1469,17 +1481,17 @@ Tato volba se používá spolu s ukončením k odstranění bodů trasy, které 
     <message>
         <location filename="trackui.ui" line="232"/>
         <location filename="trackui.ui" line="247"/>
-        <source>Use track pts before this time. </source>
-        <translation type="unfinished">Použít body trasy před touto dobou. </translation>
+        <source>Use track pts before this time.</source>
+        <translation type="unfinished">Použít body trasy před touto dobou.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
-This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Použít pouze body trasy před tímto časovým razítkem.
 
-Tato volba se používá spolu s volbou Začátek k odstranění všech bodů trasy mimo dané časové období. Tato volba definuje konec časového období. </translation>
+Tato volba se používá spolu s volbou Začátek k odstranění všech bodů trasy mimo dané časové období. Tato volba definuje konec časového období.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="240"/>
@@ -1488,7 +1500,7 @@ Tato volba se používá spolu s volbou Začátek k odstranění všech bodů tr
     </message>
     <message>
         <location filename="trackui.ui" line="254"/>
-        <source>Pack all tracks into one. </source>
+        <source>Pack all tracks into one.</source>
         <translation type="unfinished">Sbalit všechny stopy do jedné.</translation>
     </message>
     <message>
@@ -1497,7 +1509,7 @@ Tato volba se používá spolu s volbou Začátek k odstranění všech bodů tr
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
-This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop.</source>
         <translation type="unfinished">Sbalit všechny stopy do jedné. Tato možnost způsobí, že budou všechny stopy připojeny k sobě, aby vytvořily jednu stopu. Tato možnost nefunguje, pokud se libovolné dvě stopy překrývají v čase; v tomto případě zvažte použití možnosti slučování. Tato možnost je nejvíce užitečná pro opětovné spojení stop, které mohly být přerušeny poruchou zařízení nebo přes noc.</translation>
     </message>
     <message>
@@ -1512,10 +1524,10 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
-This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
-        <translation type="unfinished"> Sloučit více stop pro stejnou cestu. Tato možnost umístí všechny body stop ze všech stop do jedné stopy a seřadí je podle časového razítka. Body se stejným časovým razítkem budou odstraněny.</translation>
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
+        <translation type="unfinished">Sloučit více stop pro stejnou cestu. Tato možnost umístí všechny body stop ze všech stop do jedné stopy a seřadí je podle časového razítka. Body se stejným časovým razítkem budou odstraněny.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="279"/>
@@ -1534,7 +1546,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="305"/>
-        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date.</source>
         <translation type="unfinished">Pokud není nula, bude stopa rozdělena, pokud čas mezi dvěma body je větší než tento parametr. Pokud je nula, bude stopa rozdělena podle data.</translation>
     </message>
     <message>
@@ -1549,7 +1561,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="348"/>
-        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter.</source>
         <translation type="unfinished">Pokud není nula, bude vstupní stopa rozdělena do několika stop, pokud je vzdálenost mezi po sobě jdoucími body stop větší než vzdálenost zadaná jako parametr.</translation>
     </message>
     <message>
@@ -1604,17 +1616,17 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
-        <source>Synthesize speed. </source>
-        <translation type="unfinished">Synthetizovat rychlost. </translation>
+        <source>Synthesize speed.</source>
+        <translation type="unfinished">Synthetizovat rychlost.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
         <translation type="unfinished">Synthetizovat rychlost.
 
-Tato možnost vypočítá hodnotu GPS rychlosti pro každý bod sledované trasy. Je to nejvíce užitečné pro body sledované trasy z formátů, které nepodporují informace o rychlosti, nebo pro body sledované trasy syntetizované filtru interpolace. Rychlost v každém bodě sledované trasy je průměrná rychlost z předchozího bodu sledované trasy (vzdálenost děleno časem). První bod sledované trasy v každé trasě je přiřazen rychlost &quot;neznámá.&quot; </translation>
+Tato možnost vypočítá hodnotu GPS rychlosti pro každý bod sledované trasy. Je to nejvíce užitečné pro body sledované trasy z formátů, které nepodporují informace o rychlosti, nebo pro body sledované trasy syntetizované filtru interpolace. Rychlost v každém bodě sledované trasy je průměrná rychlost z předchozího bodu sledované trasy (vzdálenost děleno časem). První bod sledované trasy v každé trasě je přiřazen rychlost &quot;neznámá.&quot;</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="451"/>
@@ -1630,10 +1642,10 @@ Tato možnost vypočítá hodnotu GPS rychlosti pro každý bod sledované trasy
         <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
-This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
         <translation type="unfinished">Synthetizovat kurz.
 
-Tato možnost vypočítá (nebo znovu vypočítá) hodnotu GPS směru pro každý bod sledované trasy. Je to nejvíce užitečné pro body sledované trasy z formátů, které nepodporují informace o směru, nebo pro body sledované trasy syntetizované filtrem interpolace. Směr v každém bodě sledované trasy je jednoduše kurz z předchozího bodu sledované trasy v trase. První bod sledované trasy v každé trase je libovolně přiřazen směru 0 stupňů. </translation>
+Tato možnost vypočítá (nebo znovu vypočítá) hodnotu GPS směru pro každý bod sledované trasy. Je to nejvíce užitečné pro body sledované trasy z formátů, které nepodporují informace o směru, nebo pro body sledované trasy syntetizované filtrem interpolace. Směr v každém bodě sledované trasy je jednoduše kurz z předchozího bodu sledované trasy v trase. První bod sledované trasy v každé trase je libovolně přiřazen směru 0 stupňů.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="466"/>
@@ -1757,7 +1769,7 @@ Tato možnost vypočítá (nebo znovu vypočítá) hodnotu GPS směru pro každ�
         <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</source>
         <translation type="unfinished">Tento filtr zahrnuje nebo vylučuje způsobem bodů na základě jejich blízkosti k centrálnímu bodu. Všechny body vzdálenější než zadaná vzdálenost od zadaného bodu budou odstraněny z datové sady.
 
 Ve výchozím nastavení jsou všechny zbývající body seřazeny tak, aby body blíže k centru se objevily dříve v výstupním souboru.</translation>
@@ -1776,7 +1788,7 @@ Ve výchozím nastavení jsou všechny zbývající body seřazeny tak, aby body
         <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</source>
         <translation type="unfinished">Maximální polohová vzdálenost.
 
 Tato volba určuje minimální povolenou vzdálenost mezi dvěma body. Pokud jsou dva body blíže než tato vzdálenost, zachová se pouze jeden z nich.</translation>
@@ -1828,7 +1840,7 @@ Tato volba určuje minimální povolenou vzdálenost mezi dvěma body. Pokud jso
     </message>
     <message>
         <location filename="wayptsui.ui" line="133"/>
-        <source>Suppress duplicate waypoint based on coords. </source>
+        <source>Suppress duplicate waypoint based on coords.</source>
         <translation type="unfinished">Potlačit duplicitní bod na základě souřadnic.</translation>
     </message>
     <message>
@@ -1868,7 +1880,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="168"/>
-        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</source>
         <translation type="unfinished">Filtr duplikátů je navržen k odstranění duplikátů bodů na základě jejich krátkého názvu (obvykle názvu bodu na GPS přijímači) a/nebo jejich polohy (s přesností 6 desetinných míst). Tento filtr podporuje dvě možnosti, které určují, jak budou duplikáty rozpoznány – krátký název a poloha. Obecně je vyžadována alespoň jedna z těchto možností.</translation>
     </message>
     <message>
@@ -1903,8 +1915,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="208"/>
-        <source>Maximum distance from center. </source>
-        <translation type="unfinished">Maximální vzdálenost od středu. </translation>
+        <source>Maximum distance from center.</source>
+        <translation type="unfinished">Maximální vzdálenost od středu.</translation>
     </message>
 </context>
 </TS>

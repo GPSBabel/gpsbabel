@@ -117,7 +117,7 @@ static void
 usage(const char* pname, bool verbose)
 {
   printf("GPSBabel Version %s.  https://www.gpsbabel.org\n\n",
-         gpsbabel_version);
+         gpsbabel::kVersion);
   printf(
     "Usage:\n"
     "    %s [options] -i INTYPE -f INFILE [filter] -o OUTTYPE -F OUTFILE\n"
@@ -364,7 +364,7 @@ run(const char* prog_name)
     }
 
     if (qargs.at(argn).size() > 1 && qargs.at(argn).at(1).toLatin1() == 'V') {
-      printf("\nGPSBabel Version %s\n\n", gpsbabel_version);
+      printf("\nGPSBabel Version %s\n\n", gpsbabel::kVersion);
       if (qargs.at(argn).size() > 2 && qargs.at(argn).at(2).toLatin1() == 'V') {
         print_extended_info();
       }
@@ -526,12 +526,12 @@ run(const char* prog_name)
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
-        gbInfo("GPSBabel Version: %s\n", gpsbabel_version);
-        if(sizeof(kVersionSHA) > 1) {
-          gbInfo("Repository SHA: %s\n", kVersionSHA);
+        gbInfo("GPSBabel Version: %s\n", gpsbabel::kVersion);
+        if(sizeof(gpsbabel::kVersionSHA) > 1) {
+          gbInfo("Repository SHA: %s\n", gpsbabel::kVersionSHA);
         }
-        if(sizeof(kVersionDate) > 1) {
-          QDateTime date = QDateTime::fromString(kVersionDate, Qt::ISODate);
+        if(sizeof(gpsbabel::kVersionDate) > 1) {
+          QDateTime date = QDateTime::fromString(gpsbabel::kVersionDate, Qt::ISODate);
           if (date.isValid()) {
             gbInfo("Date: %s\n", gbLogCStr(date.toUTC().toString(Qt::ISODate)));
           }

@@ -18,8 +18,8 @@
     </message>
     <message>
         <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
-        <translation type="unfinished">Створити розумні скорочені імена. </translation>
+        <source>Create smart shortened names.</source>
+        <translation type="unfinished">Створити розумні скорочені імена.</translation>
     </message>
     <message>
         <location filename="advui.ui" line="23"/>
@@ -178,27 +178,27 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cc" line="47"/>
+        <location filename="filterdlg.cc" line="49"/>
         <source>Tracks</source>
         <translation type="unfinished">Треки</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="50"/>
+        <location filename="filterdlg.cc" line="52"/>
         <source>Waypoints</source>
         <translation type="unfinished">Вейпоінти</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="53"/>
+        <location filename="filterdlg.cc" line="55"/>
         <source>Routes &amp; Tracks</source>
         <translation type="unfinished">Маршрути та треки</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="56"/>
+        <location filename="filterdlg.cc" line="58"/>
         <source>Miscellaneous</source>
         <translation type="unfinished">Різне</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="111"/>
+        <location filename="filterdlg.cc" line="113"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation type="unfinished">Ви впевнені, що хочете скинути всі параметри фільтрації на значення за замовчуванням?</translation>
     </message>
@@ -212,7 +212,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="filterui.ui" line="17"/>
-        <source>Data filters process and transform the data between input and output files or devices. </source>
+        <source>Data filters process and transform the data between input and output files or devices.</source>
         <translation type="unfinished">Фільтри даних обробляють та перетворюють дані між вхідними та вихідними файлами або пристроями.</translation>
     </message>
     <message>
@@ -376,17 +376,22 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>LeafletMap</name>
     <message>
-        <location filename="leafletmap.cc" line="142"/>
+        <location filename="leafletmap.cc" line="118"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">Помилка відкриття файлу &quot;:/qtwebchannel/qwebchannel.js&quot;. Перевірте встановлення</translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="162"/>
         <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Помилка відкриття файлу &quot;leafletbase.html&quot;. Перевірте встановлення</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="146"/>
+        <location filename="leafletmap.cc" line="165"/>
         <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Відсутній файл &quot;leafletbase.html&quot;. Перевірте встановлення</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="164"/>
+        <location filename="leafletmap.cc" line="183"/>
         <source>Failed to load Leaflet maps base page</source>
         <translation type="unfinished">Не вдалося завантажити сторінку бази карт Leaflet</translation>
     </message>
@@ -471,61 +476,61 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">Маршрути</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="533"/>
+        <location filename="leafletdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished">Показати всі маршрутні точки</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="534"/>
+        <location filename="leafletdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished">Приховати всі маршрутні точки</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="535"/>
-        <location filename="leafletdlg.cc" line="542"/>
-        <location filename="leafletdlg.cc" line="549"/>
+        <location filename="leafletdlg.cc" line="543"/>
+        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="557"/>
         <source>Expand All</source>
         <translation type="unfinished">Розгорнути все</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="536"/>
-        <location filename="leafletdlg.cc" line="543"/>
-        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="544"/>
+        <location filename="leafletdlg.cc" line="551"/>
+        <location filename="leafletdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation type="unfinished">Згорнути все</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="540"/>
+        <location filename="leafletdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation type="unfinished">Показати всі маршрути</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="541"/>
+        <location filename="leafletdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation type="unfinished">Приховати всі маршрути</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="547"/>
+        <location filename="leafletdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation type="unfinished">Показати всі треки</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="548"/>
+        <location filename="leafletdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished">Приховати всі треки</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="556"/>
+        <location filename="leafletdlg.cc" line="564"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished">Показати лише цей шлях</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="558"/>
+        <location filename="leafletdlg.cc" line="566"/>
         <source>Show Only This Track</source>
         <translation type="unfinished">Показати лише цей трек</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="560"/>
+        <location filename="leafletdlg.cc" line="568"/>
         <source>Show Only This Route</source>
         <translation type="unfinished">Показати лише цей маршрут</translation>
     </message>
@@ -547,7 +552,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
+        <source>Input</source>
         <translation type="unfinished">Вхід</translation>
     </message>
     <message>
@@ -586,7 +591,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="129"/>
-        <source>Browse for one or more input files. </source>
+        <source>Browse for one or more input files.</source>
         <translation type="unfinished">Виберіть один або кілька вхідних файлів.</translation>
     </message>
     <message>
@@ -607,7 +612,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="207"/>
-        <source>Options for the selected input format. </source>
+        <source>Options for the selected input format.</source>
         <translation type="unfinished">Параметри для вибраного формату вхідних даних.</translation>
     </message>
     <message>
@@ -663,8 +668,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="427"/>
-        <source>More translation options. </source>
-        <translation type="unfinished">Більше варіантів перекладу. </translation>
+        <source>More translation options.</source>
+        <translation type="unfinished">Більше варіантів перекладу.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="430"/>
@@ -678,8 +683,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="460"/>
-        <source>If selected, output is to a file. </source>
-        <translation type="unfinished">Якщо вибрано, вихідні дані зберігаються у файлі. </translation>
+        <source>If selected, output is to a file.</source>
+        <translation type="unfinished">Якщо вибрано, вихідні дані зберігаються у файлі.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="476"/>
@@ -693,8 +698,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="545"/>
-        <source>Browse for an output file name. </source>
-        <translation type="unfinished">Шукати ім&apos;я вихідного файлу. </translation>
+        <source>Browse for an output file name.</source>
+        <translation type="unfinished">Шукати ім&apos;я вихідного файлу.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="548"/>
@@ -708,13 +713,13 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="623"/>
-        <source>Options for the selected output format. </source>
-        <translation type="unfinished">Параметри для вибраного формату виходу. </translation>
+        <source>Options for the selected output format.</source>
+        <translation type="unfinished">Параметри для вибраного формату виходу.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="647"/>
-        <source>Output of GPSBabel translation process. </source>
-        <translation type="unfinished">Вихід процесу перекладу GPSBabel. </translation>
+        <source>Output of GPSBabel translation process.</source>
+        <translation type="unfinished">Вихід процесу перекладу GPSBabel.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="681"/>
@@ -762,17 +767,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">Зробити пожертву...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="532"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation type="unfinished">Виберіть один або кілька вхідних файлів</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation type="unfinished">Ім&apos;я вихідного файлу</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="624"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -781,7 +786,7 @@ This program cannot continue.</source>
 Ця програма не може продовжувати роботу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="635"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -790,115 +795,117 @@ This program cannot continue.</source>
 Ця програма не може продовжувати роботу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished">Вхідний та вихідний формати не підтримують %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Вхідний формат не підтримує %1; вихідний формат підтримує %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">Вхідний формат підтримує %1; вихідний формат не підтримує %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished">Обидва вхідний та вихідний формати підтримують %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="686"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation type="unfinished">маршрутні точки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation type="unfinished">треки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="688"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation type="unfinished">маршрути</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished">Немає варіантів введення для формату &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="789"/>
-        <location filename="mainwindow.cc" line="808"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation type="unfinished">Параметри для %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished">Немає варіантів виведення для формату &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished">Не вказано коректного перекладу маршрутних точок/треків/маршрутів</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation type="unfinished">Не вказано вхідний файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation type="unfinished">Не вказано коректний вихід</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation type="unfinished">Не вказано файл виводу</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="974"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">Не вдалося відкрити тимчасовий файл &quot;%1&quot; для попереднього перегляду карти. Помилка: &quot;%2&quot;. Попередній перегляд карти не буде показано.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="991"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation type="unfinished">Переклад успішний</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1003"/>
-        <source>Error preparing map: %1
-</source>
+        <location filename="mainwindow.cc" line="1006"/>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">Помилка підготовки карти: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1038"/>
-        <source>Error running gpsbabel: %1
-</source>
+        <location filename="mainwindow.cc" line="1049"/>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
         <translation type="unfinished">Помилка виконання gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1163"/>
+        <location filename="mainwindow.cc" line="1174"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished">Ви впевнені, що хочете скинути всі параметри формату до значень за замовчуванням?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1193"/>
+        <location filename="mainwindow.cc" line="1204"/>
         <source>About %1</source>
         <translation type="unfinished">Про %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1241"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished">Один або кілька фільтрів даних активовані</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1243"/>
+        <location filename="mainwindow.cc" line="1254"/>
         <source>No data filters are active</source>
         <translation type="unfinished">Фільтри даних не активовані</translation>
     </message>
@@ -906,17 +913,22 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="122"/>
+        <location filename="map.cc" line="92"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">Помилка відкриття файлу &quot;:/qtwebchannel/qwebchannel.js&quot;. Перевірте встановлення</translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="142"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Помилка відкриття файлу &quot;gmapbase.html&quot;. Перевірте встановлення</translation>
     </message>
     <message>
-        <location filename="map.cc" line="126"/>
+        <location filename="map.cc" line="145"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Відсутній файл &quot;gmapbase.html&quot;. Перевірте встановлення</translation>
     </message>
     <message>
-        <location filename="map.cc" line="181"/>
+        <location filename="map.cc" line="200"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished">Не вдалося завантажити сторінку бази Google Maps</translation>
     </message>
@@ -942,7 +954,7 @@ This program cannot continue.</source>
         <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</source>
         <translation type="unfinished">Цей фільтр можна використовувати для конвертації GPS-даних між різними типами даних.
 
 Деякі формати GPS-даних підтримують лише певний підмножину точок, треків та маршрутів. Фільтр перетворення дозволяє конвертувати між цими типами. Наприклад, його можна використовувати для конвертації набору точок (наприклад, з CSV-файлу) у трек або навпаки.</translation>
@@ -954,12 +966,12 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <source>Type of transformation. </source>
+        <source>Type of transformation.</source>
         <translation type="unfinished">Тип перетворення.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <source>Delete original data after transform to prevent duplicated data. </source>
+        <source>Delete original data after transform to prevent duplicated data.</source>
         <translation type="unfinished">Видалити оригінальні дані після перетворення, щоб уникнути дублювання даних.</translation>
     </message>
     <message>
@@ -974,28 +986,28 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="297"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="286"/>
         <source>Routes</source>
         <translation type="unfinished">Маршрути</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="297"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="286"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Tracks</source>
         <translation type="unfinished">Треки</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Waypoints</source>
         <translation type="unfinished">Точки</translation>
     </message>
@@ -1048,7 +1060,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="215"/>
-        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</source>
         <translation type="unfinished">Простий фільтр для обміну значеннями координат (широта та довгота) всіх точок. Це може бути корисно для неправильно визначених/закодованих даних. Або якщо ви думаєте, що можете використовувати один із наших xcsv форматів, але широта та довгота розташовані в зворотному порядку.</translation>
     </message>
     <message>
@@ -1217,7 +1229,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">Помилка обробки форматів при запуску процесу </translation>
+        <translation type="unfinished">Помилка обробки форматів з запущеного процесу &quot;gpsbabel -^3&quot; на рядку %1</translation>
     </message>
 </context>
 <context>
@@ -1286,7 +1298,7 @@ The quality of the results will vary depending on the density of points in the o
     </message>
     <message>
         <location filename="rttrkui.ui" line="89"/>
-        <source>Maximum number points in track or route. </source>
+        <source>Maximum number points in track or route.</source>
         <translation type="unfinished">Максимальна кількість точок у треку або маршруті.</translation>
     </message>
     <message>
@@ -1370,7 +1382,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
     </message>
     <message>
         <location filename="trackui.ui" line="17"/>
-        <source>This filter performs various operations on track data. </source>
+        <source>This filter performs various operations on track data.</source>
         <translation type="unfinished">Цей фільтр виконує різні операції з даними треку.</translation>
     </message>
     <message>
@@ -1387,7 +1399,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
         <location filename="trackui.ui" line="45"/>
         <source>Basic title for new track(s). 
 This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
-If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names.</source>
         <translation type="unfinished">Базове ім&apos;я для нового(их) треку(ів).
 Цей параметр визначає назву треків, створених фільтром треку. За замовчуванням, назва нового треку складається з часу початку треку, доданого до цього значення.
 Якщо це значення містить символ відсотка (%), він розглядається як рядок формату для функції POSIX strftime, що дозволяє створювати імена треків залежно від часу.</translation>
@@ -1399,7 +1411,7 @@ If this value contains a percent (%) character, it is treated as a format string
     </message>
     <message>
         <location filename="trackui.ui" line="57"/>
-        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
+        <source>the title of the new track is composed of the start time of the track appended to this value.</source>
         <translation type="unfinished">Назва нового треку складається з часу початку треку, доданого до цього значення.</translation>
     </message>
     <message>
@@ -1410,7 +1422,7 @@ If this value contains a percent (%) character, it is treated as a format string
     <message>
         <location filename="trackui.ui" line="67"/>
         <source>Correct trackpoint timestamps by a delta. 
-This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone.</source>
         <translation type="unfinished">Виправити часові мітки точок треку на величину зсуву.
 Цей параметр змінює час для всіх точок треку. Це може бути корисно, якщо ваш трек потрібно змістити на один або кілька годин через неправильну часову зону.</translation>
     </message>
@@ -1449,14 +1461,14 @@ This option changes the time of all trackpoints. This might be useful if your tr
     <message>
         <location filename="trackui.ui" line="204"/>
         <location filename="trackui.ui" line="219"/>
-        <source>Use track pts. after this time. </source>
+        <source>Use track pts. after this time.</source>
         <translation type="unfinished">Використовувати точки треку після цього часу.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
-This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period.</source>
         <translation type="unfinished">Використовувати лише точки треку після цього часового мітки.
 
 Цей параметр використовується разом з «зупинкою» для видалення точок треку, які були записані поза певним періодом часу. Цей параметр визначає початок часового періоду.</translation>
@@ -1469,14 +1481,14 @@ This option is used along with the stop to discard trackpoints that were recorde
     <message>
         <location filename="trackui.ui" line="232"/>
         <location filename="trackui.ui" line="247"/>
-        <source>Use track pts before this time. </source>
+        <source>Use track pts before this time.</source>
         <translation type="unfinished">Використовувати точки треку до цього часу.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
-This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">Використовувати лише точки треку до цього часового мітки.
 
 Цей параметр використовується разом з параметром «початок» для видалення всіх точок треку, які знаходяться поза заданим періодом часу. Цей параметр визначає кінець часового періоду.</translation>
@@ -1488,7 +1500,7 @@ This option is used in conjunction with the start option to discard all trackpoi
     </message>
     <message>
         <location filename="trackui.ui" line="254"/>
-        <source>Pack all tracks into one. </source>
+        <source>Pack all tracks into one.</source>
         <translation type="unfinished">Зібрати всі треки в один.</translation>
     </message>
     <message>
@@ -1497,7 +1509,7 @@ This option is used in conjunction with the start option to discard all trackpoi
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
-This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop.</source>
         <translation type="unfinished">Зібрати всі треки в один.
 
 Ця опція призводить до приєднання всіх треків один до одного, щоб утворити один трек. Ця опція не працює, якщо будь-які два треки перекриваються за часом; у цьому випадку розгляньте використання опції злиття.
@@ -1516,10 +1528,10 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
-This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
-        <translation type="unfinished"> Злити кілька треків для одного маршруту.
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
+        <translation type="unfinished">Злити кілька треків для одного маршруту.
 
 Ця опція поміщає всі точки треку з усіх треків у один трек і сортує їх за часовим міткою. Точки з однаковими часовими мітками будуть видалені.</translation>
     </message>
@@ -1540,7 +1552,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="305"/>
-        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date.</source>
         <translation type="unfinished">Якщо значення не нульове, трек буде розділений, якщо час між двома точками більший за цей параметр. Якщо нуль, трек буде розділений за датою.</translation>
     </message>
     <message>
@@ -1555,7 +1567,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="348"/>
-        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter.</source>
         <translation type="unfinished">Якщо значення не нульове, вхідний трек буде розділений на кілька треків, якщо відстань між послідовними точками треку більша за відстань, вказану як параметр.</translation>
     </message>
     <message>
@@ -1610,17 +1622,17 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
-        <source>Synthesize speed. </source>
-        <translation type="unfinished">Синтезувати швидкість. </translation>
+        <source>Synthesize speed.</source>
+        <translation type="unfinished">Синтезувати швидкість.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
         <translation type="unfinished">Синтезувати швидкість.
 
-Ця опція обчислює значення швидкості GPS для кожного точкового шляху. Це найбільш корисно з точковими шляхами з форматів, які не підтримують інформацію про швидкість, або для точкових шляхів, синтезованих фільтром інтерполяції. Швидкість для кожного точкового шляху становить середню швидкість від попереднього точкового шляху (відстань поділено на час). Перший точковий шлях у кожному шляху присвоюється швидкість &quot;невідомо.&quot; </translation>
+Ця опція обчислює значення швидкості GPS для кожного точкового шляху. Це найбільш корисно з точковими шляхами з форматів, які не підтримують інформацію про швидкість, або для точкових шляхів, синтезованих фільтром інтерполяції. Швидкість для кожного точкового шляху становить середню швидкість від попереднього точкового шляху (відстань поділено на час). Перший точковий шлях у кожному шляху присвоюється швидкість &quot;невідомо.&quot;</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="451"/>
@@ -1636,10 +1648,10 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
         <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
-This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
         <translation type="unfinished">Синтезувати курс.
 
-Ця опція обчислює (або перераховує) значення напрямку GPS для кожного точкового шляху. Це найбільш корисно з точковими шляхами з форматів, які не підтримують інформацію про напрямок, або для точкових шляхів, синтезованих фільтром інтерполяції. Напрямок для кожного точкового шляху просто є курсом від попереднього точкового шляху у шляху. Перший точковий шлях у кожному шляху довільно присвоюється напрямок 0 градусів. </translation>
+Ця опція обчислює (або перераховує) значення напрямку GPS для кожного точкового шляху. Це найбільш корисно з точковими шляхами з форматів, які не підтримують інформацію про напрямок, або для точкових шляхів, синтезованих фільтром інтерполяції. Напрямок для кожного точкового шляху просто є курсом від попереднього точкового шляху у шляху. Перший точковий шлях у кожному шляху довільно присвоюється напрямок 0 градусів.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="466"/>
@@ -1763,7 +1775,7 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
         <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</source>
         <translation type="unfinished">Цей фільтр включає або виключає точки-маршрути залежно від їхньої близькості до центральної точки. Усі точки, які знаходяться далі за вказаний відстань від вказаної точки, будуть видалені з набору даних.
 
 За замовчуванням, решта точок сортується так, щоб точки, ближчі до центру, з’являлися раніше у вихідному файлі.</translation>
@@ -1782,7 +1794,7 @@ By default, all remaining points are sorted so that points closer to the center 
         <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</source>
         <translation type="unfinished">Максимальна позиційна відстань.
 
 Цей параметр визначає мінімальну дозволену відстань між двома точками. Якщо дві точки знаходяться ближче за цю відстань, зберігається лише одна з них.</translation>
@@ -1834,7 +1846,7 @@ This option specifies the minimum allowable distance between two points. If two 
     </message>
     <message>
         <location filename="wayptsui.ui" line="133"/>
-        <source>Suppress duplicate waypoint based on coords. </source>
+        <source>Suppress duplicate waypoint based on coords.</source>
         <translation type="unfinished">Приховати дублюючі точки-маршрути на основі координат.</translation>
     </message>
     <message>
@@ -1874,7 +1886,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="168"/>
-        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</source>
         <translation type="unfinished">Фільтр дублікатів призначений для видалення дублікатів точок на основі їх короткої назви (традиційно імені вейпоінта на GPS-приймачі) та/або їх розташування (з точністю до 6 десяткових знаків). Цей фільтр підтримує два параметри, які визначають, як будуть визначатися дублікати: коротка назва та розташування. Зазвичай, принаймні один з цих параметрів є обов&apos;язковим.</translation>
     </message>
     <message>
@@ -1909,8 +1921,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="208"/>
-        <source>Maximum distance from center. </source>
-        <translation type="unfinished">Максимальна відстань від центру. </translation>
+        <source>Maximum distance from center.</source>
+        <translation type="unfinished">Максимальна відстань від центру.</translation>
     </message>
 </context>
 </TS>

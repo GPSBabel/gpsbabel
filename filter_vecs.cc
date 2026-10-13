@@ -39,7 +39,7 @@
 #include "discard.h"        // for DiscardFilter
 #include "duplicate.h"      // for DuplicateFilter
 #include "filter.h"         // for Filter
-#include "gbversion.h"      // for WEB_DOC_DIR
+#include "gbversion.h"      // for kWebDocDir
 #include "height.h"         // for HeightFilter
 #include "inifile.h"        // for inifile_readstr
 #include "interpolate.h"    // for InterpolateFilter
@@ -351,7 +351,7 @@ void FilterVecs::disp_filter_vec(const QString& vecname) const
 
 void FilterVecs::disp_help_url(const fl_vecs_t& vec, const arglist_t* arg)
 {
-  printf("\t" WEB_DOC_DIR "/filter_%s.html", CSTR(vec.name));
+  printf("\t%s/filter_%s.html", gpsbabel::kWebDocDir, CSTR(vec.name));
   if (arg) {
     printf("#fmt_%s_o_%s", CSTR(vec.name), CSTR(arg->argstring));
   }

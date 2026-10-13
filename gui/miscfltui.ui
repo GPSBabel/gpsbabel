@@ -33,7 +33,7 @@
          <property name="whatsThis">
           <string>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </string>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</string>
          </property>
          <property name="text">
           <string>Transform</string>
@@ -43,14 +43,14 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
        <item>
         <widget class="QComboBox" name="transformCombo">
          <property name="toolTip">
-          <string>Type of transformation. </string>
+          <string>Type of transformation.</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="deleteCheck">
          <property name="toolTip">
-          <string>Delete original data after transform to prevent duplicated data. </string>
+          <string>Delete original data after transform to prevent duplicated data.</string>
          </property>
          <property name="text">
           <string>Delete</string>
@@ -212,7 +212,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
         <string>Swap Longitude and Latitudes for badly formatted data formats.</string>
        </property>
        <property name="whatsThis">
-        <string>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </string>
+        <string>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</string>
        </property>
        <property name="text">
         <string>Swap Coordinates</string>

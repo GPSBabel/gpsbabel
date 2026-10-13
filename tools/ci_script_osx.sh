@@ -22,7 +22,10 @@ if [ $# -lt 2 ]; then
 fi
 SOURCE_DIR=$1
 QTVER=$2
-if version_ge "${QTVER}" 6.10.0; then
+if version_ge "${QTVER}" 6.12.0; then
+  DEPLOY_TARGET="14.4"
+  ARCHS="x86_64;arm64"
+elif version_ge "${QTVER}" 6.10.0; then
   DEPLOY_TARGET="13.0"
   ARCHS="x86_64;arm64"
 elif version_ge "${QTVER}" 6.8.0; then

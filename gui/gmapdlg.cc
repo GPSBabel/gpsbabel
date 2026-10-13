@@ -144,7 +144,7 @@ void GMapDialog::appendRouteInfo(QStandardItem* it, const GpxRoute& rte)
 GMapDialog::GMapDialog(QWidget* parent, const Gpx& mapData, int debugLevel, QPlainTextEdit* te): QDialog(parent), debugLevel_(debugLevel), gpx_(mapData)
 {
   ui_.setupUi(this);
-  this->setWindowTitle(QString(appName) + " " + QString("Google Maps"));
+  this->setWindowTitle(appName + QStringLiteral(" - Google Maps"));
 
   mapWidget_ = new Map(this, gpx_, te);
   auto* lay = new QHBoxLayout(ui_.frame);
@@ -233,7 +233,7 @@ void GMapDialog::trace(const QString& label, const QStandardItem* it)
     }
   }
 }
-  
+
 //------------------------------------------------------------------------
 void GMapDialog::showHideChild(const QStandardItem* child)
 {

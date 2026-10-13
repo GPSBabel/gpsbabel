@@ -335,7 +335,7 @@ ShapeFormat::read()
       }
       wpt->shortname = name;
       if (!url.isEmpty()) {
-        wpt->AddUrlLink(url);
+        wpt->AddUrlLink(UrlLink(url));
       }
       waypt_add(wpt);
       break;

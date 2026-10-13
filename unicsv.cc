@@ -573,7 +573,7 @@ UnicsvFormat::unicsv_parse_one_line(const QString& ibuf)
       break;
 
     case fld_url: {
-      wpt->AddUrlLink(value);
+      wpt->AddUrlLink(UrlLink(value));
     }
     break;
 

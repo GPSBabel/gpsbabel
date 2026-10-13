@@ -56,12 +56,12 @@ unused = [
     "qtlanguageserver",
     "qtlocation",
     "qtmultimedia",
+    "qtopenapi",
     "qtquickeffectmaker",
     "qtremoteobjects",
     "qtscxml",
     "qtsensors",
     "qtspeech",
-    "qttasktree",
     "qtwebsockets",
 ]
 blacklist = []
@@ -75,6 +75,7 @@ whitelist = [
     "qtpositioning",
     "qtserialbus",
     "qtserialport",
+    "qttasktree",
     "qtwebchannel",
     "qtwebengine",
     "qtwebview",
@@ -90,8 +91,7 @@ def fetch_installer(tmpdir: str, verbose: int) -> str:
         elif platform.machine() in ["arm64", "ARM64"]:
             installer_name = "qt-online-installer-windows-arm64-online.exe"
     elif platform.system() == "Darwin":
-        # note this may require rosetta is installed on arm64 macs.
-        installer_name = "qt-online-installer-mac-x64-online.dmg"
+        installer_name = "qt-online-installer-macOS-universal.dmg"
     elif platform.system() == "Linux":
         if platform.machine() == "x86_64":
             installer_name = "qt-online-installer-linux-x64-online.run"
@@ -328,6 +328,7 @@ def main() -> None:
         default=0,
     )
     parser.add_argument("--black", help="select all modules not on black list", action="store_true")
+    parser.add_argument("--dirty", help="leave non-essential components", action="store_true")
     args = parser.parse_args()
 
     jwt = os.getenv("QT_INSTALLER_JWT_TOKEN")
@@ -345,8 +346,8 @@ def main() -> None:
             usewhite=not args.black,
         )
         install(installer=installer, dest=args.dest, selected=selected)
-        cleanup(dest=args.dest, ver=args.ver)
-
+        if not args.dirty:
+            cleanup(dest=args.dest, ver=args.ver)
 
 if __name__ == "__main__":
     main()
