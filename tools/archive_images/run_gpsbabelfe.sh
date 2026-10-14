@@ -66,7 +66,7 @@ fi
 WAS_XHOST_GRANTED=true
 
 if [ -n "$DISPLAY" ] && command -v xhost >/dev/null 2>&1; then
-  if ! xhost | grep -qEi "LOCAL:|local:$(id -un)"; then
+  if ! xhost | grep -qEi "LOCAL:|SI:localuser:$(id -un)"; then
     WAS_XHOST_GRANTED=false
     xhost +local:$(id -un) >/dev/null 2>&1 || true
   fi
