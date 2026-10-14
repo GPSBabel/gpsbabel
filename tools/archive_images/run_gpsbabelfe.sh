@@ -38,12 +38,6 @@ if [ -z "$(docker ps -a -q -f "name=^${container_name}$")" ]; then
     OPTIONS+=(--device /dev/dri)
   fi
 
-  # XWayland Authorization Bridge (Crucial for Ubuntu 26.04 host)
-  if [ -n "$DISPLAY" ] && command -v xhost >/dev/null 2>&1; then
-    # Grant local container runtime authority to bridge into XWayland
-    xhost +local:root >/dev/null 2>&1 || true
-  fi
-
   docker container create -q -i -t \
                           -e "DISPLAY=$DISPLAY" \
                           "${OPTIONS[@]}" \
@@ -67,4 +61,23 @@ if [ -z "$(docker ps -a -q -f "status=running" -f "name=^${container_name}$")" ]
 fi
 
 # run the gpsbabel GUI
+
+# XWayland Authorization Bridge (Crucial for Ubuntu 26.04 host)
+WAS_XHOST_GRANTED=true
+
+if [ -n "$DISPLAY" ] && command -v xhost >/dev/null 2>&1; then
+  if ! xhost | grep -qEi "LOCAL:|local:$(id -un)"; then
+    WAS_XHOST_GRANTED=false
+    xhost +local:$(id -un) >/dev/null 2>&1 || true
+  fi
+fi
+
+cleanup_xhost() {
+  if [ "$WAS_XHOST_GRANTED" = false ] && command -v xhost >/dev/null 2>&1; then
+    xhost -local:$(id -un) >/dev/null 2>&1 || true
+  fi
+}
+
+trap cleanup_xhost EXIT
+
 docker exec -i -t -u "${uid}:${gid}" "${container_name}" gpsbabelfe "$@"
