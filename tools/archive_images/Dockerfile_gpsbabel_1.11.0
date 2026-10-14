@@ -1,6 +1,6 @@
 # this file is used to build the image gpsbabel_build_environment used by travis.
 
-FROM ubuntu:noble AS stage
+FROM ubuntu:resolute AS stage
 
 # update environment.
 ARG DEBIAN_FRONTEND=noninteractive
@@ -38,6 +38,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qt6-base-dev \
     qt6-5compat-dev \
     qt6-serialport-dev \
+    libcups2-dev \
     libx11-xcb-dev \
     libxkbcommon-dev \
     qt6-tools-dev \
@@ -52,8 +53,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tzdata \
  && rm -rf /var/lib/apt/lists/* \
  && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
+ && sed -i 's/^# *\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
  && locale-gen \
  && locale -a
+
+# Qt emits warnings if it doesn't start in a UTF-8 locale
+ARG LC_ALL=en_US.UTF-8
 
 RUN --mount=type=bind,target=/home/gpsbabel/gpsbabel-build,rw cd /home/gpsbabel/gpsbabel-build \
  && rm -fr zlib \
@@ -68,7 +73,7 @@ RUN --mount=type=bind,target=/home/gpsbabel/gpsbabel-build,rw cd /home/gpsbabel/
  && ln -s /usr/local/cellar/GPSBabelFE/gpsbabelfe /usr/local/bin \
  && cp tools/archive_images/setup_user.sh /usr/local/bin
 
-FROM ubuntu:noble
+FROM ubuntu:resolute
 
 LABEL maintainer="https://github.com/tsteven4"
 
@@ -102,6 +107,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     qt6-qpa-plugins \
     qt6-wayland \
  && rm -rf /var/lib/apt/lists/*
+
+# testo uses en_US.UTF-8
+# we may need locales to dynamically generate user LANG
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    locales \
+    tzdata \
+ && rm -rf /var/lib/apt/lists/* \
+ && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
+ && sed -i 's/^# *\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+ && locale-gen \
+ && locale -a
 
 COPY --from=stage /usr/local/cellar /usr/local/cellar
 COPY --from=stage /usr/local/bin/setup_user.sh /usr/local/bin
