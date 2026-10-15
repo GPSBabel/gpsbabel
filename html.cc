@@ -34,6 +34,7 @@
 #include "defs.h"
 #include "formspec.h"              // for FormatSpecificDataList, kFsGpx
 #include "geocache.h"              // for Geocache, Geocache::UtfString
+#include "gbversion.h"             // for kVersion
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN
 #include "mkshort.h"               // for MakeShort
 #include "src/core/datetime.h"     // for DateTime
@@ -246,7 +247,7 @@ HtmlFormat::write()
   // probably not write this line at all...
   if (!gpsbabel_testmode()) {
     *file_out << R"(  <meta name="Generator" content="GPSBabel )"
-              << gpsbabel_version << "\">\n";
+              << gpsbabel::kVersion << "\">\n";
   }
   *file_out << "  <title>GPSBabel HTML Output</title>\n";
   if (opt_stylesheet) {

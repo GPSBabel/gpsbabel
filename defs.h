@@ -170,7 +170,6 @@ struct global_options {
 };
 
 extern global_options global_opts;
-extern const char gpsbabel_version[];
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 
 enum fix_type {
@@ -197,21 +196,18 @@ class UrlLink
 {
 public:
   UrlLink() = default;
-  UrlLink(QString url) :
+  explicit UrlLink(QString url) :
     url_(std::move(url))
-  { }
-  explicit UrlLink(const char* url) :
-    url_(url)
-  { }
+  {}
   UrlLink(QString url, QString url_link_text) :
     url_(std::move(url)),
     url_link_text_(std::move(url_link_text))
-  { }
+  {}
   UrlLink(QString url, QString url_link_text, QString url_link_type) :
     url_(std::move(url)),
     url_link_text_(std::move(url_link_text)),
     url_link_type_(std::move(url_link_type))
-  { }
+  {}
   QString url_;
   QString url_link_text_;
   QString url_link_type_;
@@ -938,20 +934,6 @@ FILE* xfopen(const QString& fname, const char* type);
 
 // Thin wrapper around fopen() that supports Unicode fname on all platforms.
 FILE* ufopen(const QString& fname, const char* mode);
-
-// FIXME: case_ignore_strcmp() and case_ignore_strncmp() should probably
-// just be replaced at the call sites.  These shims are just here to make
-// them more accommodating of QString input.
-inline int
-case_ignore_strcmp(const QString& s1, const QString& s2)
-{
-  return QString::compare(s1, s2, Qt::CaseInsensitive);
-}
-// In 95% of the callers, this could be s1.startsWith(s2)...
-inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
-{
-  return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
-}
 
 QDateTime make_datetime(QDate date, QTime time, bool is_localtime, bool force_utc, int utc_offset);
 bool gpsbabel_testmode();

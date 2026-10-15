@@ -37,11 +37,6 @@
 class GtmFormat : public Format
 {
 public:
-  QVector<arglist_t>* get_args() override
-  {
-    return nullptr;
-  }
-
   ff_type get_type() const override
   {
     return ff_type_file;

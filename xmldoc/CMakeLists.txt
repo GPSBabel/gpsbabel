@@ -24,7 +24,10 @@ if(Python3_FOUND)
 
   add_custom_target(xmldoc
                     COMMAND perl ${CMAKE_CURRENT_SOURCE_DIR}/makedoc --pname $<TARGET_FILE:gpsbabel>
-                    COMMAND xmllint --noout --relaxng file://${CMAKE_SOURCE_DIR}/tools/schema/docbook/xml/5.0/rng/docbook.rng readme.xml
+                    # xmllint: using libxml version 21502 on resolute fails relaxng validation if we don't replace entities first.
+                    # xmllint: using libxml version 20914 on noble handle entities with relaxng validation.
+                    COMMAND xmllint --noent --output readme_noent.xml readme.xml
+                    COMMAND xmllint --noout --relaxng file://${CMAKE_SOURCE_DIR}/tools/schema/docbook/xml/5.0/rng/docbook.rng readme_noent.xml
                     # schematron validation with xmllint doesn't seem to work:
                     # "Schematron schema .../docbook.sch failed to compile"
                     # COMMAND xmllint --noout --schematron file://${CMAKE_SOURCE_DIR}/tools/schema/docbook/xml/5.0/sch/docbook.sch readme.xml

@@ -25,7 +25,7 @@
         <translation type="vanished">Nome ad-hoc icona aperta</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="106"/>
+        <location filename="core_strings.h" line="107"/>
         <source>After output job done sleep n second(s)</source>
         <translation>Attendi n secondi dopo il termine dell&apos;elaborazione</translation>
     </message>
@@ -36,19 +36,19 @@
         <location filename="core_strings.h" line="56"/>
         <location filename="core_strings.h" line="65"/>
         <location filename="core_strings.h" line="90"/>
-        <location filename="core_strings.h" line="114"/>
-        <location filename="core_strings.h" line="165"/>
-        <location filename="core_strings.h" line="175"/>
-        <location filename="core_strings.h" line="184"/>
-        <location filename="core_strings.h" line="193"/>
-        <location filename="core_strings.h" line="285"/>
-        <location filename="core_strings.h" line="297"/>
-        <location filename="core_strings.h" line="329"/>
+        <location filename="core_strings.h" line="115"/>
+        <location filename="core_strings.h" line="167"/>
+        <location filename="core_strings.h" line="177"/>
+        <location filename="core_strings.h" line="186"/>
+        <location filename="core_strings.h" line="195"/>
+        <location filename="core_strings.h" line="287"/>
+        <location filename="core_strings.h" line="299"/>
+        <location filename="core_strings.h" line="331"/>
         <source>Allow whitespace synth. shortnames</source>
         <translation>Permetti spazi nei nomi brevi sintetizzati</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="152"/>
+        <location filename="core_strings.h" line="153"/>
         <source>Altitudes are absolute and not clamped to ground</source>
         <translation>Le quote sono assolute e non relative al terreno</translation>
     </message>
@@ -57,7 +57,7 @@
         <translation type="vanished">Aggiungi icon_descr alla descrizione</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="204"/>
+        <location filename="core_strings.h" line="206"/>
         <source>Base URL for link tag in output</source>
         <translation>Url di base per i tag link in uscita</translation>
     </message>
@@ -68,18 +68,18 @@
         <location filename="core_strings.h" line="59"/>
         <location filename="core_strings.h" line="68"/>
         <location filename="core_strings.h" line="93"/>
-        <location filename="core_strings.h" line="168"/>
-        <location filename="core_strings.h" line="178"/>
-        <location filename="core_strings.h" line="187"/>
-        <location filename="core_strings.h" line="196"/>
-        <location filename="core_strings.h" line="300"/>
-        <location filename="core_strings.h" line="332"/>
+        <location filename="core_strings.h" line="170"/>
+        <location filename="core_strings.h" line="180"/>
+        <location filename="core_strings.h" line="189"/>
+        <location filename="core_strings.h" line="198"/>
+        <location filename="core_strings.h" line="302"/>
+        <location filename="core_strings.h" line="334"/>
         <source>Basename prepended to URL on output</source>
         <translation>Nome base anteposto all&apos;URL in uscita</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="74"/>
-        <location filename="core_strings.h" line="121"/>
+        <location filename="core_strings.h" line="122"/>
         <source>Bitmap of categories</source>
         <translation>Bitmap delle categorie</translation>
     </message>
@@ -88,7 +88,7 @@
         <translation type="vanished">Nome della categoria (cache)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="120"/>
+        <location filename="core_strings.h" line="121"/>
         <source>Category number to use for written waypoints</source>
         <translation>Numero categoria da usare per i punti d&apos;interesse scritti</translation>
     </message>
@@ -97,22 +97,22 @@
         <translation type="vanished">Colore per le linee o le note della mappa</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="117"/>
+        <location filename="core_strings.h" line="118"/>
         <source>Command unit to power itself down</source>
         <translation>Chiedi al dispositivo di spegnersi</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="271"/>
+        <location filename="core_strings.h" line="273"/>
         <source>Complete date-free tracks with given date (YYYYMMDD).</source>
         <translation>Completa le tracce senza data con la data fornita (AAAAMMGG).</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="108"/>
+        <location filename="core_strings.h" line="109"/>
         <source>Create unique waypoint names (default = yes)</source>
         <translation>Crea punti d&apos;interesse con nomi univoci (predefinito: sì)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="203"/>
+        <location filename="core_strings.h" line="205"/>
         <source>Create waypoints from geocache log entries</source>
         <translation>Crea punti d&apos;interesse dagli elementi nel registro geocache</translation>
     </message>
@@ -125,7 +125,7 @@
         <translation type="vanished">Nome della banca dati (nome file)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="262"/>
+        <location filename="core_strings.h" line="264"/>
         <source>Datum (default=NAD27)</source>
         <translation>Datum (predefinito: NAD27)</translation>
     </message>
@@ -134,7 +134,7 @@
         <translation type="vanished">Giorni dopo i quali i punti sono considerati vecchi</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="273"/>
+        <location filename="core_strings.h" line="275"/>
         <source>Decimal seconds to pause between groups of strings</source>
         <translation>Pausa (in decimi di secondo) tra gruppi di stringhe</translation>
     </message>
@@ -149,9 +149,9 @@
         <translation>Categoria predefinita in uscita (1... 16)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="115"/>
-        <location filename="core_strings.h" line="129"/>
-        <location filename="core_strings.h" line="147"/>
+        <location filename="core_strings.h" line="116"/>
+        <location filename="core_strings.h" line="130"/>
+        <location filename="core_strings.h" line="148"/>
         <source>Default icon name</source>
         <translation>Nome dell&apos;icona predefinita</translation>
     </message>
@@ -160,12 +160,12 @@
         <translation type="vanished">Posizione predefinita</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="105"/>
+        <location filename="core_strings.h" line="106"/>
         <source>Default proximity</source>
         <translation>Prossimità predefinita</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="107"/>
+        <location filename="core_strings.h" line="108"/>
         <source>Default speed</source>
         <translation>Velocità predefinita</translation>
     </message>
@@ -174,8 +174,8 @@
         <translation type="vanished">Velocità predefinita per i punti di interesse (nodi/ora)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="221"/>
-        <location filename="core_strings.h" line="340"/>
+        <location filename="core_strings.h" line="223"/>
+        <location filename="core_strings.h" line="342"/>
         <source>Degrees output as &apos;ddd&apos;, &apos;dmm&apos;(default) or &apos;dms&apos;</source>
         <translation>Gradi in uscita come &apos;ggg&apos;, &apos;gmm&apos; (predefinito) o &apos;gms&apos;</translation>
     </message>
@@ -192,7 +192,7 @@
         <translation type="vanished">Cancella tutti i punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="158"/>
+        <location filename="core_strings.h" line="159"/>
         <source>Display labels on track and routepoints  (default = 1)</source>
         <translation>Mostra le etichette su tracce e punti rotta (predefinito: 1)</translation>
     </message>
@@ -255,7 +255,7 @@
         <translation type="unfinished">Dati GPS Exif incorporati (.jpg)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="145"/>
+        <location filename="core_strings.h" line="146"/>
         <source>Time zone ID</source>
         <translation type="unfinished">ID fuso orario</translation>
     </message>
@@ -385,98 +385,103 @@
         <translation>Non mostrare la bitmap gpi sul dispositivo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="110"/>
+        <location filename="core_strings.h" line="103"/>
+        <source>Write description/notes to the comment record instead of the address field (multi-line on some Garmin devices)</source>
+        <translation type="unfinished">Scrivi descrizione/annotazioni nel record del commento invece del campo indirizzo (multi-line su alcuni dispositivi Garmin)</translation>
+    </message>
+    <message>
+        <location filename="core_strings.h" line="111"/>
         <source>codec to use for writing strings</source>
         <translation type="unfinished">Codec da utilizzare per scrivere stringhe</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="111"/>
+        <location filename="core_strings.h" line="112"/>
         <source>language code to use for reading dual language files</source>
         <translation type="unfinished">Codice lingua da utilizzare per leggere file a doppia lingua</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="112"/>
+        <location filename="core_strings.h" line="113"/>
         <source>Garmin Points of Interest (.gpi)</source>
         <translation type="unfinished">Punti di interesse Garmin (.gpi)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="118"/>
+        <location filename="core_strings.h" line="119"/>
         <source>Erase existing courses when writing new ones</source>
         <translation type="unfinished">Cancella corsi esistenti quando si scrivono nuovi</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="122"/>
+        <location filename="core_strings.h" line="123"/>
         <source>Speed in bits per second of serial port (baud=9600)</source>
         <translation type="unfinished">Velocità in bit/secondo della porta seriale (baud=4800) {9600)?}</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="123"/>
+        <location filename="core_strings.h" line="124"/>
         <source>override codec to use for device</source>
         <translation type="unfinished">Sovrascrivi codec da utilizzare per il dispositivo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="124"/>
+        <location filename="core_strings.h" line="125"/>
         <source>Garmin serial/USB protocol</source>
         <translation type="unfinished">Protocollo seriale/USB Garmin</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="125"/>
+        <location filename="core_strings.h" line="126"/>
         <source>Write course rather than history, default yes</source>
         <translation type="unfinished">Scrivi corso invece della cronologia, predefinito sì</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="128"/>
+        <location filename="core_strings.h" line="129"/>
         <source>Garmin Training Center (.tcx/.crs/.hst/.xml)</source>
         <translation type="unfinished">Garmin Training Center (.tcx/.crs/.hst/.xml)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="130"/>
+        <location filename="core_strings.h" line="131"/>
         <source>Geocaching.com .loc</source>
         <translation type="unfinished">Geocaching.com .loc</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="134"/>
+        <location filename="core_strings.h" line="135"/>
         <source>GeoJson</source>
         <translation type="unfinished">GeoJson</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="136"/>
-        <location filename="core_strings.h" line="139"/>
-        <location filename="core_strings.h" line="213"/>
-        <location filename="core_strings.h" line="257"/>
+        <location filename="core_strings.h" line="137"/>
+        <location filename="core_strings.h" line="140"/>
+        <location filename="core_strings.h" line="215"/>
+        <location filename="core_strings.h" line="259"/>
         <source>Only erase device data, do not download anything</source>
         <translation type="unfinished">Cancella solo i dati del dispositivo, non scaricare nulla</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="137"/>
+        <location filename="core_strings.h" line="138"/>
         <source>GlobalSat DG-100/BT-335 Download</source>
         <translation type="unfinished">Download GlobalSat DG-100/BT-335</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="140"/>
+        <location filename="core_strings.h" line="141"/>
         <source>GlobalSat DG-200 Download</source>
         <translation type="unfinished">Download GlobalSat DG-200</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="142"/>
+        <location filename="core_strings.h" line="143"/>
         <source>list tracks</source>
         <translation type="unfinished">elenco tracce</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="143"/>
         <location filename="core_strings.h" line="144"/>
-        <location filename="core_strings.h" line="236"/>
-        <location filename="core_strings.h" line="313"/>
+        <location filename="core_strings.h" line="145"/>
+        <location filename="core_strings.h" line="238"/>
+        <location filename="core_strings.h" line="315"/>
         <source>Dump raw data to this file</source>
         <translation type="unfinished">Scarica dati grezzi in questo file</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="146"/>
+        <location filename="core_strings.h" line="147"/>
         <source>GlobalSat GH625XT GPS training watch</source>
         <translation type="unfinished">Orologio GPS per allenamento GlobalSat GH625XT</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="153"/>
+        <location filename="core_strings.h" line="154"/>
         <source>Draw extrusion line from trackpoint to ground</source>
         <translation>Disegna linee estruse dai punti traccia al terreno</translation>
     </message>
@@ -491,9 +496,9 @@
         <translation>Abilita avvisi su velocità o prossimità</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="219"/>
-        <location filename="core_strings.h" line="338"/>
-        <location filename="core_strings.h" line="350"/>
+        <location filename="core_strings.h" line="221"/>
+        <location filename="core_strings.h" line="340"/>
+        <location filename="core_strings.h" line="352"/>
         <source>Encrypt hints using ROT13</source>
         <translation>Cripta le note usando ROT13</translation>
     </message>
@@ -502,22 +507,22 @@
         <translation type="vanished">Cripta le note con ROT13</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="135"/>
-        <location filename="core_strings.h" line="138"/>
-        <location filename="core_strings.h" line="212"/>
-        <location filename="core_strings.h" line="237"/>
-        <location filename="core_strings.h" line="256"/>
-        <location filename="core_strings.h" line="305"/>
+        <location filename="core_strings.h" line="136"/>
+        <location filename="core_strings.h" line="139"/>
+        <location filename="core_strings.h" line="214"/>
+        <location filename="core_strings.h" line="239"/>
+        <location filename="core_strings.h" line="258"/>
+        <location filename="core_strings.h" line="307"/>
         <source>Erase device data after download</source>
         <translation>Cancella i dati dal dispositivo dopo lo scaricamento</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="148"/>
+        <location filename="core_strings.h" line="149"/>
         <source>Export linestrings for tracks and routes</source>
         <translation>Esporta le linee stringa da tracce e rotte</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="149"/>
+        <location filename="core_strings.h" line="150"/>
         <source>Export placemarks for tracks and routes</source>
         <translation>Esporta segnaposti da tracce e rotte</translation>
     </message>
@@ -545,13 +550,13 @@
         <location filename="core_strings.h" line="70"/>
         <location filename="core_strings.h" line="81"/>
         <location filename="core_strings.h" line="95"/>
-        <location filename="core_strings.h" line="170"/>
-        <location filename="core_strings.h" line="180"/>
-        <location filename="core_strings.h" line="189"/>
-        <location filename="core_strings.h" line="198"/>
-        <location filename="core_strings.h" line="302"/>
-        <location filename="core_strings.h" line="334"/>
-        <location filename="core_strings.h" line="344"/>
+        <location filename="core_strings.h" line="172"/>
+        <location filename="core_strings.h" line="182"/>
+        <location filename="core_strings.h" line="191"/>
+        <location filename="core_strings.h" line="200"/>
+        <location filename="core_strings.h" line="304"/>
+        <location filename="core_strings.h" line="336"/>
+        <location filename="core_strings.h" line="346"/>
         <source>GPS datum (def. WGS 84)</source>
         <translation>Datum GPS (predefinito: WGS 84)</translation>
     </message>
@@ -564,13 +569,13 @@
         <translation type="vanished">Ignora le icone dei marcatori in fase di lettura</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="155"/>
+        <location filename="core_strings.h" line="156"/>
         <source>Include extended data for trackpoints (default = 1)</source>
         <translation>Includi dati estesi sui punti traccia (predefinito: 1)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="220"/>
-        <location filename="core_strings.h" line="339"/>
+        <location filename="core_strings.h" line="222"/>
+        <location filename="core_strings.h" line="341"/>
         <source>Include groundspeak logs if present</source>
         <translation>Includi registri groundspeak (se presenti)</translation>
     </message>
@@ -616,42 +621,42 @@
         <translation type="vanished">Indice del campo url nel .dbf</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="156"/>
+        <location filename="core_strings.h" line="157"/>
         <source>Indicate direction of travel in track icons (default = 0)</source>
         <translation>Indica la direzione di viaggio nelle icone di traccia (predefinito: 0)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="323"/>
+        <location filename="core_strings.h" line="325"/>
         <source>Video position for which exact GPS time is known (hhmmss[.sss], default is 00:00:00,000)</source>
         <translation type="unfinished">Posizione video per cui è noto il tempo GPS esatto (hhmmss[.sss], predefinito 00:00:00,000)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="324"/>
+        <location filename="core_strings.h" line="326"/>
         <source>GPS time at position video_time (hhmmss[.sss], default is first timestamp of track)</source>
         <translation type="unfinished">Ora GPS alla posizione video_time (hhmmss[.sss], predefinito il primo timestamp della traccia)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="325"/>
+        <location filename="core_strings.h" line="327"/>
         <source>GPS date at position video_time (yyyymmdd, default is first timestamp of track)</source>
         <translation type="unfinished">Data GPS alla posizione video_time (yyyymmdd, predefinito il primo timestamp della traccia)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="347"/>
+        <location filename="core_strings.h" line="349"/>
         <source>Write name(s) of format(s) from input session(s)</source>
         <translation type="unfinished">Scrivi nome(i) del formato(i) dalle sessioni di input</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="348"/>
+        <location filename="core_strings.h" line="350"/>
         <source>Write filename(s) from input session(s)</source>
         <translation type="unfinished">Scrivi nome(i) di file dalle sessioni di input</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="349"/>
+        <location filename="core_strings.h" line="351"/>
         <source>Universal csv with field structure in first line</source>
         <translation type="unfinished">CSV universale con struttura dei campi nella prima riga</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="351"/>
+        <location filename="core_strings.h" line="353"/>
         <source>Vcard Output (for iPod)</source>
         <translation type="unfinished">Output Vcard (per iPod)</translation>
     </message>
@@ -668,8 +673,8 @@
         <translation type="vanished">Mantieni le svolte se si usa il filtro di semplificazione</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="113"/>
-        <location filename="core_strings.h" line="201"/>
+        <location filename="core_strings.h" line="114"/>
+        <location filename="core_strings.h" line="203"/>
         <source>Length of generated shortnames</source>
         <translation>Lunghezza dei nomi brevi generati</translation>
     </message>
@@ -680,19 +685,19 @@
         <location filename="core_strings.h" line="55"/>
         <location filename="core_strings.h" line="64"/>
         <location filename="core_strings.h" line="89"/>
-        <location filename="core_strings.h" line="164"/>
-        <location filename="core_strings.h" line="174"/>
-        <location filename="core_strings.h" line="183"/>
-        <location filename="core_strings.h" line="192"/>
-        <location filename="core_strings.h" line="284"/>
-        <location filename="core_strings.h" line="296"/>
-        <location filename="core_strings.h" line="328"/>
+        <location filename="core_strings.h" line="166"/>
+        <location filename="core_strings.h" line="176"/>
+        <location filename="core_strings.h" line="185"/>
+        <location filename="core_strings.h" line="194"/>
+        <location filename="core_strings.h" line="286"/>
+        <location filename="core_strings.h" line="298"/>
+        <location filename="core_strings.h" line="330"/>
         <source>Max synthesized shortname length</source>
         <oldsource>Length of generated shortnames (default 16)</oldsource>
         <translation type="unfinished">Lunghezza dei nomi brevi generati (predefinito: 16)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="151"/>
+        <location filename="core_strings.h" line="152"/>
         <source>Line color, specified in hex AABBGGRR</source>
         <translation>Colore delle linee, indicato in esadecimale AABBVVRR</translation>
     </message>
@@ -703,13 +708,13 @@
         <location filename="core_strings.h" line="58"/>
         <location filename="core_strings.h" line="67"/>
         <location filename="core_strings.h" line="92"/>
-        <location filename="core_strings.h" line="167"/>
-        <location filename="core_strings.h" line="177"/>
-        <location filename="core_strings.h" line="186"/>
-        <location filename="core_strings.h" line="195"/>
-        <location filename="core_strings.h" line="287"/>
-        <location filename="core_strings.h" line="299"/>
-        <location filename="core_strings.h" line="331"/>
+        <location filename="core_strings.h" line="169"/>
+        <location filename="core_strings.h" line="179"/>
+        <location filename="core_strings.h" line="188"/>
+        <location filename="core_strings.h" line="197"/>
+        <location filename="core_strings.h" line="289"/>
+        <location filename="core_strings.h" line="301"/>
+        <location filename="core_strings.h" line="333"/>
         <source>Make synth. shortnames unique</source>
         <translation>Crea nomi brevi sintetizzati univoci</translation>
     </message>
@@ -719,185 +724,190 @@
         <translation type="unfinished">offset da UTC in ore</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="126"/>
+        <location filename="core_strings.h" line="127"/>
         <source>Sport: Biking (deflt), Running, Other</source>
         <translation type="unfinished">Sport: Ciclismo (predefinito), Corsa, Altro</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="127"/>
+        <location filename="core_strings.h" line="128"/>
         <source>Write global extension namespace declarations</source>
         <translation type="unfinished">Scrivi dichiarazioni dello spazio dei nomi estensione globale</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="131"/>
+        <location filename="core_strings.h" line="132"/>
         <source>Compact Output. Default is off</source>
         <translation type="unfinished">Output compatto. Predefinito disattivato</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="132"/>
+        <location filename="core_strings.h" line="133"/>
         <source>Property key to use for name</source>
         <translation type="unfinished">Chiave proprietà da utilizzare per il nome</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="133"/>
+        <location filename="core_strings.h" line="134"/>
         <source>Property key to use for description</source>
         <translation type="unfinished">Chiave proprietà da utilizzare per la descrizione</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="141"/>
+        <location filename="core_strings.h" line="142"/>
         <source>GlobalSat DG-388 Binary File</source>
         <translation type="unfinished">File binario GlobalSat DG-388</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="154"/>
+        <location filename="core_strings.h" line="155"/>
         <source>Write KML track (default = 0)</source>
         <translation type="unfinished">Scrivi traccia KML (predefinito = 0)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="157"/>
+        <location filename="core_strings.h" line="158"/>
         <source>Units used when writing comments (&apos;s&apos;tatute, &apos;m&apos;etric,&apos; &apos;n&apos;autical, &apos;a&apos;viation)</source>
         <translation type="unfinished">Unità utilizzate per i commenti (&apos;s&apos; statuto, &apos;m&apos;etrico, &apos;n&apos;autico, &apos;a&apos;viation)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="160"/>
+        <location filename="core_strings.h" line="161"/>
         <source>Rotate colors for tracks and routes (default automatic)</source>
         <translation type="unfinished">Ruota i colori per tracce e percorsi (predefinito automatico)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="161"/>
+        <location filename="core_strings.h" line="162"/>
         <source>Precision of coordinates, number of decimals</source>
         <translation type="unfinished">Precisione delle coordinate, numero di decimali</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="162"/>
+        <location filename="core_strings.h" line="163"/>
         <source>Google Earth (Keyhole) Markup Language</source>
         <translation type="unfinished">Google Earth (Linguaggio Markup Keyhole)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="172"/>
+        <location filename="core_strings.h" line="164"/>
+        <source>Google Maps Timeline</source>
+        <translation type="unfinished">Cronologia Google Maps</translation>
+    </message>
+    <message>
+        <location filename="core_strings.h" line="174"/>
         <source>GPS Tracking Key Pro text</source>
         <translation type="unfinished">Testo GPS Tracking Key Pro</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="173"/>
+        <location filename="core_strings.h" line="175"/>
         <source>GPS TrackMaker</source>
         <translation type="unfinished">GPS TrackMaker</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="182"/>
+        <location filename="core_strings.h" line="184"/>
         <source>GPSBabel arc filter file</source>
         <translation type="unfinished">File filtro arc GPSBabel</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="191"/>
+        <location filename="core_strings.h" line="193"/>
         <source>GpsDrive Format</source>
         <translation type="unfinished">Formato GpsDrive</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="200"/>
+        <location filename="core_strings.h" line="202"/>
         <source>GpsDrive Format for Tracks</source>
         <translation type="unfinished">Formato GpsDrive per tracce</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="206"/>
+        <location filename="core_strings.h" line="208"/>
         <source>Add info (depth) as Humminbird extension</source>
         <translation type="unfinished">Aggiungi informazioni (profondità) come estensione Humminbird</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="207"/>
+        <location filename="core_strings.h" line="209"/>
         <source>Add info (depth) as Garmin extension</source>
         <translation type="unfinished">Aggiungi informazioni (profondità) come estensione Garmin</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="208"/>
+        <location filename="core_strings.h" line="210"/>
         <source>Precision of elevations, number of decimals</source>
         <translation type="unfinished">Precisione delle quote, numero di decimali</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="209"/>
+        <location filename="core_strings.h" line="211"/>
         <source>GPX XML</source>
         <translation type="unfinished">GPX XML</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="211"/>
+        <location filename="core_strings.h" line="213"/>
         <source>Holux M-241 (MTK based) Binary File Format</source>
         <translation type="unfinished">Formato file binario Holux M-241 (basato su MTK)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="214"/>
-        <location filename="core_strings.h" line="258"/>
+        <location filename="core_strings.h" line="216"/>
+        <location filename="core_strings.h" line="260"/>
         <source>Enable logging after download</source>
         <translation type="unfinished">Abilita registrazione dopo il download</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="216"/>
-        <location filename="core_strings.h" line="260"/>
+        <location filename="core_strings.h" line="218"/>
+        <location filename="core_strings.h" line="262"/>
         <source>Size of blocks in KB to request from device</source>
         <translation type="unfinished">Dimensione dei blocchi in KB da richiedere dal dispositivo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="217"/>
+        <location filename="core_strings.h" line="219"/>
         <source>Holux M-241 (MTK based) download</source>
         <translation type="unfinished">Download Holux M-241 (basato su MTK)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="223"/>
+        <location filename="core_strings.h" line="225"/>
         <source>HTML Output</source>
         <translation type="unfinished">Output HTML</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="224"/>
+        <location filename="core_strings.h" line="226"/>
         <source>Humminbird tracks (.ht)</source>
         <translation type="unfinished">Tracce Humminbird (.ht)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="225"/>
+        <location filename="core_strings.h" line="227"/>
         <source>Humminbird waypoints and routes (.hwr)</source>
         <translation type="unfinished">Punti di interesse e percorsi Humminbird (.hwr)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="226"/>
+        <location filename="core_strings.h" line="228"/>
         <source>(USR input) Ignore event marker icons on read</source>
         <translation type="unfinished">(USR input) Ignora le icone dei marker di evento in lettura</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="227"/>
+        <location filename="core_strings.h" line="229"/>
         <source>(USR output) Treat waypoints as icons on write</source>
         <translation type="unfinished">(USR output) Tratta i punti di interesse come icone in scrittura</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="228"/>
+        <location filename="core_strings.h" line="230"/>
         <source>(USR output) Merge into one segmented trail</source>
         <translation type="unfinished">(USR output) Unisci in un unico percorso segmentato</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="229"/>
+        <location filename="core_strings.h" line="231"/>
         <source>(USR input) Break segments into separate trails</source>
         <translation type="unfinished">(USR input) Suddividi i segmenti in percorsi separati</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="230"/>
+        <location filename="core_strings.h" line="232"/>
         <source>(USR output) Write version</source>
         <oldsource>(USR input) Read version</oldsource>
         <translation type="unfinished">(USR output) Scrivi versione</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="231"/>
+        <location filename="core_strings.h" line="233"/>
         <source>(USR output) Output file title string</source>
         <translation type="unfinished">(USR output) Stringa titolo del file di output</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="232"/>
+        <location filename="core_strings.h" line="234"/>
         <source>(USR output) Device serial number</source>
         <translation type="unfinished">(USR output) Numero di serie del dispositivo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="233"/>
+        <location filename="core_strings.h" line="235"/>
         <source>(USR output) Output file content description</source>
         <translation type="unfinished">(USR output) Descrizione del contenuto del file di output</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="234"/>
+        <location filename="core_strings.h" line="236"/>
         <source>Lowrance USR</source>
         <translation type="unfinished">Lowrance USR</translation>
     </message>
@@ -906,180 +916,180 @@
         <translation type="vanished">Versione del file TRK di MapSend da generare (3, 4)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="235"/>
-        <location filename="core_strings.h" line="308"/>
+        <location filename="core_strings.h" line="237"/>
+        <location filename="core_strings.h" line="310"/>
         <source>Baud rate used for download</source>
         <translation type="unfinished">Velocità di trasmissione utilizzata per il download</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="238"/>
-        <location filename="core_strings.h" line="311"/>
+        <location filename="core_strings.h" line="240"/>
+        <location filename="core_strings.h" line="313"/>
         <source>First sector to be read from the device</source>
         <translation type="unfinished">Primo settore da leggere dal dispositivo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="239"/>
-        <location filename="core_strings.h" line="309"/>
+        <location filename="core_strings.h" line="241"/>
+        <location filename="core_strings.h" line="311"/>
         <source>Baud rate used to init device (0=autodetect)</source>
         <translation type="unfinished">Velocità di trasmissione utilizzata per l&apos;inizializzazione del dispositivo (0=autodetect)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="240"/>
-        <location filename="core_strings.h" line="312"/>
+        <location filename="core_strings.h" line="242"/>
+        <location filename="core_strings.h" line="314"/>
         <source>Last sector to be read from the device (-1: smart read everything)</source>
         <translation type="unfinished">Ultimo settore da leggere dal dispositivo (-1: lettura intelligente di tutto)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="241"/>
-        <location filename="core_strings.h" line="314"/>
+        <location filename="core_strings.h" line="243"/>
+        <location filename="core_strings.h" line="316"/>
         <source>Disable output (useful with erase)</source>
         <translation type="unfinished">Disabilita l&apos;output (utile con cancellazione)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="242"/>
-        <location filename="core_strings.h" line="310"/>
+        <location filename="core_strings.h" line="244"/>
+        <location filename="core_strings.h" line="312"/>
         <source>Number of sectors to read at once (0=use single sector mode)</source>
         <translation type="unfinished">Numero di settori da leggere contemporaneamente (0=usa modalità singolo settore)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="243"/>
+        <location filename="core_strings.h" line="245"/>
         <source>POI for Home Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">POI per simbolo Home come lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="244"/>
+        <location filename="core_strings.h" line="246"/>
         <source>POI for Car Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">POI per simbolo Auto come lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="245"/>
+        <location filename="core_strings.h" line="247"/>
         <source>POI for Boat Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">POI per simbolo Barca come lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="246"/>
+        <location filename="core_strings.h" line="248"/>
         <source>POI for Heart Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">POI per simbolo Cuore come lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="247"/>
+        <location filename="core_strings.h" line="249"/>
         <source>POI for Bar Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">POI per simbolo Bar come lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="250"/>
+        <location filename="core_strings.h" line="252"/>
         <source>MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)</source>
         <translation type="unfinished">MiniHomer, un logger basato su skyTraq Venus 6 (scarica tracce, waypoint e ottieni/imposta POI)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="251"/>
+        <location filename="core_strings.h" line="253"/>
         <source>Garmin Mobile XT ([ATRK]/STRK)</source>
         <translation type="unfinished">Garmin Mobile XT ([ATRK]/STRK)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="252"/>
+        <location filename="core_strings.h" line="254"/>
         <source>Track name processing option ([0]-nrm/1-ign)</source>
         <translation type="unfinished">Opzione di elaborazione del nome traccia ([0]-nrm/1-ign)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="253"/>
+        <location filename="core_strings.h" line="255"/>
         <source>Mobile Garmin XT Track files</source>
         <translation type="unfinished">File traccia Mobile Garmin XT</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="255"/>
+        <location filename="core_strings.h" line="257"/>
         <source>MTK Logger (iBlue 747,...) Binary File Format</source>
         <translation type="unfinished">MTK Logger (iBlue 747,...) Formato file binario</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="261"/>
+        <location filename="core_strings.h" line="263"/>
         <source>MTK Logger (iBlue 747,Qstarz BT-1000,...) download</source>
         <translation type="unfinished">MTK Logger (iBlue 747,Qstarz BT-1000,...) download</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="263"/>
+        <location filename="core_strings.h" line="265"/>
         <source>National Geographic Topo .tpg (waypoints)</source>
         <translation type="unfinished">National Geographic Topo .tpg (waypoint)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="264"/>
+        <location filename="core_strings.h" line="266"/>
         <source>National Geographic Topo 2.x .tpo</source>
         <translation type="unfinished">National Geographic Topo 2.x .tpo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="265"/>
+        <location filename="core_strings.h" line="267"/>
         <source>National Geographic Topo 3.x/4.x .tpo</source>
         <translation type="unfinished">National Geographic Topo 3.x/4.x .tpo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="274"/>
+        <location filename="core_strings.h" line="276"/>
         <source>Append realtime positioning data to the output file instead of truncating</source>
         <translation type="unfinished">Aggiungi dati di posizionamento in tempo reale al file di output invece di troncarlo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="277"/>
+        <location filename="core_strings.h" line="279"/>
         <source>Accept position fixes in gpgga marked invalid</source>
         <translation type="unfinished">Accetta correzioni di posizione in gpgga contrassegnate come non valide</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="278"/>
+        <location filename="core_strings.h" line="280"/>
         <source>NMEA 0183 sentences</source>
         <translation type="unfinished">Frasi NMEA 0183</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="281"/>
+        <location filename="core_strings.h" line="283"/>
         <source>Use this value as custom created_by value</source>
         <translation type="unfinished">Utilizza questo valore come valore custom created_by</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="282"/>
+        <location filename="core_strings.h" line="284"/>
         <source>OpenStreetMap data files</source>
         <translation type="unfinished">File dati OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="291"/>
+        <location filename="core_strings.h" line="293"/>
         <source>Unit used in altitude values</source>
         <translation type="unfinished">Unità utilizzata nei valori di altitudine</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="292"/>
+        <location filename="core_strings.h" line="294"/>
         <source>Unit used in proximity values</source>
         <translation type="unfinished">Unità utilizzata nei valori di prossimità</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="293"/>
+        <location filename="core_strings.h" line="295"/>
         <source>codec to use for reading and writing strings (default windows-1252)</source>
         <translation type="unfinished">Codec da utilizzare per la lettura e scrittura di stringhe (predefinito windows-1252)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="294"/>
+        <location filename="core_strings.h" line="296"/>
         <source>OziExplorer</source>
         <translation type="unfinished">OziExplorer</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="295"/>
+        <location filename="core_strings.h" line="297"/>
         <source>Qstarz BL-1000</source>
         <translation type="unfinished">Qstarz BL-1000</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="304"/>
+        <location filename="core_strings.h" line="306"/>
         <source>See You flight analysis data</source>
         <translation type="unfinished">Dati di analisi del volo See You</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="306"/>
+        <location filename="core_strings.h" line="308"/>
         <source>Set location finder target location as lat,lng</source>
         <translation type="unfinished">Imposta la posizione target del localizzatore come lat,lng</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="307"/>
+        <location filename="core_strings.h" line="309"/>
         <source>Configure logging parameter as tmin:tmax:dmin:dmax</source>
         <translation type="unfinished">Configura il parametro di logging come tmin:tmax:dmin:dmax</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="248"/>
-        <location filename="core_strings.h" line="315"/>
-        <location filename="core_strings.h" line="320"/>
+        <location filename="core_strings.h" line="250"/>
+        <location filename="core_strings.h" line="317"/>
+        <location filename="core_strings.h" line="322"/>
         <source>Seconds that GPS time tracks UTC (0: best guess)</source>
         <translation type="unfinished">Secondi in cui l&apos;orario GPS segue UTC (0: migliore stima)</translation>
     </message>
@@ -1089,54 +1099,54 @@
         <translation type="unfinished">Ora di offset immagine (+HH:MM o -HH:MM)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="163"/>
+        <location filename="core_strings.h" line="165"/>
         <source>Google Takeout Location History</source>
         <translation type="unfinished">Cronologia posizione Google Takeout</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="249"/>
-        <location filename="core_strings.h" line="316"/>
-        <location filename="core_strings.h" line="321"/>
+        <location filename="core_strings.h" line="251"/>
+        <location filename="core_strings.h" line="318"/>
+        <location filename="core_strings.h" line="323"/>
         <source>GPS week rollover period we&apos;re in (-1: best guess)</source>
         <translation type="unfinished">Periodo di rollover della settimana GPS in cui ci troviamo (-1: migliore stima)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="317"/>
+        <location filename="core_strings.h" line="319"/>
         <source>SkyTraq Venus based loggers (download)</source>
         <translation type="unfinished">Logger basati su SkyTraq Venus (download)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="318"/>
+        <location filename="core_strings.h" line="320"/>
         <source>First sector to be read from the file</source>
         <translation type="unfinished">Primo settore da leggere dal file</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="319"/>
+        <location filename="core_strings.h" line="321"/>
         <source>Last sector to be read from the file (-1: read till empty sector)</source>
         <translation type="unfinished">Ultimo settore da leggere dal file (-1: leggi fino a settore vuoto)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="322"/>
+        <location filename="core_strings.h" line="324"/>
         <source>SkyTraq Venus based loggers Binary File Format</source>
         <translation type="unfinished">Formato file binario per logger basati su SkyTraq Venus</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="326"/>
+        <location filename="core_strings.h" line="328"/>
         <source>Format for subtitles</source>
         <translation type="unfinished">Formato per sottotitoli</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="327"/>
+        <location filename="core_strings.h" line="329"/>
         <source>SubRip subtitles for video mapping (.srt)</source>
         <translation type="unfinished">Sottotitoli SubRip per mappatura video (.srt)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="336"/>
+        <location filename="core_strings.h" line="338"/>
         <source>Tab delimited fields useful for OpenOffice</source>
         <translation type="unfinished">Campi delimitati da tab utili per OpenOffice</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="343"/>
+        <location filename="core_strings.h" line="345"/>
         <source>Textual Output</source>
         <translation type="unfinished">Output testuale</translation>
     </message>
@@ -1157,7 +1167,7 @@
         <translation type="vanished">Tipo di marcatore per i punti non trovati</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="266"/>
+        <location filename="core_strings.h" line="268"/>
         <source>Max length of waypoint name to write</source>
         <translation>Lunghezza massima dei nomi dei punti d&apos;interesse da scrivere</translation>
     </message>
@@ -1174,10 +1184,10 @@
         <translation type="vanished">Unisci la destinazione con un file esistente</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="210"/>
-        <location filename="core_strings.h" line="215"/>
-        <location filename="core_strings.h" line="254"/>
-        <location filename="core_strings.h" line="259"/>
+        <location filename="core_strings.h" line="212"/>
+        <location filename="core_strings.h" line="217"/>
+        <location filename="core_strings.h" line="256"/>
+        <location filename="core_strings.h" line="261"/>
         <source>MTK compatible CSV output file</source>
         <translation>File di destinazione CVS compatibile con MTK</translation>
     </message>
@@ -1194,7 +1204,7 @@
         <translation type="vanished">Nessuna linea di separazione tra punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="202"/>
+        <location filename="core_strings.h" line="204"/>
         <source>No whitespace in generated shortnames</source>
         <translation>Nessuno spazio nei nomi brevi generati</translation>
     </message>
@@ -1219,7 +1229,7 @@
         <translation type="vanished">Leggi solo le svolte; tralascia tutti gli altri punti</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="218"/>
+        <location filename="core_strings.h" line="220"/>
         <source>Path to HTML style sheet</source>
         <translation>Percorso del foglio di stile html</translation>
     </message>
@@ -1229,7 +1239,7 @@
         <translation>Precisione delle coordinate</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="290"/>
+        <location filename="core_strings.h" line="292"/>
         <source>Proximity distance</source>
         <translation>Distanza di prossimità</translation>
     </message>
@@ -1255,22 +1265,22 @@
         <translation>Formato data in lettura/scrittura (per es. yyyy/mm/dd)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="268"/>
+        <location filename="core_strings.h" line="270"/>
         <source>Read/write GPGGA sentences</source>
         <translation>Leggi/scrivi frasi GPGGA</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="270"/>
+        <location filename="core_strings.h" line="272"/>
         <source>Read/write GPGSA sentences</source>
         <translation>Leggi/scrivi frasi GPGSA</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="267"/>
+        <location filename="core_strings.h" line="269"/>
         <source>Read/write GPRMC sentences</source>
         <translation>Leggi/scrivi frasi GPRMC</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="269"/>
+        <location filename="core_strings.h" line="271"/>
         <source>Read/write GPVTG sentences</source>
         <translation>Leggi/scrivi frasi GPVTG</translation>
     </message>
@@ -1280,13 +1290,13 @@
         <translation>Formato ora in lettura/scrittura (per es. HH:mm:ss xx)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="159"/>
+        <location filename="core_strings.h" line="160"/>
         <source>Retain at most this number of position points  (0 = unlimited)</source>
         <translation>Mantieni almeno questo numero di punti posizione (0 = illimitati)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="116"/>
-        <location filename="core_strings.h" line="272"/>
+        <location filename="core_strings.h" line="117"/>
+        <location filename="core_strings.h" line="274"/>
         <source>Return current position as a waypoint</source>
         <translation>Ritorna la posizione corrente sotto forma di punto d&apos;interesse</translation>
     </message>
@@ -1303,7 +1313,7 @@
         <translation type="vanished">Il nome breve è un indirizzo MAC</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="275"/>
+        <location filename="core_strings.h" line="277"/>
         <source>Speed in bits per second of serial port (baud=4800)</source>
         <translation>Velocità in bit/secondo della porta seriale (baud=4800)</translation>
     </message>
@@ -1340,7 +1350,7 @@
         <translation type="vanished">Ometti i geocache obsoleti</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="337"/>
+        <location filename="core_strings.h" line="339"/>
         <source>Suppress separator lines between waypoints</source>
         <translation>Ometti le linee di separazione tra punti d&apos;interesse</translation>
     </message>
@@ -1357,7 +1367,7 @@
         <translation type="vanished">Simbolo da usare per i punti</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="119"/>
+        <location filename="core_strings.h" line="120"/>
         <source>Sync GPS time to computer time</source>
         <translation>Sincronizza l&apos;ora del GPS con quella del computer</translation>
     </message>
@@ -1366,7 +1376,7 @@
         <translation type="vanished">Sintetizza gli orari delle tracce</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="205"/>
+        <location filename="core_strings.h" line="207"/>
         <source>Target GPX version for output</source>
         <translation>Versione GPX del file di destinazione</translation>
     </message>
@@ -1388,13 +1398,13 @@
         <translation type="vanished">Tipo del file .an1</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="222"/>
-        <location filename="core_strings.h" line="341"/>
+        <location filename="core_strings.h" line="224"/>
+        <location filename="core_strings.h" line="343"/>
         <source>Units for altitude (f)eet or (m)etres</source>
         <translation>Unità di misura della quota [m: metri, f: piedi]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="109"/>
+        <location filename="core_strings.h" line="110"/>
         <source>Units used for names with @speed (&apos;s&apos;tatute or &apos;m&apos;etric)</source>
         <translation>Untià di misura per nomi con @speed [m: metrico, s: statutario]</translation>
     </message>
@@ -1409,13 +1419,13 @@
         <location filename="core_strings.h" line="57"/>
         <location filename="core_strings.h" line="66"/>
         <location filename="core_strings.h" line="91"/>
-        <location filename="core_strings.h" line="166"/>
-        <location filename="core_strings.h" line="176"/>
-        <location filename="core_strings.h" line="185"/>
-        <location filename="core_strings.h" line="194"/>
-        <location filename="core_strings.h" line="286"/>
-        <location filename="core_strings.h" line="298"/>
-        <location filename="core_strings.h" line="330"/>
+        <location filename="core_strings.h" line="168"/>
+        <location filename="core_strings.h" line="178"/>
+        <location filename="core_strings.h" line="187"/>
+        <location filename="core_strings.h" line="196"/>
+        <location filename="core_strings.h" line="288"/>
+        <location filename="core_strings.h" line="300"/>
+        <location filename="core_strings.h" line="332"/>
         <source>UPPERCASE synth. shortnames</source>
         <translation>Nomi brevi sintetizzati in MAIUSCOLO</translation>
     </message>
@@ -1434,12 +1444,12 @@
         <location filename="core_strings.h" line="60"/>
         <location filename="core_strings.h" line="69"/>
         <location filename="core_strings.h" line="94"/>
-        <location filename="core_strings.h" line="169"/>
-        <location filename="core_strings.h" line="179"/>
-        <location filename="core_strings.h" line="188"/>
-        <location filename="core_strings.h" line="197"/>
-        <location filename="core_strings.h" line="301"/>
-        <location filename="core_strings.h" line="333"/>
+        <location filename="core_strings.h" line="171"/>
+        <location filename="core_strings.h" line="181"/>
+        <location filename="core_strings.h" line="190"/>
+        <location filename="core_strings.h" line="199"/>
+        <location filename="core_strings.h" line="303"/>
+        <location filename="core_strings.h" line="335"/>
         <source>Use shortname instead of description</source>
         <translation>Usa il nome breve invece della descrizione</translation>
     </message>
@@ -1458,12 +1468,12 @@
         <translation type="vanished">Versione del file MapSource da generare (3, 4, 5)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="289"/>
+        <location filename="core_strings.h" line="291"/>
         <source>Waypoint background color</source>
         <translation>Colore di sfondo dei punti d&apos;interesse</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="288"/>
+        <location filename="core_strings.h" line="290"/>
         <source>Waypoint foreground color</source>
         <translation>Colore dei punti d&apos;interesse</translation>
     </message>
@@ -1476,22 +1486,22 @@
         <translation type="vanished">Larghezza della mappa, in pixel</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="150"/>
+        <location filename="core_strings.h" line="151"/>
         <source>Width of lines, in pixels</source>
         <translation>Larghezza delle linee, in pixel</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="280"/>
+        <location filename="core_strings.h" line="282"/>
         <source>Write additional node tag key/value pairs</source>
         <translation>Scrivi coppie addizionali di tag chiave/valore per i nodi</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="279"/>
+        <location filename="core_strings.h" line="281"/>
         <source>Write additional way tag key/value pairs</source>
         <translation>Scrivi coppie addizionali di tag chiave/valore per le vie</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="283"/>
+        <location filename="core_strings.h" line="285"/>
         <source>Write all tracks into one file</source>
         <translation>Scrivi tutte le tracce in un solo file</translation>
     </message>
@@ -1501,23 +1511,23 @@
         <translation>Scrivi la descrizione nel campo indirizzo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="342"/>
+        <location filename="core_strings.h" line="344"/>
         <source>Write each waypoint in a separate file</source>
         <translation>Scrivi ciascun punto d&apos;interesse in un file separato</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="103"/>
+        <location filename="core_strings.h" line="104"/>
         <source>Write notes to address field</source>
         <translation>Scrivi le note nel campo indirizzo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="104"/>
+        <location filename="core_strings.h" line="105"/>
         <source>Write position to address field</source>
         <translation>Scrivi la posizione del campo indirizzo</translation>
     </message>
     <message>
         <location filename="core_strings.h" line="83"/>
-        <location filename="core_strings.h" line="345"/>
+        <location filename="core_strings.h" line="347"/>
         <source>Write position using this grid.</source>
         <translation>Scrivi la posizione usando questa griglia.</translation>
     </message>
@@ -1529,13 +1539,13 @@
         <location filename="core_strings.h" line="71"/>
         <location filename="core_strings.h" line="87"/>
         <location filename="core_strings.h" line="96"/>
-        <location filename="core_strings.h" line="171"/>
-        <location filename="core_strings.h" line="181"/>
-        <location filename="core_strings.h" line="190"/>
-        <location filename="core_strings.h" line="199"/>
-        <location filename="core_strings.h" line="303"/>
-        <location filename="core_strings.h" line="335"/>
-        <location filename="core_strings.h" line="346"/>
+        <location filename="core_strings.h" line="173"/>
+        <location filename="core_strings.h" line="183"/>
+        <location filename="core_strings.h" line="192"/>
+        <location filename="core_strings.h" line="201"/>
+        <location filename="core_strings.h" line="305"/>
+        <location filename="core_strings.h" line="337"/>
+        <location filename="core_strings.h" line="348"/>
         <source>Write timestamps with offset x to UTC time</source>
         <translation>Scrivi date e ore con scostamento X rispetto al tempo UTC</translation>
     </message>
@@ -1544,7 +1554,7 @@
         <translation type="vanished">Scrivi tracce compatibili con Carto Exploreur</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="276"/>
+        <location filename="core_strings.h" line="278"/>
         <source>Write tracks for Gisteq Phototracker</source>
         <translation>Scrivi tracce per Gisteq Phototracker</translation>
     </message>

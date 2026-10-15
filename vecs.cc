@@ -39,7 +39,7 @@
 #include <type_traits>         // for is_base_of
 #include <utility>             // for as_const
 
-#include "defs.h"              // for arglist_t, CSTR, gbFatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, case_ignore_strcmp, gpsdata_type, gbWarning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
+#include "defs.h"              // for arglist_t, CSTR, gbFatal, ff_cap, ARGTYPE_TYPEMASK, ff_type, ARGTYPE_BOOL, gpsdata_type, gbWarning, ff_cap_array, global_options, global_opts, ARGTYPE_FLOAT, ARGTYPE_HIDDEN, ARGTYPE_INT, ARGTYPE_REQUIRED
 #include "dg-100.h"            // for Dg100FileFormat, Dg100SerialFormat, Dg200FileFormat, Dg200SerialFormat
 #include "dg-388.h"            // for Dg388Format
 #include "exif.h"              // for ExifFormat
@@ -49,7 +49,7 @@
 #include "garmin_gpi.h"        // for GarminGPIFormat
 #include "garmin_txt.h"        // for GarminTxtFormat
 #include "garmin_xt.h"         // for GarminXTFormat
-#include "gbversion.h"         // for WEB_DOC_DIR
+#include "gbversion.h"         // for kWebDocDir
 #include "gdb.h"               // for GdbFormat
 #include "geojson.h"           // for GeoJsonFormat
 #include "globalsat_sport.h"   // for GlobalsatSportFormat
@@ -647,7 +647,7 @@ void Vecs::disp_vec_options(const QString& vecname, const QVector<arglist_t>* ar
       if ((arg.argval != nullptr) && !arg.argval->isEmpty()) {
         gbDebug("options: module/option=value: %s/%s=\"%s\"",
                gbLogCStr(vecname), gbLogCStr(arg.argstring), gbLogCStr(arg.argval->get()));
-        if (case_ignore_strcmp(arg.defaultvalue, arg.argval->get()) == 0) {
+        if (QString::compare(arg.defaultvalue, arg.argval->get(), Qt::CaseInsensitive) == 0) {
           gbDebug(" (=default)");
         }
         gbDebug("\n");
@@ -855,8 +855,8 @@ QVector<Vecs::vecinfo_t> Vecs::sort_and_unify_vecs() const
    * the option to set the style file.  Make sure we know which entry in
    * the argument list that is.
    */
-  assert(case_ignore_strcmp(xcsvfmt->get_args()->at(0).helpstring,
-                            "Full path to XCSV style file") == 0);
+  assert(QString::compare(xcsvfmt->get_args()->at(0).helpstring,
+                            QLatin1String("Full path to XCSV style file"), Qt::CaseInsensitive) == 0);
 
   /* Gather the relevant info for the style based formats. */
   for (const auto& svec : style_list) {
@@ -999,7 +999,7 @@ const char* Vecs::name_option(uint32_t type)
 
 void Vecs::disp_help_url(const vecinfo_t& vec, const QString& argstring)
 {
-  printf("\t" WEB_DOC_DIR "/fmt_%s.html", CSTR(vec.name));
+  printf("\t%s/fmt_%s.html", gpsbabel::kWebDocDir, CSTR(vec.name));
   if (!argstring.isEmpty()) {
     printf("#fmt_%s_o_%s", CSTR(vec.name), CSTR(argstring));
   }
@@ -1134,15 +1134,15 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
         }
 
         if (!arg.defaultvalue.isNull() && !double_option->isValid(arg.defaultvalue)) {
-          Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not an float.";
+          Warning() << name << "Float option" << arg.argstring << "default value" << arg.defaultvalue << "is not a float.";
           ok = false;
         }
         if (!arg.minvalue.isNull() && !double_option->isValid(arg.minvalue)) {
-          Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not an float.";
+          Warning() << name << "Float option" << arg.argstring << "minimum value" << arg.minvalue << "is not a float.";
           ok = false;
         }
         if (!arg.maxvalue.isNull() && !double_option->isValid(arg.maxvalue)) {
-          Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an float.";
+          Warning() << name << "Float option" << arg.argstring << "maximum value" << arg.maxvalue << "is not a float.";
           ok = false;
         }
       } else if (const auto* bool_option = dynamic_cast<const OptionBool*>(arg.argval); bool_option != nullptr) {
@@ -1152,15 +1152,15 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
         }
 
         if (!arg.defaultvalue.isNull() && !is_bool(arg.defaultvalue)) {
-          Warning() << name << "Bool option" << arg.argstring << "default value" << arg.defaultvalue << "is not an bool.";
+          Warning() << name << "Bool option" << arg.argstring << "default value" << arg.defaultvalue << "is not a bool.";
           ok = false;
         }
         if (!arg.minvalue.isNull() && !is_bool(arg.minvalue)) {
-          Warning() << name << "Bool option" << arg.argstring << "minimum value" << arg.minvalue << "is not an bool.";
+          Warning() << name << "Bool option" << arg.argstring << "minimum value" << arg.minvalue << "is not a bool.";
           ok = false;
         }
         if (!arg.maxvalue.isNull() && !is_bool(arg.maxvalue)) {
-          Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not an bool.";
+          Warning() << name << "Bool option" << arg.argstring << "maximum value" << arg.maxvalue << "is not a bool.";
           ok = false;
         }
       } else if (const auto* str_option = dynamic_cast<const OptionString*>(arg.argval); str_option != nullptr) {
@@ -1186,7 +1186,7 @@ bool Vecs::validate_args(const QString& name, const QVector<arglist_t>* args)
         break;
       case ARGTYPE_UNKNOWN:
       default:
-        Warning() << name << "Unknown ARGTYPE for << arg.argstring.";
+        Warning() << name << "Unknown ARGTYPE for" << arg.argstring << ".";
         ok = false;
         break;
       }

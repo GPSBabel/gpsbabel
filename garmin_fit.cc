@@ -752,7 +752,7 @@ GarminFitFormat::fit_parse_data_message(uint8_t header)
     fit_parse_data(fit_data.message_def.value(local_id), 0);
   } else {
     throw ReaderException(
-      QString("Message %1 hasn't been defined before being used at file position 0x%2.").
+      QStringLiteral("Message %1 hasn't been defined before being used at file position 0x%2.").
       arg(local_id).arg(gbftell(fin) - 1, 0, 16).toStdString());
   }
 }
@@ -765,7 +765,7 @@ GarminFitFormat::fit_parse_compressed_message(uint8_t header)
     fit_parse_data(fit_data.message_def.value(local_id), header & 0x1f);
   } else {
     throw ReaderException(
-      QString("Compressed message %1 hasn't been defined before being used at file position 0x%2.").
+      QStringLiteral("Compressed message %1 hasn't been defined before being used at file position 0x%2.").
       arg(local_id).arg(gbftell(fin) - 1, 0, 16).toStdString());
   }
 }

@@ -163,13 +163,6 @@ public:
   { \
     return (gmsd && gmsd->flags.field)? gmsd->field : p; \
   } \
-  static void set_##field(garmin_fs_t* gmsd, const char* p) \
-  { \
-    if (gmsd && p && *p) { \
-      gmsd->field = p; \
-      gmsd->flags.field = 1; \
-    } \
-  } \
   static void set_##field(garmin_fs_t* gmsd, const QString& p) \
   { \
     if (gmsd && !p.isEmpty()) { \

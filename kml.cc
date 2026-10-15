@@ -716,13 +716,13 @@ void KmlFormat::kml_write_coordinates(const Waypoint* waypointp) const
 {
   if (kml_altitude_known(waypointp)) {
     writer->writeTextElement(QStringLiteral("coordinates"),
-                             QString::number(waypointp->longitude, 'f', precision) + QString(",") +
-                             QString::number(waypointp->latitude, 'f', precision) + QString(",") +
+                             QString::number(waypointp->longitude, 'f', precision) + QStringLiteral(",") +
+                             QString::number(waypointp->latitude, 'f', precision) + QStringLiteral(",") +
                              QString::number(waypointp->altitude, 'f', 2)
                             );
   } else {
     writer->writeTextElement(QStringLiteral("coordinates"),
-                             QString::number(waypointp->longitude, 'f', precision) + QString(",") +
+                             QString::number(waypointp->longitude, 'f', precision) + QStringLiteral(",") +
                              QString::number(waypointp->latitude, 'f', precision)
                             );
   }
@@ -1702,13 +1702,13 @@ void KmlFormat::kml_mt_hdr(const route_head* header)
 
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
-                               QString::number(tpt->longitude, 'f', precision) + QString(" ") +
-                               QString::number(tpt->latitude, 'f', precision) + QString(" ") +
+                               QString::number(tpt->longitude, 'f', precision) + QStringLiteral(" ") +
+                               QString::number(tpt->latitude, 'f', precision) + QStringLiteral(" ") +
                                QString::number(tpt->altitude, 'f', 2)
                               );
     } else {
       writer->writeTextElement(QStringLiteral("gx:coord"),
-                               QString::number(tpt->longitude, 'f', precision) + QString(" ") +
+                               QString::number(tpt->longitude, 'f', precision) + QStringLiteral(" ") +
                                QString::number(tpt->latitude, 'f', precision)
                               );
     }

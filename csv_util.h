@@ -59,7 +59,7 @@ double
 ddmmdir_to_degrees(const char* ddmmdir);
 
 void
-human_to_dec(const QString& instr, double* outlat, double* outlon, int which);
+human_to_dec(const QString& instr, double* outlat, double* outlon, int which, int line_no);
 
 QString
 dec_to_human(const char* format, const char* dirs, double val);

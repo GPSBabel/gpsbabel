@@ -54,6 +54,7 @@
 #include "csv_util.h"              // for csv_stringtrim, dec_to_human, csv_stringclean, human_to_dec, ddmmdir_to_degrees, dec_to_intdeg, decdir_to_dec, intdeg_to_dec, csv_linesplit
 #include "formspec.h"              // for FormatSpecificDataList
 #include "garmin_fs.h"             // for garmin_fs_t
+#include "gbversion.h"             // for kVersion
 #include "geocache.h"              // for Geocache, Geocache::status_t, Geoc...
 #include "grtcirc.h"               // for RAD, gcdist, radtometers
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_UTM_EN, GPS_Lookup_Datum_Index, GPS_Math_Known_Datum_To_WGS84_M, GPS_Math_UTM_EN_To_Known_Datum, GPS_Math_WGS84_To_Known_Datum_M, GPS_Math_WGS84_To_UKOSMap_H
@@ -441,7 +442,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->latitude = intdeg_to_dec((int) strtod(s, nullptr));
     break;
   case XcsvStyle::XT_LAT_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 1);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 1, line_no);
     break;
   case XcsvStyle::XT_LAT_DDMMDIR:
     wpt->latitude = ddmmdir_to_degrees(s);
@@ -465,7 +466,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
     wpt->longitude = intdeg_to_dec((int) strtod(s, nullptr));
     break;
   case XcsvStyle::XT_LON_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 2);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 2, line_no);
     break;
   case XcsvStyle::XT_LON_DDMMDIR:
     wpt->longitude = ddmmdir_to_degrees(s);
@@ -476,7 +477,7 @@ XcsvFormat::xcsv_parse_val(const QString& value, Waypoint* wpt, const XcsvStyle:
   // case XcsvStyle::XT_LON_10E is handled outside the switch.
   /* LAT AND LON CONVERSIONS ********************************************/
   case XcsvStyle::XT_LATLON_HUMAN_READABLE:
-    human_to_dec(value, &wpt->latitude, &wpt->longitude, 0);
+    human_to_dec(value, &wpt->latitude, &wpt->longitude, 0, line_no);
     break;
   /* DIRECTIONS **********************************************************/
   case XcsvStyle::XT_LAT_DIR:
@@ -1632,7 +1633,7 @@ XcsvFormat::xcsv_replace_tokens(const QString& original) const
   // isn't present;
   if (original.contains("__")) {
     replacement.replace("__FILE__", xcsv_file->fname);
-    replacement.replace("__VERSION__", gpsbabel_testmode()? "" : gpsbabel_version);
+    replacement.replace("__VERSION__", gpsbabel_testmode()? "" : gpsbabel::kVersion);
 
     QDateTime dt = current_time().toUTC();
 
