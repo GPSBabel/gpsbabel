@@ -245,7 +245,7 @@ else()
   if(APPLE)
     # Add the CFBundleLocalizations key to Info.plist with the available translations.
     # https://doc.qt.io/qt-6/macos-issues.html#internationalization
-    set(_formatted_items "\t<key>CFBundleLocalizations</key>\n\t<array>")
+    set(_formatted_items "\t<key>CFBundleLocalizations</key>" "\t<array>")
     foreach(item IN LISTS TRANSLATIONS)
       string(REGEX REPLACE "^gpsbabelfe_" "" item "${item}")
       string(REGEX REPLACE "\\.ts$" "" item "${item}")
