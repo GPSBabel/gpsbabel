@@ -242,6 +242,20 @@ else()
   list(APPEND TRANSLATIONS gpsbabelfe_zh_CN.ts)
   list(APPEND TRANSLATIONS gpsbabelfe_zh_TW.ts)
 
+  if(APPLE)
+    # Add the CFBundleLocalizations key to Info.plist with the available translations.
+    # https://doc.qt.io/qt-6/macos-issues.html#internationalization
+    set(_formatted_items "\t<key>CFBundleLocalizations</key>\n\t<array>")
+    foreach(item IN LISTS TRANSLATIONS)
+      string(REGEX REPLACE "^gpsbabelfe_" "" item "${item}")
+      string(REGEX REPLACE "\\.ts$" "" item "${item}")
+      string(REPLACE "_" "-" item "${item}")
+      list(APPEND _formatted_items "\t\t<string>${item}</string>")
+    endforeach()
+    list(APPEND _formatted_items "\t</array>")
+    list(JOIN _formatted_items "\n" MACOSX_BUNDLE_LOCALIZATIONS)
+  endif()
+
   add_custom_target(gpsbabelfe_lupdate
                     COMMAND Qt6::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}

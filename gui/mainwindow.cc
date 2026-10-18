@@ -40,6 +40,7 @@
 #include <QImage>              // for QImage
 #include <QLibraryInfo>        // for QLibraryInfo
 #include <QLocale>             // for QLocale
+#include <QLoggingCategory>    // for QLoggingCategory
 #include <QMessageBox>         // for QMessageBox, operator|
 #include <QMimeData>           // for QMimeData
 #include <QPlainTextEdit>      // for QPlainTextEdit
@@ -299,7 +300,8 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
 
 void MainWindow::loadLanguage(const QLocale& rLocale)
 {
-  //qDebug() << "requested locale" << rLocale.name() << "uiLanguages" << rLocale.uiLanguages();
+  static QLoggingCategory category("gpsbabelfe.mainwindow");
+  qCDebug(category) << "requested locale" << rLocale.name() << "uiLanguages" << rLocale.uiLanguages();
   QLocale::setDefault(rLocale);
 
   switchTranslator(translator_, QStringLiteral("gpsbabelfe"), rLocale);

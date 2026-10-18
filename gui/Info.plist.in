@@ -4,6 +4,7 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+${MACOSX_BUNDLE_LOCALIZATIONS}
 	<key>CFBundleExecutable</key>
 	<string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
