@@ -50,7 +50,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "vcredist"; Description: "Install Microsoft Visual C++ Redistributable (An appropriate Visual C++ Resdistributable is required.)";
 
 [InstallDelete]
-Type: files; Name: "{app}\gmapbase.html
+Type: files; Name: "{app}\gmapbase.html"
 
 [Files]
 Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
