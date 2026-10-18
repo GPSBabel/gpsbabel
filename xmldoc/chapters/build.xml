@@ -252,15 +252,6 @@ QtWebEngineWidgets are not used.
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term>GPSBABEL_EMBED_MAP</term>
-          <listitem>
-            <para>
-Embed gmapbase.html for map preview.  When using this option gmapbase.html
-will be compiled into the executable and does not need to be distributed.
-	</para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
           <term>GPSBABEL_EMBED_TRANSLATIONS</term>
           <listitem>
             <para>

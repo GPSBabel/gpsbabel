@@ -52,10 +52,6 @@ GPSBABEL_LEAFLET_MAPPREVIEW=ON*|OFF
   If both this and GPSBABEL_GOOGLE_MAPPREVIEW are disabled then QtWebEngine and
   QtWebEngineWidgets are not used.
 
-GPSBABEL_EMBED_MAP:BOOL=ON|OFF
-  Embed gmapbase.html for map preview.  When using this option gmapbase.html
-  will be compiled into the executable and does not need to be distributed.
-
 GPSBABEL_EMBED_TRANSLATIONS:BOOL:ON|OFF
   Embed translations.  When using this option the gpsbabel provided
   translations will be compiled into the executable and do not need to be
