@@ -2,26 +2,28 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   message(FATAL_ERROR "Please use CMakeLists.txt in the project root directory to generate a build system.")
 endif()
 
-list(APPEND LANGUAGES ar)
-list(APPEND LANGUAGES cs)
-list(APPEND LANGUAGES de)
-list(APPEND LANGUAGES en)
-list(APPEND LANGUAGES es)
-list(APPEND LANGUAGES fa)
-list(APPEND LANGUAGES fr)
-list(APPEND LANGUAGES he)
-list(APPEND LANGUAGES hu)
-list(APPEND LANGUAGES it)
-list(APPEND LANGUAGES ja)
-list(APPEND LANGUAGES ko)
-list(APPEND LANGUAGES nl)
-list(APPEND LANGUAGES pl)
-list(APPEND LANGUAGES pt_BR)
-list(APPEND LANGUAGES ru)
-list(APPEND LANGUAGES tr)
-list(APPEND LANGUAGES uk)
-list(APPEND LANGUAGES zh_CN)
-list(APPEND LANGUAGES zh_TW)
+set(LANGUAGES
+  ar
+  cs
+  de
+  en
+  es
+  fa
+  fr
+  he
+  hu
+  it
+  ja
+  ko
+  nl
+  pl
+  pt_BR
+  ru
+  tr
+  uk
+  zh_CN
+  zh_TW
+)
 
 add_subdirectory(coretool)
 
@@ -206,7 +208,7 @@ if(APPLE)
   set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
   set(ICON_FILE images/macos/${MACOSX_BUNDLE_ICON_FILE})
   set_source_files_properties(${ICON_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-  
+ 
   set(CAR_FILE images/macos/Assets.car)
   set_source_files_properties(${CAR_FILE} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
