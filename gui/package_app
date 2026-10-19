@@ -30,7 +30,6 @@ function convert_qt_translations()
     if [ -e "qtserialport_${language}.qm" ]; then inputs+=("qtserialport_${language}.qm"); fi
     if [ -e "qtwebengine_${language}.qm" ]; then inputs+=("qtwebengine_${language}.qm"); fi
     "${LCONVERT}" -o "${LANGDIR}/qt_${language}.qm" "${inputs[@]}"
-
   done
   popd > /dev/null
 
