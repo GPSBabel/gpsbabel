@@ -24,7 +24,6 @@ function convert_qt_translations()
   pushd "${QT_INSTALL_TRANSLATIONS}" > /dev/null
   for language in "${LANGUAGES[@]}"
   do
-    language=${language//-/_}
     inputs=()
     inputs+=("qtbase_${language}.qm")
     if [ -e "qtdeclarative_${language}.qm" ]; then inputs+=("qtdeclarative_${language}.qm"); fi

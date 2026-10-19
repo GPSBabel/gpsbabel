@@ -32,7 +32,6 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/core_strings.h
                   USES_TERMINAL)
 
 set(TRANSLATIONS "${LANGUAGES}")
-list(TRANSFORM TRANSLATIONS REPLACE "-" "_")
 list(TRANSFORM TRANSLATIONS PREPEND "gpsbabel_")
 list(TRANSFORM TRANSLATIONS APPEND ".ts")
 

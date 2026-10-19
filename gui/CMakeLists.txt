@@ -16,12 +16,12 @@ list(APPEND LANGUAGES ja)
 list(APPEND LANGUAGES ko)
 list(APPEND LANGUAGES nl)
 list(APPEND LANGUAGES pl)
-list(APPEND LANGUAGES pt-BR)
+list(APPEND LANGUAGES pt_BR)
 list(APPEND LANGUAGES ru)
 list(APPEND LANGUAGES tr)
 list(APPEND LANGUAGES uk)
-list(APPEND LANGUAGES zh-CN)
-list(APPEND LANGUAGES zh-TW)
+list(APPEND LANGUAGES zh_CN)
+list(APPEND LANGUAGES zh_TW)
 
 add_subdirectory(coretool)
 
@@ -215,6 +215,7 @@ if(APPLE)
   # Add the CFBundleLocalizations key to Info.plist with the available translations.
   # https://doc.qt.io/qt-6/macos-issues.html#internationalization
   set(_formatted_items "${LANGUAGES}")
+  list(TRANSFORM _formatted_items REPLACE "_" "-")
   list(TRANSFORM _formatted_items PREPEND "\t\t<string>")
   list(TRANSFORM _formatted_items APPEND "</string>")
   list(JOIN _formatted_items "\n" MACOSX_BUNDLE_LOCALIZATIONS)
@@ -248,7 +249,6 @@ if(NOT Qt6LinguistTools_FOUND)
 else()
 # FIXME: translations updated and released in source directory (and under version control).
   set(TRANSLATIONS "${LANGUAGES}")
-  list(TRANSFORM TRANSLATIONS REPLACE "-" "_")
   list(TRANSFORM TRANSLATIONS PREPEND "gpsbabelfe_")
   list(TRANSFORM TRANSLATIONS APPEND ".ts")
 
