@@ -22,9 +22,9 @@ function convert_qt_translations()
 # copying or converting them won't copy the dependencies.
 
   pushd "${QT_INSTALL_TRANSLATIONS}" > /dev/null
-  languages=($(echo qtbase_*.qm | sed 's/qtbase_\([^\.]*\)\.qm/\1/g'))
-  for language in "${languages[@]}"
+  for language in "${LANGUAGES[@]}"
   do
+    language=${language//-/_}
     inputs=()
     inputs+=("qtbase_${language}.qm")
     if [ -e "qtdeclarative_${language}.qm" ]; then inputs+=("qtdeclarative_${language}.qm"); fi
@@ -51,12 +51,13 @@ fi
 GPSBABEL=../gpsbabel
 QMAKE=qmake
 SOURCEDIR=.
-while getopts a:g:q:s:c:n: name
+while getopts a:g:q:l:s:c:n: name
 do
   case $name in
     a) APPDIR="$OPTARG";;
     g) GPSBABEL="$OPTARG";;
     q) QMAKE="$OPTARG";;
+    l) IFS=';' read -r -a LANGUAGES <<< "$OPTARG";;
     s) SOURCEDIR="$OPTARG";;
     c) CODESIGN="$OPTARG";;
     n) NOTARY="$OPTARG";;

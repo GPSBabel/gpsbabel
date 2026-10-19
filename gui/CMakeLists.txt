@@ -2,6 +2,27 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   message(FATAL_ERROR "Please use CMakeLists.txt in the project root directory to generate a build system.")
 endif()
 
+list(APPEND LANGUAGES ar)
+list(APPEND LANGUAGES cs)
+list(APPEND LANGUAGES de)
+list(APPEND LANGUAGES en)
+list(APPEND LANGUAGES es)
+list(APPEND LANGUAGES fa)
+list(APPEND LANGUAGES fr)
+list(APPEND LANGUAGES he)
+list(APPEND LANGUAGES hu)
+list(APPEND LANGUAGES it)
+list(APPEND LANGUAGES ja)
+list(APPEND LANGUAGES ko)
+list(APPEND LANGUAGES nl)
+list(APPEND LANGUAGES pl)
+list(APPEND LANGUAGES pt-BR)
+list(APPEND LANGUAGES ru)
+list(APPEND LANGUAGES tr)
+list(APPEND LANGUAGES uk)
+list(APPEND LANGUAGES zh-CN)
+list(APPEND LANGUAGES zh-TW)
+
 add_subdirectory(coretool)
 
 configure_file(${CMAKE_SOURCE_DIR}/gbversion.h.in gbversion.h @ONLY NEWLINE_STYLE LF)
@@ -191,7 +212,12 @@ if(APPLE)
 
   target_sources(gpsbabelfe PRIVATE ${SOURCES} ${HEADERS} ${ICON_FILE} ${CAR_FILE} ${RESOURCES})
 
-  # Info.plist has not been debugged with the cmake flow, it's a bit different than with the qmake flow.
+  # Add the CFBundleLocalizations key to Info.plist with the available translations.
+  # https://doc.qt.io/qt-6/macos-issues.html#internationalization
+  set(_formatted_items "${LANGUAGES}")
+  list(TRANSFORM _formatted_items PREPEND "\t\t<string>")
+  list(TRANSFORM _formatted_items APPEND "</string>")
+  list(JOIN _formatted_items "\n" MACOSX_BUNDLE_LOCALIZATIONS)
   set_target_properties(gpsbabelfe PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
     MACOSX_BUNDLE_BUNDLE_NAME GPSBabel
@@ -221,40 +247,10 @@ if(NOT Qt6LinguistTools_FOUND)
   message(WARNING "Qt6LinguistTools not found, gpsbabelfe translations cannot be updated or released, and application cannot be packaged.")
 else()
 # FIXME: translations updated and released in source directory (and under version control).
-  list(APPEND TRANSLATIONS gpsbabelfe_ar.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_cs.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_de.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_en.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_es.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_fa.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_fr.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_he.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_hu.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_it.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_ja.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_ko.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_nl.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_pl.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_pt_BR.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_ru.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_tr.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_uk.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_zh_CN.ts)
-  list(APPEND TRANSLATIONS gpsbabelfe_zh_TW.ts)
-
-  if(APPLE)
-    # Add the CFBundleLocalizations key to Info.plist with the available translations.
-    # https://doc.qt.io/qt-6/macos-issues.html#internationalization
-    set(_formatted_items "\t<key>CFBundleLocalizations</key>" "\t<array>")
-    foreach(item IN LISTS TRANSLATIONS)
-      string(REGEX REPLACE "^gpsbabelfe_" "" item "${item}")
-      string(REGEX REPLACE "\\.ts$" "" item "${item}")
-      string(REPLACE "_" "-" item "${item}")
-      list(APPEND _formatted_items "\t\t<string>${item}</string>")
-    endforeach()
-    list(APPEND _formatted_items "\t</array>")
-    list(JOIN _formatted_items "\n" MACOSX_BUNDLE_LOCALIZATIONS)
-  endif()
+  set(TRANSLATIONS "${LANGUAGES}")
+  list(TRANSFORM TRANSLATIONS REPLACE "-" "_")
+  list(TRANSFORM TRANSLATIONS PREPEND "gpsbabelfe_")
+  list(TRANSFORM TRANSLATIONS APPEND ".ts")
 
   add_custom_target(gpsbabelfe_lupdate
                     COMMAND Qt6::lupdate ${SOURCES} ${FORMS} -ts ${TRANSLATIONS}
@@ -283,7 +279,7 @@ else()
     endif()
     get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR} ${_codesign} ${_notary}
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_BUNDLE_DIR:gpsbabelfe> -q ${_qmake_executable} -l "${LANGUAGES}" -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR} ${_codesign} ${_notary}
                       COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_BUNDLE_DIR:gpsbabelfe>/../GPSBabelFE.dmg ${CMAKE_CURRENT_BINARY_DIR}
                       DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                       VERBATIM
@@ -291,7 +287,7 @@ else()
   elseif(UNIX)
     get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
     add_custom_target(package_app
-                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_FILE_DIR:gpsbabelfe> -q ${_qmake_executable} -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
+                      COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/package_app -a $<TARGET_FILE_DIR:gpsbabelfe> -q ${_qmake_executable} -l "${LANGUAGES}" -g $<TARGET_FILE:gpsbabel> -s ${CMAKE_CURRENT_SOURCE_DIR}
                       DEPENDS gpsbabelfe gpsbabel gpsbabelfe_lrelease coretool_lrelease
                       VERBATIM
                       USES_TERMINAL)
