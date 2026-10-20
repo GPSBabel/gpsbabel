@@ -382,7 +382,7 @@ message(STATUS "Defines are: \"${DirDefs}\"")
 get_target_property(LnkLibs gpsbabel LINK_LIBRARIES)
 message(STATUS "Libs are: \"${LnkLibs}\"")
 get_target_property(IncDirs gpsbabel INCLUDE_DIRECTORIES)
-message(STATUS "Include Directores are: \"${IncDirs}\"")
+message(STATUS "Include Directories are: \"${IncDirs}\"")
 
 # In case we ever update the garmin_icons mkicondoc helps
 # update the related document table.
