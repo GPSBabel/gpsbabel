@@ -48,7 +48,7 @@ if(UNIX)
             mac/libusb/os/darwin_usb.h
             mac/libusb/os/events_posix.h
             mac/libusb/os/threads_posix.h
-            mac/libusb/XCode/config.h
+            mac/libusb/Xcode/config.h
           )
           target_include_directories(usb-1.0 PRIVATE mac/libusb/XCode PUBLIC mac/libusb)
           target_link_libraries(usb-1.0 INTERFACE objc "-framework IOKit" "-framework CoreFoundation" "-framework Security")
