@@ -21,31 +21,8 @@ function convert_qt_translations()
 # Note with Qt6 the Qt distributed qt_xx.qm files are metacatalogs, and just
 # copying or converting them won't copy the dependencies.
 
-  if [ "${machine}" = "Mac" ]; then
-    resourcedir="${APPDIR}/Contents/Resources"
-
-    # caution, mktemp here is macos specific version
-    resourceskel="$(mktemp -t gpsbabel_package_app)"
-    echo '<?xml version="1.0" encoding="UTF-8"?>' > "$resourceskel"
-    echo '<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"' >> "$resourceskel"
-    echo '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> "$resourceskel"
-    echo '<plist version="1.0">' >> "$resourceskel"
-    echo '<dict>' >> "$resourceskel"
-    echo '    <key>LprojCompatibleVersion</key>' >> "$resourceskel"
-    echo '    <string>123</string>' >> "$resourceskel"
-    echo '    <key>LprojLocale</key>' >> "$resourceskel"
-    echo '    <string>LANGUAGE</string>' >> "$resourceskel"
-    echo '    <key>LprojRevisionLevel</key>' >> "$resourceskel"
-    echo '    <string>1</string>' >> "$resourceskel"
-    echo '    <key>LprojVersion</key>' >> "$resourceskel"
-    echo '    <string>123</string>' >> "$resourceskel"
-    echo '</dict>' >> "$resourceskel"
-    echo '</plist>' >> "$resourceskel"
-  fi
-
   pushd "${QT_INSTALL_TRANSLATIONS}" > /dev/null
-  languages=($(echo qtbase_*.qm | sed 's/qtbase_\([^\.]*\)\.qm/\1/g'))
-  for language in "${languages[@]}"
+  for language in "${LANGUAGES[@]}"
   do
     inputs=()
     inputs+=("qtbase_${language}.qm")
@@ -53,20 +30,9 @@ function convert_qt_translations()
     if [ -e "qtserialport_${language}.qm" ]; then inputs+=("qtserialport_${language}.qm"); fi
     if [ -e "qtwebengine_${language}.qm" ]; then inputs+=("qtwebengine_${language}.qm"); fi
     "${LCONVERT}" -o "${LANGDIR}/qt_${language}.qm" "${inputs[@]}"
-
-    if [ "${machine}" = "Mac" ]; then
-      # Create locversion.plist in the bundle to trigger translations for
-      # the application menu and system buttons.  See description at
-      # https://doc.qt.io/qt-5/macos-issues.html#translating-the-application-menu-and-native-dialogs
-      mkdir -p "${resourcedir}/${language}.lproj"
-      sed "s/LANGUAGE/${language}/" "${resourceskel}" > "${resourcedir}/${language}.lproj/locversion.plist"
-    fi
   done
   popd > /dev/null
 
-  if [ "${machine}" = "Mac" ]; then
-    rm "${resourceskel}"
-  fi
 }
 
 case "$(uname -s)" in
@@ -83,12 +49,13 @@ fi
 GPSBABEL=../gpsbabel
 QMAKE=qmake
 SOURCEDIR=.
-while getopts a:g:q:s:c:n: name
+while getopts a:g:q:l:s:c:n: name
 do
   case $name in
     a) APPDIR="$OPTARG";;
     g) GPSBABEL="$OPTARG";;
     q) QMAKE="$OPTARG";;
+    l) IFS=';' read -r -a LANGUAGES <<< "$OPTARG";;
     s) SOURCEDIR="$OPTARG";;
     c) CODESIGN="$OPTARG";;
     n) NOTARY="$OPTARG";;
