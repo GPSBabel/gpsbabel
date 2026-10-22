@@ -25,16 +25,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - IMAGE: 'jammy'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
-            os: ubuntu-latest
-          - IMAGE: 'jammy'
-            CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
-            SCRIPT: './tools/build_and_test_cmake.sh'
-            TOOLS: 'clang'
-            os: ubuntu-latest
-
           - IMAGE: 'noble'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             SCRIPT: './tools/build_and_test_cmake.sh -d'
