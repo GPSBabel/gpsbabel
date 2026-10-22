@@ -235,7 +235,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
+        <source>Create smart shortened names.</source>
         <translation>Crear nombres cortors de forma automática.</translation>
     </message>
 </context>
@@ -288,27 +288,27 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cc" line="47"/>
+        <location filename="filterdlg.cc" line="49"/>
         <source>Tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="50"/>
+        <location filename="filterdlg.cc" line="52"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="53"/>
+        <location filename="filterdlg.cc" line="55"/>
         <source>Routes &amp; Tracks</source>
         <translation>Rutas y registro de trazados</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="56"/>
+        <location filename="filterdlg.cc" line="58"/>
         <source>Miscellaneous</source>
         <translation>Miscelánea</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="111"/>
+        <location filename="filterdlg.cc" line="113"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a las opciones por defecto de todos los filtros?</translation>
     </message>
@@ -322,8 +322,8 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="filterui.ui" line="17"/>
-        <source>Data filters process and transform the data between input and output files or devices. </source>
-        <translation>Procesar y transforma los datos entre los ficheros o aparatos de entrada y salida, de acuerdo a los filtros seleccionados. </translation>
+        <source>Data filters process and transform the data between input and output files or devices.</source>
+        <translation>Procesar y transforma los datos entre los ficheros o aparatos de entrada y salida, de acuerdo a los filtros seleccionados.</translation>
     </message>
     <message>
         <location filename="filterui.ui" line="72"/>
@@ -495,17 +495,22 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>LeafletMap</name>
     <message>
-        <location filename="leafletmap.cc" line="142"/>
+        <location filename="leafletmap.cc" line="118"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">Error al abrir el archivo &quot;:/qtwebchannel/qwebchannel.js&quot;. Compruebe la instalación</translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="162"/>
         <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Error al abrir el archivo &quot;leafletbase.html&quot;. Compruebe la instalación</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="146"/>
+        <location filename="leafletmap.cc" line="165"/>
         <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Falta el archivo &quot;leafletbase.html&quot;. Compruebe la instalación</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="164"/>
+        <location filename="leafletmap.cc" line="183"/>
         <source>Failed to load Leaflet maps base page</source>
         <translation type="unfinished">Error al cargar la página base de mapas Leaflet</translation>
     </message>
@@ -590,61 +595,61 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">Rutas</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="533"/>
+        <location filename="leafletdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished">Mostrar todos los puntos de interés</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="534"/>
+        <location filename="leafletdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished">Ocultar todos los puntos de interés</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="535"/>
-        <location filename="leafletdlg.cc" line="542"/>
-        <location filename="leafletdlg.cc" line="549"/>
+        <location filename="leafletdlg.cc" line="543"/>
+        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="557"/>
         <source>Expand All</source>
         <translation type="unfinished">Expandir todo</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="536"/>
-        <location filename="leafletdlg.cc" line="543"/>
-        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="544"/>
+        <location filename="leafletdlg.cc" line="551"/>
+        <location filename="leafletdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation type="unfinished">Colapsar todo</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="540"/>
+        <location filename="leafletdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation type="unfinished">Mostrar todas las rutas</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="541"/>
+        <location filename="leafletdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation type="unfinished">Ocultar todas las rutas</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="547"/>
+        <location filename="leafletdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation type="unfinished">Mostrar todos los trazados</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="548"/>
+        <location filename="leafletdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished">Ocultar todos los trazados</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="556"/>
+        <location filename="leafletdlg.cc" line="564"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished">Mostras sólo este punto de interés</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="558"/>
+        <location filename="leafletdlg.cc" line="566"/>
         <source>Show Only This Track</source>
         <translation type="unfinished">Mostrar sólo este trazado</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="560"/>
+        <location filename="leafletdlg.cc" line="568"/>
         <source>Show Only This Route</source>
         <translation type="unfinished">Mostrar sólo esta ruta</translation>
     </message>
@@ -707,31 +712,31 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="obsolete">Defecto</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="532"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation>Seleccionar uno o más archivos de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation>Nombre del fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="624"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>Se ha producido un error cuando se intentaba leer la configuración. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="635"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>El formato de alfunos ficheros o dispositivos no se halló durante la inicialización. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation>Formatos de entrada y salida inadmisibles %1</translation>
     </message>
@@ -740,73 +745,73 @@ This program cannot continue.</source>
         <translation type="vanished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">Formatos de entrada inadmisible %1; Formatos de salida inadmisible %1 {1;?}</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">El formato de entrada admite %1; el formato de salida no admite %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation>Formatos de entrada y salida admisibles (ambos) %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="686"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="688"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>No hay opciones de entrada para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="789"/>
-        <location filename="mainwindow.cc" line="808"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation>Opciones de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>No hay opciones de salida para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Se han especificicado puntos de interés, trazados o rutas no traducibles</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation>No se ha especificado el fichero de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation>El fichero de salida no es válido</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation>No se ha especificado el fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="974"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">No se pudo abrir el archivo temporal &quot;%1&quot; para la vista previa del mapa. El error fue: &quot;%2&quot;. La vista previa del mapa no se mostrará.</translation>
     </message>
@@ -819,39 +824,41 @@ This program cannot continue.</source>
         <translation type="vanished">El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="991"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1003"/>
-        <source>Error preparing map: %1
-</source>
+        <location filename="mainwindow.cc" line="1006"/>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">Error al preparar el mapa: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1038"/>
-        <source>Error running gpsbabel: %1
-</source>
-        <translation>Error ejecutando gpsbabel: %1</translation>
+        <location filename="mainwindow.cc" line="1049"/>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
+        <translation type="unfinished">Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1163"/>
+        <location filename="mainwindow.cc" line="1174"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1193"/>
+        <location filename="mainwindow.cc" line="1204"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1241"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1243"/>
+        <location filename="mainwindow.cc" line="1254"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
@@ -866,7 +873,7 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
+        <source>Input</source>
         <translation>Entrada</translation>
     </message>
     <message>
@@ -909,9 +916,9 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="129"/>
-        <source>Browse for one or more input files. </source>
+        <source>Browse for one or more input files.</source>
         <translatorcomment>Podría ser más literal navega, pero buscar creo que se entiende mejor</translatorcomment>
-        <translation>Busca uno o más ficheros de entrada. </translation>
+        <translation>Busca uno o más ficheros de entrada.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="132"/>
@@ -931,7 +938,7 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="207"/>
-        <source>Options for the selected input format. </source>
+        <source>Options for the selected input format.</source>
         <translation>Opciones aplicables al formato de entrada seleccionado.</translation>
     </message>
     <message>
@@ -991,7 +998,7 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="427"/>
-        <source>More translation options. </source>
+        <source>More translation options.</source>
         <translation>Más opciones de conversión.</translation>
     </message>
     <message>
@@ -1006,8 +1013,8 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="460"/>
-        <source>If selected, output is to a file. </source>
-        <translation>Si se selecciona, la salida es a un fichero. </translation>
+        <source>If selected, output is to a file.</source>
+        <translation>Si se selecciona, la salida es a un fichero.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="476"/>
@@ -1025,8 +1032,8 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="545"/>
-        <source>Browse for an output file name. </source>
-        <translation>Selecciona el nombre del fichero de salida. </translation>
+        <source>Browse for an output file name.</source>
+        <translation>Selecciona el nombre del fichero de salida.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="548"/>
@@ -1040,12 +1047,12 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="623"/>
-        <source>Options for the selected output format. </source>
+        <source>Options for the selected output format.</source>
         <translation>Opciones aplicables al formato de salida seleccionado.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="647"/>
-        <source>Output of GPSBabel translation process. </source>
+        <source>Output of GPSBabel translation process.</source>
         <translation>Salida del proceso de conversión de GPSBabel.</translation>
     </message>
     <message>
@@ -1097,17 +1104,22 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="122"/>
+        <location filename="map.cc" line="92"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">Error al abrir el archivo &quot;:/qtwebchannel/qwebchannel.js&quot;. Compruebe la instalación</translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="142"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">Error al abrir el archivo &quot;gmapbase.html&quot;. Compruebe la instalación</translation>
     </message>
     <message>
-        <location filename="map.cc" line="126"/>
+        <location filename="map.cc" line="145"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation>No se encuentra el fichero &quot;&quot;gmapbase.html&quot;. Compruebe la instalación</translation>
     </message>
     <message>
-        <location filename="map.cc" line="181"/>
+        <location filename="map.cc" line="200"/>
         <source>Failed to load Google maps base page</source>
         <translation>Fallo al buscar la página básica de los mapas de Googe</translation>
     </message>
@@ -1116,28 +1128,28 @@ This program cannot continue.</source>
     <name>MiscFltWidget</name>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="297"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="286"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Tracks</source>
         <translation>Trazados</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="297"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="286"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
@@ -1171,7 +1183,7 @@ This program cannot continue.</source>
         <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</source>
         <translation>Éste filtro puede ser utilizado para convertir datos GPS entre varios tipos de datos.
 
 Algunos formatos de datos de los GPS solo permiten utilizar una parte de los puntos de interés, trazados o rutas. El filtro de transformación habilita la conversión entres esos tipos. Por ejemplo, se puede usar para convertir un conjunto de puntos de interés (como los contenidos en un fichero CSV) a un trazado o viceversa.</translation>
@@ -1183,12 +1195,12 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <source>Type of transformation. </source>
-        <translation>Tipos de transformación. </translation>
+        <source>Type of transformation.</source>
+        <translation>Tipos de transformación.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <source>Delete original data after transform to prevent duplicated data. </source>
+        <source>Delete original data after transform to prevent duplicated data.</source>
         <translation>Borrar los datos originales después de la transaformación para evitar la duplicación de los mismos.</translation>
     </message>
     <message>
@@ -1245,7 +1257,7 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
     </message>
     <message>
         <location filename="miscfltui.ui" line="215"/>
-        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</source>
         <translation>Filtro simple para cambiar entre los valores de las coordenadas (latitud y longitud) de todos los puntos. Esto puede ser útil si los datos están mal definidos o si piensas que algún formato xcsv te puede ser útil pero la longitud y la latitud están en un orden incorrecto.</translation>
     </message>
     <message>
@@ -1493,7 +1505,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="rttrkui.ui" line="89"/>
-        <source>Maximum number points in track or route. </source>
+        <source>Maximum number points in track or route.</source>
         <translation>Máximo número de puntos en el trazado o en la ruta.</translation>
     </message>
     <message>
@@ -1528,11 +1540,11 @@ The quality of the results will vary depending on the density of points in the o
 The filter attempts to remove points from each route until the number of points or the error is within the given bounds, while also attempting to preserve the shape of the original route as much as possible.
 
 The quality of the results will vary depending on the density of points in the original route and the length of the original route. </oldsource>
-        <translation type="unfinished"> El filtro Simplificar se usa para hacer lo propio con rutas y trazados para que pueden utilizarse con formatos que limitan el número máximo de puntos que pueden contener, o simplemente para reducir la complejidad de una ruta (por eso se llama simplificar).
+        <translation type="unfinished">El filtro Simplificar se usa para hacer lo propio con rutas y trazados para que pueden utilizarse con formatos que limitan el número máximo de puntos que pueden contener, o simplemente para reducir la complejidad de una ruta (por eso se llama simplificar).
 
 El filtro intenta quitar algunos puntos de cada ruta hasta que el número de puntos o el margen de error se halla entre los límites dados, a la vez que intenta que la forma se parezca lo más posible a la ruta original.
 
-La calidad de los resultados variará dependiendo del número de puntos que contenga la ruta original y de su longitud. </translation>
+La calidad de los resultados variará dependiendo del número de puntos que contenga la ruta original y de su longitud.</translation>
     </message>
     <message>
         <location filename="rttrkui.ui" line="124"/>
@@ -1541,7 +1553,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
         <oldsource>The reversal is performed in the laziest way possible. Timestamps are kept with the original waypoints so the resulting track or route will have the interesting characteristic that time runs backwards. This tends to make Magellan Mapsend, in particular, do a weird thing and place each waypoint on a separate day. 
 Additionally, if you&apos;re using this to reverse a route that navigates, say, an exit ramp or a one way street, you will be in for unpleasant ride. application cares about timestamps </oldsource>
         <translation type="unfinished">La inversión es realizada de la manera más simple posible. Los tiempos de marca de los puntos originales se guardan tal cual de tal forma que el trazado o la ruta resultantes tendrá características curiosas cuando el tiempo va para atrás. Esto hace que, sobre todo, Magellan Mapasend haga cosas raras como poner cada punto de interés en un día diferente. 
-Además, si se utiliza este filtro para navegar por una ruta invertida que se mueve, por ejemplo una rampa de salida o una calle de sentido único, puedes encontrarte con un viaje poco apacible. Al programa le importan los tiempos de marca </translation>
+Además, si se utiliza este filtro para navegar por una ruta invertida que se mueve, por ejemplo una rampa de salida o una calle de sentido único, puedes encontrarte con un viaje poco apacible. Al programa le importan los tiempos de marca.</translation>
     </message>
 </context>
 <context>
@@ -1602,7 +1614,7 @@ Además, si se utiliza este filtro para navegar por una ruta invertida que se mu
     </message>
     <message>
         <location filename="trackui.ui" line="17"/>
-        <source>This filter performs various operations on track data. </source>
+        <source>This filter performs various operations on track data.</source>
         <translation>Este filtro efectúa varias operaciones en los registros de trazado.</translation>
     </message>
     <message>
@@ -1619,9 +1631,9 @@ Además, si se utiliza este filtro para navegar por una ruta invertida que se mu
         <location filename="trackui.ui" line="45"/>
         <source>Basic title for new track(s). 
 This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
-If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names.</source>
         <translation>Título simple del trazado o trazados. Esta opción designa un título para los trazados generados por un filtro. Por defecto, el título del trazado resultante está formado por la fecha de comienzo del trazado añadida a su valor.
-Si el título contiene un porcentaje (%) , es tratado como una cadena de texto por la función strftime POSIX lo que facilita el poner títulos que tienen en cuenta los datos temporales y los títulos de los trazados. </translation>
+Si el título contiene un porcentaje (%) , es tratado como una cadena de texto por la función strftime POSIX lo que facilita el poner títulos que tienen en cuenta los datos temporales y los títulos de los trazados.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="50"/>
@@ -1630,7 +1642,7 @@ Si el título contiene un porcentaje (%) , es tratado como una cadena de texto p
     </message>
     <message>
         <location filename="trackui.ui" line="57"/>
-        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
+        <source>the title of the new track is composed of the start time of the track appended to this value.</source>
         <translation>el título del trazado resultante está formado por la fecha de comienzo del trazado añadida a su valor.</translation>
     </message>
     <message>
@@ -1641,8 +1653,8 @@ Si el título contiene un porcentaje (%) , es tratado como una cadena de texto p
     <message>
         <location filename="trackui.ui" line="67"/>
         <source>Correct trackpoint timestamps by a delta. 
-This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
-        <translation>Corregir el tiempo de los puntos de cada trazado con un incremento. Esta opción cambia los datos temporales de todos los puntos del trazado. Esto sería útil si tu trazado tuviera que ser trasladado una o más horas debido al cambio de huso horario. </translation>
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone.</source>
+        <translation>Corregir el tiempo de los puntos de cada trazado con un incremento. Esta opción cambia los datos temporales de todos los puntos del trazado. Esto sería útil si tu trazado tuviera que ser trasladado una o más horas debido al cambio de huso horario.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="71"/>
@@ -1679,17 +1691,17 @@ This option changes the time of all trackpoints. This might be useful if your tr
     <message>
         <location filename="trackui.ui" line="204"/>
         <location filename="trackui.ui" line="219"/>
-        <source>Use track pts. after this time. </source>
+        <source>Use track pts. after this time.</source>
         <translation>Usar sólo los puntos del trazado grabados después de esta hora.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
-This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period.</source>
         <translation>Usar sólo los puntos del trazado grabados después de esta marca de tiempo.
 
-Esta opción se utiliza junto con la de parar (stop) para descartar puntos que fueron grabados fuera del período de tiempo deseado. La opción especifica el inicio del período. </translation>
+Esta opción se utiliza junto con la de parar (stop) para descartar puntos que fueron grabados fuera del período de tiempo deseado. La opción especifica el inicio del período.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="212"/>
@@ -1729,15 +1741,15 @@ Esta opción se utiliza junto con la de parar (stop) para descartar puntos que f
     <message>
         <location filename="trackui.ui" line="232"/>
         <location filename="trackui.ui" line="247"/>
-        <source>Use track pts before this time. </source>
-        <translation>Usa los puntos del trazado tomados antes de esta hora. </translation>
+        <source>Use track pts before this time.</source>
+        <translation>Usa los puntos del trazado tomados antes de esta hora.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
-This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
-        <translation>Usa los puntos del trazado tomados antes de esta marca de tiempo. Esta opción se usa junto con la opción comenzar para descartar todos los puntos no tomados en determinado período temporal. Esta opción define el final del período. </translation>
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
+        <translation>Usa los puntos del trazado tomados antes de esta marca de tiempo. Esta opción se usa junto con la opción comenzar para descartar todos los puntos no tomados en determinado período temporal. Esta opción define el final del período.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="240"/>
@@ -1746,8 +1758,8 @@ This option is used in conjunction with the start option to discard all trackpoi
     </message>
     <message>
         <location filename="trackui.ui" line="254"/>
-        <source>Pack all tracks into one. </source>
-        <translation>Junta todos los trazados en uno. </translation>
+        <source>Pack all tracks into one.</source>
+        <translation>Junta todos los trazados en uno.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="257"/>
@@ -1755,12 +1767,12 @@ This option is used in conjunction with the start option to discard all trackpoi
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
-This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop.</source>
         <translation>Junta todos los trazados en uno. 
 
 Esta opción hace que todos los trazados se añadan uno tras otros hasta formar un único trazado. La opción no funciona si dos trazados se superponen temporalmente, en ese caso, puede ser mejor usar la opción unir.
 
-Esta opción es muy útil para juntar trazados que se interrumpieron por un error en el equipo o por una parada para descansar. </translation>
+Esta opción es muy útil para juntar trazados que se interrumpieron por un error en el equipo o por una parada para descansar.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="264"/>
@@ -1774,9 +1786,9 @@ Esta opción es muy útil para juntar trazados que se interrumpieron por un erro
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
-This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation>Unir diversos trazados repetitivos.
 
 Esta opción pone todos los puntos de todos los trazados en un único trazado y los ordena por la marca de tiempo. Los puntos con idénticas marcas de tiempo son borrados.</translation>
@@ -1811,7 +1823,7 @@ Si la entrada tiene múltiples trazados, júntalos antes de dividirlos por día.
     </message>
     <message>
         <location filename="trackui.ui" line="305"/>
-        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date.</source>
         <translation>Si &quot;nonzero&quot;, el trazado será dividido si el tiempo entre dos puntos es mayor que el parámetro.   Si &quot;zero&quot;, el trazado será dividido por día.</translation>
     </message>
     <message>
@@ -1826,7 +1838,7 @@ Si la entrada tiene múltiples trazados, júntalos antes de dividirlos por día.
     </message>
     <message>
         <location filename="trackui.ui" line="348"/>
-        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter.</source>
         <translation>Si &quot;nonzero&quot;, el trazado será dividido en varios trazados si la distancia entre dos puntos es mayor que el parámetro dado.</translation>
     </message>
     <message>
@@ -1905,7 +1917,7 @@ Esta opción es muy útil cuando se trata de convertir de un formato que no cont
         <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
-This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
         <translation>Sintetizar la dirección.
 
 Esta opción calcula (o recalcula) un valor para el rumbo de cada punto del trazado. Es muy útil para puntos de trazado en formatos que no contienen información sobre el rumbo o para puntos de trazado calculados con el filtro interpolar. El rumbo de cada punto es simplemente la dirección desde el punto previo en el trazado. El primer punto de cada trazado tiene el valor arbitrario de 0 grados.</translation>
@@ -1917,8 +1929,8 @@ Esta opción calcula (o recalcula) un valor para el rumbo de cada punto del traz
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
-        <source>Synthesize speed. </source>
-        <translation>Calcular velocidad. </translation>
+        <source>Synthesize speed.</source>
+        <translation>Calcular velocidad.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="293"/>
@@ -1929,7 +1941,7 @@ Esta opción calcula (o recalcula) un valor para el rumbo de cada punto del traz
         <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
         <translation>Sintetizar la veloclidad.
 
 Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del trazado. Es muy útil para puntos de trazado en formatos que no contienen información sobre la velocidad o para puntos de trazado calculados con el filtro interpolar. La velocidad de cada punto es simplemente la media (distancia partido por tiempo) desde el punto previo en el trazado. El primer punto de cada trazado tiene el valor arbitrario de &quot;desconocido&quot;.</translation>
@@ -2048,7 +2060,7 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
     </message>
     <message>
         <location filename="wayptsui.ui" line="168"/>
-        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</source>
         <translation>El filtro duplicados está designado para borrar los puntos duplicados basándose en el nombre corto (normalmente el nombre del punto de interés en el receptor GPS), y su localización (hasta una precisión de seis decimales). El filtro permite dos opciones para designar como serán tratados los duplicados, por nombre corto y localización. Normalmente, al menos una de esas opciones es requerida.</translation>
     </message>
     <message>
@@ -2083,8 +2095,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="133"/>
-        <source>Suppress duplicate waypoint based on coords. </source>
-        <translation>Suprimir los puntos de interés que comparten coordenadas. </translation>
+        <source>Suppress duplicate waypoint based on coords.</source>
+        <translation>Suprimir los puntos de interés que comparten coordenadas.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="136"/>
@@ -2115,7 +2127,7 @@ p, li { white-space: pre-wrap; }
         <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</source>
         <translatorcomment>Hay una contradicción en el original</translatorcomment>
         <translation>Distancia máxima permitida.
 
@@ -2150,10 +2162,10 @@ Esta opción especifica la distancia máxima permitidad entre dos puntos. Si dos
         <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</source>
         <translation>Este filtro incluye o excluye puntos de interés basándose en la proximidad a un punto central. Los puntos alejados más allá del radio proporcionado son excluidos del conjunto.
 
-Por defecto, los puntos restantes se ordenan de acuerdo con su distancia al centro, el más cercano será el primero. </translation>
+Por defecto, los puntos restantes se ordenan de acuerdo con su distancia al centro, el más cercano será el primero.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="30"/>
@@ -2162,7 +2174,7 @@ Por defecto, los puntos restantes se ordenan de acuerdo con su distancia al cent
     </message>
     <message>
         <location filename="wayptsui.ui" line="208"/>
-        <source>Maximum distance from center. </source>
+        <source>Maximum distance from center.</source>
         <translation>Máxima distancia desde el centro.</translation>
     </message>
     <message>

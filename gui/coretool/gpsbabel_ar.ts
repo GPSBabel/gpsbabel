@@ -25,13 +25,13 @@
         <location filename="core_strings.h" line="55"/>
         <location filename="core_strings.h" line="64"/>
         <location filename="core_strings.h" line="89"/>
-        <location filename="core_strings.h" line="164"/>
-        <location filename="core_strings.h" line="174"/>
-        <location filename="core_strings.h" line="183"/>
-        <location filename="core_strings.h" line="192"/>
-        <location filename="core_strings.h" line="284"/>
-        <location filename="core_strings.h" line="296"/>
-        <location filename="core_strings.h" line="328"/>
+        <location filename="core_strings.h" line="166"/>
+        <location filename="core_strings.h" line="176"/>
+        <location filename="core_strings.h" line="185"/>
+        <location filename="core_strings.h" line="194"/>
+        <location filename="core_strings.h" line="286"/>
+        <location filename="core_strings.h" line="298"/>
+        <location filename="core_strings.h" line="330"/>
         <source>Max synthesized shortname length</source>
         <translation type="unfinished">أقصى طول للاسم المختصر المُولَّد</translation>
     </message>
@@ -42,14 +42,14 @@
         <location filename="core_strings.h" line="56"/>
         <location filename="core_strings.h" line="65"/>
         <location filename="core_strings.h" line="90"/>
-        <location filename="core_strings.h" line="114"/>
-        <location filename="core_strings.h" line="165"/>
-        <location filename="core_strings.h" line="175"/>
-        <location filename="core_strings.h" line="184"/>
-        <location filename="core_strings.h" line="193"/>
-        <location filename="core_strings.h" line="285"/>
-        <location filename="core_strings.h" line="297"/>
-        <location filename="core_strings.h" line="329"/>
+        <location filename="core_strings.h" line="115"/>
+        <location filename="core_strings.h" line="167"/>
+        <location filename="core_strings.h" line="177"/>
+        <location filename="core_strings.h" line="186"/>
+        <location filename="core_strings.h" line="195"/>
+        <location filename="core_strings.h" line="287"/>
+        <location filename="core_strings.h" line="299"/>
+        <location filename="core_strings.h" line="331"/>
         <source>Allow whitespace synth. shortnames</source>
         <translation type="unfinished">السماح بمسافات فارغة في الأسماء المختصرة المُولَّدة</translation>
     </message>
@@ -60,13 +60,13 @@
         <location filename="core_strings.h" line="57"/>
         <location filename="core_strings.h" line="66"/>
         <location filename="core_strings.h" line="91"/>
-        <location filename="core_strings.h" line="166"/>
-        <location filename="core_strings.h" line="176"/>
-        <location filename="core_strings.h" line="185"/>
-        <location filename="core_strings.h" line="194"/>
-        <location filename="core_strings.h" line="286"/>
-        <location filename="core_strings.h" line="298"/>
-        <location filename="core_strings.h" line="330"/>
+        <location filename="core_strings.h" line="168"/>
+        <location filename="core_strings.h" line="178"/>
+        <location filename="core_strings.h" line="187"/>
+        <location filename="core_strings.h" line="196"/>
+        <location filename="core_strings.h" line="288"/>
+        <location filename="core_strings.h" line="300"/>
+        <location filename="core_strings.h" line="332"/>
         <source>UPPERCASE synth. shortnames</source>
         <translation type="unfinished">الأسماء المختصرة المُولَّدة بحروف كبيرة</translation>
     </message>
@@ -77,13 +77,13 @@
         <location filename="core_strings.h" line="58"/>
         <location filename="core_strings.h" line="67"/>
         <location filename="core_strings.h" line="92"/>
-        <location filename="core_strings.h" line="167"/>
-        <location filename="core_strings.h" line="177"/>
-        <location filename="core_strings.h" line="186"/>
-        <location filename="core_strings.h" line="195"/>
-        <location filename="core_strings.h" line="287"/>
-        <location filename="core_strings.h" line="299"/>
-        <location filename="core_strings.h" line="331"/>
+        <location filename="core_strings.h" line="169"/>
+        <location filename="core_strings.h" line="179"/>
+        <location filename="core_strings.h" line="188"/>
+        <location filename="core_strings.h" line="197"/>
+        <location filename="core_strings.h" line="289"/>
+        <location filename="core_strings.h" line="301"/>
+        <location filename="core_strings.h" line="333"/>
         <source>Make synth. shortnames unique</source>
         <translation type="unfinished">جعل الأسماء المختصرة المُولَّدة فريدة</translation>
     </message>
@@ -94,12 +94,12 @@
         <location filename="core_strings.h" line="59"/>
         <location filename="core_strings.h" line="68"/>
         <location filename="core_strings.h" line="93"/>
-        <location filename="core_strings.h" line="168"/>
-        <location filename="core_strings.h" line="178"/>
-        <location filename="core_strings.h" line="187"/>
-        <location filename="core_strings.h" line="196"/>
-        <location filename="core_strings.h" line="300"/>
-        <location filename="core_strings.h" line="332"/>
+        <location filename="core_strings.h" line="170"/>
+        <location filename="core_strings.h" line="180"/>
+        <location filename="core_strings.h" line="189"/>
+        <location filename="core_strings.h" line="198"/>
+        <location filename="core_strings.h" line="302"/>
+        <location filename="core_strings.h" line="334"/>
         <source>Basename prepended to URL on output</source>
         <translation type="unfinished">إضافة الاسم الأساسي إلى URL عند الإخراج</translation>
     </message>
@@ -110,12 +110,12 @@
         <location filename="core_strings.h" line="60"/>
         <location filename="core_strings.h" line="69"/>
         <location filename="core_strings.h" line="94"/>
-        <location filename="core_strings.h" line="169"/>
-        <location filename="core_strings.h" line="179"/>
-        <location filename="core_strings.h" line="188"/>
-        <location filename="core_strings.h" line="197"/>
-        <location filename="core_strings.h" line="301"/>
-        <location filename="core_strings.h" line="333"/>
+        <location filename="core_strings.h" line="171"/>
+        <location filename="core_strings.h" line="181"/>
+        <location filename="core_strings.h" line="190"/>
+        <location filename="core_strings.h" line="199"/>
+        <location filename="core_strings.h" line="303"/>
+        <location filename="core_strings.h" line="335"/>
         <source>Use shortname instead of description</source>
         <translation type="unfinished">استخدام الاسم المختصر بدلًا من الوصف</translation>
     </message>
@@ -127,13 +127,13 @@
         <location filename="core_strings.h" line="70"/>
         <location filename="core_strings.h" line="81"/>
         <location filename="core_strings.h" line="95"/>
-        <location filename="core_strings.h" line="170"/>
-        <location filename="core_strings.h" line="180"/>
-        <location filename="core_strings.h" line="189"/>
-        <location filename="core_strings.h" line="198"/>
-        <location filename="core_strings.h" line="302"/>
-        <location filename="core_strings.h" line="334"/>
-        <location filename="core_strings.h" line="344"/>
+        <location filename="core_strings.h" line="172"/>
+        <location filename="core_strings.h" line="182"/>
+        <location filename="core_strings.h" line="191"/>
+        <location filename="core_strings.h" line="200"/>
+        <location filename="core_strings.h" line="304"/>
+        <location filename="core_strings.h" line="336"/>
+        <location filename="core_strings.h" line="346"/>
         <source>GPS datum (def. WGS 84)</source>
         <translation type="unfinished"> datum GPS (افتراضي: WGS 84)</translation>
     </message>
@@ -145,13 +145,13 @@
         <location filename="core_strings.h" line="71"/>
         <location filename="core_strings.h" line="87"/>
         <location filename="core_strings.h" line="96"/>
-        <location filename="core_strings.h" line="171"/>
-        <location filename="core_strings.h" line="181"/>
-        <location filename="core_strings.h" line="190"/>
-        <location filename="core_strings.h" line="199"/>
-        <location filename="core_strings.h" line="303"/>
-        <location filename="core_strings.h" line="335"/>
-        <location filename="core_strings.h" line="346"/>
+        <location filename="core_strings.h" line="173"/>
+        <location filename="core_strings.h" line="183"/>
+        <location filename="core_strings.h" line="192"/>
+        <location filename="core_strings.h" line="201"/>
+        <location filename="core_strings.h" line="305"/>
+        <location filename="core_strings.h" line="337"/>
+        <location filename="core_strings.h" line="348"/>
         <source>Write timestamps with offset x to UTC time</source>
         <translation type="unfinished">كتابة التواريخ مع التزامن x مع وقت UTC</translation>
     </message>
@@ -307,7 +307,7 @@
     </message>
     <message>
         <location filename="core_strings.h" line="74"/>
-        <location filename="core_strings.h" line="121"/>
+        <location filename="core_strings.h" line="122"/>
         <source>Bitmap of categories</source>
         <translation type="unfinished">رسم بياني للفئات</translation>
     </message>
@@ -348,7 +348,7 @@
     </message>
     <message>
         <location filename="core_strings.h" line="83"/>
-        <location filename="core_strings.h" line="345"/>
+        <location filename="core_strings.h" line="347"/>
         <source>Write position using this grid.</source>
         <translation type="unfinished">اكتب الموضع باستخدام هذه الشبكة.</translation>
     </message>
@@ -404,821 +404,831 @@
     </message>
     <message>
         <location filename="core_strings.h" line="103"/>
+        <source>Write description/notes to the comment record instead of the address field (multi-line on some Garmin devices)</source>
+        <translation type="unfinished">اكتب وصف/ملاحظات إلى سجل التعليق بدلًا من حقل العنوان (متعدد الأسطر على بعض أجهزة Garmin)</translation>
+    </message>
+    <message>
+        <location filename="core_strings.h" line="104"/>
         <source>Write notes to address field</source>
         <translation type="unfinished">اكتب ملاحظات إلى حقل العنوان</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="104"/>
+        <location filename="core_strings.h" line="105"/>
         <source>Write position to address field</source>
         <translation type="unfinished">اكتب الموقع إلى حقل العنوان</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="105"/>
+        <location filename="core_strings.h" line="106"/>
         <source>Default proximity</source>
         <translation type="unfinished">المسافة الافتراضية</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="106"/>
+        <location filename="core_strings.h" line="107"/>
         <source>After output job done sleep n second(s)</source>
         <translation type="unfinished">بعد اكتمال المهمة الناتجة، انتظر n ثانية (ثوان)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="107"/>
+        <location filename="core_strings.h" line="108"/>
         <source>Default speed</source>
         <translation type="unfinished">السرعة الافتراضية</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="108"/>
+        <location filename="core_strings.h" line="109"/>
         <source>Create unique waypoint names (default = yes)</source>
         <translation type="unfinished">أنشئ أسماء مسارات فريدة (الافتراضي = نعم)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="109"/>
+        <location filename="core_strings.h" line="110"/>
         <source>Units used for names with @speed (&apos;s&apos;tatute or &apos;m&apos;etric)</source>
         <translation type="unfinished">وحدات تستخدم لأسماء مع @speed (&apos;s&apos; للنظام الإمبراطوري أو &apos;m&apos; للنظام المتر)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="110"/>
+        <location filename="core_strings.h" line="111"/>
         <source>codec to use for writing strings</source>
         <translation type="unfinished">الكودك المستخدم لكتابة السلسلة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="111"/>
+        <location filename="core_strings.h" line="112"/>
         <source>language code to use for reading dual language files</source>
         <translation type="unfinished">رمز اللغة المستخدم لقراءة ملفات اللغتين</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="112"/>
+        <location filename="core_strings.h" line="113"/>
         <source>Garmin Points of Interest (.gpi)</source>
         <translation type="unfinished">نقاط الاهتمام من جارمين (.gpi)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="113"/>
-        <location filename="core_strings.h" line="201"/>
+        <location filename="core_strings.h" line="114"/>
+        <location filename="core_strings.h" line="203"/>
         <source>Length of generated shortnames</source>
         <translation type="unfinished">طول الأسماء القصيرة المولدة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="115"/>
-        <location filename="core_strings.h" line="129"/>
-        <location filename="core_strings.h" line="147"/>
+        <location filename="core_strings.h" line="116"/>
+        <location filename="core_strings.h" line="130"/>
+        <location filename="core_strings.h" line="148"/>
         <source>Default icon name</source>
         <translation type="unfinished">اسم الرمز الافتراضي</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="116"/>
-        <location filename="core_strings.h" line="272"/>
+        <location filename="core_strings.h" line="117"/>
+        <location filename="core_strings.h" line="274"/>
         <source>Return current position as a waypoint</source>
         <translation type="unfinished">إرجاع الموقع الحالي كمسار</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="117"/>
+        <location filename="core_strings.h" line="118"/>
         <source>Command unit to power itself down</source>
         <translation type="unfinished">أمر الوحدة بتعطيل نفسها</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="118"/>
+        <location filename="core_strings.h" line="119"/>
         <source>Erase existing courses when writing new ones</source>
         <translation type="unfinished">احذف المسارات الموجودة عند كتابة مسارات جديدة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="119"/>
+        <location filename="core_strings.h" line="120"/>
         <source>Sync GPS time to computer time</source>
         <translation type="unfinished">مزامنة وقت GPS مع وقت الكمبيوتر</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="120"/>
+        <location filename="core_strings.h" line="121"/>
         <source>Category number to use for written waypoints</source>
         <translation type="unfinished">رقم الفئة المستخدم لمسارات مكتوبة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="122"/>
+        <location filename="core_strings.h" line="123"/>
         <source>Speed in bits per second of serial port (baud=9600)</source>
         <translation type="unfinished">السرعة في بت في الثانية لمنفذ التسلسلي (باود=9600)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="123"/>
+        <location filename="core_strings.h" line="124"/>
         <source>override codec to use for device</source>
         <translation type="unfinished">تجاوز الكودك المستخدم للجهاز</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="124"/>
+        <location filename="core_strings.h" line="125"/>
         <source>Garmin serial/USB protocol</source>
         <translation type="unfinished">بروتوكول جارمين التسلسلي/USB</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="125"/>
+        <location filename="core_strings.h" line="126"/>
         <source>Write course rather than history, default yes</source>
         <translation type="unfinished">اكتب المسار بدلًا من التاريخ، الافتراضي هو نعم</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="126"/>
+        <location filename="core_strings.h" line="127"/>
         <source>Sport: Biking (deflt), Running, Other</source>
         <translation type="unfinished">الرياضة: ركوب الدراجات (افتراضي)، الجري، أخرى</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="127"/>
+        <location filename="core_strings.h" line="128"/>
         <source>Write global extension namespace declarations</source>
         <translation type="unfinished">اكتب إعلانات مساحة الاسم الامتدادية العالمية</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="128"/>
+        <location filename="core_strings.h" line="129"/>
         <source>Garmin Training Center (.tcx/.crs/.hst/.xml)</source>
         <translation type="unfinished">مركز تدريب Garmin (.tcx/.crs/.hst/.xml)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="130"/>
+        <location filename="core_strings.h" line="131"/>
         <source>Geocaching.com .loc</source>
         <translation type="unfinished">Geocaching.com .loc</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="131"/>
+        <location filename="core_strings.h" line="132"/>
         <source>Compact Output. Default is off</source>
         <translation type="unfinished">إخراج مضغوط. الافتراضي هو إيقاف</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="132"/>
+        <location filename="core_strings.h" line="133"/>
         <source>Property key to use for name</source>
         <translation type="unfinished">المفتاح الخاص لاستخدامه للاسم</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="133"/>
+        <location filename="core_strings.h" line="134"/>
         <source>Property key to use for description</source>
         <translation type="unfinished">المفتاح الخاص لاستخدامه للوصف</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="134"/>
+        <location filename="core_strings.h" line="135"/>
         <source>GeoJson</source>
         <translation type="unfinished">GeoJson</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="135"/>
-        <location filename="core_strings.h" line="138"/>
-        <location filename="core_strings.h" line="212"/>
-        <location filename="core_strings.h" line="237"/>
-        <location filename="core_strings.h" line="256"/>
-        <location filename="core_strings.h" line="305"/>
+        <location filename="core_strings.h" line="136"/>
+        <location filename="core_strings.h" line="139"/>
+        <location filename="core_strings.h" line="214"/>
+        <location filename="core_strings.h" line="239"/>
+        <location filename="core_strings.h" line="258"/>
+        <location filename="core_strings.h" line="307"/>
         <source>Erase device data after download</source>
         <translation type="unfinished">امسح بيانات الجهاز بعد التنزيل</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="136"/>
-        <location filename="core_strings.h" line="139"/>
-        <location filename="core_strings.h" line="213"/>
-        <location filename="core_strings.h" line="257"/>
+        <location filename="core_strings.h" line="137"/>
+        <location filename="core_strings.h" line="140"/>
+        <location filename="core_strings.h" line="215"/>
+        <location filename="core_strings.h" line="259"/>
         <source>Only erase device data, do not download anything</source>
         <translation type="unfinished">امسح بيانات الجهاز فقط، ولا تنزّل أي شيء</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="137"/>
+        <location filename="core_strings.h" line="138"/>
         <source>GlobalSat DG-100/BT-335 Download</source>
         <translation type="unfinished">تنزيل GlobalSat DG-100/BT-335</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="140"/>
+        <location filename="core_strings.h" line="141"/>
         <source>GlobalSat DG-200 Download</source>
         <translation type="unfinished">تنزيل GlobalSat DG-200</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="141"/>
+        <location filename="core_strings.h" line="142"/>
         <source>GlobalSat DG-388 Binary File</source>
         <translation type="unfinished">ملف ثنائي GlobalSat DG-388</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="142"/>
+        <location filename="core_strings.h" line="143"/>
         <source>list tracks</source>
         <translation type="unfinished">قائمة المسارات</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="143"/>
         <location filename="core_strings.h" line="144"/>
-        <location filename="core_strings.h" line="236"/>
-        <location filename="core_strings.h" line="313"/>
+        <location filename="core_strings.h" line="145"/>
+        <location filename="core_strings.h" line="238"/>
+        <location filename="core_strings.h" line="315"/>
         <source>Dump raw data to this file</source>
         <translation type="unfinished">قم بتصدير البيانات الخام إلى هذا الملف</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="145"/>
+        <location filename="core_strings.h" line="146"/>
         <source>Time zone ID</source>
         <translation type="unfinished">معرف منطقة الزمن</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="146"/>
+        <location filename="core_strings.h" line="147"/>
         <source>GlobalSat GH625XT GPS training watch</source>
         <translation type="unfinished">ساعة تدريب GPS GlobalSat GH625XT</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="148"/>
+        <location filename="core_strings.h" line="149"/>
         <source>Export linestrings for tracks and routes</source>
         <translation type="unfinished">تصدير خطوط الاستمرار للمسارات والطرق</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="149"/>
+        <location filename="core_strings.h" line="150"/>
         <source>Export placemarks for tracks and routes</source>
         <translation type="unfinished">تصدير العلامات المكانية للمسارات والطرق</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="150"/>
+        <location filename="core_strings.h" line="151"/>
         <source>Width of lines, in pixels</source>
         <translation type="unfinished">عرض الخطوط، بالبكسلات</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="151"/>
+        <location filename="core_strings.h" line="152"/>
         <source>Line color, specified in hex AABBGGRR</source>
         <translation type="unfinished">لون الخط، محدد بـ hex AABBGGRR</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="152"/>
+        <location filename="core_strings.h" line="153"/>
         <source>Altitudes are absolute and not clamped to ground</source>
         <translation type="unfinished">الارتفاعات مطلقة ولا تُحَدَّدُ إلى الأرض</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="153"/>
+        <location filename="core_strings.h" line="154"/>
         <source>Draw extrusion line from trackpoint to ground</source>
         <translation type="unfinished">ارسم خط التمديد من نقطة المسار إلى الأرض</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="154"/>
+        <location filename="core_strings.h" line="155"/>
         <source>Write KML track (default = 0)</source>
         <translation type="unfinished">اكتب مسار KML (الافتراضي = 0)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="155"/>
+        <location filename="core_strings.h" line="156"/>
         <source>Include extended data for trackpoints (default = 1)</source>
         <translation type="unfinished">شامل البيانات الممتدة لنقاط المسار (الافتراضي = 1)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="156"/>
+        <location filename="core_strings.h" line="157"/>
         <source>Indicate direction of travel in track icons (default = 0)</source>
         <translation type="unfinished">أظهر اتجاه السفر في أيقونات المسار (الافتراضي = 0)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="157"/>
+        <location filename="core_strings.h" line="158"/>
         <source>Units used when writing comments (&apos;s&apos;tatute, &apos;m&apos;etric,&apos; &apos;n&apos;autical, &apos;a&apos;viation)</source>
         <translation type="unfinished">الوحدات المستخدمة عند كتابة التعليقات (&apos;s&apos;القانونية، &apos;m&apos;القياسية، &apos;n&apos;البحرية، &apos;a&apos;الجوية)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="158"/>
+        <location filename="core_strings.h" line="159"/>
         <source>Display labels on track and routepoints  (default = 1)</source>
         <translation type="unfinished">عرض التسميات على المسار ونقاط الوجهة (الافتراضي = 1)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="159"/>
+        <location filename="core_strings.h" line="160"/>
         <source>Retain at most this number of position points  (0 = unlimited)</source>
         <translation type="unfinished">احتفظ بعدد نقاط الموضع الأقصى (0 = غير محدود)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="160"/>
+        <location filename="core_strings.h" line="161"/>
         <source>Rotate colors for tracks and routes (default automatic)</source>
         <translation type="unfinished">قم بتدوير الألوان للمسارات والطرق (الافتراضي تلقائي)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="161"/>
+        <location filename="core_strings.h" line="162"/>
         <source>Precision of coordinates, number of decimals</source>
         <translation type="unfinished">دقة الإحداثيات، عدد الفواصل العشرية</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="162"/>
+        <location filename="core_strings.h" line="163"/>
         <source>Google Earth (Keyhole) Markup Language</source>
         <translation type="unfinished">لغة ترميز Google Earth (Keyhole)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="163"/>
+        <location filename="core_strings.h" line="164"/>
+        <source>Google Maps Timeline</source>
+        <translation type="unfinished">تقويم خرائط جوجل</translation>
+    </message>
+    <message>
+        <location filename="core_strings.h" line="165"/>
         <source>Google Takeout Location History</source>
         <translation type="unfinished">سجل الموقع من Google Takeout</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="172"/>
+        <location filename="core_strings.h" line="174"/>
         <source>GPS Tracking Key Pro text</source>
         <translation type="unfinished">نص GPS Tracking Key Pro</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="173"/>
+        <location filename="core_strings.h" line="175"/>
         <source>GPS TrackMaker</source>
         <translation type="unfinished">GPS TrackMaker</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="182"/>
+        <location filename="core_strings.h" line="184"/>
         <source>GPSBabel arc filter file</source>
         <translation type="unfinished">ملف مرشح GPSBabel arc</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="191"/>
+        <location filename="core_strings.h" line="193"/>
         <source>GpsDrive Format</source>
         <translation type="unfinished">تنسيق GpsDrive</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="200"/>
+        <location filename="core_strings.h" line="202"/>
         <source>GpsDrive Format for Tracks</source>
         <translation type="unfinished">تنسيق GpsDrive للمسارات</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="202"/>
+        <location filename="core_strings.h" line="204"/>
         <source>No whitespace in generated shortnames</source>
         <translation type="unfinished">لا مسافات بيضاء في الأسماء المختصرة المولدة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="203"/>
+        <location filename="core_strings.h" line="205"/>
         <source>Create waypoints from geocache log entries</source>
         <translation type="unfinished">إنشاء نقاط مسارات من سجلات الجيوكاش</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="204"/>
+        <location filename="core_strings.h" line="206"/>
         <source>Base URL for link tag in output</source>
         <translation type="unfinished">العنوان الأساسي لـ URL لعلامة الارتباط في المخرجات</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="205"/>
+        <location filename="core_strings.h" line="207"/>
         <source>Target GPX version for output</source>
         <translation type="unfinished">الإصدار المستهدف لـ GPX في المخرجات</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="206"/>
+        <location filename="core_strings.h" line="208"/>
         <source>Add info (depth) as Humminbird extension</source>
         <translation type="unfinished">إضافة معلومات (العمق) كامتداد Humminbird</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="207"/>
+        <location filename="core_strings.h" line="209"/>
         <source>Add info (depth) as Garmin extension</source>
         <translation type="unfinished">إضافة معلومات (العمق) كامتداد Garmin</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="208"/>
+        <location filename="core_strings.h" line="210"/>
         <source>Precision of elevations, number of decimals</source>
         <translation type="unfinished">دقة الارتفاعات، عدد الفواصل العشرية</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="209"/>
+        <location filename="core_strings.h" line="211"/>
         <source>GPX XML</source>
         <translation type="unfinished">GPX XML</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="210"/>
-        <location filename="core_strings.h" line="215"/>
-        <location filename="core_strings.h" line="254"/>
-        <location filename="core_strings.h" line="259"/>
+        <location filename="core_strings.h" line="212"/>
+        <location filename="core_strings.h" line="217"/>
+        <location filename="core_strings.h" line="256"/>
+        <location filename="core_strings.h" line="261"/>
         <source>MTK compatible CSV output file</source>
         <translation type="unfinished">ملف إخراج CSV متوافق مع MTK</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="211"/>
+        <location filename="core_strings.h" line="213"/>
         <source>Holux M-241 (MTK based) Binary File Format</source>
         <translation type="unfinished">تنسيق الملف الثنائي Holux M-241 (مُعتمد على MTK)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="214"/>
-        <location filename="core_strings.h" line="258"/>
+        <location filename="core_strings.h" line="216"/>
+        <location filename="core_strings.h" line="260"/>
         <source>Enable logging after download</source>
         <translation type="unfinished">تمكين التسجيل بعد التنزيل</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="216"/>
-        <location filename="core_strings.h" line="260"/>
+        <location filename="core_strings.h" line="218"/>
+        <location filename="core_strings.h" line="262"/>
         <source>Size of blocks in KB to request from device</source>
         <translation type="unfinished">حجم الكتل بالكيلوبايت لطلبها من الجهاز</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="217"/>
+        <location filename="core_strings.h" line="219"/>
         <source>Holux M-241 (MTK based) download</source>
         <translation type="unfinished">تنزيل Holux M-241 (مُعتمد على MTK)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="218"/>
+        <location filename="core_strings.h" line="220"/>
         <source>Path to HTML style sheet</source>
         <translation type="unfinished">مسار ورقة الأنماط HTML</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="219"/>
-        <location filename="core_strings.h" line="338"/>
-        <location filename="core_strings.h" line="350"/>
+        <location filename="core_strings.h" line="221"/>
+        <location filename="core_strings.h" line="340"/>
+        <location filename="core_strings.h" line="352"/>
         <source>Encrypt hints using ROT13</source>
         <translation type="unfinished">تشفير التلميحات باستخدام ROT13</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="220"/>
-        <location filename="core_strings.h" line="339"/>
+        <location filename="core_strings.h" line="222"/>
+        <location filename="core_strings.h" line="341"/>
         <source>Include groundspeak logs if present</source>
         <translation type="unfinished">إدراج سجلات Groundspeak إذا كانت موجودة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="221"/>
-        <location filename="core_strings.h" line="340"/>
+        <location filename="core_strings.h" line="223"/>
+        <location filename="core_strings.h" line="342"/>
         <source>Degrees output as &apos;ddd&apos;, &apos;dmm&apos;(default) or &apos;dms&apos;</source>
         <translation type="unfinished">الدرجات المخرجة كـ &apos;ddd&apos;, &apos;dmm&apos; (الافتراضي) أو &apos;dms&apos;</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="222"/>
-        <location filename="core_strings.h" line="341"/>
+        <location filename="core_strings.h" line="224"/>
+        <location filename="core_strings.h" line="343"/>
         <source>Units for altitude (f)eet or (m)etres</source>
         <translation type="unfinished">وحدات الارتفاع (f) قدم أو (m) أمتار</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="223"/>
+        <location filename="core_strings.h" line="225"/>
         <source>HTML Output</source>
         <translation type="unfinished">مخرجات HTML</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="224"/>
+        <location filename="core_strings.h" line="226"/>
         <source>Humminbird tracks (.ht)</source>
         <translation type="unfinished">مسارات Humminbird (.ht)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="225"/>
+        <location filename="core_strings.h" line="227"/>
         <source>Humminbird waypoints and routes (.hwr)</source>
         <translation type="unfinished">نقاط مسارات ومسارات Humminbird (.hwr)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="226"/>
+        <location filename="core_strings.h" line="228"/>
         <source>(USR input) Ignore event marker icons on read</source>
         <translation type="unfinished">(USR input) تجاهل أيقونات علامات الحدث أثناء القراءة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="227"/>
+        <location filename="core_strings.h" line="229"/>
         <source>(USR output) Treat waypoints as icons on write</source>
         <translation type="unfinished">(USR output) معالجة النقاط الملاحية كأيقونات عند الكتابة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="228"/>
+        <location filename="core_strings.h" line="230"/>
         <source>(USR output) Merge into one segmented trail</source>
         <translation type="unfinished">(USR output) دمجها في مسار مُقسم واحد</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="229"/>
+        <location filename="core_strings.h" line="231"/>
         <source>(USR input) Break segments into separate trails</source>
         <translation type="unfinished">(USR input) تقسيم الأجزاء إلى مسارات منفصلة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="230"/>
+        <location filename="core_strings.h" line="232"/>
         <source>(USR output) Write version</source>
         <translation type="unfinished">(USR output) كتابة الإصدار</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="231"/>
+        <location filename="core_strings.h" line="233"/>
         <source>(USR output) Output file title string</source>
         <translation type="unfinished">(USR output) سلسلة عنوان الملف المُخرجة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="232"/>
+        <location filename="core_strings.h" line="234"/>
         <source>(USR output) Device serial number</source>
         <translation type="unfinished">(USR output) رقم التسلسل للجهاز</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="233"/>
+        <location filename="core_strings.h" line="235"/>
         <source>(USR output) Output file content description</source>
         <translation type="unfinished">(USR output) وصف محتوى الملف المُخرجة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="234"/>
+        <location filename="core_strings.h" line="236"/>
         <source>Lowrance USR</source>
         <translation type="unfinished">Lowrance USR</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="235"/>
-        <location filename="core_strings.h" line="308"/>
+        <location filename="core_strings.h" line="237"/>
+        <location filename="core_strings.h" line="310"/>
         <source>Baud rate used for download</source>
         <translation type="unfinished">معدل الباود المستخدم للتنزيل</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="238"/>
-        <location filename="core_strings.h" line="311"/>
+        <location filename="core_strings.h" line="240"/>
+        <location filename="core_strings.h" line="313"/>
         <source>First sector to be read from the device</source>
         <translation type="unfinished">أول قطاع يُقرأ من الجهاز</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="239"/>
-        <location filename="core_strings.h" line="309"/>
+        <location filename="core_strings.h" line="241"/>
+        <location filename="core_strings.h" line="311"/>
         <source>Baud rate used to init device (0=autodetect)</source>
         <translation type="unfinished">معدل الباود المستخدم لتهيئة الجهاز (0=اكتشاف تلقائي)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="240"/>
-        <location filename="core_strings.h" line="312"/>
+        <location filename="core_strings.h" line="242"/>
+        <location filename="core_strings.h" line="314"/>
         <source>Last sector to be read from the device (-1: smart read everything)</source>
         <translation type="unfinished">آخر قطاع يُقرأ من الجهاز (-1: قراءة ذكية لجميع البيانات)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="241"/>
-        <location filename="core_strings.h" line="314"/>
+        <location filename="core_strings.h" line="243"/>
+        <location filename="core_strings.h" line="316"/>
         <source>Disable output (useful with erase)</source>
         <translation type="unfinished">تعطيل المخرجات (مفيد مع المسح)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="242"/>
-        <location filename="core_strings.h" line="310"/>
+        <location filename="core_strings.h" line="244"/>
+        <location filename="core_strings.h" line="312"/>
         <source>Number of sectors to read at once (0=use single sector mode)</source>
         <translation type="unfinished">عدد القطاعات التي تُقرأ في المرة الواحدة (0=استخدام وضع القطاع الواحد)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="243"/>
+        <location filename="core_strings.h" line="245"/>
         <source>POI for Home Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">نقطة مرجعية لرمز المنزل كـ lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="244"/>
+        <location filename="core_strings.h" line="246"/>
         <source>POI for Car Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">نقطة مرجعية لرمز السيارة كـ lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="245"/>
+        <location filename="core_strings.h" line="247"/>
         <source>POI for Boat Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">نقطة مرجعية لرمز القارب كـ lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="246"/>
+        <location filename="core_strings.h" line="248"/>
         <source>POI for Heart Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">نقطة مرجعية لرمز القلب كـ lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="247"/>
+        <location filename="core_strings.h" line="249"/>
         <source>POI for Bar Symbol as lat:lng[:alt]</source>
         <translation type="unfinished">نقطة مرجعية لرمز الشريط كـ lat:lng[:alt]</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="248"/>
-        <location filename="core_strings.h" line="315"/>
-        <location filename="core_strings.h" line="320"/>
+        <location filename="core_strings.h" line="250"/>
+        <location filename="core_strings.h" line="317"/>
+        <location filename="core_strings.h" line="322"/>
         <source>Seconds that GPS time tracks UTC (0: best guess)</source>
         <translation type="unfinished">ثواني تتبع وقت GPS لـ UTC (0: أفضل تخمين)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="249"/>
-        <location filename="core_strings.h" line="316"/>
-        <location filename="core_strings.h" line="321"/>
+        <location filename="core_strings.h" line="251"/>
+        <location filename="core_strings.h" line="318"/>
+        <location filename="core_strings.h" line="323"/>
         <source>GPS week rollover period we&apos;re in (-1: best guess)</source>
         <translation type="unfinished">فترة تكرار أسبوع GPS التي نحن فيها (-1: أفضل تخمين)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="250"/>
+        <location filename="core_strings.h" line="252"/>
         <source>MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)</source>
         <translation type="unfinished">MiniHomer، مُسجِّل مُعتمد على skyTraq Venus 6 (تنزيل المسارات، النقاط المكانية وجلب/تعيين POI)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="251"/>
+        <location filename="core_strings.h" line="253"/>
         <source>Garmin Mobile XT ([ATRK]/STRK)</source>
         <translation type="unfinished">Garmin Mobile XT ([ATRK]/STRK)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="252"/>
+        <location filename="core_strings.h" line="254"/>
         <source>Track name processing option ([0]-nrm/1-ign)</source>
         <translation type="unfinished">خيار معالجة اسم المسار ([0]-nrm/1-ign)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="253"/>
+        <location filename="core_strings.h" line="255"/>
         <source>Mobile Garmin XT Track files</source>
         <translation type="unfinished">ملفات مسار Garmin Mobile XT</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="255"/>
+        <location filename="core_strings.h" line="257"/>
         <source>MTK Logger (iBlue 747,...) Binary File Format</source>
         <translation type="unfinished">مُسجِّل MTK (iBlue 747,...) تنسيق ملف ثنائي</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="261"/>
+        <location filename="core_strings.h" line="263"/>
         <source>MTK Logger (iBlue 747,Qstarz BT-1000,...) download</source>
         <translation type="unfinished">تنزيل مُسجِّل MTK (iBlue 747,Qstarz BT-1000,...)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="262"/>
+        <location filename="core_strings.h" line="264"/>
         <source>Datum (default=NAD27)</source>
         <translation type="unfinished">Datum (الافتراضي=NAD27)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="263"/>
+        <location filename="core_strings.h" line="265"/>
         <source>National Geographic Topo .tpg (waypoints)</source>
         <translation type="unfinished">National Geographic Topo .tpg (النقاط المكانية)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="264"/>
+        <location filename="core_strings.h" line="266"/>
         <source>National Geographic Topo 2.x .tpo</source>
         <translation type="unfinished">National Geographic Topo 2.x .tpo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="265"/>
+        <location filename="core_strings.h" line="267"/>
         <source>National Geographic Topo 3.x/4.x .tpo</source>
         <translation type="unfinished">National Geographic Topo 3.x/4.x .tpo</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="266"/>
+        <location filename="core_strings.h" line="268"/>
         <source>Max length of waypoint name to write</source>
         <translation type="unfinished">الحد الأقصى لطول اسم النقطة المكانية التي سيتم كتابتها</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="267"/>
+        <location filename="core_strings.h" line="269"/>
         <source>Read/write GPRMC sentences</source>
         <translation type="unfinished">قراءة/كتابة جمل GPRMC</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="268"/>
+        <location filename="core_strings.h" line="270"/>
         <source>Read/write GPGGA sentences</source>
         <translation type="unfinished">قراءة/كتابة جمل GPGGA</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="269"/>
+        <location filename="core_strings.h" line="271"/>
         <source>Read/write GPVTG sentences</source>
         <translation type="unfinished">قراءة/كتابة جمل GPVTG</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="270"/>
+        <location filename="core_strings.h" line="272"/>
         <source>Read/write GPGSA sentences</source>
         <translation type="unfinished">قراءة/كتابة جمل GPGSA</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="271"/>
+        <location filename="core_strings.h" line="273"/>
         <source>Complete date-free tracks with given date (YYYYMMDD).</source>
         <translation type="unfinished">إكمال المسارات الخالية من التاريخ بالتواريخ المحددة (YDDDMMDD).</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="273"/>
+        <location filename="core_strings.h" line="275"/>
         <source>Decimal seconds to pause between groups of strings</source>
         <translation type="unfinished">الثواني العشرية لوقف بين مجموعات النصوص</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="274"/>
+        <location filename="core_strings.h" line="276"/>
         <source>Append realtime positioning data to the output file instead of truncating</source>
         <translation type="unfinished">إضافة بيانات الموضع في الوقت الفعلي إلى ملف الإخراج بدلًا من قصه</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="275"/>
+        <location filename="core_strings.h" line="277"/>
         <source>Speed in bits per second of serial port (baud=4800)</source>
         <translation type="unfinished">سرعة البتات في الثانية لمنفذ التسلسلي (باود=4800)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="276"/>
+        <location filename="core_strings.h" line="278"/>
         <source>Write tracks for Gisteq Phototracker</source>
         <translation type="unfinished">كتابة المسارات لـ Gisteq Phototracker</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="277"/>
+        <location filename="core_strings.h" line="279"/>
         <source>Accept position fixes in gpgga marked invalid</source>
         <translation type="unfinished">قبول التصحيحات الموضعية في gpgga المُعلَّمة كغير صالحة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="278"/>
+        <location filename="core_strings.h" line="280"/>
         <source>NMEA 0183 sentences</source>
         <translation type="unfinished">جمل NMEA 0183</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="279"/>
+        <location filename="core_strings.h" line="281"/>
         <source>Write additional way tag key/value pairs</source>
         <translation type="unfinished">كتابة أزواج مفتاح/قيمة إضافية للعلامة way</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="280"/>
+        <location filename="core_strings.h" line="282"/>
         <source>Write additional node tag key/value pairs</source>
         <translation type="unfinished">كتابة أزواج مفتاح/قيمة إضافية للعلامة node</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="281"/>
+        <location filename="core_strings.h" line="283"/>
         <source>Use this value as custom created_by value</source>
         <translation type="unfinished">استخدام هذا القيمة كقيمة مخصصة لـ created_by</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="282"/>
+        <location filename="core_strings.h" line="284"/>
         <source>OpenStreetMap data files</source>
         <translation type="unfinished">ملفات بيانات OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="283"/>
+        <location filename="core_strings.h" line="285"/>
         <source>Write all tracks into one file</source>
         <translation type="unfinished">كتابة جميع المسارات في ملف واحد</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="288"/>
+        <location filename="core_strings.h" line="290"/>
         <source>Waypoint foreground color</source>
         <translation type="unfinished">لون خلفية النقطة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="289"/>
+        <location filename="core_strings.h" line="291"/>
         <source>Waypoint background color</source>
         <translation type="unfinished">لون خلفية النقطة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="290"/>
+        <location filename="core_strings.h" line="292"/>
         <source>Proximity distance</source>
         <translation type="unfinished">المسافة القريبة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="291"/>
+        <location filename="core_strings.h" line="293"/>
         <source>Unit used in altitude values</source>
         <translation type="unfinished">الوحدة المستخدمة في قيم الارتفاع</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="292"/>
+        <location filename="core_strings.h" line="294"/>
         <source>Unit used in proximity values</source>
         <translation type="unfinished">الوحدة المستخدمة في قيم القرب</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="293"/>
+        <location filename="core_strings.h" line="295"/>
         <source>codec to use for reading and writing strings (default windows-1252)</source>
         <translation type="unfinished">الكودك المستخدم لقراءة وكتابة النصوص (الافتراضي: windows-1252)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="294"/>
+        <location filename="core_strings.h" line="296"/>
         <source>OziExplorer</source>
         <translation type="unfinished">OziExplorer</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="295"/>
+        <location filename="core_strings.h" line="297"/>
         <source>Qstarz BL-1000</source>
         <translation type="unfinished">Qstarz BL-1000</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="304"/>
+        <location filename="core_strings.h" line="306"/>
         <source>See You flight analysis data</source>
         <translation type="unfinished">بيانات تحليل الرحلات See You</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="306"/>
+        <location filename="core_strings.h" line="308"/>
         <source>Set location finder target location as lat,lng</source>
         <translation type="unfinished">تعيين موقع الهدف في محدد الموقع كـ lat,lng</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="307"/>
+        <location filename="core_strings.h" line="309"/>
         <source>Configure logging parameter as tmin:tmax:dmin:dmax</source>
         <translation type="unfinished">تهيئة معلمة التسجيل كـ tmin:tmax:dmin:dmax</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="317"/>
+        <location filename="core_strings.h" line="319"/>
         <source>SkyTraq Venus based loggers (download)</source>
         <translation type="unfinished">مُسجِّلات SkyTraq Venus القائمة على التنزيل</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="318"/>
+        <location filename="core_strings.h" line="320"/>
         <source>First sector to be read from the file</source>
         <translation type="unfinished">القطاع الأول الذي سيتم قراءته من الملف</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="319"/>
+        <location filename="core_strings.h" line="321"/>
         <source>Last sector to be read from the file (-1: read till empty sector)</source>
         <translation type="unfinished">القطاع الأخير الذي سيتم قراءته من الملف (-1: القراءة حتى القطاع الفارغ)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="322"/>
+        <location filename="core_strings.h" line="324"/>
         <source>SkyTraq Venus based loggers Binary File Format</source>
         <translation type="unfinished">تنسيق ملف مُسجِّلات SkyTraq Venus الثنائي</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="323"/>
+        <location filename="core_strings.h" line="325"/>
         <source>Video position for which exact GPS time is known (hhmmss[.sss], default is 00:00:00,000)</source>
         <translation type="unfinished">موضع الفيديو الذي يُعرف فيه الوقت الدقيق لـ GPS (hhmmss[.sss]، الافتراضي هو 00:00:00,000)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="324"/>
+        <location filename="core_strings.h" line="326"/>
         <source>GPS time at position video_time (hhmmss[.sss], default is first timestamp of track)</source>
         <translation type="unfinished">وقت GPS عند الموضع video_time (hhmmss[.sss]، الافتراضي هو أول علامة زمنية للمسار)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="325"/>
+        <location filename="core_strings.h" line="327"/>
         <source>GPS date at position video_time (yyyymmdd, default is first timestamp of track)</source>
         <translation type="unfinished">تاريخ GPS عند الموضع video_time (yyyymmdd، الافتراضي هو أول علامة زمنية للمسار)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="326"/>
+        <location filename="core_strings.h" line="328"/>
         <source>Format for subtitles</source>
         <translation type="unfinished">تنسيق العناوين الفرعية</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="327"/>
+        <location filename="core_strings.h" line="329"/>
         <source>SubRip subtitles for video mapping (.srt)</source>
         <translation type="unfinished">عناوين فرعية SubRip لخرائط الفيديو (.srt)</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="336"/>
+        <location filename="core_strings.h" line="338"/>
         <source>Tab delimited fields useful for OpenOffice</source>
         <translation type="unfinished">حقول مفصولة بـ Tab مفيدة لـ OpenOffice</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="337"/>
+        <location filename="core_strings.h" line="339"/>
         <source>Suppress separator lines between waypoints</source>
         <translation type="unfinished">إسقاط الخطوط الفاصلة بين النقاط الملاحية</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="342"/>
+        <location filename="core_strings.h" line="344"/>
         <source>Write each waypoint in a separate file</source>
         <translation type="unfinished">كتابة كل نقطة ملاحية في ملف منفصل</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="343"/>
+        <location filename="core_strings.h" line="345"/>
         <source>Textual Output</source>
         <translation type="unfinished">الإخراج النصي</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="347"/>
+        <location filename="core_strings.h" line="349"/>
         <source>Write name(s) of format(s) from input session(s)</source>
         <translation type="unfinished">كتابة اسم(أسماء) تنسيق(تنسيق) من الجلسة(الجلسات) المدخلة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="348"/>
+        <location filename="core_strings.h" line="350"/>
         <source>Write filename(s) from input session(s)</source>
         <translation type="unfinished">كتابة اسم(أسماء) الملف من الجلسة(الجلسات) المدخلة</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="349"/>
+        <location filename="core_strings.h" line="351"/>
         <source>Universal csv with field structure in first line</source>
         <translation type="unfinished">CSV عالمي مع هيكل الحقل في السطر الأول</translation>
     </message>
     <message>
-        <location filename="core_strings.h" line="351"/>
+        <location filename="core_strings.h" line="353"/>
         <source>Vcard Output (for iPod)</source>
         <translation type="unfinished">إخراج Vcard (لـ iPod)</translation>
     </message>

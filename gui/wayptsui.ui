@@ -24,7 +24,7 @@
        <property name="whatsThis">
         <string>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </string>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</string>
        </property>
        <property name="text">
         <string>Radius</string>
@@ -39,7 +39,7 @@ By default, all remaining points are sorted so that points closer to the center 
        <property name="whatsThis">
         <string>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </string>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</string>
        </property>
        <property name="text">
         <string>Position</string>
@@ -130,7 +130,7 @@ This option specifies the minimum allowable distance between two points. If two 
      <item row="1" column="2">
       <widget class="QCheckBox" name="locationsCheck">
        <property name="toolTip">
-        <string>Suppress duplicate waypoint based on coords. </string>
+        <string>Suppress duplicate waypoint based on coords.</string>
        </property>
        <property name="whatsThis">
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -165,7 +165,7 @@ p, li { white-space: pre-wrap; }
         <string>Remove duplicates</string>
        </property>
        <property name="whatsThis">
-        <string>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint's name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </string>
+        <string>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint's name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</string>
        </property>
        <property name="text">
         <string>Duplicates</string>
@@ -205,7 +205,7 @@ p, li { white-space: pre-wrap; }
         </size>
        </property>
        <property name="toolTip">
-        <string>Maximum distance from center. </string>
+        <string>Maximum distance from center.</string>
        </property>
       </widget>
      </item>

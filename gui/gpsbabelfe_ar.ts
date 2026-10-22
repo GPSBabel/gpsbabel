@@ -18,7 +18,7 @@
     </message>
     <message>
         <location filename="advui.ui" line="20"/>
-        <source>Create smart shortened names. </source>
+        <source>Create smart shortened names.</source>
         <translation type="unfinished">إنشاء أسماء مختصرة ذكية.</translation>
     </message>
     <message>
@@ -178,27 +178,27 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cc" line="47"/>
+        <location filename="filterdlg.cc" line="49"/>
         <source>Tracks</source>
         <translation type="unfinished">المسارات</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="50"/>
+        <location filename="filterdlg.cc" line="52"/>
         <source>Waypoints</source>
         <translation type="unfinished">النقاط</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="53"/>
+        <location filename="filterdlg.cc" line="55"/>
         <source>Routes &amp; Tracks</source>
         <translation type="unfinished">المسارات والمسارات</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="56"/>
+        <location filename="filterdlg.cc" line="58"/>
         <source>Miscellaneous</source>
         <translation type="unfinished">متنوع</translation>
     </message>
     <message>
-        <location filename="filterdlg.cc" line="111"/>
+        <location filename="filterdlg.cc" line="113"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation type="unfinished">هل أنت متأكد أنك تريد إعادة تعيين جميع خيارات التصفية إلى القيم الافتراضية؟</translation>
     </message>
@@ -212,7 +212,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="filterui.ui" line="17"/>
-        <source>Data filters process and transform the data between input and output files or devices. </source>
+        <source>Data filters process and transform the data between input and output files or devices.</source>
         <translation type="unfinished">تُعالج مرشحات البيانات وتحوّل البيانات بين الملفات المدخلة والمخرجة أو الأجهزة.</translation>
     </message>
     <message>
@@ -376,17 +376,22 @@ Higher number provides more detailed diagnostics.</source>
 <context>
     <name>LeafletMap</name>
     <message>
-        <location filename="leafletmap.cc" line="142"/>
+        <location filename="leafletmap.cc" line="118"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">خطأ في فتح ملف &quot;:/qtwebchannel/qwebchannel.js&quot;. تحقق من التثبيت</translation>
+    </message>
+    <message>
+        <location filename="leafletmap.cc" line="162"/>
         <source>Error opening &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">خطأ في فتح ملف &quot;leafletbase.html&quot;. تحقق من التثبيت</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="146"/>
+        <location filename="leafletmap.cc" line="165"/>
         <source>Missing &quot;leafletbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">ملف &quot;leafletbase.html&quot; مفقود. تحقق من التثبيت</translation>
     </message>
     <message>
-        <location filename="leafletmap.cc" line="164"/>
+        <location filename="leafletmap.cc" line="183"/>
         <source>Failed to load Leaflet maps base page</source>
         <translation type="unfinished">فشل تحميل صفحة الأساس لخرائط ليافلت</translation>
     </message>
@@ -471,61 +476,61 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">المسارات</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="533"/>
+        <location filename="leafletdlg.cc" line="541"/>
         <source>Show All Waypoints</source>
         <translation type="unfinished">إظهار جميع النقاط الملاحية</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="534"/>
+        <location filename="leafletdlg.cc" line="542"/>
         <source>Hide All Waypoints</source>
         <translation type="unfinished">إخفاء جميع النقاط الملاحية</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="535"/>
-        <location filename="leafletdlg.cc" line="542"/>
-        <location filename="leafletdlg.cc" line="549"/>
+        <location filename="leafletdlg.cc" line="543"/>
+        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="557"/>
         <source>Expand All</source>
         <translation type="unfinished">توسيع الكل</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="536"/>
-        <location filename="leafletdlg.cc" line="543"/>
-        <location filename="leafletdlg.cc" line="550"/>
+        <location filename="leafletdlg.cc" line="544"/>
+        <location filename="leafletdlg.cc" line="551"/>
+        <location filename="leafletdlg.cc" line="558"/>
         <source>Collapse All</source>
         <translation type="unfinished">طي الكل</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="540"/>
+        <location filename="leafletdlg.cc" line="548"/>
         <source>Show All Routes</source>
         <translation type="unfinished">إظهار جميع المسارات</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="541"/>
+        <location filename="leafletdlg.cc" line="549"/>
         <source>Hide All Routes</source>
         <translation type="unfinished">إخفاء جميع المسارات</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="547"/>
+        <location filename="leafletdlg.cc" line="555"/>
         <source>Show All Tracks</source>
         <translation type="unfinished">عرض جميع المسارات</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="548"/>
+        <location filename="leafletdlg.cc" line="556"/>
         <source>Hide All Tracks</source>
         <translation type="unfinished">إخفاء جميع المسارات</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="556"/>
+        <location filename="leafletdlg.cc" line="564"/>
         <source>Show Only This Waypoint</source>
         <translation type="unfinished">عرض هذه النقطة فقط</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="558"/>
+        <location filename="leafletdlg.cc" line="566"/>
         <source>Show Only This Track</source>
         <translation type="unfinished">عرض هذه المسار فقط</translation>
     </message>
     <message>
-        <location filename="leafletdlg.cc" line="560"/>
+        <location filename="leafletdlg.cc" line="568"/>
         <source>Show Only This Route</source>
         <translation type="unfinished">عرض هذه المسار فقط</translation>
     </message>
@@ -547,7 +552,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="21"/>
-        <source>Input </source>
+        <source>Input</source>
         <translation type="unfinished">الإدخال</translation>
     </message>
     <message>
@@ -586,7 +591,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="129"/>
-        <source>Browse for one or more input files. </source>
+        <source>Browse for one or more input files.</source>
         <translation type="unfinished">تصفح لاختيار ملفات إدخال واحدة أو أكثر.</translation>
     </message>
     <message>
@@ -607,7 +612,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="207"/>
-        <source>Options for the selected input format. </source>
+        <source>Options for the selected input format.</source>
         <translation type="unfinished">خيارات التنسيق المحدد للإدخال.</translation>
     </message>
     <message>
@@ -663,7 +668,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="427"/>
-        <source>More translation options. </source>
+        <source>More translation options.</source>
         <translation type="unfinished">خيارات ترجمة إضافية.</translation>
     </message>
     <message>
@@ -678,7 +683,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="460"/>
-        <source>If selected, output is to a file. </source>
+        <source>If selected, output is to a file.</source>
         <translation type="unfinished">إذا تم تحديد هذا، يتم إخراج البيانات إلى ملف.</translation>
     </message>
     <message>
@@ -693,7 +698,7 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="545"/>
-        <source>Browse for an output file name. </source>
+        <source>Browse for an output file name.</source>
         <translation type="unfinished">ابحث عن اسم ملف إخراج.</translation>
     </message>
     <message>
@@ -708,12 +713,12 @@ Higher number provides more detailed diagnostics.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="623"/>
-        <source>Options for the selected output format. </source>
+        <source>Options for the selected output format.</source>
         <translation type="unfinished">خيارات التنسيق المحدد للإخراج.</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="647"/>
-        <source>Output of GPSBabel translation process. </source>
+        <source>Output of GPSBabel translation process.</source>
         <translation type="unfinished">إخراج عملية تحويل GPSBabel.</translation>
     </message>
     <message>
@@ -762,17 +767,17 @@ Higher number provides more detailed diagnostics.</source>
         <translation type="unfinished">إعطاء تبرع...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="532"/>
+        <location filename="mainwindow.cc" line="535"/>
         <source>Select one or more input files</source>
         <translation type="unfinished">اختر ملفات إدخال واحدة أو أكثر</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="563"/>
         <source>Output File Name</source>
         <translation type="unfinished">اسم الملف الناتج</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="624"/>
+        <location filename="mainwindow.cc" line="627"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -781,7 +786,7 @@ This program cannot continue.</source>
 لا يمكن استمرار هذا البرنامج.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="635"/>
+        <location filename="mainwindow.cc" line="638"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -790,115 +795,117 @@ This program cannot continue.</source>
 لا يمكن استمرار هذا البرنامج.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="656"/>
+        <location filename="mainwindow.cc" line="659"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished">تنسيق الإدخال والخروج لا يدعمان %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="659"/>
+        <location filename="mainwindow.cc" line="662"/>
         <source>Input does not support %1; output format supports %1</source>
         <translation type="unfinished">تنسيق الإدخال لا يدعم %1؛ تنسيق الإخراج يدعم %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="662"/>
+        <location filename="mainwindow.cc" line="665"/>
         <source>Input format supports %1; output format does not support %1</source>
         <translation type="unfinished">تنسيق الإدخال يدعم %1؛ تنسيق الإخراج لا يدعم %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="665"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished">كلا تنسيق الإدخال والخروج يدعمان %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="686"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>waypoints</source>
         <translation type="unfinished">النقاط الملاحية</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="687"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>tracks</source>
         <translation type="unfinished">المسارات</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="688"/>
+        <location filename="mainwindow.cc" line="691"/>
         <source>routes</source>
         <translation type="unfinished">المسارات</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="783"/>
+        <location filename="mainwindow.cc" line="786"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished">لا توجد خيارات إدخال لتنسيق &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="789"/>
-        <location filename="mainwindow.cc" line="808"/>
+        <location filename="mainwindow.cc" line="792"/>
+        <location filename="mainwindow.cc" line="811"/>
         <source>Options for %1</source>
         <translation type="unfinished">خيارات لـ %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="805"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished">لا توجد خيارات إخراج لتنسيق &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="825"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished">لم يتم تحديد ترجمة صحيحة للنقاط الملاحية/المسارات/المسارات</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="841"/>
+        <location filename="mainwindow.cc" line="844"/>
         <source>No input file specified</source>
         <translation type="unfinished">لم يتم تحديد ملف إدخال</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="850"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid output specified</source>
         <translation type="unfinished">لم يتم تحديد مخرجات صحيحة</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="855"/>
+        <location filename="mainwindow.cc" line="858"/>
         <source>No output file specified</source>
         <translation type="unfinished">لم يتم تحديد ملف مخرجات</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="974"/>
+        <location filename="mainwindow.cc" line="977"/>
         <source>Failed to open temporary file &quot;%1&quot; for map preview.  The error was: &quot;%2&quot;.  The map preview will not be shown.</source>
         <translation type="unfinished">فشل في فتح الملف المؤقت &quot;%1&quot; لمعاينة الخريطة. كانت الخطأ: &quot;%2&quot;. لن تُعرض معاينة الخريطة.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="991"/>
+        <location filename="mainwindow.cc" line="994"/>
         <source>Translation successful</source>
         <translation type="unfinished">تم الترجمة بنجاح</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1003"/>
-        <source>Error preparing map: %1
-</source>
+        <location filename="mainwindow.cc" line="1006"/>
+        <source>Error preparing map: %1</source>
+        <oldsource>Error preparing map: %1
+</oldsource>
         <translation type="unfinished">خطأ في إعداد الخريطة: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1038"/>
-        <source>Error running gpsbabel: %1
-</source>
+        <location filename="mainwindow.cc" line="1049"/>
+        <source>Error running gpsbabel: %1</source>
+        <oldsource>Error running gpsbabel: %1
+</oldsource>
         <translation type="unfinished">خطأ في تشغيل gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1163"/>
+        <location filename="mainwindow.cc" line="1174"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished">هل أنت متأكد أنك تريد إعادة تعيين جميع خيارات التنسيق إلى القيم الافتراضية؟</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1193"/>
+        <location filename="mainwindow.cc" line="1204"/>
         <source>About %1</source>
         <translation type="unfinished">حول %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1241"/>
+        <location filename="mainwindow.cc" line="1252"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished">مُعَدِّلات البيانات النشطة واحدة أو أكثر</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1243"/>
+        <location filename="mainwindow.cc" line="1254"/>
         <source>No data filters are active</source>
         <translation type="unfinished">لا توجد مُعَدِّلات بيانات نشطة</translation>
     </message>
@@ -906,17 +913,22 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="122"/>
+        <location filename="map.cc" line="92"/>
+        <source>Error opening &quot;:/qtwebchannel/qwebchannel.js&quot; file.  Check installation</source>
+        <translation type="unfinished">خطأ في فتح ملف &quot;:/qtwebchannel/qwebchannel.js&quot;. تحقق من التثبيت</translation>
+    </message>
+    <message>
+        <location filename="map.cc" line="142"/>
         <source>Error opening &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">خطأ في فتح ملف &quot;gmapbase.html&quot;. تحقق من التثبيت</translation>
     </message>
     <message>
-        <location filename="map.cc" line="126"/>
+        <location filename="map.cc" line="145"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation type="unfinished">ملف &quot;gmapbase.html&quot; مفقود. تحقق من التثبيت</translation>
     </message>
     <message>
-        <location filename="map.cc" line="181"/>
+        <location filename="map.cc" line="200"/>
         <source>Failed to load Google maps base page</source>
         <translation type="unfinished">فشل تحميل صفحة قاعدة خرائط جوجل</translation>
     </message>
@@ -942,7 +954,7 @@ This program cannot continue.</source>
         <location filename="miscfltui.ui" line="34"/>
         <source>This filter can be used to convert GPS data between different data types.
 
-Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa. </source>
+Some GPS data formats support only some subset of waypoints, tracks, and routes. The transform filter allows you to convert between these types. For example, it can be used to convert a pile of waypoints (such as those from a CSV file) into a track or vice versa.</source>
         <translation type="unfinished">يمكن استخدام هذا المرشح لتحويل بيانات GPS بين أنواع مختلفة.
 
 بعض تنسيقات بيانات GPS تدعم فقط مجموعة فرعية من النقاط والمسارات والمسارات. يسمح مرشح التحويل بتحويل هذه الأنواع. على سبيل المثال، يمكن استخدامه لتحويل مجموعة من النقاط (مثل تلك من ملف CSV) إلى مسار أو العكس.</translation>
@@ -954,12 +966,12 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <source>Type of transformation. </source>
+        <source>Type of transformation.</source>
         <translation type="unfinished">نوع التحويل.</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <source>Delete original data after transform to prevent duplicated data. </source>
+        <source>Delete original data after transform to prevent duplicated data.</source>
         <translation type="unfinished">حذف البيانات الأصلية بعد التحويل لمنع تكرار البيانات.</translation>
     </message>
     <message>
@@ -974,28 +986,28 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="90"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="297"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="286"/>
         <source>Routes</source>
         <translation type="unfinished">المسارات</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="97"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="294"/>
-        <location filename="filterwidgets.cc" line="297"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="283"/>
+        <location filename="filterwidgets.cc" line="286"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Tracks</source>
         <translation type="unfinished">المسارات</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="104"/>
-        <location filename="filterwidgets.cc" line="293"/>
-        <location filename="filterwidgets.cc" line="295"/>
-        <location filename="filterwidgets.cc" line="296"/>
-        <location filename="filterwidgets.cc" line="298"/>
+        <location filename="filterwidgets.cc" line="282"/>
+        <location filename="filterwidgets.cc" line="284"/>
+        <location filename="filterwidgets.cc" line="285"/>
+        <location filename="filterwidgets.cc" line="287"/>
         <source>Waypoints</source>
         <translation type="unfinished">النقاط</translation>
     </message>
@@ -1048,7 +1060,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     </message>
     <message>
         <location filename="miscfltui.ui" line="215"/>
-        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order. </source>
+        <source>Simple filter to swap the coordinate values (latitude and longitude) of all points. This can be helpful for wrong defined/coded data. Or if you think, you can use one of our xcsv formats, but latitude and longitude are in opposite order.</source>
         <translation type="unfinished">مرشح بسيط لتبديل قيم الإحداثيات (العرض والطول) لجميع النقاط. قد يكون هذا مفيدًا لبيانات مُعرَّفة/مُشفَّرة خاطئة. أو إذا كنت تعتقد أن بإمكانك استخدام أحد تنسيقات xcsv الخاصة بنا، لكن العرض والطول مُرتَّبان بشكل عكسي.</translation>
     </message>
     <message>
@@ -1204,7 +1216,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="processwait.cc" line="44"/>
         <source> ... Process GPSBabel</source>
-        <translation type="unfinished">... معالجة GPSBabel</translation>
+        <translation type="unfinished"> ... معالجة GPSBabel</translation>
     </message>
     <message>
         <location filename="processwait.cc" line="61"/>
@@ -1217,7 +1229,7 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
     <message>
         <location filename="formatload.cc" line="174"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
-        <translation type="unfinished">خطأ في معالجة التنسيقات من تشغيل العملية </translation>
+        <translation type="unfinished">خطأ في معالجة التنسيقات من عملية تشغيل &quot;gpsbabel -^3&quot; في السطر %1</translation>
     </message>
 </context>
 <context>
@@ -1286,7 +1298,7 @@ The quality of the results will vary depending on the density of points in the o
     </message>
     <message>
         <location filename="rttrkui.ui" line="89"/>
-        <source>Maximum number points in track or route. </source>
+        <source>Maximum number points in track or route.</source>
         <translation type="unfinished">الحد الأقصى لعدد النقاط في المسار أو المسار.</translation>
     </message>
     <message>
@@ -1370,7 +1382,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
     </message>
     <message>
         <location filename="trackui.ui" line="17"/>
-        <source>This filter performs various operations on track data. </source>
+        <source>This filter performs various operations on track data.</source>
         <translation type="unfinished">يقوم هذا المرشح بتنفيذ عمليات مختلفة على بيانات المسار.</translation>
     </message>
     <message>
@@ -1387,7 +1399,7 @@ Additionally, if you&apos;re using this to reverse a route that navigates, say, 
         <location filename="trackui.ui" line="45"/>
         <source>Basic title for new track(s). 
 This option specifies a title for tracks generated by the track filter. By default, the title of the new track is composed of the start time of the track appended to this value. 
-If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names. </source>
+If this value contains a percent (%) character, it is treated as a format string for the POSIX strftime function, allowing custom time-based track names.</source>
         <translation type="unfinished">العنوان الأساسي للمسار الجديد(المسارات). 
 يحدد هذا الخيار عنوانًا للمسارات التي تُولَّد بواسطة مرشح المسار. بشكل افتراضي، يتألف عنوان المسار الجديد من وقت البدء للمسار مضافًا إلى هذا القيمة. 
 إذا تحتوي هذه القيمة على رمز النسبة المئوية (%), فسيتم اعتبارها كسلسلة تنسيق لدالة POSIX strftime، مما يسمح بتعيين أسماء مسارات مبنية على الوقت بشكل مخصص.</translation>
@@ -1399,7 +1411,7 @@ If this value contains a percent (%) character, it is treated as a format string
     </message>
     <message>
         <location filename="trackui.ui" line="57"/>
-        <source>the title of the new track is composed of the start time of the track appended to this value. </source>
+        <source>the title of the new track is composed of the start time of the track appended to this value.</source>
         <translation type="unfinished">يتألف عنوان المسار الجديد من وقت البدء للمسار مضافًا إلى هذه القيمة.</translation>
     </message>
     <message>
@@ -1410,7 +1422,7 @@ If this value contains a percent (%) character, it is treated as a format string
     <message>
         <location filename="trackui.ui" line="67"/>
         <source>Correct trackpoint timestamps by a delta. 
-This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone. </source>
+This option changes the time of all trackpoints. This might be useful if your track must be moved by one or more hours because of an incorrect time zone.</source>
         <translation type="unfinished">تصحيح تواريخ نقاط المسار بمقدار تغيير. 
 يقوم هذا الخيار بتغيير وقت جميع نقاط المسار. قد يكون هذا مفيدًا إذا كان يجب تحريك المسار بساعتين أو أكثر بسبب خطأ في التوقيت الزمني.</translation>
     </message>
@@ -1449,14 +1461,14 @@ This option changes the time of all trackpoints. This might be useful if your tr
     <message>
         <location filename="trackui.ui" line="204"/>
         <location filename="trackui.ui" line="219"/>
-        <source>Use track pts. after this time. </source>
+        <source>Use track pts. after this time.</source>
         <translation type="unfinished">استخدم نقاط المسار بعد هذا الوقت.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="207"/>
         <source>Use only track points after this timestamp.
 
-This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period. </source>
+This option is used along with the stop to discard trackpoints that were recorded outside of a specific period of time. This option specifies the beginning of the time period.</source>
         <translation type="unfinished">استخدم فقط نقاط المسار بعد هذا التوقيت.
 
 يتم استخدام هذا الخيار مع الخيار &apos;النهاية&apos; لحذف نقاط المسار التي تم تسجيلها خارج فترة زمنية محددة. يحدد هذا الخيار بداية الفترة الزمنية.</translation>
@@ -1469,14 +1481,14 @@ This option is used along with the stop to discard trackpoints that were recorde
     <message>
         <location filename="trackui.ui" line="232"/>
         <location filename="trackui.ui" line="247"/>
-        <source>Use track pts before this time. </source>
+        <source>Use track pts before this time.</source>
         <translation type="unfinished">استخدم نقاط المسار قبل هذا الوقت.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
-        <source> Use only track points before this timestamp.
+        <source>Use only track points before this timestamp.
 
-This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period. </source>
+This option is used in conjunction with the start option to discard all trackpoints outside of a given period of time. This option defines the end of the time period.</source>
         <translation type="unfinished">استخدم فقط نقاط المسار قبل هذا التوقيت.
 
 يتم استخدام هذا الخيار مع الخيار &apos;البدء&apos; لحذف جميع نقاط المسار خارج فترة زمنية محددة. يحدد هذا الخيار نهاية الفترة الزمنية.</translation>
@@ -1488,7 +1500,7 @@ This option is used in conjunction with the start option to discard all trackpoi
     </message>
     <message>
         <location filename="trackui.ui" line="254"/>
-        <source>Pack all tracks into one. </source>
+        <source>Pack all tracks into one.</source>
         <translation type="unfinished">حزم جميع المسارات في مسار واحد.</translation>
     </message>
     <message>
@@ -1497,7 +1509,7 @@ This option is used in conjunction with the start option to discard all trackpoi
 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
-This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
+This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop.</source>
         <translation type="unfinished">حزم جميع المسارات في مسار واحد. تسبب هذه الخيار في إلحاق جميع المسارات ببعضها البعض لتشكيل مسار واحد. لا يعمل هذا الخيار إذا تداخلت أي مسارين في الوقت؛ في هذه الحالة، يُوصى باستخدام خيار الدمج. يُعتبر هذا الخيار مفيدًا بشكل خاص لإعادة توصيل المسارات التي قد تكون توقفت بسبب عطل في المعدات أو توقف ليلة.</translation>
     </message>
     <message>
@@ -1512,9 +1524,9 @@ This option is most useful for rejoining tracks that might have been interrupted
     </message>
     <message>
         <location filename="trackui.ui" line="274"/>
-        <source> Merge multiple tracks for the same way.
+        <source>Merge multiple tracks for the same way.
 
-This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
+This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped.</source>
         <translation type="unfinished">دمج عدة مسارات لنفس الطريق. تضع هذه الخيار جميع نقاط المسار من جميع المسارات في مسار واحد وتصنفها حسب التوقيت. سيتم إزالة النقاط ذات التوقيت المتطابق.</translation>
     </message>
     <message>
@@ -1534,7 +1546,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="305"/>
-        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date. </source>
+        <source>If nonzero, the track will be split if the time between two points is greater than this parameter.   If zero, the track will be split by date.</source>
         <translation type="unfinished">إذا لم يكن الصفر، سيتم تقسيم المسار إذا كان الفاصل الزمني بين نقطتين أكبر من هذا المعلمة. إذا كان الصفر، سيتم تقسيم المسار حسب التاريخ.</translation>
     </message>
     <message>
@@ -1549,7 +1561,7 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="348"/>
-        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter. </source>
+        <source>If nonzero, the input track will be split into several tracks if the distance between successive track points is greater than the distance given as a parameter.</source>
         <translation type="unfinished">إذا لم يكن الصفر، سيتم تقسيم المسار المدخل إلى عدة مسارات إذا كان المسافة بين نقطتي المسار المتتاليتين أكبر من المسافة المحددة كمعلمة.</translation>
     </message>
     <message>
@@ -1604,17 +1616,17 @@ This option puts all track points from all tracks into a single track and sorts 
     </message>
     <message>
         <location filename="trackui.ui" line="443"/>
-        <source>Synthesize speed. </source>
-        <translation type="unfinished">توليد السرعة. </translation>
+        <source>Synthesize speed.</source>
+        <translation type="unfinished">توليد السرعة.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="446"/>
         <source>Synthesize speed.
 
-This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot; </source>
+This option computes a value for the GPS speed at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support speed information or for trackpoints synthesized by the interpolate filter. The speed at each trackpoint is the average speed from the previous trackpoint (distance divided by time). The first trackpoint in each track is assigned a speed of &quot;unknown.&quot;</source>
         <translation type="unfinished">توليد السرعة.
 
-تقوم هذه الخيار بحساب قيمة لسرعة GPS في كل نقطة مسار. هذا مفيد بشكل خاص مع النقاط من التنسيقات التي لا تدعم معلومات السرعة أو للنقاط المولدة بواسطة مرشح التداخل. تُحسب سرعة كل نقطة مسار كمتوسط السرعة من النقطة السابقة (المسافة مقسومة على الوقت). تُعطى النقطة الأولى في كل مسار سرعة &quot;غير معروفة.&quot; </translation>
+تقوم هذه الخيار بحساب قيمة لسرعة GPS في كل نقطة مسار. هذا مفيد بشكل خاص مع النقاط من التنسيقات التي لا تدعم معلومات السرعة أو للنقاط المولدة بواسطة مرشح التداخل. تُحسب سرعة كل نقطة مسار كمتوسط السرعة من النقطة السابقة (المسافة مقسومة على الوقت). تُعطى النقطة الأولى في كل مسار سرعة &quot;غير معروفة.&quot;</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="451"/>
@@ -1630,7 +1642,7 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
         <location filename="trackui.ui" line="461"/>
         <source>Synthesize course.
 
-This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees. </source>
+This option computes (or recomputes) a value for the GPS heading at each trackpoint. This is most useful with trackpoints from formats that don&apos;t support heading information or for trackpoints synthesized by the interpolate filter. The heading at each trackpoint is simply the course from the previous trackpoint in the track. The first trackpoint in each track is arbitrarily assigned a heading of 0 degrees.</source>
         <translation type="unfinished">توليد الاتجاه.
 
 تقوم هذه الخيار بحساب (أو إعادة حساب) قيمة لاتجاه GPS في كل نقطة مسار. هذا مفيد بشكل خاص مع النقاط من التنسيقات التي لا تدعم معلومات الاتجاه أو للنقاط المولدة بواسطة مرشح التداخل. يُحسب الاتجاه في كل نقطة مسار كاتجاه النقطة السابقة في المسار. تُعطى النقطة الأولى في كل مسار اتجاهًا عشوائيًا قدره 0 درجة.</translation>
@@ -1757,10 +1769,10 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
         <location filename="wayptsui.ui" line="25"/>
         <source>This filter includes or excludes waypoints based on their proximity to a central point. All waypoints more than the specified distance from the specified point will be removed from the dataset.
 
-By default, all remaining points are sorted so that points closer to the center appear earlier in the output file. </source>
+By default, all remaining points are sorted so that points closer to the center appear earlier in the output file.</source>
         <translation type="unfinished">يقوم هذا المرشح بإدراج أو استبعاد النقاط بناءً على قربها من نقطة مركزية. سيتم إزالة جميع النقاط التي تبعد مسافة أكبر من المسافة المحددة عن النقطة المحددة من مجموعة البيانات.
 
-بشكل افتراضي، يتم ترتيب جميع النقاط المتبقية بحيث تظهر النقاط الأقرب إلى المركز في البداية في ملف الإخراج. </translation>
+بشكل افتراضي، يتم ترتيب جميع النقاط المتبقية بحيث تظهر النقاط الأقرب إلى المركز في البداية في ملف الإخراج.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="30"/>
@@ -1776,10 +1788,10 @@ By default, all remaining points are sorted so that points closer to the center 
         <location filename="wayptsui.ui" line="40"/>
         <source>Maximum positional distance.
 
-This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept. </source>
+This option specifies the minimum allowable distance between two points. If two points are closer than this distance, only one of them is kept.</source>
         <translation type="unfinished">الحد الأقصى لمسافة الموضع.
 
-يحدد هذا الخيار الحد الأدنى المسموح به لمسافة بين نقطتين. إذا كانت نقطتان أقرب من هذه المسافة، يتم الاحتفاظ بواحدة فقط منهما. </translation>
+يحدد هذا الخيار الحد الأدنى المسموح به لمسافة بين نقطتين. إذا كانت نقطتان أقرب من هذه المسافة، يتم الاحتفاظ بواحدة فقط منهما.</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="45"/>
@@ -1799,7 +1811,7 @@ This option specifies the minimum allowable distance between two points. If two 
     <message>
         <location filename="wayptsui.ui" line="73"/>
         <source>Miles</source>
-        <translation type="unfinished"> الأميال</translation>
+        <translation type="unfinished">الأميال</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="78"/>
@@ -1828,7 +1840,7 @@ This option specifies the minimum allowable distance between two points. If two 
     </message>
     <message>
         <location filename="wayptsui.ui" line="133"/>
-        <source>Suppress duplicate waypoint based on coords. </source>
+        <source>Suppress duplicate waypoint based on coords.</source>
         <translation type="unfinished">إسقاط النقاط المتكررة بناءً على الإحداثيات.</translation>
     </message>
     <message>
@@ -1868,7 +1880,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="168"/>
-        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required. </source>
+        <source>The duplicate filter is designed to remove duplicate points based on their short name (traditionally a waypoint&apos;s name on the GPS receiver), and/or their location (to a precision of 6 decimals). This filter supports two options that specify how duplicates will be recognized, shortname and location. Generally, at least one of these options is required.</source>
         <translation type="unfinished">يُصمم مرشح التكرار لإزالة النقاط المتكررة بناءً على اسمها القصير (الذي يُعتبر عادةً اسم النقطة على جهاز الاستقبال GPS)، أو موضعها (بدقة تصل إلى 6 أرقام عشريّة). يدعم هذا المرشح خيارين يحددان كيفية تحديد التكرارات، وهو الاسم القصير والموقع. عادةً ما يكون من الضروري تحديد واحد على الأقل من هذه الخيارات.</translation>
     </message>
     <message>
@@ -1904,7 +1916,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wayptsui.ui" line="208"/>
-        <source>Maximum distance from center. </source>
+        <source>Maximum distance from center.</source>
         <translation type="unfinished">الحد الأقصى لمسافة من المركز.</translation>
     </message>
 </context>

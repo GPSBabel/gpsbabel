@@ -18,7 +18,7 @@
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
-       <string>Input </string>
+       <string>Input</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="topMargin">
@@ -126,7 +126,7 @@
              <item>
               <widget class="QPushButton" name="inputFileNameBrowseBtn">
                <property name="toolTip">
-                <string>Browse for one or more input files. </string>
+                <string>Browse for one or more input files.</string>
                </property>
                <property name="text">
                 <string>File Name(s)</string>
@@ -204,7 +204,7 @@
          <item>
           <widget class="QPushButton" name="inputOptionsBtn">
            <property name="toolTip">
-            <string>Options for the selected input format. </string>
+            <string>Options for the selected input format.</string>
            </property>
            <property name="text">
             <string>Options</string>
@@ -424,7 +424,7 @@
        <item>
         <widget class="QPushButton" name="moreOptionButton">
          <property name="toolTip">
-          <string>More translation options. </string>
+          <string>More translation options.</string>
          </property>
          <property name="text">
           <string>More Options</string>
@@ -457,7 +457,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>If selected, output is to a file. </string>
+            <string>If selected, output is to a file.</string>
            </property>
            <property name="text">
             <string>File</string>
@@ -542,7 +542,7 @@
              <item>
               <widget class="QPushButton" name="outputFileNameBrowseBtn">
                <property name="toolTip">
-                <string>Browse for an output file name. </string>
+                <string>Browse for an output file name.</string>
                </property>
                <property name="text">
                 <string>File Name</string>
@@ -620,7 +620,7 @@
          <item>
           <widget class="QPushButton" name="outputOptionsBtn">
            <property name="toolTip">
-            <string>Options for the selected output format. </string>
+            <string>Options for the selected output format.</string>
            </property>
            <property name="text">
             <string>Options</string>
@@ -644,7 +644,7 @@
        </sizepolicy>
       </property>
       <property name="toolTip">
-       <string>Output of GPSBabel translation process. </string>
+       <string>Output of GPSBabel translation process.</string>
       </property>
      </widget>
     </item>
