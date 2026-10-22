@@ -38,8 +38,6 @@
 
 #include "ozi.h"
 
-#include <cmath>                  // for lround
-
 #include <QByteArray>             // for QByteArray
 #include <QChar>                  // for operator==, QChar
 #include <QFile>                  // for QFile
@@ -52,7 +50,7 @@
 #include <QStringLiteral>         // for qMakeStringPrivate, QStringLiteral
 #include <QTextStream>            // for QTextStream, operator<<, qSetRealNumberPrecision, QTextStream::FixedNotation
 #include <Qt>                     // for CaseInsensitive
-#include <QtGlobal>               // for qPrintable
+#include <QtGlobal>               // for qPrintable, qRound64, qint64
 
 #include "defs.h"
 #include "csv_util.h"             // for csv_stringclean
@@ -116,8 +114,8 @@ OziFormat::ozi_set_time_str(const QString& str, Waypoint* waypointp)
   double ozi_time = str.toDouble();
 
   if (ozi_time > DAYS_SINCE_1990) {
-    waypointp->SetCreationTime((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY,
-                               lround(1000.0 * (ozi_time - (int) ozi_time)));
+    qint64 msecs = qRound64((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY * 1000.0);
+    waypointp->SetCreationTime(0, msecs);
   }
 }
 
