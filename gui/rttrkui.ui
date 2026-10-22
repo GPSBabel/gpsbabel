@@ -86,7 +86,7 @@ The quality of the results will vary depending on the density of points in the o
      <item>
       <widget class="QSpinBox" name="limitToSpin">
        <property name="toolTip">
-        <string>Maximum number points in track or route. </string>
+        <string>Maximum number points in track or route.</string>
        </property>
        <property name="stepType">
         <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
