@@ -86,7 +86,7 @@ jobs:
       if: ( steps.restore-cache.outputs.cache-hit != 'true' ) && ( matrix.METHOD == 'aqt' )
       uses: actions/setup-python@v7
       with:
-        python-version: '3.13'
+        python-version: '3.14'
 
     - name: Install Qt
       if: steps.restore-cache.outputs.cache-hit != 'true'
