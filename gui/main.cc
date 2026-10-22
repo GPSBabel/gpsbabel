@@ -46,7 +46,7 @@ int main(int argc, char** argv)
   // Don't override the window icon on macos.
   // Overriding defeats style preferences which otherwise will modify the appearance
   // of the icon in the dock.
-  // This also effects any title bar icon, but that is only used on macos with windows
+  // This also affects any title bar icon, but that is only used on macos with windows
   // representing documents.
   if (app.platformName() != u"cocoa") {
     QApplication::setWindowIcon(QIcon(":/images/appicon.png"));

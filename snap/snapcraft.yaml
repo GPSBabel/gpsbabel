@@ -1,5 +1,5 @@
 name: gpsbabel # you probably want to 'snapcraft register <name>'
-base: core24 # the base snap is the execution environment for this snap
+base: core26 # the base snap is the execution environment for this snap
 summary: "Convert, manipulate and transfer GPS data."
 description: |
   Convert, manipulate and transfer data from GPS programs or GPS
@@ -57,12 +57,6 @@ layout:
     symlink: $SNAP/usr/lib/qt6
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6:
     symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6
-# XKB_CONFIG_ROOT, QT_XKB_CONFIG_ROOT not enough to prevent "xkbcommon: ERROR: Couldn't find file "rules/evdev" in include paths"
-# to overcome this symlink /usr/share/X11/xkb
-# see https://bugreports.qt.io/browse/QTBUG-105124
-# supposedly fixed in Qt 6.5.
-  /usr/share/X11/xkb:
-    symlink: $SNAP/gnome-platform/usr/share/X11/xkb
 
 adopt-info: gpsbabel
 parts:
@@ -126,25 +120,33 @@ parts:
       - qt6-wayland
 
     stage:
-      # these are all required by libQt6WebEngineCore.so.6.4.2
-      # they are older versions than those in gnome-46-2404
+      # these are all required by libQt6WebEngineCore.so.6.10.2
+      # gnome-core26 may have newer version than ubuntu 26.04
+      #
+      # #!/bin/bash -e
+      #
+      # find_snap_lib() {
+      #   target=$(find /snap/gnome-core26/current/ -name $1)
+      #   echo "$target is resolve be $(readlink -e $target)"
+      # }
+      #
+      # find_link_tgt() {
+      #   target=$(ldd /usr/lib/x86_64-linux-gnu/libQt6WebEngineCore.so | grep $1 | cut -d' ' -f3)
+      #   echo "$target is resolved by $(readlink -e $target)"
+      #   find_snap_lib $(basename $target)
+      # }
+      #
+      # echo checking /usr/lib/x86_64-linux-gnu/libQt6WebEngineCore.so dependencies
+      # find_link_tgt libfontconfig.so
+      # find_link_tgt libharfbuzz-subset.so
+      # find_link_tgt libharfbuzz.so
+      # find_link_tgt libpsl.so
+      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libfontconfig.so.1.*
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz-subset.so.0.*
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libharfbuzz.so.0.*
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libpsl.so.5.*
       # we don't need lintian files
       - -usr/share/lintian
-
-  cleanup:
-    after:
-      - gpsbabel
-    plugin: nil
-    build-snaps:  # List all content-snaps and base snaps you're using here
-      - gnome-46-2404
-    override-prime: |
-      set -eu
-      for snap in "gnome-46-2404"; do  # List all content-snaps and base snaps you're using here
-          cd "/snap/$snap/current" && find . -type f,l -exec rm -fv "$CRAFT_PRIME/{}" \;
-      done
 
 lint:
   ignore:
