@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "gbser.h"
 #include "gbser_private.h"
+#include "src/core/logging.h"
 
 #include <windows.h>
 #include <setupapi.h>
@@ -83,7 +84,7 @@ DWORD mkspeed(unsigned br)
     return 230400;
 #endif
   default:
-    gbFatal("Unsupported serial speed: %d\n", br);
+    gbFatal("Unsupported serial speed: {}\n", br);
     return 0;   /* keep compiler happy */
   }
 }
@@ -229,15 +230,15 @@ int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity,
   DCB tio;
 
   if (bits < 5 || bits > 8) {
-    gbFatal("Unsupported bits setting: %d\n", bits);
+    gbFatal("Unsupported bits setting: {}\n", bits);
   }
 
   if (parity > 2) {
-    gbFatal("Unsupported parity setting: %d\n", parity);
+    gbFatal("Unsupported parity setting: {}\n", parity);
   }
 
   if (stop < 1 || stop > 2) {
-    gbFatal("Unsupported stop setting: %d\n", stop);
+    gbFatal("Unsupported stop setting: {}\n", stop);
   }
 
   tio.DCBlength = sizeof(DCB);

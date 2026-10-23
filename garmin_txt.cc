@@ -247,7 +247,7 @@ GarminTxtFormat::print_position(const Waypoint* wpt)
 
   if (! valid) {
     *fout << "#####\n";
-    gbFatal("%s (%s) is outside of convertible area \"%s\"!\n",
+    gbFatal("{} ({}) is outside of convertible area \"{}\"!\n",
           wpt->shortname.isEmpty() ? "Waypoint" : gbLogCStr(wpt->shortname),
           gbLogCStr(pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, false)),
           gbLogCStr(gt_get_mps_grid_longname(grid_index)));
@@ -640,7 +640,7 @@ GarminTxtFormat::wr_init(const QString& fname)
   if (opt_precision) {
     precision = opt_precision.get_result();
     if (precision < 0) {
-      gbFatal("Invalid precision (%s)!\n", gbLogCStr(opt_precision));
+      gbFatal("Invalid precision ({})!\n", gbLogCStr(opt_precision));
     }
   }
 
@@ -651,7 +651,7 @@ GarminTxtFormat::wr_init(const QString& fname)
     if (int i = opt_grid.toInt(&ok); ok) {
       grid_index = (grid_type) i;
       if ((grid_index < GRID_INDEX_MIN) || (grid_index > GRID_INDEX_MAX))
-        gbFatal("Grid index out of range (%d..%d)!\n",
+        gbFatal("Grid index out of range ({}..{})!\n",
               (int)GRID_INDEX_MIN, (int)GRID_INDEX_MAX);
     } else {
       grid_index = gt_lookup_grid_type(opt_grid);
@@ -842,7 +842,7 @@ GarminTxtFormat::strftime_to_timespec(const char* s)
           q += "AP";
           continue;
         default:
-          gbWarning("omitting unknown strptime conversion \"%%%c\" in \"%s\"\n", s[i], s);
+          gbWarning("omitting unknown strptime conversion \"%{}\" in \"{}\"\n", s[i], s);
           break;
         }
       }
@@ -875,7 +875,7 @@ GarminTxtFormat::parse_categories(const QString& str) const
     QString cin = catstring.trimmed();
     if (!cin.isEmpty()) {
       if (std::optional<uint16_t> cat = garmin_fs_t::convert_category(cin); !cat.has_value()) {
-        gbWarning("Unable to convert category \"%s\" at line %d!\n", gbLogCStr(cin), current_line);
+        gbWarning("Unable to convert category \"{}\" at line {}!\n", gbLogCStr(cin), current_line);
       } else {
         res = res | *cat;
       }
@@ -904,11 +904,11 @@ GarminTxtFormat::parse_temperature(const QString& str, double* temperature) cons
       *temperature = FAHRENHEIT_TO_CELSIUS(value);
       break;
     default:
-      gbFatal("Unknown temperature unit \"%c\" at line %d!\n", unit, current_line);
+      gbFatal("Unknown temperature unit \"{}\" at line {}!\n", unit, current_line);
     }
     return true;
   } else {
-    gbFatal("Invalid temperature \"%s\" at line %d!\n", gbLogCStr(str), current_line);
+    gbFatal("Invalid temperature \"{}\" at line {}!\n", gbLogCStr(str), current_line);
   }
   return false;
 }
@@ -935,7 +935,7 @@ GarminTxtFormat::parse_display(const QString& str, int* val) const
       return true;
     }
   }
-  gbWarning("Unknown display mode \"%s\" at line %d.\n", gbLogCStr(str), current_line);
+  gbWarning("Unknown display mode \"{}\" at line {}.\n", gbLogCStr(str), current_line);
   return false;
 }
 
@@ -963,10 +963,10 @@ GarminTxtFormat::bind_fields(const header_type ht)
       int field_no = field_idx + 1;
       header_mapping_info[ht].append(std::make_pair(name, field_no));
       if (global_opts.debug_level >= 2) {
-        gbDebug("Binding field \"%s\" to internal number %d (%d,%d)\n", gbLogCStr(name), field_no, ht, i);
+        gbDebug("Binding field \"{}\" to internal number {} ({},{})\n", gbLogCStr(name), field_no, gpsbabel::to_underlying(ht), i);
       }
     } else {
-      gbWarning("Field %s not recognized!\n", gbLogCStr(name));
+      gbWarning("Field {} not recognized!\n", gbLogCStr(name));
     }
   }
   header_column_names.clear();
@@ -1185,7 +1185,7 @@ GarminTxtFormat::parse_route_waypoint(const QStringList& lineparts)
     switch (field_no) {
     case 1:
       if (str.isEmpty()) {
-        gbFatal("Route waypoint without name at line %d!\n", current_line);
+        gbFatal("Route waypoint without name at line {}!\n", current_line);
       }
       wpt = find_waypt_by_name(str);
       if (wpt == nullptr) {
@@ -1332,7 +1332,7 @@ GarminTxtFormat::read()
       parse_track_header(lineparts);
     } else if (linetype.compare(u"Map", Qt::CaseInsensitive) == 0) /* do nothing */ ;
     else {
-      gbFatal("Unknown identifier (%s) at line %d!\n", gbLogCStr(linetype), current_line);
+      gbFatal("Unknown identifier ({}) at line {}!\n", gbLogCStr(linetype), current_line);
     }
 
   }

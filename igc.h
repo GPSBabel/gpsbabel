@@ -229,7 +229,7 @@ private:
       ret = 1;
       break;
     default:
-      gbWarning("igc.h: IgcFormat::get_ext_factor(): unknown extension (%i), returning factor of zero.\n",int(type));
+      gbWarning("igc.h: IgcFormat::get_ext_factor(): unknown extension ({}), returning factor of zero.\n",int(type));
       break;
     }
     return ret;

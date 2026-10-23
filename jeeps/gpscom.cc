@@ -31,6 +31,8 @@
 
 #include <QByteArray>
 
+#include "src/core/logging.h"
+
 /* @func GPS_Command_Off ***********************************************
 **
 ** Turn off power on GPS

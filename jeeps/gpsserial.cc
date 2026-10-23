@@ -26,6 +26,7 @@
 #include "jeeps/gps.h"
 #include "gbser.h"
 #include "jeeps/gpsserial.h"
+#include "src/core/logging.h"
 #include <QThread>
 #include <cerrno>
 #include <cstdio>
@@ -215,7 +216,7 @@ int32_t GPS_Serial_Write(gpsdevh* dh, const void* obuf, int size)
   }
   WriteFile(wsd->comport, obuf, size, &len, NULL);
   if (len != (DWORD) size) {
-    gbFatal("Write error.   Wrote %d of %d bytes.\n", (int)len, size);
+    gbFatal("Write error.   Wrote {} of {} bytes.\n", (int)len, size);
   }
   return len;
 }

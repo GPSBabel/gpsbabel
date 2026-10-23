@@ -180,7 +180,6 @@ set(JEEPS
 # SUPPORT
 set(SUPPORT
   csv_util.cc
-  fatal.cc
   filter_vecs.cc
   formspec.cc
   garmin_fs.cc
@@ -341,6 +340,74 @@ include(shapelib.cmake)
 include(zlib.cmake)
 include(libusb.cmake)
 include(strptime.cmake)
+
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles([[
+  #include <format>
+  #include <string>
+  #include <iostream>
+
+  #if !defined(__cpp_lib_format) || __cpp_lib_format < 202110L
+  #error "Insufficient std::format support"
+  #endif
+
+  template <typename... Args>
+  void test(std::format_string<Args...> fmt, Args&&... args) {
+    std::cout << std::format(fmt, std::forward<Args>(args)...) << std::endl;
+  }
+
+  int main() {
+  #ifdef __cpp_lib_format
+    std::cout << "_cpp_lib_format " << __cpp_lib_format << std::endl;
+  #endif
+    test("your lucky number is {:.1f}", 42.0);
+    return 0;
+  }
+]] _have_std_format)
+
+check_cxx_source_compiles([[
+  #include <format>
+  #include <string>
+  #include <iostream>
+
+  #if !defined(__cpp_lib_format) || __cpp_lib_format < 202110L
+  #error "Insufficient std::format support"
+  #endif
+
+  template <typename... Args>
+  void test(std::format_string<Args...> fmt, Args&&... args) {
+    std::cout << std::format(fmt, std::forward<Args>(args)...) << std::endl;
+  }
+
+  int main() {
+  #ifdef __cpp_lib_format
+    std::cout << "_cpp_lib_format " << __cpp_lib_format << std::endl;
+  #endif
+    test("your lucky number is {:.1f}", "42.0");
+    return 0;
+  }
+]] _std_format_compile_xfail)
+
+if(_have_std_format AND NOT _std_format_compile_xfail)
+  set(_use_fmt_default OFF)
+else()
+  set(_use_fmt_default ON)
+endif()
+option(GPSBABEL_USE_FMT "use {fmt} instead of std::format" ${_use_fmt_default})
+if(GPSBABEL_USE_FMT)
+  message(STATUS "Using {fmt} fallback")
+  include(FetchContent)
+  FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG        12.2.0
+    GIT_SHALLOW    TRUE
+    SYSTEM
+  )
+  FetchContent_MakeAvailable(fmt)
+  target_compile_definitions(gpsbabel PRIVATE MOCK_FORMAT)
+  list(APPEND LIBS fmt::fmt)
+endif()
 
 set(GPSBABEL_EXTRA_LINK_LIBRARIES "" CACHE STRING "extra libraries to link with.")
 list(APPEND LIBS ${GPSBABEL_EXTRA_LINK_LIBRARIES})

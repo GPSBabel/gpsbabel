@@ -341,7 +341,7 @@ HumminbirdBase::humminbird_read_track(gbfile* fin)
   }
 
   if (th.num_points > max_points) {
-    gbFatal("Too many track points! (%d)\n", th.num_points);
+    gbFatal("Too many track points! ({})\n", th.num_points);
   }
 
   /* num_points is actually one too big, because it includes the value in
@@ -443,7 +443,7 @@ HumminbirdBase::humminbird_read_track_old(gbfile* fin)
   int max_points = (file_len - (sizeof(th) + sizeof(uint32_t) + TRK_NAME_LEN)) / sizeof(humminbird_trk_point_old_t);
 
   if (th.num_points > max_points) {
-    gbFatal("Too many track points! (%d)\n", th.num_points);
+    gbFatal("Too many track points! ({})\n", th.num_points);
   }
 
   /* num_points is actually one too big, because it includes the value in
@@ -542,7 +542,7 @@ HumminbirdBase::humminbird_read()
       humminbird_read_track_old(fin_);
       return; /* Don't continue. The rest of the file is all zeores */
     default:
-      gbFatal("Invalid record header \"0x%08X\" (no or unknown humminbird file)!\n", signature);
+      gbFatal("Invalid record header \"0x{:08X}\" (no or unknown humminbird file)!\n", signature);
     }
   }
 }
@@ -852,7 +852,7 @@ HumminbirdFormat::humminbird_write_rtept(const Waypoint* wpt) const
     humrte->points[humrte->count] = wpt_id_to_wpt_num_hash.value(id);
     humrte->count++;
   } else {
-    gbWarning("Sorry, routes are limited to %d points!\n", MAX_RTE_POINTS);
+    gbWarning("Sorry, routes are limited to {} points!\n", MAX_RTE_POINTS);
     gbFatal("You can use our simplify filter to reduce the number of route points.\n");
   }
 }

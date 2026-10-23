@@ -57,10 +57,10 @@ void
 GlobalsatSportFormat::serial_init(const char* fname)
 {
   if (serial_handle = gbser_init(fname), nullptr == serial_handle) {
-    gbFatal("Can't open port '%s'\n", fname);
+    gbFatal("Can't open port '{}'\n", fname);
   }
   if (gbser_set_speed(serial_handle, 115200) != gbser_OK) {
-    gbFatal("Can't configure port '%s'\n", fname);
+    gbFatal("Can't configure port '{}'\n", fname);
   }
   // Toss anything that came in before our speed was set
   gbser_flush(serial_handle);
@@ -99,7 +99,7 @@ void
 GlobalsatSportFormat::serial_write_byte(uint8_t byte)
 {
   if (global_opts.debug_level > 1) {
-    gbDebug("0x%02x (%d), ", byte, byte);
+    gbDebug("0x{:02x} ({}), ", byte, byte);
   }
 
   int n = gbser_writec(serial_handle, byte);
@@ -185,7 +185,7 @@ GlobalsatSportFormat::globalsat_read_package(int* out_length, uint8_t* out_Devic
 
   uint8_t DeviceCommand = recv_byte();
   if (global_opts.debug_level > 1) {
-    gbDebug("DeviceCommand: 0x%02x ", DeviceCommand);
+    gbDebug("DeviceCommand: 0x{:02x} ", DeviceCommand);
   }
   uint8_t len_h = recv_byte();
   calc_crc ^= len_h;
@@ -194,7 +194,7 @@ GlobalsatSportFormat::globalsat_read_package(int* out_length, uint8_t* out_Devic
 
   int length = (len_h << 8) + len_l;
   if (global_opts.debug_level > 1) {
-    gbDebug("len=%d Payload:", length);
+    gbDebug("len={} Payload:", length);
   }
 
   auto* payload = (uint8_t*) malloc(length);
@@ -209,7 +209,7 @@ GlobalsatSportFormat::globalsat_read_package(int* out_length, uint8_t* out_Devic
 
   crc = recv_byte();
   if (global_opts.debug_level > 1) {
-    gbDebug("crc=0x%x should be=0x%x\n", crc, calc_crc);
+    gbDebug("crc=0x{:x} should be=0x{:x}\n", crc, calc_crc);
   }
   if (crc == calc_crc) {
     *out_DeviceCommand = DeviceCommand;
@@ -266,10 +266,10 @@ GlobalsatSportFormat::rd_init(const QString& fname)
   if (opt_dump_file) {
     dumpfile = gbfopen(opt_dump_file, "wb");
     if (!dumpfile) {
-      gbWarning("rd_init() creating dumpfile %s FAILED continue anyway\n", gbLogCStr(opt_dump_file));
+      gbWarning("rd_init() creating dumpfile {} FAILED continue anyway\n", gbLogCStr(opt_dump_file));
     } else {
       if (global_opts.debug_level > 1) {
-        gbDebug("rd_init() creating dumpfile %s for writing binary copy of serial stream\n", gbLogCStr(opt_dump_file));
+        gbDebug("rd_init() creating dumpfile {} for writing binary copy of serial stream\n", gbLogCStr(opt_dump_file));
       }
     }
   }
@@ -279,7 +279,7 @@ GlobalsatSportFormat::rd_init(const QString& fname)
     // read from dump-file instead of serial
     in_file = gbfopen(fname, "rb");
     if (!in_file) {
-      gbFatal("Could not open dumpfile for input: %s\n", gbLogCStr(fname));
+      gbFatal("Could not open dumpfile for input: {}\n", gbLogCStr(fname));
     }
 
   }
@@ -288,7 +288,7 @@ GlobalsatSportFormat::rd_init(const QString& fname)
       timezn = new QTimeZone(opt_timezone.get().toUtf8());
     } else {
       list_timezones();
-      gbFatal("Requested time zone \"%s\" not available.\n", gbLogCStr(opt_timezone));
+      gbFatal("Requested time zone \"{}\" not available.\n", gbLogCStr(opt_timezone));
     }
   } else {
     timezn = nullptr;
@@ -367,7 +367,7 @@ GlobalsatSportFormat::track_read()
     //payload is packed with a number of trainingheaders with the size of 29bytes each
     int number_headers = length / 29;	//29=packed sizeof(gh_trainheader)
     if (global_opts.debug_level > 1) {
-      gbDebug("length=%d sizeof(gh_trainheader)=%d number_headers=%d\n", length, 29, number_headers);
+      gbDebug("length={} sizeof(gh_trainheader)={} number_headers={}\n", length, 29, number_headers);
     }
 
     for (int i = 0; i < number_headers; i++) {
@@ -389,17 +389,17 @@ GlobalsatSportFormat::track_read()
       th_header.DataType = th_hdr[28];
 
       if (showlist || global_opts.debug_level > 1) {
-        gbDebug("Track[%02i]: %02d-%02d-%02d ", i, th_header.dateStart.Year, th_header.dateStart.Month, th_header.dateStart.Day);
-        gbDebug("%02d:%02d:%02d ", th_header.timeStart.Hour, th_header.timeStart.Minute, th_header.timeStart.Second);
+        gbDebug("Track[{:02}]: {:02}-{:02}-{:02} ", i, th_header.dateStart.Year, th_header.dateStart.Month, th_header.dateStart.Day);
+        gbDebug("{:02}:{:02}:{:02} ", th_header.timeStart.Hour, th_header.timeStart.Minute, th_header.timeStart.Second);
         int time_s=th_header.TotalTime / 10;
         int time_h=time_s/(60*60);
         time_s-=time_h*(60*60);
         int time_m=time_s/60;
         time_s-=time_m*60;
-        gbDebug("Points:%6u Time:%02d:%02d:%02d Dist:%9um LapCnts:%5d ", th_header.TotalPoint, time_h, time_m, time_s, th_header.TotalDistance, th_header.LapCnts);
-        gbDebug("Index/StartPt:%u ", th_header.gh_ptrec.Index);
-        gbDebug("LapIndex/EndPt:%u ", th_header.gh_laprec.LapIndex);
-        gbDebug("DataType:0x%x\n", th_header.DataType);
+        gbDebug("Points:{:6} Time:{:02}:{:02}:{:02} Dist:{:9}m LapCnts:{:5} ", th_header.TotalPoint, time_h, time_m, time_s, th_header.TotalDistance, th_header.LapCnts);
+        gbDebug("Index/StartPt:{} ", th_header.gh_ptrec.Index);
+        gbDebug("LapIndex/EndPt:{} ", th_header.gh_laprec.LapIndex);
+        gbDebug("DataType:0x{:x}\n", th_header.DataType);
       }
 
       if (!showlist) {
@@ -466,12 +466,12 @@ GlobalsatSportFormat::track_read()
         db_train.Sport5 = dbtrain[57];
 
         if (global_opts.debug_level > 1) {
-          gbDebug("\nTrainData:%02d-%02d-%02d ", db_train.dateStart.Year, db_train.dateStart.Month, db_train.dateStart.Day);
-          gbDebug("%02d:%02d:%02d ", db_train.timeStart.Hour, db_train.timeStart.Minute, db_train.timeStart.Second);
-          gbDebug("Total(points:%6u time:%6us dist:%9um) LapCnts:%5d ", db_train.TotalPoint, db_train.TotalTime / 10, db_train.TotalDistance, db_train.LapCnts);
-          gbDebug("Index/StartPt:%u ", db_train.gh_ptrec.Index);
-          gbDebug("LapIndex/EndPt:%u ", db_train.gh_laprec.LapIndex);
-          gbDebug("MultiSport:0x%x ", db_train.MultiSport);
+          gbDebug("\nTrainData:{:02}-{:02}-{:02} ", db_train.dateStart.Year, db_train.dateStart.Month, db_train.dateStart.Day);
+          gbDebug("{:02}:{:02}:{:02} ", db_train.timeStart.Hour, db_train.timeStart.Minute, db_train.timeStart.Second);
+          gbDebug("Total(points:{:6} time:{:6}s dist:{:9}m) LapCnts:{:5} ", db_train.TotalPoint, db_train.TotalTime / 10, db_train.TotalDistance, db_train.LapCnts);
+          gbDebug("Index/StartPt:{} ", db_train.gh_ptrec.Index);
+          gbDebug("LapIndex/EndPt:{} ", db_train.gh_laprec.LapIndex);
+          gbDebug("MultiSport:0x{:x} ", db_train.MultiSport);
         }
         int total_laps = db_train.LapCnts;
         int total_laps_left = total_laps;
@@ -507,12 +507,12 @@ GlobalsatSportFormat::track_read()
 
 
           if (global_opts.debug_level > 1) {
-            gbDebug("Lap Trainheader: %02d-%02d-%02d ", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
-            gbDebug("%02d:%02d:%02d ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
-            gbDebug("Total(points:%6u time:%6us dist:%9um) LapCnts:%5d ", header.TotalPoint, header.TotalTime / 10, header.TotalDistance, header.LapCnts);
-            gbDebug("Index/StartPt:%u ", header.gh_ptrec.Index);
-            gbDebug("LapIndex/EndPt:%u ", header.gh_laprec.LapIndex);
-            gbDebug("DataType:0x%x\n", header.DataType);
+            gbDebug("Lap Trainheader: {:02}-{:02}-{:02} ", header.dateStart.Year, header.dateStart.Month, header.dateStart.Day);
+            gbDebug("{:02}:{:02}:{:02} ", header.timeStart.Hour, header.timeStart.Minute, header.timeStart.Second);
+            gbDebug("Total(points:{:6} time:{:6}s dist:{:9}m) LapCnts:{:5} ", header.TotalPoint, header.TotalTime / 10, header.TotalDistance, header.LapCnts);
+            gbDebug("Index/StartPt:{} ", header.gh_ptrec.Index);
+            gbDebug("LapIndex/EndPt:{} ", header.gh_laprec.LapIndex);
+            gbDebug("DataType:0x{:x}\n", header.DataType);
           }
 
           /*
@@ -553,13 +553,13 @@ GlobalsatSportFormat::track_read()
             db_lap.EndPt = be_read32(dblap+37);
 
             if (global_opts.debug_level > 1) {
-              gbDebug("     lap[%d] AccruedTime:%us TotalTime:%us TotalDist:%um", lap, db_lap.AccruedTime, db_lap.TotalTime / 10, db_lap.TotalDistance);
-              gbDebug(" Calory:%d MaxSpeed:%u Hearth max:%d avg:%d ", db_lap.Calory, db_lap.MaxSpeed, db_lap.MaxHeart, db_lap.AvgHeart);
-              gbDebug(" Alt min:%d max:%d", db_lap.MinAlti, db_lap.MaxAlti);
-              gbDebug(" Cadns avg:%d best:%d", db_lap.AvgCadns, db_lap.BestCadns);
-              gbDebug(" Power avg:%d Max:%d", db_lap.AvgPower, db_lap.MaxPower);
-              gbDebug(" MultisportIndex:%d", db_lap.MultiSportIndex);
-              gbDebug(" StartPt:%u EndPt:%u\n", db_lap.StartPt, db_lap.EndPt);
+              gbDebug("     lap[{}] AccruedTime:{}s TotalTime:{}s TotalDist:{}m", lap, db_lap.AccruedTime, db_lap.TotalTime / 10, db_lap.TotalDistance);
+              gbDebug(" Calory:{} MaxSpeed:{} Hearth max:{} avg:{} ", db_lap.Calory, db_lap.MaxSpeed, db_lap.MaxHeart, db_lap.AvgHeart);
+              gbDebug(" Alt min:{} max:{}", db_lap.MinAlti, db_lap.MaxAlti);
+              gbDebug(" Cadns avg:{} best:{}", db_lap.AvgCadns, db_lap.BestCadns);
+              gbDebug(" Power avg:{} Max:{}", db_lap.AvgPower, db_lap.MaxPower);
+              gbDebug(" MultisportIndex:{}", db_lap.MultiSportIndex);
+              gbDebug(" StartPt:{} EndPt:{}\n", db_lap.StartPt, db_lap.EndPt);
             }
           }
           free(track_payload);
@@ -597,12 +597,12 @@ GlobalsatSportFormat::track_read()
 
 
             if (global_opts.debug_level > 1) {
-              gbDebug("Lap Trainheader: %02d-%02d-%02d ", laptrain_header.dateStart.Year, laptrain_header.dateStart.Month, laptrain_header.dateStart.Day);
-              gbDebug("%02d:%02d:%02d ", laptrain_header.timeStart.Hour, laptrain_header.timeStart.Minute, laptrain_header.timeStart.Second);
-              gbDebug("Total(points:%6u time:%6us dist:%9um) LapCnts:%5d ", laptrain_header.TotalPoint, laptrain_header.TotalTime / 10, laptrain_header.TotalDistance, laptrain_header.LapCnts);
-              gbDebug("StartPt:%u ", laptrain_header.gh_ptrec.StartPt);
-              gbDebug("EndPt:%u ", laptrain_header.gh_laprec.EndPt);
-              gbDebug("DataType:0x%x\n", laptrain_header.DataType);
+              gbDebug("Lap Trainheader: {:02}-{:02}-{:02} ", laptrain_header.dateStart.Year, laptrain_header.dateStart.Month, laptrain_header.dateStart.Day);
+              gbDebug("{:02}:{:02}:{:02} ", laptrain_header.timeStart.Hour, laptrain_header.timeStart.Minute, laptrain_header.timeStart.Second);
+              gbDebug("Total(points:{:6} time:{:6}s dist:{:9}m) LapCnts:{:5} ", laptrain_header.TotalPoint, laptrain_header.TotalTime / 10, laptrain_header.TotalDistance, laptrain_header.LapCnts);
+              gbDebug("StartPt:{} ", laptrain_header.gh_ptrec.StartPt);
+              gbDebug("EndPt:{} ", laptrain_header.gh_laprec.EndPt);
+              gbDebug("DataType:0x{:x}\n", laptrain_header.DataType);
             }
 
             int recpoints_in_package = laptrain_header.gh_laprec.EndPt - laptrain_header.gh_ptrec.StartPt + 1;
@@ -629,10 +629,10 @@ GlobalsatSportFormat::track_read()
               //   qDebug() << "DateTime2:" << gpsDateTime.toString();
               // }
               if (global_opts.debug_level > 1) {
-                gbDebug("     recpoint[%2d] Lat:%f Long:%f Alt:%dm", recpoint, (double)((int32_t) point.Latitude) / 1000000.0, (double)((int32_t) point.Longitude) / 1000000.0, point.Altitude);
-                gbDebug(" Speed:%f HR:%d", (double) point.Speed / 100, point.HeartRate);
-                gbDebug(" Time:%u Cadence:%d", point.IntervalTime, point.Cadence);
-                gbDebug(" PwrCadense:%d Power:%d\n", point.PwrCadence, point.Power);
+                gbDebug("     recpoint[{:2}] Lat:{:.6f} Long:{:.6f} Alt:{}m", recpoint, (double)((int32_t) point.Latitude) / 1000000.0, (double)((int32_t) point.Longitude) / 1000000.0, point.Altitude);
+                gbDebug(" Speed:{:.6f} HR:{}", (double) point.Speed / 100, point.HeartRate);
+                gbDebug(" Time:{} Cadence:{}", point.IntervalTime, point.Cadence);
+                gbDebug(" PwrCadense:{} Power:{}\n", point.PwrCadence, point.Power);
               }
 
               auto* wpt = new Waypoint(); // waypt_new();
