@@ -47,8 +47,8 @@ endif()
 # Find the QtCore library
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Network SerialPort Widgets Xml OPTIONAL_COMPONENTS WebEngineWidgets WebChannel)
 list(APPEND QT_LIBRARIES Qt6::Core Qt6::Gui Qt6::Network Qt6::SerialPort Qt6::Widgets Qt6::Xml)
-if(${Qt6Core_VERSION} VERSION_LESS 6.2)
-  message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.2 or newer is required.")
+if(${Qt6Core_VERSION} VERSION_LESS 6.4)
+  message(FATAL_ERROR "Qt version ${Qt6Core_VERSION} found, but version 6.4 or newer is required.")
 else()
   message(STATUS "Using Qt6 version ${Qt6Core_VERSION}")
 endif()
@@ -300,15 +300,7 @@ else()
       message(WARNING "Inno compiler iscc not found, application cannot be packaged.")
     endif()
 
-    # in 5.12.12 cmake doesn't know about windeployqt, look in directory that has qmake.
-    get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
-    get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
-    find_program(WINDEPLOYQT NAMES windeployqt PATHS "${_qt_bin_dir}" NO_DEFAULT_PATH)
-    if(WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND")
-      message(WARNING "windeployqt not found, application cannot be packaged.")
-    endif()
-
-    if((NOT WINDEPLOYQT STREQUAL "WINDEPLOYQT-NOTFOUND") AND (NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND"))
+    if(NOT INNO_COMPILER STREQUAL "INNO_COMPILER-NOTFOUND")
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}" _win_binary_path)
       file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" _win_source_path)
       # for cross compiles we need to tell windeployqt about the target qt paths.
@@ -337,7 +329,7 @@ else()
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabelfe> package
                         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gpsbabel> package
                         # use --plugindir option to locate the plugins.
-                        COMMAND ${WINDEPLOYQT} --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe ${_qtpaths_option}
+                        COMMAND Qt6::windeployqt --verbose 1 --plugindir package\\plugins package\\GPSBabelFE.exe package\\GPSBabel.exe ${_qtpaths_option}
                         COMMAND ${CMAKE_COMMAND} -DPACKAGEDIR=package -P "${CMAKE_CURRENT_SOURCE_DIR}/ci_win_deploy_fixup_package.cmake"
                         # set location to location of generated setup.iss file.
                         COMMAND ${INNO_COMPILER} /Doutput_dir=${_win_binary_path} /Dsource_dir=${_win_source_path} /Darch=${_installer_arch} setup.iss
