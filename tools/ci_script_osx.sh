@@ -37,12 +37,9 @@ elif version_ge "${QTVER}" 6.5.0; then
 elif version_ge "${QTVER}" 6.0.0; then
   DEPLOY_TARGET="10.14"
   ARCHS="x86_64;arm64"
-elif version_ge "${QTVER}" 5.14.0; then
-  DEPLOY_TARGET="10.13"
-  ARCHS="x86_64"
 else
-  DEPLOY_TARGET="10.12"
-  ARCHS="x86_64"
+  echo "Qt 5 and earlier are not supported" >&2
+  exit 1
 fi
 CMAKEOPTIONS+=(-DCMAKE_OSX_ARCHITECTURES="${ARCHS}")
 CMAKEOPTIONS+=(-DCMAKE_OSX_DEPLOYMENT_TARGET="${DEPLOY_TARGET}")

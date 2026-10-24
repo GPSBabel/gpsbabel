@@ -17,7 +17,7 @@ function validate() {
   )
 }
 
-QT_VERSION=${1:-6.5.3}
+QT_VERSION=${1:-6.12.0}
 COMPILER=${2:-msvc2022_64}
 METHOD=${3:-default}
 CROSS_COMPILER=${4}
