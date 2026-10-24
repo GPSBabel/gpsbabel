@@ -65,9 +65,7 @@ else
     # we need https://github.com/miurahr/aqtinstall/pull/1048 for 6.12.0
     # until these are merged and released we must use a locally generated version of aqt.
     #pip3 install 'aqtinstall>=3.3.0'
-    archive=aqtinstall-3.3.1.dev169-py3-none-any.whl
-    curl -u "${ARTIFACTORY_USER}:${ARTIFACTORY_API_KEY}" "${ARTIFACTORY_BASE_URL}/${archive}" -o "/tmp/${archive}"
-    pip3 install "/tmp/${archive}"
+    "${BASH_SOURCE%/*}/getaqt.sh"
     "${CI_BUILD_DIR}/tools/ci_install_qt.sh" "${HOST}" "${QT_VERSION}" "${PACKAGE_SUFFIX}" "${CACHEDIR}/Qt"
     if [ -n "${PACKAGE_SUFFIX_CROSS}" ]; then
       "${CI_BUILD_DIR}/tools/ci_install_qt.sh" "${HOST}" "${QT_VERSION}" "${PACKAGE_SUFFIX_CROSS}" "${CACHEDIR}/Qt"
