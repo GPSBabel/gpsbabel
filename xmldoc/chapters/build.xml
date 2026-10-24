@@ -252,6 +252,16 @@ QtWebEngineWidgets are not used.
           </listitem>
         </varlistentry>
         <varlistentry>
+          <term>GPSBABEL_EMBED_MAP</term>
+          <listitem>
+            <para>
+This switch is obsolete and has been removed.
+gmapbase.html is always embedded if GPSBABEL_GOOGLE_MAPPREVIEW is ON.
+gmapbase.html should not be distributed.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
           <term>GPSBABEL_EMBED_TRANSLATIONS</term>
           <listitem>
             <para>
