@@ -3,9 +3,9 @@
 # install Qt
 #
 # Examples:
-# ci_install_qt.sh mac 6.8.1 clang_64 /tmp/Qt
-# ci_install_qt.sh windows 6.8.1 win64_msvc2022_64 /tmp/Qt
-# ci_install_qt.sh linux 6.8.1 linux_gcc_64 /tmp/Qt
+# ci_install_qt.sh mac 6.8.3 clang_64 /tmp/Qt
+# ci_install_qt.sh windows 6.8.3 win64_msvc2022_64 /tmp/Qt
+# ci_install_qt.sh linux 6.8.3 linux_gcc_64 /tmp/Qt
 
 host=$1
 version=$2
