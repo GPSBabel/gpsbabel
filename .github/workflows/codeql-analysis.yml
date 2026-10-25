@@ -50,7 +50,7 @@ jobs:
         include:
         - language: c-cpp
           build-mode: autobuild
-          image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_noble
+          image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_resolute
           runs-on: ubuntu-latest
         - language: actions
           build-mode: none
