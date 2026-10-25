@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - IMAGE: 'noble'
+          - IMAGE: 'resolute'
             CMAKE_PREFIX_PATH: '/usr/lib/x86_64-linux-gnu/cmake/Qt6'
             RELEASE: true
     container:
