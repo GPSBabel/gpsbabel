@@ -171,13 +171,8 @@ UpgradeCheck::updateStatus UpgradeCheck::getStatus()
 // this function to sort that out. (See what I did there? Bwaaaahah!)
 bool UpgradeCheck::suggestUpgrade(const QString& from, const QString& to)
 {
-#if (QT_VERSION < QT_VERSION_CHECK(6, 4, 0))
-  int fromIndex = 0;
-  int toIndex = 0;
-#else
   qsizetype fromIndex = 0;
   qsizetype toIndex = 0;
-#endif
   QVersionNumber fromVersion = QVersionNumber::fromString(from, &fromIndex);
   QVersionNumber toVersion = QVersionNumber::fromString(to, &toIndex);
 
