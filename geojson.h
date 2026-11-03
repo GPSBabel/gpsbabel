@@ -19,16 +19,19 @@
 #ifndef GEOJSON_H_INCLUDED_
 #define GEOJSON_H_INCLUDED_
 
-#include <QList>            // for QList
-#include <QJsonArray>       // for QJsonArray
-#include <QJsonObject>      // for QJsonObject
-#include <QString>          // for QString, QStringLiteral
-#include <QVector>          // for QVector
+#include <QJsonArray>         // for QJsonArray
+#include <QJsonObject>        // for QJsonObject
+#include <QLatin1StringView>  // for QLatin1StringView
+#include <QList>              // for QList
+#include <QString>            // for QString
+#include <QVector>            // for QVector
 
-#include "defs.h"
-#include "format.h"         // for Format
-#include "option.h"         // for OptionBool
-#include "src/core/file.h"  // for File
+#include "defs.h"             // for arglist_t, Waypoint, route_head, ARG_NOMINMAX, ARGTYPE_STRING, ff_type, ARGTYPE_BOOL, FF_CAP_RW_ALL, ff_cap
+#include "format.h"           // for Format
+#include "option.h"           // for OptionString, OptionBool
+#include "src/core/file.h"    // for File
+
+using namespace Qt::StringLiterals;
 
 class GeoJsonFormat : public Format
 {
@@ -82,21 +85,21 @@ private:
   QJsonObject* route_object = nullptr;
   QJsonArray* route_coords = nullptr;
 
-  const QString FEATURE_COLLECTION = QStringLiteral("FeatureCollection");
-  const QString FEATURE = QStringLiteral("Feature");
-  const QString POINT = QStringLiteral("Point");
-  const QString MULTIPOINT = QStringLiteral("MultiPoint");
-  const QString LINESTRING = QStringLiteral("LineString");
-  const QString MULTILINESTRING = QStringLiteral("MultiLineString");
-  const QString POLYGON = QStringLiteral("Polygon");
-  const QString MULTIPOLYGON = QStringLiteral("MultiPolygon");
-  const QString TYPE = QStringLiteral("type");
-  const QString FEATURES = QStringLiteral("features");
-  const QString COORDINATES = QStringLiteral("coordinates");
-  const QString GEOMETRY = QStringLiteral("geometry");
-  const QString PROPERTIES = QStringLiteral("properties");
-  const QString URL = QStringLiteral("url");
-  const QString URLNAME = QStringLiteral("urlname");
+  static constexpr QLatin1StringView FEATURE_COLLECTION = "FeatureCollection"_L1;
+  static constexpr QLatin1StringView FEATURE = "Feature"_L1;
+  static constexpr QLatin1StringView POINT = "Point"_L1;
+  static constexpr QLatin1StringView MULTIPOINT = "MultiPoint"_L1;
+  static constexpr QLatin1StringView LINESTRING = "LineString"_L1;
+  static constexpr QLatin1StringView MULTILINESTRING = "MultiLineString"_L1;
+  static constexpr QLatin1StringView POLYGON = "Polygon"_L1;
+  static constexpr QLatin1StringView MULTIPOLYGON = "MultiPolygon"_L1;
+  static constexpr QLatin1StringView TYPE = "type"_L1;
+  static constexpr QLatin1StringView FEATURES = "features"_L1;
+  static constexpr QLatin1StringView COORDINATES = "coordinates"_L1;
+  static constexpr QLatin1StringView GEOMETRY = "geometry"_L1;
+  static constexpr QLatin1StringView PROPERTIES = "properties"_L1;
+  static constexpr QLatin1StringView URL = "url"_L1;
+  static constexpr QLatin1StringView URLNAME = "urlname"_L1;
 
   QVector<arglist_t> geojson_args = {
     {

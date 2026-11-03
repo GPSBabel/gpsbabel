@@ -22,14 +22,17 @@
 #ifndef GOOGLETAKEOUT_H_INCLUDED_
 #define GOOGLETAKEOUT_H_INCLUDED_
 
-#include <QJsonObject>     // for QJsonObject
-#include <QJsonValue>      // for QJsonValue
-#include <QList>           // for QList
-#include <QString>         // for QString
-#include <QVector>         // for QVector
+#include <QJsonObject>        // for QJsonObject
+#include <QJsonValue>         // for QJsonValue
+#include <QLatin1StringView>  // for QLatin1StringView
+#include <QList>              // for QList
+#include <QString>            // for QString
+#include <QVector>            // for QVector
 
 #include "defs.h"
-#include "format.h"        // for Format
+#include "format.h"           // for Format
+
+using namespace Qt::StringLiterals;
 
 /*
  * Reads Location History JSON files and return each timelineObject
@@ -66,30 +69,30 @@ public:
 private:
   /* Constants */
 
-  static constexpr char TIMELINE_OBJECTS[] = "timelineObjects";
-  static constexpr char16_t PLACE_VISIT[] = u"placeVisit";
-  static constexpr char16_t ACTIVITY_SEGMENT[] = u"activitySegment";
-  static constexpr char16_t ACTIVITY_TYPE[] = u"activityType";
-  static constexpr char16_t LOCATION[] = u"location";
-  static constexpr char16_t LOCATION_LATE7[] = u"latitudeE7";
-  static constexpr char16_t LOCATION_LONE7[] = u"longitudeE7";
-  static constexpr char16_t NAME[] = u"name";
-  static constexpr char16_t ADDRESS[] = u"address";
-  static constexpr char16_t DURATION[] = u"duration";
-  static constexpr char16_t START_TIMESTAMP[] = u"startTimestamp";
-  static constexpr char16_t START_LOCATION[] = u"startLocation";
-  static constexpr char16_t END_TIMESTAMP[] = u"endTimestamp";
-  static constexpr char16_t END_LOCATION[] = u"endLocation";
-  static constexpr char16_t TIMESTAMP[] = u"timestamp";
-  static constexpr char16_t SIMPLE_PATH[] = u"simplifiedRawPath";
-  static constexpr char16_t POINTS[] = u"points";
-  static constexpr char16_t WAYPOINT_PATH[] = u"waypointPath";
-  static constexpr char16_t WAYPOINTS [] = u"waypoints";
+  static constexpr QLatin1StringView TIMELINE_OBJECTS = "timelineObjects"_L1;
+  static constexpr QLatin1StringView PLACE_VISIT = "placeVisit"_L1;
+  static constexpr QLatin1StringView ACTIVITY_SEGMENT = "activitySegment"_L1;
+  static constexpr QLatin1StringView ACTIVITY_TYPE = "activityType"_L1;
+  static constexpr QLatin1StringView LOCATION = "location"_L1;
+  static constexpr QLatin1StringView LOCATION_LATE7 = "latitudeE7"_L1;
+  static constexpr QLatin1StringView LOCATION_LONE7 = "longitudeE7"_L1;
+  static constexpr QLatin1StringView NAME = "name"_L1;
+  static constexpr QLatin1StringView ADDRESS = "address"_L1;
+  static constexpr QLatin1StringView DURATION = "duration"_L1;
+  static constexpr QLatin1StringView START_TIMESTAMP = "startTimestamp"_L1;
+  static constexpr QLatin1StringView START_LOCATION = "startLocation"_L1;
+  static constexpr QLatin1StringView END_TIMESTAMP = "endTimestamp"_L1;
+  static constexpr QLatin1StringView END_LOCATION = "endLocation"_L1;
+  static constexpr QLatin1StringView TIMESTAMP = "timestamp"_L1;
+  static constexpr QLatin1StringView SIMPLE_PATH = "simplifiedRawPath"_L1;
+  static constexpr QLatin1StringView POINTS = "points"_L1;
+  static constexpr QLatin1StringView WAYPOINT_PATH = "waypointPath"_L1;
+  static constexpr QLatin1StringView WAYPOINTS  = "waypoints"_L1;
   // for some reason that probably only a former Google engineer knows,;
-  // we use[] = u"latE7"/"lngE7" here instead of "latitudeE7"/"longitudeE7".;
+  // we use = "latE7"/"lngE7" here instead of "latitudeE7"/"longitudeE7".;
   // +10 points for brevity, but -100 points for inconsistency.;
-  static constexpr char16_t LATE7[] = u"latE7";
-  static constexpr char16_t LONE7[] = u"lngE7";
+  static constexpr QLatin1StringView LATE7 = "latE7"_L1;
+  static constexpr QLatin1StringView LONE7 = "lngE7"_L1;
 
   /* Types */
 

@@ -21,14 +21,17 @@
 #ifndef GOOGLETIMELINE_H_INCLUDED_
 #define GOOGLETIMELINE_H_INCLUDED_
 
-#include <QJsonArray>      // for QJsonArray
-#include <QJsonObject>     // for QJsonObject
-#include <QString>         // for QString
-#include <QVector>         // for QVector
+#include <QJsonArray>           // for QJsonArray
+#include <QJsonObject>          // for QJsonObject
+#include <QLatin1StringView>    // for QLatin1StringView
+#include <QString>              // for QString
+#include <QVector>              // for QVector
 
 #include "defs.h"
-#include "format.h"        // for Format
+#include "format.h"             // for Format
 #include "src/core/datetime.h"  // for DateTime
+
+using namespace Qt::StringLiterals;
 
 /*
  * Reads the device-local Google Maps Timeline export (a single "Timeline.json"
@@ -66,28 +69,28 @@ public:
 
 private:
   /* Constants — top level */
-  static constexpr char SEMANTIC_SEGMENTS[] = "semanticSegments";
-  static constexpr char16_t START_TIME[] = u"startTime";
-  static constexpr char16_t END_TIME[] = u"endTime";
+  static constexpr QLatin1StringView SEMANTIC_SEGMENTS = "semanticSegments"_L1;
+  static constexpr QLatin1StringView START_TIME = "startTime"_L1;
+  static constexpr QLatin1StringView END_TIME = "endTime"_L1;
 
   /* Constants — the three semanticSegment sub-types */
-  static constexpr char16_t VISIT[] = u"visit";
-  static constexpr char16_t ACTIVITY[] = u"activity";
-  static constexpr char16_t TIMELINE_PATH[] = u"timelinePath";
+  static constexpr QLatin1StringView VISIT = "visit"_L1;
+  static constexpr QLatin1StringView ACTIVITY = "activity"_L1;
+  static constexpr QLatin1StringView TIMELINE_PATH = "timelinePath"_L1;
 
   /* Constants — fields within the sub-types */
-  static constexpr char16_t TOP_CANDIDATE[] = u"topCandidate";
-  static constexpr char16_t PLACE_LOCATION[] = u"placeLocation";
-  static constexpr char16_t LATLNG[] = u"latLng";
-  static constexpr char16_t SEMANTIC_TYPE[] = u"semanticType";
-  static constexpr char16_t PLACE_ID[] = u"placeId";
-  static constexpr char16_t POINT[] = u"point";
-  static constexpr char16_t TIME[] = u"time";
-  static constexpr char16_t START[] = u"start";
-  static constexpr char16_t END[] = u"end";
-  static constexpr char16_t TYPE[] = u"type";
-  static constexpr char16_t PARKING[] = u"parking";
-  static constexpr char16_t LOCATION[] = u"location";
+  static constexpr QLatin1StringView TOP_CANDIDATE = "topCandidate"_L1;
+  static constexpr QLatin1StringView PLACE_LOCATION = "placeLocation"_L1;
+  static constexpr QLatin1StringView LATLNG = "latLng"_L1;
+  static constexpr QLatin1StringView SEMANTIC_TYPE = "semanticType"_L1;
+  static constexpr QLatin1StringView PLACE_ID = "placeId"_L1;
+  static constexpr QLatin1StringView POINT = "point"_L1;
+  static constexpr QLatin1StringView TIME = "time"_L1;
+  static constexpr QLatin1StringView START = "start"_L1;
+  static constexpr QLatin1StringView END = "end"_L1;
+  static constexpr QLatin1StringView TYPE = "type"_L1;
+  static constexpr QLatin1StringView PARKING = "parking"_L1;
+  static constexpr QLatin1StringView LOCATION = "location"_L1;
 
   static const QString nullString;
 
