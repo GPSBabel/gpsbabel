@@ -775,12 +775,12 @@ main(int argc, char* argv[])
 // MIN_QT_VERSION in GPSBabel.pro should correspond to the QT_VERSION_CHECK
 // arguments in main.cc and gui/main.cc and the version check in
 // CMakeLists.txt, gui/CMakeLists.txt.
-#if (QT_VERSION < QT_VERSION_CHECK(6, 2, 0))
+#if (QT_VERSION < QT_VERSION_CHECK(6, 4, 0))
 #error This version of Qt is not supported.
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 1920) /* Visual Studio 2017 or earlier */
-#error Visual Studio 2017 and earlier are not supported. Please use Visual Studio 2019 or 2022.
+#if defined(_MSC_VER) && (_MSC_VER < 1930) /* Visual Studio 2019 or earlier */
+#error Visual Studio 2019 and earlier are not supported. Please use Visual Studio 2022 or 2026.
 #endif
 
   qInstallMessageHandler(MessageHandler);

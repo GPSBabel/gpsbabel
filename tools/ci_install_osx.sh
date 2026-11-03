@@ -28,7 +28,7 @@ function validate() {
   )
 }
 
-QT_VERSION=${1:-6.2.4}
+QT_VERSION=${1:-6.12.0}
 METHOD=${2:-aqt}
 
 # our expectation is that the install creates $QTDIR, $QTDIR/bin.
