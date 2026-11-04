@@ -287,7 +287,9 @@ LowranceusrFormat::lowranceusr4_find_color_from_icon_number_plus_color_index(con
 {
   for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
     if (icon == i->value) {
-      return i->color[index];
+      if (index >= 0 && index < 7) {
+        return i->color[index];
+      }
     }
   }
 
