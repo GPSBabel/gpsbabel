@@ -31,8 +31,6 @@
 #include "option.h"           // for OptionString, OptionBool
 #include "src/core/file.h"    // for File
 
-using namespace Qt::StringLiterals;
-
 class GeoJsonFormat : public Format
 {
 public:
@@ -85,21 +83,21 @@ private:
   QJsonObject* route_object = nullptr;
   QJsonArray* route_coords = nullptr;
 
-  static constexpr QLatin1StringView FEATURE_COLLECTION = "FeatureCollection"_L1;
-  static constexpr QLatin1StringView FEATURE = "Feature"_L1;
-  static constexpr QLatin1StringView POINT = "Point"_L1;
-  static constexpr QLatin1StringView MULTIPOINT = "MultiPoint"_L1;
-  static constexpr QLatin1StringView LINESTRING = "LineString"_L1;
-  static constexpr QLatin1StringView MULTILINESTRING = "MultiLineString"_L1;
-  static constexpr QLatin1StringView POLYGON = "Polygon"_L1;
-  static constexpr QLatin1StringView MULTIPOLYGON = "MultiPolygon"_L1;
-  static constexpr QLatin1StringView TYPE = "type"_L1;
-  static constexpr QLatin1StringView FEATURES = "features"_L1;
-  static constexpr QLatin1StringView COORDINATES = "coordinates"_L1;
-  static constexpr QLatin1StringView GEOMETRY = "geometry"_L1;
-  static constexpr QLatin1StringView PROPERTIES = "properties"_L1;
-  static constexpr QLatin1StringView URL = "url"_L1;
-  static constexpr QLatin1StringView URLNAME = "urlname"_L1;
+  static constexpr QLatin1StringView FEATURE_COLLECTION{"FeatureCollection"};
+  static constexpr QLatin1StringView FEATURE{"Feature"};
+  static constexpr QLatin1StringView POINT{"Point"};
+  static constexpr QLatin1StringView MULTIPOINT{"MultiPoint"};
+  static constexpr QLatin1StringView LINESTRING{"LineString"};
+  static constexpr QLatin1StringView MULTILINESTRING{"MultiLineString"};
+  static constexpr QLatin1StringView POLYGON{"Polygon"};
+  static constexpr QLatin1StringView MULTIPOLYGON{"MultiPolygon"};
+  static constexpr QLatin1StringView TYPE{"type"};
+  static constexpr QLatin1StringView FEATURES{"features"};
+  static constexpr QLatin1StringView COORDINATES{"coordinates"};
+  static constexpr QLatin1StringView GEOMETRY{"geometry"};
+  static constexpr QLatin1StringView PROPERTIES{"properties"};
+  static constexpr QLatin1StringView URL{"url"};
+  static constexpr QLatin1StringView URLNAME{"urlname"};
 
   QVector<arglist_t> geojson_args = {
     {

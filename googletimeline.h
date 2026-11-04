@@ -31,8 +31,6 @@
 #include "format.h"             // for Format
 #include "src/core/datetime.h"  // for DateTime
 
-using namespace Qt::StringLiterals;
-
 /*
  * Reads the device-local Google Maps Timeline export (a single "Timeline.json"
  * with a top-level "semanticSegments" array), the format Google switched to after
@@ -69,28 +67,28 @@ public:
 
 private:
   /* Constants — top level */
-  static constexpr QLatin1StringView SEMANTIC_SEGMENTS = "semanticSegments"_L1;
-  static constexpr QLatin1StringView START_TIME = "startTime"_L1;
-  static constexpr QLatin1StringView END_TIME = "endTime"_L1;
+  static constexpr QLatin1StringView SEMANTIC_SEGMENTS{"semanticSegments"};
+  static constexpr QLatin1StringView START_TIME{"startTime"};
+  static constexpr QLatin1StringView END_TIME{"endTime"};
 
   /* Constants — the three semanticSegment sub-types */
-  static constexpr QLatin1StringView VISIT = "visit"_L1;
-  static constexpr QLatin1StringView ACTIVITY = "activity"_L1;
-  static constexpr QLatin1StringView TIMELINE_PATH = "timelinePath"_L1;
+  static constexpr QLatin1StringView VISIT{"visit"};
+  static constexpr QLatin1StringView ACTIVITY{"activity"};
+  static constexpr QLatin1StringView TIMELINE_PATH{"timelinePath"};
 
   /* Constants — fields within the sub-types */
-  static constexpr QLatin1StringView TOP_CANDIDATE = "topCandidate"_L1;
-  static constexpr QLatin1StringView PLACE_LOCATION = "placeLocation"_L1;
-  static constexpr QLatin1StringView LATLNG = "latLng"_L1;
-  static constexpr QLatin1StringView SEMANTIC_TYPE = "semanticType"_L1;
-  static constexpr QLatin1StringView PLACE_ID = "placeId"_L1;
-  static constexpr QLatin1StringView POINT = "point"_L1;
-  static constexpr QLatin1StringView TIME = "time"_L1;
-  static constexpr QLatin1StringView START = "start"_L1;
-  static constexpr QLatin1StringView END = "end"_L1;
-  static constexpr QLatin1StringView TYPE = "type"_L1;
-  static constexpr QLatin1StringView PARKING = "parking"_L1;
-  static constexpr QLatin1StringView LOCATION = "location"_L1;
+  static constexpr QLatin1StringView TOP_CANDIDATE{"topCandidate"};
+  static constexpr QLatin1StringView PLACE_LOCATION{"placeLocation"};
+  static constexpr QLatin1StringView LATLNG{"latLng"};
+  static constexpr QLatin1StringView SEMANTIC_TYPE{"semanticType"};
+  static constexpr QLatin1StringView PLACE_ID{"placeId"};
+  static constexpr QLatin1StringView POINT{"point"};
+  static constexpr QLatin1StringView TIME{"time"};
+  static constexpr QLatin1StringView START{"start"};
+  static constexpr QLatin1StringView END{"end"};
+  static constexpr QLatin1StringView TYPE{"type"};
+  static constexpr QLatin1StringView PARKING{"parking"};
+  static constexpr QLatin1StringView LOCATION{"location"};
 
   static const QString nullString;
 

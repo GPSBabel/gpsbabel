@@ -32,8 +32,6 @@
 #include "defs.h"
 #include "format.h"           // for Format
 
-using namespace Qt::StringLiterals;
-
 /*
  * Reads Location History JSON files and return each timelineObject
  * that should be processed.
@@ -69,30 +67,30 @@ public:
 private:
   /* Constants */
 
-  static constexpr QLatin1StringView TIMELINE_OBJECTS = "timelineObjects"_L1;
-  static constexpr QLatin1StringView PLACE_VISIT = "placeVisit"_L1;
-  static constexpr QLatin1StringView ACTIVITY_SEGMENT = "activitySegment"_L1;
-  static constexpr QLatin1StringView ACTIVITY_TYPE = "activityType"_L1;
-  static constexpr QLatin1StringView LOCATION = "location"_L1;
-  static constexpr QLatin1StringView LOCATION_LATE7 = "latitudeE7"_L1;
-  static constexpr QLatin1StringView LOCATION_LONE7 = "longitudeE7"_L1;
-  static constexpr QLatin1StringView NAME = "name"_L1;
-  static constexpr QLatin1StringView ADDRESS = "address"_L1;
-  static constexpr QLatin1StringView DURATION = "duration"_L1;
-  static constexpr QLatin1StringView START_TIMESTAMP = "startTimestamp"_L1;
-  static constexpr QLatin1StringView START_LOCATION = "startLocation"_L1;
-  static constexpr QLatin1StringView END_TIMESTAMP = "endTimestamp"_L1;
-  static constexpr QLatin1StringView END_LOCATION = "endLocation"_L1;
-  static constexpr QLatin1StringView TIMESTAMP = "timestamp"_L1;
-  static constexpr QLatin1StringView SIMPLE_PATH = "simplifiedRawPath"_L1;
-  static constexpr QLatin1StringView POINTS = "points"_L1;
-  static constexpr QLatin1StringView WAYPOINT_PATH = "waypointPath"_L1;
-  static constexpr QLatin1StringView WAYPOINTS  = "waypoints"_L1;
+  static constexpr QLatin1StringView TIMELINE_OBJECTS{"timelineObjects"};
+  static constexpr QLatin1StringView PLACE_VISIT{"placeVisit"};
+  static constexpr QLatin1StringView ACTIVITY_SEGMENT{"activitySegment"};
+  static constexpr QLatin1StringView ACTIVITY_TYPE{"activityType"};
+  static constexpr QLatin1StringView LOCATION{"location"};
+  static constexpr QLatin1StringView LOCATION_LATE7{"latitudeE7"};
+  static constexpr QLatin1StringView LOCATION_LONE7{"longitudeE7"};
+  static constexpr QLatin1StringView NAME{"name"};
+  static constexpr QLatin1StringView ADDRESS{"address"};
+  static constexpr QLatin1StringView DURATION{"duration"};
+  static constexpr QLatin1StringView START_TIMESTAMP{"startTimestamp"};
+  static constexpr QLatin1StringView START_LOCATION{"startLocation"};
+  static constexpr QLatin1StringView END_TIMESTAMP{"endTimestamp"};
+  static constexpr QLatin1StringView END_LOCATION{"endLocation"};
+  static constexpr QLatin1StringView TIMESTAMP{"timestamp"};
+  static constexpr QLatin1StringView SIMPLE_PATH{"simplifiedRawPath"};
+  static constexpr QLatin1StringView POINTS{"points"};
+  static constexpr QLatin1StringView WAYPOINT_PATH{"waypointPath"};
+  static constexpr QLatin1StringView WAYPOINTS {"waypoints"};
   // for some reason that probably only a former Google engineer knows,;
-  // we use = "latE7"/"lngE7" here instead of "latitudeE7"/"longitudeE7".;
+  // we use{"latE7"/"lngE7" here instead of "latitudeE7"/"longitudeE7".;
   // +10 points for brevity, but -100 points for inconsistency.;
-  static constexpr QLatin1StringView LATE7 = "latE7"_L1;
-  static constexpr QLatin1StringView LONE7 = "lngE7"_L1;
+  static constexpr QLatin1StringView LATE7{"latE7"};
+  static constexpr QLatin1StringView LONE7{"lngE7"};
 
   /* Types */
 
