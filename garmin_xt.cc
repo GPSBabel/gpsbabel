@@ -120,6 +120,7 @@ GarminXTFormat::format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_
   gbfread(p_track_color, 1, DATABLOCKSIZE, fin);
   gbfread(&spam, 1, DATABLOCKSIZE, fin);
 
+  trk_name[sizeof(trk_name) - 1] = '\0';
   strcpy(p_trk_name, trk_name);
   return trackbytes;
 }
