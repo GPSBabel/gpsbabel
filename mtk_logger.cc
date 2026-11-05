@@ -200,7 +200,7 @@ int MtkLoggerBase::do_cmd(const char* cmd, const char* expect, char** rslt, time
           }
           // printf("Data segment: #%s#\n", &line[expect_len+1]);
           if (rslt) {
-            *rslt = (char*) xmalloc(len-3-expect_len+1);
+            *rslt = (char*) xmalloc(strlen(&line[expect_len+1]) + 1);
             strcpy(*rslt, &line[expect_len+1]);
           }
         }
