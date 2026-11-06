@@ -10,8 +10,11 @@ git checkout -- zlib
 
 mv zlib zlib.old
 
-tar -xzvf ../../Downloads/zlib-1.3.2.tar.gz
-mv zlib-1.3.2 zlib
+curl -L -O -s https://github.com/madler/zlib/releases/download/v1.4/zlib-1.4.tar.gz.asc
+curl -L -O -s https://github.com/madler/zlib/releases/download/v1.4/zlib-1.4.tar.gz
+gpg --verify zlib-1.4.tar.gz.asc
+tar -xzf zlib-1.4.tar.gz
+mv zlib-1.4 zlib
 cd zlib
 
 mv doc/algorithm.txt .
@@ -51,12 +54,12 @@ rm -f zlibConfig.cmake.in
 
 # copy our unique files
 cp -p ../zlib.old/README.gpsbabel .
+cp ../resync_zlib .
 
 cd ..
 find zlib | sort > zlib.new.list
 find zlib.old | sort > zlib.old.list
 
-cp resync_zlib zlib
 
 echo "you must manually edit README.gpsbabel"
 echo "Done"
