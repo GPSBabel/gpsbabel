@@ -285,9 +285,9 @@ LowranceusrFormat::lowranceusr4_find_icon_number_from_desc(const QString& desc)
 const char*
 LowranceusrFormat::lowranceusr4_find_color_from_icon_number_plus_color_index(const int icon, const int index)
 {
-  for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
-    if (icon == i->value) {
-      if (index >= 0 && index < 7) {
+  if (index >= 0 && index < 7) {
+    for (const lowranceusr4_icon_mapping_t* i = lowranceusr4_icon_value_table; i->icon; i++) {
+      if (icon == i->value) {
         return i->color[index];
       }
     }
