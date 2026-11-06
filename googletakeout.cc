@@ -40,11 +40,11 @@
 
 
 void GoogleTakeoutFormat::takeout_fatal(const QString& message) {
-  gbFatal(FatalMsg() << message);
+  gbFatal(FatalMsg().noquote() << message);
 }
 
 void GoogleTakeoutFormat::takeout_warning(const QString& message) {
-  Warning() << message;
+  Warning().noquote() << message;
 }
 
 /* create a waypoint from late7/lone7 and optional metadata */

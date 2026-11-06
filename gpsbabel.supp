@@ -1,79 +1,39 @@
 {
-   <vtesto text>
+   <qt6_qhash_simd_unaligned_16_byte_read_fix>
+#  This is intermittently triggered by vtesto -l text
+#  This should not require dbgsyms.
 #  Fedora 41 qt6-qtbase.x86_64 6.8.0-4.fc41
 #  Fedora 40 qt6-qtbase.x86_64 6.7.2-6.fc40 intermittant
-#  Ubnutu Jammy libqt6core6/jammy-updates,now 6.2.4+dfsg-2ubuntu1.1 amd64 >
+#  Ubuntu Jammy libqt6core6/jammy-updates,now 6.2.4+dfsg-2ubuntu1.1 amd64 >
 #  Ubuntu Jammy qtio qhash.cpp 6.2.4
 #  Ubuntu Jammy qtio qhash.cpp 6.7.2 intermittant
+#  Ubuntu Noble libqt6core6t64/noble,now 6.4.2+dfsg-21.1build5 amd64>
+#  SIMD (emmintrin.h / SSE2) unaligned 16-byte reads in Qt6 core hashing optimization.
+#  Requires libqt6core6t64-dbgsym
    Memcheck:Addr16
    ...
-   fun:calculateHash<QStringView>
+   fun:*aeshash128*
+   ...
 }
 {
-   <vesto text 2>
-#  Ubuntu Noble libqt6core6t64/noble,now 6.4.2+dfsg-21.1build5 amd64>
-   Memcheck:Addr16
-   fun:UnknownInlinedFun
-   fun:_ZL15aeshash128_lt16Dv2_xPKhm
+   suppress_gpsbabel_parse_integer_exceptions_completely
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   fun:*throw_*
+   fun:*parse_integer*
 }
 {
-   <Fedora18: Qt's use of libuuc leaks.>
+   suppress_gpsbabel_parse_double_exceptions_completely
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   fun:*throw_*
+   fun:*parse_double*
+}
+{
+   <Ubuntu Noble, Resolute et.al.: Qt's use of libuuc leaks.>
    Memcheck:Leak
    ...
    obj:*libicuuc*
 }
-{
-   <Fedora18: XmlStreamAttributes has an internal leak.>
-   Memcheck:Leak
-   ...
-   fun:_ZL7tag_wptRK20QXmlStreamAttributes
-}
-
-{
-   <F18 internal leak for locales called from toDouble>
-   Memcheck:Leak
-   ...
-   fun:_ZN14QLocalePrivate19updateSystemPrivateEv
-}
-
-{
-   <F18 many errors from dlopened objects.
-   Memcheck:Leak
-   ...
-   fun:dlopen_doit
-}
-
-{
-   <F18 leak in QIODevice::QIODevice ctor>
-   Memcheck:Leak
-   ...
-   fun:_ZN9QIODeviceC1ER16QIODevicePrivateP7QObject
-}
-
-
-{
-   <F18 leak in QTextStream::QTextStream(QIODevice*) in google.cc >
-   Memcheck:Leak
-   ...
-   fun:_ZN11QTextStreamC1EP9QIODevice
-}
-
-{
-   <ubuntu precise with qt 4.8.1 on travis>
-   Memcheck:Leak
-   fun:memalign
-   fun:posix_memalign
-   obj:/lib/x86_64-linux-gnu/libglib-2.0.so.0.3200.4
-   fun:g_slice_alloc
-   fun:g_slice_alloc0
-   fun:g_thread_self
-   fun:g_main_context_acquire
-   fun:g_main_context_push_thread_default
-   fun:_ZN27QEventDispatcherGlibPrivateC1EP13_GMainContext
-   fun:_ZN20QEventDispatcherGlibC1EP7QObject
-   fun:_ZN23QCoreApplicationPrivate21createEventDispatcherEv
-   fun:_ZN16QCoreApplication4initEv
-   fun:_ZN16QCoreApplicationC1ERiPPci
-   fun:main
-}
-
