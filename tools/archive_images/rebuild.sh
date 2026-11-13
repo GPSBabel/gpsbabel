@@ -9,3 +9,4 @@
 ./make_docker_image_gpsbabel.sh -s 1.8.0
 ./make_docker_image_gpsbabel.sh -s 1.9.0
 ./make_docker_image_gpsbabel.sh -s 1.10.0
+./make_docker_image_gpsbabel.sh -s 1.11.0
