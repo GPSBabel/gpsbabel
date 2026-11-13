@@ -41,12 +41,12 @@ const QString GoogleTimelineFormat::nullString = QString();
 
 void GoogleTimelineFormat::timeline_fatal(const QString& message)
 {
-  gbFatal(FatalMsg() << message);
+  gbFatal(FatalMsg().noquote() << message);
 }
 
 void GoogleTimelineFormat::timeline_warning(const QString& message)
 {
-  Warning() << message;
+  Warning().noquote() << message;
 }
 
 /* Parse a "lat°, lng°" decimal-degree string (e.g. "37.4277646°, -122.1404993°").
