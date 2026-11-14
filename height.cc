@@ -24,6 +24,7 @@
 
 #include "defs.h"
 #include "height.h"
+#include "src/core/logging.h"
 #include <cmath>    // for floor
 #include <cstdint>  // for int8_t
 
@@ -52,10 +53,10 @@ double HeightFilter::wgs84_separation(double lat, double lon)
 {
   /* sanity checks to prevent segfault on bad data */
   if ((lat > 90.0) || (lat < -90.0)) {
-    gbFatal("Invalid latitude value (%f)\n", lat);
+    gbFatal("Invalid latitude value ({:.6f})\n", lat);
   }
   if ((lon > 180.0) || (lon < -180.0)) {
-    gbFatal("Invalid longitude value (%f)\n", lon);
+    gbFatal("Invalid longitude value ({:.6f})\n", lon);
   }
 
   auto ilat = static_cast<int>(floor((90.0+lat)/geoid_grid_deg));

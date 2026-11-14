@@ -31,11 +31,18 @@
 #include <QVector>    // for QVector
 
 #include <cstdint>    // for uint8_t, int32_t, uint32_t, uint16_t, int16_t
+#ifndef MOCK_FORMAT
+#include <format>
+#else
+#include <fmt/format.h>
+#endif
+#include <utility>             // for forward
 
 #include "defs.h"
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
 #include "option.h"   // for OptionString, OptionBool
+#include "src/core/logging.h"  // for gbDebug
 
 
 class SkytraqBase
@@ -112,7 +119,13 @@ protected:
 
   /* Member Functions */
 
-  [[gnu::format(printf, 2, 3)]] static void dbg(int l, const char* msg, ...);
+  template <typename... Args>
+  static void dbg(int l, gpsbabel::format_string<Args...> fmt, Args&&... args)
+  {
+    if (global_opts.debug_level > l) {
+      gbDebug(gpsbabel::format(fmt, std::forward<Args>(args)...));
+    }
+  }
   void rd_drain();
   int rd_char(int* errors);
   int rd_buf(uint8_t* buf, int len);

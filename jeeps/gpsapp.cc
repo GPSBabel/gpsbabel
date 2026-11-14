@@ -40,6 +40,7 @@
 #include "jeeps/garminusb.h"
 #include "jeeps/gpsserial.h"
 #include "jeeps/gpsusbint.h"
+#include "src/core/logging.h"
 
 time_t gps_save_time;
 double gps_save_lat;

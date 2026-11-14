@@ -35,6 +35,7 @@
 
 #include "defs.h"            // for gbFatal, CSTR
 #include "jeeps/gpsdatum.h"  // for GPS_ODatum, GPS_OEllipse, GPS_Datums, GPS_Ellipses, UKNG, GPS_SDatum_Alias, GPS_SDatum, GPS_DatumAliases, GPS_PDatum, GPS_PDatum_Alias
+#include "src/core/logging.h"
 
 static constexpr bool use_exact_helmert_inverse = false;
 

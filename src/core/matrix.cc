@@ -25,6 +25,7 @@
 #include <QDebugStateSaver>  // for QDebugStateSaver
 
 #include "defs.h"            // For gbFatal
+#include "src/core/logging.h"
 
 Matrix::Matrix(int rows, int cols) : rows_(rows), cols_(cols), data_(rows * cols, 0.0) {}
 

@@ -92,7 +92,7 @@ GarminFitFormat::fit_parse_header()
 
   int ver = gbfgetc(fin);
   if (ver == EOF || (ver >> 4) > 2)
-    gbFatal("Unsupported protocol version %d.%d\n",
+    gbFatal("Unsupported protocol version {}.{}\n",
           ver >> 4, ver & 0xf);
   if (global_opts.debug_level >= 1) {
     Debug(1) << "protocol version=" << ver;
@@ -126,7 +126,7 @@ GarminFitFormat::fit_parse_header()
       for (unsigned int i = 0; i < kReadHeaderCrcLen; ++i) {
         int data = gbfgetc(fin);
         if (data == EOF) {
-          gbFatal("File %s truncated\n", gbLogCStr(fin->name));
+          gbFatal("File {} truncated\n", gbLogCStr(fin->name));
         }
         crc = fit_crc16(data, crc);
       }
@@ -861,10 +861,10 @@ GarminFitFormat::read()
     }
   } catch (ReaderException& e) {
     if (opt_recoverymode) {
-      gbWarning("%s\n",e.what());
+      gbWarning("{}\n",e.what());
       gbWarning("Aborting read and continuing processing.\n");
     } else {
-      gbFatal("%s  Use recoverymode option at your risk.\n",e.what());
+      gbFatal("{}  Use recoverymode option at your risk.\n",e.what());
     }
   }
 }
@@ -1093,7 +1093,7 @@ GarminFitFormat::fit_write_file_finish() const
   // Update data records size in file header
   gbsize_t file_size = gbftell(fout);
   if (file_size < kWriteHeaderCrcLen) {
-    gbFatal("File %s truncated\n", gbLogCStr(fout->name));
+    gbFatal("File {} truncated\n", gbLogCStr(fout->name));
   }
   gbfseek(fout, 0, SEEK_SET);
   fit_write_file_header(file_size - kWriteHeaderCrcLen, 0);
@@ -1104,7 +1104,7 @@ GarminFitFormat::fit_write_file_finish() const
   for (unsigned int i = 0; i < kWriteHeaderLen; ++i) {
     int data = gbfgetc(fout);
     if (data == EOF) {
-      gbFatal("File %s truncated\n", gbLogCStr(fout->name));
+      gbFatal("File {} truncated\n", gbLogCStr(fout->name));
     }
     crc = fit_crc16(data, crc);
   }

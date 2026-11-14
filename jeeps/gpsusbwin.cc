@@ -31,6 +31,7 @@
 #include "jeeps/gps.h"
 #include "jeeps/gpsapp.h"
 #include "jeeps/gpsusbcommon.h"
+#include "src/core/logging.h"
 
 /* Constants from Garmin doc. */
 
@@ -117,7 +118,7 @@ gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
   WriteFile(usb_handle, obuf, sz, &rsz, NULL);
 
   if (rsz != sz) {
-    gbFatal("Error sending %zu bytes.  Successfully sent %ld\n", sz, rsz);
+    gbFatal("Error sending {} bytes.  Successfully sent {}\n", sz, rsz);
   }
 
   return rsz;
@@ -226,7 +227,7 @@ gusb_init(const char* pname, gpsdevh** dh)
                                      &GARMIN_GUID,
                                      req_unit_number, &devinterface)) {
       GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
-      gbWarning("Is the Garmin USB unit number %d powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.\nAre the Garmin USB drivers installed and functioning with other programs?\nIs it a storage based device like Nuvi, CO, or OR?\n  If so, send GPX files to it, don't use this module.\n", un);
+      gbWarning("Is the Garmin USB unit number {} powered up and connected?\nIs it really a USB unit?  If it's serial, don't choose USB, choose serial.\nAre the Garmin USB drivers installed and functioning with other programs?\nIs it a storage based device like Nuvi, CO, or OR?\n  If so, send GPX files to it, don't use this module.\n", un);
       return 0;
     }
     /* We've matched.  Now start the specific unit. */
@@ -247,7 +248,7 @@ gusb_init(const char* pname, gpsdevh** dh)
       } else {
 
         GPS_Serial_Error("SetupDiEnumDeviceInterfaces");
-        gbWarning("Is the Garmin USB unit number %d powered up and connected?\n", un);
+        gbWarning("Is the Garmin USB unit number {} powered up and connected?\n", un);
         return 0;
       }
     }

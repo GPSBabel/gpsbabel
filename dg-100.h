@@ -32,6 +32,12 @@
 
 #include <cstdint>    // for uint8_t, int16_t, uint16_t
 #include <cstdio>     // for size_t
+#ifndef MOCK_FORMAT
+#include <format>
+#else
+#include <fmt/format.h>
+#endif
+#include <utility>             // for forward
 
 #include <QDateTime>  // for QDateTime
 #include <QList>      // for QList
@@ -42,6 +48,7 @@
 #include "format.h"   // for Format
 #include "gbfile.h"   // for gbfile
 #include "option.h"   // for OptionBool
+#include "src/core/logging.h"  // for gbDebug
 
 
 class Dg100Format : public Format
@@ -111,7 +118,13 @@ protected:
   const dg100_command* dg100_findcmd(int id);
   static QDateTime bintime2utc(int date, int time);
   static void dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf);
-  [[gnu::format(printf, 1, 2)]] static void dg100_log(const char* fmt, ...);
+  template <typename... Args>
+  static void dg100_log(gpsbabel::format_string<Args...> fmt, Args&&... args)
+  {
+    if (global_opts.debug_level > 0) {
+      gbDebug(gpsbabel::format(fmt, std::forward<Args>(args)...));
+    }
+  }
   static float bin2deg(int val);
   void process_gpsfile(uint8_t* data, route_head** track);
   static uint16_t dg100_checksum(const uint8_t* buf, int count);

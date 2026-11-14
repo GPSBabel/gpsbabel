@@ -85,7 +85,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const QString& arg)
       bool ok;
       qint64 partial = match.captured(idx).toLong(&ok);
       if (!ok) {
-        gbFatal("time: invalid quantity in move option \"%s\"!\n", gbLogCStr(match.captured(idx)));
+        gbFatal("time: invalid quantity in move option \"{}\"!\n", gbLogCStr(match.captured(idx)));
       }
 
       switch (match.captured(idx+1).at(0).toLower().toLatin1()) {
@@ -107,7 +107,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const QString& arg)
       case 'z':
         break;
       default:
-        gbFatal("time: invalid unit in move option \"%s\"!\n", gbLogCStr(match.captured(idx+1)));
+        gbFatal("time: invalid unit in move option \"{}\"!\n", gbLogCStr(match.captured(idx+1)));
       }
 
       result += partial;
@@ -118,7 +118,7 @@ qint64 TrackFilter::trackfilter_parse_time_opt(const QString& arg)
       qDebug() << "time option: shift =" << result / 1000.0 << "seconds";
     }
   } else {
-    gbFatal("time: invalid value in move option \"%s\"!\n", gbLogCStr(arg));
+    gbFatal("time: invalid value in move option \"{}\"!\n", gbLogCStr(arg));
   }
 
   return result;
@@ -205,7 +205,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
 
   foreach (const Waypoint* wpt, track->waypoint_list) {
     if (!(opt_merge && opt_discard) && need_time && (!wpt->creation_time.isValid())) {
-      gbFatal("init: Found track point at %f,%f without time!\n",
+      gbFatal("init: Found track point at {:.6f},{:.6f} without time!\n",
             wpt->latitude, wpt->longitude);
     }
 
@@ -213,7 +213,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
       if (!opt_merge) {
         QString t1 = prev->CreationTimeXML();
         QString t2 = wpt->CreationTimeXML();
-        gbFatal("init: Track points badly ordered (timestamp %s > %s)!\n", gbLogCStr(t1), gbLogCStr(t2));
+        gbFatal("init: Track points badly ordered (timestamp {} > {})!\n", gbLogCStr(t1), gbLogCStr(t2));
       }
     }
     prev = wpt;
@@ -317,7 +317,7 @@ void TrackFilter::trackfilter_pack()
       auto prev_last_time = trackfilter_get_last_time(track_list.at(j));
       auto curr_first_time = trackfilter_get_first_time(track_list.at(i));
       if (prev_last_time >= curr_first_time) {
-        gbFatal("pack: Tracks overlap in time! %s >= %s at %d\n",
+        gbFatal("pack: Tracks overlap in time! {} >= {} at {}\n",
               gbLogCStr(prev_last_time.toString()),
               gbLogCStr(curr_first_time.toString()), i);
       }
@@ -406,10 +406,10 @@ void TrackFilter::trackfilter_merge()
     }
 
     if (global_opts.verbose_status > 0) {
-      gbInfo("merge: %d track point(s) merged, %d dropped.\n", track_waypt_count(), original_waypt_count - track_waypt_count());
+      gbInfo("merge: {} track point(s) merged, {} dropped.\n", track_waypt_count(), original_waypt_count - track_waypt_count());
     }
     if ((original_waypt_count > 0) && (track_waypt_count() == 0)) {
-      gbWarning("merge: All %d track points have been dropped!\n", original_waypt_count);
+      gbWarning("merge: All {} track points have been dropped!\n", original_waypt_count);
     }
   }
 }
@@ -442,7 +442,7 @@ void TrackFilter::trackfilter_split()
         bool ok;
         interval = match.captured(1).toDouble(&ok);
         if (!ok || interval <= 0.0) {
-          gbFatal("invalid time interval specified \"%s\", must be a positive number.\n", gbLogCStr(match.captured(1)));
+          gbFatal("invalid time interval specified \"{}\", must be a positive number.\n", gbLogCStr(match.captured(1)));
         }
 
         switch (match.captured(2).at(0).toLower().toLatin1()) {
@@ -462,10 +462,10 @@ void TrackFilter::trackfilter_split()
         }
 
         if constexpr(TRACKF_DBG) {
-          gbDebug("interval %f seconds\n", interval);
+          gbDebug("interval {:.6f} seconds\n", interval);
         }
       } else {
-        gbFatal("invalid timer interval specified \"%s\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", gbLogCStr(opt_split));
+        gbFatal("invalid timer interval specified \"{}\", must be a positive number, followed by 'd' for days, 'h' for hours, 'm' for minutes or 's' for seconds.\n", gbLogCStr(opt_split));
       }
     }
 
@@ -478,7 +478,7 @@ void TrackFilter::trackfilter_split()
         bool ok;
         distance = match.captured(1).toDouble(&ok);
         if (!ok || distance <= 0.0) {
-          gbFatal("invalid time distance specified \"%s\", must be a positive number.\n", gbLogCStr(match.captured(1)));
+          gbFatal("invalid time distance specified \"{}\", must be a positive number.\n", gbLogCStr(match.captured(1)));
         }
 
         switch (match.captured(2).at(0).toLower().toLatin1()) {
@@ -493,10 +493,10 @@ void TrackFilter::trackfilter_split()
         }
 
         if constexpr(TRACKF_DBG) {
-          gbDebug("distance %f meters\n", distance);
+          gbDebug("distance {:.6f} meters\n", distance);
         }
       } else {
-        gbFatal("invalid distance specified \"%s\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", gbLogCStr(opt_sdistance.get()));
+        gbFatal("invalid distance specified \"{}\", must be a positive number followed by 'k' for kilometers or 'm' for miles.\n", gbLogCStr(opt_sdistance.get()));
       }
     }
 
@@ -524,7 +524,7 @@ void TrackFilter::trackfilter_split()
                          wpt->GetCreationTime().toLocalTime().date();
         if constexpr(TRACKF_DBG) {
           if (new_track_flag) {
-            gbDebug("new day %s\n", gbLogCStr(wpt->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
+            gbDebug("new day {}\n", gbLogCStr(wpt->GetCreationTime().toLocalTime().date().toString(Qt::ISODate)));
           }
         }
       } else {
@@ -536,7 +536,7 @@ void TrackFilter::trackfilter_split()
           if (curdist <= distance) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
-            gbDebug("sdistance, %g > %g\n", curdist, distance);
+            gbDebug("sdistance, {:g} > {:g}\n", curdist, distance);
           }
         }
 
@@ -545,7 +545,7 @@ void TrackFilter::trackfilter_split()
           if (tr_interval <= interval) {
             new_track_flag = false;
           } else if constexpr(TRACKF_DBG) {
-            gbDebug("split, %g > %g\n", tr_interval, interval);
+            gbDebug("split, {:g} > {:g}\n", tr_interval, interval);
           }
         }
 
@@ -588,9 +588,9 @@ void TrackFilter::trackfilter_move()
     }
   }
   if (timeless_points > 0) {
-    gbWarning("move: %d points out of %d total points didn't have "
-            "time information and could not be moved.\n",
-            timeless_points, track_waypt_count());
+    gbWarning("move: {} points out of {} total points didn't have "
+                 "time information and could not be moved.\n",
+                 timeless_points, track_waypt_count());
   }
 }
 
@@ -682,14 +682,14 @@ QDateTime TrackFilter::trackfilter_range_check(const QString& timestr)
     result.setTimeSpec(Qt::UTC);
 #endif
     if (!result.isValid()) {
-      gbFatal("range-check: Invalid timestamp \"%s\"!\n", gbLogCStr(timestr));
+      gbFatal("range-check: Invalid timestamp \"{}\"!\n", gbLogCStr(timestr));
     }
 
     if constexpr(TRACKF_DBG) {
       qDebug() << "range-check: " << result;
     }
   } else {
-    gbFatal("range-check: Invalid value for option \"%s\"!\n", gbLogCStr(timestr));
+    gbFatal("range-check: Invalid value for option \"{}\"!\n", gbLogCStr(timestr));
   }
 
   return result;
@@ -742,7 +742,7 @@ void TrackFilter::trackfilter_range()
   }
 
   if ((original_waypt_count > 0) && (track_waypt_count() == 0)) {
-    gbWarning("range: All %d track points have been dropped!\n", original_waypt_count);
+    gbWarning("range: All {} track points have been dropped!\n", original_waypt_count);
   }
 }
 
@@ -844,14 +844,14 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const QString& t
     result.start.setTimeSpec(Qt::UTC);
 #endif
     if (!result.start.isValid()) {
-      gbFatal("faketime-check: Invalid timestamp \"%s\"!\n", gbLogCStr(start));
+      gbFatal("faketime-check: Invalid timestamp \"{}\"!\n", gbLogCStr(start));
     }
 
     if (match.capturedLength(3) > 0) {
       bool ok;
       result.step = llround(1000.0 * match.captured(3).toDouble(&ok));
       if (!ok) {
-        gbFatal("faketime-check: Invalid step \"%s\"!\n", gbLogCStr(match.captured(3)));
+        gbFatal("faketime-check: Invalid step \"{}\"!\n", gbLogCStr(match.captured(3)));
       }
     } else {
       result.step = 0;
@@ -861,7 +861,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const QString& t
       qDebug() << "faketime option: force =" << result.force << ", timestamp =" << result.start << ", step =" << result.step << "milliseconds";
     }
   } else {
-    gbFatal("faketime-check: Invalid value for faketime option \"%s\"!\n", gbLogCStr(timestr));
+    gbFatal("faketime-check: Invalid value for faketime option \"{}\"!\n", gbLogCStr(timestr));
   }
 
   return result;
