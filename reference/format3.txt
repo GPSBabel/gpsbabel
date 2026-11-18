@@ -156,7 +156,7 @@ option	igc	ACZ	Z Acceleration (ACZ; default=1)	boolean	1			https://www.gpsbabel.
 
 option	igc	GFO	G Force? (GFO; default=0)	boolean	0			https://www.gpsbabel.org/WEB_DOC_DIR/fmt_igc.html#fmt_igc_o_GFO
 
-file	-wrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file	garmin_fit
+file	rwrw--	garmin_fit	fit	Flexible and Interoperable Data Transfer (FIT) Activity file	garmin_fit
 	https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html
 option	garmin_fit	allpoints	Read all points even if latitude or longitude is missing	boolean				https://www.gpsbabel.org/WEB_DOC_DIR/fmt_garmin_fit.html#fmt_garmin_fit_o_allpoints
 

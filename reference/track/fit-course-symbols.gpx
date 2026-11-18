@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="45" lon="-75"><time>2020-01-01T12:00:00Z</time><name>Left bank</name><sym>WATER</sym></wpt>
+  <wpt lat="45" lon="-74.999"><name>Fountain</name><sym>3</sym></wpt>
+  <wpt lat="45" lon="-74.998"><name>Medic</name><sym>first_aid</sym></wpt>
+  <wpt lat="45" lon="-74.997"><name>Climb</name><sym>4th Category</sym></wpt>
+  <wpt lat="45" lon="-74.994"><name>Right bank</name><sym>Generic</sym></wpt>
+  <wpt lat="45" lon="-74.993"><name>Links</name><sym>Flag, Red</sym></wpt>
+  <wpt lat="45" lon="-74.992"><name>Market</name><sym>Store</sym></wpt>
+  <wpt lat="45" lon="-74.991"><name>Future marker</name><sym>200</sym></wpt>
+  <wpt lat="45" lon="-74.995"><name>LAP001</name><sym>Generic</sym></wpt>
+  <wpt lat="45" lon="-74.99"><name>LAP002</name><sym>Generic</sym></wpt>
+  <wpt lat="45" lon="-74.99"><name>LAP001</name><sym>Food</sym></wpt>
+  <trk><name>Course</name><trkseg>
+    <trkpt lat="45" lon="-75"><time>2020-01-01T12:00:00Z</time></trkpt>
+    <trkpt lat="45" lon="-74.99"><time>2020-01-01T12:05:00Z</time></trkpt>
+  </trkseg></trk>
+</gpx>
