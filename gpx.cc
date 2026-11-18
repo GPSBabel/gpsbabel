@@ -88,9 +88,10 @@ inline QString GpxFormat::toString(float f)
 
 QString GpxFormat::longitudeToString(double longitude) const
 {
+  static const QString longitudeplus180 = toString(180.0);
   const QString result = toString(longitude);
   // GPX 1.1 excludes +180, even when a longitude just below it rounds up.
-  if (gpx_write_version >= gpx_1_1 && result == QStringLiteral("180.000000000")) {
+  if (gpx_write_version >= gpx_1_1 && result == longitudeplus180) {
     return QString::number(longitude, 'f', QLocale::FloatingPointShortest);
   }
   return result;
