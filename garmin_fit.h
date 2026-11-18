@@ -32,6 +32,7 @@
 
 #include <QHash>                // for QHash
 #include <QList>                // for QList
+#include <QMultiHash>           // for QMultiHash
 #include <QString>              // for QString
 #include <QVariant>             // for QVariant
 #include <QVector>              // for QVector
@@ -59,7 +60,7 @@ public:
   QVector<ff_cap> get_cap() const override
   {
     return {
-      ff_cap_write,				/* waypoints */
+      (ff_cap)(ff_cap_read | ff_cap_write),	/* waypoints */
       (ff_cap)(ff_cap_read | ff_cap_write),	/* tracks */
       ff_cap_none 				/* routes */
     };
@@ -94,6 +95,8 @@ private:
     uint32_t last_timestamp{};
     uint32_t global_utc_offset{};
     QHash<int, fit_message_def> message_def;
+    QList<Waypoint*> lap_waypoints;
+    QMultiHash<QString, std::pair<double, double>> generic_lap_cues;
   };
 
   struct FitCourseRecordPoint {

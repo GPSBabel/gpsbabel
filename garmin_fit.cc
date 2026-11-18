@@ -44,6 +44,53 @@
 #include "src/core/logging.h"  // for Warning, Fatal
 
 
+namespace {
+// FIT Profile course_point enum. The first spelling of each value is used for output.
+constexpr std::pair<int, const char*> kCoursePointSymbols[] = {
+  {0, "Generic"}, {1, "Summit"}, {2, "Valley"}, {3, "Water"}, {4, "Food"},
+  {5, "Danger"}, {6, "Left"}, {7, "Right"}, {8, "Straight"}, {9, "First Aid"},
+  {10, "4th Category"}, {11, "3rd Category"}, {12, "2nd Category"}, {13, "1st Category"},
+  {14, "Hors Category"}, {15, "Sprint"}, {16, "Left Fork"}, {17, "Right Fork"},
+  {18, "Middle Fork"}, {19, "Slight Left"}, {20, "Sharp Left"}, {21, "Slight Right"},
+  {22, "Sharp Right"}, {23, "U Turn"}, {24, "Segment Start"}, {25, "Segment End"},
+  {27, "Campsite"}, {28, "Aid Station"}, {29, "Rest Area"}, {30, "General Distance"},
+  {31, "Service"}, {32, "Energy Gel"}, {33, "Sports Drink"}, {34, "Mile Marker"},
+  {35, "Checkpoint"}, {36, "Shelter"}, {37, "Meeting Spot"}, {38, "Overlook"},
+  {39, "Toilet"}, {40, "Shower"}, {41, "Gear"}, {42, "Sharp Curve"},
+  {43, "Steep Incline"}, {44, "Tunnel"}, {45, "Bridge"}, {46, "Obstacle"},
+  {47, "Crossing"}, {48, "Store"}, {49, "Transition"}, {50, "Navaid"},
+  {51, "Transport"}, {52, "Alert"}, {53, "Info"},
+  {10, "Fourth Category"}, {11, "Third Category"}, {12, "Second Category"}, {13, "First Category"},
+};
+
+QString course_point_symbol(int type)
+{
+  for (const auto& [value, symbol] : kCoursePointSymbols) {
+    if (value == type) {
+      return symbol;
+    }
+  }
+  return QString::number(type);
+}
+
+int course_point_type(QString symbol)
+{
+  bool ok;
+  const int value = symbol.toInt(&ok);
+  if (ok && value >= 0 && value < 0xff) {
+    return value;
+  }
+  symbol = symbol.trimmed().replace('_', ' ');
+  for (const auto& [type, name] : kCoursePointSymbols) {
+    if (symbol.compare(name, Qt::CaseInsensitive) == 0) {
+      return type;
+    }
+  }
+  return -1;
+}
+
+} // namespace
+
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
@@ -405,6 +452,9 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
   //uint32_t starttime = 0; // ??? default ?
   uint8_t event = 0xff;
   uint8_t eventtype = 0xff;
+  uint8_t cp_type = 0xff;
+  uint32_t cp_timestamp = 0xffffffff;
+  uint32_t cp_distance = 0xffffffff;
   QString name;
   QString description;
 
@@ -607,6 +657,32 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
         // end of case def.global_id = kIdEvent
         break;
 
+      case kIdCoursePoint:
+        switch (f.id) {
+        case kFieldCPTimeStamp:
+          // A course time does not advance the clock for compressed record timestamps.
+          cp_timestamp = val;
+          if (cp_timestamp < 0x10000000) {
+            cp_timestamp += fit_data.global_utc_offset;
+          }
+          break;
+        case kFieldCPPositionLat:
+          lat = val;
+          break;
+        case kFieldCPPositionLong:
+          lon = val;
+          break;
+        case kFieldCPDistance:
+          cp_distance = val;
+          break;
+        case kFieldCPType:
+          cp_type = val;
+          break;
+        case kFieldCPName:
+          name = field.toString();
+          break;
+        }
+        break;
       case kIdLocations:
         switch (f.id) {
         case kFieldLocLatitude:
@@ -674,6 +750,7 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
     lappt->longitude = GPS_Math_Semi_To_Deg(endlon);
     lappt->shortname = QStringLiteral("LAP%1").arg(++lap_ct, 3, 10, QLatin1Char('0'));
     waypt_add(lappt);
+    fit_data.lap_waypoints.append(lappt);
   }
   break;
   case kIdRecord: { // record message
@@ -723,22 +800,41 @@ GarminFitFormat::fit_parse_data(const fit_message_def& def, int time_offset)
       new_trkseg = true;
     }
     break;
-  case kIdLocations: { // locations message
-    if (lat == 0x7fffffff || lon == 0x7fffffff) {
+  case kIdCoursePoint:
+  case kIdLocations: {
+    const bool allow_missing_position = def.global_id == kIdCoursePoint && opt_allpoints;
+    if ((lat == 0x7fffffff || lon == 0x7fffffff) && !allow_missing_position) {
       break;
     }
     if (global_opts.debug_level >= 7) {
-      Debug(7) << "storing fit data location " << def.global_id;
+      Debug(7) << "storing fit waypoint " << def.global_id;
     }
     auto* locpt = new Waypoint;
-    locpt->latitude = GPS_Math_Semi_To_Deg(lat);
-    locpt->longitude = GPS_Math_Semi_To_Deg(lon);
+    if (lat != 0x7fffffff) {
+      locpt->latitude = GPS_Math_Semi_To_Deg(lat);
+    }
+    if (lon != 0x7fffffff) {
+      locpt->longitude = GPS_Math_Semi_To_Deg(lon);
+    }
     if (alt != 0xffff) {
       locpt->altitude = (alt / 5.0) - 500;
     }
     locpt->shortname = name;
     locpt->description = description;
+    if (cp_type != 0xff) {
+      locpt->icon_descr = course_point_symbol(cp_type);
+    }
+    if (cp_timestamp != 0xffffffff) {
+      locpt->SetCreationTime(GPS_Math_Gtime_To_Utime(cp_timestamp));
+    }
+    if (cp_distance != 0xffffffff) {
+      locpt->odometer_distance = cp_distance / 100.0;
+    }
     waypt_add(locpt);
+    if (cp_type == kCoursePointTypeGeneric && cp_timestamp == 0xffffffff &&
+        lat != 0x7fffffff && lon != 0x7fffffff && name.startsWith("LAP")) {
+      fit_data.generic_lap_cues.insert(name, {locpt->latitude, locpt->longitude});
+    }
   }
   break;
   }
@@ -865,6 +961,16 @@ GarminFitFormat::read()
       gbWarning("Aborting read and continuing processing.\n");
     } else {
       gbFatal("%s  Use recoverymode option at your risk.\n",e.what());
+    }
+  }
+
+  // A previous conversion may have written a generated lap waypoint as an
+  // untimed generic course point. Keep the explicit cue and omit its duplicate
+  // lap marker, regardless of which FIT message came first.
+  for (Waypoint* lap : fit_data.lap_waypoints) {
+    if (fit_data.generic_lap_cues.contains(lap->shortname, {lap->latitude, lap->longitude})) {
+      waypt_del(lap);
+      delete lap;
     }
   }
 }
@@ -1277,12 +1383,15 @@ GarminFitFormat::fit_collect_waypt(const Waypoint* waypointp)
 {
   FitCourseRecordPoint crpt(*waypointp, true);
 
-  // Try to find a better course point type than "generic", based on the
-  // course point name
-  for (const auto& cptm: kCoursePointTypeMapping) {
-    if (crpt.shortname.contains(cptm.first, Qt::CaseInsensitive)) {
-      crpt.course_point_type = cptm.second;
-      break;
+  const int type = course_point_type(waypointp->icon_descr);
+  if (type >= 0) {
+    crpt.course_point_type = type;
+  } else {
+    for (const auto& cptm: kCoursePointTypeMapping) {
+      if (crpt.shortname.contains(cptm.first, Qt::CaseInsensitive)) {
+        crpt.course_point_type = cptm.second;
+        break;
+      }
     }
   }
 
