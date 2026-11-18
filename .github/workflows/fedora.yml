@@ -39,6 +39,9 @@ jobs:
           - IMAGE: '44'
             CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
             OPTS: '-d -t -v'
+          - IMAGE: '45'
+            CMAKE_PREFIX_PATH: '/usr/lib64/cmake/Qt6'
+            OPTS: '-d -t -v'
     container:
       image: gpsbabel-docker.jfrog.io/tsteven4/gpsbabel_build_environment_f${{ matrix.IMAGE }}
       env:
