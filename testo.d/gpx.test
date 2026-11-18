@@ -1,5 +1,9 @@
 
 # GPX
+# GPX 1.1 point and bounds longitudes must stay below +180 after formatting.
+gpsbabel -i gpx -f ${REFERENCE}/gpx-antimeridian.gpx -o gpx -F ${TMPDIR}/gpx-antimeridian.gpx
+compare ${REFERENCE}/gpx-antimeridian.gpx ${TMPDIR}/gpx-antimeridian.gpx
+
 rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.wpt
 gpsbabel -i geo -f ${REFERENCE}/geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
 gpsbabel -i gpx -f ${TMPDIR}/gl.gpx -o geo -F ${TMPDIR}/gpx.wpt

@@ -36,6 +36,7 @@
 #include <QIODevice>                        // for QIODevice, operator|, QIODevice::ReadOnly, QIODevice::Text, QIODevice::WriteOnly
 #include <QLatin1Char>                      // for QLatin1Char
 #include <QLatin1String>                    // for QLatin1String
+#include <QLocale>                         // for QLocale::FloatingPointShortest
 #include <QString>                          // for QString, QStringLiteral, operator+, operator==
 #include <QStringList>                      // for QStringList
 #include <QStringView>                      // for QStringView
@@ -83,6 +84,16 @@ inline QString GpxFormat::toString(double d)
 inline QString GpxFormat::toString(float f)
 {
   return QString::number(f, 'f', 6);
+}
+
+QString GpxFormat::longitudeToString(double longitude) const
+{
+  const QString result = toString(longitude);
+  // GPX 1.1 excludes +180, even when a longitude just below it rounds up.
+  if (gpx_write_version >= gpx_1_1 && result == QStringLiteral("180.000000000")) {
+    return QString::number(longitude, 'f', QLocale::FloatingPointShortest);
+  }
+  return result;
 }
 
 
@@ -1491,7 +1502,7 @@ GpxFormat::gpx_waypt_pr(const Waypoint* waypointp) const
 {
   writer->writeStartElement(QStringLiteral("wpt"));
   writer->writeAttribute(QStringLiteral("lat"), toString(waypointp->latitude));
-  writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
+  writer->writeAttribute(QStringLiteral("lon"), longitudeToString(waypointp->longitude));
 
   gpx_write_common_core(waypointp, gpxpt_waypoint);
 
@@ -1553,7 +1564,7 @@ GpxFormat::gpx_track_disp(const Waypoint* waypointp) const
 
   writer->writeStartElement(QStringLiteral("trkpt"));
   writer->writeAttribute(QStringLiteral("lat"), toString(waypointp->latitude));
-  writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
+  writer->writeAttribute(QStringLiteral("lon"), longitudeToString(waypointp->longitude));
 
   gpx_write_common_core(waypointp, gpxpt_track);
 
@@ -1633,7 +1644,7 @@ GpxFormat::gpx_route_disp(const Waypoint* waypointp) const
 {
   writer->writeStartElement(QStringLiteral("rtept"));
   writer->writeAttribute(QStringLiteral("lat"), toString(waypointp->latitude));
-  writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
+  writer->writeAttribute(QStringLiteral("lon"), longitudeToString(waypointp->longitude));
 
   gpx_write_common_core(waypointp, gpxpt_route);
 
@@ -1691,9 +1702,9 @@ GpxFormat::gpx_write_bounds()
   if (waypt_bounds_valid(&all_bounds)) {
     writer->writeStartElement(QStringLiteral("bounds"));
     writer->writeAttribute(QStringLiteral("minlat"), toString(all_bounds.min_lat));
-    writer->writeAttribute(QStringLiteral("minlon"), toString(all_bounds.min_lon));
+    writer->writeAttribute(QStringLiteral("minlon"), longitudeToString(all_bounds.min_lon));
     writer->writeAttribute(QStringLiteral("maxlat"), toString(all_bounds.max_lat));
-    writer->writeAttribute(QStringLiteral("maxlon"), toString(all_bounds.max_lon));
+    writer->writeAttribute(QStringLiteral("maxlon"), longitudeToString(all_bounds.max_lon));
     writer->writeEndElement();
   }
 }

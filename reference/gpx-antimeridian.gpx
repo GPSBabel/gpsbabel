@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - https://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="1.000000000" minlon="179.9999999998" maxlat="3.000000000" maxlon="179.99999999999997"/>
+  </metadata>
+  <wpt lat="1.000000000" lon="179.9999999998">
+    <name>Waypoint</name>
+    <cmt>Waypoint</cmt>
+    <desc>Waypoint</desc>
+  </wpt>
+  <rte>
+    <rtept lat="2.000000000" lon="179.9999999999">
+      <name>Route point</name>
+    </rtept>
+  </rte>
+  <trk>
+    <trkseg>
+      <trkpt lat="3.000000000" lon="179.99999999999997"/>
+    </trkseg>
+  </trk>
+</gpx>
