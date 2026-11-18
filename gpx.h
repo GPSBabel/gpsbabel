@@ -215,6 +215,7 @@ private:
   static void gpx_add_to_global(QStringList& ge, const QString& s);
   static inline QString toString(double d);
   static inline QString toString(float f);
+  QString longitudeToString(double longitude) const;
   void gpx_reset_short_handle();
   void gpx_write_gdata(const QStringList& ge, const QString& tag) const;
   tag_mapping get_tag(const QString& t) const;
