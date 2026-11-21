@@ -1,0 +1,4 @@
+<para>
+	When a format variable such as <code>altitude</code> or <code>cadence</code>
+	has no value available, this string will be shown as a placeholder.
+</para>
