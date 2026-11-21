@@ -86,6 +86,7 @@
 #include "defs.h"               // for Waypoint, gbFatal, route_head, le_read32, waypt_add, track_add_wpt, track_add_head, doing_rtes, doing_wpts, gb_color, route_add_head, route_add_wpt, unknown_alt, doing_trks
 #include "gbfile.h"             // for gbfread, gbfgetc, gbfgetint32, gbfreadbuf, gbfseek, gbfgetdbl, gbfgetint16, gbfclose, gbfgetnativecstr, gbfgetuint16, gbfopen_le
 #include "jeeps/gpsmath.h"      // for GPS_Math_Known_Datum_To_WGS84_M
+#include "src/core/logging.h"   // for Warning
 
 
 /*******************************************************************************/
@@ -568,7 +569,16 @@ void TpoFormatBase::tpo_process_tracks()
 
     // Can be 8/16/32-bit value (defined in 2012, ignored before then)
     unsigned int track_style = tpo_read_int(); // index into freehand route styles defined in this .tpo file
-    track_style -= 1;  // STARTS AT 1, whereas style arrays start at 0
+    // STARTS AT 1, whereas style arrays start at 0
+    if (track_style < 1 || track_style > track_style_count) {
+      Warning() << "Track" << ii + 1 << "names style" << track_style
+                << "but the file defines" << track_style_count << "styles.";
+      if (track_style_count == 0) {
+        return;
+      }
+      track_style = 1;
+    }
+    track_style -= 1;
 
     // Can be 8/16/32-bit value - never used? length in meters?
     double track_length = tpo_read_int();
@@ -714,6 +724,12 @@ void TpoFormatBase::tpo_process_tracks()
 
       // read 8-byte lon+lat, required at start of track or after 0x88 tag
       if (tpmode == GetFullPoint) {
+        if (jj + 8 > track_byte_count) {
+          Warning() << "Track" << ii + 1
+                    << "ends in the middle of a point; ignoring the"
+                    << track_byte_count - jj << "trailing bytes.";
+          break;
+        }
         lon = le_read32(&buf[jj]);
         if constexpr(debug > 3) {
           gbDebug("%02x %02x %02x %02x - raw lon = %d (byte %u)\n", buf[jj], buf[jj+1], buf[jj+2], buf[jj+3], lon,jj);
@@ -1247,6 +1263,13 @@ void TpoFormatBase::tpo_process_routes(const QList<Waypoint>& tpo_wp_index)
       // Fetch the index to the waypoint
       unsigned int val = tpo_read_int();
 //printf("val: %x\t\t", val);
+
+      if (val < 1 || val > (unsigned int)tpo_wp_index.size()) {
+        Warning() << "Route" << ii + 1 << "references waypoint" << val
+                  << "but the file defines" << tpo_wp_index.size()
+                  << "waypoints.";
+        continue;
+      }
 
       // Duplicate a waypoint from our index of waypoints.
       auto* waypoint_temp = new Waypoint(tpo_wp_index[val-1]);
