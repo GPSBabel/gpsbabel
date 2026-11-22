@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 # run testo on the docker images
 
-versions=(1.5.0 1.5.1 1.5.2 1.5.3 1.5.4 1.6.0 1.7.0 1.8.0 1.9.0 1.10.0)
+versions=(1.5.0 1.5.1 1.5.2 1.5.3 1.5.4 1.6.0 1.7.0 1.8.0 1.9.0 1.10.0 1.11.0)
 for ver in "${versions[@]}"; do
   ver_=$(echo "${ver}" | tr . _) 
   tag=gpsbabel_${ver_}
