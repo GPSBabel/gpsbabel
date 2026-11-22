@@ -759,7 +759,7 @@ void IgcFormat::wr_task_hdr(const route_head* rte, unsigned int task_num)
 
   if (!rte->rte_desc.isEmpty()) {
     // desc will be something like "IGCDATE160701: 500KTri"
-    sscanf(CSTR(rte->rte_desc), DATEMAGIC "%6[0-9]: %s", flight_date, task_desc);
+    sscanf(CSTR(rte->rte_desc), DATEMAGIC "%6[0-9]: %78s", flight_date, task_desc);
   }
 
   gbfprintf(file_out, "C%s%s%s%04u%02u%s\r\n", date2str(rte_time).constData(),
