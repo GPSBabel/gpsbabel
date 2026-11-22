@@ -121,7 +121,7 @@ void KmlFormat::kml_step_color()
   // Note that color_seq may be outside this range if the cast from float to int fails.
   int color_seq = static_cast<int>(kml_color_sequencer.seq) % (kml_color_limit * 6);
   if (global_opts.debug_level >= 1) {
-    gbDebug("kml_color_sequencer seq %f %d, step %f\n", kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
+    gbDebug("kml_color_sequencer seq {:.6f} {}, step {:.6f}\n", kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
   }
   if ((color_seq >= (0*kml_color_limit)) && (color_seq < (1*kml_color_limit))) {
     kml_color_sequencer.color.bbggrr = kml_bgr_to_color(0, color_seq, kml_color_limit);
@@ -361,7 +361,7 @@ void KmlFormat::gx_trk_coord(const QString& args, const QXmlStreamAttributes* /*
   double alt;
   int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
   if (EOF != n && 2 != n && 3 != n) {
-    gbFatal("coord field decode failure on \"%s\".\n", gbLogCStr(args));
+    gbFatal("coord field decode failure on \"{}\".\n", gbLogCStr(args));
   }
   gx_trk_coords->append(std::make_tuple(n, lat, lon, alt));
 }
@@ -406,7 +406,7 @@ void KmlFormat::wr_init(const QString& fname)
     unitsformatter->setunits(UnitsFormatter::units_t::aviation);
     break;
   default:
-    gbFatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", gbLogCStr(opt_units));
+    gbFatal("Units argument '{}' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", gbLogCStr(opt_units));
     break;
   }
   /*
@@ -1507,7 +1507,7 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
   writer->writeStartElement(QStringLiteral("gx:SimpleArrayData"));
   writer->writeAttribute(QStringLiteral("name"), name);
   if (global_opts.debug_level >= 3) {
-    gbDebug("New KML SimpleArray: %s\n", gbLogCStr(name));
+    gbDebug("New KML SimpleArray: {}\n", gbLogCStr(name));
   }
   foreach (const Waypoint* wpt, header->waypoint_list) {
     const auto* fs_igc = reinterpret_cast<igc_fsdata*>(wpt->fs.FsChainFind(kFsIGC));
@@ -1549,14 +1549,14 @@ void KmlFormat::kml_mt_simple_array(const route_head* header,
       if (fs_igc && fs_igc->get_value(member).has_value()) {
         double value = fs_igc->get_value(member).value();
         if (global_opts.debug_level >= 6) {
-          gbDebug("Writing KML SimpleArray data: %s of %f\n", gbLogCStr(name), value);
+          gbDebug("Writing KML SimpleArray data: {} of {:.6f}\n", gbLogCStr(name), value);
         }
         writer->writeTextElement(QStringLiteral("gx:value"), QString::number(value));
         // No igc_fsdata present, but we still need to write out the SimpleArray.
         // This can happen when merging tracks with different sets of IGC extensions.
       } else {
         if (global_opts.debug_level >= 7) {
-          gbDebug("Writing empty KML SimpleArray data for %s\n", gbLogCStr(name));
+          gbDebug("Writing empty KML SimpleArray data for {}\n", gbLogCStr(name));
         }
         writer->writeTextElement(QStringLiteral("gx:value"), QString());
       }

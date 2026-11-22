@@ -59,7 +59,7 @@
 #define GPI_BITMAP_SIZE sizeof(gpi_bitmap)
 
 #define GPI_DBG global_opts.debug_level >= 3
-#define PP if (GPI_DBG) gbDebug("@%6x (%8d): ", gbftell(fin), gbftell(fin))
+#define PP if (GPI_DBG) gbDebug("@{:6x} ({:8}): ", gbftell(fin), gbftell(fin))
 
 /*******************************************************************************
 * %%%                             gpi reader                               %%% *
@@ -89,7 +89,7 @@ GarminGPIFormat::gpi_read_lc_string()
   gbfread(result.lc.data(), 1, 2, fin);
   if ((result.lc.at(0) < 'A') || (result.lc.at(0) > 'Z') ||
       (result.lc.at(1) < 'A') || (result.lc.at(1) > 'Z')) {
-    gbFatal("Invalid language code %s!\n", result.lc.constData());
+    gbFatal("Invalid language code {}!\n", result.lc.constData());
   }
 
   result.strlen = gbfgetint16(fin);
@@ -115,25 +115,25 @@ GarminGPIFormat::gpi_read_string(const char* field)
     if (first == 0) {
 
       if (gbfgetc(fin) != 0) {
-        gbFatal("Error reading field '%s'!\n", field);
+        gbFatal("Error reading field '{}'!\n", field);
       }
 
       lc_string res1 = gpi_read_lc_string();
       if ((res1.strlen + 4) < l0) { // dual language?
         lc_string res2 = gpi_read_lc_string();
         if (res1.strlen + 4 + res2.strlen + 4 != l0) {
-          gbFatal("Error out of sync (wrong size %d/%d/%d) on field '%s'!\n", l0, res1.strlen, res2.strlen, field);
+          gbFatal("Error out of sync (wrong size {}/{}/{}) on field '{}'!\n", l0, res1.strlen, res2.strlen, field);
         }
         if (opt_lang && (opt_lang.get().toUtf8()  == res1.lc)) {
           string = res1.str;
         } else if (opt_lang && (opt_lang.get().toUtf8() == res2.lc)) {
           string = res2.str;
         } else {
-          gbFatal("Must select language code, %s and %s found.\n", res1.lc.constData(), res2.lc.constData());
+          gbFatal("Must select language code, {} and {} found.\n", res1.lc.constData(), res2.lc.constData());
         }
       } else { // normal case, single language
         if (res1.strlen + 4 != l0) {
-          gbFatal("Error out of sync (wrong size %d/%d) on field '%s'!\n", l0, res1.strlen, field);
+          gbFatal("Error out of sync (wrong size {}/{}) on field '{}'!\n", l0, res1.strlen, field);
         }
         string = res1.str;
       }
@@ -149,7 +149,7 @@ GarminGPIFormat::gpi_read_string(const char* field)
 
   QString result = str_to_unicode(string).trimmed();
   if (GPI_DBG) {
-    gbDebug("%s: \"%s\"\n", field, result.isNull() ? "<NULL>" : gbLogCStr(result));
+    gbDebug("{}: \"{}\"\n", field, result.isNull() ? "<NULL>" : gbLogCStr(result));
   }
   return result;
 }
@@ -175,7 +175,7 @@ GarminGPIFormat::read_header()
   rdata->crdate = gbfgetint32(fin);
   if (GPI_DBG) {
     time_t crdate = GPS_Math_Gtime_To_Utime(rdata->crdate);
-    gbDebug("crdate = %lld (%s)\n", (long long) rdata->crdate,
+    gbDebug("crdate = {} ({})\n", (long long) rdata->crdate,
             CSTR(QDateTime::fromSecsSinceEpoch(crdate, QtUTC).toString(Qt::ISODate)));
   }
 
@@ -209,7 +209,7 @@ GarminGPIFormat::read_header()
   codepage = gbfgetuint16(fin);
   if (GPI_DBG) {
     PP;
-    gbDebug("Code Page: %d\n",codepage);
+    gbDebug("Code Page: {}\n",codepage);
   }
   (void) gbfgetint16(fin);     /* typically 0, but  0x11 in
             Garminonline.de files.  */
@@ -226,7 +226,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
 {
   if (GPI_DBG) {
     PP;
-    gbDebug("> reading poi (size %d)\n", sz);
+    gbDebug("> reading poi (size {})\n", sz);
   }
   PP;
   int len = 0;
@@ -234,7 +234,7 @@ GarminGPIFormat::read_poi(const int sz, const int tag)
     len = gbfgetint32(fin);  /* sub-header size */
   }
   if (GPI_DBG) {
-  gbDebug("poi sublen = %d (0x%x)\n", len, len);
+  gbDebug("poi sublen = {} (0x{:x})\n", len, len);
   }
   (void) len;
   int pos = gbftell(fin);
@@ -278,12 +278,12 @@ GarminGPIFormat::read_poi_list(const int sz)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    gbDebug("> reading poi list (-> %x / %d )\n", pos + sz, pos + sz);
+    gbDebug("> reading poi list (-> {:x} / {} )\n", pos + sz, pos + sz);
   }
   PP;
   int i = gbfgetint32(fin);  /* mostly 23 (0x17) */
   if (GPI_DBG) {
-    gbDebug("list sublen = %d (0x%x)\n", i, i);
+    gbDebug("list sublen = {} (0x{:x})\n", i, i);
   }
   (void) i;
 
@@ -316,13 +316,13 @@ GarminGPIFormat::read_poi_group(const int sz, const int tag)
   int pos = gbftell(fin);
   if (GPI_DBG) {
     PP;
-    gbDebug("> reading poi group (-> %x / %d)\n", pos + sz, pos + sz);
+    gbDebug("> reading poi group (-> {:x} / {})\n", pos + sz, pos + sz);
   }
   if (tag == 0x80009) {
     PP;
     int subsz = gbfgetint32(fin);  /* ? offset to category data ? */
     if (GPI_DBG) {
-      gbDebug("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
+      gbDebug("group sublen = {} (-> {:x} / {})\n", subsz, pos + subsz + 4, pos + subsz + 4);
     }
     (void)subsz;
   }
@@ -363,7 +363,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 
   if (GPI_DBG) {
     PP;
-    gbDebug("%s: tag = 0x%x (size %d)\n", caller, tag, sz);
+    gbDebug("{}: tag = 0x{:x} (size {})\n", caller, tag, sz);
   }
   if ((tag >= 0x80000) && (tag <= 0x800ff)) {
     sz += 4;
@@ -456,7 +456,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
     if (GPI_DBG) {
-      gbDebug("GPI Address field mask: %d (0x%02x)\n", mask, mask);
+      gbDebug("GPI Address field mask: {} (0x{:02x})\n", mask, mask);
     }
     if ((mask & GPI_ADDR_CITY) && !(str = gpi_read_string("City")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
@@ -509,7 +509,7 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
 
     mask = gbfgetint16(fin); /* phone fields mask */
     if (GPI_DBG) {
-      gbDebug("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
+      gbDebug("GPI Phone field mask: {} (0x{:02x})\n", mask, mask);
     }
     if ((mask & 1) && !(str = gpi_read_string("Phone")).isEmpty()) {
       gmsd = gpi_gmsd_init(wpt);
@@ -530,21 +530,21 @@ GarminGPIFormat::read_tag(const char* caller, const int tag, Waypoint* wpt)
     if (GPI_DBG) {
       int x;
       std::unique_ptr<unsigned char[]> b(new unsigned char[sz]);
-      gbDebug("Tag: %x\n", tag);
+      gbDebug("Tag: {:x}\n", tag);
       gbfread(b.get(), 1, sz, fin);
       gbDebug("\n");
       for (x = 0; x < sz; x++) {
-        gbDebug("%02x ", b[x]);
+        gbDebug("{:02x} ", b[x]);
       }
       gbDebug("\n");
       for (x = 0; x < sz; x++) {
-        gbDebug("%c", isalnum(b[x]) ? b[x] : '.');
+        gbDebug("{}", isalnum(b[x]) ? b[x] : '.');
       }
       gbDebug("\n");
     }
   break;
   default:
-    gbWarning("Unknown tag (0x%x). Please report!\n", tag);
+    gbWarning("Unknown tag (0x{:x}). Please report!\n", tag);
     return 0;
   }
   gbfseek(fin, pos + sz, SEEK_SET);
@@ -1107,28 +1107,28 @@ GarminGPIFormat::load_bitmap_from_file(const QString& fname, const unsigned char
   }
 
   if (GPI_DBG) {
-    gbDebug("data size:             0x%x (%d)\n", src_h.size, src_h.size);
-    gbDebug("image data offset:     0x%x (%d)\n", src_h.image_offset, src_h.image_offset);
-    gbDebug("header size:           0x%x (%d)\n", src_h.header_size, src_h.header_size);
-    gbDebug("image width:           0x%x (%d)\n", src_h.width, src_h.width);
-    gbDebug("image height:          0x%x (%d)\n", src_h.height, src_h.height);
-    gbDebug("number of planes:      0x%x (%d)\n", src_h.planes, src_h.planes);
-    gbDebug("bits per pixel:        0x%x (%d)\n", src_h.bpp, src_h.bpp);
-    gbDebug("compression type:      0x%x (%d)\n", src_h.compression_type, src_h.compression_type);
-    gbDebug("image size:            0x%x (%d)\n", src_h.image_data_size, src_h.image_data_size);
-    gbDebug("horizontal resolution: 0x%x (%d)\n", src_h.resolution_h, src_h.resolution_h);
-    gbDebug("vertical resolution:   0x%x (%d)\n", src_h.resolution_v, src_h.resolution_v);
-    gbDebug("number of colors:      0x%x (%d)\n", src_h.used_colors, src_h.used_colors);
-    gbDebug("important colors:      0x%x (%d)\n", src_h.important_colors, src_h.important_colors);
+    gbDebug("data size:             0x{:x} ({})\n", src_h.size, src_h.size);
+    gbDebug("image data offset:     0x{:x} ({})\n", src_h.image_offset, src_h.image_offset);
+    gbDebug("header size:           0x{:x} ({})\n", src_h.header_size, src_h.header_size);
+    gbDebug("image width:           0x{:x} ({})\n", src_h.width, src_h.width);
+    gbDebug("image height:          0x{:x} ({})\n", src_h.height, src_h.height);
+    gbDebug("number of planes:      0x{:x} ({})\n", src_h.planes, src_h.planes);
+    gbDebug("bits per pixel:        0x{:x} ({})\n", src_h.bpp, src_h.bpp);
+    gbDebug("compression type:      0x{:x} ({})\n", src_h.compression_type, src_h.compression_type);
+    gbDebug("image size:            0x{:x} ({})\n", src_h.image_data_size, src_h.image_data_size);
+    gbDebug("horizontal resolution: 0x{:x} ({})\n", src_h.resolution_h, src_h.resolution_h);
+    gbDebug("vertical resolution:   0x{:x} ({})\n", src_h.resolution_v, src_h.resolution_v);
+    gbDebug("number of colors:      0x{:x} ({})\n", src_h.used_colors, src_h.used_colors);
+    gbDebug("important colors:      0x{:x} ({})\n", src_h.important_colors, src_h.important_colors);
   }
 
   /* sort out unsupported files */
   if (!((src_h.width <= 24) && (src_h.height <= 24) &&
         (src_h.width > 0) && (src_h.height > 0))) {
-    gbFatal("Unsupported format (%dx%d)!\n", src_h.width, src_h.height);
+    gbFatal("Unsupported format ({}x{})!\n", src_h.width, src_h.height);
   }
   if (!((src_h.bpp == 8) || (src_h.bpp == 24) || (src_h.bpp == 32))) {
-    gbFatal("Unsupported color depth (%d)!\n", src_h.bpp);
+    gbFatal("Unsupported color depth ({})!\n", src_h.bpp);
   }
   if (!(src_h.compression_type == 0)) {
     gbFatal("Sorry, we don't support compressed bitmaps.\n");
@@ -1231,7 +1231,7 @@ char GarminGPIFormat::parse_units(const QString& str)
   } else if (str.startsWith('s', Qt::CaseInsensitive)) {
     result = 's';
   } else {
-    gbFatal("Unknown units parameter (%s).\n", gbLogCStr(str));
+    gbFatal("Unknown units parameter ({}).\n", gbLogCStr(str));
   }
   return result;
 }
@@ -1254,7 +1254,7 @@ GarminGPIFormat::rd_init(const QString& fname)
   } else if (codepage == 65001) {
     codec = get_codec("utf8");
   } else {
-    gbFatal("Unsupported code page (%d). File is likely encrypted.\n", codepage);
+    gbFatal("Unsupported code page ({}). File is likely encrypted.\n", codepage);
   }
 
   units = parse_units(opt_units);
@@ -1301,7 +1301,7 @@ GarminGPIFormat::wr_init(const QString& fname)
   }
 
   if (! codepage) {
-    gbWarning("Unsupported character set (%s)!\n", gbLogCStr(opt_writecodec));
+    gbWarning("Unsupported character set ({})!\n", gbLogCStr(opt_writecodec));
     gbFatal("Valid values are windows-1250 to windows-1257 and utf8.\n");
   }
 

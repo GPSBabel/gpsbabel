@@ -21,6 +21,7 @@
 
 #include "defs.h"
 #include "stackfilter.h"
+#include "src/core/logging.h"
 
 #if FILTERS_ENABLED
 
@@ -145,7 +146,7 @@ void StackFilter::exit()
 
   if (warnings_enabled && stack) {
     gbWarning("Warning: leftover stack entries; "
-            "check command line for mistakes\n");
+                 "check command line for mistakes\n");
   }
   while (stack) {
     stack->waypts.flush();

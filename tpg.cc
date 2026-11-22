@@ -59,7 +59,7 @@ TpgFormat::tpg_common_init()
 {
   tpg_datum_idx = GPS_Lookup_Datum_Index(tpg_datum_opt);
   if (tpg_datum_idx < 0) {
-    gbFatal("Datum '%s' is not recognized.\n", gbLogCStr(tpg_datum_opt));
+    gbFatal("Datum '{}' is not recognized.\n", gbLogCStr(tpg_datum_opt));
   }
 }
 
@@ -285,7 +285,7 @@ TpgFormat::write()
   }
 
   if (s > MAXTPGOUTPUTPINS) {
-    gbFatal("attempt to output too many points (%d).  The max is %d.  Sorry.\n", s, MAXTPGOUTPUTPINS);
+    gbFatal("attempt to output too many points ({}).  The max is {}.  Sorry.\n", s, MAXTPGOUTPUTPINS);
   }
 
   /* write the waypoint count */

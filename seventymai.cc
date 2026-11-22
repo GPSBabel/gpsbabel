@@ -69,7 +69,7 @@ void SeventymaiFormat::read()
     const auto values = buff.split(',');
 
     if (values.size() != kNumCols) {
-      gbWarning("Expected %d columns, got %lld.  Ignoring line number %d.\n", kNumCols,
+      gbWarning("Expected {} columns, got {}.  Ignoring line number {}.\n", kNumCols,
                 values.size(), line_no);
       continue;
     }
@@ -85,7 +85,7 @@ void SeventymaiFormat::read()
         if (ok) {
           wpt->SetCreationTime(tt);
         } else {
-          gbWarning("parse of string '%s' on line number %d as time_t failed.\n",
+          gbWarning("parse of string '{}' on line number {} as time_t failed.\n",
                     qPrintable(values.at(0)), line_no);
         }
         break;
@@ -103,7 +103,7 @@ void SeventymaiFormat::read()
         if (ok) {
           wpt->latitude = lat;
         } else {
-          gbWarning("parse of string '%s' on line number %d as double failed.\n",
+          gbWarning("parse of string '{}' on line number {} as double failed.\n",
                     qPrintable(values.at(2)), line_no);
         }
         break;
@@ -114,7 +114,7 @@ void SeventymaiFormat::read()
         if (ok) {
           wpt->longitude = lon;
         } else {
-          gbWarning("parse of string '%s' on line number %d as double failed.\n",
+          gbWarning("parse of string '{}' on line number {} as double failed.\n",
                     qPrintable(values.at(3)), line_no);
         }
         break;
@@ -125,7 +125,7 @@ void SeventymaiFormat::read()
         if (ok) {
           wpt->set_course(course / 100.0F);
         } else {
-          gbWarning("parse of string '%s' on line number %d as double failed.\n",
+          gbWarning("parse of string '{}' on line number {} as double failed.\n",
                     qPrintable(values.at(4)), line_no);
         }
         break;
@@ -136,7 +136,7 @@ void SeventymaiFormat::read()
         if (ok) {
           wpt->set_speed(speed / 100.0F);
         } else {
-          gbWarning("parse of string '%s' on line number %d as double failed.\n",
+          gbWarning("parse of string '{}' on line number {} as double failed.\n",
                     qPrintable(values.at(5)), line_no);
         }
         break;
@@ -160,7 +160,7 @@ void SeventymaiFormat::read()
 
     // ignore points from the NULL island.
     if ((wpt->latitude == 0.0) && (wpt->longitude == 0.0)) {
-      gbWarning("Point at latitude 0, longitude 0. Ignoring line number %d.\n", line_no);
+      gbWarning("Point at latitude 0, longitude 0. Ignoring line number {}.\n", line_no);
       delete wpt;
       continue;
     }

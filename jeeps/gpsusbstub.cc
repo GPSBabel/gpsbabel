@@ -21,6 +21,7 @@
 
 
 #include "defs.h"
+#include "src/core/logging.h"
 
 #if !HAVE_LIBUSB_1_0
 

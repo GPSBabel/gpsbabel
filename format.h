@@ -39,6 +39,7 @@
 #define FORMAT_H_INCLUDED_
 
 #include "defs.h"
+#include "src/core/logging.h"
 
 
 class Format

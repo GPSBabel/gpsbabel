@@ -26,6 +26,7 @@
 #include <ctime>                     // for time_t
 #include <numbers>                   // for inv_pi, pi
 #include <optional>                  // for optional
+#include <type_traits>               // for underlying_type_t, is_enum_v
 #include <utility>                   // for move
 
 #include <QByteArray>                // for QByteArray
@@ -43,6 +44,11 @@
 #include <Qt>                        // for CaseInsensitive
 #include <QtGlobal>                  // for QForeachContainer, qMakeForeachContainer, foreach, qint64
 
+#ifndef MOCK_FORMAT
+#include <format>
+#else
+#include <fmt/format.h>
+#endif
 #include "geocache.h"                // for Geocache
 #include "formspec.h"                // for FormatSpecificData
 #include "inifile.h"                 // for inifile_t
@@ -906,22 +912,6 @@ enum ff_cap {
 #define FF_CAP_RW_WPT \
 	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
 
-[[noreturn]] void gbFatal(QDebug& msginstance);
-// cppcheck 2.10.3 fails to assign noreturn attribute to gbFatal if
-// the noreturn attribute is listed before the gnu::format attribute.
-// A PR to resolve this is https://github.com/danmar/cppcheck/pull/4971,
-// but cppcheck works if the noreturn attribute follows the gnu::format
-// attribute.
-// This can have a large effect on codacy issues from cppcheck
-// nullPointerRedundantCheck, nullPointerArithmeticRedundantCheck,
-// negativeIndex, arrayIndexOutOfBoundsCond.
-[[gnu::format(printf, 1, 2)]] [[noreturn]] void gbFatal(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void gbWarning(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void gbInfo(const char* fmt, ...);
-[[gnu::format(printf, 1, 2)]] void gbDebug(const char* fmt, ...);
-
-void gbVLegacyLog(QtMsgType type, const char* fmt, va_list args1);
-
 void printposn(double c, bool is_lat);
 
 void* xcalloc(size_t nmemb, size_t size);
@@ -1040,5 +1030,29 @@ constexpr QTimeZone::Initialization QtUTC = QTimeZone::UTC;
 constexpr Qt::TimeSpec QtLocalTime = Qt::LocalTime;
 constexpr Qt::TimeSpec QtUTC = Qt::UTC;
 #endif
+
+#ifndef MOCK_FORMAT
+namespace gpsbabel {
+  using std::format;
+  using std::format_string;
+}
+#else
+namespace gpsbabel {
+  using fmt::format;
+  using fmt::format_string;
+}
+#endif
+
+
+// mock c++23 std::to_underlying
+namespace gpsbabel {
+  template <typename Enum>
+  constexpr auto to_underlying(Enum value) noexcept
+      -> std::underlying_type_t<Enum>
+  {
+      static_assert(std::is_enum_v<Enum>);
+      return static_cast<std::underlying_type_t<Enum>>(value);
+  }
+}
 
 #endif // DEFS_H_INCLUDED_
