@@ -728,12 +728,6 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
   QString	result;
   char latsig = lat < 0 ? 'S':'N';
   char lonsig = lon < 0 ? 'W':'E';
-  int latint = abs((int) lat);
-  int lonint = abs((int) lon);
-  double latmin = 60.0 * (fabs(lat) - latint);
-  double lonmin = 60.0 * (fabs(lon) - lonint);
-  double latsec = 60.0 * (latmin - floor(latmin));
-  double lonsec = 60.0 * (lonmin - floor(lonmin));
   if (sep == nullptr) {
     sep = " ";  /* default " " */
   }
@@ -742,13 +736,21 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, bool html)
              .arg(latsig).arg(fabs(lat), 6, 'f', 5).arg(html ? "&deg;" : "", sep)
              .arg(lonsig).arg(fabs(lon), 6, 'f', 5).arg(html ? "&deg;" : "");
   } else if (fmt == 's') { /* dms */
+    // Round to the printed tenth of a second first, so that 59.96" carries
+    // into the minutes instead of being printed as 60.0".
+    long lattenths = lround(fabs(lat) * 36000.0);
+    long lontenths = lround(fabs(lon) * 36000.0);
     result = QStringLiteral("%1%2%3%4'%5\"%6%7%8%9%10'%11\"")
-             .arg(latsig).arg(latint).arg(html ? "&deg;" : " ").arg((int)latmin, 2, 10, QChar('0')).arg(latsec, 4, 'f', 1, QChar('0')).arg(sep)
-             .arg(lonsig).arg(lonint).arg(html ? "&deg;" : " ").arg((int)lonmin, 2, 10, QChar('0')).arg(lonsec, 4, 'f', 1, QChar('0'));
+             .arg(latsig).arg(lattenths / 36000).arg(html ? "&deg;" : " ").arg(lattenths / 600 % 60, 2, 10, QChar('0')).arg(lattenths % 600 / 10.0, 4, 'f', 1, QChar('0')).arg(sep)
+             .arg(lonsig).arg(lontenths / 36000).arg(html ? "&deg;" : " ").arg(lontenths / 600 % 60, 2, 10, QChar('0')).arg(lontenths % 600 / 10.0, 4, 'f', 1, QChar('0'));
   } else { /* default dmm */
+    // Round to the printed thousandth of a minute first, so that 59.9996'
+    // carries into the degrees instead of being printed as 60.000.
+    long latthousandths = lround(fabs(lat) * 60000.0);
+    long lonthousandths = lround(fabs(lon) * 60000.0);
     result = QStringLiteral("%1%2%3%4%5%6%7%8%9")
-             .arg(latsig).arg(latint).arg(html ? "&deg;" : " ").arg(latmin, 6, 'f', 3, QChar('0')).arg(sep)
-             .arg(lonsig).arg(lonint).arg(html ? "&deg;" : " ").arg(lonmin, 6, 'f', 3, QChar('0'));
+             .arg(latsig).arg(latthousandths / 60000).arg(html ? "&deg;" : " ").arg(latthousandths % 60000 / 1000.0, 6, 'f', 3, QChar('0')).arg(sep)
+             .arg(lonsig).arg(lonthousandths / 60000).arg(html ? "&deg;" : " ").arg(lonthousandths % 60000 / 1000.0, 6, 'f', 3, QChar('0'));
   }
   return result;
 }
