@@ -236,6 +236,13 @@ void TrackFilter::trackfilter_minpoint_list_cb(const route_head* track)
 
 void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const gpsbabel::DateTime& dt)
 {
+  if (!dt.isValid()) {
+    if (!opt_title.isEmpty()) {
+      track->rte_name = opt_title.get();
+    }
+    return;
+  }
+
   QString datetimestring;
 
   if (opt_interval) {
@@ -433,7 +440,6 @@ void TrackFilter::trackfilter_split()
 
     /* check additional options */
 
-    opt_interval = !opt_split.isEmpty();
     if (opt_interval) {
       static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([dhms])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
@@ -469,7 +475,6 @@ void TrackFilter::trackfilter_split()
       }
     }
 
-    opt_distance = !opt_sdistance.isEmpty();
     if (opt_distance) {
       static const QRegularExpression re(R"(^([+-]?(?:\d+(?:\.\d*)?|\.\d+))([km])$)", QRegularExpression::CaseInsensitiveOption);
       assert(re.isValid());
@@ -945,15 +950,12 @@ void TrackFilter::init()
 {
   RteHdFunctor<TrackFilter> trackfilter_fill_track_list_cb_f(this, &TrackFilter::trackfilter_fill_track_list_cb);
 
-  /*
-   * check time presence only if required. Options that NOT require time:
-   *
-   * - opt_title (!!! only if no format specifier is present !!!)
-   * - opt_course
-   * - opt_name
-   */
+  opt_interval = !opt_split.isEmpty();
+  opt_distance = !opt_sdistance.isEmpty();
+  // Without an interval or distance, splitting compares the dates of adjacent points.
+  const bool split_by_day = (opt_split || opt_sdistance) && !opt_interval && !opt_distance;
   need_time = (
-                opt_merge || opt_pack || opt_split || opt_sdistance ||
+                opt_merge || opt_pack || opt_interval || split_by_day ||
                 opt_fix || opt_speed ||
                 (trackfilter_opt_count() == 0)	/* do pack by default */
               );

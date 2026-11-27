@@ -16,6 +16,19 @@ compare ${REFERENCE}/track/trackfilter-sdistance.gpx ${TMPDIR}/trackfilter2.gpx
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,sdistance=0.1k,split=5m,title=%Y%m%d  -o gpx -F ${TMPDIR}/trackfilter-sdistance2.gpx
 compare ${REFERENCE}/track/trackfilter-sdistance2.gpx ${TMPDIR}/trackfilter-sdistance2.gpx
 
+# Split three untimed waypoints at the one gap greater than 10 km.
+gpsbabel -i csv -f ${REFERENCE}/radius.csv -x transform,trk=wpt,del -x track,sdistance=10k,title=Places -o gpx -F ${TMPDIR}/untimed.gpx
+compare ${REFERENCE}/track/trackfilter-sdistance-untimed.gpx ${TMPDIR}/untimed.gpx
+
+# Splitting by day or time interval and formatting a date in the title still require times.
+for options in sdistance split sdistance=10k,split=5m sdistance=10k,title=%Y; do
+  if ${VALGRIND} "${PNAME}" -i gpx -f ${REFERENCE}/track/trackfilter_discard.gpx -x track,"$options" -o gpx -F ${TMPDIR}/unexpected.gpx 2> ${TMPDIR}/untimed.err; then
+    echo "Expected track,$options to require timestamps"
+    exit 1
+  fi
+  compare ${REFERENCE}/track/trackfilter_discard_err.gpx ${TMPDIR}/untimed.err
+done
+
 gpsbabel -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,title=LOG-%FT%TZ -o gpx -F ${TMPDIR}/trackfilter3.gpx
 compare ${REFERENCE}/track/trackfilter3.gpx ${TMPDIR}/trackfilter3.gpx
 
