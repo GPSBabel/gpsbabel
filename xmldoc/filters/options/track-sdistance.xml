@@ -3,6 +3,8 @@
          is greater than the distance given as a parameter.
          The distance must be numeric and can be in miles or kilometers,
          expressed as one of the character "k", or "m".
+         A numeric distance threshold also works with untimed track points.
+         A track receives a date suffix only when its first point has a timestamp.
 	If sdistance is given no parameters, this option has the same
 	effect as the split option without parameters. If there is more
 	than one track,
@@ -13,7 +15,7 @@
          <para><userinput>
 gpsbabel -t
      -i gpx -f in.gpx
-     -x track,pack,sdistance=0.1k
+     -x track,sdistance=0.1k
      -o gpx -F out.gpx
 </userinput></para>
         <para> The sdistance option can be combined with the split option.
