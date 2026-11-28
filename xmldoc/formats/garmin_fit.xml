@@ -16,14 +16,24 @@ gaps.
 </para>
 <para>
 When writing a FIT file, waypoints are converted to course points by
-inserting them at the nearest location in the track/course. By default,
-generic course points are written unless the waypoint name contains one of
-the following words in which case course points of type left/right are
-emitted:
+inserting them at the nearest location in the track/course. The waypoint
+symbol (for example, <literal>Water</literal> or <literal>First Aid</literal>)
+sets the FIT course point type. Symbols can also be written as decimal type
+numbers from 0 to 254. When reading a FIT course, GPSBabel stores the type in the waypoint
+symbol and keeps the course point name separately. If the input symbol is
+missing or unrecognized, the waypoint name determines the type. It defaults
+to generic unless the name contains one of these words for left or right:
 <simplelist type="vert">
 <member>left, links, gauche, izquierda, sinistra</member>
 <member>right, rechts, droit, derecha, destro</member>
 </simplelist>
+</para>
+<para>
+GPSBabel represents lap endpoints as numbered waypoints such as
+<literal>LAP001</literal>. An untimed generic course point with the same name
+and position supplies that waypoint. The FIT writer creates one lap per track,
+so rewriting a track with several laps can place a numbered endpoint at a
+different position.
 </para>
 <para>
 FIT courses typically contain speed information. If the original track

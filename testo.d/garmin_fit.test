@@ -41,3 +41,19 @@ compare ${REFERENCE}/Lctns_Instinct.gpx ${TMPDIR}/Lctns_Instinct.gpx
 #
 gpsbabel -i gpx -f ${REFERENCE}/track/fitwrite-track.gpx -o garmin_fit -F ${TMPDIR}/fitwrite-track.fit
 bincompare ${REFERENCE}/track/fitwrite-track.fit ${TMPDIR}/fitwrite-track.fit
+
+# Course point types use waypoint symbols, independently of their names.
+gpsbabel -i gpx -f ${REFERENCE}/track/fit-course-symbols.gpx -o garmin_fit -F ${TMPDIR}/fit-course-symbols.fit
+bincompare ${REFERENCE}/track/fit-course-symbols.fit ${TMPDIR}/fit-course-symbols.fit
+gpsbabel -w -i garmin_fit -f ${REFERENCE}/track/fit-course-symbols.fit -o unicsv,utc=0 -F ${TMPDIR}/fit-course-symbols.csv
+compare ${REFERENCE}/track/fit-course-symbols.csv ${TMPDIR}/fit-course-symbols.csv
+
+# Once the writer has projected the track into one FIT lap, repeated conversions
+# must preserve the original cues without accumulating more lap waypoints.
+gpsbabel -i garmin_fit -f ${REFERENCE}/track/fit-course-symbols.fit -o gpx -F ${TMPDIR}/fit-course-symbols.gpx
+gpsbabel -i gpx -f ${TMPDIR}/fit-course-symbols.gpx -o garmin_fit -F ${TMPDIR}/fit-course-symbols-round.fit
+gpsbabel -w -i garmin_fit -f ${TMPDIR}/fit-course-symbols-round.fit -o unicsv,utc=0 -F ${TMPDIR}/fit-course-symbols-round.csv
+gpsbabel -i garmin_fit -f ${TMPDIR}/fit-course-symbols-round.fit -o gpx -F ${TMPDIR}/fit-course-symbols.gpx
+gpsbabel -i gpx -f ${TMPDIR}/fit-course-symbols.gpx -o garmin_fit -F ${TMPDIR}/fit-course-symbols-next.fit
+gpsbabel -w -i garmin_fit -f ${TMPDIR}/fit-course-symbols-next.fit -o unicsv,utc=0 -F ${TMPDIR}/fit-course-symbols-next.csv
+compare ${TMPDIR}/fit-course-symbols-round.csv ${TMPDIR}/fit-course-symbols-next.csv
